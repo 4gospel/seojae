@@ -742,7 +742,7 @@ settings(){
   <section class="sheet tape">
     <p class="label book">목차 · 책 소개 · 쪽수 (국립중앙도서관)</p>
     <p class="sub">${CONF.nl?"✓ 국립중앙도서관 인증키가 들어 있습니다. 책을 꽂으면 목차·소개·쪽수·분류를 저절로 채웁니다.":"짧은 책 소개는 카카오에서 이미 채워집니다. <b>목차·쪽수·긴 소개</b>까지 채우려면 국립중앙도서관 무료 인증키가 필요합니다."}</p>
-    <ol class="steps sub"><li><a href="https://www.nl.go.kr/seoji/" target="_blank">국립중앙도서관 서지정보 유통지원시스템</a>에 로그인합니다(국립중앙도서관 회원).</li><li>「Open API → 인증키 신청」에서 키를 받습니다.</li><li>받은 인증키를 아래에 넣습니다.</li></ol>
+    <ol class="steps sub"><li>국립중앙도서관 홈페이지에 회원가입·로그인합니다.</li><li><a href="https://www.nl.go.kr/NL/contents/N31101020000.do" target="_blank">Open API → 인증키 신청/관리</a>에서 키를 신청합니다.</li><li>받은 인증키를 아래에 넣습니다.</li></ol>
     <div class="row"><input id="nlkey" type="password" placeholder="국립중앙도서관 인증키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('nlKey','nlkey')">저장</button></div>
   </section>`}
   <section class="sheet">
