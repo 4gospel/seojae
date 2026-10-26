@@ -1,0 +1,24 @@
+{
+  "name": "아침 서재",
+  "short_name": "아침 서재",
+  "description": "말씀과 책을 읽고 쓰는 아침의 다이어리",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#e8dfcf",
+  "theme_color": "#e8dfcf",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "scope": "./",
+  "id": "./"
+}
