@@ -371,7 +371,7 @@ function connectView(){
     <div class="row"><input id="ccode" placeholder="연결 링크 또는 연결 코드" style="flex:1"><button class="btn ink" onclick="connectWith($('#ccode').value)">연결</button></div>
   </section>`;
 }
-const ROUTES={"/api/notion/sync":"notionSync","/api/notion/note":"notionNote","/api/notion/book":"notionBook","/api/config":"setConfig"};
+const ROUTES={"/api/notion/sync":"notionSync","/api/notion/note":"notionNote","/api/notion/book":"notionBook","/api/notion/trash":"notionTrash","/api/config":"setConfig"};
 async function apiGet(path,params){
   if(GAS){
     if(path==="/api/data") return JSON.parse(await gcall("getData"));
@@ -779,7 +779,11 @@ function todayNotes(trk){
     ${grownFrom(n.id).length?`<span class="muted">✓ 글 ${grownFrom(n.id).length}편</span>`:`<button class="btn small" onclick="growNote('${n.id}')">✍️ 글로 키우기</button>`}</div>`).join("")}</div>`;
 }
 function growNote(id){ const n=S.notes.find(x=>x.id===id); go("write",{track:n.track,fromNote:id}); }
-function delNote(id){ if(!confirm("이 밑줄을 지울까요? (노션에 올라간 것은 그대로 남습니다)")) return; S.notes=S.notes.filter(n=>n.id!==id); save(); render(); }
+function delNote(id){
+  const n=S.notes.find(x=>x.id===id), pages=[n?.notion?.page].filter(Boolean);
+  if(!confirm("이 밑줄을 지울까요?"+(pages.length?"\n노션 「아침 독서 글」에 실린 독서 메모도 함께 휴지통으로 옮깁니다.":""))) return;
+  S.notes=S.notes.filter(x=>x.id!==id); save(); render(); trashInNotion(pages);
+}
 
 // ───────── 동작: 오늘 ─────────
 function todayBibleCard(){
@@ -878,7 +882,22 @@ function pressSeal(){
   const b=$("#sealbtn"); b.classList.remove("press"); void b.offsetWidth; b.classList.add("press");
   setTimeout(saveWriting,300);
 }
-function delWriting(id){ if(!confirm("이 글을 지울까요? 앱에서만 지워지고 노션에 실린 글은 남습니다.")) return; S.writings=S.writings.filter(w=>w.id!==id); save(); go("drawer",{sub:"all"}); }
+function delWriting(id){
+  const w=S.writings.find(x=>x.id===id), pages=[w?.notion?.page,w?.notion?.index].filter(Boolean); // 책 노트(또는 아침 독서 글)와 색인 줄
+  if(!confirm("이 글을 지울까요?"+(pages.length?"\n노션에 실린 글"+(w.track==="bible"?"(책 노트와 색인 줄)":"")+"도 함께 휴지통으로 옮깁니다.\n노션 휴지통에서 되살릴 수 있습니다.":""))) return;
+  S.writings=S.writings.filter(x=>x.id!==id); S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==id); });
+  save(); go("drawer",{sub:"all"}); trashInNotion(pages);
+}
+// 앱에서 지운 글의 노션 페이지를 휴지통으로 (독서 목록의 책은 다른 글과 이어져 있어 그대로 둡니다)
+async function trashInNotion(pages){
+  if(!pages.length) return;
+  if(!SERVER||!CONF.notion){ toast("앱에서 지웠습니다. 노션에 연결되어 있지 않아 노션 글은 그대로 남았습니다"); return; }
+  try{
+    const r=await api("/api/notion/trash",{pages});
+    if(r.ok&&!r.failed.length) toast("앱과 노션에서 함께 지웠습니다 (노션 휴지통)");
+    else toast("앱에서 지웠습니다. 노션 글 일부는 옮기지 못했습니다"+(r.error?": "+r.error:""));
+  }catch(e){ toast("앱에서 지웠습니다. 노션에 닿지 못해 노션 글은 그대로 남았습니다"); }
+}
 function copyW(){ navigator.clipboard?.writeText(($("#wtitle").value?$("#wtitle").value+"\n\n":"")+$("#wbody").value).then(()=>toast("복사했습니다")); }
 async function resyncAll(){ const list=S.writings.filter(w=>w.syncError||!w.notion?.page); for(const w of list) await syncWriting(w,true); toast("다시 보냈습니다"); render(); }
 
