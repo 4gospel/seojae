@@ -919,9 +919,10 @@ async function setReminder(on){
   const hour=+($("#rhour")?.value||S.reminder?.hour||6);
   try{
     const r=await api("/api/reminder",{on,hour});
-    if(!r.ok) return toast(/권한|authoriz|permission/i.test(r.error||"")?"앱스 스크립트 편집기에서 testMorningMail 을 먼저 ▶ 실행해 권한을 허락해 주세요":r.error);
-    S.reminder={...(S.reminder||{}),on,hour,email:r.email}; save(); render();
-    toast(on?`매일 아침 ${hour}시에 ${r.email} 로 보냅니다`:"아침 알림을 껐습니다");
+    if(!r.ok) return toast(r.error);
+    S.reminder={...(S.reminder||{}),on,hour,email:r.email,clock:r.clock}; save(); render();
+    if(on&&!r.clock) toast("시각을 저장했습니다. 앱스 스크립트 편집기에서 turnOnMorningMail 을 한 번 ▶ 실행해 주세요");
+    else toast(on?`매일 아침 ${hour}시에 ${r.email} 로 보냅니다`:"아침 알림을 껐습니다");
   }catch(e){ toast("구글 서버에 닿지 못했습니다"); }
 }
 function reminderSection(){
@@ -930,10 +931,11 @@ function reminderSection(){
   return `<section class="sheet tape c">
     <p class="label bible">아침 알림 (메일)</p>
     <p class="sub">매일 아침 정한 시각에 <b>오늘의 통독 분량 · 말씀 질문 · 책 질문 · 읽는 책</b>을 구글 메일로 보냅니다. 휴대폰 Gmail 알림을 켜 두시면 알림으로 받습니다.</p>
-    ${R.on?`<p class="sub"><span class="stamp ok">알림 켜짐</span> 매일 ${h}시 · ${esc(R.email||"")}</p>`:""}
+    ${R.on&&R.clock===false?`<p class="sub" style="color:var(--stamp)">⚠️ 아직 알림 시계가 없습니다. 앱스 스크립트 편집기에서 <b>turnOnMorningMail</b> 을 한 번 ▶ 실행한 뒤, 아래 「시각 바꾸기」를 한 번 눌러 주세요.</p>`
+      :R.on?`<p class="sub"><span class="stamp ok">알림 켜짐</span> 매일 ${h}시 · ${esc(R.email||"")}</p>`:""}
     <div class="row" style="margin-top:8px"><label class="field" style="width:130px;margin:0"><span>보낼 시각</span><select id="rhour">${[4,5,6,7,8,9].map(x=>`<option value="${x}" ${x===h?"selected":""}>오전 ${x}시</option>`).join("")}</select></label>
       <span class="spacer"></span>${R.on?`<button class="btn" onclick="setReminder(true)">시각 바꾸기</button><button class="btn danger" onclick="setReminder(false)">끄기</button>`:`<button class="btn ink" onclick="setReminder(true)">알림 켜기</button>`}</div>
-    <p class="hint">처음 한 번은 앱스 스크립트 편집기에서 <code>testMorningMail</code> 을 ▶ 실행해 메일 보내기 권한을 허락해 주세요. 시험 메일이 한 통 갑니다.</p>
+    <p class="hint">처음 한 번은 앱스 스크립트 편집기에서 <code>turnOnMorningMail</code> 을 ▶ 실행해 알림 시계를 설치해 주세요. (<code>testMorningMail</code> 은 지금 바로 시험 메일을 한 통 보냅니다)</p>
   </section>`;
 }
 
