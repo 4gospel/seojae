@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -11,8 +11,21 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="아침 서재">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#e8dfcf" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1a1612" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#e8dfcf" id="themecolor">
+<meta name="color-scheme" content="light" id="colorscheme">
+<script>
+// 화면 밝기: 기기의 야간 모드와 상관없이 기본은 '밝게'. 설정에서 기기마다 '어둡게'·'기기 설정 따라'를 고를 수 있습니다.
+// (화면이 그려지기 전에 정해야 어둡게 번쩍이지 않아서 맨 앞에 둡니다)
+function applyTheme(t){
+  t=t||(()=>{ try{ return localStorage.getItem("seojae.theme"); }catch(_){ return null; } })()||"light";
+  const dark=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.dataset.theme=dark?"dark":"light";
+  document.getElementById("colorscheme").content=dark?"dark":"light";
+  document.getElementById("themecolor").content=dark?"#1a1612":"#e8dfcf";
+  return t;
+}
+applyTheme();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -392,19 +405,50 @@ async function apiGet(path,params){
   const r=await fetch(path+(params?"?"+new URLSearchParams(params):""),{cache:"no-store"}); if(!r.ok) throw new Error(r.status); return r.json();
 }
 const PLACE=()=>GAS?"구글 드라이브":"이 컴퓨터";
+// 빠르게 열기: 이 기기에 남은 지난번 사본(기록·설정)으로 화면을 먼저 그리고, 최신 기록은 뒤에서 받아 옵니다.
+// 최신 기록이 오기 전에는 구글에 저장하지 않고(PENDING), 도착하면 최신 기록과 합친 뒤 저장합니다 → 다른 기기 글을 덮지 않음.
+const CKEY="seojae.conf";
+let READY=false, PENDING=false, CACHED_REV=null;
+const useData=d=>{ S=Object.assign(blank(),d); S.settings=Object.assign(blank().settings,d.settings); };
 async function load(){
   if(NEED_CONNECT) return;
+  if(GAS){
+    try{
+      const d=JSON.parse(localStorage.getItem(LKEY)||"null"), c=JSON.parse(localStorage.getItem(CKEY)||"null");
+      if(d&&d.writings&&c){ useData(d); CONF=c; CONF.phoneUrl=connectLink(); SERVER=true; CACHED_REV=d.rev??null; setTimeout(()=>fetchFresh(false),0); return; }
+    }catch(_){}
+  }
+  await fetchFresh(true);
+}
+async function fetchFresh(first){
   try{
-    const d=await apiGet("/api/data"); SERVER=true; REV=d.rev??0;
-    if(d && d.writings){ S=Object.assign(blank(),d); S.settings=Object.assign(blank().settings,d.settings); }
-    else migrate();
-    CONF=await apiGet("/api/config");
-    if(GAS) CONF.phoneUrl=connectLink();
-    if(window._justConnected) setTimeout(()=>toast("이 기기를 아침 서재에 연결했습니다 🔑"),300);
+    let d,c;
+    if(GAS){
+      try{ const r=await gcall("boot"); d=JSON.parse(r.data); c=r.config; }    // 구글 왕복 한 번에 기록+설정
+      catch(e){ if(!/없는 기능/.test(e.message)) throw e; d=JSON.parse(await gcall("getData")); c=await gcall("getConfig"); } // 옛 서버면 예전 방식
+    }
+    else { d=await apiGet("/api/data"); c=await apiGet("/api/config"); }
+    SERVER=true; REV=d.rev??0; CONF=c; if(GAS) CONF.phoneUrl=connectLink();
+    try{ localStorage.setItem(CKEY,JSON.stringify(c)); }catch(_){}
+    let changed=true;
+    if(first){ if(d&&d.writings) useData(d); else migrate(); }
+    else if(PENDING) mergeFrom(d);                       // 사본에서 간직한 것 + 최신 기록
+    else if((d.rev??0)!==CACHED_REV) useData(d);          // 다른 기기에서 바뀐 것이 있으면 최신으로
+    else changed=false;
+    READY=true;
+    if(PENDING){ PENDING=false; pushSave(); }
+    else if(changed&&!first){ try{ localStorage.setItem(LKEY,JSON.stringify(S)); }catch(_){} }
+    if(changed&&!first){ ensurePlan(); ensureMs(); if(tab!=="write") render(); }   // 쓰는 중이면 화면을 바꾸지 않음
+    if(window._justConnected){ window._justConnected=false; setTimeout(()=>toast("이 기기를 아침 서재에 연결했습니다 🔑"),300); }
   }catch(e){
-    if(AUTH_FAIL) return;
-    SERVER=false;
-    try{ const d=JSON.parse(localStorage.getItem(LKEY)); if(d) S=Object.assign(blank(),d); else migrate(); }catch(_){}
+    if(AUTH_FAIL){ if(!first) render(); return; }
+    if(first){
+      SERVER=false;
+      try{ const d=JSON.parse(localStorage.getItem(LKEY)); if(d) S=Object.assign(blank(),d); else migrate(); }catch(_){}
+    } else {
+      toast("최신 기록을 아직 받지 못해 이 기기의 사본을 보여 드립니다");
+      setTimeout(()=>fetchFresh(false),15000);          // 잠시 뒤 다시 시도
+    }
   }
 }
 function migrate(){ // 첫 버전 기록 옮기기
@@ -434,16 +478,53 @@ function save(){
   try{ localStorage.setItem(LKEY,JSON.stringify(S)); }catch(_){}
   if(!SERVER) return;
   clearTimeout(saveT);
-  saveT=setTimeout(pushSave,GAS?800:400);
+  saveT=setTimeout(()=>{ saveT=null; pushSave(); },GAS?800:400);
 }
+let SAVING=false;
 async function pushSave(){
+  if(GAS&&!READY){ PENDING=true; return; }   // 최신 기록을 받기 전에는 저장을 미뤄 둡니다
+  SAVING=true;
   try{
     if(!GAS){ await fetch("/api/data",{method:"POST",body:JSON.stringify(S)}); return; }
     const r=await gcall("saveData",JSON.stringify(S),REV);
     if(r.ok){ REV=r.rev; S.rev=r.rev; return; }
     if(r.conflict){ const o=JSON.parse(r.data); mergeFrom(o); REV=o.rev??0; toast("다른 기기에서 쓴 기록과 합쳤습니다"); render(); pushSave(); }
   }catch(e){ if(AUTH_FAIL) return render(); toast(PLACE()+"에 저장하지 못했습니다. 잠시 뒤 다시 간직해 주세요"); }
+  finally{ SAVING=false; }
 }
+
+// ───────── 새 버전 자동 새로 고침 ─────────
+// 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
+// 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
+const APP_BUILD="76301239d2";
+let NEW_BUILD=null, UPDATE_NOTICED=false;
+async function checkUpdate(){
+  if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
+  try{
+    const v=(await (await fetch("version.json?t="+Date.now(),{cache:"no-store"})).json()).build;
+    if(v&&v!==APP_BUILD){ NEW_BUILD=v; tryReload(); }
+  }catch(_){}
+}
+function writingUnsaved(){
+  if(noteOpen&&($("#nf-text")?.value||"").trim()) return true;          // 밑줄을 적는 중
+  if(tab!=="write") return false;
+  const body=$("#wbody")?.value||"", title=$("#wtitle")?.value||"";
+  const w=editId&&S.writings.find(x=>x.id===editId);
+  return w?(w.body!==body||(w.title||"")!==title.trim()):!!(body.trim()&&body!==$("#wbody")?.defaultValue);
+}
+function tryReload(){
+  if(!NEW_BUILD) return;
+  if(writingUnsaved()){                                    // 쓰는 중이면 간직한 뒤로 미룹니다
+    if(!UPDATE_NOTICED){ UPDATE_NOTICED=true; toast("새 버전이 나왔습니다. 지금 쓰는 글을 간직하면 자동으로 새로 고칩니다"); }
+    return;
+  }
+  if(saveT||SAVING||PENDING) return setTimeout(tryReload,1500);   // 저장이 끝날 때까지 기다립니다
+  try{ if(sessionStorage.getItem("seojae.reloadedFor")===NEW_BUILD) return; sessionStorage.setItem("seojae.reloadedFor",NEW_BUILD); }catch(_){}
+  location.replace(location.pathname+"?v="+NEW_BUILD);    // ?v= 를 붙여 예전 화면이 남아 있지 않게
+}
+if(/[?&]v=/.test(location.search)) history.replaceState(null,"",location.pathname+location.hash);
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") checkUpdate(); });
+setInterval(checkUpdate,5*60*1000);
 
 // ───────── 노션 ─────────
 async function api(path,body){
@@ -711,6 +792,7 @@ settings(){
   return `<div class="row" style="margin-bottom:18px"><h2>설정</h2></div>
   ${planSettings()}
   <div class="grid" style="margin-top:30px">
+  ${themeSection()}
   ${reminderSection()}
   ${CONF.phoneUrl?`<section class="sheet tape c">
     <p class="label">${GAS?"다른 기기 연결":"휴대폰에서 쓰기"}</p>
@@ -856,7 +938,7 @@ function saveWriting(){
   const pick=S.manuscripts.find(m=>m.id===$("#wms").value); // 직접 고른 원고의 맨 뒤 꼭지로
   if(pick&&!pick.items.includes(w.id)) pick.items.push(w.id);
   fromNote=null;
-  mark("write"); save(); toast("간직했습니다");
+  mark("write"); save(); toast("간직했습니다"); if(NEW_BUILD) setTimeout(tryReload,1200);
   const focus=document.body.classList.contains("focus");
   render(); if(focus) toggleFocus();
   syncWriting(w);
@@ -906,6 +988,23 @@ function delWriting(id){
   S.writings=S.writings.filter(x=>x.id!==id); S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==id); });
   save(); go("drawer",{sub:"all"}); trashInNotion(pages);
 }
+// ───────── 화면 밝기 (기기마다) ─────────
+function setTheme(t){ try{ localStorage.setItem("seojae.theme",t); }catch(_){} applyTheme(t); render(); }
+function themeSection(){
+  let cur="light"; try{ cur=localStorage.getItem("seojae.theme")||"light"; }catch(_){}
+  const opt=(v,n,d)=>`<label class="plancard ${cur===v?"on":""}"><input type="radio" name="theme" ${cur===v?"checked":""} onchange="setTheme('${v}')"><div class="pc-head"><b>${n}</b></div><div class="pc-how">${d}</div></label>`;
+  return `<section class="sheet">
+    <p class="label">화면 밝기</p>
+    <p class="sub" style="margin:0 0 10px">이 기기에서만 적용됩니다. 휴대폰과 컴퓨터를 따로 정할 수 있습니다.</p>
+    <div class="plancards" style="grid-template-columns:1fr">
+      ${opt("light","밝게 (기본)","기기가 야간 모드여도 항상 밝은 종이 화면으로 엽니다.")}
+      ${opt("dark","어둡게","항상 어두운 밤 서재 화면으로 엽니다.")}
+      ${opt("auto","기기 설정 따라","기기의 주간·야간 모드를 그대로 따릅니다.")}
+    </div>
+  </section>`;
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>applyTheme());
+
 // ───────── 아침 알림 ─────────
 // 서버가 매일 아침 메일로 보낼 수 있게, 앞으로 3주 치 분량과 질문을 data.json 에 미리 적어 둡니다
 function refreshReminder(){
@@ -1335,7 +1434,7 @@ function ensurePlan(){
   const offset=BIBLE.slice(0,b.idx).reduce((a,x)=>a+x[1],0)+b.ch-1;
   st.plan={id:"seq",perDay:b.perDay||3,day:Math.floor(offset/(b.perDay||3)),mode:"pace",start:today(),done:{},checks:[],last:null};
 }
-load().then(()=>{ ensurePlan(); ensureMs(); render(); });
+load().then(()=>{ ensurePlan(); ensureMs(); render(); setTimeout(checkUpdate,1500); });
 </script>
 </body>
 </html>
