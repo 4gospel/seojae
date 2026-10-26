@@ -740,10 +740,10 @@ settings(){
     <div class="row"><input id="kkey" type="password" placeholder="REST API 키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('kakaoKey','kkey')">저장</button></div>
   </section>
   <section class="sheet tape">
-    <p class="label book">책 소개 · 목차 (알라딘)</p>
-    <p class="sub">${CONF.aladin?"✓ 알라딘 TTB 키가 들어 있습니다. 책을 꽂으면 소개·목차·쪽수를 저절로 채웁니다.":"책을 꽂을 때 책 소개·목차·쪽수를 저절로 채우려면 무료 TTB 키가 필요합니다."}</p>
-    <ol class="steps sub"><li><a href="https://www.aladin.co.kr/ttb/wblog_manage.aspx" target="_blank">알라딘 TTB 키 발급</a> 페이지에서 로그인합니다.</li><li>블로그(사이트) 주소에 <code>https://4gospel.github.io/seojae</code> 를 적고 키를 발급받습니다.</li><li><code>ttb</code> 로 시작하는 키를 아래에 넣습니다.</li></ol>
-    <div class="row"><input id="akey" type="password" placeholder="ttb 로 시작하는 TTB 키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('aladinKey','akey')">저장</button></div>
+    <p class="label book">목차 · 책 소개 · 쪽수 (국립중앙도서관)</p>
+    <p class="sub">${CONF.nl?"✓ 국립중앙도서관 인증키가 들어 있습니다. 책을 꽂으면 목차·소개·쪽수·분류를 저절로 채웁니다.":"짧은 책 소개는 카카오에서 이미 채워집니다. <b>목차·쪽수·긴 소개</b>까지 채우려면 국립중앙도서관 무료 인증키가 필요합니다."}</p>
+    <ol class="steps sub"><li><a href="https://www.nl.go.kr/seoji/" target="_blank">국립중앙도서관 서지정보 유통지원시스템</a>에 로그인합니다(국립중앙도서관 회원).</li><li>「Open API → 인증키 신청」에서 키를 받습니다.</li><li>받은 인증키를 아래에 넣습니다.</li></ol>
+    <div class="row"><input id="nlkey" type="password" placeholder="국립중앙도서관 인증키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('nlKey','nlkey')">저장</button></div>
   </section>`}
   <section class="sheet">
     <p class="label">간직된 곳</p>
@@ -966,22 +966,23 @@ async function searchBook(){
 }
 function addBook(i){
   const src=i>=0?found[i]:{title:$("#bq").value.trim(),authors:[],cover:""};
-  const b={id:uid(),title:src.title,authors:src.authors||[],publisher:src.publisher||"",isbn:src.isbn||"",cover:src.cover||"",page:0,total:src.pages||0,status:"읽는 중",started:today()};
+  const b={id:uid(),title:src.title,authors:src.authors||[],publisher:src.publisher||"",isbn:src.isbn||"",cover:src.cover||"",page:0,total:src.pages||0,status:"읽는 중",started:today(),
+    description:src.description||"",pubDate:src.pubDate||""}; // 카카오가 주는 짧은 책 소개·출간일
   S.books.push(b); S.settings.currentBook=b.id; save(); toast("책장에 꽂았습니다"); found=[]; render(); openBook(b.id);
-  enrichBook(b,true).then(()=>syncBook(b)); // 알라딘 정보(소개·목차·쪽수)를 먼저 채운 뒤 노션 독서 목록에 올립니다
+  enrichBook(b,true).then(()=>syncBook(b)); // 국립중앙도서관 정보(목차·소개·쪽수)를 먼저 채운 뒤 노션 독서 목록에 올립니다
 }
-// 알라딘에서 책 소개·목차·쪽수·분야·출간일 가져오기
+// 국립중앙도서관에서 목차·책 소개·쪽수·분류·출간일 가져오기 (없는 항목은 카카오에서 받은 값을 그대로 둡니다)
 async function enrichBook(b,quiet){
-  if(!SERVER||!CONF.aladin||!b.isbn) { if(!quiet) toast(!CONF.aladin?"설정에서 알라딘 TTB 키를 먼저 넣어 주세요":"ISBN이 없는 책이라 가져올 수 없습니다"); return; }
+  if(!SERVER||!CONF.nl||!b.isbn) { if(!quiet) toast(!CONF.nl?"설정에서 국립중앙도서관 인증키를 먼저 넣어 주세요":"ISBN이 없는 책이라 가져올 수 없습니다"); return; }
   try{
     const isbn=String(b.isbn).split(/\s+/).pop();
     const r=await apiGet("/api/books/detail",{isbn});
     if(!r.ok){ if(!quiet) toast(r.error); return; }
-    Object.assign(b,{description:r.description,toc:r.toc,category:r.category,pubDate:r.pubDate,link:r.link,isbn:r.isbn});
+    Object.assign(b,{description:r.description||b.description,toc:r.toc?.length?r.toc:b.toc,category:r.category||b.category,pubDate:r.pubDate||b.pubDate,isbn:r.isbn||b.isbn});
     if(!b.total&&r.pages) b.total=r.pages; if(!b.publisher&&r.publisher) b.publisher=r.publisher; if(!b.cover&&r.cover) b.cover=r.cover;
-    save(); if(!quiet) toast("알라딘에서 책 정보를 가져왔습니다");
+    save(); if(!quiet) toast(r.toc?.length?"국립중앙도서관에서 목차와 책 정보를 가져왔습니다":"국립중앙도서관에 이 책의 목차가 없어 쪽수·분류만 채웠습니다");
     if($("#bookdetail")?.innerHTML) openBook(b.id);
-  }catch(e){ if(!quiet) toast("알라딘에 닿지 못했습니다"); }
+  }catch(e){ if(!quiet) toast("국립중앙도서관에 닿지 못했습니다"); }
 }
 function openBook(id){
   const b=S.books.find(x=>x.id===id); if(!b) return;
@@ -990,9 +991,9 @@ function openBook(id){
   $("#bookdetail").innerHTML=`<section class="sheet tape c" style="margin-bottom:30px"><div class="nowbook">${coverHtml(b)}<div style="flex:1;min-width:0">
     <div class="big">${esc(b.title)}</div><div class="sub">${esc((b.authors||[]).join(", "))}${b.publisher?" · "+esc(b.publisher):""}${b.isbn?" · ISBN "+esc(b.isbn):""}</div>
     <div class="muted">${[b.pubDate,b.category,b.total?b.total+"쪽":""].filter(Boolean).map(esc).join(" · ")}${b.pubDate||b.category||b.total?"<br>":""}밑줄 ${notes}개 · 글 ${essays}편 ${b.notionId?"· 노션 독서 목록 ✓":""}</div>
-    ${b.description?`<details class="more"><summary>책 소개</summary><p class="sub pre" style="margin:6px 0">${esc(b.description)}</p>${b.link?`<a class="muted" href="${esc(b.link)}" target="_blank">알라딘에서 보기 ↗</a>`:""}</details>`:""}
+    ${b.description?`<details class="more"><summary>책 소개</summary><p class="sub pre" style="margin:6px 0">${esc(b.description)}</p>${b.link?`<a class="muted" href="${esc(b.link)}" target="_blank">자세히 보기 ↗</a>`:""}</details>`:""}
     ${b.toc?.length?`<details class="more"><summary>목차 (${b.toc.length})</summary><ol class="toc">${b.toc.map(t=>`<li>${esc(t)}</li>`).join("")}</ol></details>`:""}
-    ${CONF.aladin&&b.isbn&&!b.description?`<button class="btn small" style="margin-top:8px" onclick="enrichBook(S.books.find(x=>x.id==='${b.id}'))">알라딘에서 소개·목차 가져오기</button>`:""}
+    ${CONF.nl&&b.isbn&&!b.toc?.length?`<button class="btn small" style="margin-top:8px" onclick="enrichBook(S.books.find(x=>x.id==='${b.id}'))">국립중앙도서관에서 목차·쪽수 가져오기</button>`:""}
     <div class="row" style="margin-top:8px"><label class="field" style="width:90px"><span>읽은 쪽</span><input id="bp" type="number" value="${b.page||0}"></label><label class="field" style="width:90px"><span>전체 쪽</span><input id="bt" type="number" value="${b.total||""}"></label>
       <label class="field" style="flex:1;min-width:160px"><span>표지 바꾸기</span><input type="file" accept="image/*" onchange="uploadCover('${b.id}',this)" style="border:0"></label></div>
     <div class="row" style="margin-top:8px"><span class="stars">${[1,2,3,4,5].map(n=>`<span class="${(b.rating||0)>=n?"on":""}" onclick="rate('${b.id}',${n})">★</span>`).join("")}</span>${b.status==="완료"?`<span class="stamp round">완독</span>`:""}</div>
