@@ -982,7 +982,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="49432a8fe1";
+const APP_BUILD="d1f9e30c95";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2209,7 +2209,7 @@ drawer(){
   <div class="grid">${S.manuscripts.map(msCardHtml).join("")||`<p class="muted">아직 원고가 없습니다. 위에서 만들어 보세요.</p>`}</div>`;
   return head+`
   <section class="sheet" style="margin-bottom:26px">
-    <div class="row"><input id="q" placeholder="낱말로 찾기 (제목, 본문, 책 제목…)" style="flex:1" oninput="renderArchive()"></div>
+    <div class="row"><input id="q" placeholder="낱말로 찾기 (제목, 본문, 성경 본문…)" style="flex:1" oninput="renderArchive()"></div>
     ${filterBar()}
     ${S.writings.some(w=>w.syncError)?`<div class="row" style="margin-top:12px"><span class="muted">노션에 아직 못 간 글이 있습니다.</span><button class="btn small" onclick="resyncAll()">모두 다시 보내기</button></div>`:""}
   </section>
@@ -2986,7 +2986,7 @@ function filterBar(){
   const sel=(k,first,opts)=>`<select style="width:auto" onchange="setFilt('${k}',this.value)"><option value="">${first}</option>${opts.map(([v,l])=>`<option value="${esc(v)}" ${String(filt[k])===String(v)?"selected":""}>${esc(l)}</option>`).join("")}</select>`;
   return `<div class="row filterbar">
     ${sel("track","말씀+책",[["bible","말씀"],["book","책"]])}
-    ${sel("kind","밑줄+글",[["note","밑줄만"],["write","글만"]])}
+
     ${sel("type","모든 글 종류",ALL_TYPES.map(t=>[t,t]))}
     ${sel("book","모든 성경책",usedBooks().map(i=>[i,BIBLE[i][0]]))}
     ${sel("topic","모든 주제",usedTopics().map(t=>[t,t]))}
@@ -2995,11 +2995,8 @@ function filterBar(){
 function renderArchive(){
   const q=($("#q")?.value||"").trim().toLowerCase(), f=filt, items=[];
   const bookOk=x=>f.book===""||(x&&x.book===+f.book);
-  if(f.kind!=="write"&&!f.type) S.notes.forEach(n=>{
-    if(f.track&&n.track!==f.track) return; if(!bookOk(nRef(n))) return; if(f.topic&&!(n.tags||[]).includes(f.topic)) return;
-    if(q&&!(n.text+(n.thought||"")+noteSrc(n)+(n.tags||[]).join(" ")).toLowerCase().includes(q)) return;
-    items.push({d:n.date,html:noteHtml(n)}); });
-  if(f.kind!=="note") S.writings.forEach(w=>{
+  S.writings.forEach(w=>{   // 서랍에는 실제로 쓴 글만 (밑줄은 오늘 화면·일기에서 봅니다)
+
     if(f.track&&w.track!==f.track) return; if(f.type&&w.type!==f.type) return; if(!bookOk(wRef(w))) return;
     if(f.topic&&![...(w.topics||[]),...(w.tags||[])].includes(f.topic)) return;
     if(q&&!(w.title+w.body+(w.passage||"")+[...(w.topics||[]),...(w.tags||[])].join(" ")).toLowerCase().includes(q)) return;
