@@ -469,6 +469,24 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .dline{font-family:"Nanum Pen Script";font-size:24px;line-height:34px;border:0;background:transparent;min-height:102px;padding:0;color:var(--ink)}
 .diary .cover{width:54px;height:78px;font-size:10px}
 .dnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.dwrap{display:flex;gap:22px;align-items:flex-start} .dside{width:300px;flex:none}
+@media (max-width:900px){ .dwrap{flex-direction:column} .dside{width:100%} }
+/* 일기 달력 표시: 일기 쓴 날 진한 점, 기록만 있는 날 옅은 점, 펼친 날 테두리 */
+.cal .d.dj::after{content:"";position:absolute;left:50%;bottom:3px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--ink)}
+.cal .d.ds::after{content:"";position:absolute;left:50%;bottom:3px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--deco)}
+.cal .d.cur{box-shadow:inset 0 0 0 1.5px var(--sepia)} .cal .d.fut{opacity:.35;cursor:default}
+/* 책장 넘기기 */
+.dwrap>div:first-child{perspective:1600px}
+.diary{transform-origin:left center;backface-visibility:hidden}
+.diary.turn-out-next{animation:turnOutNext .24s ease-in forwards} .diary.turn-out-prev{animation:turnOutPrev .24s ease-in forwards;transform-origin:right center}
+.diary.turn-in-next{animation:turnInNext .3s ease-out} .diary.turn-in-prev{animation:turnInPrev .3s ease-out;transform-origin:right center}
+@keyframes turnOutNext{to{transform:rotateY(-70deg);opacity:0}} @keyframes turnOutPrev{to{transform:rotateY(70deg);opacity:0}}
+@keyframes turnInNext{from{transform:rotateY(60deg);opacity:0}} @keyframes turnInPrev{from{transform:rotateY(-60deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){ .diary{animation:none !important} }
+/* 일기 목록 */
+.dlist .dli{display:grid;grid-template-columns:58px 22px 44px 1fr auto;gap:8px;align-items:center;padding:8px 4px;border-bottom:1px dotted var(--edge);color:var(--ink);text-decoration:none}
+.dlist .dli:hover{background:var(--paper-2)} .dlist .dd{font-size:21px;color:var(--sepia)} .dlist .dw{font-size:12px;color:var(--faint)} .dlist .dm{font-size:16px} .dlist .dt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .dlist .dn{font-size:12px}
+@media (max-width:700px){ .dlist .dli{grid-template-columns:50px 1fr auto;grid-template-rows:auto auto} .dlist .dw,.dlist .dm{display:none} .dlist .dt{grid-column:2/4;white-space:normal} }
 .dnav .spacer{flex:1}
 @media (max-width:700px){ .diary{grid-template-columns:1fr} .diary .pg{padding:22px 18px 30px} .diary .pg.l{border-right:0;border-bottom:1px dashed var(--edge);box-shadow:none} .diary .pg.r{box-shadow:none} .dhead .dd{font-size:46px} }
 /* 스티커 */
@@ -994,7 +1012,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="a72ef88c7c";
+const APP_BUILD="306cfd006e";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1917,18 +1935,51 @@ function dEntry(d,make){ if(!S.diary) S.diary={}; if(make&&!S.diary[d]) S.diary[
 function dTouch(d){ dEntry(d,true).t=new Date().toISOString(); save(); }
 function dSet(k,v){ const d=diaryDate, e=dEntry(d,true); const ta=$(".dline"); if(ta){ clearTimeout(dLineT); e.line=ta.value; } e[k]=e[k]===v?null:v; dTouch(d); render(); }
 let dLineT; function dLine(v){ const d=diaryDate; clearTimeout(dLineT); dLineT=setTimeout(()=>{ dEntry(d,true).line=v; dTouch(d); },600); }
-function dGo(n){ const x=new Date((diaryDate||today())+"T00:00"); x.setDate(x.getDate()+n); diaryDate=dkey(x); STK_SEL=null; render(); }
+function dGo(n){ const x=new Date((diaryDate||today())+"T00:00"); x.setDate(x.getDate()+n); dOpen(dkey(x),n>0?"next":"prev"); }
+// 그날 일기로: 책장을 넘기듯 지금 장이 접히고 새 장이 펼쳐집니다
+function dOpen(k,dir){ if(k>today()) return; STK_SEL=null; const el=$(".diary"); DIARY_VIEW="page";
+  if(!el||!dir){ diaryDate=k; render(); return; }
+  el.classList.add(dir==="next"?"turn-out-next":"turn-out-prev");
+  setTimeout(()=>{ diaryDate=k; render(); const n=$(".diary"); if(n){ n.classList.add(dir==="next"?"turn-in-next":"turn-in-prev"); setTimeout(()=>n.classList.remove("turn-in-next","turn-in-prev"),320); } },230); }
+let DIARY_VIEW="page", dcalY=null, dcalM=null;
+// 일기 달력: 한 줄 일기·날씨·기분·스티커가 있는 날은 잉크 점(진함), 읽기·글 기록만 있는 날은 옅은 점
+const dHas=k=>{ const e=S.diary?.[k]; return !!(e&&((e.line||"").trim()||e.mood||e.weather||(e.stickers||[]).length)); };
+const dSome=k=>{ const L=S.log?.[k]; return !!((L&&(L.read||L.book||L.note||L.write||(L.bible||[]).length||Object.keys(L.books||{}).length))||live().some(w=>w.date===k)); };
+function dCalHtml(){
+  const cur=new Date((diaryDate||today())+"T00:00"); if(dcalY==null){ dcalY=cur.getFullYear(); dcalM=cur.getMonth(); }
+  const first=new Date(dcalY,dcalM,1), start=new Date(first); start.setDate(1-first.getDay()); const t=today(); let cells="";
+  for(let i=0;i<42;i++){ const d=new Date(start); d.setDate(start.getDate()+i); if(i>=35&&d.getMonth()!==dcalM) break;
+    const k=dkey(d), has=dHas(k), some=!has&&dSome(k), cls=["d",d.getMonth()!==dcalM?"o":"",d.getDay()===0?"sun":"",k===t?"today":"",k===diaryDate?"cur":"",has?"dj":some?"ds":"",k>t?"fut":""].filter(Boolean).join(" ");
+    cells+=`<button type="button" class="${cls}" ${k>t?"disabled":""} onclick="dOpen('${k}','${k<diaryDate?"prev":"next"}')" title="${k}${has?" · 일기 있음":some?" · 읽기·글 기록":""}"><span>${d.getDate()}</span></button>`; }
+  const now=new Date();
+  return `<div class="calcard dcal"><div class="calhead"><button onclick="dCalMove(-12)" title="지난해">«</button><button onclick="dCalMove(-1)" title="지난달">‹</button><span class="t">${dcalY}년 ${dcalM+1}월</span><button onclick="dCalMove(1)" title="다음 달">›</button><button onclick="dCalMove(12)" title="다음 해">»</button>${(dcalY!==now.getFullYear()||dcalM!==now.getMonth())?`<button onclick="dcalY=dcalM=null;dCalPaint()" title="이번 달로" style="font-size:12px;width:auto;padding:0 6px">이번 달</button>`:""}</div>
+    <div class="cal">${"일월화수목금토".split("").map(x=>`<div class="wd">${x}</div>`).join("")}${cells}</div>
+    <div class="callegend"><span><i style="background:var(--ink);width:8px;height:8px"></i>일기 쓴 날</span><span><i style="background:var(--deco);width:7px;height:7px"></i>읽기·글만 있는 날</span><span><i style="border:1.5px solid var(--sepia);border-radius:50%;width:10px;height:10px"></i>지금 펼친 날</span></div></div>`;
+}
+function dCalMove(n){ let m=dcalM+n, y=dcalY; while(m<0){ m+=12; y--; } while(m>11){ m-=12; y++; } dcalY=y; dcalM=m; dCalPaint(); }
+function dCalPaint(){ const el=$(".dcal"); if(el) el.outerHTML=dCalHtml(); }
+// 목록 보기: 일기가 있는 날을 최근부터
+function dListHtml(){
+  const days=[...new Set([...Object.keys(S.diary||{}).filter(dHas),...Object.keys(S.log||{}).filter(dSome),...live().map(w=>w.date)])].filter(k=>k<=today()).sort().reverse();
+  if(!days.length) return `<p class="muted">아직 일기가 없습니다. 날마다 한 줄이면 충분합니다.</p>`;
+  return `<div class="dlist">${days.map(k=>{ const e=S.diary?.[k]||{}, ws=live().filter(w=>w.date===k), L=S.log?.[k]||{}, x=new Date(k+"T00:00");
+    return `<a href="#" class="dli" onclick="dOpen('${k}');return false"><span class="dd pen">${x.getMonth()+1}.${String(x.getDate()).padStart(2,"0")}</span><span class="dw">${WEEK[x.getDay()]}</span><span class="dm">${esc((e.weather||"")+(e.mood||""))}</span>
+      <span class="dt">${(e.line||"").trim()?`<span class="pen" style="font-size:19px">${esc(e.line.trim().slice(0,60))}</span>`:`<span class="muted">${ws.length?ws.map(w=>"["+esc(wTag(w))+"] "+esc(w.title||w.passage||"")).join(" · "):L.read||(L.bible||[]).length?"말씀을 읽은 날":Object.keys(L.books||{}).length?"책을 읽은 날":""}</span>`}</span>
+      <span class="dn muted">${[ws.length?"글 "+ws.length:"",(e.stickers||[]).length?"스티커 "+(e.stickers||[]).length:""].filter(Boolean).join(" · ")}</span></a>`; }).join("")}</div>`;
+}
 function diaryPage(){
-  const d=diaryDate=diaryDate||today(), x=new Date(d+"T00:00"), L=S.log[d]||{}, e=dEntry(d);
+  const d=diaryDate=diaryDate||today(), x=new Date(d+"T00:00"), L=S.log[d]||{}, e=dEntry(d); dcalY=x.getFullYear(); dcalM=x.getMonth();
   const notes=S.notes.filter(n=>n.date===d), ws=live().filter(w=>w.date===d);
   const bible=(L.bible||[]).map(b=>`<div class="muted">${esc(b.plan)} · ${b.day}일째</div><ul>${b.portions.map(p=>`<li><a href="#" onclick="openBible(${jsArg(p)});return false">${esc(p)}</a></li>`).join("")}</ul>`).join("")
     || (L.read?`<p class="sub">말씀을 읽었습니다 ✓</p>`:`<p class="muted">이날은 읽은 말씀 기록이 없습니다.</p>`);
   const books=Object.entries(L.books||{}).map(([id,v])=>{ const b=S.books.find(y=>y.id===id);
     const u=pgUnit(b); return `<div class="row" style="gap:12px;align-items:center;margin:6px 0">${b?coverHtml(b,"cover"):""}<div><b class="myeongjo">${esc(v.title)}</b><div class="muted">${v.from}${u} → ${v.to}${u} · ${Math.max(0,v.to-v.from)}${u} 읽음</div></div></div>`; }).join("");
-  return `<div class="dnav"><button class="btn small" onclick="dGo(-1)">‹ 전날</button><button class="btn small" onclick="dGo(1)" ${d>=today()?"disabled":""}>다음 날 ›</button>
-    ${d!==today()?`<button class="btn small ghost" onclick="diaryDate=today();render()">오늘로</button>`:""}<input type="date" value="${d}" max="${today()}" onchange="if(this.value){diaryDate=this.value;render()}" style="width:150px">
-    <span class="spacer"></span><button class="btn small ink" onclick="toggleStk()">${ICO.flower}스티커 붙이기</button></div>
-  <div class="diary">
+  const nav=`<div class="dnav"><button class="btn small" onclick="dGo(-1)">‹ 전날</button><button class="btn small" onclick="dGo(1)" ${d>=today()?"disabled":""}>다음 날 ›</button>
+    ${d!==today()?`<button class="btn small ghost" onclick="dOpen(today(),'next')">오늘로</button>`:""}
+    <span class="pills" style="margin-left:6px"><button class="pill ${DIARY_VIEW==="page"?"on":""}" onclick="DIARY_VIEW='page';render()">일기장</button><button class="pill ${DIARY_VIEW==="list"?"on":""}" onclick="DIARY_VIEW='list';render()">목록</button></span>
+    <span class="spacer"></span>${DIARY_VIEW==="page"?`<button class="btn small ink" onclick="toggleStk()">${ICO.flower}스티커 붙이기</button>`:""}</div>`;
+  if(DIARY_VIEW==="list") return nav+`<div class="dwrap"><section class="sheet" style="flex:1;min-width:0"><p class="label">일기 목록</p>${dListHtml()}</section><aside class="dside">${dCalHtml()}</aside></div>`;
+  return nav+`<div class="dwrap"><div style="flex:1;min-width:0"><div class="diary">
     ${stkLayer("diary:"+d)}
     <div class="pg l">
       <div class="dhead"><span class="dd">${x.getMonth()+1}.${String(x.getDate()).padStart(2,"0")}</span><span class="dw">${x.getFullYear()} · ${WEEK[x.getDay()]}요일</span></div>
@@ -1945,7 +1996,7 @@ function diaryPage(){
           :`<p class="muted">이날 쓴 글이 없습니다.</p>`}</div>
       <div class="dsec"><p class="dl">한 줄 일기</p><textarea class="dline" placeholder="오늘 아침을 한 줄로…" oninput="dLine(this.value)">${esc(e.line||"")}</textarea></div>
     </div>
-  </div>`;
+  </div></div><aside class="dside">${dCalHtml()}</aside></div>`;
 }
 
 // ───────── 스티커: 일기와 글 종이에 붙이고, 끌어서 옮기고, 돌리고, 키우기 ─────────
