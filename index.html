@@ -691,22 +691,28 @@ const ICO=(()=>{ const w=d=>`<svg class="ico" viewBox="0 0 24 24" aria-hidden="t
 const BIBLE=[["창세기",50],["출애굽기",40],["레위기",27],["민수기",36],["신명기",34],["여호수아",24],["사사기",21],["룻기",4],["사무엘상",31],["사무엘하",24],["열왕기상",22],["열왕기하",25],["역대상",29],["역대하",36],["에스라",10],["느헤미야",13],["에스더",10],["욥기",42],["시편",150],["잠언",31],["전도서",12],["아가",8],["이사야",66],["예레미야",52],["예레미야애가",5],["에스겔",48],["다니엘",12],["호세아",14],["요엘",3],["아모스",9],["오바댜",1],["요나",4],["미가",7],["나훔",3],["하박국",3],["스바냐",3],["학개",2],["스가랴",14],["말라기",4],["마태복음",28],["마가복음",16],["누가복음",24],["요한복음",21],["사도행전",28],["로마서",16],["고린도전서",16],["고린도후서",13],["갈라디아서",6],["에베소서",6],["빌립보서",4],["골로새서",4],["데살로니가전서",5],["데살로니가후서",3],["디모데전서",6],["디모데후서",4],["디도서",3],["빌레몬서",1],["히브리서",13],["야고보서",5],["베드로전서",5],["베드로후서",3],["요한1서",5],["요한2서",1],["요한3서",1],["유다서",1],["요한계시록",22]];
 const SERMON="중심 메시지(한 문장): \n\n■ 본문 주해 — 처음 독자에게 이 말씀은 무엇이었나\n\n■ 신학 — 하나님은 어떤 분이시고, 복음은 어디에 있나\n\n■ 서론 — 듣는 이의 삶에서 시작하기\n\n■ 1대지\n\n■ 2대지\n\n■ 3대지\n\n■ 적용 — 오늘 우리 교회, 이번 주의 한 걸음\n\n■ 결론과 결단\n";
 const TYPES={
-  bible:{
+  bible:{   // 묵상 탭은 두 가지만: 묵상 · 설교초안 (주일·새벽 설교는 노션의 설교초안을 바탕으로 설교작성 프로젝트에서 씁니다). 옛 종류는 LEGACY_TYPES
     "묵상":"■ 본문 — 마음에 머문 구절\n\n■ 관찰 — 무엇이 쓰여 있는가\n\n■ 하나님은 어떤 분이신가\n\n■ 해석 — 처음 독자에게 무슨 뜻이었나\n\n■ 적용 — 오늘 나의 삶에서\n\n■ 기도\n\n■ 설교 씨앗 — 언젠가 전하고 싶은 한 줄\n",
+    "설교초안":"■ 중심 메시지 (한 문장)\n\n■ 본문에서 붙잡은 것\n\n■ 뼈대 메모 — 대지 후보\n\n■ 예화·자료 후보\n\n■ 더 살펴볼 것 (원어·배경·주석)\n"},
+  book:{
+    "자기계발 글":"■ 오늘의 한 문장\n\n■ 장면 하나 — 내가 겪은 일 (도장·목회·가정)\n\n■ 이 문장이 그 장면에 말해 준 것\n\n■ 독자에게 건네는 통찰\n\n■ 오늘 바로 해볼 한 가지\n",
+    "자유 글":""}
+};
+const LEGACY_TYPES={   // 예전에 쓰던 말씀 글 종류 — 이미 쓴 글을 열면 그 종류로 보이고, 노션 꼬리표도 그대로
+  bible:{
     "설교 초안":"■ 떠오른 메시지 한 줄\n\n■ 본문에서 붙잡은 것\n\n■ 뼈대 메모 (대지 후보)\n\n■ 예화·자료 후보\n\n■ 더 살펴볼 것 (원어·배경·주석)\n",
     "주일설교":SERMON,
     "새벽설교":"중심 메시지(한 문장): \n\n■ 본문 풀이\n\n■ 오늘 붙들 한 가지\n\n■ 함께 드릴 기도\n",
     "예식설교":"중심 메시지(한 문장): \n\n■ 이 자리에 모인 분들 — 누가, 어떤 마음으로\n\n■ 본문이 이 자리에 주는 말씀\n\n■ 짧은 권면 (한 가지)\n\n■ 축복과 기도\n",
     "묵상을설교로":"■ 중심 메시지 (한 문장)\n\n■ 설교 뼈대 메모 — 대지 후보, 예화 후보, 더 살펴볼 것\n\n■ 완성 설교 — 설교작성 프로젝트에서 완성한 설교를 이 아래에 씁니다\n",
     "자유 글":""},
-  book:{
-    "자기계발 글":"■ 오늘의 한 문장\n\n■ 장면 하나 — 내가 겪은 일 (도장·목회·가정)\n\n■ 이 문장이 그 장면에 말해 준 것\n\n■ 독자에게 건네는 통찰\n\n■ 오늘 바로 해볼 한 가지\n",
-    "자유 글":""}
+  book:{}
 };
+const typeTpl=(tr,t)=>(TYPES[tr]||{})[t]??(LEGACY_TYPES[tr]||{})[t]??"";
 const SITUATIONS=["개업·창업","이사·입주","결혼·약혼","출산·돌·생일","입학·졸업·진학","장례·추모","병문안·심방","세례·입교·학습","임직·취임·은퇴","교회 창립·헌당","파송·선교","수련회·특강","온세대(어린이 함께)","신년·송구영신","주현절","사순절","고난주간·부활절","성령강림절","맥추·추수감사절","대림·성탄절","종교개혁주일","어린이·어버이주일","국가 기념일(삼일절·광복절)"];
 const WSTATUS=["씨앗","초고","다듬는 중","완성"];
 // 제목 앞 꼬리표: 노션 「새 노트 정리법」과 같은 이름 ([묵상] 요한복음 15:5 / 머무는 삶)
-const KTAG={"묵상":"묵상","설교 초안":"설교메모","주일설교":"주일설교","새벽설교":"새벽설교","예식설교":"설교","자유 글":"메모","묵상을설교로":"묵상을설교로"};
+const KTAG={"묵상":"묵상","설교초안":"설교초안","설교 초안":"설교메모","주일설교":"주일설교","새벽설교":"새벽설교","예식설교":"설교","자유 글":"메모","묵상을설교로":"묵상을설교로"};
 const wTag=w=>w.track==="bible"?(KTAG[w.type]||w.type):w.type;
 const SLEN=[["긴설교","주일·특별 예배처럼 30분 안팎"],["짧은설교","새벽·수요·소그룹처럼 10~15분"]];
 const TOPICS=["믿음","순종","소명·부르심","두려움·용기","시험·고난","위로·회복","은혜","회개","용서·화해","기도","예배","말씀","우상·세속","정체성·자존감","교회·공동체","가정·관계","지도자·리더십","다음세대","정의·공의","물질·돈","섬김·사랑","부활·소망","성령","십자가·복음","감사·찬양","언약","하나님의 동행","인도하심","겸손·교만","분열·연합","헌신","거룩·성결","죄·심판","하나님 나라","재림·종말","선교·전도","성찬·세례"];
@@ -961,7 +967,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="4d8dfcdfae";
+const APP_BUILD="efcce8dc74";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1544,7 +1550,8 @@ let TRACK_PICK=false;   // 메뉴(묵상/글쓰기)로 갈래를 정해 들어�
 function goInner(t,o){ TRACK_PICK=!!o.track; if(t!=="write"){ keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
   if(t==="write"&&!o.edit&&!o.fromNote&&!o.fromWriting&&!o.new){   // 쓰기로 들어오면 오늘 쓴 글이 있을 때 그 글을 이어서 (묵상 먼저). 새로 쓰려면 「새 글」
     const tr=o.track||track, ws=S.writings.filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
-  tab=t; if(o.track) track=o.track; editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||null; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
+  tab=t; if(o.track) track=o.track; { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew) track=ew.track; }   // 글을 열면 그 글의 갈래로 (위 메뉴 표시도 묵상/글쓰기로 맞춤)
+  editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||null; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
 const FLOW=`<div class="flow"><span><b>밑줄</b> 읽다가 붙잡은 한 문장</span><i>→</i><span><b>글</b> 그 문장으로 쓴 묵상·설교·에세이</span><i>→</i><span><b>원고</b> 글을 모아 엮는 한 권의 책</span></div>`;
 function render(){
   // 같은 쓰기 화면을 다시 그릴 때(말씀/책 바꾸기, 합친 뒤 등) 쓰던 제목·본문을 그대로 지켜 줍니다
@@ -1621,9 +1628,9 @@ function calHtml(){
     const k=dkey(d), m=marks[k]||{}, cls=["d",d.getMonth()!==calM?"o":"",d.getDay()===0?"sun":"",k===t?"today":"",m.promo?"promo":m.bible?"bible":"",m.book?"book":""].filter(Boolean).join(" ");
     cells+=`<button type="button" class="${cls}" onclick="calGo('${k}')" title="${k}${m.bible||m.promo||m.book?" · 쓴 글 "+S.writings.filter(w=>w.date===k).length+"편":""}"><span>${d.getDate()}</span></button>`; }
   const pick=calPick?S.writings.filter(w=>w.date===calPick):[];
-  return `<div class="calcard"><div class="calhead"><button onclick="calMove(-12)" title="지난해">«</button><button onclick="calMove(-1)" title="지난달">‹</button><span class="t">${calY}년 ${calM+1}월</span><button onclick="calMove(1)" title="다음 달">›</button><button onclick="calMove(12)" title="다음 해">»</button>${(calY!==now.getFullYear()||calM!==now.getMonth())?`<button onclick="calY=calM=null;calPick=null;paintCal()" title="이번 달로" style="font-size:12px;width:auto;padding:0 6px">오늘</button>`:""}</div>
+  return `<div class="calcard"><p class="label bible" style="margin:0 0 4px;font-size:20px">묵상 캘린더</p><div class="calhead"><button onclick="calMove(-12)" title="지난해">«</button><button onclick="calMove(-1)" title="지난달">‹</button><span class="t">${calY}년 ${calM+1}월</span><button onclick="calMove(1)" title="다음 달">›</button><button onclick="calMove(12)" title="다음 해">»</button>${(calY!==now.getFullYear()||calM!==now.getMonth())?`<button onclick="calY=calM=null;calPick=null;paintCal()" title="이번 달로" style="font-size:12px;width:auto;padding:0 6px">오늘</button>`:""}</div>
     <div class="cal">${"일월화수목금토".split("").map(x=>`<div class="wd">${x}</div>`).join("")}${cells}</div>
-    <div class="callegend"><span><i style="background:rgba(247,214,92,.8)"></i>묵상·말씀 글</span><span><i style="border:1.5px solid var(--stamp);border-radius:3px;width:10px;height:10px"></i>설교로 올린 날</span><span><i style="background:var(--book);width:7px;height:7px"></i>책 글</span></div>
+    <div class="callegend"><span><i style="background:rgba(247,214,92,.8)"></i>묵상·설교초안</span><span><i style="border:1.5px solid var(--stamp);border-radius:3px;width:10px;height:10px"></i>설교로 올린 글</span><span><i style="background:var(--book);width:7px;height:7px"></i>책 글</span></div>
     ${pick.length>1?`<div class="calpick"><div class="muted">${calPick}에 쓴 글 ${pick.length}편</div>${pick.map(w=>`<a href="#" onclick="go('write',{edit:'${w.id}'});return false" style="${w.id===editId?"font-weight:700":""}">[${esc(wTag(w))}] ${esc(w.title||w.passage||"(제목 없음)")}${w.id===editId?" ← 지금":""}</a>`).join("")}</div>`:""}</div>`;
 }
 function paintCal(){ const el=$(".calcard"); if(!el) return; el.outerHTML=calHtml(); }
@@ -2038,11 +2045,11 @@ write(){
   if(fw&&!selTopics.length) selTopics=[...(fw.topics||[])];
   if(w&&!selSits.length) selSits=[...(w.situations||[])];
   if(w&&selLen===undefined) selLen=w.length||null;
-  const dtype=w?.type||(fw?"설교 초안":null);
+  const dtype=w?.type||(fw?"설교초안":null);
   const defBook=w?w.bookId:(fn?.bookId??S.settings.currentBook), defPage=w?.page??fn?.page??"";
   const hasMore=!!(w&&(w.summary||(w.topics||[]).length||(w.situations||[]).length||msOf(w).length));
-  const seed=fw?`${TYPES.bible["설교 초안"]}\n■ 묵상에서 (${fw.date}${fw.title?" · "+fw.title:""})\n${fw.body}\n`:fn?`「${fn.text}」 (${noteSrc(fn)})\n${fn.thought?fn.thought+"\n":""}\n`:"";
-  const types=Object.keys(TYPES[track]);
+  const seed=fw?`${TYPES.bible["설교초안"]}\n■ 묵상에서 (${fw.date}${fw.title?" · "+fw.title:""})\n${fw.body}\n`:fn?`「${fn.text}」 (${noteSrc(fn)})\n${fn.thought?fn.thought+"\n":""}\n`:"";
+  const types=Object.keys(TYPES[track]); if(dtype&&!types.includes(dtype)) types.push(dtype);   // 옛 종류의 글은 그 종류를 그대로 보여 줌
   const notes=S.notes.filter(n=>n.track===track).slice(-14).reverse();
   const ink=S.settings.ink, paper=S.settings.paper;
   const books=S.books;
@@ -2103,7 +2110,7 @@ write(){
           <div class="sealtext"><b class="pen" style="font-size:24px">봉인을 누르면</b><br>${PLACE()}에 저장되고${canSync()?", 노션에도 실립니다.":"니다."}<br><span class="muted">⌘S 를 눌러도 됩니다</span>
             <div id="syncstamp" style="margin-top:10px">${syncStamp(w)}${w?.syncError?`<div class="muted" style="margin-top:8px">${esc(w.syncError)}</div>`:""}</div></div>
         </div>
-        <div class="row" style="margin-top:14px"><button class="btn small" onclick="copyW()" title="제목과 본문을 복사해 카톡·블로그 등에 붙여 넣을 수 있습니다">글 복사</button>${w&&w.track==="bible"&&w.type!=="묵상을설교로"&&w.type!=="주일설교"&&w.type!=="새벽설교"?(promoAsk===w.id
+        <div class="row" style="margin-top:14px"><button class="btn small" onclick="copyW()" title="제목과 본문을 복사해 카톡·블로그 등에 붙여 넣을 수 있습니다">글 복사</button>${false&&w&&w.track==="bible"&&w.type!=="묵상을설교로"&&w.type!=="주일설교"&&w.type!=="새벽설교"?(promoAsk===w.id
           ?`<span class="pills">${SLEN.map(([n,d])=>`<button class="pill" data-tip="${d}" onclick="promote('${w.id}','${n}')">${n}</button>`).join("")}<button class="pill" onclick="promoAsk=null;render()">취소</button></span>`
           :`<button class="btn small ink" onclick="promoAsk='${w.id}';render()" title="이 묵상으로 [묵상을설교로] 페이지를 새로 만듭니다">${ICO.cross}설교로 올리기</button>`):""}
         ${w?.type==="묵상을설교로"?`<button class="btn small" onclick="pullNotion('${w.id}')" title="설교작성 프로젝트가 노션 이 페이지에 쓴 글을 앱으로 가져옵니다">${ICO.down}노션에서 가져오기</button>`:""}${w?`<button class="btn small" onclick="syncWriting(S.writings.find(x=>x.id==='${w.id}'))">노션에 다시 보내기</button><button class="btn small danger" onclick="delWriting('${w.id}')">지우기</button>`:""}</div>
@@ -2286,8 +2293,7 @@ function addNoteFrom(trk){
 function todayNotes(trk){
   const list=S.notes.filter(n=>n.date===today()&&n.track===trk);
   if(!list.length) return "";
-  return `<div class="todaynotes"><p class="hint" style="margin:0 0 4px">오늘 남긴 밑줄 — 글로 키울 수 있습니다</p>${list.map(n=>`<div class="mini-note"><span class="myeongjo">「${esc(n.text.length>60?n.text.slice(0,60)+"…":n.text)}」</span>
-    ${grownFrom(n.id).length?`<span class="muted">✓ 글 ${grownFrom(n.id).length}편</span>`:`<button class="btn small" onclick="growNote('${n.id}')">${ICO.pen}글로 키우기</button>`}</div>`).join("")}</div>`;
+  return `<div class="todaynotes"><p class="hint" style="margin:0 0 4px">오늘 남긴 밑줄</p>${list.map(n=>`<div class="mini-note"><span class="myeongjo">「${esc(n.text.length>60?n.text.slice(0,60)+"…":n.text)}」</span></div>`).join("")}</div>`;
 }
 function growNote(id){ const n=S.notes.find(x=>x.id===id); go("write",{track:n.track,fromNote:id}); }
 function delNote(id){
@@ -2452,13 +2458,13 @@ async function pullNotion(id){
 function toggleSit(t){ const i=selSits.indexOf(t); if(i>=0) selSits.splice(i,1); else selSits.push(t); document.querySelectorAll("#sits .chip").forEach(c=>c.classList.toggle("on",selSits.includes(c.textContent))); }
 function restorePrev(id,k){ const w=S.writings.find(x=>x.id===id), v=w?.prev?.[k], b=$("#wbody"); if(!v||!b) return;
   if(b.value.trim()&&!confirm("지금 본문 대신 이전 판을 넣을까요? (간직해야 확정됩니다)")) return; tInsert(b,v.body,0,b.value.length); toast("이전 판을 불러왔습니다. 봉인을 누르면 간직됩니다 (↶ 로 되돌리기)"); }
-function insertTemplate(){ const b=$("#wbody"), tpl=TYPES[track][$("#wtype").value]; if(!tpl) return toast("자유 글에는 틀이 없습니다. 마음 가는 대로 쓰세요"); if(b.value.trim()&&!confirm("본문 맨 앞에 틀을 넣을까요?")) return; tInsert(b,tpl+(b.value?"\n":""),0,0); b.selectionStart=b.selectionEnd=tpl.indexOf("\n")>0?tpl.indexOf("\n"):tpl.length; }
+function insertTemplate(){ const b=$("#wbody"), tpl=typeTpl(track,$("#wtype").value); if(!tpl) return toast("자유 글에는 틀이 없습니다. 마음 가는 대로 쓰세요"); if(b.value.trim()&&!confirm("본문 맨 앞에 틀을 넣을까요?")) return; tInsert(b,tpl+(b.value?"\n":""),0,0); b.selectionStart=b.selectionEnd=tpl.indexOf("\n")>0?tpl.indexOf("\n"):tpl.length; }
 function insertNote(id){ const n=S.notes.find(x=>x.id===id), b=$("#wbody"); const txt=`「${n.text}」 (${noteSrc(n)})\n`; tInsert(b,txt); }
 // 간직하기: 봉인(또는 ⌘S)을 누르면 바로, 아니어도 글을 25초 쉬면 저절로 간직됩니다(자동 간직 — 화면은 건드리지 않고 조용히).
 // 노션에는 봉인을 눌렀을 때와 쓰기 화면을 떠날 때·앱을 내릴 때 실립니다 (타자마다 보내면 노션 페이지가 계속 다시 써지므로)
 function keepWriting(auto){
   const b=$("#wbody"); if(!b) return null; const body=b.value; if(!body.trim()){ if(!auto) toast("아직 빈 페이지입니다"); return null; }
-  if(auto){ const tl=new Set((TYPES[track]?.[$("#wtype")?.value]||"").split("\n").map(l=>l.trim()).filter(Boolean)); const own=stripMemo(body).split("\n").filter(l=>!tl.has(l.trim())).join(""); if(chars(own)<40||!writingUnsaved()) return null; }   // 틀만 넣고 아직 안 쓴 글은 간직하지 않음
+  if(auto){ const tl=new Set(typeTpl(track,$("#wtype")?.value).split("\n").map(l=>l.trim()).filter(Boolean)); const own=stripMemo(body).split("\n").filter(l=>!tl.has(l.trim())).join(""); if(chars(own)<40||!writingUnsaved()) return null; }   // 틀만 넣고 아직 안 쓴 글은 간직하지 않음
   clearDraft();   // 임시 보관 칸(이 기기·구글)을 비움 — 새 글은 번호가 정해지기 전(칸 이름이 new 일 때) 비워야 합니다
   const data={type:$("#wtype").value,title:$("#wtitle").value.trim(),body,summary:$("#wsummary").value.trim(),topics:[...selTopics],status:$("#wstatus")?.value||"초고",updated:new Date().toISOString()};
   if(track==="bible"){ data.passage=normPassage($("#wpassage").value); data.situations=[...selSits]; data.length=data.type==="묵상을설교로"?(selLen||null):null; }
@@ -2745,7 +2751,7 @@ function uploadCover(id,input){
 // ───────── 동작: 원고 · 보관함 · 설정 ─────────
 // ───────── 분류 · 원고 ─────────
 // 저절로 붙는 분류(글 종류·성경책·읽은 책·해)와 직접 고르는 주제로 글을 찾고, 원고로 엮습니다
-const ALL_TYPES=[...Object.keys(TYPES.bible),...Object.keys(TYPES.book)];
+const ALL_TYPES=[...Object.keys(TYPES.bible),...Object.keys(LEGACY_TYPES.bible),...Object.keys(TYPES.book)];
 const BOOK_NAMES=BIBLE.map((b,i)=>[b[0],i]).sort((a,b)=>b[0].length-a[0].length);
 function bibleRef(s){ s=(s||"").trim(); for(const [n,i] of BOOK_NAMES) if(s.startsWith(n)){ const m=s.slice(n.length).match(/(\d+)(?:\s*[:장편]\s*(\d+))?/); return {book:i,ch:m?+m[1]:0,vs:m&&m[2]?+m[2]:0}; } return null; }
 const wRef=w=>w.track==="bible"?bibleRef(w.passage):null;
