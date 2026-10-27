@@ -709,7 +709,7 @@ const TYPES={
     "묵상":"■ 본문 — 마음에 머문 구절\n\n■ 관찰 — 무엇이 쓰여 있는가\n\n■ 하나님은 어떤 분이신가\n\n■ 해석 — 처음 독자에게 무슨 뜻이었나\n\n■ 적용 — 오늘 나의 삶에서\n\n■ 기도\n\n■ 설교 씨앗 — 언젠가 전하고 싶은 한 줄\n",
     "설교초안":"■ 중심 메시지 (한 문장)\n\n■ 본문에서 붙잡은 것\n\n■ 뼈대 메모 — 대지 후보\n\n■ 예화·자료 후보\n\n■ 더 살펴볼 것 (원어·배경·주석)\n"},
   book:{
-    "자기계발 글":"■ 오늘의 한 문장\n\n■ 장면 하나 — 내가 겪은 일 (도장·목회·가정)\n\n■ 이 문장이 그 장면에 말해 준 것\n\n■ 독자에게 건네는 통찰\n\n■ 오늘 바로 해볼 한 가지\n",
+    "자기계발 글":"■ 오늘의 한 문장\n\n■ 장면 하나 — 내가 겪은 일 (가정·목회·일)\n\n■ 이 문장이 그 장면에 말해 준 것\n\n■ 독자에게 건네는 통찰\n\n■ 오늘 바로 해볼 한 가지\n",
     "자유 글":""}
 };
 const LEGACY_TYPES={   // 예전에 쓰던 말씀 글 종류 — 이미 쓴 글을 열면 그 종류로 보이고, 노션 꼬리표도 그대로
@@ -982,7 +982,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="aac7744e2c";
+const APP_BUILD="96c548ee6b";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2387,7 +2387,7 @@ function paintHeads(){
   if(t.style.display==="none"){ m.style.display="none"; return; } m.style.display="";
   const cs=getComputedStyle(t); m.style.cssText=`top:${t.offsetTop}px;left:${t.offsetLeft}px;width:${t.clientWidth}px;padding:${cs.padding};font:${cs.font};letter-spacing:${cs.letterSpacing};color:${cs.color}`;
   // 소제목 줄 안의 영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보이므로 그 부분만 원래 글자(보이지 않는 자리)로 둡니다
-  const boldLine=l=>l.split(/([A-Za-z0-9@._\-\/:'"%+=<>]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");
+  const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):`<span>${esc(l)}</span>`;
   const errs=spellLines(t.value);
   m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[]; if(!E.length) return plain(l,head);
