@@ -761,7 +761,9 @@ const CONN_KEY="seojae.conn";
 // 연결 링크는 내 구글 앱스 스크립트 주소 모양일 때만 받고, 이미 다른 곳에 연결된 기기면 한 번 확인합니다(가짜 링크 방지)
 function validConn(c){ return !!c&&typeof c.k==="string"&&c.k.length>=20&&/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(c.u||""); }
 function askReplace(c){ let cur=null; try{ cur=JSON.parse(localStorage.getItem(CONN_KEY)||"null"); }catch(_){}
-  return !cur||(cur.u===c.u&&cur.k===c.k)||confirm("이 기기는 이미 아침 서재에 연결되어 있습니다.\n받은 연결 링크로 바꿀까요? (본인이 직접 만든 링크가 아니면 「취소」를 누르세요)"); }
+  if(cur&&cur.u===c.u&&cur.k===c.k) return true;
+  const who=c.e?`${c.e} 의 `:"", id=(c.u.match(/\/s\/([\w-]{8})/)||[])[1]||"";
+  return confirm(`${who}아침 서재(구글 서버 …${id})에 이 기기를 연결할까요?\n쓰는 모든 글과 기록이 그 서버에 저장됩니다.\n본인이 직접 만든 링크(또는 본인 기기의 QR)가 아니면 「취소」를 누르세요.${cur?"\n(지금 연결된 서버를 바꾸게 됩니다)":""}`); }
 (function takeConnectLink(){ // 주소 끝의 #connect=… 를 읽어 이 기기에 열쇠를 저장하고, 주소에서는 지웁니다
   const m=location.hash.match(/^#connect=([\w\-=]+)/); if(!m) return;
   try{ const c=JSON.parse(atob(m[1].replace(/-/g,"+").replace(/_/g,"/")));
@@ -774,7 +776,7 @@ const GAS=!!CONN;                        // 구글 서버를 쓰는지
 let NEED_CONNECT=!CONN&&!IS_LOCAL, AUTH_FAIL=false;
 async function gcall(fn,...args){
   // 본문을 글자(text/plain)로 보내면 브라우저가 따로 허락을 묻지 않아 구글 서버에 바로 닿습니다
-  const r=await fetch(CONN.u,{method:"POST",body:JSON.stringify({key:CONN.k,fn,args})});
+  const r=await fetch(CONN.u,{method:"POST",body:JSON.stringify({key:CONN.k,fn,args}),signal:AbortSignal.timeout?AbortSignal.timeout(fn==="saveData"?120000:fn==="cmtIndex"?300000:180000):undefined});
   const j=await r.json();
   if(j.auth===false){ AUTH_FAIL=true; throw new Error(j.error); }
   if(!j.ok) throw new Error(j.error);
@@ -811,37 +813,37 @@ async function apiGet(path,params){
   }
   const r=await fetch(path+(params?"?"+new URLSearchParams(params):""),{cache:"no-store"}); if(!r.ok) throw new Error(r.status); return r.json();
 }
-const PLACE=()=>GAS?"구글 드라이브":"이 컴퓨터";
+const PLACE=()=>GAS?"구글 드라이브":"이 기기";
 // 빠르게 열기: 이 기기에 남은 지난번 사본(기록·설정)으로 화면을 먼저 그리고, 최신 기록은 뒤에서 받아 옵니다.
 // 최신 기록이 오기 전에는 구글에 저장하지 않고(PENDING), 도착하면 최신 기록과 합친 뒤 저장합니다 → 다른 기기 글을 덮지 않음.
 const CKEY="seojae.conf";
 let READY=false, PENDING=false, CACHED_REV=null;
 const useData=d=>{ S=Object.assign(blank(),d); S.settings=Object.assign(blank().settings,d.settings);
+  for(const k of ["writings","notes","books","manuscripts","jots"]) (S[k]||[]).forEach(x=>{ if(!/^[a-z0-9_-]{1,40}$/i.test(String(x.id||""))) x.id=uid(); });   // 번호는 글자·숫자만
   S.writings.forEach(w=>{ delete w.syncing; delete w.resync; }); dedupeWritings(); };   // 예전에 남은 '보내는 중' 표시 지우기
 function dedupeWritings(){
-  // 같은 날·같은 갈래에 제목과 본문 위치가 같은 글(또는 본문이 똑같은 글)은 한 편으로: 본문이 더 긴 쪽을 남기고(같으면 노션에 실린 쪽, 그다음 먼저 만든 쪽),
-  // 남는 쪽에 노션 번호가 없으면 지워지는 쪽 것을 물려받고, 지워지는 쪽의 노션 페이지가 따로 있으면 휴지통으로
-  const norm=t=>String(t||"").replace(/\s+/g," ").trim(), seen=new Map(), drop=[], pages=[];
-  const keyOf=w=>{ const t=norm(w.title); return t?[w.date,w.track,"t",t,norm(w.passage)].join("|"):[w.date,w.track,"b",norm(w.body)].join("|"); };
+  // 같은 날·갈래·종류·제목·본문 위치에 본문 앞 200자까지 같은 글(또는 본문이 똑같은 글)만 같은 글로 봅니다. 본문이 더 긴 쪽을 남기고(같으면 노션 실린 쪽, 그다음 먼저 만든 쪽),
+  // 남는 쪽에 노션 번호가 없으면 물려받습니다. 지워지는 쪽은 휴지통으로만 보냅니다(노션 페이지는 건드리지 않음 — 사람이 휴지통에서 확인)
+  const norm=t=>String(t||"").replace(/\s+/g," ").trim(), seen=new Map(), drop=[];
+  const keyOf=w=>{ const t=norm(w.title); return t?[w.date,w.track,w.type,"t",t,norm(w.passage),norm(w.body).slice(0,200)].join("|"):[w.date,w.track,w.type,"b",norm(w.body)].join("|"); };
   for(const w of live().slice().sort((a,b)=>a.id.localeCompare(b.id))){ const k=keyOf(w), o=seen.get(k);
     if(!o){ seen.set(k,w); continue; }
     const lb=norm(w.body).length-norm(o.body).length;
     const keep=lb>0?w:lb<0?o:(o.notion?.page&&!w.notion?.page)?o:(w.notion?.page&&!o.notion?.page)?w:o, gone=keep===o?w:o;
-    if(!keep.notion?.page&&gone.notion?.page){ keep.notion=gone.notion; keep.syncedAt=gone.syncedAt; }
-    else if(gone.notion?.page&&gone.notion.page!==keep.notion?.page) pages.push(gone.notion.page,gone.notion.index);
+    if(!keep.notion?.page&&gone.notion?.page){ keep.notion=gone.notion; keep.syncedAt=gone.syncedAt; gone.notion=null; }
     for(const f of ["summary","topics","situations","stickers","prev"]) if(!keep[f]?.length&&gone[f]?.length) keep[f]=gone[f];
     seen.set(k,keep); drop.push(gone); }
   if(!drop.length) return;
-  drop.forEach(w=>{ tomb(w.id); S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==w.id); }); });
-  S.writings=S.writings.filter(w=>!drop.includes(w)); if(drop.some(w=>w.id===editId)) editId=null;
-  setTimeout(()=>{ toast(`같은 글 ${drop.length}편을 하나로 합쳤습니다`); save(); if(pages.filter(Boolean).length) trashInNotion(pages.filter(Boolean)); if(tab!=="write") render(); },800);
+  const now=new Date().toISOString(); drop.forEach(w=>{ w.trashed=now; w.updated=now; S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==w.id); }); });
+  if(drop.some(w=>w.id===editId)) editId=null;
+  setTimeout(()=>{ toast(`같은 글 ${drop.length}편을 휴지통으로 옮겼습니다 (서랍 → 휴지통에서 확인)`); save(); if(tab!=="write") render(); },800);
 }
 async function load(){
   if(NEED_CONNECT) return;
   if(GAS){
     try{
       const d=JSON.parse(localStorage.getItem(LKEY)||"null"), c=JSON.parse(localStorage.getItem(CKEY)||"null");
-      if(d&&d.writings&&c){ useData(d); CONF=c; CONF.phoneUrl=connectLink(); SERVER=true; CACHED_REV=d.rev??null; setTimeout(()=>fetchFresh(false),0); return; }
+      if(d&&d.writings&&c){ useData(d); CONF=c; CONF.phoneUrl=connectLink(); SERVER=true; CACHED_REV=d.rev??null; takeSnap(); setTimeout(()=>fetchFresh(false),0); return; }
     }catch(_){}
   }
   await fetchFresh(true);
@@ -921,7 +923,7 @@ function mergeFrom(other){
     for(const x of S[k]){ const o=map.get(x.id); if(!o||stamp(x)>=stamp(o)) map.set(x.id,x);
       // 노션 페이지 번호는 고친 시각과 상관없이 어느 쪽에든 있으면 지킵니다 (잃으면 다음 간직 때 노션에 같은 글이 하나 더 생김)
       const win=map.get(x.id), lose=win===x?o:x; if(lose){ for(const f of ["notion","syncedAt","notionId","reviewNotion","title","passage","summary","oneLine","review"]) if(lose[f]&&!win[f]) win[f]=lose[f]; } }   // 제목처럼 한쪽만 적은 칸은 비어 있는 쪽으로 덮지 않음
-    S[k]=[...map.values()].filter(x=>!del[x.id]);
+    S[k]=[...map.values()].filter(x=>{ const t=del[x.id]; if(!t) return true; if((x.updated||"")>t){ delete del[x.id]; return true; } return false; });   // 지운 뒤에 다른 기기에서 고친 글은 살림
   }
   { const D=Object.assign({},other.drafts||{});                // 쓰다 만 글(임시 보관): 칸마다 더 나중 것, 간직해서 지운 칸은 묘비로
     for(const [k,v] of Object.entries(S.drafts||{})){ if(!D[k]||(v.t||0)>=(D[k].t||0)) D[k]=v; }
@@ -988,7 +990,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="d6733b015d";
+const APP_BUILD="ae5e8dbf25";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1043,6 +1045,7 @@ async function syncWriting(w,quiet){
   const firstTime=!w.notion?.page;
   try{
     const r=await api("/api/notion/sync",{writing:payload,book});
+    { const cur=S.writings.find(x=>x.id===w.id); if(cur&&cur!==w){ cur.syncing=w.syncing; w=cur; } }   // 보내는 사이 합쳐져 글 객체가 바뀌었으면 그쪽에 기록
     if(r.ok){ w.notion={page:r.page,index:r.index,marker:r.marker,blocks:r.blocks,url:r.url}; w.syncedAt=new Date().toISOString(); w.syncError=null; if(book&&r.bookRow) book.notionId=r.bookRow; if(!quiet) toast(r.recovered?"노션의 같은 글 페이지를 다시 찾아 그곳에 실었습니다":"노션에 실었습니다");
       if(firstTime&&w.type==="설교초안") srcOf(w).filter(m=>m.notion?.page).forEach(m=>syncWriting(m,true)); }   // 새 초안이 생기면 바탕 묵상 페이지에도 「→ 설교초안」 링크를 달아 줌
     else { w.syncError=r.error; if(!quiet) toast("노션에 올리지 못했습니다"); }
@@ -1067,10 +1070,10 @@ function syncStamp(w){   // 노션 보관 상태는 늘 보이게: 보내는 중
   if(!w) return "";
   if(w.syncing) return `<span class="stamp">보내는 중…</span><div class="nstate busy" style="margin-top:6px"><i></i>노션에 싣는 중</div>`;
   if(w.syncError) return `<span class="stamp err" title="${esc(w.syncError)}">노션 미전송</span>`;
-  if(w.notion?.page) return `<a href="${esc(w.notion.url||"#")}" target="_blank" style="text-decoration:none"><span class="stamp ok">노션 보관 ✓</span></a><div class="nstate ok" style="margin-top:6px"><i></i>노션에 보관됨${w.syncedAt?" · "+esc(hm(w.syncedAt)):""}</div>`;
+  if(w.notion?.page) return `<a href="${esc(safeUrl(w.notion.url)||"#")}" target="_blank" style="text-decoration:none"><span class="stamp ok">노션 보관 ✓</span></a><div class="nstate ok" style="margin-top:6px"><i></i>노션에 보관됨${w.syncedAt?" · "+esc(hm(w.syncedAt)):""}</div>`;
   return canSync()?`<div class="nstate"><i></i>아직 노션에 없음 — 봉인을 누르면 실립니다</div>`:"";
 }
-const nState=w=>w.syncing?`<span class="nstate busy"><i></i>보관 중</span>`:w.notion?.page?`<a class="nstate ok" href="${esc(w.notion.url)}" target="_blank" style="text-decoration:none"><i></i>노션 보관됨</a>`:w.syncError?`<span class="nstate err" title="${esc(w.syncError)}"><i></i>노션 미전송</span>`:"";
+const nState=w=>w.syncing?`<span class="nstate busy"><i></i>보관 중</span>`:w.notion?.page?`<a class="nstate ok" href="${esc(safeUrl(w.notion.url)||"#")}" target="_blank" style="text-decoration:none"><i></i>노션 보관됨</a>`:w.syncError?`<span class="nstate err" title="${esc(w.syncError)}"><i></i>노션 미전송</span>`:"";
 function paintSync(w){ const el=document.getElementById("syncstamp"); if(el&&editId===w.id){ el.innerHTML=syncStamp(w)+(w.syncError?`<div class="muted" style="margin-top:8px">${esc(w.syncError)}</div>`:""); } }
 
 // ───────── 유틸 ─────────
@@ -1577,7 +1580,7 @@ let tab="today", track="bible", editId=null, selTopics=[], selSits=[], fromWriti
 let NAV=false;
 function go(t,o={}){
   if(tab==="write"&&$("#wbody")&&writingUnsaved()){                    // 떠날 때: 쓴 만큼 되면 저절로 간직(노션에도), 아직 몇 줄이면 임시 보관
-    autoKeepNow(); if(writingUnsaved()){ saveDraft(); if(t!=="write") toast("쓰던 글은 임시로 보관했습니다. 「쓰기」를 다시 열면 이어집니다"); }
+    autoKeepNow(); if(writingUnsaved()){ saveDraft(); if(t!=="write") toast(`쓰던 글은 임시로 보관했습니다. 「${track==="bible"?"묵상":"글쓰기"}」을 다시 열면 이어집니다`); }
   }
   NAV=true; try{ goInner(t,o); }finally{ NAV=false; }
 }
@@ -1585,6 +1588,7 @@ let TRACK_PICK=false;   // 메뉴(묵상/글쓰기)로 갈래를 정해 들어�
 function goInner(t,o){ TRACK_PICK=!!o.track; if(t!=="write"){ keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
   if(t==="write"&&!o.edit&&!o.fromNote&&!o.fromWriting&&!o.new){   // 쓰기로 들어오면 오늘 쓴 글이 있을 때 그 글을 이어서 (묵상 먼저). 새로 쓰려면 「새 글」
     const tr=o.track||track, ws=live().filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
+  { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew&&ew.trashed){ t="drawer"; o={sub:"trash"}; setTimeout(()=>toast("휴지통에 있는 글입니다. 「되살리기」를 누른 뒤 열 수 있습니다"),100); } }
   tab=t; if(o.track) track=o.track; { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew) track=ew.track; }   // 글을 열면 그 글의 갈래로 (위 메뉴 표시도 묵상/글쓰기로 맞춤)
   editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||(o.fromWritings||[])[0]||null; FROMS=o.fromWritings||(fromWriting?[fromWriting]:null); SEL_PLACE=o.place; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
 const FLOW=`<div class="flow"><span><b>묵상</b> 날마다 말씀 앞에서 쓴 글</span><i>→</i><span><b>끄적이기</b> 수시로 적어 두는 글감</span><i>→</i><span><b>글쓰기</b> 책을 읽고, 생각을 엮어 쓴 글</span><i>→</i><span><b>원고</b> 글을 모아 엮는 한 권의 책</span></div>`;
@@ -1595,7 +1599,7 @@ function render(){
   $("#nav").innerHTML=TABS.map(([k,n])=>`<button class="${(k==="qt"?tab==="write"&&track==="bible":k==="write"?tab==="write"&&track!=="bible":k===tab)?"on":""}" onclick="${k==="qt"?"go('write',{track:'bible'})":k==="write"?"go('write',{track:'book'})":`go('${k}')`}">${n}</button>`).join("");
   paintStreak();
   if(NEED_CONNECT||AUTH_FAIL){ $("#main").innerHTML=connectView(); return; }
-  $("#main").innerHTML=(SERVER?"":`<div class="notice">지금은 파일만 열린 상태라 노션 연결과 자동 저장 파일이 동작하지 않습니다. <b>아침서재 열기.command</b>로 열어 주세요.</div>`)+VIEWS[tab]();
+  $("#main").innerHTML=(SERVER?"":GAS?`<div class="notice">구글 서버에 아직 닿지 못해 이 기기의 사본을 보여 드립니다. 인터넷을 확인한 뒤 <a href="#" onclick="fetchFresh(false);return false">다시 시도</a></div>`:location.protocol==="file:"?`<div class="notice">파일로 직접 연 상태라 저장이 되지 않습니다. 아침 서재 주소(인터넷)로 열어 주세요.</div>`:"")+VIEWS[tab]();
   AFTER[tab]?.();
   if(keep&&keep.e===editId&&$("#wbody")){ $("#wtitle").value=keep.t; $("#wbody").value=keep.b; if(keep.p!=null&&$("#wpassage")) $("#wpassage").value=keep.p; grow(); countW(); }
 }
@@ -1619,7 +1623,7 @@ function draftCloud(){
   let d=null; try{ d=JSON.parse(localStorage.getItem(draftKey())||"null"); }catch(_){} if(!d) return;
   (S.drafts=S.drafts||{})[cloudKey()]=d; DRAFT_DIRTY=false; save(); paintDraftStamp(PLACE()+"에도 임시 보관");
 }
-setInterval(draftCloud,60*1000);
+setInterval(draftCloud,3*60*1000);
 function paintDraftStamp(msg){ const el=$("#draftstamp"); if(!el) return; const t=new Date(DRAFT_AT||Date.now()); el.textContent=`✓ ${msg} ${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}`; paintHeads(); }   // 표시 줄이 늘면 글자 칸이 내려가므로 거울 층도 다시 맞춤
 // 글자 칸의 자리·너비가 바뀌면(창 크기, 집중 모드, 위 표시 줄 바뀜) 거울 층을 다시 맞춥니다
 new ResizeObserver(()=>{ const t=$("#wbody"), m=$("#hmirror"); if(t&&m&&(m.style.top!==t.offsetTop+"px"||m.style.width!==t.clientWidth+"px")) paintHeads(); }).observe(document.body);
@@ -1631,7 +1635,7 @@ function restoreDraft(){
   let d=null; try{ d=JSON.parse(localStorage.getItem(draftKey())||localStorage.getItem(DKEY)||"null"); }catch(_){}   // 옛 한 칸짜리 보관도 한 번은 읽음
   const c=(S.drafts||{})[cloudKey()]; if(c&&(!d||(c.t||0)>(d.t||0))) d=c;   // 다른 기기에서 더 나중에 쓰다 만 글이 있으면 그것을
   if(!d||(d.editId||null)!==(editId||null)) return;
-  if(!editId&&d.body){ const norm=t=>String(t||"").replace(/\s+/g," ").trim(); const same=S.writings.find(x=>norm(x.body)===norm(d.body)); if(same){ clearDraft(); save(); NAV=true; try{ goInner("write",{edit:same.id}); }finally{ NAV=false; } return; } }   // 이미 간직된 글의 임시 보관본이면 그 글을 엶 (같은 글이 둘 생기지 않게)
+  if(!editId&&d.body){ const norm=t=>String(t||"").replace(/\s+/g," ").trim(); const same=live().find(x=>norm(x.body)===norm(d.body)); if(same){ clearDraft(); save(); NAV=true; try{ goInner("write",{edit:same.id}); }finally{ NAV=false; } return; } }   // 이미 간직된 글의 임시 보관본이면 그 글을 엶 (같은 글이 둘 생기지 않게)
   if(!editId&&fromNote&&d.fromNote!==fromNote) return;          // 다른 밑줄로 새 글을 시작한 경우는 건드리지 않음
   if(!editId&&!fromWriting&&d.fromWriting){ fromWriting=d.fromWriting; FROMS=d.froms||[d.fromWriting]; SEL_PLACE=d.place; NAV=true; try{ render(); }finally{ NAV=false; } return; }   // 설교로 키우던 글
   if(!editId&&fromWriting&&d.fromWriting!==fromWriting) return;
@@ -1708,7 +1712,7 @@ function cmtSection(){
     <p class="sub">드라이브의 <b>${esc(CONF.cmtFolder||"성경공부")}</b> 폴더에 올려 둔 주석(PDF·워드·구글 문서·txt)에서 글의 본문 구절 부분을 찾아 보여 주고, 인공지능 열쇠가 있으면 요약합니다. 쓰기 화면 본문 칸 아래 「주석 보기」 단추로 봅니다.</p>
     <div class="row"><input id="cmtfolder" placeholder="폴더 이름 또는 폴더 링크 (기본: 성경공부)" value="${esc(CONF.cmtFolder||"")}" style="flex:1"><button class="btn small" onclick="saveKey('cmtFolderName','cmtfolder')">폴더 이름 저장</button><button class="btn ink small" id="cmtidxbtn" onclick="cmtRefresh(true)">${files.length?"다시 읽기":"색인 만들기"}</button></div>
     <details class="keybox" ${CONF.ai?"":"open"}><summary>${CONF.ai?`요약: ${CONF.ai==="gemini"?"제미나이":"클로드"} 열쇠 ✓ · 바꾸기`:"요약 열쇠 넣기 (없으면 발췌만 보입니다)"}</summary>
-      <p class="hint">둘 중 하나만 넣으면 됩니다. <b>제미나이</b>: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>에서 무료로 만들 수 있습니다. <b>클로드</b>: <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> (사용량만큼 요금). 주석 본문(발췌)은 「요약하기」를 누를 때만 그 회사로 보내집니다. 「주석 보기」만 누르면 아무것도 보내지 않습니다.</p>
+      <p class="hint">둘 중 하나만 넣으면 됩니다. <b>제미나이</b>: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>에서 무료로 만들 수 있습니다. <b>클로드</b>: <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> (사용량만큼 요금). 주석 본문(발췌)은 「요약하기」를 누를 때만, 내 글은 「맞춤법」 단추를 누르거나 설정에서 「규칙 + 인공지능」을 켠 경우에만 그 회사로 보내집니다. 보낸 글은 그 회사 서버에 닿으며, 무료 열쇠는 품질 개선에 쓰일 수 있습니다(각 회사 약관 확인).</p>
       <div class="row"><input id="gkey" type="text" class="secret" spellcheck="false" placeholder="제미나이 API 키" style="flex:1" autocomplete="off"><button class="btn small" onclick="saveKey('geminiKey','gkey')">저장</button></div>
       <div class="row" style="margin-top:6px"><input id="ckey" type="text" class="secret" spellcheck="false" placeholder="클로드 API 키 (sk-ant-…)" style="flex:1" autocomplete="off"><button class="btn small" onclick="saveKey('claudeKey','ckey')">저장</button></div></details>
     ${all.length?`<p class="hint" style="margin-top:10px">${esc(c.folder)} · 파일 ${all.length}개 · ${(c.at||"").slice(0,10)} 읽음. 체크한 파일만 씁니다 — 1차 주석(★3 이상: WBC·100주년·현대성서주석·엑스포지멘터리·BST·톰 라이트 등)은 켜 두고, 종합·편집 주석(★2: 그랜드·HOW·카리스·옥스퍼드원어)과 나머지는 꺼 두었습니다. 성경책은 파일 이름과 폴더 이름으로 알아봅니다.</p>
@@ -1817,7 +1821,7 @@ const SPELL_RULES=[
 ].filter(r=>r[1]!==null);
 const SPELL_SKIP=new Set();                 // 「그대로」 둔 말
 let SPELL_AI=new Map(), SPELL_AI_T, SPELL_AI_BUSY=false;   // 문단 글자 → 인공지능이 찾은 것 (문단이 바뀌면 다시)
-const spellMode=()=>{ const m=applyLook().spell; return m||(CONF.ai?"ai":"rules"); };   // rules | ai | off
+const spellMode=()=>{ const m=applyLook().spell; return m==="ai"&&!CONF.ai?"rules":(m||"rules"); };   // rules | ai | off — 인공지능 검사는 설정에서 직접 켤 때만
 const inQuote=(l,s,e)=>{ let d=0; for(let i=0;i<e;i++){ if(l[i]==="「") d++; else if(l[i]==="」") d--; if(i===s&&d>0) return true; } return false; };   // 「 」 안인가
 function spellLine(l){   // 한 줄의 고칠 곳 [{s,e,from,to,why,src}]
   if(spellMode()==="off"||HEAD_RE.test(l)&&/^※/.test(l.trim())) return [];
@@ -2172,7 +2176,7 @@ write(){
         <p class="step"><span class="num">2</span>간직하기</p>
         <div class="sealrow">
           <button class="seal" id="sealbtn" onclick="pressSeal()" aria-label="간직하기">${waxSeal()}</button>
-          <div class="sealtext"><b class="pen" style="font-size:24px">봉인을 누르면</b><br>${PLACE()}에 저장되고${canSync()?", 노션에도 실립니다.":"니다."}<br><span class="muted">⌘S 를 눌러도 됩니다</span>
+          <div class="sealtext"><b class="pen" style="font-size:24px">봉인을 누르면</b><br>${PLACE()}에 저장${canSync()?"되고, 노션에도 실립니다.":"됩니다."}<br><span class="muted">⌘S 를 눌러도 됩니다</span>
             <div id="syncstamp" style="margin-top:10px">${syncStamp(w)}${w?.syncError?`<div class="muted" style="margin-top:8px">${esc(w.syncError)}</div>`:""}</div></div>
         </div>
         <div class="row" style="margin-top:14px"><button class="btn small" onclick="copyW()" title="제목과 본문을 복사해 카톡·블로그 등에 붙여 넣을 수 있습니다">글 복사</button>
@@ -2320,7 +2324,7 @@ const AFTER={
   today(){ paintTimer(); },
   settings(){
     if(CONF.notion&&CONF.local!==false) checkNotion();
-    const el=$("#qr"); if(el&&CONF.phoneUrl){ const draw=()=>window.QRCode?new QRCode(el,{text:CONF.phoneUrl,width:168,height:168,correctLevel:QRCode.CorrectLevel.M}):setTimeout(draw,300); draw(); }
+    const el=$("#qr"); if(el&&CONF.phoneUrl){ let n=0; const draw=()=>window.QRCode?new QRCode(el,{text:CONF.phoneUrl,width:168,height:168,correctLevel:QRCode.CorrectLevel.M}):(++n<20?setTimeout(draw,300):(el.innerHTML='<p class="muted">QR 그림을 못 받았습니다 — 아래 「연결 링크 복사」를 쓰세요.</p>')); draw(); }
   }
 };
 
@@ -2371,7 +2375,7 @@ function todayBibleCard(){
     return `<section class="sheet tape restcard"><p class="label bible">오늘의 말씀</p>
       <div class="big">오늘은 쉬는 날입니다</div>
       <p class="sub">${WEEK[new Date().getDay()]}요일은 통독을 쉬는 날로 정하셨습니다. 진도는 그대로 두었다가 ${nx.getMonth()+1}월 ${nx.getDate()}일(${WEEK[nx.getDay()]})에 이어 갑니다.</p>
-      <p class="muted">매일성경 묵상은 쉬는 날에도 그대로입니다 — 「쓰기」 맨 위에서 오늘 본문을 볼 수 있습니다.</p>
+      <p class="muted">매일성경 묵상은 쉬는 날에도 그대로입니다 — 「묵상」 맨 위에서 오늘 본문을 볼 수 있습니다.</p>
       <div class="row" style="margin-top:12px">${p.mode==="date"?"":`<button class="btn ghost" onclick="restPeek=true;render()">그래도 읽기</button>`}<button class="btn" onclick="go('write',{track:'bible'})">${ICO.pen}묵상 쓰기</button><button class="btn" onclick="toggleNoteForm('bible')">${ICO.pen}밑줄 남기기</button></div>
       ${noteOpen==="bible"?noteForm("bible"):""}${todayNotes("bible")}</section>`;
   }
@@ -2424,7 +2428,8 @@ function paintHeads(){
 }
 // 글자 칸에 프로그램이 글을 넣을 때는 브라우저의 '입력' 명령으로 넣어, ⌘Z(되돌리기)·⇧⌘Z(다시 하기)가 그대로 듣게 합니다
 function tInsert(b,txt,s,e){
-  b.focus(); s=s??(b.selectionStart??b.value.length); e=e??(arguments.length>=3?s:(b.selectionEnd??s)); try{ b.setSelectionRange(s,e); }catch(_){}
+  if(READVIEW&&b.id==="wbody"){ READVIEW=false; toggleRead(); }
+  b.focus(); if(document.activeElement!==b){ s=s??(b.selectionStart??b.value.length); e=e??s; b.value=b.value.slice(0,s)+txt+b.value.slice(e); b.selectionStart=b.selectionEnd=s+txt.length; grow(); countW(); draftInput(); return; } s=s??(b.selectionStart??b.value.length); e=e??(arguments.length>=3?s:(b.selectionEnd??s)); try{ b.setSelectionRange(s,e); }catch(_){}
   let ok=false; try{ ok=document.execCommand("insertText",false,txt); }catch(_){}
   if(!ok||b.value.slice(s,s+txt.length)!==txt){ b.value=b.value.slice(0,s)+txt+b.value.slice(e); }   // 입력 명령을 못 쓰는 브라우저면 그냥 넣음 (이때는 되돌리기 안 됨)
   b.selectionStart=b.selectionEnd=s+txt.length; grow(); countW(); draftInput();
@@ -2462,7 +2467,7 @@ function lookSection(){
       <div class="setrow"><span class="k">글자 크기</span><div class="pills">${[["",isTouch()?"보통(17)":"보통(18)"],[16,"작게"],[20,"크게"],[22,"더 크게"],[26,"아주 크게"]].map(([v,n])=>`<button class="pill ${(fs||"")===v?"on":""}" onclick="lookSet('fs',${v===""?"''":v})">${n}</button>`).join("")}</div></div>
       <div class="setrow"><span class="k">종이 색</span><div class="row" style="gap:7px;flex-wrap:wrap;padding-top:4px">${PAPERS.map(([bg,n,ink])=>dot(bg||"linear-gradient(135deg,#fbf7ee 50%,#29231d 50%)",n,(L.bg||"")===bg,`lookSet('bg','${bg}');lookSet('ink','${(L.ink&&L.inkManual)?L.ink:ink}')`)).join("")}</div></div>
       <div class="setrow"><span class="k">글자 색</span><div class="row" style="gap:7px;flex-wrap:wrap;padding-top:4px">${dot("linear-gradient(135deg,#2e2721 50%,#7a4a22 50%)","기본(펜 잉크 따라)",!L.ink,"lookSet('ink','')")}${[["#2e2721","먹"],["#222222","검정"],["#24427a","청색"],["#7a4a22","세피아"],["#2f5d4e","녹색"],["#5a2d2d","적갈"],["#e8dfcf","밝은 글자(검은 종이용)"]].map(([c,n])=>dot(c,n,L.ink===c,`lookSet('ink','${c}')`)).join("")}</div></div>
-      <div class="setrow"><span class="k">맞춤법 밑줄</span><div class="pills">${[["rules","규칙만","자주 틀리는 맞춤법·띄어쓰기 규칙으로 쓰는 즉시 밑줄 (인터넷 없이, 바로)"],["ai","규칙 + 인공지능","규칙 밑줄에 더해, 5초 쉬면 바뀐 문단을 인공지능(빠른 모델)이 조용히 살펴 밑줄을 보탭니다"],["off","끄기","밑줄을 긋지 않습니다"]].map(([k,n,tip])=>`<button class="pill ${spellMode()===k?"on":""}" data-tip="${tip}" onclick="lookSet('spell','${k}')" ${k==="ai"&&!CONF.ai?"disabled":""}>${n}</button>`).join("")}</div></div>
+      <div class="setrow"><span class="k">맞춤법 밑줄</span><div class="pills">${[["rules","규칙만","자주 틀리는 맞춤법·띄어쓰기 규칙으로 쓰는 즉시 밑줄 (인터넷 없이, 바로)"],["ai","규칙 + 인공지능","규칙 밑줄에 더해, 5초 쉬면 바뀐 문단을 인공지능(빠른 모델)이 조용히 살펴 밑줄을 보탭니다"],["off","끄기","밑줄을 긋지 않습니다"]].map(([k,n,tip])=>`<button class="pill ${spellMode()===k?"on":""}" data-tip="${tip}" onclick="if('${k}'==='ai'&&!confirm('켜면 글을 5초 쉴 때마다 바뀐 문단이 ${CONF.ai==="claude"?"클로드":"제미나이"} 서버로 보내집니다. 무료 열쇠는 품질 개선에 쓰일 수 있습니다(각 회사 약관). 켤까요?')) return; lookSet('spell','${k}')" ${k==="ai"&&!CONF.ai?"disabled":""}>${n}</button>`).join("")}</div></div>
       <div class="setrow"><span class="k">매일성경 글자</span><div class="pills">${[["","보통(15)"],[13,"작게"],[17,"크게"],[20,"더 크게"],[24,"아주 크게"]].map(([v,n])=>`<button class="pill ${(+L.sufs||"")===v?"on":""}" onclick="lookSet('sufs',${v===""?"''":v})">${n}</button>`).join("")}</div></div>
       <div class="setrow"><span class="k">매일성경 보기</span><div class="pills">${SU_VIEWS.map(([k,n,tip])=>`<button class="pill ${suView()===k?"on":""}" data-tip="${tip}" onclick="lookSet('suview','${k}')">${n}</button>`).join("")}<button class="pill ${L.sutall?"on":""}" data-tip="본문 칸을 스크롤 없이 다 펼쳐 둡니다" onclick="lookSet('sutall',${L.sutall?"''":1})">다 펼치기</button></div></div>
     </div>
@@ -2571,8 +2576,8 @@ function keepWriting(auto){
   if(editId&&(S.deleted||{})[editId]){ if(auto) return null; editId=null; }   // 지운 글 번호로는 다시 만들지 않음
   let w;
   if(editId) w=S.writings.find(x=>x.id===editId);
-  if(!w){ const norm=t=>String(t||"").replace(/\s+/g," ").trim(); const dup=S.writings.find(x=>x.track===track&&(norm(x.body)===norm(body)||(data.title&&x.date===today()&&x.title===data.title&&(x.passage||"")===(data.passage||""))));
-    if(dup){ w=dup; editId=dup.id; } }   // 같은 글이 이미 있으면 새로 만들지 않고 그 글에 덮어씁니다
+  if(!w){ const norm=t=>String(t||"").replace(/\s+/g," ").trim(), nb=norm(body); const dup=live().find(x=>x.track===track&&x.type===data.type&&(nb===norm(x.body)||(data.title&&x.date===today()&&x.title===data.title&&(x.passage||"")===(data.passage||"")&&norm(x.body).slice(0,100)===nb.slice(0,100))));
+    if(dup){ w=dup; editId=dup.id; if(auto&&dup.body!==body) dup.prev=[{at:dup.updated||dup.date,body:dup.body},...(dup.prev||[])].slice(0,3); } }   // 같은 글(종류·본문 앞부분까지 같은)이 이미 있으면 새로 만들지 않고 그 글에 이어 씁니다
   if(w&&w.body!==body&&!auto) w.prev=[{at:w.updated||w.date,body:w.body},...(w.prev||[])].slice(0,3);   // 이전 판 3개 (봉인 때만 — 자동 간직은 같은 판을 이어 씀)
   if(w) Object.assign(w,data);
   else {   // 새 글 (또는 다른 기기에서 지워진 글을 다시 간직하는 경우)
@@ -2650,7 +2655,7 @@ async function restoreWriting(id){
   const w=S.writings.find(x=>x.id===id); if(!w||!w.trashed) return;
   const pages=[w.notion?.page,w.notion?.index].filter(Boolean);
   delete w.trashed; w.updated=new Date().toISOString(); save(); render(); toast("되살렸습니다");
-  if(pages.length&&SERVER&&CONF.notion){ try{ const r=await gcall("notionRestore",{pages}); if(!r.ok||r.failed?.length){ w.notion=null; } }catch(_){ w.notion=null; } }   // 노션 페이지도 휴지통에서 꺼냄 (못 꺼내면 다음 간직 때 새로 만듦)
+  if(pages.length&&SERVER&&CONF.notion){ try{ const r=await gcall("notionRestore",{pages}); if(!r.ok||r.failed?.length) w.syncError="노션 페이지를 휴지통에서 꺼내지 못했습니다 — 노션 휴지통에서 직접 복원하거나 「노션에 다시 보내기」"; }catch(_){ w.syncError="노션에 닿지 못했습니다"; } }   // 노션 페이지도 휴지통에서 꺼냄
   if(canSync()) syncWriting(w,true);
 }
 function purgeWriting(id){ const w=S.writings.find(x=>x.id===id); if(!w) return; if(!confirm("이 글을 완전히 지울까요? 되살릴 수 없습니다.")) return;
@@ -2686,10 +2691,10 @@ async function backupBrowse(){
 async function backupShow(name){
   const box=$("#bklist"); if(!box||!name) return; BK_NAME=name; box.innerHTML=`<p class="muted">사본을 읽는 중…</p>`;
   try{ const r=await gcall("backupWritings",{name}); if(!r.ok) throw new Error(r.error);
-    const have=new Set(live().map(w=>w.id)), gone=r.writings.filter(x=>!have.has(x.id));
+    const have=new Set(live().map(w=>w.id)), inTrash=new Set(trashed().map(w=>w.id)), gone=r.writings.filter(x=>!have.has(x.id));
     box.innerHTML=gone.length?`<p class="hint">지금 서랍에 없는 글 ${gone.length}편 (사본에 있는 글 ${r.writings.length}편 중)</p>`+gone.map(x=>`<div class="item"><div class="row"><span class="label ${x.track}" style="margin:0;font-size:17px">[${esc(x.type||"")}]</span>${x.passage?`<span class="muted">${esc(x.passage)}</span>`:""}<span class="spacer"></span><span class="muted" style="font-size:13px">${esc(x.date)} · ${(x.chars||0).toLocaleString()}자</span></div>
         <div class="myeongjo" style="font-size:16px"><b>${esc(x.title||"(제목 없음)")}</b></div><div class="sub">${esc(x.head||"")}…</div>
-        <div class="row" style="margin-top:6px"><button class="btn small ink" onclick="backupRestore('${esc(x.id)}')">이 글 되살리기</button></div></div>`).join("")
+        <div class="row" style="margin-top:6px">${inTrash.has(x.id)?`<span class="muted" style="font-size:13px">휴지통에 있습니다 →</span><button class="btn small ink" onclick="restoreWriting('${esc(x.id)}')">휴지통에서 되살리기</button>`:`<button class="btn small ink" onclick="backupRestore('${esc(x.id)}')">이 글 되살리기</button>`}</div></div>`).join("")
       :`<p class="muted">이 사본의 글은 모두 지금 서랍에 있습니다.</p>`;
   }catch(e){ box.innerHTML=`<p class="muted">사본을 읽지 못했습니다: ${esc(e.message)}</p>`; }
 }
@@ -3244,8 +3249,10 @@ async function checkNotion(){
   }catch(_){ el.textContent="확인하지 못했습니다."; }
 }
 function restore(input){ const f=input.files[0]; if(!f) return; const r=new FileReader();
-  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d.notes||!d.writings) throw 0; if(!confirm("지금 기록을 백업 파일 내용으로 바꿀까요?")) return; S=Object.assign(blank(),d); save(); toast("복원했습니다"); render(); }catch(_){ toast("올바른 백업 파일이 아닙니다"); } };
-  r.readAsText(f); }
+  r.onload=async()=>{ try{ const d=JSON.parse(r.result); if(!d||!Array.isArray(d.writings)) throw 0; if(!confirm("백업 파일의 기록을 지금 기록과 합칠까요?\n(지금 기록은 사라지지 않고, 같은 글은 더 나중에 고친 쪽이 남습니다. 지운 글은 되살아나지 않습니다)")) return;
+      if(GAS&&SERVER){ try{ await gcall("backupNow"); }catch(_){} }   // 합치기 전 지금 기록을 드라이브에 사본으로
+      mergeFrom(d); save(); render(); toast("백업 파일을 합쳤습니다"); }catch(_){ toast("아침 서재 백업 파일이 아닙니다"); } };
+  r.readAsText(f); input.value=""; }
 
 // ───────── 타이머 ─────────
 const timer={on:false,start:0,acc:0,h:null};
