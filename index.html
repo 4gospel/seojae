@@ -32,6 +32,7 @@ function applyLook(){
   if(fs){ r.setProperty("--note-fs",fs+"px"); r.setProperty("--note-lh",Math.round(fs*2)+"px"); } else { r.removeProperty("--note-fs"); r.removeProperty("--note-lh"); }
   if(L.bg) r.setProperty("--note-bg",L.bg); else r.removeProperty("--note-bg");
   if(L.ink) r.setProperty("--note-ink",L.ink); else r.removeProperty("--note-ink");
+  if(+L.sufs) r.setProperty("--su-fs",(+L.sufs)+"px"); else r.removeProperty("--su-fs");   // 매일성경 본문·해설 글자 크기
   return L;
 }
 applyLook();
@@ -442,11 +443,19 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .sucard .sut{font-family:"Nanum Myeongjo";font-size:17px;margin:4px 0 8px}
 .sucard .sut b{font-weight:800}
 .sucard .links{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.sunote{margin-top:12px;padding:12px 14px;background:var(--paper-2);border-radius:4px;font-size:15px;line-height:1.75}
-.sutext{margin-top:12px;max-height:46vh;overflow:auto;border-top:1px dashed var(--deco);padding-top:10px}
-.suv{display:grid;grid-template-columns:2.4em 1fr 1fr;gap:4px 16px;padding:5px 0;border-bottom:1px dotted var(--edge);font-size:15px;line-height:1.75}
-.suv .n{font-family:"Nanum Pen Script";font-size:18px;color:var(--bible);text-align:right}
-.suv .en{font-family:Georgia,serif;font-size:14px;color:var(--ink-soft)}
+.sunote{margin-top:12px;padding:12px 14px;background:var(--paper-2);border-radius:4px;font-size:var(--su-fs,15px);line-height:1.75}
+.sutext{margin-top:12px;max-height:var(--su-max,46vh);overflow:auto;border-top:1px dashed var(--deco);padding-top:10px}
+.suv{display:grid;grid-template-columns:2.4em 1fr 1fr;gap:4px 16px;padding:5px 0;border-bottom:1px dotted var(--edge);font-size:var(--su-fs,15px);line-height:1.75}
+.suv .n{font-family:"Nanum Pen Script";font-size:calc(var(--su-fs,15px) + 3px);color:var(--bible);text-align:right}
+.suv .en{font-family:Georgia,serif;font-size:calc(var(--su-fs,15px) - 1px);color:var(--ink-soft)}
+/* 매일성경 보기 방식 (이 기기): 나란히 · 한글만 · 영어만 · 위아래 */
+.sutext.v-ko .suv,.sutext.v-en .suv,.sutext.v-stack .suv{grid-template-columns:2.4em 1fr}
+.sutext.v-ko .en,.sutext.v-ko .suv.hd span:last-child{display:none}
+.sutext.v-en .vt[data-l="ko"],.sutext.v-en .suv.hd span:nth-child(2){display:none}
+.sutext.v-stack .en{grid-column:2}
+.sutext.v-stack .suv.hd,.sutext.v-ko .suv.hd,.sutext.v-en .suv.hd{grid-template-columns:2.4em 1fr 1fr}
+.sutext.v-stack .suv.hd span:last-child{display:none}
+.sutext.v-tall{max-height:none}
 .suhead{font-family:"Nanum Pen Script";font-size:19px;color:var(--sepia)}
 body.focus .sucard{display:none}
 @media (max-width:700px){ .suv{grid-template-columns:2em 1fr} .suv .en{grid-column:2} .suv.hd{grid-template-columns:1fr 1fr} .suv.hd span:first-child{display:none} }
@@ -882,7 +891,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="0af241b4a4";
+const APP_BUILD="fd5560351c";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1105,7 +1114,8 @@ async function paintSu(){
       ${SU.audio?`<a class="btn small ghost" href="${esc(SU.audio)}" target="_blank" rel="noopener">${ICO.audio}듣기</a>`:""}<button class="btn small ghost" id="subtn" onclick="suNoteToggle()">${ICO.book}해설 보기</button></div>
     <details class="more"><summary>말씀 앞에서 묻기 <small class="hint" style="display:inline">· 오늘의 질문</small></summary><ol class="q" style="margin:4px 0 0">${pickQ("bible",today()+"b").map(q=>`<li>${esc(q)}</li>`).join("")}</ol></details>
     <div id="sunote"></div>
-    ${open?`<div class="sutext" id="sutext"><span class="muted">본문을 불러오는 중…</span></div><small class="hint">앱 안 본문: 개역한글 · World English Bible (둘 다 저작권이 끝난 공개본). 새한글·새번역·NIV는 저작권 때문에 위 단추로 공식 사이트에서 같은 구절을 엽니다.</small>`:""}`;
+    ${open?`<div class="row" style="gap:6px;margin-top:10px;flex-wrap:wrap"><span class="muted" style="font-size:12.5px">보기</span><span class="pills">${SU_VIEWS.map(([k,n,tip])=>`<button class="pill ${suView()===k?"on":""}" style="padding:3px 10px;font-size:13px" data-tip="${tip}" onclick="lookSet('suview','${k}');paintSuText()">${n}</button>`).join("")}</span><span class="spacer"></span><span class="row" style="gap:4px" title="매일성경 글자 크기 (이 기기만)"><button class="fsbtn" onclick="suFont(-1)">가−</button><button class="fsbtn" onclick="suFont(1)">가＋</button></span><button class="fsbtn" onclick="lookSet('sutall',applyLook().sutall?'':1);paintSuText()" title="본문 칸을 다 펼쳐 스크롤 없이 봅니다">${applyLook().sutall?"칸 줄이기":"다 펼치기"}</button></div>
+      <div class="sutext" id="sutext"><span class="muted">본문을 불러오는 중…</span></div><small class="hint">앱 안 본문: 개역한글 · World English Bible (둘 다 저작권이 끝난 공개본). 새한글·새번역·NIV는 저작권 때문에 위 단추로 공식 사이트에서 같은 구절을 엽니다.</small>`:""}`;
   if(!open) return;
   try{ if(!SUT||SUT.label!==P.label){ const t=await suTexts(P); if(gen!==SUGEN) return; SUT=t; SUT.label=P.label; } }catch(e){ const t=$("#sutext"); if(t) t.innerHTML=`<span class="muted">본문을 불러오지 못했습니다. 위 단추로 열어 주세요.</span>`; return; }
   paintSuText();
@@ -1125,8 +1135,14 @@ function markHtml(t,ms){
     cov.filter(m=>m.memo&&m.e===b).forEach(m=>out+=`<sup class="mmo" data-mid="${m.id}" title="${esc(m.memo)}">✎</sup>`); }
   return out;
 }
+// 매일성경 보기 방식·글자 크기 (이 기기만, seojae.look 의 suview/sufs/sutall)
+const SU_VIEWS=[["both","나란히","개역한글과 영어(WEB)를 옆으로 나란히"],["ko","한글만","개역한글만"],["en","영어만","영어(WEB)만"],["stack","위아래","절마다 한글 아래에 영어"]];
+const suView=()=>{ const v=applyLook().suview; return SU_VIEWS.some(x=>x[0]===v)?v:"both"; };
+const SU_FS=[13,14,15,16,17,18,20,22,24];
+function suFont(d){ const cur=+applyLook().sufs||15; let i=SU_FS.findIndex(x=>x>=cur); if(i<0) i=SU_FS.length-1; i=Math.max(0,Math.min(SU_FS.length-1,i+d)); lookSet("sufs",SU_FS[i]===15?"":SU_FS[i]); toast(`매일성경 글자 크기 ${SU_FS[i]}`); }
 function paintSuText(){
   const t=$("#sutext"), P=suPassage(SU); if(!t||!SUT||!P) return;
+  t.className="sutext v-"+suView()+(applyLook().sutall?" v-tall":""); document.querySelectorAll("#sucard .pills .pill").forEach(b=>b.classList.toggle("on",b.textContent===(SU_VIEWS.find(x=>x[0]===suView())||[])[1]));
   const d=suDate(), ms=marksOf(d), en=new Map(SUT.en.map(v=>[v.c+":"+v.v,v.t])); let last=null;
   const vt=(c,v,l,txt)=>`<span class="vt ${l==="en"?"en":""}" data-c="${c}" data-v="${v}" data-l="${l}">${markHtml(txt,ms.filter(m=>m.c===c&&m.v===v&&m.lang===l))}</span>`;
   t.innerHTML=`<div class="suv hd"><span></span><span class="suhead">개역한글</span><span class="suhead">WEB (영어) <small class="muted" style="font-family:inherit">· 단어에 마우스를 올리면 뜻</small></span></div>`+SUT.ko.map(v=>{ const head=v.c!==last&&P.c1!==P.c2?`<div class="suhead" style="margin-top:6px">${v.c}${P.bi===18?"편":"장"}</div>`:""; last=v.c;
@@ -2194,6 +2210,10 @@ function lookSection(){
     <div class="setrow"><span class="k">종이 색</span><div class="row" style="gap:8px;flex-wrap:wrap">${PAPERS.map(([bg,n,ink])=>`<span class="inkdot ${(L.bg||"")===bg?"on":""}" title="${n}" style="background:${bg||"linear-gradient(135deg,#fbf7ee 50%,#29231d 50%)"};width:26px;height:26px" onclick="lookSet('bg','${bg}');lookSet('ink','${(L.ink&&L.inkManual)?L.ink:ink}')"></span>`).join("")}</div></div>
     <div class="setrow"><span class="k">글자 색</span><div class="row" style="gap:8px;flex-wrap:wrap"><span class="inkdot ${L.ink?"":"on"}" title="기본(펜 잉크 따라)" style="background:linear-gradient(135deg,#2e2721 50%,#7a4a22 50%);width:26px;height:26px" onclick="lookSet('ink','')"></span>${[["#2e2721","먹"],["#222222","검정"],["#24427a","청색"],["#7a4a22","세피아"],["#2f5d4e","녹색"],["#5a2d2d","적갈"],["#e8dfcf","밝은 글자(검은 종이용)"]].map(([c,n])=>`<span class="inkdot ${L.ink===c?"on":""}" title="${n}" style="background:${c};width:26px;height:26px" onclick="lookSet('ink','${c}')"></span>`).join("")}</div></div>
     <p class="hint">쓰기 화면의 「펜과 종이」 잉크와 줄 노트·모눈은 모든 기기 공통이고, 여기 글자 색을 고르면 이 기기에서는 그것이 우선합니다.</p>
+    <hr class="dash">
+    <div class="setrow"><span class="k">매일성경 글자</span><div class="pills">${[["","보통(15)"],[13,"작게"],[17,"크게"],[20,"더 크게"],[24,"아주 크게"]].map(([v,n])=>`<button class="pill ${(+L.sufs||"")===v?"on":""}" onclick="lookSet('sufs',${v===""?"''":v})">${n}</button>`).join("")}</div></div>
+    <div class="setrow"><span class="k">매일성경 보기</span><div class="pills">${SU_VIEWS.map(([k,n,tip])=>`<button class="pill ${suView()===k?"on":""}" data-tip="${tip}" onclick="lookSet('suview','${k}')">${n}</button>`).join("")}<button class="pill ${L.sutall?"on":""}" data-tip="본문 칸을 스크롤 없이 다 펼쳐 둡니다" onclick="lookSet('sutall',${L.sutall?"''":1})">다 펼치기</button></div></div>
+    <p class="hint">쓰기 화면 맨 위 매일성경 카드의 본문·해설에 적용됩니다. 카드 안의 「가−·가＋」와 보기 단추도 같은 값을 바꿉니다. 휴대폰은 화면이 좁아 「나란히」도 절마다 위아래로 보입니다.</p>
   </section>`;
 }
 function quietSection(){
