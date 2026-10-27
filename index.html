@@ -488,16 +488,17 @@ const TYPES={
     "설교 초안":"■ 떠오른 메시지 한 줄\n\n■ 본문에서 붙잡은 것\n\n■ 뼈대 메모 (대지 후보)\n\n■ 예화·자료 후보\n\n■ 더 살펴볼 것 (원어·배경·주석)\n",
     "주일설교":SERMON,
     "새벽설교":"중심 메시지(한 문장): \n\n■ 본문 풀이\n\n■ 오늘 붙들 한 가지\n\n■ 함께 드릴 기도\n",
+    "예식설교":"중심 메시지(한 문장): \n\n■ 이 자리에 모인 분들 — 누가, 어떤 마음으로\n\n■ 본문이 이 자리에 주는 말씀\n\n■ 짧은 권면 (한 가지)\n\n■ 축복과 기도\n",
     "묵상을설교로":"■ 중심 메시지 (한 문장)\n\n■ 설교 뼈대 메모 — 대지 후보, 예화 후보, 더 살펴볼 것\n\n■ ✍️ 완성 설교 — 설교작성 프로젝트에서 완성한 설교를 이 아래에 씁니다\n",
     "자유 글":""},
   book:{
     "자기계발 글":"■ 오늘의 한 문장\n\n■ 장면 하나 — 내가 겪은 일 (도장·목회·가정)\n\n■ 이 문장이 그 장면에 말해 준 것\n\n■ 독자에게 건네는 통찰\n\n■ 오늘 바로 해볼 한 가지\n",
     "자유 글":""}
 };
-const SITUATIONS=["개업·창업","이사·입주","결혼·약혼","출산·돌·생일","입학·졸업·진학","장례·추모","병문안·심방","임직·취임·은퇴","교회 창립·헌당","파송·선교","수련회·특강","온세대(어린이 함께)","신년·송구영신","고난주간·부활절","성령강림절","맥추·추수감사절","대림·성탄절","종교개혁주일","어린이·어버이주일","국가 기념일(삼일절·광복절)"];
+const SITUATIONS=["개업·창업","이사·입주","결혼·약혼","출산·돌·생일","입학·졸업·진학","장례·추모","병문안·심방","세례·입교·학습","임직·취임·은퇴","교회 창립·헌당","파송·선교","수련회·특강","온세대(어린이 함께)","신년·송구영신","주현절","사순절","고난주간·부활절","성령강림절","맥추·추수감사절","대림·성탄절","종교개혁주일","어린이·어버이주일","국가 기념일(삼일절·광복절)"];
 const WSTATUS=["씨앗","초고","다듬는 중","완성"];
 // 제목 앞 꼬리표: 노션 「새 노트 정리법」과 같은 이름 ([묵상] 요한복음 15:5 / 머무는 삶)
-const KTAG={"묵상":"묵상","설교 초안":"설교메모","주일설교":"주일설교","새벽설교":"새벽설교","자유 글":"묵상","묵상을설교로":"묵상을설교로"};
+const KTAG={"묵상":"묵상","설교 초안":"설교메모","주일설교":"주일설교","새벽설교":"새벽설교","예식설교":"설교","자유 글":"메모","묵상을설교로":"묵상을설교로"};
 const wTag=w=>w.track==="bible"?(KTAG[w.type]||w.type):w.type;
 const SLEN=[["긴설교","주일·특별 예배처럼 30분 안팎"],["짧은설교","새벽·수요·소그룹처럼 10~15분"]];
 const TOPICS=["믿음","순종","소명·부르심","두려움·용기","시험·고난","위로·회복","은혜","회개","용서·화해","기도","예배","말씀","우상·세속","정체성·자존감","교회·공동체","가정·관계","지도자·리더십","다음세대","정의·공의","물질·돈","섬김·사랑","부활·소망","성령","십자가·복음","감사·찬양","언약","하나님의 동행","인도하심","겸손·교만","분열·연합","헌신","거룩·성결","죄·심판","하나님 나라","재림·종말","선교·전도","성찬·세례"];
@@ -509,7 +510,7 @@ const QUESTIONS={
   book:{
     "이해":["저자가 이 장에서 가장 말하고 싶은 한 문장은?","밑줄 친 문장을 내 말로 다시 쓴다면?","저자는 어떤 근거와 사례로 주장을 받치고 있는가?"],
     "비평":["저자의 주장 중 동의하기 어려운 부분은 어디인가?","이 내용을 성경의 관점에서 보면 무엇이 보이는가?","밑줄 친 문장 가운데 내 경험으로 증명할 수 있는 것은?"],
-    "적용":["이 원칙을 오늘 만나는 사람들(가정·일터·공동체)에게 적용한다면?","독자가 오늘 바로 실천할 수 있는 한 가지는?","이 내용을 내 책의 한 꼭지 제목으로 만든다면?","이 문장을 실패했던 순간에 비추어 보면?"]}
+    "적용":["이 원칙을 오늘 만나는 사람들(가정·일터·공동체)에게 적용한다면?","독자가 오늘 바로 실천할 수 있는 한 가지는?","이 내용을 내 책의 한 꼭지 제목으로 만든다면?","이 문장을 내가 실패했던 순간에 비추어 보면 무엇이 보이는가?"]}
 };
 // 날마다 갈래마다 하나씩 (관찰 → 해석 → 적용)
 const pickQ=(tr,seed)=>Object.entries(QUESTIONS[tr]).map(([k,L])=>`${k} · ${pick(L,1,seed+k)[0]}`);
@@ -669,11 +670,18 @@ function mergeFrom(other){
   }
   const old=new Date(Date.now()-400*864e5).toISOString();        // 1년 넘은 묘비는 정리
   S.deleted=Object.fromEntries(Object.entries(del).filter(([,t])=>t>old));
-  const L=Object.assign({},other.log);                       // 날마다 기록은 칸 단위로 합칩니다
-  for(const [d,v] of Object.entries(S.log||{})) L[d]=Object.assign({},L[d],v);
+  const L=Object.assign({},other.log);                       // 날마다 기록은 칸 단위로 합칩니다 (읽은 분량·쪽수는 양쪽 합집합)
+  for(const [d,v] of Object.entries(S.log||{})){ const o=L[d]||{}, m=Object.assign({},o,v);
+    if(o.bible||v.bible){ const bl=[...(o.bible||[])]; (v.bible||[]).forEach(x=>{ if(!bl.some(y=>y.plan===x.plan&&y.day===x.day)) bl.push(x); }); m.bible=bl; }
+    if(o.books||v.books){ const bk=Object.assign({},o.books); for(const [id,x] of Object.entries(v.books||{})) bk[id]=bk[id]?{title:x.title,from:Math.min(bk[id].from,x.from),to:Math.max(bk[id].to,x.to)}:x; m.books=bk; }
+    L[d]=m; }
   S.log=L;
-  const D=Object.assign({},other.diary);                     // 독서 일기는 날마다 더 나중에 고친 쪽
-  for(const [d,v] of Object.entries(S.diary||{})) if(!D[d]||(v.t||"")>=(D[d].t||"")) D[d]=v;
+  const D=Object.assign({},other.diary);                     // 독서 일기: 더 나중에 고친 쪽을 바탕으로, 비어 있는 칸은 다른 쪽에서, 스티커는 합집합
+  for(const [d,v] of Object.entries(S.diary||{})){ const o=D[d]; if(!o){ D[d]=v; continue; }
+    const [nw,old]=(v.t||"")>=(o.t||"")?[v,o]:[o,v], m=Object.assign({},old,nw);
+    for(const k of ["weather","mood","line"]) if(nw[k]==null||nw[k]==="") m[k]=old[k]??nw[k];
+    const st=new Map((old.stickers||[]).map(x=>[x.id,x])); (nw.stickers||[]).forEach(x=>st.set(x.id,x)); m.stickers=[...st.values()].filter(x=>!del[x.id]);
+    D[d]=m; }
   S.diary=D;
   const MK=Object.assign({},other.marks);                    // 본문 형광펜: 날짜마다 표시 하나하나 더 나중에 고친 쪽
   for(const [d,list] of Object.entries(S.marks||{})){ const map=new Map((MK[d]||[]).map(x=>[x.id,x])); for(const x of list) if(!map.has(x.id)||(x.u||"")>=(map.get(x.id).u||"")) map.set(x.id,x); MK[d]=[...map.values()]; }
@@ -715,7 +723,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="a0903cb10c";
+const APP_BUILD="1fc494963d";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -805,23 +813,31 @@ const splitTags=s=>s.split(/[,\s]+/).map(t=>t.replace(/^#/,"").trim()).filter(Bo
 const MK_RE=/==(?:([ygpb]):)?([^=\n]+?)==|__([^_\n]+?)__|\[\^([^\]\n]+?)\]/g;
 const SUPD="⁰¹²³⁴⁵⁶⁷⁸⁹";
 const supNum=n=>String(n).split("").map(d=>SUPD[+d]).join("");
-const stripMk=t=>String(t||"").replace(MK_RE,(m,c,h,u,f)=>f!=null?"":(h??u));
-function richHtml(t,fn){ // fn: 각주를 모을 배열 (없으면 각주를 윗첨자로만)
+const FN_RE=/\[\^([^\]\n]+?)\]/g;
+const stripMk=t=>String(t||"").replace(MK_RE,(m,c,h,u,f)=>f!=null?"":stripMk(h??u));   // 형광펜 안의 각주까지 벗깁니다
+const stripWrap=t=>String(t||"").replace(/==(?:[ygpb]:)?([^=\n]+?)==|__([^_\n]+?)__/g,(m,h,u)=>h??u);   // 각주는 남기고 형광펜·밑줄만 벗김
+function fnHtmlIn(t,fn){ // 형광펜·밑줄 안의 각주
+  let out="", last=0; const str=String(t||"");
+  for(const m of str.matchAll(FN_RE)){ out+=esc(str.slice(last,m.index)); last=m.index+m[0].length; out+=`<sup class="fnref" title="${esc(m[1])}">${fn?fn.push(m[1]):"✎"}</sup>`; }
+  return out+esc(str.slice(last));
+}
+function richHtml(t,fn){ // fn: 각주를 모을 배열 (없으면 각주를 ✎ 로만)
   let out="", last=0; const str=String(t||"");
   for(const m of str.matchAll(MK_RE)){ out+=esc(str.slice(last,m.index)); last=m.index+m[0].length;
-    if(m[4]!=null){ const n=(fn?fn.push(m[4]):0)||(fn?fn.length:0); out+=`<sup class="fnref" title="${esc(m[4])}">${fn?n:"✎"}</sup>`; }
-    else if(m[3]!=null) out+=`<u class="mku">${esc(m[3])}</u>`;
-    else out+=`<mark class="mk hl-${m[1]||"y"}">${esc(m[2])}</mark>`; }
+    if(m[4]!=null) out+=`<sup class="fnref" title="${esc(m[4])}">${fn?fn.push(m[4]):"✎"}</sup>`;
+    else if(m[3]!=null) out+=`<u class="mku">${fnHtmlIn(m[3],fn)}</u>`;
+    else out+=`<mark class="mk hl-${m[1]||"y"}">${fnHtmlIn(m[2],fn)}</mark>`; }
   return out+esc(str.slice(last));
 }
 const fnHtml=fn=>fn.length?`<ol class="fnlist">${fn.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`:"";
 const chars=s=>stripMk(s).replace(/\s/g,"").length;
+const charsAll=s=>stripMk(s).replace(/\n/g,"").length;   // 원고지 매수는 관행대로 공백 포함
 const trackName=t=>t==="bible"?"말씀":"책";
 function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2000); }
 function mark(k){ const d=today(); (S.log[d]=S.log[d]||{})[k]=true; }
 function pick(arr,n,seed){ let h=0; for(const c of seed) h=(h*31+c.charCodeAt(0))>>>0; const a=[...arr]; for(let i=a.length-1;i>0;i--){ h=(h*1103515245+12345)>>>0; const j=h%(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a.slice(0,n); }
 function download(name,text,type="text/plain"){ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500); }
-const curBook=()=>S.books.find(b=>b.id===S.settings.currentBook);
+const curBook=()=>S.books.find(b=>b.id===S.settings.currentBook&&b.status!=="완료")||S.books.find(b=>b.status!=="완료");   // 다 읽은 책은 「읽고 있는 책」에 남지 않음
 const coverHtml=(b,cls="cover")=>b?.cover&&/^(https?:|data:image\/)/.test(b.cover)?`<img class="${cls}" src="${esc(b.cover)}" alt="" loading="lazy" data-fallback="${esc(b.title||"")}">`:`<div class="${cls} blank">${esc(b?.title||"")}</div>`;
 // 표지를 못 불러오면 책 제목 글자로 대신합니다 (제목은 글자로만 넣어 코드가 실행될 틈이 없게)
 document.addEventListener("error",e=>{ const t=e.target;
@@ -868,13 +884,14 @@ async function suInfo(date){
   try{ const c=JSON.parse(localStorage.getItem("seojae.su."+date)||"null"); if(c) return c; }catch(_){}
   if(!GAS) throw new Error("구글 서버에 연결되어 있어야 합니다");
   const r=await gcall("dailyBible",date);
-  try{ localStorage.setItem("seojae.su."+date,JSON.stringify(r)); }catch(_){}
+  try{ localStorage.setItem("seojae.su."+date,JSON.stringify(r));
+    const old=addMonths(today(),-1); for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k?.startsWith("seojae.su.")&&k.slice(10)<old) localStorage.removeItem(k); } }catch(_){}   // 한 달 지난 것은 정리
   return r;
 }
 function suPassage(su){
-  const m=String(su?.range||"").match(/(\d+):(\d+)\s*-\s*(\d+):(\d+)/); if(!m) return null;
-  const [c1,v1,c2,v2]=m.slice(1).map(Number), name=BALIAS[su.book]||su.book, bi=BIBLE.findIndex(b=>b[0]===name); if(bi<0) return null;
-  return {bi,c1,v1,c2,v2,name,label:`${name} ${c1}:${v1}-${c2===c1?v2:c2+":"+v2}`};
+  const m=String(su?.range||"").match(/(\d+):(\d+)(?:\s*-\s*(?:(\d+):)?(\d+))?/); if(!m) return null;   // "17:1 - 17:15" · "12:1-15" · "3:16"
+  const c1=+m[1], v1=+m[2], c2=m[3]?+m[3]:c1, v2=m[4]?+m[4]:v1, name=BALIAS[su.book]||su.book, bi=BIBLE.findIndex(b=>b[0]===name); if(bi<0) return null;
+  return {bi,c1,v1,c2,v2,name,label:`${name} ${c1}:${v1}${c2===c1&&v2===v1?"":"-"+(c2===c1?v2:c2+":"+v2)}`};
 }
 const suOfficial=(P,ver)=>`https://bible.bskorea.or.kr/bible/${ver}/${BCODE[P.bi]}.${P.c1}.${P.v1}-${BCODE[P.bi]}.${P.c2}.${P.v2}`;
 const suNiv=P=>`https://www.biblegateway.com/passage/?search=${encodeURIComponent(`${BEN[P.bi]} ${P.c1}:${P.v1}-${P.c2===P.c1?P.v2:P.c2+":"+P.v2}`)}&version=NIV`;
@@ -902,10 +919,11 @@ async function suNoteToggle(){
 const suOpen=()=>{ try{ return localStorage.getItem("seojae.suOpen")!=="0"; }catch(_){ return true; } };
 function suToggle(){ try{ localStorage.setItem("seojae.suOpen",suOpen()?"0":"1"); }catch(_){} paintSu(); }
 function suUse(){ const P=suPassage(SU), f=$("#wpassage"); if(!P||!f) return; f.value=P.label; if(!$("#wtitle").value.trim()&&SU.title) $("#wtitle").value=SU.title; draftInput(); toast("매일성경 본문을 넣었습니다"); }
+let SUGEN=0;
 async function paintSu(){
-  const box=$("#sucard"); if(!box) return; const date=box.dataset.date;
+  const box=$("#sucard"); if(!box) return; const date=box.dataset.date, gen=++SUGEN;   // 늦게 끝난 옛 호출은 버립니다
   if(!SU||SU.date!==date){ box.innerHTML=`<span class="muted">오늘의 매일성경을 불러오는 중…</span>`;
-    try{ SU=await suInfo(date); SUT=null; SUERR=""; }catch(e){ SU=null; SUERR=e.message; } if(!$("#sucard")) return; }
+    try{ SU=await suInfo(date); SUT=null; SUERR=""; }catch(e){ SU=null; SUERR=e.message; } if(gen!==SUGEN||!$("#sucard")) return; }
   const x=new Date(date+"T00:00"), P=suPassage(SU);
   if(!SU||!P){ box.innerHTML=`<span class="label bible" style="margin:0">매일성경</span> <span class="muted">본문을 불러오지 못했습니다${SUERR?" ("+esc(SUERR)+")":""}.</span> <a class="muted" href="https://sum.su.or.kr:8888/bible/today" target="_blank" rel="noopener">성서유니온에서 보기 ↗</a>`; return; }
   // 새 묵상이면 본문 칸을 매일성경으로 (설정에서 '통독표 따라'를 고르면 그대로 둠)
@@ -916,10 +934,11 @@ async function paintSu(){
     <div class="links"><button class="btn small ink" onclick="suUse()">이 본문으로 쓰기</button>
       <a class="btn small ghost" href="${esc(suOfficial(P,"NKT"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새한글 ↗</a><a class="btn small ghost" href="${esc(suOfficial(P,"RNKSV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새번역 ↗</a><a class="btn small ghost" href="${esc(suNiv(P))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">NIV ↗</a>
       ${SU.audio?`<a class="btn small ghost" href="${esc(SU.audio)}" target="_blank" rel="noopener">🎧 듣기</a>`:""}<button class="btn small ghost" id="subtn" onclick="suNoteToggle()">📖 해설 보기</button></div>
+    <details class="more"><summary>말씀 앞에서 묻기 <small class="hint" style="display:inline">· 오늘의 질문</small></summary><ol class="q" style="margin:4px 0 0">${pickQ("bible",today()+"b").map(q=>`<li>${esc(q)}</li>`).join("")}</ol></details>
     <div id="sunote"></div>
     ${open?`<div class="sutext" id="sutext"><span class="muted">본문을 불러오는 중…</span></div><small class="hint">앱 안 본문: 개역한글 · World English Bible (둘 다 저작권이 끝난 공개본). 새한글·새번역·NIV는 저작권 때문에 위 단추로 공식 사이트에서 같은 구절을 엽니다.</small>`:""}`;
   if(!open) return;
-  try{ if(!SUT||SUT.label!==P.label){ SUT=await suTexts(P); SUT.label=P.label; } }catch(e){ const t=$("#sutext"); if(t) t.innerHTML=`<span class="muted">본문을 불러오지 못했습니다. 위 단추로 열어 주세요.</span>`; return; }
+  try{ if(!SUT||SUT.label!==P.label){ const t=await suTexts(P); if(gen!==SUGEN) return; SUT=t; SUT.label=P.label; } }catch(e){ const t=$("#sutext"); if(t) t.innerHTML=`<span class="muted">본문을 불러오지 못했습니다. 위 단추로 열어 주세요.</span>`; return; }
   paintSuText();
 }
 // ───────── 본문 형광펜·밑줄·메모 (S.marks[날짜]) ─────────
@@ -973,19 +992,42 @@ function wTools(){
 function wMark(kind,color){
   const b=$("#wbody"); if(!b||!WSEL) return hlClose();
   let {s,e}=WSEL; const v=b.value; let sel=v.slice(s,e);
-  if(kind==="fn"){ const memo=(prompt("이 구절에 달 각주를 적어 주세요",""))?.trim(); hlClose(); if(!memo) return;
-    const ins=`[^${memo.replace(/[\[\]]/g,"")}]`; b.value=v.slice(0,e)+ins+v.slice(e); b.selectionStart=b.selectionEnd=e+ins.length; }
-  else { // 고른 구간이 표시 안에 있으면 그 표시 전체를 바꿉니다
-    const around=[...v.matchAll(MK_RE)].find(m=>m.index<s&&m.index+m[0].length>e); if(around){ s=around.index; e=s+around[0].length; sel=v.slice(s,e); }
-    sel=stripMk(sel); const wrapped=kind==="hl"?`==${color==="y"?"":color+":"}${sel}==`:kind==="ul"?`__${sel}__`:sel;
+  if(kind==="fn"){ fnBox(e,null,v.slice(s,e)); return; }
+  else { // 고른 구간과 조금이라도 겹치는 표시는 통째로 다룹니다 (반쪽만 바뀌어 깨지지 않게)
+    for(const m of v.matchAll(MK_RE)){ const ms=m.index, me=ms+m[0].length; if(ms<e&&me>s){ s=Math.min(s,ms); e=Math.max(e,me); } }
+    sel=v.slice(s,e);
+    const wrap=t=>{ t=stripWrap(t); if(!t.trim()) return t; const lead=t.match(/^\s*/)[0], tail=t.match(/\s*$/)[0], core=t.trim();
+      return lead+(kind==="hl"?`==${color==="y"?"":color+":"}${core}==`:kind==="ul"?`__${core}__`:core)+tail; };
+    const wrapped=sel.split("\n").map(wrap).join("\n");   // 여러 줄이면 줄마다 따로
     b.value=v.slice(0,s)+wrapped+v.slice(e); b.selectionStart=s; b.selectionEnd=s+wrapped.length; hlClose(); }
   b.focus(); grow(); countW(); draftInput();
 }
+// 각주 상자: at 자리에 새로 넣거나(editIdx=null), n번째 각주를 고칩니다
+function fnBox(at,editIdx,quote){
+  const b=$("#wbody"); if(!b) return; let cur="";
+  if(editIdx!=null){ let k=0; for(const m of b.value.matchAll(MK_RE)){ const f=m[4]??(m[2]??m[3]??"").match(FN_RE)?.[0]; if(m[4]!=null||f){ if(k===editIdx){ cur=m[4]??f.slice(2,-1); break; } k++; } } }
+  const r=b.getBoundingClientRect();
+  hlBar(`<div class="muted" style="font-size:13px;margin-bottom:6px">${editIdx!=null?`각주 ${editIdx+1} 고치기`:`「${esc((quote||"").slice(0,50))}${(quote||"").length>50?"…":""}」에 각주`}</div>
+    <textarea id="wfn" placeholder="각주 내용 (출처, 보충 설명, 번역 이름 등)">${esc(cur)}</textarea>
+    <div class="row" style="margin-top:8px;gap:6px"><span class="spacer"></span>${editIdx!=null?`<button class="btn small danger" style="width:auto;border-radius:999px" onclick="fnApply(${at},${editIdx},'')">지우기</button>`:""}<button class="btn small ghost" style="width:auto;border-radius:999px" onclick="hlClose()">취소</button><button class="btn small ink" style="width:auto;border-radius:999px" onclick="fnApply(${at},${editIdx==null?"null":editIdx},$('#wfn').value)">달기</button></div>`,
+    {left:r.left+r.width/2,top:Math.max(80,r.top)+60,width:0,height:0,bottom:Math.max(80,r.top)+80},true);
+  setTimeout(()=>$("#wfn")?.focus(),20);
+}
+function fnApply(at,editIdx,memo){
+  const b=$("#wbody"); if(!b) return; memo=(memo||"").trim().replace(/[\[\]]/g,""); const v=b.value;
+  if(editIdx==null){ hlClose(); if(!memo) return; const ins=`[^${memo}]`; b.value=v.slice(0,at)+ins+v.slice(at); b.selectionStart=b.selectionEnd=at+ins.length; }
+  else { let k=0, done=false; b.value=v.replace(FN_RE,(m,f)=>{ if(done) return m; if(k++===editIdx){ done=true; return memo?`[^${memo}]`:""; } return m; }); hlClose();
+    if(READVIEW){ READVIEW=false; toggleRead(); } }
+  b.focus(); grow(); countW(); draftInput();
+}
+document.addEventListener("click",e=>{ const sup=e.target.closest?.("#readview sup.fnref"); if(!sup) return; const n=[...document.querySelectorAll("#readview sup.fnref")].indexOf(sup); fnBox(0,n,""); });
 document.addEventListener("mouseup",e=>{ const b=e.target.closest?.("#wbody"); if(!b) return; setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd}; hlBar(wTools(),{left:e.clientX,top:e.clientY-8,width:0,height:0,bottom:e.clientY+8}); },10); });
 document.addEventListener("selectionchange",()=>{ const b=$("#wbody"); if(!b||document.activeElement!==b||!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._wsT); window._wsT=setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return; WSEL={s:b.selectionStart,e:b.selectionEnd}; const r=b.getBoundingClientRect(); hlBar(wTools(),{left:r.left+r.width/2,top:Math.max(60,r.top)+40,width:0,height:0,bottom:Math.max(60,r.top)+60}); },400); });
 // 성경 구절 넣기: 한 줄에 「창 1:1-3」(약어나 책 이름)만 적고 Enter 를 누르면 그 자리에 본문(개역한글, 공개본)이 들어갑니다
 const BABBR="창 출 레 민 신 수 삿 룻 삼상 삼하 왕상 왕하 대상 대하 스 느 에 욥 시 잠 전 아 사 렘 애 겔 단 호 욜 암 옵 욘 미 나 합 습 학 슥 말 마 막 눅 요 행 롬 고전 고후 갈 엡 빌 골 살전 살후 딤전 딤후 딛 몬 히 약 벧전 벧후 요일 요이 요삼 유 계".split(" ");
 const REF_RE=/^\s*([가-힣]{1,7})\s*(\d{1,3})[:：장편]\s*(\d{1,3})?(?:\s*[-~]\s*(?:(\d{1,3})[:：])?(\d{1,3}))?\s*(절)?\s*$/;
+function normPassage(p){ // "요 15:5"·"요한일서 1:9" → "요한복음 15:5"·"요한1서 1:9" (노션 책 노트를 찾을 수 있게)
+  p=String(p||"").trim(); const m=p.match(/^(\S+)(.*)$/); if(!m) return p; const ab=BABBR.indexOf(m[1]); const name=ab>=0?BIBLE[ab][0]:(BALIAS[m[1]]||m[1]); return name+m[2]; }
 function parseRef(line){
   const m=line.match(REF_RE); if(!m) return null;
   let bi=BABBR.indexOf(m[1]); if(bi<0) bi=BIBLE.findIndex(b=>b[0]===(BALIAS[m[1]]||m[1])); if(bi<0) return null;
@@ -996,16 +1038,17 @@ function parseRef(line){
 const CHAP=new Map();
 async function chapterKo(bi,c){ const k=bi+"/"+c; if(!CHAP.has(k)){ const d=await (await fetch(`https://api.getbible.net/v2/korean/${bi+1}/${c}.json`)).json(); CHAP.set(k,(d.verses||[]).map(v=>({v:v.verse,t:String(v.text).trim()}))); } return CHAP.get(k); }
 async function insertRef(b,lineStart,lineEnd,P){
-  const vs=[]; for(let c=P.c1;c<=P.c2;c++){ const ch=await chapterKo(P.bi,c); ch.forEach(x=>{ if((c>P.c1||x.v>=P.v1)&&(c<P.c2||x.v<=P.v2)) vs.push({c,v:x.v,t:x.t}); }); }
+  const before=b.value, vs=[]; for(let c=P.c1;c<=P.c2;c++){ const ch=await chapterKo(P.bi,c); ch.forEach(x=>{ if((c>P.c1||x.v>=P.v1)&&(c<P.c2||x.v<=P.v2)) vs.push({c,v:x.v,t:x.t}); }); }
   if(!vs.length) return toast("그 구절을 찾지 못했습니다");
   const last=vs[vs.length-1], ref=P.whole?`${P.name} ${P.c1}${P.bi===18?"편":"장"}`:`${P.name} ${P.c1}:${P.v1}${last.c!==P.c1?`-${last.c}:${last.v}`:last.v!==P.v1?`-${last.v}`:""}`;
   const text=`「${vs.map(x=>(vs.length>1?x.v+" ":"")+x.t).join(" ")}」 (${ref}, 개역한글)`;
+  if(b.value!==before) return toast("본문을 받는 사이 글이 바뀌어 넣지 않았습니다. 다시 Enter 를 눌러 주세요");
   const v=b.value; b.value=v.slice(0,lineStart)+text+v.slice(lineEnd); b.selectionStart=b.selectionEnd=lineStart+text.length; grow(); countW(); draftInput(); toast(`${ref} 본문을 넣었습니다`);
 }
 document.addEventListener("keydown",e=>{
   if(e.key!=="Enter"||e.isComposing||e.shiftKey||!e.target.matches?.("#wbody")) return;
   const b=e.target, pos=b.selectionStart, v=b.value, ls=v.lastIndexOf("\n",pos-1)+1, le=v.indexOf("\n",pos), lineEnd=le<0?v.length:le, line=v.slice(ls,lineEnd);
-  const P=parseRef(line); if(!P) return; e.preventDefault(); insertRef(b,ls,lineEnd,P).catch(()=>toast("본문을 받아 오지 못했습니다 (인터넷 연결 확인)"));
+  const P=parseRef(line); if(!P) return; e.preventDefault(); insertRef(b,ls,lineEnd,P).catch(()=>{ toast("본문을 받아 오지 못했습니다 (인터넷 연결 확인)"); if(b.value.slice(lineEnd,lineEnd+1)!=="\n"){ b.value=b.value.slice(0,lineEnd)+"\n"+b.value.slice(lineEnd); b.selectionStart=b.selectionEnd=lineEnd+1; } });
 });
 // 읽어 보기: 표시가 입혀진 모습으로 (각주는 아래에 번호로)
 let READVIEW=false;
@@ -1044,7 +1087,7 @@ function memoSave(id,text){
   const ref=f.c===l.c?`${f.c}:${f.v}${l.v!==f.v?"-"+l.v:""}`:`${f.c}:${f.v}-${l.c}:${l.v}`;
   const src=`${P?P.name:""} ${ref} (${m.lang==="en"?"WEB":"개역한글"})`.trim(), quote=text||"";
   let n=m.noteId&&S.notes.find(x=>x.id===m.noteId);
-  if(v){ if(!n){ n={id:uid(),track:"bible",date:today(),text:quote,source:src,mark:m.id}; S.notes.push(n); m.noteId=n.id; } n.thought=v; n.updated=m.u; mark("note"); }
+  if(v){ if(!n){ n={id:uid(),track:"bible",date:d,text:quote,source:src,mark:m.id}; S.notes.push(n); m.noteId=n.id; } n.thought=v; n.updated=m.u; mark("note"); }
   else if(n){ tomb(n.id); S.notes=S.notes.filter(x=>x.id!==n.id); m.noteId=null; }
   save(); paintSuText(); hlClose(); toast(v?"메모를 남겼습니다 (「밑줄」에도 들어갔습니다)":"메모를 지웠습니다");
 }
@@ -1054,9 +1097,9 @@ function markDel(id){
   S.marks[d]=marksOf(d).filter(x=>!ids.includes(x)); save(); paintSuText(); hlClose();
 }
 // 글자를 고르면 형광펜 막대, 칠한 곳을 누르면 메모 상자
-document.addEventListener("mouseup",e=>{ if(e.target.closest("#hlbar")) return; setTimeout(()=>{ const s=selPieces(); if(s){ HLSEL=s; hlBar(hlTools(),s.rect); } else if(!e.target.closest(".mk,.mmo")&&$("#hlbar")&&!$("#hlbar").classList.contains("memo")) hlClose(); },10); });
+document.addEventListener("mouseup",e=>{ if(e.target.closest?.("#hlbar,#wbody")) return; setTimeout(()=>{ const s=selPieces(); if(s){ HLSEL=s; hlBar(hlTools(),s.rect); } else if(!e.target.closest(".mk,.mmo")&&$("#hlbar")&&!$("#hlbar").classList.contains("memo")) hlClose(); },10); });
 document.addEventListener("selectionchange",()=>{ if(!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._hlT); window._hlT=setTimeout(()=>{ const s=selPieces(); if(s){ HLSEL=s; hlBar(hlTools(),s.rect); } },350); });
-document.addEventListener("click",e=>{ const mk=e.target.closest("#sutext .mk,#sutext .mmo"); if(!mk) { if($("#hlbar")?.classList.contains("memo")&&!e.target.closest("#hlbar")) hlClose(); return; }
+document.addEventListener("click",e=>{ const mk=e.target.closest?.("#sutext .mk,#sutext .mmo"); if(!mk) { if($("#hlbar")?.classList.contains("memo")&&!e.target.closest?.("#hlbar")) hlClose(); return; }
   if(!getSelection().isCollapsed) return; const [,m]=markById(mk.dataset.mid); if(!m) return;
   const grp=marksOf(suDate()).filter(x=>m.g?x.g===m.g:x.id===m.id), last=grp[grp.length-1]||m;
   const text=[...document.querySelectorAll("#sutext .mk")].filter(x=>grp.some(g=>g.id===x.dataset.mid)).map(x=>x.textContent).join(" ");
@@ -1092,8 +1135,8 @@ const hideDict=()=>{ dictWord=""; $("#dictpop")?.remove(); };
 document.addEventListener("mousemove",e=>{ if(matchMedia("(pointer:coarse)").matches) return;
   if(!e.target.closest?.("#sutext .vt.en")){ clearTimeout(dictT); if(!e.target.closest?.("#dictpop")) hideDict(); return; }
   clearTimeout(dictT); dictT=setTimeout(()=>{ if(!getSelection().isCollapsed) return; const w=wordAt(e.clientX,e.clientY); if(w&&w.toLowerCase()!==dictWord) showDict(w,e.clientX,e.clientY); else if(!w) hideDict(); },450); });
-document.addEventListener("click",e=>{ if(!matchMedia("(pointer:coarse)").matches) return; if(e.target.closest("#dictpop")) return;
-  if(e.target.closest("#sutext .vt.en")&&!e.target.closest(".mk,.mmo")&&getSelection().isCollapsed){ const w=wordAt(e.clientX,e.clientY); if(w) return showDict(w,e.clientX,e.clientY); } hideDict(); });
+document.addEventListener("click",e=>{ if(!matchMedia("(pointer:coarse)").matches) return; if(e.target.closest?.("#dictpop")) return;
+  if(e.target.closest?.("#sutext .vt.en")&&!e.target.closest(".mk,.mmo")&&getSelection().isCollapsed){ const w=wordAt(e.clientX,e.clientY); if(w) return showDict(w,e.clientX,e.clientY); } hideDict(); });
 
 // ───────── 성경 통독 계획 ─────────
 const chapterList=(from,to)=>{ const L=[]; for(let i=from;i<to;i++) for(let c=1;c<=BIBLE[i][1];c++) L.push([i,c]); return L; };
@@ -1117,7 +1160,7 @@ const PLANS=[
   {id:"nt90",ch:260,fit:n=>split(NT,Math.min(n,260)).map(fmt),name:"신약 90일",how:"신약 260장을 90일 동안 읽습니다. 하루 3장 정도입니다.",days:()=>split(NT,90).map(fmt)},
   {id:"b90",ch:1189,fit:n=>split(ALLCH,Math.min(n,1189)).map(fmt),name:"성경 90일",how:"성경 1,189장을 90일 동안 읽습니다. 하루 13장쯤으로 많지만, 성경 전체의 큰 흐름이 한눈에 들어옵니다. 방학이나 안식월에 알맞습니다.",days:()=>split(ALLCH,90).map(fmt)},
   {id:"gospel40",ch:89,fit:n=>split(chapterList(39,43),Math.min(n,89)).map(fmt),name:"사복음서 40일",how:"마태·마가·누가·요한복음 89장을 40일 동안 읽습니다. 하루 2~3장. 사순절이나 새신자와 함께 읽기에 좋습니다.",days:()=>split(chapterList(39,43),40).map(fmt)},
-  {id:"psprov",ch:181,fit:n=>split([...PSALMS,...chapterList(19,20)],Math.min(n,181)).map(fmt),name:"시편·잠언 한 달",how:"31일 동안 날마다 시편 5편 정도와 잠언 한 장을 읽습니다. 잠언은 31장이라 날짜와 장이 딱 맞습니다.",
+  {id:"psprov",ch:181,fit:n=>{ n=Math.max(1,Math.min(n,150)); const ps=split(PSALMS,n); return ps.map((x,d)=>[...fmt(x),`잠언 ${d%31+1}장`]); },name:"시편·잠언 한 달",how:"31일 동안 날마다 시편 5편 정도와 잠언 한 장을 읽습니다. 잠언은 31장이라 날짜와 장이 딱 맞습니다.",
     days:()=>split(PSALMS,31).map((x,d)=>[...fmt(x),`잠언 ${d+1}장`])}
 ];
 let _days={key:"",val:null};
@@ -1132,23 +1175,26 @@ function planDays(){
 }
 // ───────── 기간에 맞춰 읽기: 남은 분량을 '읽는 요일'만 세어 하루 장 수를 계산 ─────────
 const SPANS=[[3,"3개월"],[6,"6개월"],[12,"1년"],[18,"1년 6개월"]];
-function addMonths(key,m){ const d=new Date(key+"T00:00"); d.setMonth(d.getMonth()+m); return dkey(d); }
+function addMonths(key,m){ const d=new Date(key+"T00:00"), day=d.getDate(); d.setDate(1); d.setMonth(d.getMonth()+m); d.setDate(Math.min(day,new Date(d.getFullYear(),d.getMonth()+1,0).getDate())); return dkey(d); }   // 11월 30일+3개월 → 2월 말일
 function spanCalc(m,untilKey){
   const pl=planObj(), cur=planDays(), frac=Math.min(1,todayIdx()/cur.length);
   const until=untilKey||addMonths(today(),m), rd=Math.max(1,activeBetween(today(),until)), remCh=Math.max(1,Math.round(pl.ch*(1-frac)));
   return {until,rd,remCh,frac,per:Math.max(1,Math.round(remCh/rd*10)/10)};
 }
+function walkFwd(n){ const d=new Date(); let c=0; while(c<n){ d.setDate(d.getDate()+1); if(isReadDay(dkey(d))) c++; } return dkey(d); }
 function walkBack(n){ const d=new Date(); let c=0; while(c<n){ d.setDate(d.getDate()-1); if(isReadDay(dkey(d))) c++; } return dkey(d); }
-function setIndexTo(i){ const p=S.settings.plan; p.checks=[]; p.last=null;
-  if(p.mode==="date"){ p.start=walkBack(i); p.setOn=today(); p.done={}; } else p.day=i; }
+function setIndexTo(i,was=doneToday()){ const p=S.settings.plan; p.checks=[]; p.last=null;   // 오늘 이미 읽었으면 그 도장은 지키고 자리만 옮깁니다
+  if(p.mode==="date"){ p.start=walkBack(i); p.setOn=today(); p.done=was?{[i]:true}:{}; }
+  else if(was){ p.last={date:today(),index:i}; p.day=Math.min(planDays().length,i+1); } else p.day=i; }
 function applySpan(m,untilKey){
   const p=S.settings.plan, pl=planObj(), c=spanCalc(m,untilKey);
-  if(c.frac>=1) return toast("이 방법은 이미 다 읽었습니다");
+  if(c.frac>=1){ toast("이 방법은 이미 다 읽었습니다"); return false; }
   { const total=Math.max(1,Math.round(c.rd/(1-c.frac))); p.span=total; _days.key="";
     setIndexTo(Math.min(planDays().length-1,Math.round(c.frac*planDays().length))); }
-  p.spanM=m; p.spanUntil=c.until; p.spanPer=Math.max(1,Math.round(c.remCh/c.rd));
-  const left=planDays().length-todayIdx();
-  planChanged(left<c.rd-1?`하루 약 ${p.spanPer}장 · ${left}일이면 끝납니다 (이 방법은 더 길게 늘릴 수 없어요)`:`${c.until}까지, 읽는 날마다 약 ${p.spanPer}장씩 읽습니다`);
+  const left=Math.max(1,planDays().length-todayIdx());                 // 실제로 다시 나뉜 표 기준으로 안내
+  p.spanM=m; p.spanUntil=left<c.rd-1?walkFwd(left):c.until; p.spanPer=Math.max(1,Math.round(c.remCh/left));
+  planChanged(left<c.rd-1?`이 방법은 더 길게 늘릴 수 없어, ${p.spanUntil}쯤 끝납니다 (하루 약 ${p.spanPer}장)`:`${c.until}까지, 읽는 날마다 약 ${p.spanPer}장씩 읽습니다`);
+  return true;
 }
 function clearSpan(){ // 기본: 그 방법의 원래 날 수대로
   const p=S.settings.plan; if(!p.spanM) return;
@@ -1185,6 +1231,8 @@ function togglePortion(k){
   p.checks=p.checks.includes(k)?p.checks.filter(x=>x!==k):[...p.checks,k];
   if(p.checks.length>=n) completeDay(); else { save(); render(); }
 }
+function missedDays(){ const p=S.settings.plan, out=[]; if(p.mode!=="date") return out; for(let i=activeBetween(p.start,p.setOn||p.start);i<todayIdx();i++) if(!p.done[i]) out.push(i); return out; }
+function catchUp(i){ const p=S.settings.plan; if(p.mode!=="date") return; p.done[i]=true; mark("read"); save(); toast(`${i+1}일째 분량을 읽음으로 표시했습니다`); render(); }
 function readAhead(){ S.settings.plan.last=null; S.settings.plan.checks=[]; save(); render(); }
 function planProgress(){ const p=S.settings.plan, len=planDays().length; const done=p.mode==="date"?activeBetween(p.start,p.setOn||p.start)+Object.keys(p.done).length:p.day; return {len,done,pct:Math.min(100,Math.round(done/len*1000)/10)}; }
 function behind(){ // 이 방법을 고른 날 이후에 놓친 날만 셉니다
@@ -1193,7 +1241,7 @@ function behind(){ // 이 방법을 고른 날 이후에 놓친 날만 셉니다
 }
 function todayPassageHint(){ const first=(planDays()[todayIdx()]||[])[0]||""; const m=first.match(/^(\S+) (\d+)/); return m?`${m[1]} ${m[2]}:`:""; }
 function streak(){ // 쉬는 요일은 건너뛰고 셉니다 (쉬어도 끊기지 않음)
-  const act=k=>{const l=S.log[k]; return l&&(l.read||l.note||l.write);};
+  const act=k=>{const l=S.log[k]; return l&&(l.read||l.book||l.note||l.write);};
   let d=new Date(),n=0; if(!act(dkey(d))) d.setDate(d.getDate()-1);
   const from=S.settings.streakFrom||"";   // '다시 세기'를 누른 날부터만 셉니다 (기록은 그대로)
   for(let g=0;g<4000;g++){ const k=dkey(d); if(k<from) break; if(act(k)) n++; else if(isReadDay(k)) break; d.setDate(d.getDate()-1); }
@@ -1226,7 +1274,7 @@ function go(t,o={}){
   }
   NAV=true; try{ goInner(t,o); }finally{ NAV=false; }
 }
-function goInner(t,o){ tab=t; if(o.track) track=o.track; editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||null; selLen=null; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
+function goInner(t,o){ tab=t; if(o.track) track=o.track; editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||null; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
 const FLOW=`<div class="flow"><span><b>밑줄</b> 읽다가 붙잡은 한 문장</span><i>→</i><span><b>글</b> 그 문장으로 쓴 묵상·설교·에세이</span><i>→</i><span><b>원고</b> 글을 모아 엮는 한 권의 책</span></div>`;
 function render(){
   // 같은 쓰기 화면을 다시 그릴 때(말씀/책 바꾸기, 합친 뒤 등) 쓰던 제목·본문을 그대로 지켜 줍니다
@@ -1244,7 +1292,8 @@ const DKEY="seojae.draft";
 let draftT;
 function saveDraft(){
   if(tab!=="write"||!$("#wbody")||!writingUnsaved()) return;
-  const d={editId,fromNote,fromWriting,track,type:$("#wtype")?.value,title:$("#wtitle").value,body:$("#wbody").value,passage:$("#wpassage")?.value??null,t:Date.now()};
+  const d={editId,fromNote,fromWriting,track,type:$("#wtype")?.value,title:$("#wtitle").value,body:$("#wbody").value,passage:$("#wpassage")?.value??null,
+    summary:$("#wsummary")?.value??null,topics:[...selTopics],sits:[...selSits],status:$("#wstatus")?.value??null,len:selLen??null,stk:editId?null:wStk,t:Date.now()};
   try{ localStorage.setItem(DKEY,JSON.stringify(d)); }catch(_){}
 }
 const clearDraft=()=>{ try{ localStorage.removeItem(DKEY); }catch(_){} };
@@ -1260,6 +1309,12 @@ function restoreDraft(){
   $("#wtitle").value=d.title||""; $("#wbody").value=d.body||"";
   if(d.type&&$("#wtype")) $("#wtype").value=d.type;
   if(d.passage!=null&&$("#wpassage")) $("#wpassage").value=d.passage;
+  if(d.summary!=null&&$("#wsummary")) $("#wsummary").value=d.summary;
+  if(d.status&&$("#wstatus")) $("#wstatus").value=d.status;
+  if(Array.isArray(d.topics)&&d.topics.length){ selTopics=[...d.topics]; document.querySelectorAll("#topics .chip").forEach(c=>c.classList.toggle("on",selTopics.includes(c.textContent))); }
+  if(Array.isArray(d.sits)&&d.sits.length){ selSits=[...d.sits]; document.querySelectorAll("#sits .chip").forEach(c=>c.classList.toggle("on",selSits.includes(c.textContent))); }
+  if(d.len!=null){ selLen=d.len; document.querySelectorAll("#lenbox .pill").forEach(x=>x.classList.toggle("on",x.textContent===selLen)); }
+  if(Array.isArray(d.stk)&&d.stk.length&&!editId){ wStk=d.stk; paintStk(); }
   if(d.fromNote) fromNote=d.fromNote;
   grow(); countW();
   $(".notebook")?.insertAdjacentHTML("beforebegin",`<div class="draftbar">✎ 간직하지 않았던 글을 되살렸습니다 <button class="btn small ghost" onclick="discardDraft()">이 글 버리기</button></div>`);
@@ -1345,7 +1400,7 @@ function stkAct(op){
   const layer=document.querySelector(`.stk[data-id="${STK_SEL}"]`)?.parentElement; if(!layer) return; const ctx=layer.dataset.ctx, L=stkList(ctx), i=L.findIndex(t=>t.id===STK_SEL); if(i<0) return; const t=L[i];
   if(op==="l") t.r=(t.r||0)-15; if(op==="r") t.r=(t.r||0)+15;
   if(op==="+") t.s=Math.min(3,+((t.s||1)*1.15).toFixed(2)); if(op==="-") t.s=Math.max(.4,+((t.s||1)/1.15).toFixed(2));
-  if(op==="f"){ L.splice(i,1); L.push(t); } if(op==="x"){ L.splice(i,1); STK_SEL=null; }
+  if(op==="f"){ L.splice(i,1); L.push(t); } if(op==="x"){ L.splice(i,1); tomb(t.id); STK_SEL=null; }
   stkCommit(ctx); paintStk();
 }
 function toggleStk(){ STK_OPEN=!STK_OPEN; if(!STK_OPEN) STK_SEL=null; paintStk(); }
@@ -1372,7 +1427,8 @@ document.addEventListener("pointermove",e=>{ const g=STK_DRAG; if(!g) return;
   const dx=e.clientX-g.sx, dy=e.clientY-g.sy; if(Math.abs(dx)+Math.abs(dy)>3) g.moved=true;
   g.t.x=Math.max(0,Math.min(100,g.x0+dx/g.r.width*100)); g.t.y=Math.max(0,Math.min(100,g.y0+dy/g.r.height*100)); g.el.style.cssText=stkStyle(g.t); });
 document.addEventListener("pointerup",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; g.t.x=+g.t.x.toFixed(2); g.t.y=+g.t.y.toFixed(2); if(g.moved) stkCommit(g.ctx); paintStk(); });
-document.addEventListener("keydown",e=>{ if(STK_SEL&&(e.key==="Delete"||e.key==="Backspace")&&!e.target.matches("input,textarea")){ e.preventDefault(); stkAct("x"); } });
+document.addEventListener("pointercancel",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; if(g.moved) stkCommit(g.ctx); paintStk(); });
+document.addEventListener("keydown",e=>{ if(STK_SEL&&(e.key==="Delete"||e.key==="Backspace")&&!e.target.matches?.("input,textarea,select")){ e.preventDefault(); stkAct("x"); } });
 
 const VIEWS={
 diary(){ return diaryPage(); },
@@ -1427,7 +1483,7 @@ write(){
   if(w&&!selTopics.length) selTopics=[...(w.topics||[])];
   if(fw&&!selTopics.length) selTopics=[...(fw.topics||[])];
   if(w&&!selSits.length) selSits=[...(w.situations||[])];
-  if(w&&selLen==null) selLen=w.length||null;
+  if(w&&selLen===undefined) selLen=w.length||null;
   const dtype=w?.type||(fw?"설교 초안":null);
   const defBook=w?w.bookId:(fn?.bookId??S.settings.currentBook), defPage=w?.page??fn?.page??"";
   const hasMore=!!(w&&(w.summary||(w.topics||[]).length||(w.situations||[]).length||msOf(w).length));
@@ -1441,7 +1497,7 @@ write(){
   ${track==="bible"?`<div class="sucard" id="sucard" data-date="${esc(w?.date||today())}"></div>`:""}
   <div class="toolbar">
     <span class="nofocus">${w?`<span class="label ${track}" style="margin:0">${trackName(track)}</span> <span class="muted">[${esc(wTag(w))}]${w.length?" · "+esc(w.length):""}</span>`:seg("render()")}</span>
-    <select id="wtype" style="width:auto">${types.map(t=>`<option ${dtype===t?"selected":""}>${t}</option>`).join("")}</select>
+    <select id="wtype" style="width:auto" onchange="const lb=$('#lenbox'); if(lb) lb.style.display=this.value==='묵상을설교로'?'':'none'">${types.map(t=>`<option ${dtype===t?"selected":""}>${t}</option>`).join("")}</select>
     <button class="btn small" onclick="insertTemplate()">틀 넣기</button>
     <span class="spacer"></span>
     <details class="penpaper nofocus"><summary>🖋 펜과 종이</summary><span class="pp">
@@ -1459,7 +1515,7 @@ write(){
         ${stkLayer("write")}
         <input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput()">
         <div class="meta"><span class="pen" style="font-size:20px">${esc(w?.date||today())}</span><span id="wcount"></span></div>
-        <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput()" style="--penink:${ink||"var(--ink)"}" placeholder="여기에 천천히 써 내려가세요…  (한 줄에 「창 1:1-3」처럼 적고 Enter 를 누르면 그 구절이 들어옵니다)">${esc(w?.body??seed)}</textarea>
+        <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput()" style="--penink:${ink||"var(--ink)"}" placeholder="여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Enter 를 누르면 그 구절이 들어옵니다(참조만 남기려면 Shift+Enter).">${esc(w?.body??seed)}</textarea>
       </div>
     </div>
     <aside>
@@ -1476,7 +1532,7 @@ write(){
             <input id="newtopic" placeholder="＋ 새 주제 (적고 Enter)" style="margin-top:6px" onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();addTopic(this.value)}"></div>
           ${track==="bible"?`<div class="field"><span>상황 <small class="hint" style="display:inline">· 특별한 자리에 쓸 설교라면. 노션 「상황별」 보기에 모입니다</small></span>
             <div id="sits">${SITUATIONS.map(t=>`<span class="chip ${selSits.includes(t)?"on":""}" onclick="toggleSit(this.textContent)">${esc(t)}</span>`).join("")}</div></div>`:""}
-          ${track==="bible"?`<div class="field"><span>설교 길이 <small class="hint" style="display:inline">· 「묵상을설교로」 글에 태그로 붙습니다</small></span>
+          ${track==="bible"?`<div class="field" id="lenbox" style="${dtype==="묵상을설교로"?"":"display:none"}"><span>설교 길이 <small class="hint" style="display:inline">· 노션 태그와 완성 뒤 색인 종류(긴설교→주일설교, 짧은설교→새벽설교)에 쓰입니다</small></span>
             <div class="pills">${SLEN.map(([n,d])=>`<button type="button" class="pill ${selLen===n?"on":""}" data-tip="${d}" onclick="selLen=selLen==='${n}'?null:'${n}';this.parentNode.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',b.textContent===selLen))">${n}</button>`).join("")}</div></div>`:""}
           <label class="field"><span>글의 상태</span><select id="wstatus" style="width:auto">${WSTATUS.map(x=>`<option ${(w?.status||"초고")===x?"selected":""}>${x}</option>`).join("")}</select><small class="hint">씨앗 → 초고 → 다듬는 중 → 완성. 서랍에서 상태가 보입니다.</small></label>
           <label class="field"><span>원고에 넣기</span><select id="wms"><option value="">고르지 않음</option>${S.manuscripts.filter(m=>!m.rule&&!(w&&m.items.includes(w.id))).map(m=>`<option value="${m.id}">✋ ${esc(m.title)}</option>`).join("")}</select>
@@ -1609,7 +1665,7 @@ settings(){
 };
 const AFTER={
   diary(){ paintPalette(); },
-  write(){ grow(); countW(); restoreDraft(); paintPalette(); paintSu(); },
+  write(){ READVIEW=false; grow(); countW(); restoreDraft(); paintPalette(); paintSu(); },
   drawer(){ if(drawerSub==="all") renderArchive(); },
   today(){ paintTimer(); },
   settings(){
@@ -1666,7 +1722,8 @@ function todayBibleCard(){
     return `<section class="sheet tape restcard"><p class="label bible">오늘의 말씀</p>
       <div class="big">오늘은 쉬는 날입니다</div>
       <p class="sub">${WEEK[new Date().getDay()]}요일은 통독을 쉬는 날로 정하셨습니다. 진도는 그대로 두었다가 ${nx.getMonth()+1}월 ${nx.getDate()}일(${WEEK[nx.getDay()]})에 이어 갑니다.</p>
-      <div class="row" style="margin-top:12px"><button class="btn ghost" onclick="restPeek=true;render()">그래도 읽기</button><button class="btn" onclick="toggleNoteForm('bible')">✎ 밑줄 남기기</button></div>
+      <p class="muted">매일성경 묵상은 쉬는 날에도 그대로입니다 — 「쓰기」 맨 위에서 오늘 본문을 볼 수 있습니다.</p>
+      <div class="row" style="margin-top:12px">${p.mode==="date"?"":`<button class="btn ghost" onclick="restPeek=true;render()">그래도 읽기</button>`}<button class="btn" onclick="go('write',{track:'bible'})">✍ 묵상 쓰기</button><button class="btn" onclick="toggleNoteForm('bible')">✎ 밑줄 남기기</button></div>
       ${noteOpen==="bible"?noteForm("bible"):""}${todayNotes("bible")}</section>`;
   }
   const many=portions.length>5; // 연대기순처럼 조각이 많은 날은 하루 단위로만 표시
@@ -1678,6 +1735,7 @@ function todayBibleCard(){
         return `<button class="portion ${on?"on":""}" onclick="togglePortion(${k})"><span class="tick">${tickSvg(on)}</span>${plan.labels?`<span class="plab">${plan.labels[k]}</span>`:""}<span class="ptext">${esc(x)}</span><span class="plink" title="${bibleVer()[1]}으로 읽기" onclick="event.stopPropagation();openBible(${jsArg(x)})">${bookSvg()}</span></button>`; }).join("")}</div>`}
     <div class="progress" style="margin-top:14px"><i style="width:${pr.pct}%;background:var(--bible)"></i></div>
     <div class="muted">${pr.done} / ${pr.len}일 · ${pr.pct}%${late?` · <span style="color:var(--ink-soft)">천천히 따라잡을 날 ${late}일</span>`:""}</div>
+    ${late?`<details class="more"><summary>놓친 분량 보기 <small class="hint" style="display:inline">· 읽은 날은 「읽음」을 눌러 지워 가세요</small></summary><div class="portions">${missedDays().slice(0,14).map(k=>`<button class="portion" onclick="catchUp(${k})"><span class="tick">${tickSvg(false)}</span><span class="plab">${k+1}일째</span><span class="ptext" style="font-weight:400;font-size:16px">${esc((days[k]||[]).join(" · "))}</span><span class="plink" style="font-size:13px;font-family:inherit">읽음</span></button>`).join("")}${late>14?`<p class="hint">…그 뒤 ${late-14}일 더</p>`:""}</div></details>`:""}
     <div class="row" style="margin-top:14px">
       ${done?`<span class="stamp">오늘 읽음</span>${p.mode!=="date"?`<button class="btn ghost small" onclick="readAhead()">다음 날 분량 이어 읽기</button>`:""}`
         :`<button class="btn ink" onclick="completeDay()">${many?"다 읽었습니다":"모두 읽었습니다"}</button>`}
@@ -1693,12 +1751,14 @@ function tickSvg(on){ // 손으로 그린 동그라미와 체크
   return `<svg viewBox="0 0 28 28" width="24" height="24" aria-hidden="true"><path d="M14 2.6c6.5-.3 11.3 4.6 11.1 11.2-.2 6.4-5.3 11.4-11.6 11.1C7.2 24.6 2.8 19.6 3 13.4 3.2 7.3 8 2.9 14 2.6z" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>${on?`<path d="M8 14.5l4.2 4.3L21 8.6" fill="none" stroke="var(--stamp)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`:""}</svg>`;
 }
 function logPages(b,from,to){ if(!b||to===from) return; const L=S.log[today()]=S.log[today()]||{}, m=L.books=L.books||{}, e=m[b.id];
-  m[b.id]={title:b.title,from:e?e.from:(from||0),to}; }
-function updatePage(){ const p=+$("#pg").value, b=curBook(); if(!p||!b) return; logPages(b,b.page,p); b.page=p; mark("read"); if(b.total&&p>=b.total&&confirm("마지막 쪽이네요. 다 읽은 책으로 옮길까요?")){ b.status="완료"; b.finished=today(); syncBook(b); } save(); toast(`${p}쪽까지 읽었습니다`); render(); }
+  const f=e?e.from:(from||0); m[b.id]={title:b.title,from:Math.min(f,to),to}; }   // 쪽수를 잘못 넣어 낮추면 시작 쪽도 함께
+function updatePage(){ const p=+$("#pg").value, b=curBook(); if(!p||!b) return; logPages(b,b.page,p); b.page=p; mark("book");
+  if(b.total&&p>=b.total&&confirm("마지막 쪽이네요. 다 읽은 책으로 옮길까요?")){ save(); return finishBook(b.id); }   // 한 줄 평·다음 책 고르기까지 똑같이
+  save(); toast(`${p}쪽까지 읽었습니다`); render(); }
 
 // ───────── 동작: 글쓰기 ─────────
 function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.height="auto"; t.style.height=Math.max(t.scrollHeight,innerHeight*.62)+"px"; if(scrollY!==y) scrollTo(0,y); }
-function countW(){ const v=$("#wbody")?.value||""; const fn=(v.match(/\[\^/g)||[]).length; $("#wcount").textContent=`${chars(v).toLocaleString()}자 · 원고지 ${Math.ceil(chars(v)/200)}매${fn?` · 각주 ${fn}`:""}`; }
+function countW(){ const v=$("#wbody")?.value||""; const fn=(v.match(/\[\^/g)||[]).length; $("#wcount").textContent=`${chars(v).toLocaleString()}자(공백 제외) · 원고지 ${Math.ceil(charsAll(v)/200)}매${fn?` · 각주 ${fn}`:""}`; }
 function setInk(c){ S.settings.ink=c; save(); $("#wbody").style.setProperty("--penink",c); document.querySelectorAll(".inkdot").forEach(d=>d.classList.toggle("on",d.style.background&&d.title&&INKS.find(i=>i[1]===c)?.[0]+" 잉크"===d.title)); }
 function setPaper(p){ S.settings.paper=p; save(); const t=$("#wbody"); t.className="page "+p; $(".notebook").className="notebook "+p; }
 function toggleFocus(){ document.body.classList.toggle("focus"); $("#focusbtn").textContent=document.body.classList.contains("focus")?"나가기":"집중 모드"; grow(); }
@@ -1714,7 +1774,7 @@ function promote(id,len){
   const m=S.writings.find(x=>x.id===id); if(!m) return;
   if(tab==="write"&&writingUnsaved()&&!confirm("지금 화면에 간직하지 않은 고친 내용이 있습니다. 그대로 두고 설교 페이지를 만들까요? (고친 내용은 임시 보관됩니다)")) return;
   saveDraft();
-  const body=`■ 설교 길이: ${len}\n\n■ 중심 메시지 (한 문장)\n${m.summary||""}\n\n■ 설교 뼈대 메모 — 대지 후보, 예화 후보, 더 살펴볼 것\n\n■ 묵상에서 — ${m.date}${m.title?" · "+m.title:""}\n${m.body.trim()}\n${m.notion?.url?`원래 묵상 노트: ${m.notion.url}\n`:""}\n■ ✍️ 완성 설교 — 설교작성 프로젝트에서 완성한 설교를 이 아래에 씁니다\n`;
+  const body=`■ 설교 길이: ${len}\n\n■ 중심 메시지 (한 문장)\n${m.summary||""}\n\n■ 설교 뼈대 메모 — 대지 후보, 예화 후보, 더 살펴볼 것\n\n■ 묵상에서 — ${m.date}${m.title?" · "+m.title:""}\n${m.body.trim().replace(/^■\s*/gm,"· ")}\n${m.notion?.url?`원래 묵상 노트: ${m.notion.url}\n`:""}\n■ ✍️ 완성 설교 — 설교작성 프로젝트에서 완성한 설교를 이 아래에 씁니다\n`;
   const w={id:uid(),date:today(),track:"bible",type:"묵상을설교로",title:m.title||"",passage:m.passage||"",summary:m.summary||"",topics:[...(m.topics||[])],situations:[...(m.situations||[])],
     length:len,status:"씨앗",fromWriting:m.id,body,updated:new Date().toISOString()};
   S.writings.push(w); mark("write"); save(); syncWriting(w);
@@ -1728,7 +1788,8 @@ async function pullNotion(id){
   try{ const r=await gcall("notionPull",{page:w.notion.page,marker:w.notion.marker});
     if(!r.ok) return toast(r.error||"가져오지 못했습니다");
     if(!r.body.trim()) return toast("노션 페이지에 가져올 글이 없습니다");
-    if(r.body===w.body.trim()) return toast("앱의 글과 노션 글이 같습니다");
+    const norm=t=>String(t||"").replace(/[ \t]+$/gm,"").replace(/\n{2,}/g,"\n").trim();
+    if(norm(r.body)===norm(w.body)) return toast("앱의 글과 노션 글이 같습니다");
     if(!confirm(`노션 페이지의 글로 이 글을 바꿀까요?\n지금 글은 「이전 판」으로 남습니다.${r.skipped?`\n(토글·표 등 ${r.skipped}개는 노션에만 그대로 둡니다)`:""}`)) return;
     w.prev=[{at:w.updated||w.date,body:w.body},...(w.prev||[])].slice(0,3);
     w.body=r.body; w.notion.blocks=r.blocks; w.updated=new Date().toISOString(); if(w.status==="씨앗") w.status="다듬는 중";
@@ -1743,7 +1804,7 @@ function insertNote(id){ const n=S.notes.find(x=>x.id===id), b=$("#wbody"); cons
 function saveWriting(){
   const body=$("#wbody").value; if(!body.trim()) return toast("아직 빈 페이지입니다");
   const data={type:$("#wtype").value,title:$("#wtitle").value.trim(),body,summary:$("#wsummary").value.trim(),topics:[...selTopics],status:$("#wstatus")?.value||"초고",updated:new Date().toISOString()};
-  if(track==="bible"){ data.passage=$("#wpassage").value.trim(); data.situations=[...selSits]; data.length=data.type==="묵상을설교로"?(selLen||null):null; }
+  if(track==="bible"){ data.passage=normPassage($("#wpassage").value); data.situations=[...selSits]; data.length=data.type==="묵상을설교로"?(selLen||null):null; }
   else { data.bookId=$("#wbook").value||null; data.page=$("#wpage").value.trim(); }
   let w;
   if(editId) w=S.writings.find(x=>x.id===editId);
@@ -1879,7 +1940,9 @@ async function trashInNotion(pages){
     else toast("앱에서 지웠습니다. 노션 글 일부는 옮기지 못했습니다"+(r.error?": "+r.error:""));
   }catch(e){ toast("앱에서 지웠습니다. 노션에 닿지 못해 노션 글은 그대로 남았습니다"); }
 }
-function plainWithNotes(t){ const fn=[]; const body=String(t||"").replace(MK_RE,(m,c,h,u,f)=>f!=null?`[${fn.push(f)}]`:(h??u)); return body+(fn.length?"\n\n각주\n"+fn.map((x,i)=>`[${i+1}] ${x}`).join("\n"):""); }
+function plainWithNotes(t,md){ // md: 마크다운 각주 문법([^1] / [^1]: 내용)으로
+  const fn=[], ref=n=>md?`[^${n}]`:`[${n}]`, body=String(t||"").replace(MK_RE,(m,c,h,u,f)=>f!=null?ref(fn.push(f)):String(h??u).replace(FN_RE,(m2,f2)=>ref(fn.push(f2))));
+  return body+(fn.length?(md?"\n\n"+fn.map((x,i)=>`[^${i+1}]: ${x}`).join("\n"):"\n\n각주\n"+fn.map((x,i)=>`[${i+1}] ${x}`).join("\n")):""); }
 function copyW(){ navigator.clipboard?.writeText(($("#wtitle").value?$("#wtitle").value+"\n\n":"")+plainWithNotes($("#wbody").value)).then(()=>toast("복사했습니다")); }
 async function resyncAll(){ const list=S.writings.filter(w=>w.syncError||!w.notion?.page); for(const w of list) await syncWriting(w,true); toast("다시 보냈습니다"); render(); }
 
@@ -2015,7 +2078,7 @@ function exportMs(id){ // 성경 순서로 모은 원고는 성경책마다 장(
   const m=S.manuscripts.find(x=>x.id===id); let out=`# ${m.title}\n\n`, part=null;
   msList(m).forEach((w,i)=>{ const x=wRef(w), name=x?BIBLE[x.book][0]:null;
     if(m.rule&&m.order!=="date"&&name&&name!==part){ part=name; out+=`\n## ${name}\n\n`; }
-    out+=`### ${i+1}. ${w.title||"(제목 없음)"}${w.passage?` — ${w.passage}`:""}\n\n${plainWithNotes(w.body.trim())}\n\n`; });
+    out+=`### ${i+1}. ${w.title||"(제목 없음)"}${w.passage?` — ${w.passage}`:""}\n\n${plainWithNotes(w.body.trim(),true)}\n\n`; });
   download(`${m.title}.md`,out,"text/markdown");
 }
 // 책 모양 PDF: A5 판형 · 표지 · 차례(쪽 번호) · 꼭지마다 새 쪽 · 쪽 번호와 머리글.
@@ -2025,7 +2088,9 @@ function bookHtml(m,ch,author){
   // 틀의 소제목 가운데 내용이 없는 것은 빼고, 「 — 안내말」은 지워서 책에는 소제목만 남깁니다
   const para=body=>{ const L=body.split("\n").map(l=>l.trim()).filter(Boolean), fn=[];
     const html=L.filter((l,k)=>!l.startsWith("■")||(k+1<L.length&&!L[k+1].startsWith("■"))).map(l=>
-    l.startsWith("■")?`<h4>${e(stripMk(l).replace(/^■\s*/,"").replace(/\s+—\s+.*$/,""))}</h4>`:l.startsWith("「")?`<blockquote>${richHtml(l,fn)}</blockquote>`:`<p>${richHtml(l,fn)}</p>`).join("");
+    l.startsWith("■")?`<h4>${richHtml(l.replace(/^■\s*/,"").replace(/\s+—\s+.*$/,""),fn)}</h4>`
+      :/^(==(?:[ygpb]:)?|__)?「/.test(l)?(()=>{ const m=l.match(/^(.*」)\s*\(([^()]{1,80})\)\s*$/); return m?`<blockquote>${richHtml(m[1],fn)}<cite>${e(m[2])}</cite></blockquote>`:`<blockquote>${richHtml(l,fn)}</blockquote>`; })()
+      :`<p>${richHtml(l,fn)}</p>`).join("");
     return html+(fn.length?`<ol class="fn">${fn.map(x=>`<li>${e(x)}</li>`).join("")}</ol>`:""); };
   const grouped=m.rule&&m.order!=="date"; let part=null, parts="", toc="";
   ch.forEach((w,i)=>{ const x=wRef(w), name=x?BIBLE[x.book][0]:null;
@@ -2063,6 +2128,7 @@ html{font-family:"Gowun Batang","Nanum Myeongjo",serif;font-size:10.5pt;color:#2
 p{margin:0;text-indent:1em;line-height:1.85;text-align:justify;orphans:2;widows:2}
 h4{font-family:"Nanum Myeongjo";font-weight:700;font-size:10.5pt;margin:6mm 0 2mm;color:#5a4636}
 blockquote{margin:3mm 0 3mm 4mm;padding-left:4mm;border-left:1pt solid #8a2a1f;font-family:"Nanum Myeongjo";line-height:1.8;color:#3d3128}
+blockquote cite{display:block;text-align:right;font-style:normal;font-size:8pt;color:#8a7a68;margin-top:1mm}
 mark.mk{color:inherit;padding:0 .5pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 mark.hl-y{background:#f6e3a1}mark.hl-g{background:#cfe3c4}mark.hl-p{background:#f3cfd4}mark.hl-b{background:#cadcec}
 u.mku{text-decoration:underline;text-decoration-color:#8a2a1f;text-decoration-thickness:.7pt;text-underline-offset:2.5pt}
@@ -2230,7 +2296,7 @@ function planSettings(){
 function resetStreak(){ if(!confirm("「이어지는 아침」 날 수를 오늘부터 다시 셀까요?\n(읽은 기록·글·일기는 그대로 남습니다)")) return; S.settings.streakFrom=today(); save(); render(); toast("오늘부터 다시 셉니다 — 1일째 아침"); }
 function setWeek(list){ const d=[...new Set(list)].sort(); if(!d.length) return toast("하루는 골라 주세요");
   S.settings.days=d; restPeek=false;
-  const p=S.settings.plan; if(p.spanM&&p.spanUntil>today()){ _days.key=""; return applySpan(p.spanM,p.spanUntil); }   // 기간을 정해 두었으면 같은 끝날에 맞춰 다시 계산
+  const p=S.settings.plan; if(p.spanM&&p.spanUntil>today()){ _days.key=""; if(applySpan(p.spanM,p.spanUntil)) return; }   // 기간을 정해 두었으면 같은 끝날에 맞춰 다시 계산
   planChanged(d.length===7?"매일 읽습니다":`${[1,2,3,4,5,6,0].filter(x=>d.includes(x)).map(x=>WEEK[x]).join("·")}요일에 읽습니다`); }
 function toggleWeekday(x){ const w=readWeek(); setWeek(w.includes(x)?w.filter(y=>y!==x):[...w,x]); }
 function planChanged(msg){ _days.key=""; save(); toast(msg); render(); }
@@ -2253,11 +2319,11 @@ function resetPlan(){
   S.settings.plan={id:p.id,...freshPlan(),perDay:p.perDay,mode:p.mode,start:p.mode==="date"?p.start:today()};
   planChanged(`「${name}」를 처음부터 다시 시작합니다`);
 }
-function setMode(m){ const p=S.settings.plan; if(p.mode===m) return; const i=todayIdx();   // 읽던 자리는 그대로 두고 방식만 바꿉니다
-  p.mode=m; if(!p.start) p.start=today(); setIndexTo(i); planChanged(m==="date"?"날짜에 맞춰 넘어갑니다":"내 속도로 넘어갑니다"); }
-function setStart(v){ const p=S.settings.plan; if(!v) return; p.start=v; p.checks=[]; p.setOn=p.setOn||today(); planChanged(`${v}부터 시작한 것으로 맞췄습니다`); }
+function setMode(m){ const p=S.settings.plan; if(p.mode===m) return; const i=todayIdx(), was=doneToday();   // 읽던 자리와 오늘 읽음 도장은 그대로 두고 방식만 바꿉니다
+  p.mode=m; if(!p.start) p.start=today(); setIndexTo(i,was); planChanged(m==="date"?"날짜에 맞춰 넘어갑니다":"내 속도로 넘어갑니다"); }
+function setStart(v){ const p=S.settings.plan; if(!v) return; p.start=v; p.checks=[]; p.done={}; p.setOn=today(); planChanged(`${v}부터 시작한 것으로 맞췄습니다`); }
 function setDay(v){ const p=S.settings.plan; p.day=Math.min(planDays().length-1,Math.max(0,(+v||1)-1)); p.checks=[]; p.last=null; planChanged(`${p.day+1}일째부터 읽습니다`); }
-function setPerDay(v){ ["spanM","spanUntil","spanPer","perDayBase"].forEach(k=>delete S.settings.plan[k]); const p=S.settings.plan, old=p.perDay, n=Math.max(1,+v||1); p.day=Math.floor(p.day*old/n); p.perDay=n; p.checks=[]; planChanged(`하루 ${n}장씩 읽습니다`); }
+function setPerDay(v){ ["spanM","spanUntil","spanPer","perDayBase"].forEach(k=>delete S.settings.plan[k]); const p=S.settings.plan, old=p.perDay, n=Math.max(1,+v||1), i=Math.floor(todayIdx()*old/n); p.perDay=n; _days.key=""; setIndexTo(i); planChanged(`하루 ${n}장씩 읽습니다`); }
 async function saveKey(k,inputId){
   if(!SERVER) return toast("서버로 열어야 저장할 수 있습니다");
   const v=$("#"+inputId).value.trim(); if(!v) return;
