@@ -286,8 +286,20 @@ textarea.page.blank{background-image:none}
 .card-index{background:var(--paper) var(--grain);border:1px solid var(--edge);box-shadow:var(--shadow);padding:18px 18px 16px;border-top:22px solid var(--bible-wash);position:relative}
 .card-index.book{border-top-color:var(--book-wash)}
 .side-note{cursor:pointer;padding:10px 12px;margin:8px 0;background:var(--paper-2);border-left:3px solid var(--sepia);font-size:14px;line-height:1.6}
-.jot{padding:8px 10px;margin:8px 0 0;background:var(--paper-2);border-left:3px solid var(--deco);border-radius:0 4px 4px 0}
-.jot .jt{font-family:"Nanum Pen Script";font-size:19px;line-height:1.35;color:var(--ink);white-space:pre-wrap}
+/* 끄적이기: 펜으로 쓴 아이디어 노트처럼 — 줄 쳐진 메모지, 손글씨, 줄마다 조금씩 기운 글씨와 다른 잉크 */
+.jotbox{background:#fdf6df var(--grain);border:1px solid rgba(120,90,40,.18);box-shadow:var(--shadow),inset 0 0 40px rgba(180,140,80,.08);padding:18px 18px 16px !important}
+:root[data-theme="dark"] .jotbox{background:#2d2820 var(--grain)}
+.jotbox .label{color:var(--bible)}
+.jotbox textarea#jotin{border:0;border-radius:0;background:transparent;padding:4px 2px 0;line-height:30px;background-image:repeating-linear-gradient(to bottom,transparent 0 29px,rgba(110,140,170,.35) 29px 30px);background-attachment:local;background-position:0 2px;resize:none;color:#24427a}
+.jotbox textarea#jotin:focus{outline:0;box-shadow:none}
+.jotlines{margin-top:8px;background-image:repeating-linear-gradient(to bottom,transparent 0 29px,rgba(110,140,170,.22) 29px 30px);background-position:0 7px}
+.jot{padding:0 2px 6px;margin:0;border:0;background:transparent;position:relative}
+.jot .jt{font-family:"Nanum Pen Script";font-size:21px;line-height:30px;color:var(--ink);white-space:pre-wrap;padding-left:18px;text-indent:-18px}
+.jot .jt::before{content:"✎ ";opacity:.45}
+.jot:nth-child(3n+1) .jt{color:#2e2721;transform:rotate(-.4deg)} .jot:nth-child(3n+2) .jt{color:#24427a;transform:rotate(.3deg)} .jot:nth-child(3n) .jt{color:#5a3a2a;transform:rotate(-.2deg)}
+:root[data-theme="dark"] .jot:nth-child(3n+1) .jt{color:#ece2d2} :root[data-theme="dark"] .jot:nth-child(3n+2) .jt{color:#9fc0ea} :root[data-theme="dark"] .jot:nth-child(3n) .jt{color:#e0b98f}
+.jot .row{opacity:.55;transition:opacity .15s} .jot:hover .row{opacity:1}
+.jot .row .muted{font-family:"Nanum Pen Script";font-size:15px}
 .side-note:hover{background:var(--bible-wash)}
 
 /* 집중 모드 */
@@ -970,7 +982,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="504668d9e2";
+const APP_BUILD="49432a8fe1";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1555,7 +1567,7 @@ function goInner(t,o){ TRACK_PICK=!!o.track; if(t!=="write"){ keepAwake(false); 
     const tr=o.track||track, ws=S.writings.filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
   tab=t; if(o.track) track=o.track; { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew) track=ew.track; }   // 글을 열면 그 글의 갈래로 (위 메뉴 표시도 묵상/글쓰기로 맞춤)
   editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||null; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
-const FLOW=`<div class="flow"><span><b>밑줄</b> 읽다가 붙잡은 한 문장</span><i>→</i><span><b>글</b> 그 문장으로 쓴 묵상·설교·에세이</span><i>→</i><span><b>원고</b> 글을 모아 엮는 한 권의 책</span></div>`;
+const FLOW=`<div class="flow"><span><b>묵상</b> 날마다 말씀 앞에서 쓴 글</span><i>→</i><span><b>끄적이기</b> 수시로 적어 두는 글감</span><i>→</i><span><b>글쓰기</b> 책을 읽고, 생각을 엮어 쓴 글</span><i>→</i><span><b>원고</b> 글을 모아 엮는 한 권의 책</span></div>`;
 function render(){
   // 같은 쓰기 화면을 다시 그릴 때(말씀/책 바꾸기, 합친 뒤 등) 쓰던 제목·본문을 그대로 지켜 줍니다
   const keep=!NAV&&tab==="write"&&$("#wbody")?{e:editId,t:$("#wtitle").value,b:$("#wbody").value,p:$("#wpassage")?.value}:null;
@@ -1851,20 +1863,20 @@ function cmtQuote(i){ const e=CMTR?.excerpts[i]; if(!e) return; const b=$("#wbod
 let JOT_Q="", JOT_ALL=false;
 const jots=()=>(S.jots||[]).slice().sort((a,b)=>(b.updated||"").localeCompare(a.updated||""));
 function jotBox(){
-  return `<div class="sheet jotbox" style="margin-top:22px;padding:18px">
-    <p class="label">끄적이기 <small class="hint" style="display:inline">· 글감 창고</small></p>
-    <small class="hint" style="margin-bottom:6px">생각나는 것을 그때그때 적어 두세요. 나중에 글을 쓸 때 꺼내 씁니다. (모든 기기에서 같이 보이고, 노션에는 가지 않습니다)</small>
-    <textarea id="jotin" placeholder="떠오른 한 줄… (⌘Enter / Ctrl+Enter 로 보관)" onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter'){event.preventDefault();jotAdd()}" style="min-height:56px;font-size:15px;background:var(--paper)"></textarea>
+  return `<div class="sheet tape b jotbox" style="margin-top:22px">
+    <p class="label">끄적이기</p>
+    <small class="hint" style="margin-bottom:6px">글감 창고 — 생각나는 것을 그때그때 적어 두고, 글을 쓸 때 꺼내 씁니다. 모든 기기에서 같이 보이고 노션에는 가지 않습니다.</small>
+    <textarea id="jotin" class="pen" placeholder="떠오른 한 줄… (⌘Enter / Ctrl+Enter 로 보관)" onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter'){event.preventDefault();jotAdd()}" style="min-height:62px;font-size:21px"></textarea>
     <div class="row" style="margin-top:6px"><button class="btn small ink" onclick="jotAdd()">끄적여 두기</button><span class="spacer"></span>${(S.jots||[]).length>6?`<input id="jotq" placeholder="찾기" value="${esc(JOT_Q)}" oninput="JOT_Q=this.value;jotPaint()" style="width:120px;font-size:13px;padding:4px 8px">`:""}</div>
-    <div id="jotlist">${jotList()}</div></div>`;
+    <div id="jotlist" class="jotlines">${jotList()}</div></div>`;
 }
 function jotList(){
   const q=JOT_Q.trim().toLowerCase(); let L=jots().filter(j=>!q||j.t.toLowerCase().includes(q)); const total=L.length; if(!JOT_ALL&&!q) L=L.slice(0,6);
-  return (L.map(j=>`<div class="jot" id="jot-${j.id}"><div class="jt">${esc(j.t)}</div><div class="row" style="gap:6px;margin-top:2px"><span class="muted" style="font-size:12px">${esc((j.updated||"").slice(0,10))}</span><span class="spacer"></span>${$("#wbody")?`<button class="btn small ghost" style="min-height:26px;padding:0 8px;font-size:12px" onclick="jotInsert('${j.id}')" title="노트의 커서 자리에 넣습니다">글에 넣기</button>`:""}<button class="btn small ghost" style="min-height:26px;padding:0 8px;font-size:12px" onclick="jotDel('${j.id}')" title="지우기">✕</button></div></div>`).join("")||`<p class="muted" style="margin:8px 0 0">아직 끄적인 것이 없습니다.</p>`)
+  return (L.map(j=>`<div class="jot" id="jot-${j.id}"><div class="jt">${esc(j.t)}</div><div class="row" style="gap:6px;margin-top:2px"><span class="muted" style="font-size:12px">${esc((j.updated||"").slice(0,10))}</span><span class="spacer"></span>${tab==="write"?`<button class="btn small ghost" style="min-height:26px;padding:0 8px;font-size:12px" onclick="jotInsert('${j.id}')" title="노트의 커서 자리에 넣습니다">글에 넣기</button>`:""}<button class="btn small ghost" style="min-height:26px;padding:0 8px;font-size:12px" onclick="jotDel('${j.id}')" title="지우기">✕</button></div></div>`).join("")||`<p class="muted" style="margin:8px 0 0">아직 끄적인 것이 없습니다.</p>`)
     +(total>L.length?`<button class="btn small ghost" style="margin-top:6px" onclick="JOT_ALL=true;jotPaint()">${total-L.length}개 더 보기</button>`:JOT_ALL&&total>6?`<button class="btn small ghost" style="margin-top:6px" onclick="JOT_ALL=false;jotPaint()">접기</button>`:"");
 }
 function jotPaint(){ const el=$("#jotlist"); if(el) el.innerHTML=jotList(); }
-function jotAdd(){ const i=$("#jotin"); const t=(i?.value||"").trim(); if(!t) return toast("적을 것을 먼저 써 주세요"); (S.jots=S.jots||[]).push({id:uid(),t,updated:new Date().toISOString()}); i.value=""; save(); jotPaint(); toast("끄적여 두었습니다"); if(S.jots.length===7) render(); }
+function jotAdd(){ const i=$("#jotin"); const t=(i?.value||"").trim(); if(!t) return toast("적을 것을 먼저 써 주세요"); (S.jots=S.jots||[]).push({id:uid(),t,updated:new Date().toISOString()}); i.value=""; save(); toast("끄적여 두었습니다"); if($("#jotlist")){ jotPaint(); if(S.jots.length===7) render(); } else if(tab==="today") render(); }
 function jotDel(id){ const j=(S.jots||[]).find(x=>x.id===id); if(!j) return; if(j.t.length>40&&!confirm("이 끄적임을 지울까요?")) return; tomb(id); S.jots=S.jots.filter(x=>x.id!==id); save(); jotPaint(); }
 function jotInsert(id){ const j=(S.jots||[]).find(x=>x.id===id), b=$("#wbody"); if(!j||!b) return; tInsert(b,j.t+"\n"); toast("글에 넣었습니다 (끄적임은 그대로 둡니다)"); }
 // ───────── 독서 일기: 그날 읽은 분량과 쓴 글을 한 장에 ─────────
@@ -2051,7 +2063,8 @@ today(){
       ${FLOW}
       <div class="sub" style="margin-top:12px">오늘 밑줄 ${tn.length}개 · 글 ${tw.length}편 · ${tw.reduce((a,w)=>a+chars(w.body),0).toLocaleString()}자</div>
       ${tw.length?`<div style="margin-top:6px">${tw.map(w=>`<div class="row" style="gap:8px;padding:3px 0"><span class="label ${w.track}" style="margin:0;font-size:17px">[${esc(wTag(w))}]</span><a href="#" class="myeongjo" style="color:var(--ink)" onclick="go('write',{edit:'${w.id}'});return false"><b>${esc(w.title||w.passage||"(제목 없음)")}</b></a>${nState(w)}</div>`).join("")}</div>`:""}
-      <div class="row" style="margin-top:14px"><button class="btn ink" onclick="go('write',{track:'bible'})">묵상 쓰기</button><button class="btn ink" onclick="go('write',{track:'book'})">글쓰기 (책·자유 글)</button></div>
+      <div class="row" style="margin-top:12px;gap:8px"><input id="jotin" class="pen" placeholder="끄적이기 — 떠오른 생각을 한 줄 적어 두세요" style="flex:1;min-width:200px;font-size:21px" onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();jotAdd()}"><button class="btn small" onclick="jotAdd()">끄적여 두기</button>${(S.jots||[]).length?`<span class="muted" style="font-size:13px">끄적임 ${(S.jots||[]).length}개 · <a href="#" onclick="go('write',{track:'book'});return false">글쓰기에서 보기</a></span>`:""}</div>
+      <div class="row" style="margin-top:14px"><button class="btn ink" onclick="go('write',{track:'bible'})">묵상 쓰기</button><button class="btn ink" onclick="go('write',{track:'book'})">글쓰기</button></div>
       <div class="row" style="margin-top:10px"><button class="btn" onclick="diaryDate=today();go('diary')">${ICO.diary}오늘의 독서 일기 꾸미기</button></div>
     </section>
     ${(()=>{ const past=S.notes.filter(n=>n.date&&daysBetween(n.date,t)>=7); if(!past.length) return ""; const n=pick(past,1,t+"n")[0];
