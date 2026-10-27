@@ -495,6 +495,51 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .diary .cover{width:54px;height:78px;font-size:10px}
 .dnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .dbook{perspective:1600px}
+/* 글방 */
+.roomtop{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.roomgrid{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:880px){ .roomgrid{grid-template-columns:1fr} }
+.roomshelf{display:grid;gap:4px;align-content:start}
+.rshelf{display:grid;gap:1px;text-align:left;background:none;border:1px solid transparent;border-radius:6px;padding:8px 10px;cursor:pointer;font:inherit;color:var(--ink)}
+.rshelf:hover{background:var(--paper-2)} .rshelf.on{background:var(--paper-2);border-color:var(--edge)}
+.rshelf .rt{font-family:"Nanum Myeongjo";font-weight:700;display:flex;gap:6px;align-items:center} .rshelf .muted{font-size:12.5px}
+.roomempty{display:grid;gap:10px;justify-items:start}
+.roomhead{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.roomhead .ring{display:grid;justify-items:center;font-size:12px;color:var(--ink-soft);gap:2px}
+.roomhead .msgoal{flex-basis:100%}
+.roombar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 0;margin-bottom:12px;border-top:1px dashed var(--edge);border-bottom:1px dashed var(--edge)}
+.roombar .roomadd{width:auto;max-width:220px;font-size:13.5px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;background:var(--faint)}
+.dot.s1,.corkcard.s1 .cst{--sc:#b9a98f}.dot.s2,.corkcard.s2 .cst{--sc:#d9a441}.dot.s3,.corkcard.s3 .cst{--sc:#5d8fb8}.dot.s4,.corkcard.s4 .cst{--sc:#4f8a6e}
+.dot.s1,.dot.s2,.dot.s3,.dot.s4{background:var(--sc)}
+.binder{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.binder li{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:5px;min-width:0;flex-wrap:wrap}
+.binder li[draggable]{cursor:grab} .binder li:hover{background:var(--paper-2)}
+.binder .bitem a{font-family:"Nanum Myeongjo";font-weight:700;color:var(--ink);text-decoration:none;min-width:0;overflow-wrap:anywhere}
+.binder .bn{font-size:19px;color:var(--sepia);width:22px;text-align:right}
+.binder .bpart{margin-top:10px;border-bottom:1px solid var(--edge)} .binder .bpart .bt{font-family:"Nanum Myeongjo";font-weight:800;font-size:17px}
+.binder .bpart.lv2{margin-top:4px;padding-left:22px;border-bottom:1px dotted var(--edge)} .binder .bpart.lv2 .bt{font-size:15px;color:var(--ink-soft)}
+.binder .bpart:first-child{margin-top:0}
+.rstep{display:inline-flex;gap:2px}
+@media (pointer:fine){ .rstep{opacity:0} li:hover>.rstep{opacity:1} }
+[data-k].dragging{opacity:.4} .dropb{box-shadow:0 -2px 0 var(--sepia)} .dropa{box-shadow:0 2px 0 var(--sepia)}
+.cork .dropb{box-shadow:-3px 0 0 var(--sepia)} .cork .dropa{box-shadow:3px 0 0 var(--sepia)} .cork .corkpart.dropb{box-shadow:0 -2px 0 var(--sepia)} .cork .corkpart.dropa{box-shadow:0 2px 0 var(--sepia)}
+.cork{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;padding:14px;background:var(--paper-2);border-radius:4px}
+.corkpart{grid-column:1/-1;font-family:"Nanum Myeongjo";font-weight:800;font-size:17px;padding:4px 2px;border-bottom:1px solid var(--edge);cursor:grab}
+.corkpart.lv2{font-size:15px;color:var(--ink-soft);border-bottom-style:dotted}
+.corkcard{background:var(--paper);border:1px solid var(--edge);border-top:4px solid var(--sc,var(--edge));padding:10px 12px;display:grid;gap:4px;align-content:start;cursor:pointer;box-shadow:0 2px 0 var(--edge);min-width:0;font-size:14px;transition:transform .12s}
+.corkcard:hover{transform:translateY(-2px) rotate(-.4deg)}
+.corkcard.s1{--sc:#b9a98f}.corkcard.s2{--sc:#d9a441}.corkcard.s3{--sc:#5d8fb8}.corkcard.s4{--sc:#4f8a6e}
+.corkcard b{font-family:"Nanum Myeongjo";font-size:15px;overflow-wrap:anywhere} .corkcard .cst{font-size:11.5px;color:var(--sc)} .corkcard .csum{color:var(--ink-soft);line-height:1.5;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden} .corkcard .cch{font-size:12px}
+.sboard{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:10px;overflow-x:auto;padding-bottom:4px}
+.scol{background:var(--paper-2);border-radius:5px;padding:8px;min-height:120px;display:grid;gap:8px;align-content:start;border-top:3px solid var(--sc)}
+.scol.s1{--sc:#b9a98f}.scol.s2{--sc:#d9a441}.scol.s3{--sc:#5d8fb8}.scol.s4{--sc:#4f8a6e}
+.scol.over{outline:2px dashed var(--sepia);outline-offset:-2px}
+.scolh{margin:0;font-family:"Nanum Myeongjo";font-weight:800;display:flex;gap:6px;align-items:center}
+.scard{background:var(--paper);border:1px solid var(--edge);padding:8px 10px;display:grid;gap:4px;cursor:grab;font-size:13.5px;min-width:0}
+.scard a{color:var(--ink);text-decoration:none;overflow-wrap:anywhere} .scard b{font-family:"Nanum Myeongjo"}
+.scard select{font-size:12.5px;padding:2px 4px;width:auto}
+@media (pointer:fine){ .scard select{opacity:.55} .scard:hover select{opacity:1} }
 .creditbox{border:1px dashed var(--deco);border-radius:6px;padding:10px 12px;margin:8px 0 10px}
 .creditbox .warn{color:var(--stamp);font-weight:700}
 .credlog{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px} .credlog td{padding:3px 4px;border-bottom:1px dotted var(--edge);color:var(--ink-soft)} .credlog td.r{text-align:right;font-variant-numeric:tabular-nums}
@@ -958,7 +1003,7 @@ async function fetchFresh(first){
     else if(dirty||!d.writings){ clearTimeout(saveT); saveT=null; mergeFrom(d); PENDING=true; }
     else if((d.rev??0)!==known) useData(d);               // 다른 기기에서 바뀐 것이 있으면 최신으로
     else changed=false;
-    READY=true; takeSnap(); try{ purgeOldTrash(); }catch(_){}
+    READY=true; takeSnap(); try{ purgeOldTrash(); }catch(_){} try{ roomBase(); }catch(_){}
     if(PENDING){ PENDING=false; pushSave(); }
     else if(changed&&!first){ try{ localStorage.setItem(LKEY,SER()); }catch(_){} }
     if(changed&&!first){ ensurePlan(); ensureMs(); if(tab!=="write") render(); else afterRemote(); }   // 쓰는 중이면 화면을 바꾸지 않음(손대지 않은 글만 새 판으로)
@@ -1110,7 +1155,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="235a9ff2c3";
+const APP_BUILD="0e8c2917cb";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1718,14 +1763,14 @@ function goInner(t,o){ TRACK_PICK=!!o.track; if(t!=="write"){ keepAwake(false); 
     const tr=o.track||track, ws=live().filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
   { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew&&ew.trashed){ t="drawer"; o={sub:"trash"}; setTimeout(()=>toast("휴지통에 있는 글입니다. 「되살리기」를 누른 뒤 열 수 있습니다"),100); } }
   tab=t; if(o.track) track=o.track; { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew) track=ew.track; }   // 글을 열면 그 글의 갈래로 (위 메뉴 표시도 묵상/글쓰기로 맞춤)
-  editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||(o.fromWritings||[])[0]||null; FROMS=o.fromWritings||(fromWriting?[fromWriting]:null); SEL_PLACE=o.place; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0);
+  editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||(o.fromWritings||[])[0]||null; FROMS=o.fromWritings||(fromWriting?[fromWriting]:null); SEL_PLACE=o.place; SEL_MS=o.ms||null; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0);
   if(t==="write"&&innerWidth<=700&&(o.edit||o.new||o.fromWritings)) setTimeout(()=>$(".toolbar")?.scrollIntoView({block:"start"}),60); }   // 휴대폰: 글을 열면 쓰는 자리로
 const FLOW=`<div class="flow"><span><b>묵상</b> 날마다 말씀 앞에서 쓴 글</span><i>→</i><span><b>끄적이기</b> 수시로 적어 두는 글감</span><i>→</i><span><b>글쓰기</b> 책을 읽고, 생각을 엮어 쓴 글</span><i>→</i><span><b>원고</b> 글을 모아 엮는 한 권의 책</span></div>`;
 function render(){
   // 같은 쓰기 화면을 다시 그릴 때(말씀/책 바꾸기, 합친 뒤 등) 쓰던 제목·본문을 그대로 지켜 줍니다
   const keep=!NAV&&tab==="write"&&$("#wbody")?{e:editId,t:$("#wtitle").value,b:$("#wbody").value,p:$("#wpassage")?.value}:null;
   const gb=$("#gearbtn"); if(gb){ if(!gb.firstChild) gb.innerHTML=gearSvg(); gb.classList.toggle("on",tab==="settings"); }
-  $("#nav").innerHTML=TABS.map(([k,n])=>`<button class="${(k==="qt"?tab==="write"&&track==="bible":k==="write"?tab==="write"&&track!=="bible":k===tab)?"on":""}" onclick="${k==="qt"?"go('write',{track:'bible'})":k==="write"?"go('write',{track:'book'})":`go('${k}')`}">${n}</button>`).join("");
+  $("#nav").innerHTML=TABS.map(([k,n])=>`<button class="${(k==="qt"?tab==="write"&&track==="bible":k==="write"?tab==="room"||(tab==="write"&&track!=="bible"):k===tab)?"on":""}" onclick="${k==="qt"?"go('write',{track:'bible'})":k==="write"?"go('room')":`go('${k}')`}">${n}</button>`).join("");
   paintStreak();
   if(NEED_CONNECT||AUTH_FAIL){ $("#main").innerHTML=connectView(); return; }
   $("#main").innerHTML=(SERVER?"":GAS?`<div class="notice">구글 서버에 아직 닿지 못해 이 기기의 사본을 보여 드립니다. 인터넷을 확인한 뒤 <a href="#" onclick="fetchFresh(false);return false">다시 시도</a></div>`:location.protocol==="file:"?`<div class="notice">파일로 직접 연 상태라 저장이 되지 않습니다. 아침 서재 주소(인터넷)로 열어 주세요.</div>`:"")+VIEWS[tab]();
@@ -2280,7 +2325,7 @@ today(){
       <div class="sub" style="margin-top:12px">오늘 밑줄 ${tn.length}개 · 글 ${tw.length}편 · ${tw.reduce((a,w)=>a+chars(w.body),0).toLocaleString()}자</div>
       ${tw.length?`<div style="margin-top:6px">${tw.map(w=>`<div class="row" style="gap:8px;padding:3px 0"><span class="label ${w.track}" style="margin:0;font-size:17px">[${esc(wTag(w))}]</span><a href="#" class="myeongjo" style="color:var(--ink)" onclick="go('write',{edit:'${w.id}'});return false"><b>${esc(w.title||w.passage||"(제목 없음)")}</b></a>${nState(w)}</div>`).join("")}</div>`:""}
       <div class="row" style="margin-top:12px;gap:8px"><input id="jotin" class="pen" placeholder="끄적이기 — 떠오른 생각을 한 줄 적어 두세요" style="flex:1;min-width:200px;font-size:21px" onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();jotAdd()}"><button class="btn small" onclick="jotAdd()">끄적여 두기</button>${(S.jots||[]).length?`<span class="muted" style="font-size:13px">끄적임 ${(S.jots||[]).length}개 · <a href="#" onclick="go('write',{track:'book'});return false">글쓰기에서 보기</a></span>`:""}</div>
-      <div class="row" style="margin-top:14px"><button class="btn ink" onclick="go('write',{track:'bible'})">묵상 쓰기</button><button class="btn ink" onclick="go('write',{track:'book'})">글쓰기</button></div>
+      <div class="row" style="margin-top:14px"><button class="btn ink" onclick="go('write',{track:'bible'})">묵상 쓰기</button><button class="btn ink" onclick="go('room')">글쓰기</button></div>
       <div class="row" style="margin-top:10px"><button class="btn" onclick="diaryDate=today();go('diary')">${ICO.diary}오늘의 독서 일기 꾸미기</button></div>
     </section>
     ${(()=>{ const past=S.notes.filter(n=>n.date&&daysBetween(n.date,t)>=7); if(!past.length) return ""; const n=pick(past,1,t+"n")[0];
@@ -2310,6 +2355,7 @@ write(){
   return `
   ${track==="bible"?`<div class="sucard" id="sucard" data-date="${esc(w?.date||today())}"></div>`:""}
   <div class="toolbar">
+    ${track!=="bible"?`<button class="btn small ghost nofocus" onclick="go('room')" title="글방(원고·서가)으로">‹ 글방</button>`:""}
     <span class="nofocus">${w?`<span class="label ${track}" style="margin:0">${track==="bible"?"묵상":"글쓰기"}</span> <span class="muted">[${esc(wTag(w))}]${w.length?" · "+esc(w.length):""}</span> <button class="btn small ghost" onclick="go('write',{new:true,track})" title="오늘 글을 하나 더 씁니다">＋ 새 글</button>`:`<span class="label ${track}" style="margin:0">${track==="bible"?"묵상":"글쓰기"}</span> <span class="muted">새 글</span>`}</span>
     ${track==="bible"
       ?`<select id="wtype" hidden><option selected>${esc(dtype||"묵상")}</option></select>${dtype&&dtype!=="묵상"?`<span class="chip on" style="cursor:default">${esc(dtype)}</span>`:""}`
@@ -2363,7 +2409,7 @@ write(){
           ${track==="bible"?`<div class="field" id="lenbox" style="${dtype==="묵상을설교로"?"":"display:none"}"><span>설교 길이 <small class="hint" style="display:inline">· 노션 태그와 완성 뒤 색인 종류(긴설교→주일설교, 짧은설교→새벽설교)에 쓰입니다</small></span>
             <div class="pills">${SLEN.map(([n,d])=>`<button type="button" class="pill ${selLen===n?"on":""}" data-tip="${d}" onclick="selLen=selLen==='${n}'?null:'${n}';this.parentNode.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',b.textContent===selLen))">${n}</button>`).join("")}</div></div>`:""}
           <label class="field"><span>글의 상태</span><select id="wstatus" style="width:auto">${WSTATUS.map(x=>`<option ${(w?.status||"초고")===x?"selected":""}>${x}</option>`).join("")}</select><small class="hint">씨앗 → 초고 → 다듬는 중 → 완성. 서랍에서 상태가 보입니다.</small></label>
-          <label class="field"><span>원고에 넣기</span><select id="wms"><option value="">고르지 않음</option>${S.manuscripts.filter(m=>!m.rule&&!(w&&m.items.includes(w.id))).map(m=>`<option value="${m.id}">${esc(m.title)}</option>`).join("")}</select>            <small class="hint">${(()=>{ const inMs=w?msOf(w):[]; return inMs.length?`지금 들어 있는 원고: ${inMs.map(m=>`${ICO.closed}${esc(m.title)}`).join(", ")}`:"직접 고른 원고에 넣을 수 있습니다. 조건으로 모으는 원고에는 주제·본문·종류에 맞으면 저절로 들어갑니다."; })()}</small></label>
+          <label class="field"><span>원고에 넣기</span><select id="wms"><option value="">고르지 않음</option>${S.manuscripts.filter(m=>!m.rule&&!(w&&m.items.includes(w.id))).map(m=>`<option value="${m.id}" ${SEL_MS===m.id?"selected":""}>${esc(m.title)}</option>`).join("")}</select>            <small class="hint">${(()=>{ const inMs=w?msOf(w):[]; return inMs.length?`지금 들어 있는 원고: ${inMs.map(m=>`${ICO.closed}${esc(m.title)}`).join(", ")}`:"직접 고른 원고에 넣을 수 있습니다. 조건으로 모으는 원고에는 주제·본문·종류에 맞으면 저절로 들어갑니다."; })()}</small></label>
         </details>
         <hr class="dash">
         <p class="step"><span class="num">2</span>간직하기</p>
@@ -2419,6 +2465,7 @@ shelf(){
   <p class="label">다 읽은 책 <small class="hint" style="display:inline">· 책등을 누르면 열립니다. 두께는 쪽수, 색은 책마다</small></p>${doneHtml}
   </div>`;
 },
+room(){ return roomPage(); },
 drawer(){
   const segBtn=(k,n)=>`<span class="chip ${drawerSub===k?"on":""}" onclick="drawerSub='${k}';msDraft=null;render()">${n}</span>`;
   const head=`<div class="row" style="margin-bottom:10px"><h2>서랍</h2><span class="spacer"></span>${segBtn("all","모든 기록")}${segBtn("ms","원고 — 책으로 엮기")}${segBtn("trash",`휴지통${trashed().length?" "+trashed().length:""}`)}</div><div style="height:22px"></div>`;
@@ -2514,6 +2561,7 @@ const AFTER={
   diary(){ paintPalette(); },
   write(){ READVIEW=false; EDIT_BASE=editId?(S.writings.find(x=>x.id===editId)?.updated||null):null; EDIT_WARNED=false; grow(); countW(); restoreDraft(); paintPalette(); paintSu(); keepAwake(true); },
   drawer(){ if(drawerSub==="all") renderArchive(); },
+  room(){ roomDnd(); },
   today(){ paintTimer(); },
   settings(){
     if(CONF.notion&&CONF.local!==false) checkNotion();
@@ -3204,8 +3252,9 @@ function msMove(mid,wid,dir){ const m=S.manuscripts.find(x=>x.id===mid), k=m.ite
 function msRemove(mid,wid){ const m=S.manuscripts.find(x=>x.id===mid); m.items=m.items.filter(x=>x!==wid); msChanged(m,S.writings.filter(w=>w.id===wid)); }
 function delMs(id){ if(!confirm("원고 묶음만 풉니다. 글은 그대로 남습니다.")) return; const m=S.manuscripts.find(x=>x.id===id), ws=msList(m); tomb(id); S.manuscripts=S.manuscripts.filter(x=>x.id!==id); syncSeq(ws); save(); render(); }
 function exportMs(id){ // 성경 순서로 모은 원고는 성경책마다 장(章) 제목이 붙습니다
-  const m=S.manuscripts.find(x=>x.id===id); let out=`# ${m.title}\n\n`, part=null;
+  const m=S.manuscripts.find(x=>x.id===id); let out=`# ${m.title}\n\n`, part=null; const pb=partsBefore(m);
   msList(m).forEach((w,i)=>{ const x=wRef(w), name=x?BIBLE[x.book][0]:null;
+    (pb.get(w.id)||[]).forEach(p=>{ out+=`\n${p.lv===1?"##":"###"} ${p.t}\n\n`; });
     if(m.rule&&m.order!=="date"&&name&&name!==part){ part=name; out+=`\n## ${name}\n\n`; }
     out+=`### ${i+1}. ${w.title||"(제목 없음)"}${w.passage?` — ${w.passage}`:""}\n\n${plainWithNotes(w.body.trim(),true,(i+1)+"-")}\n\n`; });
   download(`${m.title}.md`,out,"text/markdown");
@@ -3221,8 +3270,9 @@ function bookHtml(m,ch,author){
       :/^(==(?:[ygpb]:)?|__)?「/.test(l)?(()=>{ const m=l.match(/^(.*」)\s*\(([^()]{1,80})\)\s*$/); return m?`<blockquote>${richHtml(m[1],fn)}<cite>${e(m[2])}</cite></blockquote>`:`<blockquote>${richHtml(l,fn)}</blockquote>`; })()
       :`<p>${richHtml(l,fn)}</p>`).join("");
     return html+(fn.length?`<ol class="fn">${fn.map(x=>`<li>${e(x)}</li>`).join("")}</ol>`:""); };
-  const grouped=m.rule&&m.order!=="date"; let part=null, parts="", toc="";
+  const grouped=m.rule&&m.order!=="date"; let part=null, parts="", toc=""; const pb=partsBefore(m);
   ch.forEach((w,i)=>{ const x=wRef(w), name=x?BIBLE[x.book][0]:null;
+    (pb.get(w.id)||[]).forEach(p=>{ if(p.lv===1){ parts+=`<section class="part"><h2 class="partname">${e(p.t)}</h2></section>`; toc+=`<li class="tocpart">${e(p.t)}</li>`; } else { parts+=`<div class="sect">${e(p.t)}</div>`; toc+=`<li class="tocsect">${e(p.t)}</li>`; } });
     if(grouped&&name&&name!==part){ part=name; parts+=`<section class="part"><h2 class="partname">${e(name)}</h2></section>`; toc+=`<li class="tocpart">${e(name)}</li>`; }
     toc+=`<li><a href="#c${i}">${i+1}. ${e(w.title||"(제목 없음)")}<span class="dots"></span></a></li>`;
     parts+=`<section class="chapter" id="c${i}"><div class="num">${i+1}</div><h3>${e(w.title||"(제목 없음)")}</h3>${w.summary?`<div class="lede">${e(w.summary)}</div>`:""}${w.passage?`<div class="passage">${e(w.passage)}</div>`:""}${para(w.body)}</section>`; });
@@ -3244,6 +3294,9 @@ html{font-family:"Gowun Batang","Nanum Myeongjo",serif;font-size:10.5pt;color:#2
 .toc{list-style:none;padding:0;margin:0}
 .toc li{margin:0 0 2.2mm;font-size:10pt}
 .toc li.tocpart{margin-top:5mm;font-weight:700;color:#8a2a1f}
+.toc li.tocsect{margin-top:3mm;font-weight:700;color:#5a4a3a;font-size:9.5pt}
+.sect{break-before:page;font-family:"Nanum Myeongjo";font-weight:800;font-size:13pt;color:#8a2a1f;letter-spacing:.08em;margin:0 0 8mm;padding-bottom:3mm;border-bottom:.6pt solid #c9b9a2}
+.sect+.chapter{break-before:avoid}
 .toc a{color:inherit;text-decoration:none;display:flex;align-items:baseline;gap:2mm}
 .toc a::after{content:target-counter(attr(href),page);color:#777}
 .toc a .dots{flex:1;border-bottom:.6pt dotted #b9ab98;transform:translateY(-1mm)}
@@ -3342,6 +3395,119 @@ function msCardHtml(m,i){
   </section>`;
 }
 
+// ───────── 글방: 「글쓰기」 메뉴 — 원고를 책처럼 엮고 다듬는 곳 (서가·코르크보드·상태 보드·목표) ─────────
+// 원고의 items 에 「part:<번호>」 표시를 끼워 부·장을 나눕니다(이름은 m.parts[번호]={t,lv:1부|2장}). 옛 버전은 이 표시를 글로 못 찾아 건너뛰므로 글은 그대로 보입니다.
+// 목표: m.goal(원고지 매수), m.due(마감일). 원고는 통째로 「나중에 고친 쪽」으로 합쳐지는 기존 규칙 그대로입니다.
+let SEL_MS=null, ROOM_MS=null, ROOM_VIEW="binder", ROOM_DRAG=null;
+try{ ROOM_MS=localStorage.getItem("seojae.roomMs"); ROOM_VIEW=localStorage.getItem("seojae.roomView")||"binder"; }catch(_){}
+const isPart=x=>typeof x==="string"&&x.startsWith("part:");
+const msChars=m=>msList(m).reduce((a,w)=>a+charsAll(w.body),0);
+const msPages=m=>Math.ceil(msChars(m)/200);
+function msSeq(m){
+  if(m.rule) return msList(m).map(w=>({w}));
+  const out=[]; (m.items||[]).forEach(id=>{ if(isPart(id)){ const p=(m.parts||{})[id.slice(5)]; if(p) out.push({p:{id:id.slice(5),...p}}); } else { const w=S.writings.find(x=>x.id===id); if(w&&!w.trashed) out.push({w}); } });
+  return out; }
+function partsBefore(m){ const map=new Map(); let pend=[]; msSeq(m).forEach(x=>{ if(x.p) pend.push(x.p); else { if(pend.length) map.set(x.w.id,pend); pend=[]; } }); return map; }
+// 오늘 늘어난 매수: 이 기기에서 그날 처음 열었을 때의 매수를 기준으로
+function roomBase(){ S.manuscripts.forEach(m=>{ const k="seojae.msday."+m.id; let o=null; try{ o=JSON.parse(localStorage.getItem(k)||"null"); }catch(_){} if(!o||o.d!==today()) try{ localStorage.setItem(k,JSON.stringify({d:today(),b:msPages(m)})); }catch(_){} }); }
+function roomToday(m){ let o=null; try{ o=JSON.parse(localStorage.getItem("seojae.msday."+m.id)||"null"); }catch(_){} return o&&o.d===today()?msPages(m)-o.b:0; }
+const ringSvg=(pct,sz=46)=>{ const r=sz/2-4, c=2*Math.PI*r, f=Math.max(0,Math.min(1,pct)); return `<svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" aria-hidden="true"><circle cx="${sz/2}" cy="${sz/2}" r="${r}" fill="none" stroke="var(--edge)" stroke-width="4"/><circle cx="${sz/2}" cy="${sz/2}" r="${r}" fill="none" stroke="${f>=1?"var(--book)":"var(--sepia)"}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c*(1-f)).toFixed(1)}" transform="rotate(-90 ${sz/2} ${sz/2})"/></svg>`; };
+const ST_CLS={"씨앗":"s1","초고":"s2","다듬는 중":"s3","완성":"s4"};
+const stOf=w=>WSTATUS.includes(w.status)?w.status:"초고";
+function roomPick(id){ ROOM_MS=id; try{ localStorage.setItem("seojae.roomMs",id); }catch(_){} render(); }
+function roomSetView(v){ ROOM_VIEW=v; try{ localStorage.setItem("seojae.roomView",v); }catch(_){} render(); }
+function roomNewMs(){ const t=(prompt("새 원고의 가제를 적어 주세요 (나중에 바꿀 수 있습니다)","")||"").trim(); if(!t) return;
+  const m={id:uid(),title:t,items:[],parts:{}}; S.manuscripts.push(m); ROOM_MS=m.id; try{ localStorage.setItem("seojae.roomMs",m.id); }catch(_){} save(); roomBase(); toast(`「${t}」 원고를 만들었습니다. 부를 나누고 글을 넣어 보세요`); render(); }
+function roomRename(mid){ const m=S.manuscripts.find(x=>x.id===mid); const t=(prompt("원고 가제",m.title)||"").trim(); if(!t||t===m.title) return; m.title=t; save(); render(); }
+function addPart(mid,lv){ const m=S.manuscripts.find(x=>x.id===mid); if(!m||m.rule) return;
+  const t=(prompt(lv===1?"부 이름 (예: 1부 · 머무는 아침)":"장 이름 (예: 시편의 아침)","")||"").trim(); if(!t) return;
+  const id=uid(); m.parts=m.parts||{}; m.parts[id]={t,lv}; m.items.push("part:"+id); save(); render(); toast((lv===1?"부":"장")+"를 맨 아래에 더했습니다. 끌어서 자리를 옮기세요"); }
+function renamePart(mid,pid){ const m=S.manuscripts.find(x=>x.id===mid), p=m?.parts?.[pid]; if(!p) return; const t=(prompt("이름 바꾸기",p.t)||"").trim(); if(!t) return; p.t=t; save(); render(); }
+function delPart(mid,pid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; if(!confirm("이 구분을 지울까요? 안에 있던 글은 그대로 남습니다.")) return;
+  m.items=m.items.filter(x=>x!=="part:"+pid); if(m.parts) delete m.parts[pid]; save(); render(); }
+// 끌어 옮기기: k 를 before 앞으로 (before 가 없으면 맨 뒤)
+function msReorder(mid,k,before){ const m=S.manuscripts.find(x=>x.id===mid); if(!m||m.rule||k===before) return;
+  const a=m.items.filter(x=>x!==k), i=before?a.indexOf(before):-1; if(i<0) a.push(k); else a.splice(i,0,k); m.items=a; save(); render(); }
+function roomStep(mid,k,dir){ const m=S.manuscripts.find(x=>x.id===mid); if(!m||m.rule) return; const a=m.items, i=a.indexOf(k), j=i+dir; if(i<0||j<0||j>=a.length) return; [a[i],a[j]]=[a[j],a[i]]; save(); render(); }
+function setWStatus(wid,st){ const w=S.writings.find(x=>x.id===wid); if(!w||!WSTATUS.includes(st)||w.status===st) return; w.status=st; w.updated=new Date().toISOString(); save(); render(); toast(`「${w.title||"(제목 없음)"}」 → ${st}`); if(canSync()) syncWriting(w,true); }
+function saveMsGoal(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const g=+$("#msgoal").value, d=$("#msdue").value;
+  m.goal=g>0?Math.round(g):null; m.due=/^\d{4}-\d{2}-\d{2}$/.test(d)?d:null; save(); toast("목표를 저장했습니다"); render(); }
+function roomPage(){
+  const ms=S.manuscripts; let m=ms.find(x=>x.id===ROOM_MS)||ms[0]||null; if(m) ROOM_MS=m.id;
+  const lastBook=live().filter(w=>w.track==="book").sort((a,b)=>(b.updated||b.date||"").localeCompare(a.updated||a.date||""))[0];
+  let dr=null; try{ dr=JSON.parse(localStorage.getItem("seojae.draft.new")||"null"); }catch(_){}
+  const top=`<div class="roomtop"><div><h2 style="margin:0">글방</h2><p class="muted" style="margin:2px 0 0">책 글·자유 글을 쓰고, 원고로 엮어 다듬는 곳</p></div><span class="spacer"></span>
+    ${dr&&dr.track==="book"&&String(dr.body||"").trim()?`<button class="btn" onclick="go('write',{track:'book'})">쓰던 글 이어 쓰기</button>`:""}
+    ${lastBook?`<button class="btn" onclick="go('write',{edit:'${lastBook.id}'})" title="${esc(lastBook.title||"")}">최근 글 · ${esc((lastBook.title||"(제목 없음)").slice(0,16))}</button>`:""}
+    <button class="btn ink" onclick="go('write',{track:'book',new:true})">${ICO.pen}새 글 쓰기</button></div>`;
+  const shelf=`<aside class="roomshelf"><p class="label" style="margin:0 0 6px">서가 · 원고</p>
+    ${ms.map(x=>{ const pg=msPages(x); return `<button class="rshelf ${m&&x.id===m.id?"on":""}" onclick="roomPick('${x.id}')"><span class="rt">${ICO.closed}${esc(x.title)}</span><span class="muted">${msList(x).length}꼭지 · ${pg}${x.goal?"/"+x.goal:""}매</span></button>`; }).join("")||`<p class="muted" style="font-size:14px">아직 원고가 없습니다.</p>`}
+    <button class="btn small" style="margin-top:8px" onclick="roomNewMs()">＋ 새 원고</button>
+    <p class="hint" style="margin-top:10px">조건으로 저절로 모으는 원고는 <a href="#" onclick="go('drawer',{sub:'ms'});return false">서랍 → 원고</a>에서 만듭니다. 모든 글은 <a href="#" onclick="go('drawer',{sub:'all'});return false">서랍</a>에.</p></aside>`;
+  if(!m) return top+`<div class="roomgrid">${shelf}<section class="sheet roomempty"><p class="pen" style="font-size:26px;margin:0">첫 원고를 시작해 보세요</p><p class="sub">가제 하나면 됩니다. 부·장을 나누고, 써 둔 글을 넣고, 순서를 끌어서 바꿉니다. 원고지 매수 목표도 둘 수 있습니다.</p><button class="btn ink" onclick="roomNewMs()">＋ 새 원고 만들기</button></section></div>`;
+  const seq=msSeq(m), ws=seq.filter(x=>x.w).map(x=>x.w), pages=msPages(m), chs=msChars(m), td=roomToday(m);
+  const dd=m.due?Math.round((new Date(m.due+"T00:00")-new Date(today()+"T00:00"))/864e5):null;
+  const head=`<div class="roomhead">
+    <div class="ring">${m.goal?ringSvg(pages/m.goal):ringSvg(0)}<span>${m.goal?Math.round(pages/m.goal*100)+"%":"목표 없음"}</span></div>
+    <div style="flex:1;min-width:0"><div class="big" style="font-size:22px"><a href="#" onclick="roomRename('${m.id}');return false" title="가제 바꾸기" style="color:inherit;text-decoration:none">${esc(m.title)}</a></div>
+      <div class="muted">${m.rule?"조건으로 모으는 원고 · ":""}${ws.length}꼭지 · ${chs.toLocaleString()}자 · 원고지 약 ${pages}${m.goal?" / "+m.goal:""}매${td>0?` · 오늘 +${td}매`:""}${dd!=null?` · ${dd>0?"마감 D-"+dd:dd===0?"오늘 마감":"마감 "+(-dd)+"일 지남"}`:""}</div></div>
+    <details class="more msgoal"><summary>목표·마감</summary><div class="row" style="gap:6px;margin-top:6px;flex-wrap:wrap">
+      <label class="field" style="width:120px"><span>목표 원고지 매수</span><input id="msgoal" type="number" min="0" step="10" value="${m.goal||""}" placeholder="예: 400"></label>
+      <label class="field" style="width:150px"><span>마감일 (선택)</span><input id="msdue" type="date" value="${esc(m.due||"")}"></label>
+      <button class="btn small" onclick="saveMsGoal('${m.id}')">저장</button></div><p class="hint">원고지 1매 = 200자(공백 포함). 오늘 늘어난 매수는 이 기기에서 오늘 처음 열었을 때와 비교합니다.</p></details></div>`;
+  const views=[["binder","목차"],["cork","코르크보드"],["board","상태 보드"]];
+  const bar=`<div class="roombar"><span class="pills">${views.map(([k,n])=>`<button class="pill ${ROOM_VIEW===k?"on":""}" onclick="roomSetView('${k}')">${n}</button>`).join("")}</span><span class="spacer"></span>
+    ${m.rule?`<button class="btn small" onclick="freezeMs('${m.id}')" title="지금 모인 글로 고정하고 부·장 나누기와 순서 옮기기를 씁니다">직접 다듬기로 바꾸기</button>`
+      :`<button class="btn small" onclick="addPart('${m.id}',1)">＋ 부</button><button class="btn small" onclick="addPart('${m.id}',2)">＋ 장</button>
+        ${(()=>{ const others=live().filter(w=>!(m.items||[]).includes(w.id)).slice().reverse(); return others.length?`<select class="roomadd" onchange="msAdd('${m.id}',this.value)"><option value="">＋ 써 둔 글 넣기…</option>${others.map(w=>`<option value="${w.id}">${esc(w.date)} · [${esc(wTag(w))}] ${esc(w.title||pv(w,20))}</option>`).join("")}</select>`:""; })()}
+        <button class="btn small ink" onclick="go('write',{track:'book',new:true,ms:'${m.id}'})">${ICO.pen}새 꼭지 쓰기</button>`}</div>`;
+  const dragA=k=>m.rule?"":`draggable="true" data-k="${esc(k)}"`;
+  const steps=k=>m.rule?"":`<span class="rstep"><button class="btn small ghost" onclick="event.stopPropagation();roomStep('${m.id}','${k}',-1)" title="위로">↑</button><button class="btn small ghost" onclick="event.stopPropagation();roomStep('${m.id}','${k}',1)" title="아래로">↓</button></span>`;
+  let body="";
+  if(ROOM_VIEW==="cork"){
+    body=`<div class="cork" id="roomlist">${seq.map(x=>x.p
+      ?`<div class="corkpart lv${x.p.lv}" ${dragA("part:"+x.p.id)}>${esc(x.p.t)}</div>`
+      :`<div class="corkcard ${ST_CLS[stOf(x.w)]}" ${dragA(x.w.id)} onclick="go('write',{edit:'${x.w.id}'})"><span class="cst">${esc(stOf(x.w))}</span><b>${esc(x.w.title||"(제목 없음)")}</b><span class="csum">${esc(x.w.summary||pv(x.w,70))}</span><span class="muted cch">${chars(x.w.body).toLocaleString()}자${x.w.passage?" · "+esc(x.w.passage):""}</span></div>`).join("")
+      ||`<p class="muted">아직 꼭지가 없습니다. 위에서 글을 넣거나 새 꼭지를 쓰세요.</p>`}</div><p class="hint" style="margin-top:8px">${m.rule?"조건으로 모으는 원고는 순서가 저절로 정해집니다.":"카드를 끌어 순서를 바꿉니다. 한 줄 요약은 글의 「요약」 칸에서 옵니다(없으면 첫 문장)."}</p>`;
+  } else if(ROOM_VIEW==="board"){
+    body=`<div class="sboard">${WSTATUS.map(st=>{ const list=ws.filter(w=>stOf(w)===st);
+      return `<div class="scol ${ST_CLS[st]}" data-st="${st}"><p class="scolh"><i class="dot ${ST_CLS[st]}"></i>${st} <span class="muted">${list.length}</span></p>
+        ${list.map(w=>`<div class="scard" draggable="true" data-w="${w.id}"><a href="#" onclick="go('write',{edit:'${w.id}'});return false"><b>${esc(w.title||"(제목 없음)")}</b></a><span class="muted">${chars(w.body).toLocaleString()}자</span>
+          <select onchange="setWStatus('${w.id}',this.value)" title="상태 바꾸기">${WSTATUS.map(x=>`<option ${x===st?"selected":""}>${x}</option>`).join("")}</select></div>`).join("")||`<p class="muted" style="font-size:13px;margin:6px 2px">비어 있음</p>`}</div>`; }).join("")}</div>
+      <p class="hint" style="margin-top:8px">카드를 다른 칸으로 끌거나, 카드 아래 칸에서 상태를 고릅니다. 상태는 서랍·노션에도 같이 바뀝니다.</p>`;
+  } else {
+    let n=0;
+    body=`<ol class="binder" id="roomlist">${seq.map(x=>x.p
+      ?`<li class="bpart lv${x.p.lv}" ${dragA("part:"+x.p.id)}><span class="bt">${esc(x.p.t)}</span><span class="spacer"></span>${steps("part:"+x.p.id)}<button class="btn small ghost" onclick="renamePart('${m.id}','${x.p.id}')">이름</button><button class="btn small ghost" onclick="delPart('${m.id}','${x.p.id}')" title="구분만 지웁니다">✕</button></li>`
+      :`<li class="bitem" ${dragA(x.w.id)}><i class="dot ${ST_CLS[stOf(x.w)]}" title="${esc(stOf(x.w))}"></i><span class="pen bn">${++n}</span><a href="#" onclick="go('write',{edit:'${x.w.id}'});return false">${esc(x.w.title||"(제목 없음)")}</a>${x.w.passage?`<span class="muted">${esc(x.w.passage)}</span>`:""}<span class="muted">${chars(x.w.body).toLocaleString()}자</span><span class="spacer"></span>${steps(x.w.id)}${m.rule?"":`<button class="btn small ghost" onclick="msRemove('${m.id}','${x.w.id}')" title="원고에서 빼기 (글은 남습니다)">빼기</button>`}</li>`).join("")
+      ||`<p class="muted">아직 꼭지가 없습니다. 「＋ 부」로 나누고, 「써 둔 글 넣기」나 「새 꼭지 쓰기」로 채워 보세요.</p>`}</ol>
+      <p class="hint" style="margin-top:8px">${m.rule?"조건으로 모으는 원고는 순서가 저절로 정해집니다. 부·장을 나누려면 「직접 다듬기로 바꾸기」.":"줄을 끌어 순서를 바꿉니다(휴대폰은 ↑↓). 부·장 아래에 놓인 꼭지가 그 부·장에 들어갑니다."}</p>`;
+  }
+  const foot=`<div class="row" style="margin-top:14px;gap:6px"><button class="btn small" onclick="exportPdf('${m.id}')">${ICO.closed}책 모양 PDF</button><button class="btn small" onclick="exportMs('${m.id}')">원고 내려받기(.md)</button>${m.rule?`<button class="btn small" onclick="go('drawer',{sub:'ms'})">조건 고치기</button>`:""}<span class="spacer"></span><button class="btn small danger" onclick="delMs('${m.id}')">묶음 풀기</button></div>`;
+  return top+`<div class="roomgrid">${shelf}<section class="sheet roommain">${head}${bar}${body}${foot}</section></div>`;
+}
+// 끌어 옮기기 연결 (목차·코르크보드: 순서, 상태 보드: 상태)
+function roomDnd(){
+  const m=S.manuscripts.find(x=>x.id===ROOM_MS); if(!m) return;
+  const list=$("#roomlist");
+  if(list&&!m.rule){
+    list.querySelectorAll("[data-k]").forEach(el=>{
+      el.addEventListener("dragstart",e=>{ ROOM_DRAG=el.dataset.k; el.classList.add("dragging"); try{ e.dataTransfer.setData("text/plain",ROOM_DRAG); e.dataTransfer.effectAllowed="move"; }catch(_){} });
+      el.addEventListener("dragend",()=>{ el.classList.remove("dragging"); list.querySelectorAll(".dropb,.dropa").forEach(x=>x.classList.remove("dropb","dropa")); });
+      el.addEventListener("dragover",e=>{ if(!ROOM_DRAG) return; e.preventDefault(); const r=el.getBoundingClientRect(), after=ROOM_VIEW==="cork"&&!el.classList.contains("corkpart")?(e.clientX>r.left+r.width/2):(e.clientY>r.top+r.height/2);
+        el.classList.toggle("dropa",after); el.classList.toggle("dropb",!after); });
+      el.addEventListener("dragleave",()=>el.classList.remove("dropb","dropa"));
+      el.addEventListener("drop",e=>{ e.preventDefault(); const k=ROOM_DRAG; ROOM_DRAG=null; if(!k||k===el.dataset.k) return;
+        const after=el.classList.contains("dropa"); const all=[...list.querySelectorAll("[data-k]")].map(x=>x.dataset.k), i=all.indexOf(el.dataset.k);
+        let before=after?all[i+1]:el.dataset.k; if(before===k) before=all[all.indexOf(k)+1]; msReorder(m.id,k,before||null); });
+    }); }
+  document.querySelectorAll(".scard[data-w]").forEach(el=>{ el.addEventListener("dragstart",e=>{ ROOM_DRAG="w:"+el.dataset.w; try{ e.dataTransfer.setData("text/plain",ROOM_DRAG); }catch(_){} }); });
+  document.querySelectorAll(".scol[data-st]").forEach(col=>{
+    col.addEventListener("dragover",e=>{ if(ROOM_DRAG?.startsWith("w:")){ e.preventDefault(); col.classList.add("over"); } });
+    col.addEventListener("dragleave",()=>col.classList.remove("over"));
+    col.addEventListener("drop",e=>{ e.preventDefault(); col.classList.remove("over"); const k=ROOM_DRAG; ROOM_DRAG=null; if(k?.startsWith("w:")) setWStatus(k.slice(2),col.dataset.st); });
+  });
+}
 // 서랍: 분류별로 걸러 보기
 let filt={track:"",kind:"",type:"",book:"",topic:""};
 function setFilt(k,v){ filt[k]=v; renderArchive(); }
