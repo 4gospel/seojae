@@ -346,6 +346,14 @@ body.focus main.wrap{padding-top:40px}
 
 /* 오늘 책 */
 .nowbook{display:flex;gap:16px;align-items:flex-start}
+.otherbooks{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dotted var(--edge)}
+.otherbooks>span{width:100%}
+.minibook{background:none;border:0;padding:0;cursor:pointer;width:58px;text-align:center;font:inherit;color:var(--ink-soft)}
+.minibook .cover.mini{width:44px;height:64px;margin:0 auto 4px;font-size:8px;padding:4px;box-shadow:1px 2px 6px rgba(0,0,0,.3)}
+.minibook span{display:block;font-size:11px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.minibook:hover .cover{transform:translateY(-3px)}
+.bookc .pickbtn{margin-top:6px;font:inherit;font-size:12px;padding:2px 9px;border:1px solid var(--edge);border-radius:999px;background:var(--paper);color:var(--ink-soft);cursor:pointer}
+.bookc .pickbtn:hover{border-color:var(--sepia);color:var(--ink)}
 .nowbook .cover{width:86px;height:124px;flex:0 0 auto}
 
 .timer{font-family:"Nanum Myeongjo";font-weight:800;font-size:40px;letter-spacing:2px}
@@ -466,11 +474,22 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .dw-item h5{font-family:"Nanum Myeongjo";font-weight:800;font-size:18px;margin:0 0 2px}
 .dw-body{white-space:pre-wrap;font-size:15.5px;line-height:34px;max-height:340px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 75%,transparent)}
 .dw-body.open{max-height:none;-webkit-mask-image:none}
-.dline{font-family:"Nanum Pen Script";font-size:24px;line-height:34px;border:0;background:transparent;min-height:102px;padding:0;color:var(--ink)}
+.dline{font-family:"Nanum Pen Script";font-size:25px;line-height:34px;border:0;background:transparent;min-height:238px;padding:0;color:var(--ink);width:100%;resize:none;overflow:hidden;display:block}
+/* 크레파스 상자: 삐뚤한 두 겹 테두리(아래 svg 필터 crayon으로 왁스 느낌), 안쪽은 줄공책 */
+.crayon{position:relative;padding:16px 18px 14px;margin:2px 0 0}
+.crayon::before{content:"";position:absolute;inset:0;border:4px solid var(--crayon,#e4714a);border-radius:255px 18px 225px 18px/18px 225px 18px 255px;opacity:.85;filter:url(#crayon);pointer-events:none}
+.crayon::after{content:"";position:absolute;inset:3px;border:2.5px solid var(--crayon,#e4714a);border-radius:18px 225px 18px 255px/225px 18px 255px 18px;opacity:.35;filter:url(#crayon);pointer-events:none;transform:rotate(.4deg)}
+.crayon .dline{background:repeating-linear-gradient(transparent 0 32px,color-mix(in srgb,var(--crayon,#e4714a) 28%,transparent) 32px 33px,transparent 33px 34px);background-attachment:local;padding-top:0}
+.crayon .dline::placeholder{color:var(--faint)}
+.dsec>.dl.cr{color:var(--crayon,#e4714a)}
+.crayon .dline:focus{outline:none}
 .diary .cover{width:54px;height:78px;font-size:10px}
 .dnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.dwrap{display:flex;gap:22px;align-items:flex-start} .dside{width:300px;flex:none}
-@media (max-width:900px){ .dwrap{flex-direction:column} .dside{width:100%} }
+.dbook{perspective:1600px}
+.dcalwrap{position:relative;display:inline-block}
+.dcalpop{position:absolute;left:0;top:calc(100% + 8px);z-index:65;width:320px;max-width:calc(100vw - 32px)}
+.dcalpop .calcard{box-shadow:0 14px 34px -12px rgba(0,0,0,.45)}
+@media (max-width:700px){ .dcalpop{position:fixed;left:16px;right:16px;top:auto;bottom:calc(84px + env(safe-area-inset-bottom));width:auto;max-width:none} }
 /* 일기 달력 표시: 일기 쓴 날 진한 점, 기록만 있는 날 옅은 점, 펼친 날 테두리 */
 .cal .d.dj::after{content:"";position:absolute;left:50%;bottom:3px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--ink)}
 .cal .d.ds::after{content:"";position:absolute;left:50%;bottom:3px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--deco)}
@@ -712,6 +731,7 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="crayon" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <header><div class="wrap">
   <div class="top">
     <div class="brand" onclick="go('today')" title="오늘 화면으로" role="link">아침 서재<small>MORNING · STUDY · DIARY</small></div>
@@ -739,7 +759,8 @@ const ICO=(()=>{ const w=d=>`<svg class="ico" viewBox="0 0 24 24" aria-hidden="t
   audio:w("M4.2 14.2v-2.4a7.8 7.8 0 0 1 15.6 0v2.4M4.2 14.2h3v6H5.2a1 1 0 0 1-1-1v-5zM19.8 14.2h-3v6h2a1 1 0 0 0 1-1v-5z"),
   search:w("M10.4 10.4m-5.8 0a5.8 5.8 0 1 0 11.6 0a5.8 5.8 0 1 0-11.6 0M14.8 14.8l5.4 5.4"),
   trash:w("M5 7h14M9.2 7V4.3h5.6V7M7 7l1 13h8l1-13"),
-  seed:w("M12 20.5V12M12 12c0-4 2.5-6.5 7-6.5-.2 4.2-2.7 6.5-7 6.5zM12 14.5c0-3-2-5-5.5-5 .2 3.4 2.3 5 5.5 5z")
+  seed:w("M12 20.5V12M12 12c0-4 2.5-6.5 7-6.5-.2 4.2-2.7 6.5-7 6.5zM12 14.5c0-3-2-5-5.5-5 .2 3.4 2.3 5 5.5 5z"),
+  cal:w("M4.5 6.5h15v13.5h-15zM4.5 10.5h15M8.5 3.8v4M15.5 3.8v4M8 14h2M12 14h2M16 14h2M8 17h2M12 17h2")
 }; })();
 
 // ───────── 기본 자료 ─────────
@@ -1025,7 +1046,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="5b2dc020f2";
+const APP_BUILD="2d3e8dc81c";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1975,7 +1996,7 @@ function dCalHtml(){
   const first=new Date(dcalY,dcalM,1), start=new Date(first); start.setDate(1-first.getDay()); const t=today(); let cells="";
   for(let i=0;i<42;i++){ const d=new Date(start); d.setDate(start.getDate()+i); if(i>=35&&d.getMonth()!==dcalM) break;
     const k=dkey(d), has=dHas(k), some=!has&&dSome(k), cls=["d",d.getMonth()!==dcalM?"o":"",d.getDay()===0?"sun":"",k===t?"today":"",k===diaryDate?"cur":"",has?"dj":some?"ds":"",k>t?"fut":""].filter(Boolean).join(" ");
-    cells+=`<button type="button" class="${cls}" ${k>t?"disabled":""} onclick="dOpen('${k}','${k<diaryDate?"prev":"next"}')" title="${k}${has?" · 일기 있음":some?" · 읽기·글 기록":""}"><span>${d.getDate()}</span></button>`; }
+    cells+=`<button type="button" class="${cls}" ${k>t?"disabled":""} onclick="dCalClose();dOpen('${k}','${k<diaryDate?"prev":"next"}')" title="${k}${has?" · 일기 있음":some?" · 읽기·글 기록":""}"><span>${d.getDate()}</span></button>`; }
   const now=new Date();
   return `<div class="calcard dcal"><div class="calhead"><button onclick="dCalMove(-12)" title="지난해">«</button><button onclick="dCalMove(-1)" title="지난달">‹</button><span class="t">${dcalY}년 ${dcalM+1}월</span><button onclick="dCalMove(1)" title="다음 달">›</button><button onclick="dCalMove(12)" title="다음 해">»</button>${(dcalY!==now.getFullYear()||dcalM!==now.getMonth())?`<button onclick="dcalY=dcalM=null;dCalPaint()" title="이번 달로" style="font-size:12px;width:auto;padding:0 6px">이번 달</button>`:""}</div>
     <div class="cal">${"일월화수목금토".split("").map(x=>`<div class="wd">${x}</div>`).join("")}${cells}</div>
@@ -1993,6 +2014,7 @@ function dListHtml(){
       <span class="dn muted">${[ws.length?"글 "+ws.length:"",(e.stickers||[]).length?"스티커 "+(e.stickers||[]).length:""].filter(Boolean).join(" · ")}</span></a>`; }).join("")}</div>`;
 }
 function diaryPage(){
+  setTimeout(()=>{ const t=$(".dline"); if(t) dGrow(t); },0);
   const d=diaryDate=diaryDate||today(), x=new Date(d+"T00:00"), L=S.log[d]||{}, e=dEntry(d); dcalY=x.getFullYear(); dcalM=x.getMonth();
   const notes=S.notes.filter(n=>n.date===d), ws=live().filter(w=>w.date===d);
   const bible=(L.bible||[]).map(b=>`<div class="muted">${esc(b.plan)} · ${b.day}일째</div><ul>${b.portions.map(p=>`<li><a href="#" onclick="openBible(${jsArg(p)});return false">${esc(p)}</a></li>`).join("")}</ul>`).join("")
@@ -2002,9 +2024,10 @@ function diaryPage(){
   const nav=`<div class="dnav"><button class="btn small" onclick="dGo(-1)">‹ 전날</button><button class="btn small" onclick="dGo(1)" ${d>=today()?"disabled":""}>다음 날 ›</button>
     ${d!==today()?`<button class="btn small ghost" onclick="dOpen(today(),'next')">오늘로</button>`:""}
     <span class="pills" style="margin-left:6px"><button class="pill ${DIARY_VIEW==="page"?"on":""}" onclick="DIARY_VIEW='page';render()">일기장</button><button class="pill ${DIARY_VIEW==="list"?"on":""}" onclick="DIARY_VIEW='list';render()">목록</button></span>
+    <span class="dcalwrap"><button class="btn small" onclick="dCalToggle()" title="달력에서 날짜 고르기">${ICO.cal}달력</button><div id="dcalpop" class="dcalpop" style="display:none"></div></span>
     <span class="spacer"></span>${DIARY_VIEW==="page"?`<button class="btn small ink" onclick="toggleStk()">${ICO.flower}스티커 붙이기</button>`:""}</div>`;
-  if(DIARY_VIEW==="list") return nav+`<div class="dwrap"><section class="sheet" style="flex:1;min-width:0"><p class="label">일기 목록</p>${dListHtml()}</section><aside class="dside">${dCalHtml()}</aside></div>`;
-  return nav+`<div class="dwrap"><div style="flex:1;min-width:0"><div class="diary">
+  if(DIARY_VIEW==="list") return nav+`<section class="sheet"><p class="label">일기 목록</p>${dListHtml()}</section>`;
+  return nav+`<div class="dbook"><div class="diary">
     ${stkLayer("diary:"+d)}
     <div class="pg l">
       <div class="dhead"><span class="dd">${x.getMonth()+1}.${String(x.getDate()).padStart(2,"0")}</span><span class="dw">${x.getFullYear()} · ${WEEK[x.getDay()]}요일</span></div>
@@ -2014,15 +2037,23 @@ function diaryPage(){
       ${notes.length?`<div class="dsec"><p class="dl">밑줄</p>${notes.map(n=>`<div class="dquote">${esc(n.text)}<div class="muted">${esc(noteSrc(n))}</div></div>`).join("")}</div>`:""}
     </div>
     <div class="pg r">
-      <div class="dsec" style="margin-top:0"><p class="dl">오늘 쓴 글</p>
+      <div class="dsec" style="margin-top:0"><p class="dl cr">오늘 일기</p>
+        <div class="crayon"><textarea class="dline" placeholder="오늘 아침, 짧게라도 진짜 일기를…" oninput="dLine(this.value);dGrow(this)">${esc(e.line||"")}</textarea></div></div>
+      <div class="dsec"><p class="dl">오늘 쓴 글</p>
         ${ws.length?ws.map(w=>`<div class="dw-item"><span class="label ${w.track}" style="font-size:18px;margin:0">[${esc(wTag(w))}]${w.passage?" "+esc(w.passage):""}</span><h5>${esc(w.title||"(제목 없음)")}</h5>
           <div class="dw-body" onclick="this.classList.toggle('open')" title="눌러서 펼치기/접기">${(()=>{ const fn=[]; const h=richHtml(w.body,fn); return h+fnHtml(fn); })()}</div>
           <a href="#" class="muted" onclick="go('write',{edit:'${w.id}'});return false">글 열기 →</a></div>`).join("")
           :`<p class="muted">이날 쓴 글이 없습니다.</p>`}</div>
-      <div class="dsec"><p class="dl">한 줄 일기</p><textarea class="dline" placeholder="오늘 아침을 한 줄로…" oninput="dLine(this.value)">${esc(e.line||"")}</textarea></div>
     </div>
-  </div></div><aside class="dside">${dCalHtml()}</aside></div>`;
+  </div></div>`;
 }
+// 달력 팝업: 「달력」 단추 아래 떠서 날짜를 고르면 닫힘. 바깥 클릭·Esc로도 닫힘
+function dCalToggle(){ const p=$("#dcalpop"); if(!p) return; if(p.style.display!=="none"){ p.style.display="none"; return; } p.innerHTML=dCalHtml(); p.style.display=""; }
+function dCalClose(){ const p=$("#dcalpop"); if(p) p.style.display="none"; }
+document.addEventListener("click",e=>{ const p=$("#dcalpop"); if(p&&p.style.display!=="none"&&!e.target.closest(".dcalwrap")) p.style.display="none"; });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") dCalClose(); });
+// 일기 칸은 쓰는 만큼 아래로 늘어남
+function dGrow(t){ t.style.height="auto"; t.style.height=Math.max(238,t.scrollHeight+4)+"px"; }
 
 // ───────── 스티커: 일기와 글 종이에 붙이고, 끌어서 옮기고, 돌리고, 키우기 ─────────
 const STICKERS={
@@ -2150,6 +2181,7 @@ today(){
         ${b.total?`<div class="progress"><i style="width:${Math.min(100,b.page/b.total*100)}%"></i></div><div class="muted">${b.unit==="pct"?`${b.page||0}%`:`${b.page} / ${b.total}쪽`}</div>`:`<div class="muted">${pgText(b,b.page)}까지</div>`}
         <div class="row" style="margin-top:8px"><input id="pg" type="number" placeholder="${b.unit==="pct"?"몇 %까지?":"몇 쪽까지?"}" style="width:120px" inputmode="numeric" ${b.unit==="pct"?'max="100"':""}><button class="btn small" onclick="updatePage()">여기까지 읽음</button></div>
       </div></div>
+      ${(()=>{ const o=S.books.filter(x=>x.status!=="완료"&&x.id!==b.id); return o.length?`<div class="otherbooks"><span class="muted" style="font-size:13px">함께 읽는 책 · 누르면 그 책으로</span>${o.map(x=>`<button class="minibook" onclick="pickBook('${x.id}')" title="「${esc(x.title)}」로 바꾸기">${coverHtml(x,"cover mini")}<span>${esc(x.title)}</span></button>`).join("")}</div>`:""; })()}
       <div class="row" style="margin-top:12px"><button class="btn" onclick="toggleNoteForm('book')">${ICO.pen}밑줄 남기기</button><button class="btn ghost" onclick="go('shelf')">책장 보기</button></div>
       ${noteOpen==="book"?noteForm("book"):""}${todayNotes("book")}`
       :`<p class="sub" style="margin:10px 0 14px">책장에 읽을 책을 꽂아 주세요. 제목이나 ISBN만 넣으면 표지를 찾아 드립니다.</p><button class="btn ink" onclick="go('shelf')">책 꽂기</button>`}
@@ -2283,7 +2315,7 @@ shelf(){
   const q=(SHELF_Q||"").trim().toLowerCase();
   const sorted=S.books.slice().sort(sorters[sortBy]||sorters.new).filter(b=>!q||(b.title+" "+(b.authors||[]).join(" ")+" "+(b.publisher||"")).toLowerCase().includes(q));
   const reading=sorted.filter(b=>b.status!=="완료"), done=sorted.filter(b=>b.status==="완료");
-  const card=b=>`<div class="bookc ${b.id===S.settings.currentBook?"now":""}" onclick="openBook('${b.id}')">${b.id===S.settings.currentBook?`<span class="nowtag">지금 읽는 중</span>`:""}${coverHtml(b)}<div class="t">${esc(b.title)}</div>${b.total?`<div class="progress" style="margin:6px 8px 0"><i style="width:${Math.min(100,(b.page||0)/b.total*100)}%"></i></div>`:""}</div>`;
+  const card=b=>`<div class="bookc ${b.id===S.settings.currentBook?"now":""}" onclick="openBook('${b.id}')">${b.id===S.settings.currentBook?`<span class="nowtag">지금 읽는 중</span>`:""}${coverHtml(b)}<div class="t">${esc(b.title)}</div>${b.total?`<div class="progress" style="margin:6px 8px 0"><i style="width:${Math.min(100,(b.page||0)/b.total*100)}%"></i></div>`:""}${b.status!=="완료"&&b.id!==S.settings.currentBook?`<button class="pickbtn" onclick="event.stopPropagation();pickBook('${b.id}')" title="이 책을 지금 읽는 책으로">이 책 펴기</button>`:""}</div>`;
   const shelfRow=list=>`<div class="shelf">${list.map(card).join("")||`<p class="muted" style="align-self:center">비어 있는 칸</p>`}</div><div class="plank"></div>`;
   const spines=list=>list.length?`<div class="spines">${list.map(spineHtml).join("")}</div>`:`<p class="muted" style="margin:6px 0 20px">아직 없습니다.</p>`;
   const group=(list,of,order)=>{ const g={}; list.forEach(b=>{ const c=of(b); (g[c]=g[c]||[]).push(b); }); return Object.keys(g).sort(order).map(c=>({c,items:g[c]})); };
@@ -2305,7 +2337,7 @@ shelf(){
   <div id="bookdetail"></div>
   ${bar}
   <div id="shelves">
-  <p class="label book">읽는 중</p>${readingHtml}
+  <p class="label book">읽는 중 ${reading.length>1?`<small class="hint" style="display:inline">· 여러 권을 같이 읽을 때는 「이 책 펴기」로 기준 책을 바꿉니다</small>`:""}</p>${readingHtml}
   <p class="label">다 읽은 책 <small class="hint" style="display:inline">· 책등을 누르면 열립니다. 두께는 쪽수, 색은 책마다</small></p>${doneHtml}
   </div>`;
 },
@@ -2981,7 +3013,7 @@ function openBook(id){
     ${b.review&&REVIEW_OPEN!==b.id?`<details class="more"><summary>독후감 ${b.reviewNotion?.page?`<a class="nstate ok" href="${esc(b.reviewNotion.url)}" target="_blank" style="text-decoration:none;margin-left:6px"><i></i>노션 독서 노트</a>`:""}</summary><p class="sub pre" style="margin:6px 0">${esc(b.review)}</p><button class="btn small" onclick="REVIEW_OPEN='${b.id}';openBook('${b.id}')">고치기</button></details>`:""}
     ${REVIEW_OPEN===b.id?reviewBox(b):""}
     <div class="row" style="margin-top:12px"><button class="btn ink small" onclick="saveBook('${b.id}')">저장</button>${b.status==="완료"&&REVIEW_OPEN!==b.id&&!b.review?`<button class="btn small" onclick="REVIEW_OPEN='${b.id}';openBook('${b.id}')">${ICO.pen}독후감 쓰기</button>`:""}
-      ${b.id!==S.settings.currentBook&&b.status!=="완료"?`<button class="btn small" onclick="S.settings.currentBook='${b.id}';save();toast('지금 읽는 책으로 정했습니다')">지금 읽는 책으로</button>`:""}
+      ${b.id!==S.settings.currentBook&&b.status!=="완료"?`<button class="btn small" onclick="pickBook('${b.id}')">지금 읽는 책으로</button>`:""}
       ${b.status!=="완료"?`<button class="btn small" onclick="finishBook('${b.id}')">다 읽었습니다</button>`:`<button class="btn small" onclick="reopenBook('${b.id}')">다시 읽기</button>`}
       ${storeLinks(b.title)}
       <button class="btn small danger" onclick="delBook('${b.id}')">책장에서 빼기</button></div>
@@ -2992,6 +3024,8 @@ function saveBook(id){ const b=S.books.find(x=>x.id===id); let p=+$("#bp").value
 function rate(id,n){ const b=S.books.find(x=>x.id===id); b.rating=n; save(); syncBook(b); if(b.reviewNotion?.page) syncReview(b); openBook(id); }
 function finishBook(id){ const b=S.books.find(x=>x.id===id); b.status="완료"; b.finished=today(); if(b.unit==="pct") b.page=100;
   if(S.settings.currentBook===id) S.settings.currentBook=S.books.find(x=>x.status!=="완료"&&x.id!==id)?.id||null; save(); syncBook(b); toast("한 권을 다 읽었습니다. 독후감을 남겨 보세요"); REVIEW_OPEN=id; render(); openBook(id); setTimeout(()=>$("#rv-one")?.focus(),200); }
+// 여러 권을 같이 읽을 때: 고른 책이 「읽고 있는 책」 기준이 됩니다(쪽수 적기·밑줄의 기본 책)
+function pickBook(id){ const b=S.books.find(x=>x.id===id); if(!b) return; if(b.status==="완료") return toast("다 읽은 책입니다. 「다시 읽기」를 눌러 주세요"); S.settings.currentBook=id; save(); toast(`「${b.title}」을(를) 지금 읽는 책으로 폈습니다`); render(); if(tab==="shelf") openBook(id); }
 function reopenBook(id){ const b=S.books.find(x=>x.id===id); b.status="읽는 중"; S.settings.currentBook=id; save(); syncBook(b); render(); openBook(id); }
 function delBook(id){ if(!confirm("책장에서 뺄까요? 밑줄과 글은 남습니다.")) return; tomb(id); S.books=S.books.filter(b=>b.id!==id); if(S.settings.currentBook===id) S.settings.currentBook=null; save(); render(); }
 function uploadCover(id,input){
