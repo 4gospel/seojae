@@ -475,14 +475,18 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .cal .d.dj::after{content:"";position:absolute;left:50%;bottom:3px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--ink)}
 .cal .d.ds::after{content:"";position:absolute;left:50%;bottom:3px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--deco)}
 .cal .d.cur{box-shadow:inset 0 0 0 1.5px var(--sepia)} .cal .d.fut{opacity:.35;cursor:default}
-/* 책장 넘기기 */
-.dwrap>div:first-child{perspective:1600px}
-.diary{transform-origin:left center;backface-visibility:hidden}
-.diary.turn-out-next{animation:turnOutNext .24s ease-in forwards} .diary.turn-out-prev{animation:turnOutPrev .24s ease-in forwards;transform-origin:right center}
-.diary.turn-in-next{animation:turnInNext .3s ease-out} .diary.turn-in-prev{animation:turnInPrev .3s ease-out;transform-origin:right center}
-@keyframes turnOutNext{to{transform:rotateY(-70deg);opacity:0}} @keyframes turnOutPrev{to{transform:rotateY(70deg);opacity:0}}
-@keyframes turnInNext{from{transform:rotateY(60deg);opacity:0}} @keyframes turnInPrev{from{transform:rotateY(-60deg);opacity:0}}
-@media (prefers-reduced-motion:reduce){ .diary{animation:none !important} }
+/* 책장 넘기기: 가운데 등(spine)을 축으로 한 장이 넘어감 */
+.flipwrap{position:absolute;inset:0;z-index:20;pointer-events:none;perspective:2200px;perspective-origin:50% 50%;overflow:visible}
+.flipwrap .under{position:absolute;top:0;bottom:0;width:50%;display:block;min-height:0;border:0;box-shadow:none;border-radius:0;background:var(--paper) var(--grain)}
+.flipwrap .under.l{left:0} .flipwrap .under.r{right:0}
+.flipwrap .under>.pg,.flipwrap .face>.pg{height:100%;overflow:hidden}
+.flip{position:absolute;top:0;bottom:0;width:50%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,.05,.3,1)}
+.flip.next{left:50%;transform-origin:left center} .flip.prev{left:0;transform-origin:right center}
+.flip.next.go{transform:rotateY(-180deg)} .flip.prev.go{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;display:block;min-height:0;border:0;border-radius:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper) var(--grain);box-shadow:0 0 30px -8px rgba(0,0,0,.45)}
+.flip .face.back{transform:rotateY(180deg)}
+.flip.next .face.front{box-shadow:inset 16px 0 20px -18px rgba(0,0,0,.35)} .flip.prev .face.front{box-shadow:inset -16px 0 20px -18px rgba(0,0,0,.35)}
+.flip .face::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 35%,transparent 65%,rgba(0,0,0,.12));opacity:0;transition:opacity .35s} .flip.go .face::after{opacity:1}
 /* 일기 목록 */
 .dlist .dli{display:grid;grid-template-columns:58px 22px 44px 1fr auto;gap:8px;align-items:center;padding:8px 4px;border-bottom:1px dotted var(--edge);color:var(--ink);text-decoration:none}
 .dlist .dli:hover{background:var(--paper-2)} .dlist .dd{font-size:21px;color:var(--sepia)} .dlist .dw{font-size:12px;color:var(--faint)} .dlist .dm{font-size:16px} .dlist .dt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .dlist .dn{font-size:12px}
@@ -1012,7 +1016,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="306cfd006e";
+const APP_BUILD="fe0538b061";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1937,10 +1941,22 @@ function dSet(k,v){ const d=diaryDate, e=dEntry(d,true); const ta=$(".dline"); i
 let dLineT; function dLine(v){ const d=diaryDate; clearTimeout(dLineT); dLineT=setTimeout(()=>{ dEntry(d,true).line=v; dTouch(d); },600); }
 function dGo(n){ const x=new Date((diaryDate||today())+"T00:00"); x.setDate(x.getDate()+n); dOpen(dkey(x),n>0?"next":"prev"); }
 // 그날 일기로: 책장을 넘기듯 지금 장이 접히고 새 장이 펼쳐집니다
-function dOpen(k,dir){ if(k>today()) return; STK_SEL=null; const el=$(".diary"); DIARY_VIEW="page";
-  if(!el||!dir){ diaryDate=k; render(); return; }
-  el.classList.add(dir==="next"?"turn-out-next":"turn-out-prev");
-  setTimeout(()=>{ diaryDate=k; render(); const n=$(".diary"); if(n){ n.classList.add(dir==="next"?"turn-in-next":"turn-in-prev"); setTimeout(()=>n.classList.remove("turn-in-next","turn-in-prev"),320); } },230); }
+// 진짜 책처럼: 가운데 등을 축으로 한 장이 넘어갑니다. 다음 날은 오른쪽 장이 왼쪽으로(앞면=지금 오른쪽 장, 뒷면=새 왼쪽 장),
+// 전날은 왼쪽 장이 오른쪽으로(앞면=지금 왼쪽 장, 뒷면=새 오른쪽 장). 넘어가는 동안 밑에는 새 펼침면이 보입니다
+function dOpen(k,dir){ if(k>today()) return; STK_SEL=null; const old=$(".diary"); DIARY_VIEW="page";
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches, narrow=innerWidth<=700;
+  if(!old||!dir||reduce||narrow){ diaryDate=k; render(); return; }
+  const oL=old.querySelector(".pg.l")?.cloneNode(true), oR=old.querySelector(".pg.r")?.cloneNode(true);
+  diaryDate=k; render(); const nd=$(".diary"); if(!nd||!oL||!oR) return;
+  const nL=nd.querySelector(".pg.l").cloneNode(true), nR=nd.querySelector(".pg.r").cloneNode(true);
+  const next=dir==="next", wrap=document.createElement("div"); wrap.className="flipwrap";
+  const under=document.createElement("div"); under.className="diary under "+(next?"l":"r"); under.appendChild(next?oL:oR);   // 아직 안 넘어간 쪽은 옛 장이 그대로
+  const flip=document.createElement("div"); flip.className="flip "+(next?"next":"prev");
+  const front=document.createElement("div"); front.className="face front diary"; front.appendChild(next?oR:oL);
+  const back=document.createElement("div"); back.className="face back diary"; back.appendChild(next?nL:nR);
+  flip.append(front,back); wrap.append(under,flip); nd.appendChild(wrap);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>flip.classList.add("go")));
+  setTimeout(()=>wrap.remove(),760); }
 let DIARY_VIEW="page", dcalY=null, dcalM=null;
 // 일기 달력: 한 줄 일기·날씨·기분·스티커가 있는 날은 잉크 점(진함), 읽기·글 기록만 있는 날은 옅은 점
 const dHas=k=>{ const e=S.diary?.[k]; return !!(e&&((e.line||"").trim()||e.mood||e.weather||(e.stickers||[]).length)); };
