@@ -985,17 +985,25 @@ function tomb(id){ (S.deleted=S.deleted||{})[id]=new Date().toISOString(); }
 let SNAP=null;
 const itemKey=x=>JSON.stringify(x,(k,v)=>k==="updated"||k==="syncing"||k==="resync"?undefined:v);
 function takeSnap(){
-  SNAP={settings:JSON.stringify(S.settings),reminder:JSON.stringify(S.reminder||null)};
+  SNAP={settings:JSON.stringify(S.settings),reminder:JSON.stringify(S.reminder||null),sk:{}};
+  for(const k in (S.settings||{})) SNAP.sk[k]=JSON.stringify(S.settings[k]);
   for(const k of ["books","manuscripts"]) for(const x of S[k]) SNAP[k+":"+x.id]=itemKey(x);
 }
 function stampChanges(){
   if(!SNAP) return takeSnap();
   const now=new Date().toISOString();
-  if(SNAP.settings!==JSON.stringify(S.settings)) S.settingsT=now;
+  if(!S.settingsTs){ S.settingsTs={}; for(const k in (S.settings||{})) S.settingsTs[k]=S.settingsT||""; }   // 처음엔 모든 칸을 지금까지의 설정 시각으로
+  if(SNAP.settings!==JSON.stringify(S.settings)){ S.settingsT=now;
+    for(const k of new Set([...Object.keys(S.settings||{}),...Object.keys(SNAP.sk||{})])) if((SNAP.sk||{})[k]!==JSON.stringify(S.settings[k])) S.settingsTs[k]=now; }   // 바뀐 칸에만 시각
   if(SNAP.reminder!==JSON.stringify(S.reminder||null)) S.reminderT=now;
   for(const k of ["books","manuscripts"]) for(const x of S[k]) if(SNAP[k+":"+x.id]!==itemKey(x)) x.updated=now;
   takeSnap();
 }
+// 두 일기 줄이 같은 글의 다른 판인가: 한쪽이 다른 쪽을 품거나, 같은 줄을 하나라도 나누거나, 앞 10자가 같으면 고친 판으로 봄
+function dSameText(a,b){ if(a.includes(b)||b.includes(a)) return true; const n=t=>t.replace(/\s+/g," ").trim();
+  const L=new Set(a.split("\n").map(n).filter(x=>x.length>=4)); if(b.split("\n").map(n).some(x=>x.length>=4&&L.has(x))) return true;
+  const bg=t=>{ const c=t.replace(/\s+/g,""), m=new Map(); for(let i=0;i<c.length-1;i++){ const k=c.slice(i,i+2); m.set(k,(m.get(k)||0)+1); } return [m,Math.max(0,c.length-1)]; };   // 글자 두 개씩 겹치는 정도
+  const [ma,na]=bg(a), [mb,nb]=bg(b); if(!na||!nb) return false; let both=0; for(const [k,v] of ma) both+=Math.min(v,mb.get(k)||0); return 2*both/(na+nb)>=0.5; }
 function mergeFrom(other){
   const del=Object.assign({},other.deleted||{},S.deleted||{});
   const stamp=x=>x.updated||x.date||"";
@@ -1023,6 +1031,9 @@ function mergeFrom(other){
   for(const [d,v] of Object.entries(S.diary||{})){ const o=D[d]; if(!o){ D[d]=v; continue; }
     const [nw,old]=(v.t||"")>=(o.t||"")?[v,o]:[o,v], m=Object.assign({},old,nw);
     for(const k of ["weather","mood","line"]) if(!(k in nw)) m[k]=old[k];   // 나중 쪽에 아예 없는 칸만 보충 (일부러 비운 것은 그대로)
+    { const a=String(old.line||"").trim(), b=String(nw.line||"").trim();
+      if(a&&b&&!dSameText(a,b)) m.line=a+"\n"+b;
+      else if(a&&b&&(old.t||"")===(nw.t||"")&&a.length>b.length&&a.includes(b)) m.line=old.line; }   // 이미 이어 붙인 사본과 다시 만나면 긴 쪽(줄이 빠지지 않게)   // 두 기기에서 따로 쓴 일기 줄은 둘 다 남김(먼저 쓴 쪽이 위)
     const st=new Map((old.stickers||[]).map(x=>[x.id,x])); (nw.stickers||[]).forEach(x=>st.set(x.id,x)); m.stickers=[...st.values()].filter(x=>!del[x.id]);
     D[d]=m; }
   S.diary=D;
@@ -1030,8 +1041,22 @@ function mergeFrom(other){
   for(const [d,list] of Object.entries(S.marks||{})){ const map=new Map((MK[d]||[]).map(x=>[x.id,x])); for(const x of list) if(!map.has(x.id)||(x.u||"")>=(map.get(x.id).u||"")) map.set(x.id,x); MK[d]=[...map.values()]; }
   for(const d in MK) MK[d]=(MK[d]||[]).filter(x=>!del[x.id]);
   S.marks=MK;
-  { const mine=S.settings, theirs=other.settings||{}, newer=(other.settingsT||"")>(S.settingsT||"");
-    if(newer){ S.settings=Object.assign(blank().settings,theirs); S.settingsT=other.settingsT; }
+  { const mine=S.settings||{}, theirs=other.settings||{}, newer=(other.settingsT||"")>(S.settingsT||"");
+    // 설정은 칸마다(읽기표·지금 읽는 책·읽는 요일·잉크…) 더 나중에 바꾼 쪽. 칸 시각이 없는 옛 버전 사본은 모든 칸이 그 설정 시각
+    const tsOf=(o,T)=>{ const ts=o.settingsTs; if(!ts) return null; const mx=Object.values(ts).reduce((a,b)=>b>a?b:a,""); return (T||"")<=mx?ts:null; };
+    const myTs=tsOf(S,S.settingsT), thTs=tsOf(other,other.settingsT), out={}, outTs={};
+    for(const k of new Set([...Object.keys(mine),...Object.keys(theirs)])){
+      const a=myTs?(myTs[k]||""):(S.settingsT||""), b=thTs?(thTs[k]||""):(other.settingsT||"");
+      if(b>a){ if(k in theirs) out[k]=theirs[k]; outTs[k]=b; } else { if(k in mine) out[k]=mine[k]; outTs[k]=a; }
+    }
+    // 읽기표 진도: 같은 읽기표면 읽은 날은 양쪽 다 인정(합집합), 순서대로 읽기는 더 나중에 읽은 쪽
+    const pm=mine.plan, pt=theirs.plan;
+    if(pm&&pt&&pm.id===pt.id&&pm.start===pt.start&&out.plan){ const P=Object.assign({},out.plan);
+      P.done=Object.assign({},pt.done||{},pm.done||{});
+      if(Array.isArray(pm.checks)||Array.isArray(pt.checks)){ const seen=new Set(), c=[]; [...(pt.checks||[]),...(pm.checks||[])].forEach(x=>{ const j=JSON.stringify(x); if(!seen.has(j)){ seen.add(j); c.push(x); } }); P.checks=c; }
+      const la=pm.last?.date||"", lb=pt.last?.date||""; if(P.mode!=="date"&&(la||lb)){ const w=lb>la||(lb===la&&(pt.day||0)>(pm.day||0))?pt:pm; P.last=w.last; P.day=w.day; }
+      out.plan=P; }
+    S.settings=Object.assign(blank().settings,out); S.settingsTs=outTs; if(newer) S.settingsT=other.settingsT;
     // 주석 켜기·책 정하기는 통째 교체하지 않고 합칩니다 (겹치면 더 나중에 바꾼 쪽)
     const w=newer?theirs:mine, l=newer?mine:theirs;
     S.settings.cmtUse=Object.assign({},l.cmtUse||{},w.cmtUse||{}); S.settings.cmtBook=Object.assign({},l.cmtBook||{},w.cmtBook||{});
@@ -1074,7 +1099,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="6d96d91cb6";
+const APP_BUILD="7be8d5d2a0";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
