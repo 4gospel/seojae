@@ -821,7 +821,7 @@ function dedupeWritings(){
   // 남는 쪽에 노션 번호가 없으면 지워지는 쪽 것을 물려받고, 지워지는 쪽의 노션 페이지가 따로 있으면 휴지통으로
   const norm=t=>String(t||"").replace(/\s+/g," ").trim(), seen=new Map(), drop=[], pages=[];
   const keyOf=w=>{ const t=norm(w.title); return t?[w.date,w.track,"t",t,norm(w.passage)].join("|"):[w.date,w.track,"b",norm(w.body)].join("|"); };
-  for(const w of S.writings.slice().sort((a,b)=>a.id.localeCompare(b.id))){ const k=keyOf(w), o=seen.get(k);
+  for(const w of live().slice().sort((a,b)=>a.id.localeCompare(b.id))){ const k=keyOf(w), o=seen.get(k);
     if(!o){ seen.set(k,w); continue; }
     const lb=norm(w.body).length-norm(o.body).length;
     const keep=lb>0?w:lb<0?o:(o.notion?.page&&!w.notion?.page)?o:(w.notion?.page&&!o.notion?.page)?w:o, gone=keep===o?w:o;
@@ -862,7 +862,7 @@ async function fetchFresh(first){
     else if(dirty||!d.writings){ clearTimeout(saveT); saveT=null; mergeFrom(d); PENDING=true; }
     else if((d.rev??0)!==known) useData(d);               // 다른 기기에서 바뀐 것이 있으면 최신으로
     else changed=false;
-    READY=true; takeSnap();
+    READY=true; takeSnap(); try{ purgeOldTrash(); }catch(_){}
     if(PENDING){ PENDING=false; pushSave(); }
     else if(changed&&!first){ try{ localStorage.setItem(LKEY,SER()); }catch(_){} }
     if(changed&&!first){ ensurePlan(); ensureMs(); if(tab!=="write") render(); }   // 쓰는 중이면 화면을 바꾸지 않음
@@ -986,7 +986,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="feb2b63336";
+const APP_BUILD="59b0537e0b";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1191,7 +1191,7 @@ function suUse(){ const P=suPassage(SU), f=$("#wpassage"); if(!P||!f) return; f.
 // 매일성경 앞뒤 날짜 보기: 그날 쓴 묵상이 있으면 그 글을 바로 열고(쓰던 글은 임시 보관), 없으면 그날 본문만 보여 줍니다
 function suGo(k){ const box=$("#sucard"); if(!box) return;
   if(Math.abs(daysBetween(today(),k))>60) return toast("오늘 앞뒤 60일까지만 볼 수 있습니다");
-  const ws=S.writings.filter(w=>w.track==="bible"&&w.date===k), cur=editId&&S.writings.find(w=>w.id===editId);
+  const ws=live().filter(w=>w.track==="bible"&&w.date===k), cur=editId&&S.writings.find(w=>w.id===editId);
   if(ws.length&&!(cur&&ws.includes(cur))){ const w=ws.find(x=>x.type==="묵상")||ws[0]; go("write",{edit:w.id}); toast(`${k}에 쓴 글을 열었습니다`); return; }
   box.dataset.date=k; SUN=null; paintSu(); }
 function suMove(n){ const box=$("#sucard"); if(!box) return; const d=new Date(box.dataset.date+"T00:00"); d.setDate(d.getDate()+n); suGo(dkey(d)); }
@@ -1204,7 +1204,7 @@ async function paintSu(){
   if(!SU||!P){ box.innerHTML=`<span class="label bible" style="margin:0">매일성경</span> <span class="muted">본문을 불러오지 못했습니다${SUERR?" ("+esc(SUERR)+")":""}.</span> <a class="muted" href="https://sum.su.or.kr:8888/bible/today" target="_blank" rel="noopener">성서유니온에서 보기 ↗</a>`; return; }
   // 새 묵상이면 본문 칸을 매일성경으로 (설정에서 '통독표 따라'를 고르면 그대로 둠)
   const f=$("#wpassage"); if(f&&!editId&&!fromNote&&!fromWriting&&S.settings.qtSource!=="plan"&&f.value===f.defaultValue&&$("#wtype")?.value==="묵상"){ f.value=P.label; }
-  const open=suOpen(), dayWs=S.writings.filter(w=>w.track==="bible"&&w.date===date), cur=editId&&S.writings.find(w=>w.id===editId);
+  const open=suOpen(), dayWs=live().filter(w=>w.track==="bible"&&w.date===date), cur=editId&&S.writings.find(w=>w.id===editId);
   box.innerHTML=`<div class="row" style="gap:6px"><span class="label bible" style="margin:0">${date===today()?"오늘의 ":""}매일성경</span><button class="fsbtn" onclick="suMove(-1)" title="전날 매일성경">‹</button><span class="muted">${x.getMonth()+1}.${x.getDate()}(${WEEK[x.getDay()]})</span><button class="fsbtn" onclick="suMove(1)" title="다음 날 매일성경">›</button>${date!==today()?`<button class="fsbtn" onclick="suGo(today())">오늘</button>`:""}<span class="spacer"></span><button class="btn small ghost" onclick="suToggle()">${open?"본문 접기":"본문 펼치기"}</button></div>
     ${date!==today()&&!(cur&&cur.date===date)?`<div class="muted" style="font-size:13.5px;margin-top:4px">${dayWs.length?`이날 쓴 글: ${dayWs.map(w=>`<a href="#" onclick="go('write',{edit:'${w.id}'});return false">[${esc(wTag(w))}] ${esc(w.title||w.passage||"(제목 없음)")}</a>`).join(", ")}`:"이날 쓴 묵상이 없습니다. 「이 본문으로 쓰기」를 누르면 오늘 날짜로 새 글을 씁니다."}</div>`:""}
     <div class="sut"><b>${esc(SU.title)}</b> · ${esc(P.label)}${SU.hymn?` · <span class="muted">찬송가 ${esc(SU.hymn)}장</span>`:""}</div>
@@ -1582,7 +1582,7 @@ function go(t,o={}){
 let TRACK_PICK=false;   // 메뉴(묵상/글쓰기)로 갈래를 정해 들어왔는가
 function goInner(t,o){ TRACK_PICK=!!o.track; if(t!=="write"){ keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
   if(t==="write"&&!o.edit&&!o.fromNote&&!o.fromWriting&&!o.new){   // 쓰기로 들어오면 오늘 쓴 글이 있을 때 그 글을 이어서 (묵상 먼저). 새로 쓰려면 「새 글」
-    const tr=o.track||track, ws=S.writings.filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
+    const tr=o.track||track, ws=live().filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
   tab=t; if(o.track) track=o.track; { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew) track=ew.track; }   // 글을 열면 그 글의 갈래로 (위 메뉴 표시도 묵상/글쓰기로 맞춤)
   editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||(o.fromWritings||[])[0]||null; FROMS=o.fromWritings||(fromWriting?[fromWriting]:null); SEL_PLACE=o.place; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
 const FLOW=`<div class="flow"><span><b>묵상</b> 날마다 말씀 앞에서 쓴 글</span><i>→</i><span><b>끄적이기</b> 수시로 적어 두는 글감</span><i>→</i><span><b>글쓰기</b> 책을 읽고, 생각을 엮어 쓴 글</span><i>→</i><span><b>원고</b> 글을 모아 엮는 한 권의 책</span></div>`;
@@ -1656,12 +1656,12 @@ const seg=fn=>`<div class="row" style="gap:6px"><span class="chip ${track==="bib
 let calY=null, calM=null, calPick=null;
 function calHtml(){
   const now=new Date(); if(calY==null){ calY=now.getFullYear(); calM=now.getMonth(); }
-  const marks={}; S.writings.forEach(w=>{ const m=marks[w.date]=marks[w.date]||{}; if(w.type==="묵상을설교로"||w.type==="설교초안") m.promo=true; else if(w.track==="bible") m.bible=true; else m.book=true; });
+  const marks={}; live().forEach(w=>{ const m=marks[w.date]=marks[w.date]||{}; if(w.type==="묵상을설교로"||w.type==="설교초안") m.promo=true; else if(w.track==="bible") m.bible=true; else m.book=true; });
   const first=new Date(calY,calM,1), start=new Date(first); start.setDate(1-first.getDay()); const t=today(); let cells="";
   for(let i=0;i<42;i++){ const d=new Date(start); d.setDate(start.getDate()+i); if(i>=35&&d.getMonth()!==calM) break;
     const k=dkey(d), m=marks[k]||{}, cls=["d",d.getMonth()!==calM?"o":"",d.getDay()===0?"sun":"",k===t?"today":"",m.promo?"promo":m.bible?"bible":"",m.book?"book":""].filter(Boolean).join(" ");
-    cells+=`<button type="button" class="${cls}" onclick="calGo('${k}')" title="${k}${m.bible||m.promo||m.book?" · 쓴 글 "+S.writings.filter(w=>w.date===k).length+"편":""}"><span>${d.getDate()}</span></button>`; }
-  const pick=calPick?S.writings.filter(w=>w.date===calPick):[];
+    cells+=`<button type="button" class="${cls}" onclick="calGo('${k}')" title="${k}${m.bible||m.promo||m.book?" · 쓴 글 "+live().filter(w=>w.date===k).length+"편":""}"><span>${d.getDate()}</span></button>`; }
+  const pick=calPick?live().filter(w=>w.date===calPick):[];
   return `<div class="calcard"><p class="label bible" style="margin:0 0 4px;font-size:20px">묵상 캘린더</p><div class="calhead"><button onclick="calMove(-12)" title="지난해">«</button><button onclick="calMove(-1)" title="지난달">‹</button><span class="t">${calY}년 ${calM+1}월</span><button onclick="calMove(1)" title="다음 달">›</button><button onclick="calMove(12)" title="다음 해">»</button>${(calY!==now.getFullYear()||calM!==now.getMonth())?`<button onclick="calY=calM=null;calPick=null;paintCal()" title="이번 달로" style="font-size:12px;width:auto;padding:0 6px">오늘</button>`:""}</div>
     <div class="cal">${"일월화수목금토".split("").map(x=>`<div class="wd">${x}</div>`).join("")}${cells}</div>
     <div class="callegend"><span><i style="background:rgba(247,214,92,.8)"></i>묵상</span><span><i style="border:1.5px solid var(--stamp);border-radius:3px;width:10px;height:10px"></i>설교초안</span><span><i style="background:var(--book);width:7px;height:7px"></i>책 글</span></div>
@@ -1670,7 +1670,7 @@ function calHtml(){
 function paintCal(){ const el=$(".calcard"); if(!el) return; el.outerHTML=calHtml(); }
 function calMove(n){ let m=calM+n, y=calY; while(m<0){ m+=12; y--; } while(m>11){ m-=12; y++; } calY=y; calM=m; calPick=null; paintCal(); }
 function calGo(k){ // 그날 쓴 글로: 묵상(없으면 첫 글)을 바로 열고, 여럿이면 달력 아래에 나머지 목록. 없으면 그날 일기
-  const ws=S.writings.filter(w=>w.date===k);
+  const ws=live().filter(w=>w.date===k);
   if(ws.length){ const w=ws.find(x=>x.type==="묵상")||ws[0]; const d=new Date(k+"T00:00"); calY=d.getFullYear(); calM=d.getMonth(); calPick=ws.length>1?k:null; go("write",{edit:w.id}); if(ws.length>1) toast(`${k}에 쓴 글 ${ws.length}편 — 달력 아래에서 고를 수 있습니다`); return; }
   diaryDate=k; go("diary"); toast(`${k}에 쓴 글이 없어 그날 일기를 엽니다`);
 }
@@ -1908,7 +1908,7 @@ let dLineT; function dLine(v){ const d=diaryDate; clearTimeout(dLineT); dLineT=s
 function dGo(n){ const x=new Date((diaryDate||today())+"T00:00"); x.setDate(x.getDate()+n); diaryDate=dkey(x); STK_SEL=null; render(); }
 function diaryPage(){
   const d=diaryDate=diaryDate||today(), x=new Date(d+"T00:00"), L=S.log[d]||{}, e=dEntry(d);
-  const notes=S.notes.filter(n=>n.date===d), ws=S.writings.filter(w=>w.date===d);
+  const notes=S.notes.filter(n=>n.date===d), ws=live().filter(w=>w.date===d);
   const bible=(L.bible||[]).map(b=>`<div class="muted">${esc(b.plan)} · ${b.day}일째</div><ul>${b.portions.map(p=>`<li><a href="#" onclick="openBible(${jsArg(p)});return false">${esc(p)}</a></li>`).join("")}</ul>`).join("")
     || (L.read?`<p class="sub">말씀을 읽었습니다 ✓</p>`:`<p class="muted">이날은 읽은 말씀 기록이 없습니다.</p>`);
   const books=Object.entries(L.books||{}).map(([id,v])=>{ const b=S.books.find(y=>y.id===id);
@@ -2046,8 +2046,8 @@ const VIEWS={
 diary(){ return diaryPage(); },
 today(){
   const d=new Date(), t=today(), b=curBook();
-  const tn=S.notes.filter(n=>n.date===t), tw=S.writings.filter(w=>w.date===t);
-  const ly=new Date(); ly.setFullYear(ly.getFullYear()-1); const old=S.writings.filter(w=>w.date===dkey(ly));
+  const tn=S.notes.filter(n=>n.date===t), tw=live().filter(w=>w.date===t);
+  const ly=new Date(); ly.setFullYear(ly.getFullYear()-1); const old=live().filter(w=>w.date===dkey(ly));
   const qb=pickQ("bible",t+"b"), qk=pickQ("book",t+"k");
   return `
   <div class="dateline"><span class="d">${d.getMonth()+1}.${String(d.getDate()).padStart(2,"0")}</span><span class="w">${"일월화수목금토"[d.getDay()]}요일 ${dayPart()}, 말씀과 책 앞에서</span>
@@ -2114,7 +2114,9 @@ write(){
   ${track==="bible"?`<div class="sucard" id="sucard" data-date="${esc(w?.date||today())}"></div>`:""}
   <div class="toolbar">
     <span class="nofocus">${w?`<span class="label ${track}" style="margin:0">${track==="bible"?"묵상":"글쓰기"}</span> <span class="muted">[${esc(wTag(w))}]${w.length?" · "+esc(w.length):""}</span> <button class="btn small ghost" onclick="go('write',{new:true,track})" title="오늘 글을 하나 더 씁니다">＋ 새 글</button>`:`<span class="label ${track}" style="margin:0">${track==="bible"?"묵상":"글쓰기"}</span> <span class="muted">새 글</span>`}</span>
-    <select id="wtype" style="width:auto" onchange="const lb=$('#lenbox'); if(lb) lb.style.display=this.value==='묵상을설교로'?'':'none'; const pb=$('#placebox'); if(pb) pb.style.display=this.value==='설교초안'?'':'none'">${types.map(t=>`<option ${dtype===t?"selected":""}>${t}</option>`).join("")}</select>
+    ${track==="bible"
+      ?`<select id="wtype" hidden><option selected>${esc(dtype||"묵상")}</option></select>${dtype&&dtype!=="묵상"?`<span class="chip on" style="cursor:default">${esc(dtype)}</span>`:""}`
+      :`<select id="wtype" style="width:auto">${types.map(t=>`<option ${dtype===t?"selected":""}>${t}</option>`).join("")}</select>`}
     <button class="btn small" onclick="insertTemplate()">틀 넣기</button>
     <span class="spacer"></span>
     <details class="penpaper nofocus"><summary>${ICO.pen}펜과 종이</summary><span class="pp">
@@ -2126,7 +2128,7 @@ write(){
     <button class="btn small" onclick="toggleStk()">${ICO.flower}스티커</button>
     <button class="btn small" onclick="spellCheck()" id="spellbtn" title="쓰는 즉시 규칙으로 밑줄이 그어지고, 누르면 ${CONF.ai?(CONF.ai==="claude"?"클로드":"제미나이")+"가 모든 문단을 다시 살핍니다":"규칙 밑줄만 됩니다"}">맞춤법</button><span id="spellstate" class="muted" style="font-size:12.5px"></span>
     <button class="btn small" onclick="toggleFocus()" id="focusbtn">집중 모드</button>
-    <button class="btn small ghost" onclick="discardPage()" title="${w?"이 글을 지웁니다 (노션에 실린 페이지도 휴지통으로)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"지우기":"버리기"}</button>
+    <button class="btn small ghost" onclick="discardPage()" title="${w?"이 글을 휴지통에 넣습니다 (30일 안에 서랍 → 휴지통에서 되살림)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"휴지통에":"버리기"}</button>
     <button class="btn small ink" onclick="saveWriting()" title="⌘S">간직하기</button>
   </div>
   <div class="writegrid">
@@ -2169,7 +2171,7 @@ write(){
             <div id="syncstamp" style="margin-top:10px">${syncStamp(w)}${w?.syncError?`<div class="muted" style="margin-top:8px">${esc(w.syncError)}</div>`:""}</div></div>
         </div>
         <div class="row" style="margin-top:14px"><button class="btn small" onclick="copyW()" title="제목과 본문을 복사해 카톡·블로그 등에 붙여 넣을 수 있습니다">글 복사</button>${w&&w.track==="bible"&&w.type==="묵상"?`<button class="btn small ink" onclick="draftPick('${w.id}')" title="이 묵상(과 같은 본문의 다른 묵상)에서 씨앗을 이어받아 설교초안을 새로 씁니다. 묵상은 그대로 남습니다">${ICO.cross}설교초안 만들기</button>`:""}
-        ${w?.type==="묵상을설교로"?`<button class="btn small" onclick="pullNotion('${w.id}')" title="설교작성 프로젝트가 노션 이 페이지에 쓴 글을 앱으로 가져옵니다">${ICO.down}노션에서 가져오기</button>`:""}${w?`<button class="btn small" onclick="syncWriting(S.writings.find(x=>x.id==='${w.id}'))">노션에 다시 보내기</button><button class="btn small danger" onclick="delWriting('${w.id}')">지우기</button>`:""}</div>
+        ${w?.type==="묵상을설교로"?`<button class="btn small" onclick="pullNotion('${w.id}')" title="설교작성 프로젝트가 노션 이 페이지에 쓴 글을 앱으로 가져옵니다">${ICO.down}노션에서 가져오기</button>`:""}${w?`<button class="btn small" onclick="syncWriting(S.writings.find(x=>x.id==='${w.id}'))">노션에 다시 보내기</button><button class="btn small danger" onclick="delWriting('${w.id}')">휴지통에 넣기</button>`:""}</div>
         <div id="draftpick"></div>
         ${w?(()=>{ const srcs=srcOf(w), ups=draftsOf(w), ln=x=>`<a href="#" onclick="go('write',{edit:'${x.id}'});return false">[${esc(wTag(x))}] ${esc(x.title||x.passage||"(제목 없음)")} · ${esc(x.date)}</a>`;
           return (srcs.length?`<p class="muted" style="margin-top:10px">← 바탕이 된 묵상: ${srcs.map(ln).join(", ")}</p>`:"")
@@ -2218,7 +2220,8 @@ shelf(){
 },
 drawer(){
   const segBtn=(k,n)=>`<span class="chip ${drawerSub===k?"on":""}" onclick="drawerSub='${k}';msDraft=null;render()">${n}</span>`;
-  const head=`<div class="row" style="margin-bottom:10px"><h2>서랍</h2><span class="spacer"></span>${segBtn("all","모든 기록")}${segBtn("ms","원고 — 책으로 엮기")}</div><div style="height:22px"></div>`;
+  const head=`<div class="row" style="margin-bottom:10px"><h2>서랍</h2><span class="spacer"></span>${segBtn("all","모든 기록")}${segBtn("ms","원고 — 책으로 엮기")}${segBtn("trash",`휴지통${trashed().length?" "+trashed().length:""}`)}</div><div style="height:22px"></div>`;
+  if(drawerSub==="trash") return head+trashView();
   if(drawerSub==="ms") return head+`
   <section class="sheet" style="margin-bottom:30px">
     <p class="label">새 원고</p>
@@ -2232,7 +2235,7 @@ drawer(){
   <section class="sheet" style="margin-bottom:26px">
     <div class="row"><input id="q" placeholder="낱말로 찾기 (제목, 본문, 성경 본문…)" style="flex:1" oninput="renderArchive()"></div>
     ${filterBar()}
-    ${S.writings.some(w=>w.syncError)?`<div class="row" style="margin-top:12px"><span class="muted">노션에 아직 못 간 글이 있습니다.</span><button class="btn small" onclick="resyncAll()">모두 다시 보내기</button></div>`:""}
+    ${live().some(w=>w.syncError)?`<div class="row" style="margin-top:12px"><span class="muted">노션에 아직 못 간 글이 있습니다.</span><button class="btn small" onclick="resyncAll()">모두 다시 보내기</button></div>`:""}
   </section>
   <section class="sheet" id="results"></section>`;
 },
@@ -2319,7 +2322,7 @@ const AFTER={
 
 // ───────── 동작: 밑줄 ─────────
 function noteSrc(n){ if(n.track==="bible") return n.source; const b=S.books.find(x=>x.id===n.bookId); return `${b?.title||n.source||""}${n.page?` · ${n.page}쪽`:""}`; }
-const grownFrom=id=>S.writings.filter(w=>w.fromNote===id);
+const grownFrom=id=>live().filter(w=>w.fromNote===id);
 function noteHtml(n){ const g=grownFrom(n.id);
   return `<div class="item"><div class="muted"><span class="label ${n.track}" style="display:inline;font-size:17px">밑줄</span> ${esc(noteSrc(n))} · ${n.date}${n.notion?.page?" · 노션 ✓":""}</div><div class="quote ${n.track}">${esc(n.text)}</div>${n.thought?`<div class="thought">${esc(n.thought)}</div>`:""}
   <div class="row" style="gap:6px;margin-top:4px">${(n.tags||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}
@@ -2485,7 +2488,7 @@ function addTopic(v){ // 목록에 없는 주제를 더해 두면 다음부터 �
 let FROMS=null, SEL_PLACE=undefined;
 const PLACES=["주일","새벽","수요","특별"];
 function srcOf(w){ const ids=w?.fromWritings||(w?.fromWriting?[w.fromWriting]:[]); return ids.map(id=>S.writings.find(x=>x.id===id)).filter(Boolean); }
-function draftsOf(w){ return w?S.writings.filter(x=>x.id!==w.id&&((x.fromWritings||[]).includes(w.id)||x.fromWriting===w.id)):[]; }
+function draftsOf(w){ return w?live().filter(x=>x.id!==w.id&&((x.fromWritings||[]).includes(w.id)||x.fromWriting===w.id)):[]; }
 function placeBox(dtype){ return `<div class="field" id="placebox" style="${dtype==="설교초안"?"":"display:none"}"><span>쓰일 자리 <small class="hint" style="display:inline">· 고르지 않아도 됩니다</small></span><div class="pills">${PLACES.map(p=>`<button type="button" class="pill ${SEL_PLACE===p?"on":""}" onclick="SEL_PLACE=SEL_PLACE==='${p}'?null:'${p}';this.parentNode.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',b.textContent===SEL_PLACE));draftInput();autoKeepKick()">${p}</button>`).join("")}</div></div>`; }
 // 묵상 글을 ■ 소제목마다 나눕니다 (※ 주석 요약은 빼고)
 function medSections(m){ const out=[]; let cur={h:"",t:[]};
@@ -2507,7 +2510,7 @@ function srcCard(w,fws){ const srcs=w?srcOf(w):(fws||[]); if(!srcs.length) retur
 function srcInsert(id,k){ const m=S.writings.find(x=>x.id===id), b=$("#wbody"), x=medSections(m)[k]; if(!b||!x) return; tInsert(b,stripMk(x.t).trim()+"\n"); toast("넣었습니다 (↶ 로 되돌리기)"); }
 // 「설교초안 만들기」: 같은 본문(책·장)으로 쓴 묵상을 함께 고르고, 쓰일 자리를 정합니다 (고르지 않아도 됨)
 function draftPick(id){ const w=S.writings.find(x=>x.id===id), box=$("#draftpick"); if(!w||!box) return; if(box.innerHTML){ box.innerHTML=""; return; }
-  const r=bibleRef(w.passage), same=S.writings.filter(x=>x.id!==w.id&&x.track==="bible"&&x.type==="묵상"&&(()=>{ const y=bibleRef(x.passage); return r&&y&&y.book===r.book&&y.ch===r.ch; })()).sort((a,b)=>b.date.localeCompare(a.date));
+  const r=bibleRef(w.passage), same=live().filter(x=>x.id!==w.id&&x.track==="bible"&&x.type==="묵상"&&(()=>{ const y=bibleRef(x.passage); return r&&y&&y.book===r.book&&y.ch===r.ch; })()).sort((a,b)=>b.date.localeCompare(a.date));
   const ex=draftsOf(w);
   box.innerHTML=`<div class="pickbox"><p class="step" style="margin:0 0 4px">설교초안 만들기</p>
     <small class="hint">바탕으로 삼을 묵상을 고르세요. ${r?`같은 본문(${esc(BIBLE[r.book][0])} ${r.ch}${r.book===18?"편":"장"})으로 쓴 묵상이 함께 보입니다.`:""} 묵상은 그대로 남고, 씨앗(설교 씨앗·붙잡은 것·적용)만 새 초안에 이어집니다.</small>
@@ -2624,15 +2627,74 @@ function pressSeal(){
   const b=$("#sealbtn"); b.classList.remove("press"); void b.offsetWidth; b.classList.add("press");
   setTimeout(saveWriting,300);
 }
+// ───────── 휴지통: 지운 글은 30일 동안 휴지통에 두었다가(되살리기 가능) 그 뒤에 완전히 지웁니다 ─────────
+const live=()=>S.writings.filter(w=>!w.trashed);
+const trashed=()=>S.writings.filter(w=>w.trashed).sort((a,b)=>(b.trashed||"").localeCompare(a.trashed||""));
+const TRASH_DAYS=30;
 function delWriting(id){
-  const w=S.writings.find(x=>x.id===id), pages=[w?.notion?.page,w?.notion?.index].filter(Boolean); // 책 노트(또는 아침 독서 글)와 색인 줄
-  if(!confirm("이 글을 지울까요?"+(pages.length?"\n노션에 실린 글"+(w.track==="bible"?"(책 노트와 색인 줄)":"")+"도 함께 휴지통으로 옮깁니다.\n노션 휴지통에서 되살릴 수 있습니다.":""))) return;
-  tomb(id); S.writings=S.writings.filter(x=>x.id!==id); S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==id); });
-  const here=tab==="write"&&editId===id, tr=w?.track||track;
+  const w=S.writings.find(x=>x.id===id); if(!w) return; const pages=[w.notion?.page,w.notion?.index].filter(Boolean); // 책 노트(또는 아침 독서 글)와 색인 줄
+  if(!confirm(`이 글을 휴지통에 넣을까요?\n${TRASH_DAYS}일 안에 서랍 → 휴지통에서 되살릴 수 있습니다.${pages.length?"\n노션에 실린 글도 함께 노션 휴지통으로 옮깁니다.":""}`)) return;
+  w.trashed=new Date().toISOString(); w.updated=w.trashed;
+  S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==id); });
+  const here=tab==="write"&&editId===id, tr=w.track||track;
   if(here) blankPage();   // 쓰던 칸을 비우고 임시 보관도 지워, 지운 글이 자동 간직·되살림으로 다시 생기지 않게
   save(); trashInNotion(pages);
   NAV=true; try{ goInner(here?"write":"drawer",here?{new:true,track:tr}:{sub:"all"}); }finally{ NAV=false; }
-  if(here) toast("글을 지웠습니다. 새 페이지입니다");
+  toast(`휴지통에 넣었습니다 (${TRASH_DAYS}일 안에 되살릴 수 있습니다)`);
+}
+async function restoreWriting(id){
+  const w=S.writings.find(x=>x.id===id); if(!w||!w.trashed) return;
+  const pages=[w.notion?.page,w.notion?.index].filter(Boolean);
+  delete w.trashed; w.updated=new Date().toISOString(); save(); render(); toast("되살렸습니다");
+  if(pages.length&&SERVER&&CONF.notion){ try{ const r=await gcall("notionRestore",{pages}); if(!r.ok||r.failed?.length){ w.notion=null; } }catch(_){ w.notion=null; } }   // 노션 페이지도 휴지통에서 꺼냄 (못 꺼내면 다음 간직 때 새로 만듦)
+  if(canSync()) syncWriting(w,true);
+}
+function purgeWriting(id){ const w=S.writings.find(x=>x.id===id); if(!w) return; if(!confirm("이 글을 완전히 지울까요? 되살릴 수 없습니다.")) return;
+  tomb(id); S.writings=S.writings.filter(x=>x.id!==id); save(); render(); }
+function purgeOldTrash(){ const lim=new Date(Date.now()-TRASH_DAYS*864e5).toISOString(); let n=0;
+  S.writings.filter(w=>w.trashed&&w.trashed<lim).forEach(w=>{ tomb(w.id); n++; }); if(n){ S.writings=S.writings.filter(w=>!(w.trashed&&w.trashed<lim)); save(); } }
+function trashView(){
+  const T=trashed();
+  const left=w=>Math.max(0,TRASH_DAYS-Math.floor((Date.now()-new Date(w.trashed).getTime())/864e5));
+  return `<section class="sheet" style="margin-bottom:26px"><p class="label">휴지통</p>
+    <p class="sub">지운 글은 여기에 ${TRASH_DAYS}일 동안 남습니다. 되살리면 서랍·달력·노션에 다시 나타납니다.</p>
+    ${T.length?T.map(w=>`<div class="item"><div class="row"><span class="label ${w.track}" style="margin:0;font-size:19px">[${esc(wTag(w))}]</span>${w.passage?`<span class="muted">${esc(w.passage)}</span>`:""}<span class="spacer"></span><span class="muted" style="font-size:13px">${left(w)}일 뒤 완전히 지워짐</span></div>
+      <div class="myeongjo" style="font-size:17px"><b>${esc(w.title||"(제목 없음)")}</b> <span class="muted" style="font-size:13px">· ${esc(w.date)} 쓴 글 · ${chars(w.body).toLocaleString()}자</span></div>
+      <div class="sub" style="margin-top:2px">${esc(stripMk(w.body).replace(/\s+/g," ").slice(0,120))}…</div>
+      <div class="row" style="margin-top:6px"><button class="btn small ink" onclick="restoreWriting('${w.id}')">되살리기</button><button class="btn small ghost" onclick="purgeWriting('${w.id}')">완전히 지우기</button></div></div>`).join("")
+      :`<p class="muted">휴지통이 비어 있습니다.</p>`}
+  </section>
+  <section class="sheet"><p class="label">백업에서 찾기</p>
+    <p class="sub">휴지통에 없는 글(예전 방식으로 지운 글)은 구글 드라이브 「아침 서재/백업」 폴더의 날짜별 사본에서 찾아 되살릴 수 있습니다. 사본은 날마다 그날 첫 저장 때 만들어집니다(최근 60일).</p>
+    <div class="row" style="margin-top:8px"><button class="btn small" onclick="backupBrowse()">백업 목록 보기</button></div>
+    <div id="backups" style="margin-top:8px"></div>
+  </section>`;
+}
+// 백업 사본에서 지금 없는 글(또는 휴지통에 있는 글)을 찾아 보여 주고, 고른 글을 새 글로 되살립니다
+let BK_NAME="";
+async function backupBrowse(){
+  const box=$("#backups"); if(!box) return; if(!GAS) return box.innerHTML=`<p class="muted">구글 서버에 연결되어 있어야 합니다.</p>`;
+  box.innerHTML=`<p class="muted">백업 목록을 받는 중…</p>`;
+  try{ const r=await gcall("backupList"); if(!r.ok) throw new Error(r.error);
+    box.innerHTML=r.files.length?`<div class="row" style="gap:8px"><select id="bksel" style="width:auto" onchange="backupShow(this.value)"><option value="">날짜를 고르세요</option>${r.files.map(f=>`<option value="${esc(f.name)}">${esc(f.name.replace(/^data-|\.json$/g,""))} 사본 (${Math.round(f.size/1024)}KB)</option>`).join("")}</select></div><div id="bklist" style="margin-top:8px"></div>`:`<p class="muted">백업 사본이 아직 없습니다.</p>`;
+  }catch(e){ box.innerHTML=`<p class="muted">백업 목록을 받지 못했습니다: ${esc(e.message)}</p>`; }
+}
+async function backupShow(name){
+  const box=$("#bklist"); if(!box||!name) return; BK_NAME=name; box.innerHTML=`<p class="muted">사본을 읽는 중…</p>`;
+  try{ const r=await gcall("backupWritings",{name}); if(!r.ok) throw new Error(r.error);
+    const have=new Set(live().map(w=>w.id)), gone=r.writings.filter(x=>!have.has(x.id));
+    box.innerHTML=gone.length?`<p class="hint">지금 서랍에 없는 글 ${gone.length}편 (사본에 있는 글 ${r.writings.length}편 중)</p>`+gone.map(x=>`<div class="item"><div class="row"><span class="label ${x.track}" style="margin:0;font-size:17px">[${esc(x.type||"")}]</span>${x.passage?`<span class="muted">${esc(x.passage)}</span>`:""}<span class="spacer"></span><span class="muted" style="font-size:13px">${esc(x.date)} · ${(x.chars||0).toLocaleString()}자</span></div>
+        <div class="myeongjo" style="font-size:16px"><b>${esc(x.title||"(제목 없음)")}</b></div><div class="sub">${esc(x.head||"")}…</div>
+        <div class="row" style="margin-top:6px"><button class="btn small ink" onclick="backupRestore('${esc(x.id)}')">이 글 되살리기</button></div></div>`).join("")
+      :`<p class="muted">이 사본의 글은 모두 지금 서랍에 있습니다.</p>`;
+  }catch(e){ box.innerHTML=`<p class="muted">사본을 읽지 못했습니다: ${esc(e.message)}</p>`; }
+}
+async function backupRestore(id){
+  if(!BK_NAME) return; toast("되살리는 중…");
+  try{ const r=await gcall("backupWriting",{name:BK_NAME,id}); if(!r.ok||!r.writing) throw new Error(r.error||"사본에 그 글이 없습니다");
+    const x=r.writing, w={...x,id:uid(),notion:null,syncedAt:null,syncError:null,trashed:null,updated:new Date().toISOString(),restoredFrom:{id:x.id,backup:BK_NAME}};   // 새 번호로 (지운 글의 묘비와 겹치지 않게)
+    delete w.syncing; delete w.resync; S.writings.push(w); save(); toast("되살렸습니다 — 서랍과 달력에 다시 보입니다"); if(canSync()) syncWriting(w,true); backupShow(BK_NAME);
+  }catch(e){ toast("되살리지 못했습니다: "+e.message); }
 }
 // 쓰던 칸을 비우고, 자동 간직 예약과 임시 보관(이 기기·구글)을 모두 지웁니다
 function blankPage(){ clearTimeout(AUTOKEEP_T); clearTimeout(draftT); clearDraft(); const b=$("#wbody"), t=$("#wtitle"); if(b){ b.value=""; b.defaultValue=""; } if(t){ t.value=""; t.defaultValue=""; } editId=null; }
@@ -2725,7 +2787,7 @@ function plainWithNotes(t,md){ // md: 마크다운 각주 문법([^1] / [^1]: �
   const fn=[], ref=n=>md?`[^${n}]`:`[${n}]`, body=String(t||"").replace(MK_RE,(m,c,h,u,f)=>f!=null?ref(fn.push(f)):String(h??u).replace(FN_RE,(m2,f2)=>ref(fn.push(f2))));
   return body+(fn.length?(md?"\n\n"+fn.map((x,i)=>`[^${i+1}]: ${x}`).join("\n"):"\n\n각주\n"+fn.map((x,i)=>`[${i+1}] ${x}`).join("\n")):""); }
 function copyW(){ navigator.clipboard?.writeText(($("#wtitle").value?$("#wtitle").value+"\n\n":"")+plainWithNotes($("#wbody").value)).then(()=>toast("복사했습니다")); }
-async function resyncAll(){ const list=S.writings.filter(w=>w.syncError||!w.notion?.page); for(const w of list) await syncWriting(w,true); toast("다시 보냈습니다"); render(); }
+async function resyncAll(){ const list=live().filter(w=>w.syncError||!w.notion?.page); for(const w of list) await syncWriting(w,true); toast("다시 보냈습니다"); render(); }
 
 // ───────── 동작: 책장 ─────────
 let found=[];
@@ -2819,7 +2881,7 @@ async function enrichBook(b,quiet){
 function openBook(id){
   const b=S.books.find(x=>x.id===id); if(!b) return;
   if(!$("#bookdetail")) go("shelf");
-  const essays=S.writings.filter(w=>w.bookId===id).length, notes=S.notes.filter(n=>n.bookId===id).length;
+  const essays=live().filter(w=>w.bookId===id).length, notes=S.notes.filter(n=>n.bookId===id).length;
   $("#bookdetail").innerHTML=`<section class="sheet tape c" style="margin-bottom:30px"><div class="nowbook">${coverHtml(b)}<div style="flex:1;min-width:0">
     <div class="big">${esc(b.title)}</div><div class="sub">${esc((b.authors||[]).join(", "))}${b.publisher?" · "+esc(b.publisher):""}${b.isbn?" · ISBN "+esc(b.isbn):""}</div>
     <div class="muted">${[b.pubDate,b.unit==="pct"?"전자책":(b.total?b.total+"쪽":"")].filter(Boolean).map(esc).join(" · ")}${b.pubDate||b.total?"<br>":""}밑줄 ${notes}개 · 글 ${essays}편 ${b.notionId?"· 노션 독서 목록 ✓":""}</div>
@@ -2864,9 +2926,9 @@ function bibleRef(s){ s=(s||"").trim(); for(const [n,i] of BOOK_NAMES) if(s.star
 const wRef=w=>w.track==="bible"?bibleRef(w.passage):null;
 const nRef=n=>n.track==="bible"?bibleRef(n.source):null;
 const allTopics=()=>[...TOPICS,...(S.settings.customTopics||[])];
-const usedTopics=()=>[...new Set([...S.writings.flatMap(w=>[...(w.topics||[]),...(w.tags||[])]),...S.notes.flatMap(n=>n.tags||[])])];
-const usedBooks=()=>[...new Set([...S.writings.map(wRef),...S.notes.map(nRef)].filter(Boolean).map(x=>x.book))].sort((a,b)=>a-b);
-const years=()=>[...new Set(S.writings.map(w=>w.date.slice(0,4)))].sort().reverse();
+const usedTopics=()=>[...new Set([...live().flatMap(w=>[...(w.topics||[]),...(w.tags||[])]),...S.notes.flatMap(n=>n.tags||[])])];
+const usedBooks=()=>[...new Set([...live().map(wRef),...S.notes.map(nRef)].filter(Boolean).map(x=>x.book))].sort((a,b)=>a-b);
+const years=()=>[...new Set(live().map(w=>w.date.slice(0,4)))].sort().reverse();
 function matches(w,r){
   if(r.types?.length&&!r.types.includes(w.type)) return false;
   if(r.books?.length){ const x=wRef(w); if(!x||!r.books.includes(x.book)) return false; }
@@ -2878,8 +2940,8 @@ function matches(w,r){
 const ruleEmpty=r=>!(r.types.length||r.books.length||r.topics.length||r.readBooks.length||r.year);
 function bibleOrder(a,b){ const x=wRef(a),y=wRef(b); if(x&&y) return x.book-y.book||x.ch-y.ch||x.vs-y.vs||a.date.localeCompare(b.date); return x?-1:y?1:a.date.localeCompare(b.date); }
 function msList(m){
-  if(m.rule) return S.writings.filter(w=>matches(w,m.rule)).sort(m.order==="date"?(a,b)=>a.date.localeCompare(b.date):bibleOrder);
-  return (m.items||[]).map(id=>S.writings.find(w=>w.id===id)).filter(Boolean);
+  if(m.rule) return live().filter(w=>matches(w,m.rule)).sort(m.order==="date"?(a,b)=>a.date.localeCompare(b.date):bibleOrder);
+  return (m.items||[]).map(id=>S.writings.find(w=>w.id===id)).filter(w=>w&&!w.trashed);
 }
 const msOf=w=>S.manuscripts.filter(m=>msList(m).includes(w));
 function ruleText(r){ const p=[];
@@ -3018,7 +3080,7 @@ function msDraftHtml(){
     <p class="hint">만든 뒤 「＋ 간직한 글 더하기」로 글을 골라 넣고 ↑↓로 순서를 정합니다.</p>`;
   const chip=(key,val,label,on)=>`<span class="chip ${on?"on":""}" onclick="toggleRule(${jsArg(key)},${jsArg(val)})">${esc(label)}</span>`;
   const books=[...new Set([...usedBooks(),...r.books])].sort((a,b)=>a-b);
-  const preview=S.writings.filter(w=>matches(w,r));
+  const preview=live().filter(w=>matches(w,r));
   return `<div class="row"><input id="mtitle" value="${esc(d.title)}" placeholder="새 책의 가제 (예: 요한복음 묵상집)" style="flex:1"></div>
     <p class="hint" style="margin:10px 0 4px">아래에서 모을 글의 조건을 고르세요. 같은 줄 안에서는 <b>하나라도</b> 맞으면, 줄끼리는 <b>모두</b> 맞아야 모입니다.</p>
     <div class="rulegrid">
@@ -3039,7 +3101,7 @@ function msCardHtml(m,i){
   const ch=msList(m), total=ch.reduce((a,w)=>a+chars(w.body),0);
   const row=(w,k)=>`<li><span class="pen cn">${k+1}</span><a href="#" onclick="go('write',{edit:'${w.id}'});return false">${esc(w.title||"(제목 없음)")}</a>${w.passage?`<span class="muted">${esc(w.passage)}</span>`:""}<span class="muted">${chars(w.body).toLocaleString()}자</span><span class="spacer"></span>
     ${m.rule?"":`<button class="btn small ghost" ${k?"":"disabled"} onclick="msMove('${m.id}','${w.id}',-1)" title="앞으로">↑</button><button class="btn small ghost" ${k<ch.length-1?"":"disabled"} onclick="msMove('${m.id}','${w.id}',1)" title="뒤로">↓</button><button class="btn small ghost" onclick="msRemove('${m.id}','${w.id}')" title="원고에서 빼기 (글은 남습니다)">빼기</button>`}</li>`;
-  const others=S.writings.filter(w=>!(m.items||[]).includes(w.id)).slice().reverse();
+  const others=live().filter(w=>!(m.items||[]).includes(w.id)).slice().reverse();
   return `<section class="sheet tape ${["","b","c"][i%3]}">
     <p class="label" style="font-size:19px">${m.rule?"조건으로 모으는 원고":"직접 고른 원고"}</p>
     <div class="big">${esc(m.title)}</div>
@@ -3070,7 +3132,7 @@ function filterBar(){
 function renderArchive(){
   const q=($("#q")?.value||"").trim().toLowerCase(), f=filt, items=[];
   const bookOk=x=>f.book===""||(x&&x.book===+f.book);
-  S.writings.forEach(w=>{   // 서랍에는 실제로 쓴 글만 (밑줄은 오늘 화면·일기에서 봅니다)
+  live().forEach(w=>{   // 서랍에는 실제로 쓴 글만 (밑줄은 오늘 화면·일기에서 봅니다)
 
     if(f.track&&w.track!==f.track) return; if(f.type&&w.type!==f.type) return; if(!bookOk(wRef(w))) return;
     if(f.topic&&![...(w.topics||[]),...(w.tags||[])].includes(f.topic)) return;
