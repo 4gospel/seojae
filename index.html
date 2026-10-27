@@ -982,7 +982,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="96c548ee6b";
+const APP_BUILD="7564f6157e";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1587,7 +1587,7 @@ let DRAFT_DIRTY=false, DRAFT_AT=0;
 const cloudKey=()=>draftKey().slice(DKEY.length+1);   // 구글 사본의 칸 이름 (new / from:… / 글 번호)
 function saveDraft(){
   if(tab!=="write"||!$("#wbody")) return;
-  if(!writingUnsaved()){ try{ localStorage.removeItem(draftKey()); }catch(_){} return; }   // 저장본과 같아졌으면 묵은 초안도 지움
+  if(!writingUnsaved()){ try{ localStorage.removeItem(draftKey()); }catch(_){} const k=cloudKey(); if(S.drafts?.[k]){ delete S.drafts[k]; tomb("draft:"+k); save(); } return; }   // 저장본과 같아졌으면(또는 다 지웠으면) 묵은 초안도 지움 — 구글 사본까지
   const d={editId,fromNote,fromWriting,track,type:$("#wtype")?.value,title:$("#wtitle").value,body:$("#wbody").value,passage:$("#wpassage")?.value??null,
     summary:$("#wsummary")?.value??null,topics:[...selTopics],sits:[...selSits],status:$("#wstatus")?.value??null,len:selLen??null,stk:editId?null:wStk,t:Date.now()};
   try{ localStorage.setItem(draftKey(),JSON.stringify(d)); }catch(_){}
@@ -2106,6 +2106,7 @@ write(){
     <button class="btn small" onclick="toggleStk()">${ICO.flower}스티커</button>
     <button class="btn small" onclick="spellCheck()" id="spellbtn" title="쓰는 즉시 규칙으로 밑줄이 그어지고, 누르면 ${CONF.ai?(CONF.ai==="claude"?"클로드":"제미나이")+"가 모든 문단을 다시 살핍니다":"규칙 밑줄만 됩니다"}">맞춤법</button><span id="spellstate" class="muted" style="font-size:12.5px"></span>
     <button class="btn small" onclick="toggleFocus()" id="focusbtn">집중 모드</button>
+    <button class="btn small ghost" onclick="discardPage()" title="${w?"이 글을 지웁니다 (노션에 실린 페이지도 휴지통으로)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"지우기":"버리기"}</button>
     <button class="btn small ink" onclick="saveWriting()" title="⌘S">간직하기</button>
   </div>
   <div class="writegrid">
@@ -2501,6 +2502,7 @@ function keepWriting(auto){
   const data={type:$("#wtype").value,title:$("#wtitle").value.trim(),body,summary:$("#wsummary").value.trim(),topics:[...selTopics],status:$("#wstatus")?.value||"초고",updated:new Date().toISOString()};
   if(track==="bible"){ data.passage=normPassage($("#wpassage").value); data.situations=[...selSits]; data.length=data.type==="묵상을설교로"?(selLen||null):null; }
   else { data.bookId=$("#wbook").value||null; data.page=$("#wpage").value.trim(); }
+  if(editId&&(S.deleted||{})[editId]){ if(auto) return null; editId=null; }   // 지운 글 번호로는 다시 만들지 않음
   let w;
   if(editId) w=S.writings.find(x=>x.id===editId);
   if(!w){ const norm=t=>String(t||"").replace(/\s+/g," ").trim(); const dup=S.writings.find(x=>x.track===track&&(norm(x.body)===norm(body)||(data.title&&x.date===today()&&x.title===data.title&&(x.passage||"")===(data.passage||""))));
@@ -2567,7 +2569,21 @@ function delWriting(id){
   const w=S.writings.find(x=>x.id===id), pages=[w?.notion?.page,w?.notion?.index].filter(Boolean); // 책 노트(또는 아침 독서 글)와 색인 줄
   if(!confirm("이 글을 지울까요?"+(pages.length?"\n노션에 실린 글"+(w.track==="bible"?"(책 노트와 색인 줄)":"")+"도 함께 휴지통으로 옮깁니다.\n노션 휴지통에서 되살릴 수 있습니다.":""))) return;
   tomb(id); S.writings=S.writings.filter(x=>x.id!==id); S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==id); });
-  save(); go("drawer",{sub:"all"}); trashInNotion(pages);
+  const here=tab==="write"&&editId===id, tr=w?.track||track;
+  if(here) blankPage();   // 쓰던 칸을 비우고 임시 보관도 지워, 지운 글이 자동 간직·되살림으로 다시 생기지 않게
+  save(); trashInNotion(pages);
+  NAV=true; try{ goInner(here?"write":"drawer",here?{new:true,track:tr}:{sub:"all"}); }finally{ NAV=false; }
+  if(here) toast("글을 지웠습니다. 새 페이지입니다");
+}
+// 쓰던 칸을 비우고, 자동 간직 예약과 임시 보관(이 기기·구글)을 모두 지웁니다
+function blankPage(){ clearTimeout(AUTOKEEP_T); clearTimeout(draftT); clearDraft(); const b=$("#wbody"), t=$("#wtitle"); if(b){ b.value=""; b.defaultValue=""; } if(t){ t.value=""; t.defaultValue=""; } editId=null; }
+// 버리기: 아직 간직하지 않은 새 글이면 바로 비우고 새 페이지로, 간직된 글이면 그 글을 지웁니다(노션 페이지도 휴지통으로)
+function discardPage(){
+  if(!$("#wbody")) return;
+  const w=editId&&S.writings.find(x=>x.id===editId); if(w) return delWriting(w.id);
+  const tl=new Set(typeTpl(track,$("#wtype")?.value).split("\n").map(l=>l.trim()).filter(Boolean)), own=$("#wbody").value.split("\n").filter(l=>!tl.has(l.trim())).join("")+$("#wtitle").value;
+  if(chars(own)>=20&&!confirm("쓰던 글을 버리고 빈 페이지로 할까요?\n(버린 글은 되살릴 수 없습니다)")) return;
+  const tr=track; blankPage(); save(); NAV=true; try{ goInner("write",{new:true,track:tr}); }finally{ NAV=false; } toast("빈 페이지입니다");
 }
 // ───────── 화면 밝기 (기기마다) ─────────
 function setTheme(t){ try{ localStorage.setItem("seojae.theme",t); }catch(_){} applyTheme(t); render(); }
