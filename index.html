@@ -312,6 +312,13 @@ textarea.page.blank{background-image:none}
 /* 집중 모드 */
 body.focus header,body.focus .writegrid>aside,body.focus .toolbar .nofocus{display:none}
 body.focus .writegrid{grid-template-columns:1fr;max-width:820px;margin:0 auto}
+/* 쓰기 화면: 넓은 화면에서는 본문 칸을 더 넓게, 옆 칸(달력·본문·간직하기)은 접을 수 있음 — 이 기기에 기억(seojae.sidefold) */
+@media (min-width:1200px){ body:has(.writegrid) header .wrap{max-width:1320px} #main:has(.writegrid){max-width:1320px} #main:has(.writegrid) .writegrid{grid-template-columns:1fr 330px} }
+@media (min-width:881px){
+  body.sidefold .writegrid{grid-template-columns:1fr!important} body.sidefold .writegrid>aside{display:none}
+  body.sidefold #main:has(.writegrid){max-width:1320px}
+}
+.sidebtn{display:none} @media (min-width:881px){ .sidebtn{display:inline-flex} }
 body.focus main.wrap{padding-top:40px}
 
 /* 책장 */
@@ -1103,7 +1110,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="d0ad4f95d7";
+const APP_BUILD="235a9ff2c3";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2320,7 +2327,8 @@ write(){
     <button class="btn small" onclick="toggleRead()" id="readbtn" title="형광펜·밑줄·각주가 입혀진 모습으로 봅니다">${ICO.eye}읽어 보기</button>
     <button class="btn small" onclick="toggleStk()">${ICO.flower}스티커</button>
     <button class="btn small" onclick="spellCheck()" id="spellbtn" title="쓰는 즉시 규칙으로 밑줄이 그어지고, 누르면 ${CONF.ai?(CONF.ai==="claude"?"클로드":"제미나이")+"가 모든 문단을 다시 살핍니다":"규칙 밑줄만 됩니다"}">맞춤법</button><span id="spellstate" class="muted" style="font-size:12.5px"></span>
-    <button class="btn small" onclick="toggleFocus()" id="focusbtn">집중 모드</button></span>
+    <button class="btn small" onclick="toggleFocus()" id="focusbtn">집중 모드</button>
+    <button class="btn small sidebtn" onclick="toggleSide()" id="sidebtn" title="오른쪽 달력·본문·간직하기 칸을 접어 종이를 넓게 씁니다">${document.body.classList.contains("sidefold")?"옆 칸 펴기 ‹":"옆 칸 접기 ›"}</button></span>
     <button class="btn small ghost" onclick="discardPage()" title="${w?"이 글을 휴지통에 넣습니다 (30일 안에 서랍 → 휴지통에서 되살림)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"휴지통에":"버리기"}</button>
     <button class="btn small ink" onclick="saveWriting()" title="⌘S">간직하기</button>
   </div>
@@ -2631,6 +2639,9 @@ const penInk=()=>{ const L=applyLook(); if(L.ink) return L.ink; const c=S.settin
 function setInk(c){ S.settings.ink=c; save(); $("#wbody").style.setProperty("--penink",penInk()); document.querySelectorAll(".inkdot").forEach(d=>d.classList.toggle("on",d.style.background&&d.title&&INKS.find(i=>i[1]===c)?.[0]+" 잉크"===d.title)); }
 function setPaper(p){ S.settings.paper=p; save(); const t=$("#wbody"); t.className="page "+p; $(".notebook").className="notebook "+p; }
 // 집중 모드: 머리·옆 칸을 숨기고, 휴대폰이면 전체 화면(주소창·상태 표시 없이)으로. 쓰기 화면을 떠나면 저절로 풀립니다
+// 옆 칸 접기: 이 기기에 기억. 접혀 있어도 본문·종류 칸 값은 그대로 간직됨
+function toggleSide(){ const on=document.body.classList.toggle("sidefold"); try{ localStorage.setItem("seojae.sidefold",on?"1":"0"); }catch(_){} const b=$("#sidebtn"); if(b) b.textContent=on?"옆 칸 펴기 ‹":"옆 칸 접기 ›"; grow(); try{ paintHeads(); }catch(_){} }
+try{ if(localStorage.getItem("seojae.sidefold")==="1") document.body.classList.add("sidefold"); }catch(_){}
 function toggleFocus(){ const on=document.body.classList.toggle("focus"); $("#focusbtn").textContent=on?"나가기":"집중 모드"; grow();
   const de=document.documentElement; try{ if(on&&isTouch()&&!isApp()&&de.requestFullscreen&&!document.fullscreenElement) de.requestFullscreen({navigationUI:"hide"}).catch(()=>{}); else if(!on&&document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(_){} }
 const isTouch=()=>matchMedia("(pointer:coarse)").matches;
