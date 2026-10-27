@@ -494,6 +494,11 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .cal .d.dj::after{content:"";position:absolute;left:50%;bottom:3px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--ink)}
 .cal .d.ds::after{content:"";position:absolute;left:50%;bottom:3px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--deco)}
 .cal .d.cur{box-shadow:inset 0 0 0 1.5px var(--sepia)} .cal .d.fut{opacity:.35;cursor:default}
+/* 펼친 날은 별 — 숫자 뒤에 큰 별을 옅게 깔고 숫자는 굵게 */
+.dcal .cal .d.cur{box-shadow:none;color:var(--ink);font-weight:800}
+.dcal .cal .d.cur::before{content:"★";position:absolute;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:34px;line-height:1;color:var(--sepia);opacity:.32;pointer-events:none}
+.dcal .cal .d.cur>span{position:relative}
+.dcal .cal .d.today:not(.cur){box-shadow:none;font-weight:800;color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
 /* 책장 넘기기: 가운데 등(spine)을 축으로 한 장이 넘어감 */
 .flipwrap{position:absolute;inset:0;z-index:20;pointer-events:none;perspective:2200px;perspective-origin:50% 50%;overflow:visible}
 .flipwrap .under{position:absolute;top:0;bottom:0;width:50%;display:block;min-height:0;border:0;box-shadow:none;border-radius:0;background:var(--paper) var(--grain)}
@@ -1046,7 +1051,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="2d3e8dc81c";
+const APP_BUILD="d0025bd5d2";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2000,7 +2005,7 @@ function dCalHtml(){
   const now=new Date();
   return `<div class="calcard dcal"><div class="calhead"><button onclick="dCalMove(-12)" title="지난해">«</button><button onclick="dCalMove(-1)" title="지난달">‹</button><span class="t">${dcalY}년 ${dcalM+1}월</span><button onclick="dCalMove(1)" title="다음 달">›</button><button onclick="dCalMove(12)" title="다음 해">»</button>${(dcalY!==now.getFullYear()||dcalM!==now.getMonth())?`<button onclick="dcalY=dcalM=null;dCalPaint()" title="이번 달로" style="font-size:12px;width:auto;padding:0 6px">이번 달</button>`:""}</div>
     <div class="cal">${"일월화수목금토".split("").map(x=>`<div class="wd">${x}</div>`).join("")}${cells}</div>
-    <div class="callegend"><span><i style="background:var(--ink);width:8px;height:8px"></i>일기 쓴 날</span><span><i style="background:var(--deco);width:7px;height:7px"></i>읽기·글만 있는 날</span><span><i style="border:1.5px solid var(--sepia);border-radius:50%;width:10px;height:10px"></i>지금 펼친 날</span></div></div>`;
+    <div class="callegend"><span><i style="background:var(--ink);width:8px;height:8px"></i>일기 쓴 날</span><span><i style="background:var(--deco);width:7px;height:7px"></i>읽기·글만 있는 날</span><span><i style="width:auto;height:auto;border-radius:0;background:none;color:var(--sepia);font-style:normal;font-size:14px;line-height:1">★</i>지금 펼친 날</span><span><i style="width:auto;height:auto;border-radius:0;background:none;font-weight:800;text-decoration:underline;text-underline-offset:2px;font-style:normal;color:var(--ink)">${now.getDate()}</i>오늘</span></div></div>`;
 }
 function dCalMove(n){ let m=dcalM+n, y=dcalY; while(m<0){ m+=12; y--; } while(m>11){ m-=12; y++; } dcalY=y; dcalM=m; dCalPaint(); }
 function dCalPaint(){ const el=$(".dcal"); if(el) el.outerHTML=dCalHtml(); }
