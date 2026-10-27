@@ -498,6 +498,12 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .cmtlist li{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px dotted var(--edge);font-size:14px}
 .cmtlist li .nm{flex:1;min-width:0;word-break:break-all}
 .cmtlist .bk{font-size:12px;color:var(--faint)}
+
+/* 성경 약어 줄에서 보이는 작은 안내: ⇧⏎ 로 구절 넣기 */
+.refhint{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--ink-soft);background:var(--paper-2);border:1px dashed var(--deco);border-radius:999px;padding:2px 10px 2px 6px;cursor:pointer;margin-left:8px;animation:fadein .25s}
+.refhint:hover{border-style:solid;color:var(--sepia)}
+.refhint kbd{font:inherit;font-size:11px;line-height:1;padding:3px 5px;border:1px solid var(--deco);border-bottom-width:2px;border-radius:4px;background:var(--paper);color:var(--ink)}
+@keyframes fadein{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -758,7 +764,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="bfd660afc7";
+const APP_BUILD="b0df27bb5f";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1080,6 +1086,14 @@ async function insertRef(b,lineStart,lineEnd,P){
   if(b.value!==before) return toast("본문을 받는 사이 글이 바뀌어 넣지 않았습니다. 다시 Enter 를 눌러 주세요");
   const v=b.value; b.value=v.slice(0,lineStart)+text+v.slice(lineEnd); b.selectionStart=b.selectionEnd=lineStart+text.length; grow(); countW(); draftInput(); toast(`${ref} 본문을 넣었습니다`);
 }
+// 커서가 있는 줄이 성경 약어(창 1:1-3)면 작은 안내를 보여 주고, 안내를 누르거나 Shift+Enter 를 누르면 구절이 들어옵니다
+function refLine(b){ const pos=b.selectionStart, v=b.value, ls=v.lastIndexOf("\n",pos-1)+1, le=v.indexOf("\n",pos), lineEnd=le<0?v.length:le; return {ls,lineEnd,line:v.slice(ls,lineEnd)}; }
+function refHint(){ const b=$("#wbody"), h=$("#refhint"); if(!b||!h) return; const L=refLine(b), P=parseRef(L.line);
+  if(!P){ h.style.display="none"; return; }
+  const ref=P.whole?`${P.name} ${P.c1}${P.bi===18?"편":"장"}`:`${P.name} ${P.c1}:${P.v1}${P.c2!==P.c1?"-"+P.c2+":"+P.v2:P.v2!==P.v1&&P.v2!==999?"-"+P.v2:""}`;
+  h.innerHTML=`<kbd>⇧</kbd><kbd>⏎</kbd> ${esc(ref)} 넣기`; h.style.display=""; h.onclick=()=>refInsert(b); }
+function refInsert(b){ const L=refLine(b), P=parseRef(L.line); if(!P) return; $("#refhint").style.display="none";
+  insertRef(b,L.ls,L.lineEnd,P).catch(()=>{ toast("본문을 받아 오지 못했습니다 (인터넷 연결 확인)"); if(b.value.slice(L.lineEnd,L.lineEnd+1)!=="\n"){ b.value=b.value.slice(0,L.lineEnd)+"\n"+b.value.slice(L.lineEnd); b.selectionStart=b.selectionEnd=L.lineEnd+1; } }); }
 document.addEventListener("keydown",e=>{
   if(e.key!=="Enter"||e.isComposing||!e.shiftKey||!e.target.matches?.("#wbody")) return;   // Shift+Enter
   const b=e.target, pos=b.selectionStart, v=b.value, ls=v.lastIndexOf("\n",pos-1)+1, le=v.indexOf("\n",pos), lineEnd=le<0?v.length:le, line=v.slice(ls,lineEnd);
@@ -1622,8 +1636,8 @@ write(){
         <div class="margin"></div>
         ${stkLayer("write")}
         <input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput()">
-        <div class="meta"><span class="pen" style="font-size:20px">${esc(w?.date||today())}</span><span id="wcount"></span></div>
-        <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput()" style="--penink:${ink||"var(--ink)"}" placeholder="여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다.">${esc(w?.body??seed)}</textarea>
+        <div class="meta"><span class="pen" style="font-size:20px">${esc(w?.date||today())}</span><span id="wcount"></span><span id="refhint" style="display:none"></span></div>
+        <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput();refHint()" onkeyup="refHint()" onclick="refHint()" style="--penink:${ink||"var(--ink)"}" placeholder="여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다.">${esc(w?.body??seed)}</textarea>
       </div>
     </div>
     <aside>
