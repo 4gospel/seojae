@@ -936,7 +936,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="cf334f0ab2";
+const APP_BUILD="4906a93abb";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1515,7 +1515,10 @@ function go(t,o={}){
   }
   NAV=true; try{ goInner(t,o); }finally{ NAV=false; }
 }
-function goInner(t,o){ if(t!=="write"){ keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); } tab=t; if(o.track) track=o.track; editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||null; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
+function goInner(t,o){ if(t!=="write"){ keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
+  if(t==="write"&&!o.edit&&!o.fromNote&&!o.fromWriting&&!o.new){   // 쓰기로 들어오면 오늘 쓴 글이 있을 때 그 글을 이어서 (묵상 먼저). 새로 쓰려면 「새 글」
+    const tr=o.track||null, ws=S.writings.filter(w=>w.date===today()&&(!tr||w.track===tr)); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
+  tab=t; if(o.track) track=o.track; editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||null; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
 const FLOW=`<div class="flow"><span><b>밑줄</b> 읽다가 붙잡은 한 문장</span><i>→</i><span><b>글</b> 그 문장으로 쓴 묵상·설교·에세이</span><i>→</i><span><b>원고</b> 글을 모아 엮는 한 권의 책</span></div>`;
 function render(){
   // 같은 쓰기 화면을 다시 그릴 때(말씀/책 바꾸기, 합친 뒤 등) 쓰던 제목·본문을 그대로 지켜 줍니다
@@ -1594,14 +1597,13 @@ function calHtml(){
   return `<div class="calcard"><div class="calhead"><button onclick="calMove(-12)" title="지난해">«</button><button onclick="calMove(-1)" title="지난달">‹</button><span class="t">${calY}년 ${calM+1}월</span><button onclick="calMove(1)" title="다음 달">›</button><button onclick="calMove(12)" title="다음 해">»</button>${(calY!==now.getFullYear()||calM!==now.getMonth())?`<button onclick="calY=calM=null;calPick=null;paintCal()" title="이번 달로" style="font-size:12px;width:auto;padding:0 6px">오늘</button>`:""}</div>
     <div class="cal">${"일월화수목금토".split("").map(x=>`<div class="wd">${x}</div>`).join("")}${cells}</div>
     <div class="callegend"><span><i style="background:rgba(247,214,92,.8)"></i>묵상·말씀 글</span><span><i style="border:1.5px solid var(--stamp);border-radius:3px;width:10px;height:10px"></i>설교로 올린 날</span><span><i style="background:var(--book);width:7px;height:7px"></i>책 글</span></div>
-    ${pick.length>1?`<div class="calpick"><div class="muted">${calPick}에 쓴 글 ${pick.length}편</div>${pick.map(w=>`<a href="#" onclick="calPick=null;go('write',{edit:'${w.id}'});return false">[${esc(wTag(w))}] ${esc(w.title||w.passage||"(제목 없음)")}</a>`).join("")}</div>`:""}</div>`;
+    ${pick.length>1?`<div class="calpick"><div class="muted">${calPick}에 쓴 글 ${pick.length}편</div>${pick.map(w=>`<a href="#" onclick="go('write',{edit:'${w.id}'});return false" style="${w.id===editId?"font-weight:700":""}">[${esc(wTag(w))}] ${esc(w.title||w.passage||"(제목 없음)")}${w.id===editId?" ← 지금":""}</a>`).join("")}</div>`:""}</div>`;
 }
 function paintCal(){ const el=$(".calcard"); if(!el) return; el.outerHTML=calHtml(); }
 function calMove(n){ let m=calM+n, y=calY; while(m<0){ m+=12; y--; } while(m>11){ m-=12; y++; } calY=y; calM=m; calPick=null; paintCal(); }
-function calGo(k){ // 그날 쓴 글로: 한 편이면 바로, 여럿이면 고르기, 없으면 그날 일기
+function calGo(k){ // 그날 쓴 글로: 묵상(없으면 첫 글)을 바로 열고, 여럿이면 달력 아래에 나머지 목록. 없으면 그날 일기
   const ws=S.writings.filter(w=>w.date===k);
-  if(ws.length===1) return go("write",{edit:ws[0].id});
-  if(ws.length>1){ calPick=k; const d=new Date(k+"T00:00"); calY=d.getFullYear(); calM=d.getMonth(); paintCal(); return; }
+  if(ws.length){ const w=ws.find(x=>x.type==="묵상")||ws[0]; const d=new Date(k+"T00:00"); calY=d.getFullYear(); calM=d.getMonth(); calPick=ws.length>1?k:null; go("write",{edit:w.id}); if(ws.length>1) toast(`${k}에 쓴 글 ${ws.length}편 — 달력 아래에서 고를 수 있습니다`); return; }
   diaryDate=k; go("diary"); toast(`${k}에 쓴 글이 없어 그날 일기를 엽니다`);
 }
 
@@ -2019,7 +2021,7 @@ write(){
   return `
   ${track==="bible"?`<div class="sucard" id="sucard" data-date="${esc(w?.date||today())}"></div>`:""}
   <div class="toolbar">
-    <span class="nofocus">${w?`<span class="label ${track}" style="margin:0">${trackName(track)}</span> <span class="muted">[${esc(wTag(w))}]${w.length?" · "+esc(w.length):""}</span>`:seg("render()")}</span>
+    <span class="nofocus">${w?`<span class="label ${track}" style="margin:0">${trackName(track)}</span> <span class="muted">[${esc(wTag(w))}]${w.length?" · "+esc(w.length):""}</span> <button class="btn small ghost" onclick="go('write',{new:true,track})" title="오늘 글을 하나 더 씁니다">＋ 새 글</button>`:seg("render()")}</span>
     <select id="wtype" style="width:auto" onchange="const lb=$('#lenbox'); if(lb) lb.style.display=this.value==='묵상을설교로'?'':'none'">${types.map(t=>`<option ${dtype===t?"selected":""}>${t}</option>`).join("")}</select>
     <button class="btn small" onclick="insertTemplate()">틀 넣기</button>
     <span class="spacer"></span>
