@@ -285,7 +285,9 @@ textarea.page.blank{background-image:none}
 @media (max-width:880px){.writegrid{grid-template-columns:1fr}.notebook{padding:24px 18px 20px 54px}.notebook::before{left:12px}.notebook .margin{left:44px}}
 .card-index{background:var(--paper) var(--grain);border:1px solid var(--edge);box-shadow:var(--shadow);padding:18px 18px 16px;border-top:22px solid var(--bible-wash);position:relative}
 .card-index.book{border-top-color:var(--book-wash)}
-.pickbox{margin-top:12px;padding:12px 14px;border:1px dashed var(--deco);border-radius:6px;background:var(--paper-2)}
+.pickbox{padding:14px 18px;border:1px dashed var(--sepia);border-radius:6px;background:var(--paper-2)}
+.srcbar>summary{cursor:pointer;list-style:none;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap} .srcbar>summary::-webkit-details-marker{display:none} .srcbar>summary::before{content:"▸";color:var(--faint);font-size:13px} .srcbar[open]>summary::before{content:"▾"}
+.srcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px 24px;margin-top:6px}
 .pickbox .pk{display:flex;gap:8px;align-items:center;font-size:14px;padding:4px 0;cursor:pointer;margin:0} .pickbox .pk input{width:auto;margin:0}
 .srccard .srcsec{padding:8px 0 6px;border-top:1px dotted var(--edge)} .srccard .sh{font-family:"Nanum Myeongjo";font-weight:800;font-size:13.5px;color:var(--bible)}
 .srccard .sb{white-space:pre-wrap;font-size:14px;line-height:1.65;color:var(--ink-soft);max-height:9.5em;overflow:auto} .srccard .srcsec .btn{margin-top:4px;min-height:26px;padding:0 10px;font-size:12px}
@@ -986,7 +988,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="59b0537e0b";
+const APP_BUILD="d6733b015d";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2118,6 +2120,8 @@ write(){
       ?`<select id="wtype" hidden><option selected>${esc(dtype||"묵상")}</option></select>${dtype&&dtype!=="묵상"?`<span class="chip on" style="cursor:default">${esc(dtype)}</span>`:""}`
       :`<select id="wtype" style="width:auto">${types.map(t=>`<option ${dtype===t?"selected":""}>${t}</option>`).join("")}</select>`}
     <button class="btn small" onclick="insertTemplate()">틀 넣기</button>
+    ${w&&w.track==="bible"&&w.type==="묵상"?`<button class="btn small ink" onclick="draftPick('${w.id}')" title="이 묵상(과 같은 본문의 다른 묵상)에서 씨앗을 이어받아 설교초안을 새로 씁니다. 묵상은 그대로 남습니다">${ICO.cross}설교초안 만들기</button>`:""}
+    ${!w&&fws.length?`<span class="chip on" style="cursor:default">묵상 ${fws.length}편의 씨앗을 이어받은 초안</span>`:""}
     <span class="spacer"></span>
     <details class="penpaper nofocus"><summary>${ICO.pen}펜과 종이</summary><span class="pp">
     ${INKS.map(([n,c])=>`<span class="inkdot ${ink===c?"on":""}" title="${n} 잉크" style="background:${c}" onclick="setInk('${c}')"></span>`).join("")}
@@ -2131,6 +2135,8 @@ write(){
     <button class="btn small ghost" onclick="discardPage()" title="${w?"이 글을 휴지통에 넣습니다 (30일 안에 서랍 → 휴지통에서 되살림)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"휴지통에":"버리기"}</button>
     <button class="btn small ink" onclick="saveWriting()" title="⌘S">간직하기</button>
   </div>
+  <div id="draftpick"></div>
+  ${srcCard(w,fws)}
   <div class="writegrid">
     <div>
       <div class="notebook ${paper}">
@@ -2142,7 +2148,6 @@ write(){
       </div>
     </div>
     <aside>
-      ${srcCard(w,fws)}
       ${calHtml()}
       <div class="card-index ${track}">
         <p class="step"><span class="num">1</span>무엇에 대한 글인가요?</p>
@@ -2170,9 +2175,8 @@ write(){
           <div class="sealtext"><b class="pen" style="font-size:24px">봉인을 누르면</b><br>${PLACE()}에 저장되고${canSync()?", 노션에도 실립니다.":"니다."}<br><span class="muted">⌘S 를 눌러도 됩니다</span>
             <div id="syncstamp" style="margin-top:10px">${syncStamp(w)}${w?.syncError?`<div class="muted" style="margin-top:8px">${esc(w.syncError)}</div>`:""}</div></div>
         </div>
-        <div class="row" style="margin-top:14px"><button class="btn small" onclick="copyW()" title="제목과 본문을 복사해 카톡·블로그 등에 붙여 넣을 수 있습니다">글 복사</button>${w&&w.track==="bible"&&w.type==="묵상"?`<button class="btn small ink" onclick="draftPick('${w.id}')" title="이 묵상(과 같은 본문의 다른 묵상)에서 씨앗을 이어받아 설교초안을 새로 씁니다. 묵상은 그대로 남습니다">${ICO.cross}설교초안 만들기</button>`:""}
+        <div class="row" style="margin-top:14px"><button class="btn small" onclick="copyW()" title="제목과 본문을 복사해 카톡·블로그 등에 붙여 넣을 수 있습니다">글 복사</button>
         ${w?.type==="묵상을설교로"?`<button class="btn small" onclick="pullNotion('${w.id}')" title="설교작성 프로젝트가 노션 이 페이지에 쓴 글을 앱으로 가져옵니다">${ICO.down}노션에서 가져오기</button>`:""}${w?`<button class="btn small" onclick="syncWriting(S.writings.find(x=>x.id==='${w.id}'))">노션에 다시 보내기</button><button class="btn small danger" onclick="delWriting('${w.id}')">휴지통에 넣기</button>`:""}</div>
-        <div id="draftpick"></div>
         ${w?(()=>{ const srcs=srcOf(w), ups=draftsOf(w), ln=x=>`<a href="#" onclick="go('write',{edit:'${x.id}'});return false">[${esc(wTag(x))}] ${esc(x.title||x.passage||"(제목 없음)")} · ${esc(x.date)}</a>`;
           return (srcs.length?`<p class="muted" style="margin-top:10px">← 바탕이 된 묵상: ${srcs.map(ln).join(", ")}</p>`:"")
             +(ups.length?`<p class="muted" style="margin-top:6px">→ 이 묵상으로 쓴 설교초안: ${ups.map(ln).join(", ")}</p>`:""); })():""}
@@ -2505,15 +2509,15 @@ function sermonSeed(ms){
 }
 // 쓰기 화면 옆 칸: 바탕이 된 묵상 — 소제목마다 「넣기」로 필요한 부분만 가져옵니다
 function srcCard(w,fws){ const srcs=w?srcOf(w):(fws||[]); if(!srcs.length) return "";
-  return `<div class="sheet srccard" style="padding:16px 18px;margin-bottom:22px"><p class="label bible" style="margin-bottom:2px">바탕이 된 묵상</p><small class="hint">필요한 부분만 「넣기」로 노트의 커서 자리에 가져옵니다.</small>
-    ${srcs.map(m=>`<details class="more" ${srcs.length===1?"open":""} style="margin-top:8px"><summary>${esc(m.date)} · ${esc(m.title||m.passage||"(제목 없음)")}</summary>${medSections(m).map((x,k)=>`<div class="srcsec">${x.h?`<div class="sh">${esc(x.h)}</div>`:""}<div class="sb">${esc(stripMk(x.t))}</div><button class="btn small ghost" onmousedown="event.preventDefault()" onclick="srcInsert('${m.id}',${k})">넣기</button></div>`).join("")}<a href="#" class="muted" style="font-size:13px" onclick="go('write',{edit:'${m.id}'});return false">묵상 열기 →</a></details>`).join("")}</div>`; }
+  return `<details class="sheet srcbar" ${isTouch()?"":"open"} style="padding:12px 18px;margin-bottom:16px"><summary><span class="label bible" style="margin:0;font-size:19px">바탕이 된 묵상 ${srcs.length}편</span> <small class="hint" style="display:inline">· 묵상은 그대로 두고, 필요한 부분만 「넣기」로 노트에 가져옵니다</small></summary>
+    <div class="srcgrid">${srcs.map(m=>`<details class="more" ${srcs.length===1?"open":""}><summary>${esc(m.date)} · ${esc(m.title||m.passage||"(제목 없음)")}</summary>${medSections(m).map((x,k)=>`<div class="srcsec">${x.h?`<div class="sh">${esc(x.h)}</div>`:""}<div class="sb">${esc(stripMk(x.t))}</div><button class="btn small ghost" onmousedown="event.preventDefault()" onclick="srcInsert('${m.id}',${k})">넣기</button></div>`).join("")}<a href="#" class="muted" style="font-size:13px" onclick="go('write',{edit:'${m.id}'});return false">묵상 열기 →</a></details>`).join("")}</div></details>`; }
 function srcInsert(id,k){ const m=S.writings.find(x=>x.id===id), b=$("#wbody"), x=medSections(m)[k]; if(!b||!x) return; tInsert(b,stripMk(x.t).trim()+"\n"); toast("넣었습니다 (↶ 로 되돌리기)"); }
 // 「설교초안 만들기」: 같은 본문(책·장)으로 쓴 묵상을 함께 고르고, 쓰일 자리를 정합니다 (고르지 않아도 됨)
 function draftPick(id){ const w=S.writings.find(x=>x.id===id), box=$("#draftpick"); if(!w||!box) return; if(box.innerHTML){ box.innerHTML=""; return; }
   const r=bibleRef(w.passage), same=live().filter(x=>x.id!==w.id&&x.track==="bible"&&x.type==="묵상"&&(()=>{ const y=bibleRef(x.passage); return r&&y&&y.book===r.book&&y.ch===r.ch; })()).sort((a,b)=>b.date.localeCompare(a.date));
   const ex=draftsOf(w);
-  box.innerHTML=`<div class="pickbox"><p class="step" style="margin:0 0 4px">설교초안 만들기</p>
-    <small class="hint">바탕으로 삼을 묵상을 고르세요. ${r?`같은 본문(${esc(BIBLE[r.book][0])} ${r.ch}${r.book===18?"편":"장"})으로 쓴 묵상이 함께 보입니다.`:""} 묵상은 그대로 남고, 씨앗(설교 씨앗·붙잡은 것·적용)만 새 초안에 이어집니다.</small>
+  box.innerHTML=`<div class="pickbox sheet" style="margin-bottom:16px"><p class="label bible" style="margin:0 0 4px">설교초안 만들기</p>
+    <small class="hint">이 묵상은 그대로 남습니다. 새 「설교초안」 페이지가 열리고, 고른 묵상의 설교 씨앗·붙잡은 것·적용이 틀에 미리 채워집니다. 묵상 원문은 초안 위 「바탕이 된 묵상」 띠에서 꺼내 씁니다. ${r?`같은 본문(${esc(BIBLE[r.book][0])} ${r.ch}${r.book===18?"편":"장"})으로 쓴 묵상이 함께 보입니다.`:""} 묵상은 그대로 남고, 씨앗(설교 씨앗·붙잡은 것·적용)만 새 초안에 이어집니다.</small>
     <label class="pk"><input type="checkbox" value="${w.id}" checked> ${esc(w.date)} · ${esc(w.title||w.passage||"")} <span class="muted">(지금 묵상)</span></label>
     ${same.map(x=>`<label class="pk"><input type="checkbox" value="${x.id}"> ${esc(x.date)} · ${esc(x.title||x.passage||"")}</label>`).join("")||`<p class="muted" style="margin:2px 0 0;font-size:13px">같은 본문으로 쓴 다른 묵상은 아직 없습니다.</p>`}
     <div class="field" style="margin-top:8px"><span>쓰일 자리 <small class="hint" style="display:inline">· 고르지 않아도 됩니다</small></span><div class="pills" id="pkplace">${PLACES.map(p=>`<button type="button" class="pill" onclick="const on=!this.classList.contains('on');this.parentNode.querySelectorAll('.pill').forEach(b=>b.classList.remove('on'));this.classList.toggle('on',on)">${p}</button>`).join("")}</div></div>
