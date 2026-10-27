@@ -241,7 +241,9 @@ ol.q li::marker{font-family:"Nanum Pen Script";color:var(--sepia);font-size:20px
 .thought{font-family:"Nanum Pen Script";font-size:21px;color:var(--ink-soft);line-height:1.3;white-space:pre-wrap}
 
 /* 노트 페이지 */
-.notebook{position:relative;background:var(--paper) var(--grain);box-shadow:var(--shadow);border:1px solid var(--edge);border-radius:2px 6px 6px 2px;padding:30px 34px 26px 84px}
+.notebook{position:relative;background:var(--paper) var(--grain);box-shadow:var(--shadow);border:1px solid var(--edge);border-radius:2px 6px 6px 2px;padding:30px 118px 26px 84px}
+.notebook::after{content:"";position:absolute;top:30px;bottom:26px;right:104px;width:0;border-left:1px dashed rgba(138,90,43,.18)}   /* 오른쪽 스티커 여백 */
+body.readmode .notebook::after,body.focus .notebook::after{display:none}
 .notebook::before{content:"";position:absolute;left:22px;top:30px;bottom:30px;width:16px;background:radial-gradient(circle,var(--desk) 6px,rgba(0,0,0,.12) 7px,transparent 8px) 0 0/16px 72px repeat-y}
 .notebook .title-in{font-family:"Nanum Myeongjo";font-weight:800;font-size:26px;border:0;border-bottom:2px solid var(--ink);padding:4px 0;margin-bottom:6px}
 .notebook .meta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;color:var(--faint);font-size:14px;margin-bottom:10px}
@@ -295,6 +297,19 @@ body.focus main.wrap{padding-top:40px}
 .cover.blank{display:flex;align-items:center;justify-content:center;padding:10px;color:#f3e6d2;font-family:"Nanum Myeongjo";font-weight:700;font-size:14px;line-height:1.4;text-align:center}
 .bookc .t{font-size:13px;margin-top:6px;line-height:1.35;color:var(--ink-soft);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .bookc.done .cover{filter:saturate(.6)}
+/* 읽는 중: 표지가 많으면 줄을 바꿔 이어지고, 지금 읽는 책은 조금 크게 */
+.shelf{flex-wrap:wrap;overflow:visible;row-gap:22px}
+.bookc.now{transform:scale(1.1);transform-origin:bottom center;margin:0 8px;position:relative}
+.bookc.now:hover{transform:scale(1.1) translateY(-6px) rotate(-1deg)}
+.nowtag{position:absolute;top:-12px;left:50%;transform:translateX(-50%) rotate(-4deg);font-family:"Nanum Pen Script";font-size:15px;color:var(--stamp);border:1.5px solid currentColor;border-radius:4px;padding:1px 7px;background:var(--paper);white-space:nowrap;z-index:2}
+/* 다 읽은 책: 책등으로 꽂힌 책장. 한 줄(--rowh)마다 선반이 그려집니다 */
+.spines{--rowh:152px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 3px;padding:0 14px 14px;margin:4px 0 26px;background:repeating-linear-gradient(to bottom,transparent 0 var(--rowh),var(--wood-1) var(--rowh) calc(var(--rowh) + 6px),var(--wood-2) calc(var(--rowh) + 6px) calc(var(--rowh) + 12px),transparent calc(var(--rowh) + 12px) calc(var(--rowh) + 12px));background-size:100% calc(var(--rowh) + 12px);background-position:0 0}
+.spines .sp{height:var(--rowh);display:flex;align-items:flex-end}
+.spine{position:relative;border-radius:2px 2px 1px 1px;box-shadow:1px 0 0 rgba(0,0,0,.25),0 -1px 0 rgba(255,255,255,.15) inset,0 3px 4px -2px rgba(0,0,0,.4);cursor:pointer;transition:transform .15s;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:10px 0 8px}
+.spine:hover{transform:translateY(-8px)}
+.spine .st{writing-mode:vertical-rl;text-orientation:mixed;font-family:"Nanum Myeongjo";font-weight:700;font-size:12px;line-height:1;letter-spacing:.04em;max-height:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.95}
+.spine .sr{margin-top:auto;font-size:7px;letter-spacing:-1px;opacity:.75;line-height:1}
+@media (max-width:700px){ .spines{--rowh:132px;padding:0 6px 14px} .spine .st{font-size:11px} .shelf{gap:14px;row-gap:18px} }
 .results{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-top:16px}
 .result{background:var(--paper-2);padding:10px;border-radius:4px;border:1px solid var(--edge);display:flex;flex-direction:column;gap:6px}
 .result img,.result .cover{width:100%;height:190px;object-fit:contain;background:var(--paper)}
@@ -854,7 +869,7 @@ function mergeFrom(other){
     const map=new Map((other[k]||[]).map(x=>[x.id,x]));
     for(const x of S[k]){ const o=map.get(x.id); if(!o||stamp(x)>=stamp(o)) map.set(x.id,x);
       // 노션 페이지 번호는 고친 시각과 상관없이 어느 쪽에든 있으면 지킵니다 (잃으면 다음 간직 때 노션에 같은 글이 하나 더 생김)
-      const win=map.get(x.id), lose=win===x?o:x; if(lose){ for(const f of ["notion","syncedAt","notionId","reviewNotion"]) if(lose[f]&&!win[f]) win[f]=lose[f]; } }
+      const win=map.get(x.id), lose=win===x?o:x; if(lose){ for(const f of ["notion","syncedAt","notionId","reviewNotion","title","passage","summary","oneLine","review"]) if(lose[f]&&!win[f]) win[f]=lose[f]; } }   // 제목처럼 한쪽만 적은 칸은 비어 있는 쪽으로 덮지 않음
     S[k]=[...map.values()].filter(x=>!del[x.id]);
   }
   { const D=Object.assign({},other.drafts||{});                // 쓰다 만 글(임시 보관): 칸마다 더 나중 것, 간직해서 지운 칸은 묘비로
@@ -921,7 +936,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="da61abe54f";
+const APP_BUILD="cf334f0ab2";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -949,11 +964,11 @@ function tryReload(){
 }
 if(/[?&]v=/.test(location.search)) history.replaceState(null,"",location.pathname+location.hash);
 document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState==="hidden"){ saveDraft(); draftCloud(); flushSave(); return; }   // 화면을 내릴 때: 임시 저장(구글에도) + 미뤄 둔 저장 바로 보내기
+  if(document.visibilityState==="hidden"){ autoKeepNow(); saveDraft(); draftCloud(); flushSave(); return; }   // 화면을 내릴 때: 임시 저장(구글에도) + 미뤄 둔 저장 바로 보내기
   checkUpdate();
   if(GAS&&READY&&!saveT&&!SAVING&&!(tab==="write"&&writingUnsaved())) fetchFresh(false);   // 오래 열어 둔 화면도 최신으로
 });
-addEventListener("pagehide",()=>{ saveDraft(); draftCloud(); flushSave(); });
+addEventListener("pagehide",()=>{ autoKeepNow(); saveDraft(); draftCloud(); flushSave(); });
 addEventListener("beforeunload",e=>{ if(writingUnsaved()){ saveDraft(); e.preventDefault(); e.returnValue=""; } });
 setInterval(checkUpdate,5*60*1000);
 
@@ -1495,8 +1510,8 @@ let restPeek=false, selLen=null, promoAsk=null;   // 쉬는 날에도 '그래도
 let tab="today", track="bible", editId=null, selTopics=[], selSits=[], fromWriting=null, fromNote=null, noteOpen=null, drawerSub="all";
 let NAV=false;
 function go(t,o={}){
-  if(tab==="write"&&$("#wbody")&&writingUnsaved()){                    // 간직하지 않은 글은 임시로 보관하고 떠납니다
-    saveDraft(); if(t!=="write") toast("쓰던 글은 임시로 보관했습니다. 「쓰기」를 다시 열면 이어집니다");
+  if(tab==="write"&&$("#wbody")&&writingUnsaved()){                    // 떠날 때: 쓴 만큼 되면 저절로 간직(노션에도), 아직 몇 줄이면 임시 보관
+    autoKeepNow(); if(writingUnsaved()){ saveDraft(); if(t!=="write") toast("쓰던 글은 임시로 보관했습니다. 「쓰기」를 다시 열면 이어집니다"); }
   }
   NAV=true; try{ goInner(t,o); }finally{ NAV=false; }
 }
@@ -1561,7 +1576,7 @@ function restoreDraft(){
   if(Array.isArray(d.stk)&&d.stk.length&&!editId){ wStk=d.stk; paintStk(); }
   if(d.fromNote) fromNote=d.fromNote;
   grow(); countW();
-  $(".notebook")?.insertAdjacentHTML("beforebegin",`<div class="draftbar">✎ 간직하지 않았던 글을 되살렸습니다 <button class="btn small ghost" onclick="discardDraft()">이 글 버리기</button></div>`);
+  const ds=$("#draftstamp"); if(ds) ds.innerHTML=`✎ 쓰던 글을 이어 씁니다 <a href="#" onclick="discardDraft();return false" style="color:var(--faint)">(버리기)</a>`;   // 경고 띠 대신 날짜 줄에 조용히
 }
 function discardDraft(){ if(!confirm("되살린 글을 버릴까요?")) return; clearDraft(); save(); NAV=true; try{ goInner("write",{edit:editId,track}); }finally{ NAV=false; } }   // go() 를 거치면 같은 초안이 다시 보관되므로 바로 goInner
 const seg=fn=>`<div class="row" style="gap:6px"><span class="chip ${track==="bible"?"on":""}" onclick="track='bible';${fn}">말씀</span><span class="chip book ${track==="book"?"on":""}" onclick="track='book';${fn}">책</span></div>`;
@@ -1853,7 +1868,7 @@ function stkCommit(ctx){
   if(ctx==="write"){ const w=editId&&S.writings.find(x=>x.id===editId); if(w){ w.updated=new Date().toISOString(); save(); } return; }
   dTouch(ctx.slice(6));
 }
-const stkStyle=t=>`left:${t.x}%;top:${t.y}%;transform:translate(-50%,-50%) rotate(${t.r||0}deg) scale(${t.s||1})`;
+const stkStyle=t=>`left:${t.x}%;top:${t.yp!=null?t.yp+"px":t.y+"%"};transform:translate(-50%,-50%) rotate(${t.r||0}deg) scale(${t.s||1})`;   // yp: 위에서부터 px (종이가 길어져도 그 자리), 옛 스티커는 %
 function stkInner(ctx){
   const L=(ctx==="write"?(editId&&S.writings.find(x=>x.id===editId)?.stickers)||wStk:dEntry(ctx.slice(6)).stickers)||[];
   const sel=L.find(t=>t.id===STK_SEL);
@@ -1868,7 +1883,11 @@ function addSticker(k){
     const b=$("#wbody"), v=k.slice(2); tInsert(b,v,b.selectionStart??b.value.length,b.selectionEnd??b.value.length); return; }
   const layer=curLayer(); if(!layer) return; const ctx=layer.dataset.ctx, r=layer.getBoundingClientRect();
   const cl=v=>Math.max(4,Math.min(96,v));
-  const t={id:uid(),k,x:cl((innerWidth/2-r.left)/r.width*100+(Math.random()*16-8)),y:cl((innerHeight*.42-r.top)/r.height*100+(Math.random()*10-5)),r:Math.round(Math.random()*24-12),s:1};
+  // 새 스티커 자리: 쓰기 화면이면 오른쪽 여백(글자가 없는 띠)의 지금 쓰는 줄 옆, 일기면 가운데쯤
+  let x,yp; const ta=ctx==="write"&&$("#wbody");
+  if(ta&&r.width>600){ const lh=parseFloat(getComputedStyle(ta).lineHeight)||36, line=ta.value.slice(0,ta.selectionStart??ta.value.length).split("\n").length; x=(r.width-56)/r.width*100+(Math.random()*4-2); yp=ta.offsetTop+Math.min(ta.scrollHeight-24,line*lh-lh/2)+(Math.random()*10-5); }
+  else { x=cl((innerWidth/2-r.left)/r.width*100+(Math.random()*16-8)); yp=Math.max(30,Math.min(r.height-30,innerHeight*.42-r.top+(Math.random()*40-20))); }
+  const t={id:uid(),k,x:cl(x),y:cl(yp/r.height*100),yp:Math.round(yp),r:Math.round(Math.random()*24-12),s:1};
   stkList(ctx).push(t); STK_SEL=t.id; stkCommit(ctx); paintStk();
 }
 function stkAct(op){
@@ -1922,13 +1941,14 @@ document.addEventListener("pointerdown",e=>{
   if(!el){ if(STK_SEL){ STK_SEL=null; paintStk(); } return; }
   e.preventDefault(); const layer=el.parentElement, ctx=layer.dataset.ctx, t=stkList(ctx).find(x=>x.id===el.dataset.id); if(!t) return;
   if(STK_SEL!==t.id){ STK_SEL=t.id; document.querySelectorAll(".stk.sel").forEach(x=>x.classList.remove("sel")); el.classList.add("sel"); layer.querySelector(".stk-tools")?.remove(); }
-  STK_DRAG={el,ctx,t,r:layer.getBoundingClientRect(),sx:e.clientX,sy:e.clientY,x0:t.x,y0:t.y,moved:false};
+  const lr=layer.getBoundingClientRect(); if(t.yp==null) t.yp=Math.round(t.y/100*lr.height);   // 옛 % 자리를 px 로 옮겨 둠
+  STK_DRAG={el,ctx,t,r:lr,sx:e.clientX,sy:e.clientY,x0:t.x,y0:t.yp,moved:false};
   try{ el.setPointerCapture(e.pointerId); }catch(_){}
 });
 document.addEventListener("pointermove",e=>{ const g=STK_DRAG; if(!g) return;
   const dx=e.clientX-g.sx, dy=e.clientY-g.sy; if(Math.abs(dx)+Math.abs(dy)>3) g.moved=true;
-  g.t.x=Math.max(0,Math.min(100,g.x0+dx/g.r.width*100)); g.t.y=Math.max(0,Math.min(100,g.y0+dy/g.r.height*100)); g.el.style.cssText=stkStyle(g.t); });
-document.addEventListener("pointerup",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; g.t.x=+g.t.x.toFixed(2); g.t.y=+g.t.y.toFixed(2); if(g.moved) stkCommit(g.ctx); paintStk(); });
+  g.t.x=Math.max(0,Math.min(100,g.x0+dx/g.r.width*100)); g.t.yp=Math.max(0,Math.min(g.r.height,g.y0+dy)); g.t.y=+(g.t.yp/g.r.height*100).toFixed(2); g.el.style.cssText=stkStyle(g.t); });
+document.addEventListener("pointerup",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; g.t.x=+g.t.x.toFixed(2); g.t.yp=Math.round(g.t.yp); if(g.moved) stkCommit(g.ctx); paintStk(); });
 document.addEventListener("pointercancel",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; if(g.moved) stkCommit(g.ctx); paintStk(); });
 document.addEventListener("keydown",e=>{ if(STK_SEL&&(e.key==="Delete"||e.key==="Backspace")&&!e.target.matches?.("input,textarea,select")){ e.preventDefault(); stkAct("x"); } });
 
@@ -2019,9 +2039,9 @@ write(){
       <div class="notebook ${paper}">
         <div class="margin"></div>
         ${stkLayer("write")}
-        <input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput()">
+        <input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput();autoKeepKick()">
         <div class="meta"><span class="pen" style="font-size:20px">${esc(w?.date||today())}</span><span id="wcount"></span><span id="draftstamp" class="draftstamp"></span><span id="refhint" class="refhint" style="display:none"></span></div>
-        <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput();refHint();spellAutoKick()" onkeyup="refHint()" onclick="refHint();spellPopClose()" style="--penink:${penInk()}" placeholder="여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다.">${esc(w?.body??seed)}</textarea>
+        <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput();refHint();spellAutoKick();autoKeepKick()" onkeyup="refHint()" onclick="refHint();spellPopClose()" style="--penink:${penInk()}" placeholder="여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다.">${esc(w?.body??seed)}</textarea>
       </div>
     </div>
     <aside>
@@ -2071,17 +2091,27 @@ write(){
   </div>`;
 },
 shelf(){
-  // 보기 방식: 최신(꽂은 순) · 오래된 순 · 분류(도서관 갈래별 칸) · 별점순 — 이 기기에 기억
+  // 책장: 읽는 책은 표지를 크게(지금 읽는 책은 더 크게), 다 읽은 책은 책등으로 꽂아 둡니다 — 수백 권이 되어도 한 화면에 보이게.
+  // 보기 방식: 최신 · 오래된 순 · 분류별 · 별점순 (이 기기에 기억). 찾기 칸으로 제목·저자를 거릅니다.
   let sortBy="new"; try{ sortBy=localStorage.getItem("seojae.shelfsort")||"new"; }catch(_){}
-  const key=b=>b.started||b.finished||"";
+  const key=b=>b.finished||b.started||"";
   const sorters={new:(a,b)=>key(b).localeCompare(key(a)),old:(a,b)=>key(a).localeCompare(key(b)),star:(a,b)=>(b.rating||0)-(a.rating||0)||key(b).localeCompare(key(a)),cat:(a,b)=>(bookCat(a)||"힣").localeCompare(bookCat(b)||"힣","ko")||key(b).localeCompare(key(a))};
-  const sorted=S.books.slice().sort(sorters[sortBy]||sorters.new);
+  const q=(SHELF_Q||"").trim().toLowerCase();
+  const sorted=S.books.slice().sort(sorters[sortBy]||sorters.new).filter(b=>!q||(b.title+" "+(b.authors||[]).join(" ")+" "+(b.publisher||"")).toLowerCase().includes(q));
   const reading=sorted.filter(b=>b.status!=="완료"), done=sorted.filter(b=>b.status==="완료");
-  const card=b=>`<div class="bookc ${b.status==="완료"?"done":""}" onclick="openBook('${b.id}')">${coverHtml(b)}<div class="t">${esc(b.title)}${sortBy==="star"&&b.rating?`<br><span style="color:#c9962e">${"★".repeat(b.rating)}</span>`:""}</div></div>`;
+  const card=b=>`<div class="bookc ${b.id===S.settings.currentBook?"now":""}" onclick="openBook('${b.id}')">${b.id===S.settings.currentBook?`<span class="nowtag">지금 읽는 중</span>`:""}${coverHtml(b)}<div class="t">${esc(b.title)}</div>${b.total?`<div class="progress" style="margin:6px 8px 0"><i style="width:${Math.min(100,(b.page||0)/b.total*100)}%"></i></div>`:""}</div>`;
   const shelfRow=list=>`<div class="shelf">${list.map(card).join("")||`<p class="muted" style="align-self:center">비어 있는 칸</p>`}</div><div class="plank"></div>`;
-  const byCat=list=>{ const g={}; list.forEach(b=>{ const c=bookCat(b)||"미정"; (g[c]=g[c]||[]).push(b); }); return Object.keys(g).sort((a,b)=>(CATS.indexOf(a)+1||99)-(CATS.indexOf(b)+1||99)).map(c=>`<p class="catlabel">${esc(c)} <span class="muted" style="font-size:13px">${g[c].length}권</span></p>${shelfRow(g[c])}`).join("")||shelfRow([]); };
-  const bar=`<div class="shelfbar"><span class="muted" style="font-size:13px">보기</span><span class="pills">${[["new","최신"],["old","오래된 순"],["cat","분류별"],["star","별점순"]].map(([k,n])=>`<button class="pill ${sortBy===k?"on":""}" onclick="try{localStorage.setItem('seojae.shelfsort','${k}')}catch(_){};render()">${n}</button>`).join("")}</span><small class="hint" style="display:inline">분류는 국립중앙도서관 KDC(십진분류)로, 없으면 제목으로 짐작합니다. 책 카드에서 바꿀 수 있습니다.</small></div>`;
-  return `<div class="row" style="margin-bottom:18px"><h2>책장</h2></div>
+  const spines=list=>list.length?`<div class="spines">${list.map(spineHtml).join("")}</div>`:`<p class="muted" style="margin:6px 0 20px">아직 없습니다.</p>`;
+  const group=(list,of,order)=>{ const g={}; list.forEach(b=>{ const c=of(b); (g[c]=g[c]||[]).push(b); }); return Object.keys(g).sort(order).map(c=>({c,items:g[c]})); };
+  const catOrder=(a,b)=>(CATS.indexOf(a)+1||99)-(CATS.indexOf(b)+1||99);
+  // 읽는 중: 분류별이면 갈래마다 칸, 아니면 한 칸(표지가 많으면 줄을 바꿔 이어짐)
+  const readingHtml=sortBy==="cat"?(group(reading,b=>bookCat(b)||"미정",catOrder).map(({c,items})=>`<p class="catlabel">${esc(c)} <span class="muted" style="font-size:13px">${items.length}권</span></p>${shelfRow(items)}`).join("")||shelfRow([])):shelfRow(reading);
+  // 다 읽은 책: 책등으로. 최신·오래된 순은 다 읽은 해마다 한 칸, 분류별은 갈래마다, 별점순은 한 칸
+  const doneGroups=sortBy==="cat"?group(done,b=>bookCat(b)||"미정",catOrder):sortBy==="star"?[{c:"",items:done}]:group(done,b=>(b.finished||b.started||"").slice(0,4)||"연도 없음",(a,b)=>sortBy==="old"?a.localeCompare(b):b.localeCompare(a));
+  const doneHtml=done.length?doneGroups.map(({c,items})=>`${c?`<p class="catlabel">${esc(c)}${/^\d{4}$/.test(c)?"년":""} <span class="muted" style="font-size:13px">${items.length}권</span></p>`:""}${spines(items)}`).join(""):`<p class="muted" style="margin:6px 0 20px">${q?"찾은 책이 없습니다.":"다 읽은 책이 여기에 책등으로 꽂힙니다."}</p>`;
+  const bar=`<div class="shelfbar"><span class="muted" style="font-size:13px">보기</span><span class="pills">${[["new","최신"],["old","오래된 순"],["cat","분류별"],["star","별점순"]].map(([k,n])=>`<button class="pill ${sortBy===k?"on":""}" onclick="try{localStorage.setItem('seojae.shelfsort','${k}')}catch(_){};render()">${n}</button>`).join("")}</span>
+    <input id="bqf" placeholder="책장에서 찾기 (제목·저자)" value="${esc(SHELF_Q||"")}" oninput="SHELF_Q=this.value;clearTimeout(window._sq);window._sq=setTimeout(shelfPaint,200)" style="width:auto;flex:1;min-width:160px;max-width:300px;margin-left:auto"></div>`;
+  return `<div class="row" style="margin-bottom:18px"><h2>책장</h2><span class="muted" style="font-size:14px">읽는 중 ${S.books.filter(b=>b.status!=="완료").length}권 · 다 읽은 책 ${S.books.filter(b=>b.status==="완료").length}권</span></div>
   <section class="sheet tape" style="margin-bottom:30px">
     <p class="label book">새 책 꽂기</p>
     <div class="row"><input id="bq" placeholder="책 이름, 저자, 또는 ISBN" style="flex:1" onkeydown="if(event.key==='Enter'&&!event.isComposing)searchBook()"><button class="btn ink" onclick="searchBook()">표지 찾기</button><button class="btn" onclick="openStore(millieUrl,$('#bq').value)" title="같은 이름으로 밀리의 서재를 검색합니다 (밀리에 로그인되어 있어야 결과가 보입니다)">밀리의 서재</button><button class="btn" onclick="openStore(welaaaUrl,$('#bq').value)" title="같은 이름으로 윌라(전자책·오디오북)를 검색합니다">윌라</button></div>
@@ -2090,8 +2120,10 @@ shelf(){
   </section>
   <div id="bookdetail"></div>
   ${bar}
-  <p class="label book">읽는 중</p>${sortBy==="cat"?byCat(reading):shelfRow(reading)}
-  <p class="label">다 읽은 책</p>${sortBy==="cat"?byCat(done):shelfRow(done)}`;
+  <div id="shelves">
+  <p class="label book">읽는 중</p>${readingHtml}
+  <p class="label">다 읽은 책 <small class="hint" style="display:inline">· 책등을 누르면 열립니다. 두께는 쪽수, 색은 책마다</small></p>${doneHtml}
+  </div>`;
 },
 drawer(){
   const segBtn=(k,n)=>`<span class="chip ${drawerSub===k?"on":""}" onclick="drawerSub='${k}';msDraft=null;render()">${n}</span>`;
@@ -2391,26 +2423,36 @@ function restorePrev(id,k){ const w=S.writings.find(x=>x.id===id), v=w?.prev?.[k
   if(b.value.trim()&&!confirm("지금 본문 대신 이전 판을 넣을까요? (간직해야 확정됩니다)")) return; tInsert(b,v.body,0,b.value.length); toast("이전 판을 불러왔습니다. 봉인을 누르면 간직됩니다 (↶ 로 되돌리기)"); }
 function insertTemplate(){ const b=$("#wbody"), tpl=TYPES[track][$("#wtype").value]; if(!tpl) return toast("자유 글에는 틀이 없습니다. 마음 가는 대로 쓰세요"); if(b.value.trim()&&!confirm("본문 맨 앞에 틀을 넣을까요?")) return; tInsert(b,tpl+(b.value?"\n":""),0,0); b.selectionStart=b.selectionEnd=tpl.indexOf("\n")>0?tpl.indexOf("\n"):tpl.length; }
 function insertNote(id){ const n=S.notes.find(x=>x.id===id), b=$("#wbody"); const txt=`「${n.text}」 (${noteSrc(n)})\n`; tInsert(b,txt); }
-function saveWriting(){
-  const body=$("#wbody").value; if(!body.trim()) return toast("아직 빈 페이지입니다");
+// 간직하기: 봉인(또는 ⌘S)을 누르면 바로, 아니어도 글을 25초 쉬면 저절로 간직됩니다(자동 간직 — 화면은 건드리지 않고 조용히).
+// 노션에는 봉인을 눌렀을 때와 쓰기 화면을 떠날 때·앱을 내릴 때 실립니다 (타자마다 보내면 노션 페이지가 계속 다시 써지므로)
+function keepWriting(auto){
+  const b=$("#wbody"); if(!b) return null; const body=b.value; if(!body.trim()){ if(!auto) toast("아직 빈 페이지입니다"); return null; }
+  if(auto){ const tl=new Set((TYPES[track]?.[$("#wtype")?.value]||"").split("\n").map(l=>l.trim()).filter(Boolean)); const own=stripMemo(body).split("\n").filter(l=>!tl.has(l.trim())).join(""); if(chars(own)<40||!writingUnsaved()) return null; }   // 틀만 넣고 아직 안 쓴 글은 간직하지 않음
   clearDraft();   // 임시 보관 칸(이 기기·구글)을 비움 — 새 글은 번호가 정해지기 전(칸 이름이 new 일 때) 비워야 합니다
   const data={type:$("#wtype").value,title:$("#wtitle").value.trim(),body,summary:$("#wsummary").value.trim(),topics:[...selTopics],status:$("#wstatus")?.value||"초고",updated:new Date().toISOString()};
   if(track==="bible"){ data.passage=normPassage($("#wpassage").value); data.situations=[...selSits]; data.length=data.type==="묵상을설교로"?(selLen||null):null; }
   else { data.bookId=$("#wbook").value||null; data.page=$("#wpage").value.trim(); }
   let w;
   if(editId) w=S.writings.find(x=>x.id===editId);
-  if(w&&w.body!==body) w.prev=[{at:w.updated||w.date,body:w.body},...(w.prev||[])].slice(0,3);   // 이전 판 3개
+  if(w&&w.body!==body&&!auto) w.prev=[{at:w.updated||w.date,body:w.body},...(w.prev||[])].slice(0,3);   // 이전 판 3개 (봉인 때만 — 자동 간직은 같은 판을 이어 씀)
   if(w) Object.assign(w,data);
   else {   // 새 글 (또는 다른 기기에서 지워진 글을 다시 간직하는 경우)
     editId=uid(); w={id:editId,date:today(),track,...data}; if(fromNote) w.fromNote=fromNote; if(fromWriting) w.fromWriting=fromWriting; if(wStk.length) w.stickers=wStk; S.writings.push(w); }
   const pick=S.manuscripts.find(m=>m.id===$("#wms").value); // 직접 고른 원고의 맨 뒤 꼭지로
   if(pick&&!pick.items.includes(w.id)) pick.items.push(w.id);
   fromNote=null; fromWriting=null;
-  mark("write"); save(); toast("간직했습니다"); if(NEW_BUILD) setTimeout(tryReload,1200);
+  mark("write"); save();
+  if(auto){ b.defaultValue=body; $("#wtitle").defaultValue=data.title; DRAFT_AT=Date.now(); paintDraftStamp("간직됨"); paintCal(); const st=$("#syncstamp"); if(st&&!w.notion?.page) st.innerHTML=syncStamp(w); return w; }
+  toast("간직했습니다"); if(NEW_BUILD) setTimeout(tryReload,1200);
   const focus=document.body.classList.contains("focus");
   render(); if(focus) toggleFocus();
-  syncWriting(w);
+  syncWriting(w); return w;
 }
+function saveWriting(){ keepWriting(false); }
+let AUTOKEEP_T;
+function autoKeepKick(){ clearTimeout(AUTOKEEP_T); AUTOKEEP_T=setTimeout(()=>{ if(tab==="write") keepWriting(true); },25000); }
+// 쓰기 화면을 떠나거나 앱을 내릴 때: 쓰던 글을 간직하고, 봉인한 뒤 고친 것이 있으면 노션에도
+function autoKeepNow(){ if(tab!=="write"||!$("#wbody")) return; clearTimeout(AUTOKEEP_T); const w=keepWriting(true)||(editId&&S.writings.find(x=>x.id===editId)); if(w&&canSync()&&(!w.syncedAt||(w.updated||"")>w.syncedAt)) syncWriting(w,true); }
 // 밀랍 봉인: 녹아 퍼진 듯 울퉁불퉁한 가장자리를 매번 같은 모양으로 그립니다
 function waxBlob(cx,cy,r){
   const n=30, pts=[];
@@ -2588,6 +2630,13 @@ function addBook(i){
   S.books.push(b); S.settings.currentBook=b.id; save(); toast("책장에 꽂았습니다"); found=[]; render(); openBook(b.id);
   enrichBook(b,true).then(()=>syncBook(b)); // 국립중앙도서관 정보(목차·소개·쪽수)를 먼저 채운 뒤 노션 독서 목록에 올립니다
 }
+// 책등: 제목으로 정한 은은한 천 색, 쪽수로 두께, 제목을 세로로. 누르면 책 카드가 열립니다
+let SHELF_Q="";
+const SPINE_COLORS=[["#5b3a2a","#f3e6d2"],["#2f4b5e","#e8eef2"],["#4b5a3a","#eaf0dc"],["#6e3d48","#f6e3e8"],["#3f3f52","#e6e6f0"],["#8a6a3a","#fbf2dc"],["#2e5b57","#dff0ec"],["#7a4a2a","#f8e8d8"],["#4e4a3e","#eee9df"],["#6a5a7a","#efe8f6"],["#3a5a7a","#e3edf7"],["#7a3a3a","#f7e3e3"]];
+const strHash=t=>{ let h=7; for(const c of String(t||"")) h=(h*31+c.charCodeAt(0))>>>0; return h; };
+function spineHtml(b){ const h=strHash(b.title), [bg,fg]=SPINE_COLORS[h%SPINE_COLORS.length], w=b.unit==="pct"?30:b.total>450?42:b.total>280?35:b.total>150?30:26, ht=116+(h>>4)%6*7;
+  return `<div class="sp"><div class="spine" style="width:${w}px;height:${ht}px;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 22%,rgba(255,255,255,.08) 50%,rgba(0,0,0,.22)),${bg};color:${fg}" onclick="openBook('${b.id}')" title="${esc(b.title)}${(b.authors||[]).length?" · "+esc(b.authors.join(", ")):""}${b.finished?" · "+esc(b.finished)+" 완독":""}${b.rating?" · "+"★".repeat(b.rating):""}"><span class="st">${esc(b.title)}</span>${b.rating?`<span class="sr">${"•".repeat(b.rating)}</span>`:""}</div></div>`; }
+function shelfPaint(){ if(tab!=="shelf") return; const el=$("#shelves"); if(!el) return; const html=VIEWS.shelf(); const tmp=document.createElement("div"); tmp.innerHTML=html; el.innerHTML=tmp.querySelector("#shelves").innerHTML; }   // 찾기 칸은 그대로 두고 책장만 다시
 const pgUnit=b=>b?.unit==="pct"?"%":"쪽";
 const pgText=(b,n)=>b?.unit==="pct"?`${n||0}%`:`${n||0}쪽`;
 function setUnit(id,u){ const b=S.books.find(x=>x.id===id); if(!b) return; b.unit=u; if(u==="pct"){ b.total=100; if(b.page>100) b.page=100; } save(); openBook(id); toast(u==="pct"?"전자책: 읽은 곳을 %로 적습니다":"종이책: 읽은 곳을 쪽수로 적습니다"); }
