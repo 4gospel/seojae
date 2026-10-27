@@ -365,6 +365,32 @@ body.focus main.wrap{padding-top:40px}
 .nowbook .cover{width:86px;height:124px;flex:0 0 auto}
 
 .timer{font-family:"Nanum Myeongjo";font-weight:800;font-size:40px;letter-spacing:2px}
+/* 집중 시간 (뽀모도로) */
+.stkcol{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.pomomini{display:flex;align-items:center;gap:4px;font-size:13px;background:var(--paper);border:1px solid var(--edge);border-radius:999px;padding:2px 4px 2px 3px;box-shadow:0 4px 12px -8px rgba(0,0,0,.35)}
+.pomomini .pmgo{display:flex;align-items:center;gap:6px;background:none;border:0;cursor:pointer;font:inherit;color:var(--ink);padding:0 2px}
+.pomomini .pml{font-family:"Nanum Pen Script";font-size:17px;color:var(--bible);line-height:1}
+.pomomini.short .pml,.pomomini.long .pml{color:var(--book)}
+.pomomini b{font-family:"Nanum Myeongjo";font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.pomomini .pmb{width:24px;height:24px;border-radius:50%;border:0;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:10px;line-height:1}
+.pomomini .pmb:hover{background:var(--paper-2);color:var(--ink)}
+.pomomini.paused b{opacity:.55} .pomomini.waiting{animation:pmw 1.6s ease-in-out infinite}
+@keyframes pmw{50%{box-shadow:0 0 0 3px color-mix(in srgb,var(--sepia) 30%,transparent)}}
+@media (prefers-reduced-motion:reduce){ .pomomini.waiting{animation:none} }
+.parc{stroke:var(--bible);transition:stroke-dashoffset .9s linear} .parc.short,.parc.long{stroke:var(--book)}
+.pomohead{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.pomoday{font-size:13px}
+.pomobody{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.pomodial{position:relative;width:150px;height:150px;flex:none}
+.pomoin{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.pomoin .pph{font-family:"Nanum Pen Script";font-size:21px;color:var(--bible);line-height:1} .pomoin .pph.short,.pomoin .pph.long{color:var(--book)}
+.pomoin b{font-family:"Nanum Myeongjo";font-weight:800;font-size:34px;letter-spacing:.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.prounds{display:flex;gap:4px;margin-top:4px} .prounds i{width:7px;height:7px;border-radius:50%;border:1.2px solid var(--bible);opacity:.5} .prounds i.done{background:var(--bible);opacity:1} .prounds i.cur{opacity:1}
+.pomoctl{flex:1;min-width:180px;display:grid;gap:8px;justify-items:start}
+.pomoctl .hint{margin:0}
+.pomoset{border-bottom:1px dashed var(--edge);padding-bottom:12px;margin-bottom:12px}
+.pomoset .chk{display:flex;gap:6px;align-items:center;font-size:14.5px}
+@media (max-width:700px){ .pomomini .pml{display:none} .pomomini b{font-size:13.5px} .stkcol{gap:3px} }
 .notice{background:var(--paper) var(--grain);border:1px dashed var(--sepia);color:var(--ink-soft);padding:10px 16px;border-radius:4px;margin-bottom:20px;font-size:14px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:999px;font-size:15px;opacity:0;transition:.25s;pointer-events:none;z-index:50}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -816,7 +842,7 @@ h2,.big,.bookc .t,.dw-item h5,.item .myeongjo{word-break:keep-all;overflow-wrap:
 <header><div class="wrap">
   <div class="top">
     <div class="brand" onclick="go('today')" title="오늘 화면으로" role="link">아침 서재<small>MORNING · STUDY · DIARY</small></div>
-    <div class="topright"><div class="streak" id="streak"></div>
+    <div class="topright"><div class="stkcol"><div class="streak" id="streak"></div><div class="pomomini" id="pomomini" hidden></div></div>
     <button class="gearbtn" id="gearbtn" onclick="go('settings')" title="설정" aria-label="설정"></button></div>
   </div>
   <nav id="nav"></nav>
@@ -1155,7 +1181,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="0e8c2917cb";
+const APP_BUILD="fb189843ad";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2308,11 +2334,7 @@ today(){
       ${noteOpen==="book"?noteForm("book"):""}${todayNotes("book")}`
       :`<p class="sub" style="margin:10px 0 14px">책장에 읽을 책을 꽂아 주세요. 제목이나 ISBN만 넣으면 표지를 찾아 드립니다.</p><button class="btn ink" onclick="go('shelf')">책 꽂기</button>`}
     </section>
-    <section class="sheet">
-      <p class="label">조용한 시간</p>
-      <div class="timer" id="timer">00:00</div>
-      <div class="row"><button class="btn ink" id="tbtn" onclick="toggleTimer()">${timer.on?"멈춤":"시작"}</button><button class="btn ghost" onclick="resetTimer()">처음으로</button></div>
-    </section>
+    <section class="sheet pomocard" id="pomocard">${pomoCardHtml()}</section>
   </div>
   <div class="grid" style="margin-top:30px">
     <section class="sheet tape c"><p class="label bible">말씀 앞에서 묻기</p><ol class="q">${qb.map(q=>`<li>${q}</li>`).join("")}</ol></section>
@@ -2562,7 +2584,7 @@ const AFTER={
   write(){ READVIEW=false; EDIT_BASE=editId?(S.writings.find(x=>x.id===editId)?.updated||null):null; EDIT_WARNED=false; grow(); countW(); restoreDraft(); paintPalette(); paintSu(); keepAwake(true); },
   drawer(){ if(drawerSub==="all") renderArchive(); },
   room(){ roomDnd(); },
-  today(){ paintTimer(); },
+  today(){ pomoPaint(); },
   settings(){
     if(CONF.notion&&CONF.local!==false) checkNotion();
     const el=$("#qr"); if(el&&CONF.phoneUrl){ let n=0; const draw=()=>window.QRCode?new QRCode(el,{text:CONF.phoneUrl,width:168,height:168,correctLevel:QRCode.CorrectLevel.M}):(++n<20?setTimeout(draw,300):(el.innerHTML='<p class="muted">QR 그림을 못 받았습니다 — 아래 「연결 링크 복사」를 쓰세요.</p>')); draw(); }
@@ -2722,10 +2744,31 @@ function lookSection(){
     <p class="hint" style="margin-top:12px">쓰기 화면의 「가−·가＋」, 매일성경 카드의 보기·글자 단추도 같은 값을 바꿉니다. 「펜과 종이」의 잉크·줄 노트는 모든 기기 공통이고, 여기 글자 색을 고르면 이 기기에서는 그것이 우선합니다.</p>
   </section>`;
 }
+function pomoSettingsHtml(){ const c=pomoSet(), num=(k,v,min,max)=>`<input type="number" min="${min}" max="${max}" value="${v}" style="width:64px" onchange="pomoSetSave('${k}',Math.max(${min},Math.min(${max},+this.value||${POMO_DEF[k]})))">`;
+  return `<div class="pomoset" id="pomoset"><p class="label" style="margin:0 0 6px">집중 시간 (뽀모도로) <small class="hint" style="display:inline">· 이 기기만</small></p>
+    <div class="row" style="gap:10px;flex-wrap:wrap;align-items:center"><span>집중 ${num("focus",c.focus,5,90)}분</span><span>쉼 ${num("short",c.short,1,30)}분</span><span>긴 쉼 ${num("long",c.long,5,60)}분</span><span>긴 쉼까지 ${num("rounds",c.rounds,2,8)}번</span></div>
+    <div class="row" style="gap:14px;flex-wrap:wrap;margin-top:8px">
+      <label class="chk"><input type="checkbox" ${c.sound?"checked":""} onchange="pomoSetSave('sound',this.checked)"> 끝날 때 작은 종소리</label>
+      <label class="chk"><input type="checkbox" ${c.autoBreak?"checked":""} onchange="pomoSetSave('autoBreak',this.checked)"> 집중이 끝나면 쉼을 저절로 시작</label>
+      <label class="chk"><input type="checkbox" ${c.dnd?"checked":""} onchange="pomoSetSave('dnd',this.checked)"> <b>집중하는 동안 방해금지 켜기</b> (맥·아이폰 단축어)</label></div>
+    <details class="keybox" ${c.dnd?"":"open"} style="margin-top:8px"><summary>맥에서 방해금지를 켜는 단축어 만들기 (처음 한 번)</summary>
+      <p class="sub">웹앱은 맥의 방해금지를 직접 켤 수 없어서, 아침 서재가 맥의 「단축어」 앱을 불러 켭니다. 아래 두 단축어를 이름 그대로 만들어 두세요.</p>
+      <ol class="sub" style="padding-left:1.2em">
+        <li>「단축어」 앱 → ＋ (새 단축어) → 이름을 <b>${esc(c.sOn)}</b> 로.</li>
+        <li>동작 검색에서 <b>집중 모드 설정</b>(Set Focus)을 넣고 → 「방해금지」 · 「켜기」 → 「끄기」를 <b>시간</b>으로 바꾼 뒤 시간 칸에 <b>단축어 입력</b>을 연결합니다. 더 쉬운 방법: 시간 대신 <b>끄기 전까지</b>로 두고 아래 끝 단축어도 만듭니다.</li>
+        <li>시간으로 할 때는 그 앞에 <b>날짜 조정</b>(Adjust Date) 동작을 넣어 「현재 날짜」에 「단축어 입력」 <b>분</b>을 더하고, 그 결과를 「집중 모드 설정」의 시간에 넣습니다. 아침 서재가 집중 분(예: 25)을 입력으로 보냅니다.</li>
+        <li>두 번째 단축어 <b>${esc(c.sOff)}</b>: 동작 <b>집중 모드 설정</b> → 「방해금지」 · <b>끄기</b>. 중간에 「그만」을 누르거나 집중이 끝나면 이 단축어로 끕니다.</li>
+        <li>위의 「집중하는 동안 방해금지 켜기」를 켜고 집중 시간을 시작하면, 처음 한 번 「단축어를 여시겠습니까?」를 묻습니다. 「허용」을 누르면 다음부터는 바로 켜집니다.</li>
+      </ol>
+      <div class="row" style="gap:6px;flex-wrap:wrap"><label class="field" style="flex:1;min-width:180px"><span>시작 단축어 이름</span><input value="${esc(c.sOn)}" onchange="pomoSetSave('sOn',this.value.trim()||POMO_DEF.sOn)"></label><label class="field" style="flex:1;min-width:180px"><span>끝 단축어 이름</span><input value="${esc(c.sOff)}" onchange="pomoSetSave('sOff',this.value.trim()||POMO_DEF.sOff)"></label></div>
+      <div class="row" style="gap:6px;margin-top:6px"><button class="btn small" onclick="runShortcut(pomoSet().sOn,'1')">시작 단축어 시험 (1분)</button><button class="btn small" onclick="runShortcut(pomoSet().sOff)">끝 단축어 시험</button></div>
+      <p class="hint">아이폰도 같은 이름으로 단축어를 만들면 홈 화면 아침 서재에서 똑같이 켜집니다. 앱이 뒤로 가 있을 때 집중이 끝나면, 시간으로 만든 단축어는 저절로 꺼지고 「끄기 전까지」로 만든 단축어는 아침 서재로 돌아올 때 꺼집니다.</p>
+    </details></div>`; }
 function quietSection(){
   const ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua), and=/Android/.test(ua);
   return `<section class="sheet tape c compact">
     <p class="label">쓰는 동안 조용히</p>
+    ${pomoSettingsHtml()}
     <div class="okline"><span class="stamp ok">쓰기 화면</span><span class="muted">휴대폰에서는 쓰는 동안 화면이 꺼지지 않고, 「집중 모드」는 전체 화면으로 열립니다.</span></div>
     <details class="keybox"><summary>휴대폰 방해금지(알림 끄기)를 아침 서재가 열릴 때 저절로 켜는 방법</summary>
       <p class="sub">웹앱은 휴대폰의 방해금지를 직접 켤 수 없어, 휴대폰의 자동화 기능으로 한 번만 설정해 두면 됩니다.</p>
@@ -3664,12 +3707,80 @@ function restore(input){ const f=input.files[0]; if(!f) return; const r=new File
       mergeFrom(d); save(); render(); toast("백업 파일을 합쳤습니다"); }catch(_){ toast("아침 서재 백업 파일이 아닙니다"); } };
   r.readAsText(f); input.value=""; }
 
-// ───────── 타이머 ─────────
-const timer={on:false,start:0,acc:0,h:null};
-const elapsed=()=>timer.acc+(timer.on?Date.now()-timer.start:0);
-function paintTimer(){ const el=$("#timer"); if(!el) return; const s=Math.floor(elapsed()/1000); el.textContent=`${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`; }
-function toggleTimer(){ if(timer.on){ timer.acc=elapsed(); timer.on=false; clearInterval(timer.h); } else { timer.on=true; timer.start=Date.now(); timer.h=setInterval(paintTimer,500); } $("#tbtn").textContent=timer.on?"멈춤":"시작"; }
-function resetTimer(){ timer.on=false; timer.acc=0; clearInterval(timer.h); paintTimer(); $("#tbtn").textContent="시작"; }
+// ───────── 집중 시간 (뽀모도로) ─────────
+// 집중 → 짧은 쉼 → … → 네 번째 뒤 긴 쉼. 끝나는 시각(endsAt)으로 세므로 화면을 옮기거나 새로 고쳐도 이어집니다(이 기기 localStorage seojae.pomo).
+// 머리의 날 수 아래에 작은 시계가 모든 화면에서 보입니다. 맥·아이폰 방해금지는 웹앱이 직접 못 켜서 「단축어」를 불러 켭니다(설정 → 쓰는 동안 조용히).
+const POMO_DEF={focus:25,short:5,long:15,rounds:4,dnd:false,sOn:"아침서재 집중 시작",sOff:"아침서재 집중 끝",sound:true,autoBreak:true};
+const pomoSet=()=>{ let o={}; try{ o=JSON.parse(localStorage.getItem("seojae.pomoSet")||"{}"); }catch(_){} return Object.assign({},POMO_DEF,o); };
+function pomoSetSave(k,v){ const o=pomoSet(); o[k]=v; try{ localStorage.setItem("seojae.pomoSet",JSON.stringify(o)); }catch(_){} if(!P.on){ P.left=pomoLen(P.phase)*60000; pomoSave(); } pomoPaint(true); if(tab==="settings") render(); }
+let P=(()=>{ let o=null; try{ o=JSON.parse(localStorage.getItem("seojae.pomo")||"null"); }catch(_){} return Object.assign({phase:"focus",on:false,endsAt:0,left:null,round:1,waiting:false},o||{}); })();
+const pomoSave=()=>{ try{ localStorage.setItem("seojae.pomo",JSON.stringify(P)); }catch(_){} };
+const pomoLen=ph=>{ const c=pomoSet(); return ph==="focus"?c.focus:ph==="long"?c.long:c.short; };
+const pomoLeft=()=>P.on?Math.max(0,P.endsAt-Date.now()):(P.left??pomoLen(P.phase)*60000);
+const pomoActive=()=>P.on||(P.left!=null&&P.left<pomoLen(P.phase)*60000)||P.waiting;
+const mmss=ms=>{ const t=Math.ceil(ms/1000); return `${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}`; };
+const PH_NAME={focus:"집중",short:"쉼",long:"긴 쉼"};
+// 오늘 집중한 횟수·분 (이 기기)
+function pomoDay(){ let o=null; try{ o=JSON.parse(localStorage.getItem("seojae.pomoDay")||"null"); }catch(_){} return o&&o.d===today()?o:{d:today(),n:0,min:0}; }
+function pomoDayAdd(min){ const o=pomoDay(); o.n++; o.min+=min; try{ localStorage.setItem("seojae.pomoDay",JSON.stringify(o)); }catch(_){} }
+// 단축어 부르기 (맥·아이폰): shortcuts://run-shortcut?name=…&input=text&text=…
+function runShortcut(name,text){ if(!name) return; const a=document.createElement("a"); a.href="shortcuts://run-shortcut?name="+encodeURIComponent(name)+(text!=null?"&input=text&text="+encodeURIComponent(text):""); a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); }
+function pomoDnd(on,min){ const c=pomoSet(); if(!c.dnd) return; if(on) runShortcut(c.sOn,String(min)); else runShortcut(c.sOff); }
+function pomoStart(){
+  const c=pomoSet(); if(P.waiting){ P.waiting=false; }
+  const left=P.left!=null&&P.left>0?P.left:pomoLen(P.phase)*60000;
+  P.on=true; P.endsAt=Date.now()+left; P.left=null; pomoSave();
+  if(P.phase==="focus") pomoDnd(true,Math.ceil(left/60000));
+  try{ if(window.Notification&&Notification.permission==="default") Notification.requestPermission(); }catch(_){}
+  pomoAudio(); pomoTick(); pomoPaint(true); }
+function pomoPause(){ if(!P.on) return; P.left=pomoLeft(); P.on=false; pomoSave(); pomoPaint(true); }
+function pomoStop(){ const wasFocus=P.phase==="focus"&&(P.on||P.left!=null); P.on=false; P.left=null; P.phase="focus"; P.round=1; P.waiting=false; pomoSave(); if(wasFocus) pomoDnd(false); pomoPaint(true); toast("집중 시간을 마쳤습니다"); }
+function pomoSkip(){ pomoEnd(true); }
+function pomoNext(){ const c=pomoSet();
+  if(P.phase==="focus"){ P.phase=P.round>=c.rounds?"long":"short"; }
+  else { P.round=P.phase==="long"?1:P.round+1; P.phase="focus"; } }
+function pomoEnd(skipped){
+  const c=pomoSet(), was=P.phase;
+  if(was==="focus"&&!skipped) pomoDayAdd(c.focus);
+  if(was==="focus") pomoDnd(false);
+  pomoNext(); P.on=false; P.left=null;
+  if(was==="focus"){ // 쉼은 저절로 시작 (설정), 집중은 내가 눌러야 시작
+    if(c.autoBreak){ P.on=true; P.endsAt=Date.now()+pomoLen(P.phase)*60000; } else P.waiting=true; }
+  else P.waiting=true;
+  pomoSave(); pomoPaint(true);
+  if(!skipped){ const msg=was==="focus"?`집중 ${c.focus}분을 마쳤습니다. ${P.phase==="long"?"길게":""} 쉬어 가세요`:"쉼이 끝났습니다. 다음 집중을 시작해 보세요";
+    pomoChime(was==="focus"); toast(msg); try{ if(window.Notification&&Notification.permission==="granted"&&document.visibilityState!=="visible") new Notification("아침 서재 · 집중 시간",{body:msg,silent:false}); }catch(_){} } }
+let POMO_T=null;
+function pomoTick(){ clearInterval(POMO_T); POMO_T=setInterval(()=>{ if(P.on&&Date.now()>=P.endsAt) pomoEnd(false); pomoPaint(); if(!pomoActive()){ clearInterval(POMO_T); POMO_T=null; } },1000); }
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"){ if(P.on&&Date.now()>=P.endsAt) pomoEnd(false); pomoPaint(true); if(pomoActive()&&!POMO_T) pomoTick(); } });
+// 소리: 작은 종 (집중 끝 세 번, 쉼 끝 두 번)
+let AC=null; function pomoAudio(){ try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==="suspended") AC.resume(); }catch(_){} }
+function pomoChime(three){ if(!pomoSet().sound) return; try{ pomoAudio(); const t0=AC.currentTime; [0,.45,.9].slice(0,three?3:2).forEach((d,i)=>{ const o=AC.createOscillator(), g=AC.createGain(); o.type="sine"; o.frequency.value=[784,659,523][i]; g.gain.setValueAtTime(0,t0+d); g.gain.linearRampToValueAtTime(.18,t0+d+.02); g.gain.exponentialRampToValueAtTime(.001,t0+d+1.4); o.connect(g).connect(AC.destination); o.start(t0+d); o.stop(t0+d+1.5); }); }catch(_){} }
+// 그리기
+function pomoRing(sz,frac,ph,stroke=6){ const r=sz/2-stroke, c=2*Math.PI*r; return `<svg class="pring" width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" aria-hidden="true"><circle cx="${sz/2}" cy="${sz/2}" r="${r}" fill="none" stroke="var(--edge)" stroke-width="${stroke}"/><circle class="parc ${ph}" cx="${sz/2}" cy="${sz/2}" r="${r}" fill="none" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c*(1-frac)).toFixed(1)}" transform="rotate(-90 ${sz/2} ${sz/2})"/></svg>`; }
+function pomoCardHtml(){
+  const c=pomoSet(), left=pomoLeft(), tot=pomoLen(P.phase)*60000, frac=1-left/tot, d=pomoDay(), act=pomoActive();
+  const lens=[15,25,45,50];
+  return `<div class="pomohead"><p class="label" style="margin:0">집중 시간</p><span class="muted pomoday">${d.n?`오늘 ${d.n}번 · ${d.min}분`:"오늘 아직 시작 전"}</span></div>
+    <div class="pomobody"><div class="pomodial">${pomoRing(150,P.on||act?frac:0,P.phase,7)}<div class="pomoin"><span class="pph ${P.phase}">${P.waiting?(P.phase==="focus"?"다음 집중":"쉼 준비"):PH_NAME[P.phase]}</span><b id="pomotime">${mmss(left)}</b><span class="prounds">${Array.from({length:c.rounds},(_,i)=>`<i class="${i<P.round-1||(i===P.round-1&&P.phase!=="focus")?"done":i===P.round-1?"cur":""}"></i>`).join("")}</span></div></div>
+      <div class="pomoctl"><div class="row" style="gap:6px;flex-wrap:wrap">
+        ${P.on?`<button class="btn ink" onclick="pomoPause()">잠시 멈춤</button>`:`<button class="btn ink" onclick="pomoStart()">${P.waiting?(P.phase==="focus"?"다음 집중 시작":"쉬기 시작"):act?"이어서":"집중 시작"}</button>`}
+        ${act?`<button class="btn ghost" onclick="pomoSkip()" title="이 시간을 건너뛰고 다음으로">건너뛰기</button><button class="btn ghost" onclick="pomoStop()">그만</button>`:""}</div>
+        ${!act?`<div class="pills plen">${lens.map(n=>`<button class="pill ${c.focus===n?"on":""}" onclick="pomoSetSave('focus',${n})">${n}분</button>`).join("")}</div>`:""}
+        <p class="hint">${P.phase==="focus"?`${c.focus}분 집중하고 ${c.short}분 쉽니다. ${c.rounds}번째 뒤에는 ${c.long}분.`:"쉬는 동안은 눈을 감거나 창밖을 보세요."}${c.dnd?" 집중하는 동안 방해금지가 켜집니다.":` <a href="#" onclick="go('settings');setTimeout(()=>$('#pomoset')?.scrollIntoView({block:'center'}),200);return false">맥 방해금지 함께 켜기</a>`}</p>
+      </div></div>`;
+}
+function pomoMini(){ const el=$("#pomomini"); if(!el) return; const act=pomoActive(); el.hidden=!act; if(!act){ el.innerHTML=""; return; }
+  const left=pomoLeft(), tot=pomoLen(P.phase)*60000;
+  el.className="pomomini "+P.phase+(P.on?"":" paused")+(P.waiting?" waiting":"");
+  el.innerHTML=`<button class="pmgo" onclick="go('today');setTimeout(()=>$('#pomocard')?.scrollIntoView({block:'center',behavior:'smooth'}),80)" title="집중 시간 카드로">${pomoRing(22,1-left/tot,P.phase,3)}<span class="pml">${P.waiting?(P.phase==="focus"?"다음 집중":"쉼"):PH_NAME[P.phase]}</span><b>${P.waiting?"준비":mmss(left)}</b></button>`
+    +(P.on?`<button class="pmb" onclick="pomoPause()" title="잠시 멈춤" aria-label="잠시 멈춤">❙❙</button>`:`<button class="pmb" onclick="pomoStart()" title="${P.waiting?"시작":"이어서"}" aria-label="시작">▶</button>`)
+    +`<button class="pmb" onclick="pomoStop()" title="그만" aria-label="그만">■</button>`; }
+function pomoPaint(full){ pomoMini(); const card=$("#pomocard"); if(!card) return;
+  if(full||!$("#pomotime")) card.innerHTML=pomoCardHtml();
+  else { const left=pomoLeft(), tot=pomoLen(P.phase)*60000, r=card.querySelector(".pomodial .parc"); $("#pomotime").textContent=mmss(left); if(r){ const c=+r.getAttribute("stroke-dasharray"); r.setAttribute("stroke-dashoffset",(c*(left/tot)).toFixed(1)); } }
+  document.title=P.on?`${mmss(pomoLeft())} ${PH_NAME[P.phase]} · 아침 서재`:"아침 서재"; }
+setTimeout(()=>{ if(P.on&&Date.now()>=P.endsAt) pomoEnd(false); pomoPaint(true); if(pomoActive()) pomoTick(); },0);
 
 document.addEventListener("focusin",e=>{ if(e.target.matches?.("textarea,input:not([type=checkbox]):not([type=file]),select")) document.body.classList.add("typing"); });
 document.addEventListener("focusout",()=>setTimeout(()=>{ if(!document.activeElement?.matches?.("textarea,input,select")) document.body.classList.remove("typing"); },60));
