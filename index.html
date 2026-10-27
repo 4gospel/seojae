@@ -509,6 +509,15 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .ico{width:16px;height:16px;vertical-align:-3px;margin-right:4px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .btn .ico{opacity:.85}
 .label .ico{width:18px;height:18px;margin-right:2px}
+
+/* 설정: 이미 된 것은 작게 */
+.sheet.compact{padding:12px 18px 10px}
+.sheet.compact>.label{font-size:18px;margin:0 0 2px}
+.sheet.compact>.sub,.sheet.compact>.okline{font-size:14px;margin:0}
+.okline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--ink-soft)}
+.okline .stamp.ok{font-size:15px;padding:2px 8px 1px;transform:rotate(-3deg)}
+.sheet.compact details.keybox{margin-top:6px}
+.sheet.compact details.keybox>summary{font-size:13px;color:var(--faint)}
 </style>
 </head>
 <body>
@@ -786,7 +795,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="8172ba5b59";
+const APP_BUILD="839a557c7e";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1420,6 +1429,11 @@ function calGo(k){ // 그날 쓴 글로: 한 편이면 바로, 여럿이면 고�
 // ───────── 주석 서재: 드라이브 「성경공부」 폴더의 주석에서 본문 구절 부분을 발췌·요약 ─────────
 let CMT=null;   // 색인 {files:[{id,name,path,kind,size,books,score,series}],folder,at}
 function cmtLoad(){ if(CMT) return CMT; try{ CMT=JSON.parse(localStorage.getItem("seojae.cmt")||"null"); }catch(_){} return CMT; }
+async function cmtFresh(){ // 이름표 규칙이 바뀌었으면 드라이브를 다시 읽지 않고 이름표만 다시 받습니다
+  const c=cmtLoad(); if(c&&c.tagv===2) return c;
+  try{ const r=await gcall("cmtIndex",{retag:true}); if(r.ok&&r.files){ CMT=r; try{ localStorage.setItem("seojae.cmt",JSON.stringify(r)); }catch(_){} return r; } }catch(_){}
+  return c;
+}
 const cmtUse=f=>{ const u=(S.settings.cmtUse||{})[f.id]; return u!=null?u:f.score>=2; };   // 기본: 믿을 만한 시리즈만 사용
 async function cmtRefresh(force){
   const b=$("#cmtidxbtn"); if(b) b.textContent="폴더를 읽는 중… (처음엔 1~3분)";
@@ -1431,30 +1445,34 @@ async function cmtRefresh(force){
 }
 function cmtToggle(id,on){ (S.settings.cmtUse=S.settings.cmtUse||{})[id]=on; save(); }
 function cmtSection(){
-  const c=cmtLoad(), files=c?.files||[], rec=files.filter(f=>f.score>=2), etc=files.filter(f=>f.score<2);
+  const c=cmtLoad(), all=c?.files||[], q=(S._cmtq||"").trim().toLowerCase(), files=q?all.filter(f=>(f.name+" "+f.path+" "+f.books.map(b=>BIBLE[b-1][0]).join(" ")).toLowerCase().includes(q)):all, rec=files.filter(f=>f.score>=2), etc=files.filter(f=>f.score<2);
   const row=f=>`<li><input type="checkbox" ${cmtUse(f)?"checked":""} onchange="cmtToggle('${f.id}',this.checked)" style="width:auto;margin-top:3px"><div class="nm">${esc(f.name)}${f.series?` <span class="chip on" style="cursor:default;font-size:11px">${esc(f.series)}</span>`:""}<div class="bk">${f.books.length?f.books.map(b=>BIBLE[b-1][0]).join(" · "):"(어느 책인지 이름으로 알 수 없음)"} · ${esc(f.path)} · ${f.kind}</div></div></li>`;
-  return `<section class="sheet tape">
+  const ready=all.length>0;
+  return `<section class="sheet tape ${ready?"compact":""}">
     <p class="label bible">주석 서재 (구글 드라이브)</p>
+    ${ready?`<div class="okline"><span class="stamp ok">색인 있음</span><span class="muted">${esc(c.folder)} · 파일 ${all.length}개 · 켠 파일 ${all.filter(cmtUse).length}개 · 요약 ${CONF.ai?(CONF.ai==="gemini"?"제미나이":"클로드")+" ✓":"열쇠 없음(발췌만)"}</span></div>
+    <details class="keybox"><summary>파일 고르기 · 다시 읽기 · 열쇠·폴더 바꾸기</summary>`:""}
     <p class="sub">드라이브의 <b>${esc(CONF.cmtFolder||"성경공부")}</b> 폴더에 올려 둔 주석(PDF·워드·구글 문서·txt)에서 글의 본문 구절 부분을 찾아 보여 주고, 인공지능 열쇠가 있으면 요약합니다. 쓰기 화면 본문 칸 아래 「주석 보기」 단추로 봅니다.</p>
     <div class="row"><input id="cmtfolder" placeholder="폴더 이름 또는 폴더 링크 (기본: 성경공부)" value="${esc(CONF.cmtFolder||"")}" style="flex:1"><button class="btn small" onclick="saveKey('cmtFolderName','cmtfolder')">폴더 이름 저장</button><button class="btn ink small" id="cmtidxbtn" onclick="cmtRefresh(true)">${files.length?"다시 읽기":"색인 만들기"}</button></div>
     <details class="keybox" ${CONF.ai?"":"open"}><summary>${CONF.ai?`요약: ${CONF.ai==="gemini"?"제미나이":"클로드"} 열쇠 ✓ · 바꾸기`:"요약 열쇠 넣기 (없으면 발췌만 보입니다)"}</summary>
       <p class="hint">둘 중 하나만 넣으면 됩니다. <b>제미나이</b>: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>에서 무료로 만들 수 있습니다. <b>클로드</b>: <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> (사용량만큼 요금). 주석 본문은 요약을 누를 때만 그 회사로 보내집니다.</p>
       <div class="row"><input id="gkey" type="text" class="secret" spellcheck="false" placeholder="제미나이 API 키" style="flex:1" autocomplete="off"><button class="btn small" onclick="saveKey('geminiKey','gkey')">저장</button></div>
       <div class="row" style="margin-top:6px"><input id="ckey" type="text" class="secret" spellcheck="false" placeholder="클로드 API 키 (sk-ant-…)" style="flex:1" autocomplete="off"><button class="btn small" onclick="saveKey('claudeKey','ckey')">저장</button></div></details>
-    ${files.length?`<p class="hint" style="margin-top:10px">${c.folder} · 파일 ${files.length}개 · ${(c.at||"").slice(0,10)} 읽음. 체크한 파일만 씁니다 — 믿을 만한 시리즈(추천)는 켜 두고, 나머지는 꺼 두었습니다.</p>
-      <details class="more" open><summary>추천 주석 ${rec.length}</summary><ul class="cmtlist">${rec.map(row).join("")||"<li class='muted'>이름으로 알아본 추천 시리즈가 없습니다. 아래에서 직접 켜 주세요.</li>"}</ul></details>
-      <details class="more"><summary>그 밖의 파일 ${etc.length}</summary><ul class="cmtlist">${etc.map(row).join("")}</ul></details>`:`<p class="hint" style="margin-top:10px">폴더를 못 찾는다고 나오면(「내 컴퓨터」 아래 폴더는 이름으로 안 잡힐 때가 있습니다) 드라이브 웹에서 그 폴더를 열고 <b>주소창의 링크</b>를 복사해 위 칸에 붙여 넣은 뒤 「폴더 이름 저장」을 눌러 주세요.<br>「색인 만들기」를 누르면 폴더 안 파일 이름을 읽어 어느 성경책 주석인지, 믿을 만한 시리즈인지 표시합니다(파일 내용은 그때 읽지 않습니다).</p>`}
+    ${all.length?`<p class="hint" style="margin-top:10px">${c.folder} · 파일 ${all.length}개 · ${(c.at||"").slice(0,10)} 읽음. 체크한 파일만 씁니다 — 믿을 만한 시리즈(추천)는 켜 두고, 나머지는 꺼 두었습니다. 성경책은 파일 이름과 폴더 이름으로 알아봅니다.</p>
+      <input placeholder="파일·폴더·성경책 이름으로 찾기 (예: 시편)" value="${esc(S._cmtq||"")}" oninput="S._cmtq=this.value;clearTimeout(window._cq);window._cq=setTimeout(()=>{const y=scrollY;render();scrollTo(0,y);},400)" style="margin-top:8px">
+      <details class="more" open><summary>추천 주석 ${rec.length}${q?" (찾은 것)":""}</summary><ul class="cmtlist">${rec.map(row).join("")||"<li class='muted'>이름으로 알아본 추천 시리즈가 없습니다. 아래에서 직접 켜 주세요.</li>"}</ul></details>
+      <details class="more" ${q?"open":""}><summary>그 밖의 파일 ${etc.length}${q?" (찾은 것)":""}</summary><ul class="cmtlist">${etc.map(row).join("")}</ul></details></details>`:`<p class="hint" style="margin-top:10px">폴더를 못 찾는다고 나오면(「내 컴퓨터」 아래 폴더는 이름으로 안 잡힐 때가 있습니다) 드라이브 웹에서 그 폴더를 열고 <b>주소창의 링크</b>를 복사해 위 칸에 붙여 넣은 뒤 「폴더 이름 저장」을 눌러 주세요.<br>「색인 만들기」를 누르면 폴더 안 파일 이름을 읽어 어느 성경책 주석인지, 믿을 만한 시리즈인지 표시합니다(파일 내용은 그때 읽지 않습니다).</p>`}
   </section>`;
 }
 let CMTR=null;
 async function cmtShow(){
   const P=parseRef(normPassage($("#wpassage")?.value||"")); if(!P) return toast("본문 칸에 「요한복음 15:1-8」처럼 적어 주세요");
-  const c=cmtLoad(); if(!c?.files?.length) return toast("먼저 설정 → 주석 서재에서 「색인 만들기」를 눌러 주세요");
-  const ids=c.files.filter(f=>f.books.includes(P.bi+1)&&cmtUse(f)).map(f=>f.id);
+  const c=await cmtFresh(); if(!c?.files?.length) return toast("먼저 설정 → 주석 서재에서 「색인 만들기」를 눌러 주세요");
+  const forBook=c.files.filter(f=>f.books.includes(P.bi+1)), ids=forBook.filter(cmtUse).map(f=>f.id);
   const label=P.whole?`${P.name} ${P.c1}${P.bi===18?"편":"장"}`:`${P.name} ${P.c1}:${P.v1}${P.c2!==P.c1?"-"+P.c2+":"+P.v2:P.v2!==P.v1&&P.v2!==999?"-"+P.v2:""}`;
   let box=$("#cmtbox"); if(!box){ box=document.createElement("div"); box.id="cmtbox"; box.className="cmtbox"; ($("#cmtanchor")||$("#sucard")||$(".toolbar")).after(box); }
   setTimeout(()=>box.scrollIntoView({behavior:"smooth",block:"start"}),50);
-  if(!ids.length){ box.innerHTML=`<p class="muted">${esc(label)} — 이 책의 주석으로 표시된 파일이 없습니다. 설정 → 주석 서재에서 파일을 켜 주세요.</p>`; return; }
+  if(!ids.length){ box.innerHTML=`<p class="muted">${esc(label)} — ${forBook.length?`${esc(P.name)} 주석 파일 ${forBook.length}개가 있지만 모두 꺼져 있습니다. 설정 → 주석 서재에서 켜 주세요.`:`파일 이름이나 폴더 이름에 「${esc(P.name)}」이 들어간 주석을 찾지 못했습니다. 설정 → 주석 서재의 찾기 칸에서 파일을 찾아 켜 주세요.`}</p>`; return; }
   box.innerHTML=`<p class="label bible" style="margin:0">주석 — ${esc(label)}</p><p class="muted">주석 ${ids.length}권을 읽는 중… 처음 여는 파일은 변환 때문에 1~2분 걸릴 수 있습니다.</p>`;
   try{ const r=await gcall("cmtLookup",{book:P.bi+1,c1:P.c1,v1:P.v1,c2:P.c2===P.c1?P.c1:P.c2,v2:P.v2===999?999:P.v2,label,ids}); if(!r.ok) throw new Error(r.error); CMTR=r;
     const sum=r.summary?r.summary.split("\n").map(l=>l.startsWith("■")?`<h5>${esc(l.replace(/^■\s*/,""))}</h5>`:esc(l)).join("\n"):"";
@@ -1758,37 +1776,39 @@ settings(){
   </div>
   <div class="setgroup">연결</div>
   <div class="grid">
-  ${CONF.phoneUrl?`<section class="sheet tape c">
+  ${CONF.phoneUrl?`<section class="sheet tape c ${GAS?"compact":""}">
     <p class="label">${GAS?"다른 기기 연결":"휴대폰에서 쓰기"}</p>
+    ${GAS?`<div class="okline"><span class="stamp ok">이 기기 연결됨</span><span class="muted">구글 드라이브와 같은 기록을 씁니다</span></div><details class="keybox"><summary>다른 기기 연결하기 (QR 보기) · 연결 끊기</summary>`:""}
     <p class="sub">${GAS?"휴대폰(또는 다른 컴퓨터) 카메라로 아래 QR을 찍으면 그 기기가 연결됩니다. 열린 화면에서 <b>공유 → 홈 화면에 추가</b>를 누르면 아침 서재 아이콘으로 앱처럼 쓸 수 있습니다. <b>컴퓨터가 꺼져 있어도 열립니다.</b>"
       :"휴대폰이 이 컴퓨터와 <b>같은 와이파이</b>에 있으면, 카메라로 아래 QR을 찍어 열어 주세요. 열린 화면에서 <b>공유 → 홈 화면에 추가</b>를 누르면 앱처럼 쓸 수 있습니다."}</p>
     <div id="qr"></div>
     ${GAS?"":`<p class="muted" style="word-break:break-all;margin-top:8px">${esc(CONF.phoneUrl)}</p>`}
     <p class="muted">${GAS?"이 QR에는 비밀 열쇠가 들어 있습니다. 다른 사람에게 보여 주거나 사진으로 보내지 마세요.":"이 주소에는 비밀 열쇠가 들어 있어 다른 사람에게는 보내지 마세요. 컴퓨터가 켜져 있고 아침 서재가 열려 있어야 휴대폰에서도 열립니다."}</p>
-    ${GAS?`<div class="row"><button class="btn small" onclick="navigator.clipboard?.writeText(connectLink()).then(()=>toast('연결 링크를 복사했습니다'))">연결 링크 복사</button><button class="btn small danger" onclick="disconnect()">이 기기 연결 끊기</button></div>`:""}
+    ${GAS?`<div class="row"><button class="btn small" onclick="navigator.clipboard?.writeText(connectLink()).then(()=>toast('연결 링크를 복사했습니다'))">연결 링크 복사</button><button class="btn small danger" onclick="disconnect()">이 기기 연결 끊기</button></div></details>`:""}
   </section>`:""}
-  ${CONF.local===false?"":`<section class="sheet tape">
+  ${CONF.local===false?"":`<section class="sheet tape ${CONF.notion?"compact":""}">
     <p class="label">노션 연결</p>
     <div id="nstatus" class="sub">${CONF.notion?"연결 키가 들어 있습니다. 확인 중…":"아직 연결되지 않았습니다."}</div>
+    ${CONF.notion?`<label class="row" style="margin-top:6px;gap:8px;font-size:14px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 간직할 때마다 노션에 자동으로 싣기</label>`:""}
     <details class="keybox" ${CONF.notion?"":"open"}><summary>${CONF.notion?"키 바꾸기 · 연결 방법":"연결 방법"}</summary>
     <ol class="steps sub">
       <li><a href="https://www.notion.so/profile/integrations" target="_blank">노션 통합 만들기</a> 페이지에서 <b>새 통합</b>을 만들고(이름: 아침 서재), <b>내부 통합 시크릿</b>을 복사합니다.</li>
       <li>노션의 <b>설교&강의</b> 페이지와 <b>자기계발</b> 페이지에서 각각 오른쪽 위 <b>···</b> → <b>연결</b> → <b>아침 서재</b>를 추가합니다.</li>
       <li>복사한 시크릿을 아래 칸에 붙여 넣고 저장합니다. (${GAS?"구글 계정의 비공개 저장소":"이 컴퓨터의 config.json"}에만 보관됩니다)</li>
     </ol>
-    <div class="row"><input id="ntoken" type="text" class="secret" spellcheck="false" placeholder="ntn_ 로 시작하는 시크릿" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('notionToken','ntoken')">저장</button></div></details>
-    <label class="row" style="margin-top:14px;gap:8px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 간직할 때마다 노션에 자동으로 싣기</label>
-    <p class="muted" style="margin-top:10px">말씀 글 → 설교&강의의 책별 노트(예: 신약04_요한복음)와 설교·묵상 색인<br>책 글·밑줄 → 자기계발 / 아침 독서 글, 책 → 독서 목록</p>
+    <div class="row"><input id="ntoken" type="text" class="secret" spellcheck="false" placeholder="ntn_ 로 시작하는 시크릿" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('notionToken','ntoken')">저장</button></div>
+    ${CONF.notion?"":`<label class="row" style="margin-top:14px;gap:8px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 간직할 때마다 노션에 자동으로 싣기</label>`}
+    <p class="muted" style="margin-top:10px">말씀 글 → 설교&강의의 책별 노트(예: 신약04_요한복음)와 설교·묵상 색인<br>책 글·밑줄 → 자기계발 / 아침 독서 글, 책 → 독서 목록</p></details>
   </section>
   ${cmtSection()}
-  <section class="sheet tape b">
+  <section class="sheet tape b ${CONF.kakao?"compact":""}">
     <p class="label book">책 표지 찾기 (카카오)</p>
     <p class="sub">${CONF.kakao?"✓ 카카오 검색 키가 들어 있습니다.":"한국 책 표지를 정확하게 찾으려면 무료 키가 필요합니다."}</p>
     <details class="keybox" ${CONF.kakao?"":"open"}><summary>${CONF.kakao?"키 바꾸기":"키 넣는 방법"}</summary>
     <ol class="steps sub"><li><a href="https://developers.kakao.com" target="_blank">카카오 개발자</a>에 로그인 → 내 애플리케이션 → 애플리케이션 추가</li><li>앱 키 중 <b>REST API 키</b>를 복사해 아래에 넣습니다.</li></ol>
     <div class="row"><input id="kkey" type="text" class="secret" spellcheck="false" placeholder="REST API 키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('kakaoKey','kkey')">저장</button></div></details>
   </section>
-  <section class="sheet tape">
+  <section class="sheet tape ${CONF.nl?"compact":""}">
     <p class="label book">목차 · 책 소개 · 쪽수 (국립중앙도서관)</p>
     <p class="sub">${CONF.nl?"✓ 국립중앙도서관 인증키가 들어 있습니다. 책을 꽂으면 목차·소개·쪽수·분류를 저절로 채웁니다.":"짧은 책 소개는 카카오에서 이미 채워집니다. <b>목차·쪽수·긴 소개</b>까지 채우려면 국립중앙도서관 무료 인증키가 필요합니다."}</p>
     <details class="keybox" ${CONF.nl?"":"open"}><summary>${CONF.nl?"키 바꾸기":"키 넣는 방법"}</summary>
@@ -2025,9 +2045,9 @@ const isApp=()=>matchMedia("(display-mode: standalone)").matches||navigator.stan
 async function installApp(){ if(!INSTALL) return; INSTALL.prompt(); await INSTALL.userChoice; INSTALL=null; render(); }
 function appSection(){
   const ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua), safari=/Safari/.test(ua)&&!/Chrome|CriOS|Edg/.test(ua);
-  return `<section class="sheet tape">
+  return `<section class="sheet tape ${isApp()?"compact":""}">
     <p class="label">앱으로 쓰기</p>
-    ${isApp()?`<p class="sub"><span class="stamp ok">앱 창</span> 지금 주소창 없는 앱 창으로 열려 있습니다.</p>`
+    ${isApp()?`<div class="okline"><span class="stamp ok">앱 창</span><span class="muted">주소창 없는 앱 창으로 열려 있습니다</span></div>`
     :`<p class="sub">주소창·탭 없이 <b>다이어리처럼 따로 열리는 창</b>으로 쓸 수 있습니다. 한 번만 설치하면 Dock·홈 화면의 아이콘으로 엽니다.</p>
     ${INSTALL?`<button class="btn ink" onclick="installApp()">이 기기에 앱으로 설치</button>`
       :ios?`<ol class="steps sub"><li>Safari 아래쪽 <b>공유</b>(□↑) 단추를 누릅니다.</li><li><b>홈 화면에 추가</b>를 누릅니다.</li></ol>`
@@ -2069,14 +2089,16 @@ async function setReminder(on){
 function reminderSection(){
   if(!GAS) return "";
   const R=S.reminder||{}, h=R.hour||6;
-  return `<section class="sheet tape c">
+  const on=!!(R.on&&R.clock!==false);
+  return `<section class="sheet tape c ${on?"compact":""}">
     <p class="label bible">아침 알림 (메일)</p>
+    ${on?`<div class="okline"><span class="stamp ok">알림 켜짐</span><span class="muted">매일 ${h}시 · ${esc(R.email||"")}</span></div><details class="keybox"><summary>시각 바꾸기 · 끄기</summary>`:""}
     <p class="sub">매일 아침 정한 시각에 <b>오늘의 통독 분량 · 말씀 질문 · 책 질문 · 읽는 책</b>을 구글 메일로 보냅니다. 휴대폰 Gmail 알림을 켜 두시면 알림으로 받습니다.</p>
     ${R.on&&R.clock===false?`<p class="sub" style="color:var(--stamp)">아직 알림 시계가 없습니다. 앱스 스크립트 편집기에서 <b>turnOnMorningMail</b> 을 한 번 ▶ 실행한 뒤, 아래 「시각 바꾸기」를 한 번 눌러 주세요.</p>`
       :R.on?`<p class="sub"><span class="stamp ok">알림 켜짐</span> 매일 ${h}시 · ${esc(R.email||"")}</p>`:""}
     <div class="row" style="margin-top:8px"><label class="field" style="width:130px;margin:0"><span>보낼 시각</span><select id="rhour">${[4,5,6,7,8,9].map(x=>`<option value="${x}" ${x===h?"selected":""}>오전 ${x}시</option>`).join("")}</select></label>
       <span class="spacer"></span>${R.on?`<button class="btn" onclick="setReminder(true)">시각 바꾸기</button><button class="btn danger" onclick="setReminder(false)">끄기</button>`:`<button class="btn ink" onclick="setReminder(true)">알림 켜기</button>`}</div>
-    <p class="hint">처음 한 번은 앱스 스크립트 편집기에서 <code>turnOnMorningMail</code> 을 ▶ 실행해 알림 시계를 설치해 주세요. (<code>testMorningMail</code> 은 지금 바로 시험 메일을 한 통 보냅니다)</p>
+    <p class="hint">처음 한 번은 앱스 스크립트 편집기에서 <code>turnOnMorningMail</code> 을 ▶ 실행해 알림 시계를 설치해 주세요. (<code>testMorningMail</code> 은 지금 바로 시험 메일을 한 통 보냅니다)</p>${on?"</details>":""}
   </section>`;
 }
 
