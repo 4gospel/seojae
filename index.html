@@ -795,7 +795,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="e93ff33daa";
+const APP_BUILD="02503f1d3b";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1430,7 +1430,7 @@ function calGo(k){ // 그날 쓴 글로: 한 편이면 바로, 여럿이면 고�
 let CMT=null;   // 색인 {files:[{id,name,path,kind,size,books,score,series}],folder,at}
 function cmtLoad(){ if(CMT) return CMT; try{ CMT=JSON.parse(localStorage.getItem("seojae.cmt")||"null"); }catch(_){} return CMT; }
 async function cmtFresh(){ // 이름표 규칙이 바뀌었으면 드라이브를 다시 읽지 않고 이름표만 다시 받습니다
-  const c=cmtLoad(); if(c&&c.tagv===2) return c;
+  const c=cmtLoad(); if(c&&c.tagv===3) return c;
   try{ const r=await gcall("cmtIndex",{retag:true}); if(r.ok&&r.files){ CMT=r; try{ localStorage.setItem("seojae.cmt",JSON.stringify(r)); }catch(_){} return r; } }catch(_){}
   return c;
 }
@@ -1447,7 +1447,7 @@ async function cmtRefresh(force){
 }
 function cmtToggle(id,on){ (S.settings.cmtUse=S.settings.cmtUse||{})[id]=on; save(); }
 function cmtSection(){
-  const c=cmtLoad(), all=c?.files||[], q=(S._cmtq||"").trim().toLowerCase(), files=q?all.filter(f=>(f.name+" "+f.path+" "+cmtBooks(f).map(b=>BIBLE[b-1][0]).join(" ")).toLowerCase().includes(q)):all, rec=files.filter(f=>f.score>=2), etc=files.filter(f=>f.score<2);
+  const c=cmtLoad(), all=(c?.files||[]).filter(f=>!f.hidden), q=(S._cmtq||"").trim().normalize("NFC").toLowerCase(), files=q?all.filter(f=>(f.name+" "+f.path+" "+cmtBooks(f).map(b=>BIBLE[b-1][0]).join(" ")).normalize("NFC").toLowerCase().includes(q)):all, rec=files.filter(f=>f.score>=2), etc=files.filter(f=>f.score<2);
 
   const ready=all.length>0;
   return `<section class="sheet tape ${ready?"compact":""}">
@@ -1473,14 +1473,14 @@ function cmtLists(rec,etc,q){
   return `<details class="more" open><summary>추천 주석 ${rec.length}${q?" (찾은 것)":""}</summary><ul class="cmtlist">${rec.slice(0,300).map(cmtRow).join("")||"<li class='muted'>이름으로 알아본 추천 시리즈가 없습니다. 아래에서 직접 켜 주세요.</li>"}</ul></details>
     <details class="more" ${q?"open":""}><summary>그 밖의 파일 ${etc.length}${q?" (찾은 것)":""}</summary><ul class="cmtlist">${etc.slice(0,300).map(cmtRow).join("")}${etc.length>300?`<li class="muted">…${etc.length-300}개 더 — 찾기 칸으로 좁혀 주세요</li>`:""}</ul></details>`;
 }
-function cmtFilter(){ const box=$("#cmtlists"); if(!box) return; const all=cmtLoad()?.files||[], q=(S._cmtq||"").trim().toLowerCase();
-  const files=q?all.filter(f=>(f.name+" "+f.path+" "+cmtBooks(f).map(b=>BIBLE[b-1][0]).join(" ")).toLowerCase().includes(q)):all;
+function cmtFilter(){ const box=$("#cmtlists"); if(!box) return; const all=(cmtLoad()?.files||[]).filter(f=>!f.hidden), q=(S._cmtq||"").trim().normalize("NFC").toLowerCase();
+  const files=q?all.filter(f=>(f.name+" "+f.path+" "+cmtBooks(f).map(b=>BIBLE[b-1][0]).join(" ")).normalize("NFC").toLowerCase().includes(q)):all;
   box.innerHTML=cmtLists(files.filter(f=>f.score>=2),files.filter(f=>f.score<2),q); }
 let CMTR=null;
 async function cmtShow(){
   const P=parseRef(normPassage($("#wpassage")?.value||"")); if(!P) return toast("본문 칸에 「요한복음 15:1-8」처럼 적어 주세요");
   const c=await cmtFresh(); if(!c?.files?.length) return toast("먼저 설정 → 주석 서재에서 「색인 만들기」를 눌러 주세요");
-  const forBook=c.files.filter(f=>cmtBooks(f).includes(P.bi+1)), ids=forBook.filter(cmtUse).map(f=>f.id);
+  const forBook=c.files.filter(f=>!f.hidden&&cmtBooks(f).includes(P.bi+1)), ids=forBook.filter(cmtUse).map(f=>f.id);
   const label=P.whole?`${P.name} ${P.c1}${P.bi===18?"편":"장"}`:`${P.name} ${P.c1}:${P.v1}${P.c2!==P.c1?"-"+P.c2+":"+P.v2:P.v2!==P.v1&&P.v2!==999?"-"+P.v2:""}`;
   let box=$("#cmtbox"); if(!box){ box=document.createElement("div"); box.id="cmtbox"; box.className="cmtbox"; ($("#cmtanchor")||$("#sucard")||$(".toolbar")).after(box); }
   setTimeout(()=>box.scrollIntoView({behavior:"smooth",block:"start"}),50);
