@@ -785,7 +785,18 @@ const PLACE=()=>GAS?"구글 드라이브":"이 컴퓨터";
 const CKEY="seojae.conf";
 let READY=false, PENDING=false, CACHED_REV=null;
 const useData=d=>{ S=Object.assign(blank(),d); S.settings=Object.assign(blank().settings,d.settings);
-  S.writings.forEach(w=>{ delete w.syncing; delete w.resync; }); };   // 예전에 남은 '보내는 중' 표시 지우기
+  S.writings.forEach(w=>{ delete w.syncing; delete w.resync; }); dedupeWritings(); };   // 예전에 남은 '보내는 중' 표시 지우기
+function dedupeWritings(){
+  const norm=t=>String(t||"").replace(/\s+/g," ").trim(), seen=new Map(), drop=[];
+  for(const w of S.writings.slice().sort((a,b)=>a.id.localeCompare(b.id))){ const k=[w.date,w.track,norm(w.title),norm(w.body)].join("|"); const o=seen.get(k);
+    if(!o){ seen.set(k,w); continue; }
+    const keep=(o.notion?.page&&!w.notion?.page)?o:(w.notion?.page&&!o.notion?.page)?w:o, gone=keep===o?w:o;   // 노션에 실린 쪽을 남김
+    seen.set(k,keep); drop.push(gone); }
+  if(!drop.length) return;
+  const pages=[]; drop.forEach(w=>{ tomb(w.id); if(w.notion?.page) pages.push(w.notion.page,w.notion.index); S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==w.id); }); });
+  S.writings=S.writings.filter(w=>!drop.includes(w));
+  setTimeout(()=>{ toast(`같은 글 ${drop.length}편을 하나로 합쳤습니다`); save(); if(pages.filter(Boolean).length) trashInNotion(pages.filter(Boolean)); },800);
+}
 async function load(){
   if(NEED_CONNECT) return;
   if(GAS){
@@ -902,6 +913,7 @@ function mergeFrom(other){
     S.settings.cmtUse=Object.assign({},l.cmtUse||{},w.cmtUse||{}); S.settings.cmtBook=Object.assign({},l.cmtBook||{},w.cmtBook||{});
     const st=new Map((l.myStk||[]).map(x=>[x.id,x])); (w.myStk||[]).forEach(x=>st.set(x.id,x)); S.settings.myStk=[...st.values()].filter(x=>!del[x.id]); }   // 내 스티커는 합집합
   if((other.reminderT||"")>(S.reminderT||"")){ S.reminder=other.reminder; S.reminderT=other.reminderT; }
+  dedupeWritings();
   takeSnap();
 }
 let saveT;
@@ -936,7 +948,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="4906a93abb";
+const APP_BUILD="ce2bd088d4";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1563,6 +1575,7 @@ function restoreDraft(){
   let d=null; try{ d=JSON.parse(localStorage.getItem(draftKey())||localStorage.getItem(DKEY)||"null"); }catch(_){}   // 옛 한 칸짜리 보관도 한 번은 읽음
   const c=(S.drafts||{})[cloudKey()]; if(c&&(!d||(c.t||0)>(d.t||0))) d=c;   // 다른 기기에서 더 나중에 쓰다 만 글이 있으면 그것을
   if(!d||(d.editId||null)!==(editId||null)) return;
+  if(!editId&&d.body){ const norm=t=>String(t||"").replace(/\s+/g," ").trim(); const same=S.writings.find(x=>norm(x.body)===norm(d.body)); if(same){ clearDraft(); save(); NAV=true; try{ goInner("write",{edit:same.id}); }finally{ NAV=false; } return; } }   // 이미 간직된 글의 임시 보관본이면 그 글을 엶 (같은 글이 둘 생기지 않게)
   if(!editId&&fromNote&&d.fromNote!==fromNote) return;          // 다른 밑줄로 새 글을 시작한 경우는 건드리지 않음
   if(!editId&&!fromWriting&&d.fromWriting){ fromWriting=d.fromWriting; NAV=true; try{ render(); }finally{ NAV=false; } return; }   // 설교로 키우던 글
   if(!editId&&fromWriting&&d.fromWriting!==fromWriting) return;
@@ -2436,6 +2449,8 @@ function keepWriting(auto){
   else { data.bookId=$("#wbook").value||null; data.page=$("#wpage").value.trim(); }
   let w;
   if(editId) w=S.writings.find(x=>x.id===editId);
+  if(!w){ const norm=t=>String(t||"").replace(/\s+/g," ").trim(); const dup=S.writings.find(x=>x.track===track&&(norm(x.body)===norm(body)||(data.title&&x.date===today()&&x.title===data.title&&(x.passage||"")===(data.passage||""))));
+    if(dup){ w=dup; editId=dup.id; } }   // 같은 글이 이미 있으면 새로 만들지 않고 그 글에 덮어씁니다
   if(w&&w.body!==body&&!auto) w.prev=[{at:w.updated||w.date,body:w.body},...(w.prev||[])].slice(0,3);   // 이전 판 3개 (봉인 때만 — 자동 간직은 같은 판을 이어 씀)
   if(w) Object.assign(w,data);
   else {   // 새 글 (또는 다른 기기에서 지워진 글을 다시 간직하는 경우)
