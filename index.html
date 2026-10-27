@@ -793,15 +793,22 @@ let READY=false, PENDING=false, CACHED_REV=null;
 const useData=d=>{ S=Object.assign(blank(),d); S.settings=Object.assign(blank().settings,d.settings);
   S.writings.forEach(w=>{ delete w.syncing; delete w.resync; }); dedupeWritings(); };   // 예전에 남은 '보내는 중' 표시 지우기
 function dedupeWritings(){
-  const norm=t=>String(t||"").replace(/\s+/g," ").trim(), seen=new Map(), drop=[];
-  for(const w of S.writings.slice().sort((a,b)=>a.id.localeCompare(b.id))){ const k=[w.date,w.track,norm(w.title),norm(w.body)].join("|"); const o=seen.get(k);
+  // 같은 날·같은 갈래에 제목과 본문 위치가 같은 글(또는 본문이 똑같은 글)은 한 편으로: 본문이 더 긴 쪽을 남기고(같으면 노션에 실린 쪽, 그다음 먼저 만든 쪽),
+  // 남는 쪽에 노션 번호가 없으면 지워지는 쪽 것을 물려받고, 지워지는 쪽의 노션 페이지가 따로 있으면 휴지통으로
+  const norm=t=>String(t||"").replace(/\s+/g," ").trim(), seen=new Map(), drop=[], pages=[];
+  const keyOf=w=>{ const t=norm(w.title); return t?[w.date,w.track,"t",t,norm(w.passage)].join("|"):[w.date,w.track,"b",norm(w.body)].join("|"); };
+  for(const w of S.writings.slice().sort((a,b)=>a.id.localeCompare(b.id))){ const k=keyOf(w), o=seen.get(k);
     if(!o){ seen.set(k,w); continue; }
-    const keep=(o.notion?.page&&!w.notion?.page)?o:(w.notion?.page&&!o.notion?.page)?w:o, gone=keep===o?w:o;   // 노션에 실린 쪽을 남김
+    const lb=norm(w.body).length-norm(o.body).length;
+    const keep=lb>0?w:lb<0?o:(o.notion?.page&&!w.notion?.page)?o:(w.notion?.page&&!o.notion?.page)?w:o, gone=keep===o?w:o;
+    if(!keep.notion?.page&&gone.notion?.page){ keep.notion=gone.notion; keep.syncedAt=gone.syncedAt; }
+    else if(gone.notion?.page&&gone.notion.page!==keep.notion?.page) pages.push(gone.notion.page,gone.notion.index);
+    for(const f of ["summary","topics","situations","stickers","prev"]) if(!keep[f]?.length&&gone[f]?.length) keep[f]=gone[f];
     seen.set(k,keep); drop.push(gone); }
   if(!drop.length) return;
-  const pages=[]; drop.forEach(w=>{ tomb(w.id); if(w.notion?.page) pages.push(w.notion.page,w.notion.index); S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==w.id); }); });
-  S.writings=S.writings.filter(w=>!drop.includes(w));
-  setTimeout(()=>{ toast(`같은 글 ${drop.length}편을 하나로 합쳤습니다`); save(); if(pages.filter(Boolean).length) trashInNotion(pages.filter(Boolean)); },800);
+  drop.forEach(w=>{ tomb(w.id); S.manuscripts.forEach(m=>{ if(m.items) m.items=m.items.filter(x=>x!==w.id); }); });
+  S.writings=S.writings.filter(w=>!drop.includes(w)); if(drop.some(w=>w.id===editId)) editId=null;
+  setTimeout(()=>{ toast(`같은 글 ${drop.length}편을 하나로 합쳤습니다`); save(); if(pages.filter(Boolean).length) trashInNotion(pages.filter(Boolean)); if(tab!=="write") render(); },800);
 }
 async function load(){
   if(NEED_CONNECT) return;
@@ -954,7 +961,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="0aedb6cf02";
+const APP_BUILD="4d8dfcdfae";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1533,7 +1540,8 @@ function go(t,o={}){
   }
   NAV=true; try{ goInner(t,o); }finally{ NAV=false; }
 }
-function goInner(t,o){ if(t!=="write"){ keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
+let TRACK_PICK=false;   // 메뉴(묵상/글쓰기)로 갈래를 정해 들어왔는가
+function goInner(t,o){ TRACK_PICK=!!o.track; if(t!=="write"){ keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
   if(t==="write"&&!o.edit&&!o.fromNote&&!o.fromWriting&&!o.new){   // 쓰기로 들어오면 오늘 쓴 글이 있을 때 그 글을 이어서 (묵상 먼저). 새로 쓰려면 「새 글」
     const tr=o.track||track, ws=S.writings.filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
   tab=t; if(o.track) track=o.track; editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||null; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0); }
@@ -1585,7 +1593,7 @@ function restoreDraft(){
   if(!editId&&fromNote&&d.fromNote!==fromNote) return;          // 다른 밑줄로 새 글을 시작한 경우는 건드리지 않음
   if(!editId&&!fromWriting&&d.fromWriting){ fromWriting=d.fromWriting; NAV=true; try{ render(); }finally{ NAV=false; } return; }   // 설교로 키우던 글
   if(!editId&&fromWriting&&d.fromWriting!==fromWriting) return;
-  if(!editId&&d.track!==track){ track=d.track; NAV=true; try{ render(); }finally{ NAV=false; } return; }
+  if(!editId&&d.track!==track){ if(TRACK_PICK) return; track=d.track; NAV=true; try{ render(); }finally{ NAV=false; } return; }   // 메뉴로 고른 갈래면 다른 갈래 보관본은 그 메뉴에서 되살림
   if(d.body===$("#wbody").value&&d.title===$("#wtitle").value) return;
   $("#wtitle").value=d.title||""; $("#wbody").value=d.body||"";
   if(d.type&&$("#wtype")) $("#wtype").value=d.type;
