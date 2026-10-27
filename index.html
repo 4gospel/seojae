@@ -795,7 +795,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="839a557c7e";
+const APP_BUILD="60219f0c40";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1435,6 +1435,8 @@ async function cmtFresh(){ // 이름표 규칙이 바뀌었으면 드라이브�
   return c;
 }
 const cmtUse=f=>{ const u=(S.settings.cmtUse||{})[f.id]; return u!=null?u:f.score>=2; };   // 기본: 믿을 만한 시리즈만 사용
+const cmtBooks=f=>{ const o=(S.settings.cmtBook||{})[f.id]; return o?[o]:f.books; };          // 직접 정한 책이 있으면 그것을 씀
+function cmtSetBook(id,v){ const m=S.settings.cmtBook=S.settings.cmtBook||{}; if(v) m[id]=+v; else delete m[id]; if(v) (S.settings.cmtUse=S.settings.cmtUse||{})[id]=true; save(); }
 async function cmtRefresh(force){
   const b=$("#cmtidxbtn"); if(b) b.textContent="폴더를 읽는 중… (처음엔 1~3분)";
   try{ const r=await gcall("cmtIndex",{refresh:!!force}); if(!r.ok) throw new Error(r.error); CMT=r; try{ localStorage.setItem("seojae.cmt",JSON.stringify(r)); }catch(_){}
@@ -1445,8 +1447,10 @@ async function cmtRefresh(force){
 }
 function cmtToggle(id,on){ (S.settings.cmtUse=S.settings.cmtUse||{})[id]=on; save(); }
 function cmtSection(){
-  const c=cmtLoad(), all=c?.files||[], q=(S._cmtq||"").trim().toLowerCase(), files=q?all.filter(f=>(f.name+" "+f.path+" "+f.books.map(b=>BIBLE[b-1][0]).join(" ")).toLowerCase().includes(q)):all, rec=files.filter(f=>f.score>=2), etc=files.filter(f=>f.score<2);
-  const row=f=>`<li><input type="checkbox" ${cmtUse(f)?"checked":""} onchange="cmtToggle('${f.id}',this.checked)" style="width:auto;margin-top:3px"><div class="nm">${esc(f.name)}${f.series?` <span class="chip on" style="cursor:default;font-size:11px">${esc(f.series)}</span>`:""}<div class="bk">${f.books.length?f.books.map(b=>BIBLE[b-1][0]).join(" · "):"(어느 책인지 이름으로 알 수 없음)"} · ${esc(f.path)} · ${f.kind}</div></div></li>`;
+  const c=cmtLoad(), all=c?.files||[], q=(S._cmtq||"").trim().toLowerCase(), files=q?all.filter(f=>(f.name+" "+f.path+" "+cmtBooks(f).map(b=>BIBLE[b-1][0]).join(" ")).toLowerCase().includes(q)):all, rec=files.filter(f=>f.score>=2), etc=files.filter(f=>f.score<2);
+  const own=(S.settings.cmtBook||{});
+  const row=f=>`<li><input type="checkbox" ${cmtUse(f)?"checked":""} onchange="cmtToggle('${f.id}',this.checked)" style="width:auto;margin-top:3px"><div class="nm">${esc(f.name)}${f.series?` <span class="chip on" style="cursor:default;font-size:11px">${esc(f.series)}</span>`:""}<div class="bk">${f.books.length?f.books.map(b=>BIBLE[b-1][0]).join(" · "):"(어느 책인지 이름으로 알 수 없음)"} · ${esc(f.path)} · ${f.kind}
+      · 책 정하기 <select onchange="cmtSetBook('${f.id}',this.value)" style="width:auto;font-size:12px;padding:0 2px"><option value="">자동</option>${BIBLE.map((b,i)=>`<option value="${i+1}" ${own[f.id]===i+1?"selected":""}>${b[0]}</option>`).join("")}</select></div></div></li>`;
   const ready=all.length>0;
   return `<section class="sheet tape ${ready?"compact":""}">
     <p class="label bible">주석 서재 (구글 드라이브)</p>
@@ -1468,13 +1472,14 @@ let CMTR=null;
 async function cmtShow(){
   const P=parseRef(normPassage($("#wpassage")?.value||"")); if(!P) return toast("본문 칸에 「요한복음 15:1-8」처럼 적어 주세요");
   const c=await cmtFresh(); if(!c?.files?.length) return toast("먼저 설정 → 주석 서재에서 「색인 만들기」를 눌러 주세요");
-  const forBook=c.files.filter(f=>f.books.includes(P.bi+1)), ids=forBook.filter(cmtUse).map(f=>f.id);
+  const forBook=c.files.filter(f=>cmtBooks(f).includes(P.bi+1)), ids=forBook.filter(cmtUse).map(f=>f.id);
   const label=P.whole?`${P.name} ${P.c1}${P.bi===18?"편":"장"}`:`${P.name} ${P.c1}:${P.v1}${P.c2!==P.c1?"-"+P.c2+":"+P.v2:P.v2!==P.v1&&P.v2!==999?"-"+P.v2:""}`;
   let box=$("#cmtbox"); if(!box){ box=document.createElement("div"); box.id="cmtbox"; box.className="cmtbox"; ($("#cmtanchor")||$("#sucard")||$(".toolbar")).after(box); }
   setTimeout(()=>box.scrollIntoView({behavior:"smooth",block:"start"}),50);
-  if(!ids.length){ box.innerHTML=`<p class="muted">${esc(label)} — ${forBook.length?`${esc(P.name)} 주석 파일 ${forBook.length}개가 있지만 모두 꺼져 있습니다. 설정 → 주석 서재에서 켜 주세요.`:`파일 이름이나 폴더 이름에 「${esc(P.name)}」이 들어간 주석을 찾지 못했습니다. 설정 → 주석 서재의 찾기 칸에서 파일을 찾아 켜 주세요.`}</p>`; return; }
+  if(!ids.length){ box.innerHTML=`<p class="muted">${esc(label)} — ${forBook.length?`${esc(P.name)} 주석 파일 ${forBook.length}개가 있지만 모두 꺼져 있습니다. 설정 → 주석 서재에서 켜 주세요.`:`파일 이름이나 폴더 이름에 「${esc(P.name)}」이 들어간 주석을 찾지 못했습니다. 설정 → 주석 서재 → 파일 고르기에서 그 주석 파일의 「책 정하기」를 ${esc(P.name)}으로 골라 주세요.`}</p>
+      ${forBook.length?"":`<p class="hint">참고로 켜진 파일 몇 개: ${c.files.filter(cmtUse).slice(0,5).map(f=>esc(f.name)).join(" · ")||"(없음)"}</p>`}`; return; }
   box.innerHTML=`<p class="label bible" style="margin:0">주석 — ${esc(label)}</p><p class="muted">주석 ${ids.length}권을 읽는 중… 처음 여는 파일은 변환 때문에 1~2분 걸릴 수 있습니다.</p>`;
-  try{ const r=await gcall("cmtLookup",{book:P.bi+1,c1:P.c1,v1:P.v1,c2:P.c2===P.c1?P.c1:P.c2,v2:P.v2===999?999:P.v2,label,ids}); if(!r.ok) throw new Error(r.error); CMTR=r;
+  try{ const r=await gcall("cmtLookup",{book:P.bi+1,c1:P.c1,v1:P.v1,c2:P.c2===P.c1?P.c1:P.c2,v2:P.v2===999?999:P.v2,label,ids,force:true}); if(!r.ok) throw new Error(r.error); CMTR=r;
     const sum=r.summary?r.summary.split("\n").map(l=>l.startsWith("■")?`<h5>${esc(l.replace(/^■\s*/,""))}</h5>`:esc(l)).join("\n"):"";
     box.innerHTML=`<div class="row" style="gap:8px"><p class="label bible" style="margin:0">주석 — ${esc(label)}</p><span class="spacer"></span>${r.summary?`<button class="btn small" onclick="cmtInsert()">요약을 글에 넣기</button>`:""}<button class="btn small ghost" onclick="$('#cmtbox').remove()">닫기</button></div>
       ${r.summary?`<div class="cmtsum">${sum}</div><p class="hint">${r.ai==="gemini"?"제미나이":"클로드"}가 아래 발췌만 보고 정리한 요약입니다. 중요한 내용은 원문을 확인해 주세요.</p>`:r.excerpts.length?`<p class="hint">요약 열쇠가 없어 발췌만 보입니다 (설정 → 주석 서재).</p>`:""}
