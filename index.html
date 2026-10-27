@@ -335,6 +335,36 @@ hr.dash{border:0;border-top:1px dashed var(--edge);margin:18px 0}
 .penpaper .pp{display:inline-flex;align-items:center;gap:8px;margin-left:8px;flex-wrap:wrap}
 body.focus .notice{display:none}
 .prevs li{margin:6px 0}
+
+/* 설정: 구석의 톱니(손으로 그린 듯한 놋쇠 톱니) */
+.top{position:relative}
+.gearbtn{position:absolute;right:0;top:-6px;width:46px;height:46px;border:0;background:transparent;padding:0;cursor:pointer;color:var(--sepia);border-radius:50%;transition:transform .5s ease}
+.gearbtn svg{width:100%;height:100%;display:block;filter:drop-shadow(0 1.5px 0 rgba(0,0,0,.12))}
+.gearbtn:hover{transform:rotate(40deg)}
+.gearbtn.on{transform:rotate(22deg)}
+.top .streak{margin-right:58px}
+/* 설정 화면 묶음 */
+.setgroup{font-family:"Nanum Myeongjo";font-weight:800;font-size:15px;letter-spacing:.3em;color:var(--faint);margin:34px 0 12px;display:flex;align-items:center;gap:12px}
+.setgroup::after{content:"";flex:1;border-top:1px dashed var(--deco)}
+.setgroup.first{margin-top:6px}
+/* 작은 단추 묶음 (통독 방법·넘어가기·요일·밝기) */
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{position:relative;font:inherit;font-size:14.5px;color:var(--ink-soft);background:var(--paper-2);border:1px solid var(--edge);border-radius:999px;padding:6px 14px;cursor:pointer;line-height:1.3}
+.pill small{color:var(--faint);font-size:12px;margin-left:4px}
+.pill.on{background:var(--bible-wash);color:var(--bible);border-color:var(--bible);font-weight:700}
+.pill.kept{border-style:dashed}
+.pill.day{min-width:42px;padding:6px 0;text-align:center}
+@media (hover:hover){
+  .pill[data-tip]:hover::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 8px);z-index:30;width:max-content;max-width:300px;white-space:normal;text-align:left;font-weight:400;font-size:13.5px;line-height:1.6;color:var(--ink);background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:4px;padding:9px 12px;box-shadow:var(--shadow)}
+}
+.planinfo{margin-top:12px;padding:10px 14px;border-left:2px solid var(--bible);background:var(--bible-wash);font-size:14px;line-height:1.7;color:var(--ink-soft)}
+.setrow{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.setrow>.k{font-family:"Nanum Pen Script";font-size:21px;color:var(--sepia);min-width:92px}
+details.keybox{margin-top:8px}
+details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
+.restcard .big{font-family:"Nanum Pen Script";font-size:30px}
+@media (max-width:700px){ .gearbtn{width:42px;height:42px;top:-2px} .setrow>.k{min-width:0;width:100%} }
+.secret{-webkit-text-security:disc}
 </style>
 </head>
 <body>
@@ -342,6 +372,7 @@ body.focus .notice{display:none}
   <div class="top">
     <div class="brand">아침 서재<small>MORNING · STUDY · DIARY</small></div>
     <div class="streak" id="streak"></div>
+    <button class="gearbtn" id="gearbtn" onclick="go('settings')" title="설정" aria-label="설정"></button>
   </div>
   <nav id="nav"></nav>
 </div><div class="navline"></div></header>
@@ -572,7 +603,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="86fe6545b6";
+const APP_BUILD="b1679e76ff";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -671,6 +702,14 @@ document.addEventListener("error",e=>{ const t=e.target;
   if(t?.tagName==="IMG"&&t.dataset.fallback!=null){ const d=document.createElement("div"); d.className=t.className+" blank"; d.textContent=t.dataset.fallback; t.replaceWith(d); } },true);
 // onclick 안에 글자를 넣을 때: JSON 문자열로 만든 뒤 HTML용으로 한 번 더 감쌉니다
 const jsArg=v=>esc(JSON.stringify(v));
+// 밀리의 서재는 공개 검색 API가 없어, 그 책 이름으로 밀리 검색 화면을 열어 줍니다 (로그인한 브라우저·앱에서 결과가 보임)
+const millieUrl=t=>"https://www.millie.co.kr/v3/search/result/"+encodeURIComponent(String(t||"").replace(/\s*[(\[].*?[)\]]\s*/g," ").replace(/\s*[:：-]\s.*$/,"").trim());
+function openMillie(q){ q=(q||"").trim(); if(!q) return toast("책 이름을 먼저 적어 주세요"); window.open(millieUrl(q),"_blank","noopener"); }
+// 맥·아이폰의 '암호 자동 완성'이 쪽수·검색 칸에 뜨지 않게: 모든 입력 칸을 '로그인 칸 아님'으로 표시
+function noFill(root){ (root.matches?.("input,textarea")?[root]:root.querySelectorAll?.("input,textarea")||[]).forEach(el=>{
+  if(el.type==="file"||el.type==="checkbox"||el.type==="radio") return;
+  el.setAttribute("autocomplete","off"); el.setAttribute("data-1p-ignore",""); el.setAttribute("data-lpignore","true"); el.setAttribute("data-form-type","other"); }); }
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) noFill(n); }))).observe(document.documentElement,{childList:true,subtree:true});
 const safeUrl=u=>/^https?:\/\//.test(u||"")?u:"";
 
 // ───────── 성경 통독 계획 ─────────
@@ -701,10 +740,19 @@ const PLANS=[
 let _days={key:"",val:null};
 const planObj=()=>PLANS.find(p=>p.id===S.settings.plan.id)||PLANS[0];
 function planDays(){ const k=S.settings.plan.id+"/"+S.settings.plan.perDay; if(_days.key!==k) _days={key:k,val:planObj().days()}; return _days.val; }
+// 읽는 요일 (0=일 … 6=토). 정하지 않았으면 매일
+const WEEK="일월화수목금토";
+const readWeek=()=>{ const d=S.settings.days; return Array.isArray(d)&&d.length?d:[0,1,2,3,4,5,6]; };
+const isReadDay=(key=today())=>readWeek().includes(new Date(key+"T00:00").getDay());
+function activeBetween(a,b){ // a 날부터 b 날 전까지 가운데 '읽는 날'의 수
+  const set=readWeek(), n=daysBetween(a,b); if(n<=0) return 0; if(set.length===7) return n;
+  const sd=new Date(a+"T00:00").getDay(); let c=Math.floor(n/7)*set.length;
+  for(let k=0;k<n%7;k++) if(set.includes((sd+k)%7)) c++; return c;
+}
 const daysBetween=(a,b)=>Math.round((new Date(b+"T00:00")-new Date(a+"T00:00"))/864e5);
 function todayIdx(){
   const p=S.settings.plan;
-  if(p.mode==="date") return Math.max(0,daysBetween(p.start,today()));
+  if(p.mode==="date") return activeBetween(p.start,today());     // 시작한 날부터 '읽는 날'만 셉니다
   return p.last?.date===today()?p.last.index:p.day;
 }
 function doneToday(){ const p=S.settings.plan; return p.mode==="date"?!!p.done[todayIdx()]:p.last?.date===today(); }
@@ -720,17 +768,37 @@ function togglePortion(k){
   if(p.checks.length>=n) completeDay(); else { save(); render(); }
 }
 function readAhead(){ S.settings.plan.last=null; S.settings.plan.checks=[]; save(); render(); }
-function planProgress(){ const p=S.settings.plan, len=planDays().length; const done=p.mode==="date"?Math.max(0,daysBetween(p.start,p.setOn||p.start))+Object.keys(p.done).length:p.day; return {len,done,pct:Math.min(100,Math.round(done/len*1000)/10)}; }
+function planProgress(){ const p=S.settings.plan, len=planDays().length; const done=p.mode==="date"?activeBetween(p.start,p.setOn||p.start)+Object.keys(p.done).length:p.day; return {len,done,pct:Math.min(100,Math.round(done/len*1000)/10)}; }
 function behind(){ // 이 방법을 고른 날 이후에 놓친 날만 셉니다
   const p=S.settings.plan; if(p.mode!=="date") return 0;
-  let n=0; for(let i=Math.max(0,daysBetween(p.start,p.setOn||p.start));i<todayIdx();i++) if(!p.done[i]) n++; return n;
+  let n=0; for(let i=activeBetween(p.start,p.setOn||p.start);i<todayIdx();i++) if(!p.done[i]) n++; return n;
 }
 function todayPassageHint(){ const first=(planDays()[todayIdx()]||[])[0]||""; const m=first.match(/^(\S+) (\d+)/); return m?`${m[1]} ${m[2]}:`:""; }
-function streak(){ const act=d=>{const l=S.log[d]; return l&&(l.read||l.note||l.write);}; let d=new Date(),n=0; if(!act(dkey(d))) d.setDate(d.getDate()-1); while(act(dkey(d))){n++; d.setDate(d.getDate()-1);} return n; }
+function streak(){ // 쉬는 요일은 건너뛰고 셉니다 (쉬어도 끊기지 않음)
+  const act=k=>{const l=S.log[k]; return l&&(l.read||l.note||l.write);};
+  let d=new Date(),n=0; if(!act(dkey(d))) d.setDate(d.getDate()-1);
+  for(let g=0;g<4000;g++){ const k=dkey(d); if(act(k)) n++; else if(isReadDay(k)) break; d.setDate(d.getDate()-1); }
+  return n;
+}
 
 // ───────── 화면 ─────────
 // 흐름: 밑줄(읽다 붙잡은 문장) → 글(그 문장으로 쓴 묵상·설교·에세이) → 원고(글을 모아 엮는 책)
-const TABS=[["today","오늘"],["write","쓰기"],["drawer","서랍"],["shelf","책장"],["settings","설정"]];
+const TABS=[["today","오늘"],["write","쓰기"],["drawer","서랍"],["shelf","책장"]];   // 설정은 오른쪽 위 톱니
+// 손으로 그린 듯 조금씩 다른 톱니 — 놋쇠 열쇠 같은 아날로그 느낌
+function gearSvg(){
+  const n=9, cx=24, cy=24, pts=[];
+  for(let k=0;k<n;k++){ const a=k/n*Math.PI*2-Math.PI/2, w=Math.PI/n*.52, j=1+.03*Math.sin(k*2.3);
+    [[a-w*1.35,15.2],[a-w*.8,20.6*j],[a+w*.8,20.6*j],[a+w*1.35,15.2]].forEach(([t,r])=>pts.push([cx+Math.cos(t)*r,cy+Math.sin(t)*r])); }
+  const d="M"+pts.map(q=>q.map(v=>v.toFixed(1)).join(",")).join(" L")+"Z";
+  return `<svg viewBox="0 0 48 48" aria-hidden="true">
+    <path d="${d}" fill="var(--paper-2)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="${d}" fill="none" stroke="currentColor" stroke-width=".6" opacity=".45" transform="rotate(3 24 24) translate(.6 .4)"/>
+    <circle cx="24" cy="24" r="9.6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="2.2 1.6" opacity=".8"/>
+    <circle cx="24" cy="24" r="4.4" fill="var(--paper)" stroke="currentColor" stroke-width="1.7"/>
+    <path d="M21.6 22.6c1.2-1 3.4-1 4.6.3" fill="none" stroke="currentColor" stroke-width=".9" opacity=".6" stroke-linecap="round"/>
+  </svg>`;
+}
+let restPeek=false;   // 쉬는 날에도 '그래도 읽기'를 누르면 오늘 분량을 보여 줌
 let tab="today", track="bible", editId=null, selTopics=[], selSits=[], fromWriting=null, fromNote=null, noteOpen=null, drawerSub="all";
 let NAV=false;
 function go(t,o={}){
@@ -744,8 +812,9 @@ const FLOW=`<div class="flow"><span><b>밑줄</b> 읽다가 붙잡은 한 문장
 function render(){
   // 같은 쓰기 화면을 다시 그릴 때(말씀/책 바꾸기, 합친 뒤 등) 쓰던 제목·본문을 그대로 지켜 줍니다
   const keep=!NAV&&tab==="write"&&$("#wbody")?{e:editId,t:$("#wtitle").value,b:$("#wbody").value,p:$("#wpassage")?.value}:null;
+  const gb=$("#gearbtn"); if(gb){ if(!gb.firstChild) gb.innerHTML=gearSvg(); gb.classList.toggle("on",tab==="settings"); }
   $("#nav").innerHTML=TABS.map(([k,n])=>`<button class="${k===tab?"on":""}" onclick="go('${k}')">${n}</button>`).join("");
-  const s=streak(); $("#streak").textContent=s?`${s}일째 이어지는 아침`:"오늘의 첫 페이지";
+  const s=streak(); $("#streak").textContent=(isReadDay()?"":"쉬는 날 · ")+(s?`${s}일째 이어지는 아침`:"오늘의 첫 페이지");
   if(NEED_CONNECT||AUTH_FAIL){ $("#main").innerHTML=connectView(); return; }
   $("#main").innerHTML=(SERVER?"":`<div class="notice">⚠️ 지금은 파일만 열린 상태라 노션 연결과 자동 저장 파일이 동작하지 않습니다. <b>아침서재 열기.command</b>로 열어 주세요.</div>`)+VIEWS[tab]();
   AFTER[tab]?.();
@@ -903,7 +972,7 @@ shelf(){
   return `<div class="row" style="margin-bottom:18px"><h2>책장</h2></div>
   <section class="sheet tape" style="margin-bottom:30px">
     <p class="label book">새 책 꽂기</p>
-    <div class="row"><input id="bq" placeholder="책 이름, 저자, 또는 ISBN" style="flex:1" onkeydown="if(event.key==='Enter'&&!event.isComposing)searchBook()"><button class="btn ink" onclick="searchBook()">표지 찾기</button></div>
+    <div class="row"><input id="bq" placeholder="책 이름, 저자, 또는 ISBN" style="flex:1" onkeydown="if(event.key==='Enter'&&!event.isComposing)searchBook()"><button class="btn ink" onclick="searchBook()">표지 찾기</button><button class="btn" onclick="openMillie($('#bq').value)" title="같은 이름으로 밀리의 서재를 검색합니다 (밀리에 로그인되어 있어야 결과가 보입니다)">📱 밀리의 서재</button></div>
     ${CONF.kakao?"":`<p class="muted" style="margin-top:8px">한국 책 표지를 정확히 찾으려면 설정에서 카카오 검색 키를 넣어 주세요. 지금은 해외 도서 검색만 씁니다.</p>`}
     <div id="bresults"></div>
   </section>
@@ -932,11 +1001,17 @@ drawer(){
   <section class="sheet" id="results"></section>`;
 },
 settings(){
-  return `<div class="row" style="margin-bottom:18px"><h2>설정</h2></div>
+  return `<div class="row" style="margin-bottom:6px"><h2>설정</h2></div>
+  <div class="setgroup first">읽기</div>
   ${planSettings()}
-  <div class="grid" style="margin-top:30px">
-  ${themeSection()}
+  <div class="setgroup">아침 알림 · 화면 · 앱</div>
+  <div class="grid">
   ${reminderSection()}
+  ${themeSection()}
+  ${appSection()}
+  </div>
+  <div class="setgroup">연결</div>
+  <div class="grid">
   ${CONF.phoneUrl?`<section class="sheet tape c">
     <p class="label">${GAS?"다른 기기 연결":"휴대폰에서 쓰기"}</p>
     <p class="sub">${GAS?"휴대폰(또는 다른 컴퓨터) 카메라로 아래 QR을 찍으면 그 기기가 연결됩니다. 열린 화면에서 <b>공유 → 홈 화면에 추가</b>를 누르면 아침 서재 아이콘으로 앱처럼 쓸 수 있습니다. <b>컴퓨터가 꺼져 있어도 열립니다.</b>"
@@ -949,27 +1024,33 @@ settings(){
   ${CONF.local===false?"":`<section class="sheet tape">
     <p class="label">노션 연결</p>
     <div id="nstatus" class="sub">${CONF.notion?"연결 키가 들어 있습니다. 확인 중…":"아직 연결되지 않았습니다."}</div>
+    <details class="keybox" ${CONF.notion?"":"open"}><summary>${CONF.notion?"키 바꾸기 · 연결 방법":"연결 방법"}</summary>
     <ol class="steps sub">
       <li><a href="https://www.notion.so/profile/integrations" target="_blank">노션 통합 만들기</a> 페이지에서 <b>새 통합</b>을 만들고(이름: 아침 서재), <b>내부 통합 시크릿</b>을 복사합니다.</li>
       <li>노션의 <b>설교&강의</b> 페이지와 <b>자기계발</b> 페이지에서 각각 오른쪽 위 <b>···</b> → <b>연결</b> → <b>아침 서재</b>를 추가합니다.</li>
       <li>복사한 시크릿을 아래 칸에 붙여 넣고 저장합니다. (${GAS?"구글 계정의 비공개 저장소":"이 컴퓨터의 config.json"}에만 보관됩니다)</li>
     </ol>
-    <div class="row"><input id="ntoken" type="password" placeholder="ntn_ 로 시작하는 시크릿" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('notionToken','ntoken')">저장</button></div>
+    <div class="row"><input id="ntoken" type="text" class="secret" spellcheck="false" placeholder="ntn_ 로 시작하는 시크릿" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('notionToken','ntoken')">저장</button></div></details>
     <label class="row" style="margin-top:14px;gap:8px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 간직할 때마다 노션에 자동으로 싣기</label>
     <p class="muted" style="margin-top:10px">말씀 글 → 설교&강의의 책별 노트(예: 신약04_요한복음)와 설교·묵상 색인<br>책 글·밑줄 → 자기계발 / 아침 독서 글, 책 → 독서 목록</p>
   </section>
   <section class="sheet tape b">
     <p class="label book">책 표지 찾기 (카카오)</p>
     <p class="sub">${CONF.kakao?"✓ 카카오 검색 키가 들어 있습니다.":"한국 책 표지를 정확하게 찾으려면 무료 키가 필요합니다."}</p>
+    <details class="keybox" ${CONF.kakao?"":"open"}><summary>${CONF.kakao?"키 바꾸기":"키 넣는 방법"}</summary>
     <ol class="steps sub"><li><a href="https://developers.kakao.com" target="_blank">카카오 개발자</a>에 로그인 → 내 애플리케이션 → 애플리케이션 추가</li><li>앱 키 중 <b>REST API 키</b>를 복사해 아래에 넣습니다.</li></ol>
-    <div class="row"><input id="kkey" type="password" placeholder="REST API 키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('kakaoKey','kkey')">저장</button></div>
+    <div class="row"><input id="kkey" type="text" class="secret" spellcheck="false" placeholder="REST API 키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('kakaoKey','kkey')">저장</button></div></details>
   </section>
   <section class="sheet tape">
     <p class="label book">목차 · 책 소개 · 쪽수 (국립중앙도서관)</p>
     <p class="sub">${CONF.nl?"✓ 국립중앙도서관 인증키가 들어 있습니다. 책을 꽂으면 목차·소개·쪽수·분류를 저절로 채웁니다.":"짧은 책 소개는 카카오에서 이미 채워집니다. <b>목차·쪽수·긴 소개</b>까지 채우려면 국립중앙도서관 무료 인증키가 필요합니다."}</p>
+    <details class="keybox" ${CONF.nl?"":"open"}><summary>${CONF.nl?"키 바꾸기":"키 넣는 방법"}</summary>
     <ol class="steps sub"><li>국립중앙도서관 홈페이지에 회원가입·로그인합니다.</li><li><a href="https://www.nl.go.kr/NL/contents/N31101020000.do" target="_blank">Open API → 인증키 신청/관리</a>에서 키를 신청합니다.</li><li>받은 인증키를 아래에 넣습니다.</li></ol>
-    <div class="row"><input id="nlkey" type="password" placeholder="국립중앙도서관 인증키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('nlKey','nlkey')">저장</button></div>
+    <div class="row"><input id="nlkey" type="text" class="secret" spellcheck="false" placeholder="국립중앙도서관 인증키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('nlKey','nlkey')">저장</button></div></details>
   </section>`}
+  </div>
+  <div class="setgroup">기록 보관</div>
+  <div class="grid">
   <section class="sheet">
     <p class="label">간직된 곳</p>
     <p class="sub">${GAS?`모든 기록은 <a href="${esc(CONF.driveUrl)}" target="_blank">구글 드라이브 「아침 서재」 폴더</a>의 <code>data.json</code>에 저장되고, 날마다 「백업」 폴더에 사본이 하나씩 남습니다(최근 60일). 휴대폰과 컴퓨터가 같은 기록을 씁니다.`
@@ -1032,6 +1113,14 @@ function delNote(id){
 function todayBibleCard(){
   const plan=planObj(), p=S.settings.plan, days=planDays(), i=todayIdx(), portions=days[i], done=doneToday(), pr=planProgress(), late=behind();
   if(!portions) return `<section class="sheet tape"><p class="label bible">오늘의 말씀</p><div class="big">「${esc(plan.name)}」을 다 읽었습니다 🎉</div><p class="sub">설정에서 새 통독 방법을 고르거나 처음부터 다시 시작할 수 있습니다.</p><button class="btn" onclick="go('settings')">통독 방법 고르기</button></section>`;
+  if(!isReadDay()&&!restPeek&&!done){
+    const nx=new Date(); do nx.setDate(nx.getDate()+1); while(!isReadDay(dkey(nx)));
+    return `<section class="sheet tape restcard"><p class="label bible">오늘의 말씀</p>
+      <div class="big">오늘은 쉬는 날입니다</div>
+      <p class="sub">${WEEK[new Date().getDay()]}요일은 통독을 쉬는 날로 정하셨습니다. 진도는 그대로 두었다가 ${nx.getMonth()+1}월 ${nx.getDate()}일(${WEEK[nx.getDay()]})에 이어 갑니다.</p>
+      <div class="row" style="margin-top:12px"><button class="btn ghost" onclick="restPeek=true;render()">그래도 읽기</button><button class="btn" onclick="toggleNoteForm('bible')">✎ 밑줄 남기기</button></div>
+      ${noteOpen==="bible"?noteForm("bible"):""}${todayNotes("bible")}</section>`;
+  }
   const many=portions.length>5; // 연대기순처럼 조각이 많은 날은 하루 단위로만 표시
   return `<section class="sheet tape">
     <p class="label bible">오늘의 말씀</p>
@@ -1139,17 +1228,31 @@ function delWriting(id){
 }
 // ───────── 화면 밝기 (기기마다) ─────────
 function setTheme(t){ try{ localStorage.setItem("seojae.theme",t); }catch(_){} applyTheme(t); render(); }
+// 홈 화면·Dock 앱: 주소창 없이 다이어리처럼 따로 열기
+let INSTALL=null;
+addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); INSTALL=e; if(tab==="settings") render(); });
+addEventListener("appinstalled",()=>{ INSTALL=null; toast("앱으로 설치했습니다. Dock(또는 응용 프로그램)에서 「아침 서재」를 여세요"); });
+const isApp=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+async function installApp(){ if(!INSTALL) return; INSTALL.prompt(); await INSTALL.userChoice; INSTALL=null; render(); }
+function appSection(){
+  const ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua), safari=/Safari/.test(ua)&&!/Chrome|CriOS|Edg/.test(ua);
+  return `<section class="sheet tape">
+    <p class="label">앱으로 쓰기</p>
+    ${isApp()?`<p class="sub"><span class="stamp ok">앱 창</span> 지금 주소창 없는 앱 창으로 열려 있습니다.</p>`
+    :`<p class="sub">주소창·탭 없이 <b>다이어리처럼 따로 열리는 창</b>으로 쓸 수 있습니다. 한 번만 설치하면 Dock·홈 화면의 아이콘으로 엽니다.</p>
+    ${INSTALL?`<button class="btn ink" onclick="installApp()">이 기기에 앱으로 설치</button>`
+      :ios?`<ol class="steps sub"><li>Safari 아래쪽 <b>공유</b>(□↑) 단추를 누릅니다.</li><li><b>홈 화면에 추가</b>를 누릅니다.</li></ol>`
+      :safari?`<ol class="steps sub"><li>Safari 위쪽 메뉴에서 <b>파일 → Dock에 추가…</b>를 누릅니다.</li><li>이름 「아침 서재」 그대로 <b>추가</b>.</li><li>처음 열면 연결을 한 번 더 해야 합니다 — 이 화면 아래 「연결 링크 복사」를 먼저 눌러 두었다가 붙여 넣으세요.</li></ol>`
+      :`<ol class="steps sub"><li>크롬 주소창 오른쪽의 <b>설치 아이콘</b>(모니터에 ↓)을 누르거나,</li><li>오른쪽 위 <b>⋮ → 전송, 저장, 공유 → 페이지를 앱으로 설치</b>를 누릅니다.</li></ol>`}`}
+  </section>`;
+}
 function themeSection(){
   let cur="light"; try{ cur=localStorage.getItem("seojae.theme")||"light"; }catch(_){}
-  const opt=(v,n,d)=>`<label class="plancard ${cur===v?"on":""}"><input type="radio" name="theme" ${cur===v?"checked":""} onchange="setTheme('${v}')"><div class="pc-head"><b>${n}</b></div><div class="pc-how">${d}</div></label>`;
+  const T=[["light","밝게","기기가 야간 모드여도 항상 밝은 종이 화면으로 엽니다."],["dark","어둡게","항상 어두운 밤 서재 화면으로 엽니다."],["auto","기기 따라","기기의 주간·야간 모드를 그대로 따릅니다."]];
   return `<section class="sheet">
     <p class="label">화면 밝기</p>
-    <p class="sub" style="margin:0 0 10px">이 기기에서만 적용됩니다. 휴대폰과 컴퓨터를 따로 정할 수 있습니다.</p>
-    <div class="plancards" style="grid-template-columns:1fr">
-      ${opt("light","밝게 (기본)","기기가 야간 모드여도 항상 밝은 종이 화면으로 엽니다.")}
-      ${opt("dark","어둡게","항상 어두운 밤 서재 화면으로 엽니다.")}
-      ${opt("auto","기기 설정 따라","기기의 주간·야간 모드를 그대로 따릅니다.")}
-    </div>
+    <div class="pills" style="margin-top:6px">${T.map(([v,n,d])=>`<button class="pill ${cur===v?"on":""}" data-tip="${d}" onclick="setTheme('${v}')">${n}</button>`).join("")}</div>
+    <p class="hint" style="margin-top:10px">이 기기에서만 적용됩니다. 휴대폰과 컴퓨터를 따로 정할 수 있습니다.</p>
   </section>`;
 }
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>applyTheme());
@@ -1158,6 +1261,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>apply
 // 서버가 매일 아침 메일로 보낼 수 있게, 앞으로 3주 치 분량과 질문을 data.json 에 미리 적어 둡니다
 function refreshReminder(){
   const R=S.reminder; if(!R?.on||!S.settings.plan) return;
+  R.days=readWeek();   // 쉬는 요일에는 메일을 보내지 않습니다
   const p=S.settings.plan, days=planDays(), now=todayIdx(), start=p.mode==="date"?now:Math.min(now,p.day);
   Object.assign(R,{startIndex:start,items:days.slice(start,start+24),total:days.length,planName:planObj().name,q:{}});
   for(let k=0;k<22;k++){ const d=new Date(); d.setDate(d.getDate()+k); const key=dkey(d); R.q[key]={b:pickQ("bible",key+"b"),k:pickQ("book",key+"k")}; }
@@ -1208,8 +1312,8 @@ async function searchBook(){
   if(!SERVER){ $("#bresults").innerHTML=`<p class="muted">서버로 열어야 검색할 수 있습니다.</p>`; return; }
   try{
     const r=await apiGet("/api/books",{q}); found=r.results||[];
-    $("#bresults").innerHTML=found.length?`<div class="results">${found.map((b,i)=>`<div class="result">${b.cover?`<img src="${esc(b.cover)}" alt="" loading="lazy">`:`<div class="cover blank" style="width:100%">${esc(b.title)}</div>`}<div class="t">${esc(b.title)}</div><div class="muted">${esc((b.authors||[]).join(", "))}${b.publisher?" · "+esc(b.publisher):""}</div><button class="btn small ink" onclick="addBook(${i})">이 책 꽂기</button></div>`).join("")}</div>`
-      :`<p class="muted" style="margin-top:12px">찾지 못했습니다. ${esc((r.errors||[]).join(" / "))}</p><button class="btn small" onclick="addBook(-1)">“${esc(q)}” 제목으로 직접 꽂기</button>`;
+    $("#bresults").innerHTML=found.length?`<div class="results">${found.map((b,i)=>`<div class="result">${b.cover?`<img src="${esc(b.cover)}" alt="" loading="lazy">`:`<div class="cover blank" style="width:100%">${esc(b.title)}</div>`}<div class="t">${esc(b.title)}</div><div class="muted">${esc((b.authors||[]).join(", "))}${b.publisher?" · "+esc(b.publisher):""}</div><button class="btn small ink" onclick="addBook(${i})">이 책 꽂기</button><a class="btn small ghost" href="${esc(millieUrl(b.title))}" target="_blank" rel="noopener" title="밀리의 서재에 있는지 보기">밀리에서 찾기 ↗</a></div>`).join("")}</div>`
+      :`<p class="muted" style="margin-top:12px">찾지 못했습니다. ${esc((r.errors||[]).join(" / "))}</p><button class="btn small" onclick="addBook(-1)">“${esc(q)}” 제목으로 직접 꽂기</button> <a class="btn small ghost" href="${esc(millieUrl(q))}" target="_blank" rel="noopener">밀리에서 찾기 ↗</a>`;
   }catch(e){ $("#bresults").innerHTML=`<p class="muted">검색하지 못했습니다.</p>`; }
 }
 function addBook(i){
@@ -1249,6 +1353,7 @@ function openBook(id){
     <div class="row" style="margin-top:12px"><button class="btn ink small" onclick="saveBook('${b.id}')">저장</button>
       ${b.id!==S.settings.currentBook&&b.status!=="완료"?`<button class="btn small" onclick="S.settings.currentBook='${b.id}';save();toast('지금 읽는 책으로 정했습니다')">지금 읽는 책으로</button>`:""}
       ${b.status!=="완료"?`<button class="btn small" onclick="finishBook('${b.id}')">다 읽었습니다</button>`:`<button class="btn small" onclick="reopenBook('${b.id}')">다시 읽기</button>`}
+      <a class="btn small ghost" href="${esc(millieUrl(b.title))}" target="_blank" rel="noopener" title="밀리의 서재에 있는지 보기">밀리에서 찾기 ↗</a>
       <button class="btn small danger" onclick="delBook('${b.id}')">책장에서 빼기</button></div>
   </div></div></section>`;
   $("#bookdetail").scrollIntoView({behavior:"smooth",block:"start"});
@@ -1498,37 +1603,37 @@ function ruleFromFilter(){ // 서랍에서 거른 조건을 그대로 원고로
 // ───────── 설정: 통독 방법 ─────────
 let draft=null; // (예전 '선택 후 적용' 방식의 흔적 — go()에서 초기화만 합니다)
 function planSettings(){
-  const p=S.settings.plan;
+  const p=S.settings.plan, cur=planObj(), wk=readWeek();
   const lenOf=pl=>pl.id==="seq"?Math.ceil(1189/Math.max(1,p.perDay)):pl.days().length;
+  const tipOf=pl=>`${pl.how}  예) 1일째: ${pl.days()[0].join(" · ")}`;
+  const MODES=[["pace","내 속도로","「다 읽었습니다」를 눌러야 다음 분량으로 넘어갑니다. 하루 빠져도 밀리지 않고 그 자리에서 이어 읽습니다."],
+               ["date","날짜에 맞춰","시작한 날부터 읽는 날이 지날 때마다 저절로 다음 분량이 나옵니다. 맥체인처럼 1월 1일에 시작하는 표에 잘 맞습니다."]];
+  const mode=p.mode==="date"?"date":"pace";
   return `<section class="sheet tape b">
-    <p class="label bible">성경 통독 방법</p>
-    <p class="sub" style="margin:0 0 14px">카드를 누르면 <b>바로</b> 「오늘」 화면의 「오늘의 말씀」이 그 방법의 읽기표로 바뀝니다.<br>방법을 바꿔도 <b>방법마다 읽던 자리가 따로 보관</b>되어, 다시 고르면 그 자리에서 이어집니다.</p>
-    <div class="plancards">${PLANS.map(pl=>`<label class="plancard ${pl.id===p.id?"on":""}">
-      <input type="radio" name="plan" value="${pl.id}" ${pl.id===p.id?"checked":""} onchange="setPlan('${pl.id}')">
-      <div class="pc-head"><b>${pl.name}</b><span class="muted">${lenOf(pl)}일</span>${pl.id===p.id?`<span class="stamp ok" style="font-size:16px;margin-left:auto">읽는 중</span>`:readDays(planState(pl.id))?`<span class="pen" style="font-size:18px;color:var(--sepia);margin-left:auto">보관된 진도 ${readDays(planState(pl.id))}일</span>`:""}</div>
-      <div class="pc-how">${pl.how}</div>
-      <div class="pc-ex"><span class="pen">예) 1일째</span> ${esc(pl.days()[0].join(" · "))}</div>
-    </label>`).join("")}</div>
-    <hr class="dash">
-    <p class="label" style="font-size:20px">어떻게 넘어갈까요?</p>
-    <div class="plancards two">
-      <label class="plancard ${p.mode!=="date"?"on":""}"><input type="radio" name="pmode" ${p.mode!=="date"?"checked":""} onchange="setMode('pace')">
-        <div class="pc-head"><b>내 속도로</b></div><div class="pc-how">'다 읽었습니다'를 눌러야 다음 날 분량으로 넘어갑니다. 하루 빠져도 밀리지 않고 그 자리에서 이어 읽습니다.</div></label>
-      <label class="plancard ${p.mode==="date"?"on":""}"><input type="radio" name="pmode" ${p.mode==="date"?"checked":""} onchange="setMode('date')">
-        <div class="pc-head"><b>날짜에 맞춰</b></div><div class="pc-how">시작한 날부터 하루가 지나면 저절로 다음 날 분량이 나옵니다. 못 읽은 날은 '밀린 날'로 셉니다. 맥체인처럼 1월 1일에 시작하는 표에 잘 맞습니다.</div></label>
+    <p class="label bible">성경 통독</p>
+    <div class="setrow" style="margin-top:6px"><span class="k">읽는 방법</span>
+      <div class="pills" style="flex:1">${PLANS.map(pl=>{ const kept=pl.id!==p.id&&readDays(planState(pl.id));
+        return `<button class="pill ${pl.id===p.id?"on":""} ${kept?"kept":""}" data-tip="${esc(tipOf(pl))}" onclick="setPlan('${pl.id}')">${pl.name}<small>${lenOf(pl)}일${kept?` · 진도 ${kept}일`:""}</small></button>`; }).join("")}</div></div>
+    <div class="planinfo"><b>${esc(cur.name)}</b> — ${esc(cur.how)}<br><span class="muted">예) 1일째: ${esc(cur.days()[0].join(" · "))}</span></div>
+    <div class="setrow"><span class="k">넘어가기</span>
+      <div class="pills">${MODES.map(([v,n,t])=>`<button class="pill ${mode===v?"on":""}" data-tip="${t}" onclick="setMode('${v}')">${n}</button>`).join("")}</div>
+      ${mode==="date"
+        ?`<label class="row" style="gap:6px;margin:0"><span class="muted">시작한 날</span><input type="date" value="${p.start}" onchange="setStart(this.value)" style="width:150px"></label><button class="btn small ghost" onclick="setStart(new Date().getFullYear()+'-01-01')">올해 1월 1일</button>`
+        :`<label class="row" style="gap:6px;margin:0"><span class="muted">지금</span><input type="number" min="1" max="${planDays().length}" value="${p.day+1}" onchange="setDay(this.value)" style="width:70px"><span class="muted">일째</span></label>`}
+      ${p.id==="seq"?`<label class="row" style="gap:6px;margin:0"><span class="muted">하루</span><input type="number" min="1" value="${p.perDay}" onchange="setPerDay(this.value)" style="width:56px"><span class="muted">장</span></label>`:""}
     </div>
-    <div class="row" style="margin-top:6px;align-items:flex-end">
-      ${p.mode==="date"
-        ?`<label class="field" style="width:190px"><span>시작한 날</span><input type="date" value="${p.start}" onchange="setStart(this.value)"></label><button class="btn small" onclick="setStart(new Date().getFullYear()+'-01-01')">올해 1월 1일부터</button>`
-        :`<label class="field" style="width:190px"><span>지금 몇째 날을 읽을까요?</span><input type="number" min="1" max="${planDays().length}" value="${p.day+1}" onchange="setDay(this.value)"></label>`}
-      ${p.id==="seq"?`<label class="field" style="width:150px"><span>하루에 몇 장?</span><input type="number" min="1" value="${p.perDay}" onchange="setPerDay(this.value)"></label>`:""}
-      <span class="spacer"></span>
-      <button class="btn ink" onclick="go('today')">「오늘」 화면에서 보기 →</button>
+    <div class="setrow"><span class="k">읽는 요일</span>
+      <div class="pills">${[1,2,3,4,5,6,0].map(d=>`<button class="pill day ${wk.includes(d)?"on":""}" onclick="toggleWeekday(${d})">${WEEK[d]}</button>`).join("")}</div>
+      <div class="pills"><button class="pill ${wk.length===7?"on":""}" onclick="setWeek([0,1,2,3,4,5,6])">매일</button><button class="pill ${wk.length===6&&!wk.includes(0)?"on":""}" onclick="setWeek([1,2,3,4,5,6])">주일 빼고</button></div>
     </div>
-    <p class="hint" style="margin-top:10px">지금: <b>${esc(planObj().name)}</b> · ${p.mode==="date"?`날짜에 맞춰 (${p.start} 시작)`:"내 속도로"} · 오늘은 ${todayIdx()+1}일째 — ${esc((planDays()[todayIdx()]||["다 읽음"]).join(" · "))}
-      <button class="btn small danger" style="margin-left:6px" onclick="resetPlan()">이 방법 진도 처음부터</button></p>
+    <p class="hint">고르지 않은 요일은 「오늘」 화면이 쉬는 날로 바뀌고, 아침 메일도 오지 않으며, 이어지는 날 수도 끊기지 않습니다.${mode==="date"?" 날짜에 맞춰 읽을 때는 시작한 날부터 <b>읽는 요일만</b> 하루로 셉니다.":""}</p>
+    <p class="hint" style="margin-top:12px">방법을 바꿔도 방법마다 읽던 자리가 따로 보관됩니다(점선 단추). 지금은 <b>${todayIdx()+1}일째</b> — ${esc((planDays()[todayIdx()]||["다 읽음"]).join(" · "))}
+      <button class="btn small ghost danger" style="margin-left:6px" onclick="resetPlan()">이 방법 처음부터</button></p>
   </section>`;
 }
+function setWeek(list){ const d=[...new Set(list)].sort(); if(!d.length) return toast("하루는 골라 주세요");
+  S.settings.days=d; restPeek=false; planChanged(d.length===7?"매일 읽습니다":`${[1,2,3,4,5,6,0].filter(x=>d.includes(x)).map(x=>WEEK[x]).join("·")}요일에 읽습니다`); }
+function toggleWeekday(x){ const w=readWeek(); setWeek(w.includes(x)?w.filter(y=>y!==x):[...w,x]); }
 function planChanged(msg){ _days.key=""; save(); toast(msg); render(); }
 // 통독 방법마다 진도를 따로 보관합니다. 지우는 것은 resetPlan() 뿐입니다.
 const freshPlan=()=>({perDay:3,day:0,mode:"pace",start:today(),done:{},checks:[],last:null,setOn:today()});
