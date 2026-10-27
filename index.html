@@ -764,7 +764,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="074096cb4a";
+const APP_BUILD="b29f568368";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1403,7 +1403,9 @@ async function cmtRefresh(force){
   const b=$("#cmtidxbtn"); if(b) b.textContent="폴더를 읽는 중… (처음엔 1~3분)";
   try{ const r=await gcall("cmtIndex",{refresh:!!force}); if(!r.ok) throw new Error(r.error); CMT=r; try{ localStorage.setItem("seojae.cmt",JSON.stringify(r)); }catch(_){}
     toast(`주석 파일 ${r.files.length}개를 찾았습니다${r.partial?" (시간이 모자라 일부만)":""}`); render(); }
-  catch(e){ toast(e.message); if(b) b.textContent="색인 만들기"; }
+  catch(e){ // 브라우저 쪽이 먼저 끊겨도 서버는 끝까지 읽어 저장해 두므로, 저장된 색인이 있으면 그것을 씁니다
+    try{ const r=await gcall("cmtIndex",{refresh:false}); if(r.ok&&r.files?.length){ CMT=r; try{ localStorage.setItem("seojae.cmt",JSON.stringify(r)); }catch(_){} toast(`주석 파일 ${r.files.length}개를 찾았습니다`); return render(); } }catch(_){}
+    toast(e.message+" — 잠시 뒤 「색인 만들기」를 한 번 더 눌러 주세요"); if(b) b.textContent="색인 만들기"; }
 }
 function cmtToggle(id,on){ (S.settings.cmtUse=S.settings.cmtUse||{})[id]=on; save(); }
 function cmtSection(){
