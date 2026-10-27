@@ -764,7 +764,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="b0df27bb5f";
+const APP_BUILD="074096cb4a";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1412,14 +1412,14 @@ function cmtSection(){
   return `<section class="sheet tape">
     <p class="label bible">주석 서재 (구글 드라이브)</p>
     <p class="sub">드라이브의 <b>${esc(CONF.cmtFolder||"성경공부")}</b> 폴더에 올려 둔 주석(PDF·워드·구글 문서·txt)에서 글의 본문 구절 부분을 찾아 보여 주고, 인공지능 열쇠가 있으면 요약합니다. 쓰기 화면의 「📚 주석」 단추로 봅니다.</p>
-    <div class="row"><input id="cmtfolder" placeholder="드라이브 폴더 이름 (기본: 성경공부)" value="${esc(CONF.cmtFolder||"")}" style="flex:1"><button class="btn small" onclick="saveKey('cmtFolderName','cmtfolder')">폴더 이름 저장</button><button class="btn ink small" id="cmtidxbtn" onclick="cmtRefresh(true)">${files.length?"다시 읽기":"색인 만들기"}</button></div>
+    <div class="row"><input id="cmtfolder" placeholder="폴더 이름 또는 폴더 링크 (기본: 성경공부)" value="${esc(CONF.cmtFolder||"")}" style="flex:1"><button class="btn small" onclick="saveKey('cmtFolderName','cmtfolder')">폴더 이름 저장</button><button class="btn ink small" id="cmtidxbtn" onclick="cmtRefresh(true)">${files.length?"다시 읽기":"색인 만들기"}</button></div>
     <details class="keybox" ${CONF.ai?"":"open"}><summary>${CONF.ai?`요약: ${CONF.ai==="gemini"?"제미나이":"클로드"} 열쇠 ✓ · 바꾸기`:"요약 열쇠 넣기 (없으면 발췌만 보입니다)"}</summary>
       <p class="hint">둘 중 하나만 넣으면 됩니다. <b>제미나이</b>: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>에서 무료로 만들 수 있습니다. <b>클로드</b>: <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> (사용량만큼 요금). 주석 본문은 요약을 누를 때만 그 회사로 보내집니다.</p>
       <div class="row"><input id="gkey" type="text" class="secret" spellcheck="false" placeholder="제미나이 API 키" style="flex:1" autocomplete="off"><button class="btn small" onclick="saveKey('geminiKey','gkey')">저장</button></div>
       <div class="row" style="margin-top:6px"><input id="ckey" type="text" class="secret" spellcheck="false" placeholder="클로드 API 키 (sk-ant-…)" style="flex:1" autocomplete="off"><button class="btn small" onclick="saveKey('claudeKey','ckey')">저장</button></div></details>
     ${files.length?`<p class="hint" style="margin-top:10px">${c.folder} · 파일 ${files.length}개 · ${(c.at||"").slice(0,10)} 읽음. 체크한 파일만 씁니다 — 믿을 만한 시리즈(추천)는 켜 두고, 나머지는 꺼 두었습니다.</p>
       <details class="more" open><summary>추천 주석 ${rec.length}</summary><ul class="cmtlist">${rec.map(row).join("")||"<li class='muted'>이름으로 알아본 추천 시리즈가 없습니다. 아래에서 직접 켜 주세요.</li>"}</ul></details>
-      <details class="more"><summary>그 밖의 파일 ${etc.length}</summary><ul class="cmtlist">${etc.map(row).join("")}</ul></details>`:`<p class="hint" style="margin-top:10px">「색인 만들기」를 누르면 폴더 안 파일 이름을 읽어 어느 성경책 주석인지, 믿을 만한 시리즈인지 표시합니다(파일 내용은 그때 읽지 않습니다).</p>`}
+      <details class="more"><summary>그 밖의 파일 ${etc.length}</summary><ul class="cmtlist">${etc.map(row).join("")}</ul></details>`:`<p class="hint" style="margin-top:10px">폴더를 못 찾는다고 나오면(「내 컴퓨터」 아래 폴더는 이름으로 안 잡힐 때가 있습니다) 드라이브 웹에서 그 폴더를 열고 <b>주소창의 링크</b>를 복사해 위 칸에 붙여 넣은 뒤 「폴더 이름 저장」을 눌러 주세요.<br>「색인 만들기」를 누르면 폴더 안 파일 이름을 읽어 어느 성경책 주석인지, 믿을 만한 시리즈인지 표시합니다(파일 내용은 그때 읽지 않습니다).</p>`}
   </section>`;
 }
 let CMTR=null;
