@@ -433,6 +433,26 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .suhead{font-family:"Nanum Pen Script";font-size:19px;color:var(--sepia)}
 body.focus .sucard{display:none}
 @media (max-width:700px){ .suv{grid-template-columns:2em 1fr} .suv .en{grid-column:2} .suv.hd{grid-template-columns:1fr 1fr} .suv.hd span:first-child{display:none} }
+
+/* 본문 형광펜·밑줄·메모 */
+.sutext .vt{cursor:text}
+mark.mk{background:none;color:inherit;padding:0 1px;border-radius:2px;cursor:pointer}
+mark.hl-y{background:linear-gradient(transparent 38%,rgba(247,214,92,.62) 38%,rgba(247,214,92,.62) 92%,transparent 92%)}
+mark.hl-g{background:linear-gradient(transparent 38%,rgba(150,200,130,.55) 38%,rgba(150,200,130,.55) 92%,transparent 92%)}
+mark.hl-p{background:linear-gradient(transparent 38%,rgba(240,160,170,.55) 38%,rgba(240,160,170,.55) 92%,transparent 92%)}
+mark.hl-b{background:linear-gradient(transparent 38%,rgba(140,185,225,.55) 38%,rgba(140,185,225,.55) 92%,transparent 92%)}
+mark.ul{text-decoration:underline;text-decoration-color:var(--bible);text-decoration-thickness:1.6px;text-underline-offset:4px}
+sup.mmo{color:var(--sepia);cursor:pointer;font-size:12px;margin-left:1px;user-select:none;-webkit-user-select:none}
+.hlbar{position:fixed;z-index:70;background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:999px;box-shadow:0 8px 22px -8px rgba(0,0,0,.4);padding:4px 6px;display:flex;gap:2px;align-items:center}
+.hlbar.memo{border-radius:10px;flex-direction:column;align-items:stretch;padding:10px;width:min(320px,calc(100vw - 24px))}
+.hlbar button{font:inherit;border:0;background:none;cursor:pointer;min-width:32px;height:32px;border-radius:50%;color:var(--ink-soft);font-size:15px}
+.hlbar button:hover{background:var(--paper-2)}
+.hlbar .dot{width:18px;height:18px;border-radius:50%;display:block;margin:auto;border:1px solid rgba(0,0,0,.12)}
+.hlbar textarea{min-height:70px;font-size:15px}
+.dictpop{position:fixed;z-index:71;max-width:300px;background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:6px;box-shadow:0 8px 22px -8px rgba(0,0,0,.4);padding:10px 12px;font-size:14px;line-height:1.55}
+.dictpop b{font-family:Georgia,serif;font-size:16px}
+.dictpop .ko{font-family:"Nanum Myeongjo";font-weight:700;color:var(--bible);margin:2px 0 4px}
+.dictpop .pos{font-style:italic;color:var(--faint);font-size:12.5px}
 </style>
 </head>
 <body>
@@ -486,7 +506,7 @@ const pickQ=(tr,seed)=>Object.entries(QUESTIONS[tr]).map(([k,L])=>`${k} · ${pic
 const INKS=[["먹","#2e2721"],["청색","#24427a"],["세피아","#7a4a22"],["녹색","#2f5d4e"]];
 
 // ───────── 저장 ─────────
-const blank=()=>({settings:{bible:{idx:0,ch:1,perDay:3},currentBook:null,autoSync:true,ink:"",paper:"lined"},books:[],notes:[],writings:[],manuscripts:[],log:{},diary:{}});
+const blank=()=>({settings:{bible:{idx:0,ch:1,perDay:3},currentBook:null,autoSync:true,ink:"",paper:"lined"},books:[],notes:[],writings:[],manuscripts:[],log:{},diary:{},marks:{}});
 let S=blank(), SERVER=false, CONF={notion:false,kakao:false}, REV=null;
 const LKEY="morningStudy.v2";
 // 서버와 주고받기
@@ -645,6 +665,10 @@ function mergeFrom(other){
   const D=Object.assign({},other.diary);                     // 독서 일기는 날마다 더 나중에 고친 쪽
   for(const [d,v] of Object.entries(S.diary||{})) if(!D[d]||(v.t||"")>=(D[d].t||"")) D[d]=v;
   S.diary=D;
+  const MK=Object.assign({},other.marks);                    // 본문 형광펜: 날짜마다 표시 하나하나 더 나중에 고친 쪽
+  for(const [d,list] of Object.entries(S.marks||{})){ const map=new Map((MK[d]||[]).map(x=>[x.id,x])); for(const x of list) if(!map.has(x.id)||(x.u||"")>=(map.get(x.id).u||"")) map.set(x.id,x); MK[d]=[...map.values()]; }
+  for(const d in MK) MK[d]=(MK[d]||[]).filter(x=>!del[x.id]);
+  S.marks=MK;
   if((other.settingsT||"")>(S.settingsT||"")){ S.settings=Object.assign(blank().settings,other.settings); S.settingsT=other.settingsT; }
   if((other.reminderT||"")>(S.reminderT||"")){ S.reminder=other.reminder; S.reminderT=other.reminderT; }
   takeSnap();
@@ -681,7 +705,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="7d7fe0fd8b";
+const APP_BUILD="4b21fc89a1";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -853,14 +877,132 @@ async function paintSu(){
     <div class="sut"><b>${esc(SU.title)}</b> · ${esc(P.label)}${SU.hymn?` · <span class="muted">찬송가 ${esc(SU.hymn)}장</span>`:""}</div>
     <div class="links"><button class="btn small ink" onclick="suUse()">이 본문으로 쓰기</button>
       <a class="btn small ghost" href="${esc(suOfficial(P,"NKT"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새한글 ↗</a><a class="btn small ghost" href="${esc(suOfficial(P,"RNKSV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새번역 ↗</a><a class="btn small ghost" href="${esc(suNiv(P))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">NIV ↗</a>
-      ${SU.audio?`<a class="btn small ghost" href="${esc(SU.audio)}" target="_blank" rel="noopener">🎧 듣기</a>`:""}<a class="btn small ghost" href="https://sum.su.or.kr:8888/bible/today" target="_blank" rel="noopener">해설 ↗</a></div>
+      ${SU.audio?`<a class="btn small ghost" href="${esc(SU.audio)}" target="_blank" rel="noopener">🎧 듣기</a>`:""}<a class="btn small ghost" href="https://sum.su.or.kr:8888/bible/today" target="_blank" rel="noopener" title="성서유니온 화면이 열리면 위쪽 「해설」 탭을 눌러 주세요 (해설은 성서유니온 저작물이라 앱으로 가져오지 않습니다)" onclick="toast('열린 성서유니온 화면에서 위쪽 「해설」 탭을 눌러 주세요');return popBible(this.href)">해설 ↗ <small class="muted">(「해설」 탭)</small></a></div>
     ${open?`<div class="sutext" id="sutext"><span class="muted">본문을 불러오는 중…</span></div><small class="hint">앱 안 본문: 개역한글 · World English Bible (둘 다 저작권이 끝난 공개본). 새한글·새번역·NIV는 저작권 때문에 위 단추로 공식 사이트에서 같은 구절을 엽니다.</small>`:""}`;
   if(!open) return;
   try{ if(!SUT||SUT.label!==P.label){ SUT=await suTexts(P); SUT.label=P.label; } }catch(e){ const t=$("#sutext"); if(t) t.innerHTML=`<span class="muted">본문을 불러오지 못했습니다. 위 단추로 열어 주세요.</span>`; return; }
-  const t=$("#sutext"); if(!t) return; const en=new Map(SUT.en.map(v=>[v.c+":"+v.v,v.t])); let last=null;
-  t.innerHTML=`<div class="suv hd"><span></span><span class="suhead">개역한글</span><span class="suhead">WEB (영어)</span></div>`+SUT.ko.map(v=>{ const head=v.c!==last&&P.c1!==P.c2?`<div class="suhead" style="margin-top:6px">${v.c}${P.bi===18?"편":"장"}</div>`:""; last=v.c;
-    return head+`<div class="suv"><span class="n">${v.v}</span><span>${esc(v.t)}</span><span class="en">${esc(en.get(v.c+":"+v.v)||"")}</span></div>`; }).join("");
+  paintSuText();
 }
+// ───────── 본문 형광펜·밑줄·메모 (S.marks[날짜]) ─────────
+const HLC=[["y","#f7d65c"],["g","#96c882"],["p","#f0a0aa"],["b","#8cb9e1"]];
+const suDate=()=>$("#sucard")?.dataset.date;
+const marksOf=d=>(S.marks?.[d])||[];
+function markHtml(t,ms){
+  if(!ms.length) return esc(t);
+  const cuts=new Set([0,t.length]); ms.forEach(m=>{ cuts.add(Math.max(0,Math.min(t.length,m.s))); cuts.add(Math.max(0,Math.min(t.length,m.e))); });
+  const pts=[...cuts].sort((a,b)=>a-b); let out="";
+  for(let i=0;i<pts.length-1;i++){ const a=pts[i], b=pts[i+1], seg=t.slice(a,b), cov=ms.filter(m=>m.s<=a&&m.e>=b);
+    if(!cov.length){ out+=esc(seg); continue; }
+    const hl=[...cov].reverse().find(m=>m.color), ul=cov.some(m=>m.ul);
+    out+=`<mark class="mk ${hl?"hl-"+hl.color:""} ${ul?"ul":""}" data-mid="${cov[cov.length-1].id}">${esc(seg)}</mark>`;
+    cov.filter(m=>m.memo&&m.e===b).forEach(m=>out+=`<sup class="mmo" data-mid="${m.id}" title="${esc(m.memo)}">✎</sup>`); }
+  return out;
+}
+function paintSuText(){
+  const t=$("#sutext"), P=suPassage(SU); if(!t||!SUT||!P) return;
+  const d=suDate(), ms=marksOf(d), en=new Map(SUT.en.map(v=>[v.c+":"+v.v,v.t])); let last=null;
+  const vt=(c,v,l,txt)=>`<span class="vt ${l==="en"?"en":""}" data-c="${c}" data-v="${v}" data-l="${l}">${markHtml(txt,ms.filter(m=>m.c===c&&m.v===v&&m.lang===l))}</span>`;
+  t.innerHTML=`<div class="suv hd"><span></span><span class="suhead">개역한글</span><span class="suhead">WEB (영어) <small class="muted" style="font-family:inherit">· 단어에 마우스를 올리면 뜻</small></span></div>`+SUT.ko.map(v=>{ const head=v.c!==last&&P.c1!==P.c2?`<div class="suhead" style="margin-top:6px">${v.c}${P.bi===18?"편":"장"}</div>`:""; last=v.c;
+    return head+`<div class="suv"><span class="n">${v.v}</span>${vt(v.c,v.v,"ko",v.t)}${vt(v.c,v.v,"en",en.get(v.c+":"+v.v)||"")}</div>`; }).join("");
+}
+function plainUpTo(el,node,off){ const r=document.createRange(); r.setStart(el,0); r.setEnd(node,off); const f=r.cloneContents(); f.querySelectorAll(".mmo").forEach(x=>x.remove()); return f.textContent.length; }
+function plainText(el){ const c=el.cloneNode(true); c.querySelectorAll(".mmo").forEach(x=>x.remove()); return c.textContent; }
+function plainLen(el){ const c=el.cloneNode(true); c.querySelectorAll(".mmo").forEach(x=>x.remove()); return c.textContent.length; }
+let HLSEL=null;   // 고른 글자의 구간들 (절마다)
+function selPieces(){
+  const sel=getSelection(); if(!sel||sel.isCollapsed||!sel.rangeCount) return null; const r=sel.getRangeAt(0), box=$("#sutext"); if(!box||!box.contains(r.commonAncestorContainer)) return null;
+  const sv=(r.startContainer.nodeType===1?r.startContainer:r.startContainer.parentElement).closest(".vt");
+  const lang=sv?.dataset.l||null;   // 고르기를 시작한 쪽(한글 또는 영어)만 — 옆 칸이 함께 잡히지 않게
+  const out=[]; box.querySelectorAll(".vt").forEach(el=>{ if(!r.intersectsNode(el)||(lang&&el.dataset.l!==lang)) return;
+    const s=el.contains(r.startContainer)?plainUpTo(el,r.startContainer,r.startOffset):0, e=el.contains(r.endContainer)?plainUpTo(el,r.endContainer,r.endOffset):plainLen(el);
+    if(e>s) out.push({c:+el.dataset.c,v:+el.dataset.v,lang:el.dataset.l,s,e,t:plainText(el).slice(s,e)}); });
+  return out.length?{pieces:out.map(({t,...p})=>p),text:out.map(p=>p.t).join(" ").replace(/\s+/g," ").trim(),rect:r.getBoundingClientRect()}:null;
+}
+function hlBar(html,rect,memo){
+  let b=$("#hlbar"); if(!b){ b=document.createElement("div"); b.id="hlbar"; document.body.appendChild(b); }
+  b.className="hlbar"+(memo?" memo":""); b.innerHTML=html; b.onmousedown=e=>{ if(!e.target.matches("textarea")) e.preventDefault(); };
+  const w=b.offsetWidth, h=b.offsetHeight; let x=rect.left+rect.width/2-w/2, y=rect.top-h-10; if(y<8) y=rect.bottom+10;
+  b.style.left=Math.max(8,Math.min(innerWidth-w-8,x))+"px"; b.style.top=Math.max(8,Math.min(innerHeight-h-8,y))+"px";
+}
+const hlClose=()=>{ $("#hlbar")?.remove(); HLSEL=null; };
+function hlTools(){
+  return HLC.map(([k,c])=>`<button title="형광펜" onclick="hlApply({color:'${k}'})"><span class="dot" style="background:${c}"></span></button>`).join("")
+    +`<button title="밑줄" onclick="hlApply({ul:true})" style="text-decoration:underline;text-decoration-color:var(--bible)">U</button><button title="메모 달기 (밑줄 목록에도 남습니다)" onclick="hlApply({color:'y',memo:true})">✎</button><button title="닫기" onclick="hlClose()">✕</button>`;
+}
+function hlApply(o){
+  const d=suDate(); if(!HLSEL||!d) return hlClose();
+  const now=new Date().toISOString(), g=uid(), list=(S.marks=S.marks||{})[d]=S.marks[d]||[];
+  const made=HLSEL.pieces.map(p=>({id:uid(),g,...p,color:o.color||null,ul:!!o.ul,u:now})); list.push(...made);
+  const text=HLSEL.text, rect=HLSEL.rect; getSelection().removeAllRanges(); save(); paintSuText();
+  if(o.memo) memoBox(made[made.length-1].id,text,rect); else hlClose();
+}
+function markById(id){ for(const [d,l] of Object.entries(S.marks||{})){ const m=l.find(x=>x.id===id); if(m) return [d,m]; } return []; }
+function memoBox(id,text,rect){
+  const [,m]=markById(id); if(!m) return;
+  hlBar(`<div class="muted" style="font-size:13px;margin-bottom:6px">「${esc((text||"").slice(0,60))}${(text||"").length>60?"…":""}」</div>
+    <textarea id="hlmemo" placeholder="이 구절에 남길 생각…">${esc(m.memo||"")}</textarea>
+    <div class="row" style="margin-top:8px;gap:4px">${HLC.map(([k,c])=>`<button title="색 바꾸기" onclick="markSet('${id}',{color:'${k}'})"><span class="dot" style="background:${c}"></span></button>`).join("")}
+      <button title="밑줄" onclick="markSet('${id}',{ul:'t'})" style="text-decoration:underline">U</button><span class="spacer"></span>
+      <button class="btn small danger" style="width:auto;border-radius:999px" onclick="markDel('${id}')">지우기</button><button class="btn small ink" style="width:auto;border-radius:999px" onclick="memoSave('${id}',${jsArg(text||"")})">저장</button></div>`,rect,true);
+  setTimeout(()=>$("#hlmemo")?.focus(),20);
+}
+function markSet(id,o){ const [,m]=markById(id); if(!m) return; if(o.color) m.color=m.color===o.color?null:o.color; if(o.ul) m.ul=!m.ul; m.u=new Date().toISOString(); save(); paintSuText(); }
+function memoSave(id,text){
+  const [d,m]=markById(id); if(!m) return; const v=($("#hlmemo")?.value||"").trim(); m.memo=v||null; m.u=new Date().toISOString();
+  const grp=marksOf(d).filter(x=>m.g?x.g===m.g:x.id===m.id), f=grp[0]||m, l=grp[grp.length-1]||m, P=suPassage(SU);
+  const ref=f.c===l.c?`${f.c}:${f.v}${l.v!==f.v?"-"+l.v:""}`:`${f.c}:${f.v}-${l.c}:${l.v}`;
+  const src=`${P?P.name:""} ${ref} (${m.lang==="en"?"WEB":"개역한글"})`.trim(), quote=text||"";
+  let n=m.noteId&&S.notes.find(x=>x.id===m.noteId);
+  if(v){ if(!n){ n={id:uid(),track:"bible",date:today(),text:quote,source:src,mark:m.id}; S.notes.push(n); m.noteId=n.id; } n.thought=v; n.updated=m.u; mark("note"); }
+  else if(n){ tomb(n.id); S.notes=S.notes.filter(x=>x.id!==n.id); m.noteId=null; }
+  save(); paintSuText(); hlClose(); toast(v?"메모를 남겼습니다 (「밑줄」에도 들어갔습니다)":"메모를 지웠습니다");
+}
+function markDel(id){
+  const [d,m]=markById(id); if(!m) return; const ids=marksOf(d).filter(x=>m.g?x.g===m.g:x.id===id);
+  ids.forEach(x=>{ tomb(x.id); if(x.noteId){ tomb(x.noteId); S.notes=S.notes.filter(n=>n.id!==x.noteId); } });
+  S.marks[d]=marksOf(d).filter(x=>!ids.includes(x)); save(); paintSuText(); hlClose();
+}
+// 글자를 고르면 형광펜 막대, 칠한 곳을 누르면 메모 상자
+document.addEventListener("mouseup",e=>{ if(e.target.closest("#hlbar")) return; setTimeout(()=>{ const s=selPieces(); if(s){ HLSEL=s; hlBar(hlTools(),s.rect); } else if(!e.target.closest(".mk,.mmo")&&$("#hlbar")&&!$("#hlbar").classList.contains("memo")) hlClose(); },10); });
+document.addEventListener("selectionchange",()=>{ if(!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._hlT); window._hlT=setTimeout(()=>{ const s=selPieces(); if(s){ HLSEL=s; hlBar(hlTools(),s.rect); } },350); });
+document.addEventListener("click",e=>{ const mk=e.target.closest("#sutext .mk,#sutext .mmo"); if(!mk) { if($("#hlbar")?.classList.contains("memo")&&!e.target.closest("#hlbar")) hlClose(); return; }
+  if(!getSelection().isCollapsed) return; const [,m]=markById(mk.dataset.mid); if(!m) return;
+  const grp=marksOf(suDate()).filter(x=>m.g?x.g===m.g:x.id===m.id), last=grp[grp.length-1]||m;
+  const text=[...document.querySelectorAll("#sutext .mk")].filter(x=>grp.some(g=>g.id===x.dataset.mid)).map(x=>x.textContent).join(" ");
+  memoBox(last.id,text,mk.getBoundingClientRect()); });
+
+// ───────── 영어 단어 사전: 마우스를 잠시 올리면(휴대폰은 단어를 누르면) 뜻 ─────────
+const DICT=new Map(); let dictT=null, dictWord="";
+function wordAt(x,y){
+  let node,off; if(document.caretRangeFromPoint){ const r=document.caretRangeFromPoint(x,y); if(!r) return null; node=r.startContainer; off=r.startOffset; }
+  else if(document.caretPositionFromPoint){ const p=document.caretPositionFromPoint(x,y); if(!p) return null; node=p.offsetNode; off=p.offset; } else return null;
+  if(!node||node.nodeType!==3||!node.parentElement?.closest("#sutext .vt.en")) return null;
+  const t=node.textContent, isW=ch=>/[A-Za-z'’-]/.test(ch||""); let a=off,b=off; while(a>0&&isW(t[a-1])) a--; while(b<t.length&&isW(t[b])) b++;
+  const w=t.slice(a,b).replace(/^['’-]+|['’-]+$/g,""); return w.length>=2?w:null;
+}
+async function dictLookup(w){
+  const k=w.toLowerCase(); if(DICT.has(k)) return DICT.get(k);
+  const out={w:k,ko:"",ph:"",defs:[]};
+  await Promise.all([
+    fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(k)}&langpair=en%7Cko`).then(r=>r.json()).then(j=>{ const seen=new Set(); out.ko=[j.responseData?.translatedText,...(j.matches||[]).map(m=>m.translation)].map(x=>String(x||"").replace(/<[^>]*>/g,"").replace(/\s+/g," ").trim()).filter(x=>x&&x.length<=24&&!/[A-Za-z<>]{2,}/.test(x)&&!seen.has(x)&&seen.add(x)).slice(0,3).join(", "); }).catch(()=>{}),
+    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(k)}`).then(r=>r.ok?r.json():[]).then(j=>{ const e=j[0]; if(!e) return; out.ph=e.phonetic||""; out.defs=(e.meanings||[]).slice(0,2).map(m=>({pos:m.partOfSpeech,d:m.definitions?.[0]?.definition||""})); }).catch(()=>{})
+  ]);
+  DICT.set(k,out); return out;
+}
+async function showDict(w,x,y){
+  dictWord=w; let p=$("#dictpop"); if(!p){ p=document.createElement("div"); p.id="dictpop"; p.className="dictpop"; document.body.appendChild(p); }
+  p.innerHTML=`<b>${esc(w)}</b> <span class="muted">찾는 중…</span>`; place(); const d=await dictLookup(w); if(dictWord!==w||!$("#dictpop")) return;
+  p.innerHTML=`<b>${esc(d.w)}</b> ${d.ph?`<span class="muted">${esc(d.ph)}</span>`:""}${d.ko?`<div class="ko">${esc(d.ko)}</div>`:""}
+    ${d.defs.map(x=>`<div><span class="pos">${esc(x.pos)}</span> ${esc(x.d)}</div>`).join("")}${!d.ko&&!d.defs.length?`<div class="muted">뜻을 찾지 못했습니다.</div>`:""}
+    <div style="margin-top:6px"><a class="muted" href="https://en.dict.naver.com/#/search?query=${encodeURIComponent(d.w)}" target="_blank" rel="noopener">네이버 영어사전 ↗</a></div>`; place();
+  function place(){ const w2=p.offsetWidth,h=p.offsetHeight; p.style.left=Math.max(8,Math.min(innerWidth-w2-8,x-w2/2))+"px"; p.style.top=(y+18+h>innerHeight?y-h-14:y+18)+"px"; }
+}
+const hideDict=()=>{ dictWord=""; $("#dictpop")?.remove(); };
+document.addEventListener("mousemove",e=>{ if(matchMedia("(pointer:coarse)").matches) return;
+  if(!e.target.closest?.("#sutext .vt.en")){ clearTimeout(dictT); if(!e.target.closest?.("#dictpop")) hideDict(); return; }
+  clearTimeout(dictT); dictT=setTimeout(()=>{ if(!getSelection().isCollapsed) return; const w=wordAt(e.clientX,e.clientY); if(w&&w.toLowerCase()!==dictWord) showDict(w,e.clientX,e.clientY); else if(!w) hideDict(); },450); });
+document.addEventListener("click",e=>{ if(!matchMedia("(pointer:coarse)").matches) return; if(e.target.closest("#dictpop")) return;
+  if(e.target.closest("#sutext .vt.en")&&!e.target.closest(".mk,.mmo")&&getSelection().isCollapsed){ const w=wordAt(e.clientX,e.clientY); if(w) return showDict(w,e.clientX,e.clientY); } hideDict(); });
 
 // ───────── 성경 통독 계획 ─────────
 const chapterList=(from,to)=>{ const L=[]; for(let i=from;i<to;i++) for(let c=1;c<=BIBLE[i][1];c++) L.push([i,c]); return L; };
@@ -962,7 +1104,8 @@ function todayPassageHint(){ const first=(planDays()[todayIdx()]||[])[0]||""; co
 function streak(){ // 쉬는 요일은 건너뛰고 셉니다 (쉬어도 끊기지 않음)
   const act=k=>{const l=S.log[k]; return l&&(l.read||l.note||l.write);};
   let d=new Date(),n=0; if(!act(dkey(d))) d.setDate(d.getDate()-1);
-  for(let g=0;g<4000;g++){ const k=dkey(d); if(act(k)) n++; else if(isReadDay(k)) break; d.setDate(d.getDate()-1); }
+  const from=S.settings.streakFrom||"";   // '다시 세기'를 누른 날부터만 셉니다 (기록은 그대로)
+  for(let g=0;g<4000;g++){ const k=dkey(d); if(k<from) break; if(act(k)) n++; else if(isReadDay(k)) break; d.setDate(d.getDate()-1); }
   return n;
 }
 
@@ -1357,6 +1500,12 @@ settings(){
   </div>
   <div class="setgroup">기록 보관</div>
   <div class="grid">
+  <section class="sheet">
+    <p class="label">이어지는 아침</p>
+    <p class="sub">지금 <b>${streak()}일째</b> 이어지고 있습니다${S.settings.streakFrom?` · ${S.settings.streakFrom}부터 센 것`:""}.</p>
+    <div class="row" style="margin-top:8px"><button class="btn" onclick="resetStreak()">오늘부터 다시 세기</button>${S.settings.streakFrom?`<button class="btn ghost" onclick="S.settings.streakFrom=null;save();render();toast('처음 기록부터 다시 셉니다')">처음 기록부터 세기</button>`:""}</div>
+    <p class="hint">날 수만 새로 셉니다. 읽은 기록·글·일기는 하나도 지워지지 않습니다.</p>
+  </section>
   <section class="sheet">
     <p class="label">간직된 곳</p>
     <p class="sub">${GAS?`모든 기록은 <a href="${esc(CONF.driveUrl)}" target="_blank">구글 드라이브 「아침 서재」 폴더</a>의 <code>data.json</code>에 저장되고, 날마다 「백업」 폴더에 사본이 하나씩 남습니다(최근 60일). 휴대폰과 컴퓨터가 같은 기록을 씁니다.`
@@ -1978,6 +2127,7 @@ function planSettings(){
       <button class="btn small ghost danger" style="margin-left:6px" onclick="resetPlan()">이 방법 처음부터</button></p>
   </section>`;
 }
+function resetStreak(){ if(!confirm("「이어지는 아침」 날 수를 오늘부터 다시 셀까요?\n(읽은 기록·글·일기는 그대로 남습니다)")) return; S.settings.streakFrom=today(); save(); render(); toast("오늘부터 다시 셉니다 — 1일째 아침"); }
 function setWeek(list){ const d=[...new Set(list)].sort(); if(!d.length) return toast("하루는 골라 주세요");
   S.settings.days=d; restPeek=false;
   const p=S.settings.plan; if(p.spanM&&p.spanUntil>today()){ _days.key=""; return applySpan(p.spanM,p.spanUntil); }   // 기간을 정해 두었으면 같은 끝날에 맞춰 다시 계산
