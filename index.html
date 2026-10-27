@@ -982,7 +982,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="d1f9e30c95";
+const APP_BUILD="aac7744e2c";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2060,7 +2060,7 @@ today(){
   <div class="grid" style="margin-top:30px">
     <section class="sheet">
       <p class="label">오늘의 기록</p>
-      ${FLOW}
+      
       <div class="sub" style="margin-top:12px">오늘 밑줄 ${tn.length}개 · 글 ${tw.length}편 · ${tw.reduce((a,w)=>a+chars(w.body),0).toLocaleString()}자</div>
       ${tw.length?`<div style="margin-top:6px">${tw.map(w=>`<div class="row" style="gap:8px;padding:3px 0"><span class="label ${w.track}" style="margin:0;font-size:17px">[${esc(wTag(w))}]</span><a href="#" class="myeongjo" style="color:var(--ink)" onclick="go('write',{edit:'${w.id}'});return false"><b>${esc(w.title||w.passage||"(제목 없음)")}</b></a>${nState(w)}</div>`).join("")}</div>`:""}
       <div class="row" style="margin-top:12px;gap:8px"><input id="jotin" class="pen" placeholder="끄적이기 — 떠오른 생각을 한 줄 적어 두세요" style="flex:1;min-width:200px;font-size:21px" onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();jotAdd()}"><button class="btn small" onclick="jotAdd()">끄적여 두기</button>${(S.jots||[]).length?`<span class="muted" style="font-size:13px">끄적임 ${(S.jots||[]).length}개 · <a href="#" onclick="go('write',{track:'book'});return false">글쓰기에서 보기</a></span>`:""}</div>
@@ -2197,7 +2197,7 @@ shelf(){
 },
 drawer(){
   const segBtn=(k,n)=>`<span class="chip ${drawerSub===k?"on":""}" onclick="drawerSub='${k}';msDraft=null;render()">${n}</span>`;
-  const head=`<div class="row" style="margin-bottom:10px"><h2>서랍</h2><span class="spacer"></span>${segBtn("all","모든 기록")}${segBtn("ms","원고 — 책으로 엮기")}</div>${FLOW}<div style="height:22px"></div>`;
+  const head=`<div class="row" style="margin-bottom:10px"><h2>서랍</h2><span class="spacer"></span>${segBtn("all","모든 기록")}${segBtn("ms","원고 — 책으로 엮기")}</div><div style="height:22px"></div>`;
   if(drawerSub==="ms") return head+`
   <section class="sheet" style="margin-bottom:30px">
     <p class="label">새 원고</p>
