@@ -967,7 +967,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="efcce8dc74";
+const APP_BUILD="ae42d9589b";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2119,11 +2119,6 @@ write(){
             +(up.length?`<p class="muted" style="margin-top:6px">→ 설교로 올린 글: ${up.map(x=>`<a href="#" onclick="go('write',{edit:'${x.id}'});return false">[묵상을설교로] ${esc(x.title||x.passage||"")} · ${esc(x.length||"")} ${esc(x.date)}</a>`).join(", ")}</p>`:""); })():""}
         ${w?.prev?.length?`<details class="more" style="margin-top:10px"><summary>이전 판 ${w.prev.length}개</summary><ol class="prevs">${w.prev.map((v,k)=>`<li><span class="muted">${esc((v.at||"").slice(0,16).replace("T"," "))} · ${chars(v.body).toLocaleString()}자</span> <button class="btn small ghost" onclick="restorePrev('${w.id}',${k})">본문 되돌리기</button></li>`).join("")}</ol><small class="hint">간직할 때마다 바로 앞의 본문을 3개까지 남겨 둡니다.</small></details>`:""}
         ${canSync()?"":`<p class="muted" style="margin-top:10px">노션이 아직 연결되지 않아 ${PLACE()}에만 간직됩니다. <a href="#" onclick="go('settings');return false">연결하기</a></p>`}
-      </div>
-      <div class="sheet" style="margin-top:22px;padding:18px">
-        <p class="label ${track}">글감 — 내 밑줄</p>
-        <small class="hint" style="margin-bottom:6px">오늘 화면에서 남긴 밑줄입니다. 누르면 노트의 커서 자리에 인용으로 옮겨 적힙니다.</small>
-        ${notes.length?notes.map(n=>`<div class="side-note" onclick="insertNote('${n.id}')"><div class="muted">${esc(noteSrc(n))}</div>${esc(n.text.slice(0,90))}</div>`).join(""):`<p class="muted">밑줄이 아직 없습니다.</p>`}
       </div>
     </aside>
   </div>`;
