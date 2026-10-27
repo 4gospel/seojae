@@ -488,6 +488,10 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .diary .cover{width:54px;height:78px;font-size:10px}
 .dnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .dbook{perspective:1600px}
+.creditbox{border:1px dashed var(--deco);border-radius:6px;padding:10px 12px;margin:8px 0 10px}
+.creditbox .warn{color:var(--stamp);font-weight:700}
+.credlog{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px} .credlog td{padding:3px 4px;border-bottom:1px dotted var(--edge);color:var(--ink-soft)} .credlog td.r{text-align:right;font-variant-numeric:tabular-nums}
+.creditbox.low{border-color:var(--stamp)} .creditbox.low .progress i{background:var(--stamp)}
 .dcalwrap{position:relative;display:inline-block}
 .dcalpop{position:absolute;left:0;top:calc(100% + 8px);z-index:65;width:320px;max-width:calc(100vw - 32px)}
 .dcalpop .calcard{box-shadow:0 14px 34px -12px rgba(0,0,0,.45)}
@@ -938,7 +942,7 @@ async function fetchFresh(first){
     }
     else { d=await apiGet("/api/data"); c=await apiGet("/api/config"); }
     const known=READY?REV:CACHED_REV;
-    SERVER=true; REV=d.rev??0; CONF=c; if(GAS) CONF.phoneUrl=connectLink();
+    SERVER=true; REV=d.rev??0; CONF=c; if(GAS) CONF.phoneUrl=connectLink(); try{ creditWarn(); }catch(_){}
     try{ localStorage.setItem(CKEY,JSON.stringify(c)); }catch(_){}
     // 이 기기에 아직 구글로 못 간 기록(오프라인에서 쓴 글, 열자마자 한 저장)이 있으면 덮지 않고 합칩니다
     const dirty=PENDING||!!saveT||isDirty();
@@ -1099,7 +1103,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="4bfb951739";
+const APP_BUILD="49185ecfa2";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1826,12 +1830,14 @@ function cmtSection(){
   const ready=all.length>0;
   return `<section class="sheet tape ${ready?"compact":""}">
     <p class="label bible">주석 서재 (구글 드라이브)</p>
+    ${CONF.claude?creditBox():""}
     ${ready?`<div class="okline"><span class="stamp ok">색인 있음</span><span class="muted">${esc(c.folder)} · 파일 ${all.length}개 · 켠 파일 ${all.filter(cmtUse).length}개 · 요약 ${CONF.ai?(CONF.ai==="gemini"?"제미나이":"클로드")+" ✓":"열쇠 없음(발췌만)"}</span></div>
     <details class="keybox"><summary>파일 고르기 · 다시 읽기 · 열쇠·폴더 바꾸기</summary>`:""}
     <p class="sub">드라이브의 <b>${esc(CONF.cmtFolder||"성경공부")}</b> 폴더에 올려 둔 주석(PDF·워드·구글 문서·txt)에서 글의 본문 구절 부분을 찾아 보여 주고, 인공지능 열쇠가 있으면 요약합니다. 쓰기 화면 본문 칸 아래 「주석 보기」 단추로 봅니다.</p>
     <div class="row"><input id="cmtfolder" placeholder="폴더 이름 또는 폴더 링크 (기본: 성경공부)" value="${esc(CONF.cmtFolder||"")}" style="flex:1"><button class="btn small" onclick="saveKey('cmtFolderName','cmtfolder')">폴더 이름 저장</button><button class="btn ink small" id="cmtidxbtn" onclick="cmtRefresh(true)">${files.length?"다시 읽기":"색인 만들기"}</button></div>
-    <details class="keybox" id="aikeybox" ${CONF.ai?"":"open"}><summary>${CONF.ai?`요약 열쇠: 제미나이 ${CONF.aiKeys?.gemini||CONF.ai==="gemini"?"✓":"없음"} · 클로드 ${CONF.aiKeys?.claude?"✓":"없음"} · 넣기·바꾸기`:"요약 열쇠 넣기 (없으면 발췌만 보입니다)"}</summary>
-      <p class="hint">제미나이를 먼저 쓰고, 제미나이가 막히거나 무료 한도에 걸리면 <b>클로드 열쇠로 이어서</b> 요약합니다. 둘 다 넣어 두면 끊기지 않습니다.</p>
+    <details class="keybox" id="aikeybox" ${CONF.ai?"":"open"}><summary>${CONF.ai?`요약 열쇠: 클로드 ${CONF.aiKeys?.claude||CONF.ai==="claude"?"✓ (먼저)":"없음"} · 제미나이 ${CONF.aiKeys?.gemini?"✓":"없음"} · 넣기·바꾸기`:"요약 열쇠 넣기 (없으면 발췌만 보입니다)"}</summary>
+      <p class="hint"><b>클로드를 먼저</b> 쓰고, 클로드가 안 될 때(크레딧 부족·혼잡)만 제미나이로 이어서 요약합니다. 둘 다 넣어 두면 끊기지 않습니다.</p>
+
       <p class="hint">둘 중 하나만 넣으면 됩니다. <b>제미나이</b>: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>에서 무료로 만들 수 있습니다. <b>클로드</b>: <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> (사용량만큼 요금). 주석 본문(발췌)은 「요약하기」를 누를 때만, 내 글은 「맞춤법」 단추를 누르거나 설정에서 「규칙 + 인공지능」을 켠 경우에만 그 회사로 보내집니다. 보낸 글은 그 회사 서버에 닿으며, 무료 열쇠는 품질 개선에 쓰일 수 있습니다(각 회사 약관 확인).</p>
       <div class="row"><input id="gkey" type="text" class="secret" spellcheck="false" placeholder="제미나이 API 키" style="flex:1" autocomplete="off"><button class="btn small" onclick="saveKey('geminiKey','gkey')">저장</button></div>
       <div class="row" style="margin-top:6px"><input id="ckey" type="text" class="secret" spellcheck="false" placeholder="${CONF.aiKeys?.claude?"클로드 열쇠 들어 있음 ✓ — 바꾸려면 새 열쇠":"클로드 API 키 (sk-ant-…)"}" style="flex:1" autocomplete="off"><button class="btn small" onclick="saveKey('claudeKey','ckey')">저장</button></div></details>
@@ -3436,6 +3442,25 @@ function setMode(m){ const p=S.settings.plan; if(p.mode===m) return; const i=tod
 function setStart(v){ const p=S.settings.plan; if(!v) return; p.start=v; p.checks=[]; p.done={}; p.setOn=today(); planChanged(`${v}부터 시작한 것으로 맞췄습니다`); }
 function setDay(v){ const p=S.settings.plan; p.day=Math.min(planDays().length-1,Math.max(0,(+v||1)-1)); p.checks=[]; p.last=null; planChanged(`${p.day+1}일째부터 읽습니다`); }
 function setPerDay(v){ ["spanM","spanUntil","spanPer","perDayBase"].forEach(k=>delete S.settings.plan[k]); const p=S.settings.plan, old=p.perDay, n=Math.max(1,+v||1), i=Math.floor(todayIdx()*old/n); p.perDay=n; _days.key=""; setIndexTo(i); planChanged(`하루 ${n}장씩 읽습니다`); }
+// 클로드 크레딧(서버가 사용량으로 계산한 추정치): 남은 금액, 다음 충전일, 콘솔에서 본 실제 잔액으로 맞추기
+function creditBox(){ const c=CONF.claude, pct=c.credit?Math.max(0,Math.min(100,c.left/c.credit*100)):0;
+  return `<div class="creditbox ${c.low?"low":""}"><div class="row" style="justify-content:space-between;align-items:baseline"><b>클로드 크레딧</b><span class="${c.low?"warn":"muted"}">${c.empty?"다 썼습니다":`약 $${c.left.toFixed(2)} 남음`} / $${c.credit} · 다음 충전 ${esc(c.next)}</span></div>
+    <div class="progress"><i style="width:${pct}%"></i></div>
+    <p class="hint" style="margin:4px 0 0">이번 달 ${c.calls||0}번 썼고 약 $${c.spent.toFixed(2)}입니다 (${esc(c.from)}부터). 아침 서재가 사용량으로 계산한 <b>추정치</b>이고, $1 아래로 내려가면 메일과 앱에서 알려 드립니다.</p>
+    ${(c.log||[]).length?`<details class="more"><summary>최근 사용 내역 ${c.log.length}건</summary><table class="credlog">${c.log.map(x=>`<tr><td>${esc(x.at)}</td><td>${esc(x.what||"")}</td><td>${x.s?`검색 ${x.s}회`:""}</td><td class="r">$${(+x.usd).toFixed(x.usd<0.01?4:2)}</td></tr>`).join("")}</table></details>`:""}
+    <div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap"><a class="btn small" href="https://console.anthropic.com/settings/billing" target="_blank" rel="noopener">클로드 콘솔 · 결제(실제 잔액) ↗</a><a class="btn small ghost" href="https://console.anthropic.com/usage" target="_blank" rel="noopener">사용량 그래프 ↗</a><a class="btn small ghost" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">API 키 ↗</a></div>
+    <details class="more"><summary>콘솔에서 본 실제 잔액으로 맞추기</summary><div class="row" style="gap:6px;margin-top:6px;flex-wrap:wrap">
+      <label class="field" style="width:110px"><span>지금 남은 $</span><input id="cr-left" type="number" step="0.01" placeholder="${c.left.toFixed(2)}"></label>
+      <label class="field" style="width:110px"><span>매월 크레딧 $</span><input id="cr-credit" type="number" step="1" value="${c.credit}"></label>
+      <label class="field" style="width:150px"><span>이번 달 충전일</span><input id="cr-from" type="date" value="${esc(c.from)}"></label>
+      <button class="btn small" onclick="saveCredit()">맞추기</button></div></details></div>`; }
+async function saveCredit(){ if(!SERVER) return toast("서버로 열어야 저장할 수 있습니다");
+  const body={credit:$("#cr-credit").value,from:$("#cr-from").value,left:$("#cr-left").value};
+  await api("/api/config",{claudeCredit:body}); CONF=await apiGet("/api/config"); if(GAS) CONF.phoneUrl=connectLink(); toast("클로드 크레딧을 맞췄습니다"); render(); }
+// 앱을 열 때 클로드 크레딧이 $1 아래면 하루 한 번 알림
+function creditWarn(){ const c=CONF?.claude; if(!c||!c.low) return; let k=""; try{ k=localStorage.getItem("seojae.creditWarn"); }catch(_){} if(k===today()) return;
+  try{ localStorage.setItem("seojae.creditWarn",today()); }catch(_){}
+  setTimeout(()=>toast(c.empty?"클로드 크레딧을 다 썼습니다. 요약은 제미나이로 이어집니다 (설정 → 주석 서재)":`클로드 크레딧이 약 $${c.left.toFixed(2)} 남았습니다. 다음 충전 ${c.next}`),1500); }
 // 설정 → 주석 서재의 요약 열쇠 칸을 펴고 클로드 칸에 커서를
 function goAiKey(){ go("settings"); setTimeout(()=>{ const b=$("#aikeybox"); if(b){ b.open=true; b.closest("details:not(#aikeybox)")?.setAttribute("open",""); b.scrollIntoView({block:"center"}); setTimeout(()=>$("#ckey")?.focus(),300); } },150); }
 async function saveKey(k,inputId){
@@ -3443,7 +3468,7 @@ async function saveKey(k,inputId){
   const v=$("#"+inputId).value.trim(); if(!v) return;
   if(k==="claudeKey"&&!/^sk-ant-/.test(v)&&!confirm("클로드 열쇠는 보통 sk-ant- 로 시작합니다. 그래도 저장할까요?")) return;
   await api("/api/config",{[k]:v}); $("#"+inputId).value="";
-  CONF=await apiGet("/api/config"); if(GAS) CONF.phoneUrl=connectLink(); toast(k==="claudeKey"?"클로드 열쇠를 저장했습니다. 제미나이가 막히면 클로드로 이어서 요약합니다":"저장했습니다"); render();
+  CONF=await apiGet("/api/config"); if(GAS) CONF.phoneUrl=connectLink(); toast(k==="claudeKey"?"클로드 열쇠를 저장했습니다. 요약은 클로드가 먼저 합니다":"저장했습니다"); render();
 }
 async function checkNotion(){
   const el=$("#nstatus"); if(!el) return;
