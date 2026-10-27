@@ -92,7 +92,11 @@ main{padding:26px 0 80px}
 .sheet.tape::before{content:"";position:absolute;top:-11px;left:calc(50% - 55px);width:110px;height:24px;background:repeating-linear-gradient(45deg,var(--tape-a) 0 8px,transparent 8px 12px),var(--tape-a);opacity:.85;transform:rotate(-2.5deg);box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .sheet.tape.b::before{background:var(--tape-b);transform:rotate(2deg);left:24px}
 .sheet.tape.c::before{background:repeating-linear-gradient(90deg,var(--tape-c) 0 6px,transparent 6px 10px),var(--tape-c);transform:rotate(-1.5deg);left:auto;right:28px}
-.grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));align-items:start}
+.sheet.wide{grid-column:1 / -1}
+.lookgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:4px 32px;margin-top:4px}
+.lookgrid .setrow{margin-top:12px;align-items:flex-start} .lookgrid .setrow>.k{min-width:96px;padding-top:4px}
+.lookgrid .pills{gap:6px} .lookgrid .pill{padding:4px 11px;font-size:13.5px}
 .label{font-family:"Nanum Pen Script";font-size:22px;color:var(--sepia);line-height:1.1;margin:0 0 6px}
 .label.bible{color:var(--bible)} .label.book{color:var(--book)}
 h2{font-family:"Nanum Myeongjo";font-weight:800;font-size:24px;margin:0 0 4px;letter-spacing:-.01em}
@@ -248,6 +252,15 @@ textarea.page.lined{background-image:repeating-linear-gradient(to bottom,transpa
 .hmirror{position:absolute;z-index:2;pointer-events:none;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;box-sizing:border-box;overflow:hidden;background:transparent}
 .hmirror span{visibility:hidden}
 .hmirror b{font-weight:800;color:var(--note-ink,var(--ink))}
+/* 맞춤법 밑줄: 글자는 투명하게 두고 물결 밑줄만 보입니다. 누르면 제안 상자 */
+.hmirror i.sp{visibility:visible;font-style:normal;color:transparent;text-decoration:underline wavy var(--stamp);text-decoration-skip-ink:none;text-underline-offset:4px;text-decoration-thickness:1.5px;pointer-events:auto;cursor:pointer}
+.hmirror i.sp.ai{text-decoration-color:#2f6fb3}
+.sppop{position:absolute;z-index:75;background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:8px;box-shadow:var(--shadow);padding:10px 12px;font-size:14px;max-width:300px}
+.sppop .fr{text-decoration:line-through;color:var(--stamp)} .sppop .to{color:var(--book)} .sppop .why{color:var(--faint);font-size:12.5px;margin-top:3px}
+/* 읽어 보기: 옆 칸을 치우고 종이를 가로로 꽉 채운 미리보기 */
+body.readmode .writegrid{grid-template-columns:1fr} body.readmode .writegrid>aside,body.readmode .sucard{display:none}
+body.readmode .notebook{padding:40px 64px 48px 96px} body.readmode .readview{font-size:calc(var(--note-fs,17px) + 1px);line-height:calc(var(--note-lh,34px) + 2px)}
+@media (max-width:700px){ body.readmode .notebook{padding:24px 18px 30px 40px} }
 textarea.page.grid{background-image:repeating-linear-gradient(to bottom,transparent 0 17px,var(--rule) 17px 18px),repeating-linear-gradient(to right,transparent 0 17px,var(--rule) 17px 18px)}
 textarea.page.blank{background-image:none}
 .notebook .margin{position:absolute;top:0;bottom:0;left:70px;width:1px;background:var(--margin)}
@@ -903,7 +916,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="425029e7b7";
+const APP_BUILD="586f09685f";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1264,6 +1277,7 @@ function toggleRead(){
       if(MEMO_END.test(t)) memo=false; return h; }).join("\n");
     if(!rv){ rv=document.createElement("div"); rv.id="readview"; rv.className="readview page"; b.after(rv); } rv.innerHTML=html+fnHtml(fn); b.style.display="none"; rv.style.display=""; const m=$("#hmirror"); if(m) m.style.display="none"; }
   else { b.style.display=""; rv?.remove(); paintHeads(); }
+  document.body.classList.toggle("readmode",READVIEW);   // 옆 칸을 치우고 종이를 가로로 꽉 채운 미리보기
   $("#readbtn").innerHTML=READVIEW?ICO.pen+"다시 쓰기":ICO.eye+"읽어 보기";
 }
 function hlTools(){
@@ -1682,26 +1696,83 @@ async function cmtSummarize(){
 let SPELL=null;
 function busy(on,msg){ let el=$("#busy"); if(!on){ el?.remove(); return; } if(!el){ el=document.createElement("div"); el.id="busy"; el.className="busy"; document.body.appendChild(el); }
   el.innerHTML=`<svg class="hg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12M6 21h12M7 3v4.5c0 2 2.2 3 3.6 4.5-1.4 1.5-3.6 2.5-3.6 4.5V21M17 3v4.5c0 2-2.2 3-3.6 4.5 1.4 1.5 3.6 2.5 3.6 4.5V21" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.5 7.5h5l-2.5 2.5z M9 19.2h6l-3-3.2z" fill="currentColor" opacity=".55"/></svg><span>${esc(msg||"")}</span>`; }
+// ───────── 맞춤법 밑줄 (워드처럼): 쓰는 즉시 규칙으로 잡아 빨간 물결 밑줄을 긋고, 누르면 고칩니다. 바뀐 문단은 인공지능이 뒤에서 조용히(빠른 모델) 살핍니다 ─────────
+// 자주 틀리는 맞춤법·띄어쓰기 규칙 — 확실한 것만 (성경 인용 「 」 안과 ※ 주석 요약은 건너뜀)
+const _bat=ch=>(ch.charCodeAt(0)-0xAC00)%28!==0;   // 받침이 있는 글자인가
+const _ryeo={"할":"하","볼":"보","갈":"가","올":"오","살":"사","쓸":"쓰","먹을":"먹으","읽을":"읽으","말할":"말하","들을":"들으","만날":"만나","드릴":"드리"};
+const SPELL_RULES=[
+  [/되요/g,"돼요","'되어요'의 준말은 '돼요'"],[/됬/g,"됐","'되었'의 준말은 '됐'"],[/되서/g,"돼서","'되어서'의 준말은 '돼서'"],[/되었/g,null,""],
+  [/않되/g,"안 돼","'아니 되'는 '안 돼'"],[/않\s+(?=[가-힣])/g,"안 ","'않'은 혼자 쓰지 않습니다 — 부정 부사는 '안'"],
+  [/웬지/g,"왠지","'왜인지'의 준말은 '왠지'"],[/왠만/g,"웬만","'웬만'이 맞습니다"],[/왠일/g,"웬일","'웬일'이 맞습니다"],[/어떻해/g,"어떡해","'어떻게 해'의 준말은 '어떡해'"],
+  [/몇일/g,"며칠","'며칠'이 맞습니다"],[/금새/g,"금세","'금시에'의 준말은 '금세'"],[/오랫만/g,"오랜만","'오랜만'이 맞습니다"],[/오랜동안/g,"오랫동안","'오랫동안'이 맞습니다"],
+  [/바램(?=[은을이의도과\s,.])/g,"바람","'바라다'의 명사형은 '바람'"],[/설겆이/g,"설거지",""],[/희안/g,"희한","'희한'이 맞습니다"],[/역활/g,"역할",""],[/통채/g,"통째",""],[/어의없/g,"어이없",""],
+  [/뒤쳐지/g,"뒤처지",""],[/일일히/g,"일일이",""],[/깨끗히/g,"깨끗이",""],[/곰곰히/g,"곰곰이",""],[/틈틈히/g,"틈틈이",""],[/솔직이/g,"솔직히",""],[/일부로/g,"일부러",""],[/어느세/g,"어느새",""],
+  [/안절부절하/g,"안절부절못하","'안절부절못하다'가 맞습니다"],[/어줍잖/g,"어쭙잖",""],[/짜집기/g,"짜깁기",""],[/요컨데/g,"요컨대",""],[/하마트면/g,"하마터면",""],[/서슴치/g,"서슴지",""],[/삼가하/g,"삼가","'삼가다'가 기본형"],
+  [/끼여들/g,"끼어들",""],[/설레임/g,"설렘",""],[/건들이/g,"건드리",""],[/눈쌀/g,"눈살",""],[/댓가/g,"대가",""],[/되물림/g,"대물림",""],[/같애/g,"같아",""],[/읍니다/g,"습니다","'-습니다'가 맞습니다"],
+  [/예기(?!치|하|가|의)/g,"얘기","'이야기'의 준말은 '얘기'"],
+  [/(할|볼|줄|갈|올|살|먹을|쓸|읽을|말할|드릴)께(?=요|\.|\s|$)/g,(m,v)=>v+"게","'-ㄹ게'로 적습니다 ('-ㄹ께' 아님)"],
+  [/(할|볼|줄|갈|올|살|먹을|쓸|읽을|말할|드릴)꺼(야|예요|에요|지|라고|니까|고|든)/g,(m,v,t)=>v+" 거"+(t==="에요"?"예요":t),"'거'는 띄어 쓰고, '-ㄹ 거'로 적습니다"],
+  [/거에요/g,"거예요","'거예요'가 맞습니다"],
+  [/([가-힣])이예요/g,(m,c)=>c+(_bat(c)?"이에요":"예요"),"받침이 있으면 '이에요', 없으면 '예요'"],[/([가-힣])이였/g,(m,c)=>c+(_bat(c)?"이었":"였"),"받침이 있으면 '이었', 없으면 '였'"],
+  [/([가-힣])에요(?=[\s.,!?]|$)/g,(m,c)=>"이니".includes(c)||_bat(c)?null:c+"예요","받침 없는 말 뒤에는 '예요'"],
+  [/(할|볼|갈|올|살|쓸|먹을|읽을|말할|들을|만날|드릴)려고/g,(m,v)=>_ryeo[v]+"려고","'-려고'는 어간에 바로 붙습니다 ('할려고'→'하려고')"],
+  [/(할|될|볼|갈|올|살|줄|쓸|읽을|먹을|말할|받을|들을|알|모를|만날|드릴|따를|이길|견딜)수(?=\s|[있없도는가밖])/g,(m,v)=>v+" 수","'수'는 띄어 씁니다"],[/수있/g,"수 있","'수 있'은 띄어 씁니다"],[/수없/g,"수 없","'수 없'은 띄어 씁니다"],
+  [/것같/g,"것 같","'것 같'은 띄어 씁니다"],[/뿐만아니라/g,"뿐만 아니라",""],[/밖에없/g,"밖에 없",""],[/(할|될|볼|갈|올|줄)텐데/g,(m,v)=>v+" 텐데","'텐데'는 띄어 씁니다"],
+  [/([가-힣])지않/g,(m,c)=>c+"지 않","'-지 않'은 띄어 씁니다"],[/([가-힣])지못/g,(m,c)=>c+"지 못","'-지 못'은 띄어 씁니다"],
+  [/(할|될|볼|갈|올|줄|있을|없을|읽을|먹을|말할|들을|쓸|살)때(?=[\s,.]|$|[는도의마다])/g,(m,v)=>v+" 때","'때'는 띄어 씁니다"],
+  [/([가-힣])것(?=[이을은도의과만])/g,(m,c)=>"그이저어무아요".includes(c)?null:c+" 것","'것'은 띄어 씁니다"],
+  [/ {2,}/g," ","띄어쓰기가 두 칸입니다"],[/([가-힣]) +([,.!?])/g,(m,c,p)=>c+p,"문장부호 앞은 붙여 씁니다"]
+].filter(r=>r[1]!==null);
+const SPELL_SKIP=new Set();                 // 「그대로」 둔 말
+let SPELL_AI=new Map(), SPELL_AI_T, SPELL_AI_BUSY=false;   // 문단 글자 → 인공지능이 찾은 것 (문단이 바뀌면 다시)
+const spellMode=()=>{ const m=applyLook().spell; return m||(CONF.ai?"ai":"rules"); };   // rules | ai | off
+const inQuote=(l,s,e)=>{ let d=0; for(let i=0;i<e;i++){ if(l[i]==="「") d++; else if(l[i]==="」") d--; if(i===s&&d>0) return true; } return false; };   // 「 」 안인가
+function spellLine(l){   // 한 줄의 고칠 곳 [{s,e,from,to,why,src}]
+  if(spellMode()==="off"||HEAD_RE.test(l)&&/^※/.test(l.trim())) return [];
+  const out=[];
+  for(const [re,to,why] of SPELL_RULES){ re.lastIndex=0; let m; while((m=re.exec(l))){ const r=typeof to==="function"?to(...m):to; if(r==null||r===m[0]||inQuote(l,m.index,m.index+m[0].length)||SPELL_SKIP.has(m[0])) continue;
+      if(!out.some(x=>x.s<m.index+m[0].length&&x.e>m.index)) out.push({s:m.index,e:m.index+m[0].length,from:m[0],to:r,why:why||"",src:"rule"}); if(!re.global) break; } }
+  const ai=SPELL_AI.get(l)||[]; ai.forEach(x=>{ if(SPELL_SKIP.has(x.from)) return; let p=l.indexOf(x.from); while(p>=0){ if(!inQuote(l,p,p+x.from.length)&&!out.some(y=>y.s<p+x.from.length&&y.e>p)) out.push({s:p,e:p+x.from.length,from:x.from,to:x.to,why:x.why||"",src:"ai"}); p=l.indexOf(x.from,p+1); } });
+  return out.sort((a,b)=>a.s-b.s);
+}
+function spellLines(v){ const out=[]; let memo=false; v.split("\n").forEach(l=>{ const t=l.trim(); if(MEMO_START.test(t)) memo=true; out.push(memo?[]:spellLine(l)); if(MEMO_END.test(t)) memo=false; }); return out; }
+// 인공지능 뒷검사: 5초 쉬면 아직 안 본 문단(25자 이상)만 모아 보냅니다. 결과는 문단 글자 그대로를 열쇠로 기억해, 그 문단을 고치면 자동으로 다시 봅니다
+function spellAutoKick(){ clearTimeout(SPELL_AI_T); if(spellMode()!=="ai"||!GAS||!CONF.ai) return; SPELL_AI_T=setTimeout(spellAuto,5000); }
+async function spellAuto(force){
+  const b=$("#wbody"); if(!b||SPELL_AI_BUSY||tab!=="write") return; if(!force&&spellMode()!=="ai") return;
+  let memo=false; const lines=[]; b.value.split("\n").forEach(l=>{ const t=l.trim(); if(MEMO_START.test(t)) memo=true; if(!memo&&chars(l)>=25&&!/^(■|◆)/.test(t)&&(force||!SPELL_AI.has(l))&&!lines.includes(l)) lines.push(l); if(MEMO_END.test(t)) memo=false; });
+  if(!lines.length) return; const batch=[]; let n=0; for(const l of lines){ if(n+l.length>4000||batch.length>=20) break; batch.push(l); n+=l.length; }
+  SPELL_AI_BUSY=true; const st=$("#spellstate"); if(st) st.textContent="맞춤법 살피는 중…";
+  try{ const r=await gcall("spellCheck",{text:batch.join("\n"),fast:true}); if(!r.ok) throw new Error(r.error);
+    batch.forEach(l=>SPELL_AI.set(l,[])); (r.items||[]).forEach(x=>{ if(!x.from||!x.to||x.from===x.to) return; const l=batch.find(y=>y.includes(x.from)); if(l) SPELL_AI.get(l).push(x); });
+    if($("#wbody")) paintHeads(); if(st) st.textContent="";
+    if(batch.length<lines.length) setTimeout(()=>spellAuto(force),800);   // 남은 문단은 이어서
+  }catch(e){ if(st) st.textContent=""; }
+  finally{ SPELL_AI_BUSY=false; }
+}
+// 단추로 바로 검사: 모든 문단을 인공지능에 보내고(빠른 모델) 밑줄로 표시합니다
 async function spellCheck(){
-  const b=$("#wbody"); if(!b) return; const text=stripMemo(b.value); if(chars(text)<10) return toast("먼저 글을 조금 써 주세요");
-  if(!GAS) return toast("구글 서버에 연결되어 있어야 합니다");
-  const btn=$("#spellbtn"); if(btn) btn.disabled=true; busy(true,"맞춤법을 살피는 중…");
-  let box=$("#spellbox"); if(!box){ box=document.createElement("div"); box.id="spellbox"; box.className="spellbox sheet"; box.style.marginTop="18px"; ($(".writegrid")||$(".toolbar")).after(box); }
-  box.innerHTML=`<p class="muted">맞춤법·띄어쓰기를 살피는 중… (10~30초)</p>`;
-  try{ const r=await gcall("spellCheck",{text:text.slice(0,8000)}); if(!r.ok) throw new Error(r.error);
-    SPELL=(r.items||[]).filter(x=>x.from&&x.to&&x.from!==x.to&&b.value.includes(x.from));
-    box.innerHTML=`<div class="row" style="gap:8px"><p class="label" style="margin:0">맞춤법 제안 ${SPELL.length}곳</p><span class="spacer"></span>${SPELL.length?`<button class="btn small ink" onclick="spellApply(-1)">모두 고치기</button>`:""}<button class="btn small ghost" onclick="$('#spellbox').remove()">닫기</button></div>
-      ${SPELL.length?`<ul style="list-style:none;padding:0;margin:8px 0 0">${SPELL.map((x,i)=>`<li id="sp${i}"><span class="fr">${esc(x.from)}</span><span>→</span><span class="to">${esc(x.to)}</span><button class="btn small" onclick="spellApply(${i})">고치기</button><button class="btn small ghost" onclick="spellSkip(${i})">그대로</button>${x.why?`<span class="why">${esc(x.why)}</span>`:""}</li>`).join("")}</ul><p class="hint">${esc(r.ai||"인공지능")}의 제안입니다. 성경 인용·고유명사·일부러 쓴 말투는 「그대로」를 누르세요. 글은 요약·학습에 쓰이지 않고 검사에만 쓰입니다.</p>`
-        :`<p class="muted">고칠 곳을 찾지 못했습니다. ${r.note?esc(r.note):""}</p>`}`;
-    if(b.value.length>8000) box.insertAdjacentHTML("beforeend",`<p class="hint">글이 길어 앞 8,000자만 살폈습니다.</p>`);
-  }catch(e){ box.innerHTML=`<p class="muted">맞춤법을 살피지 못했습니다: ${esc(e.message)}</p>`; }
+  const b=$("#wbody"); if(!b) return; if(chars(stripMemo(b.value))<10) return toast("먼저 글을 조금 써 주세요");
+  if(!GAS||!CONF.ai) return toast("규칙 밑줄만 됩니다 — 인공지능 검사는 설정 → 주석 서재에 요약 열쇠가 있어야 합니다");
+  const btn=$("#spellbtn"); if(btn) btn.disabled=true; busy(true,"맞춤법을 살피는 중…"); const before=countErr();
+  try{ clearTimeout(SPELL_AI_T); await spellAuto(true); const n=countErr(); toast(n?`밑줄 ${n}곳 — 밑줄을 누르면 고칠 수 있습니다`:"고칠 곳을 찾지 못했습니다"); }
   finally{ busy(false); if(btn) btn.disabled=false; }
 }
-function spellApply(i){ const b=$("#wbody"); if(!b||!SPELL) return; const list=i<0?SPELL.map((x,k)=>k):[i]; let n=0;
-  list.forEach(k=>{ const x=SPELL[k], li=$("#sp"+k); if(!x||li?.classList.contains("done")) return; const p=b.value.indexOf(x.from); if(p<0){ li?.classList.add("done"); return; }
-    tInsert(b,x.to,p,p+x.from.length); n++; li?.classList.add("done"); });
-  if(n){ if(READVIEW){ READVIEW=false; toggleRead(); } toast(`${n}곳을 고쳤습니다 (↶ 로 되돌릴 수 있습니다)`); } }
-function spellSkip(i){ $("#sp"+i)?.classList.add("done"); }
+const countErr=()=>{ const b=$("#wbody"); return b?spellLines(b.value).reduce((a,x)=>a+x.length,0):0; };
+// 밑줄을 누르면 제안 상자: 고치기 · 그대로
+function spellPop(el){
+  const b=$("#wbody"); if(!b) return; const i=+el.dataset.l, s=+el.dataset.s, e=+el.dataset.e, lines=b.value.split("\n"); if(!lines[i]) return;
+  const errs=spellLine(lines[i]), x=errs.find(y=>y.s===s&&y.e===e); if(!x) return spellPopClose();
+  let p=$("#sppop"); if(!p){ p=document.createElement("div"); p.id="sppop"; p.className="sppop"; document.body.appendChild(p); }
+  const r=el.getBoundingClientRect(); p.style.left=Math.max(8,Math.min(innerWidth-300,r.left))+"px"; p.style.top=(r.bottom+scrollY+6)+"px";
+  p.innerHTML=`<div class="row" style="gap:6px"><span class="fr">${esc(x.from)}</span><span>→</span><b class="to">${esc(x.to)}</b></div>${x.why?`<div class="why">${esc(x.why)}${x.src==="ai"?" (인공지능)":""}</div>`:""}
+    <div class="row" style="gap:6px;margin-top:6px"><button class="btn small ink" onclick="spellFix(${i},${s},${e})">고치기</button><button class="btn small ghost" onclick="SPELL_SKIP.add(${jsArg(x.from)});spellPopClose();paintHeads()">그대로</button><button class="btn small ghost" onclick="spellPopClose()">✕</button></div>`;
+}
+function spellPopClose(){ $("#sppop")?.remove(); }
+function spellFix(i,s,e){ const b=$("#wbody"); if(!b) return; const lines=b.value.split("\n"); const x=spellLine(lines[i]||"").find(y=>y.s===s&&y.e===e); if(!x) return spellPopClose();
+  const abs=lines.slice(0,i).reduce((a,l)=>a+l.length+1,0)+s; if(b.value.slice(abs,abs+x.from.length)!==x.from) return spellPopClose();
+  tInsert(b,x.to,abs,abs+x.from.length); spellPopClose(); toast("고쳤습니다 (↶ 로 되돌리기)"); }
+document.addEventListener("click",e=>{ const sp=e.target.closest?.(".hmirror i.sp"); if(sp){ e.preventDefault(); spellPop(sp); return; } if(!e.target.closest?.("#sppop")) spellPopClose(); });
 const MEMO_START=/^※\s*주석 요약/, MEMO_END=/^※\s*요약 끝/;
 function stripMemo(t){ // ※ 주석 요약 … ※ 요약 끝 사이는 자료(연구 메모)라 책·글자 수에서 뺍니다
   const out=[]; let inMemo=false; for(const l of String(t||"").split("\n")){ if(MEMO_START.test(l.trim())){ inMemo=true; continue; } if(inMemo){ if(MEMO_END.test(l.trim())) inMemo=false; continue; } out.push(l); } return out.join("\n"); }
@@ -1934,7 +2005,7 @@ write(){
     <span class="row" style="gap:4px" title="글자 크기 (이 기기만)"><button class="fsbtn" onclick="fontStep(-1)">가−</button><button class="fsbtn" onclick="fontStep(1)">가＋</button></span>
     <button class="btn small" onclick="toggleRead()" id="readbtn" title="형광펜·밑줄·각주가 입혀진 모습으로 봅니다">${ICO.eye}읽어 보기</button>
     <button class="btn small" onclick="toggleStk()">${ICO.flower}스티커</button>
-    ${CONF.ai?`<button class="btn small" onclick="spellCheck()" id="spellbtn" title="맞춤법·띄어쓰기 제안을 받아 하나씩 고릅니다 (본문은 ${CONF.ai==="claude"?"클로드":"제미나이"}에 보내집니다)">맞춤법</button>`:""}
+    <button class="btn small" onclick="spellCheck()" id="spellbtn" title="쓰는 즉시 규칙으로 밑줄이 그어지고, 누르면 ${CONF.ai?(CONF.ai==="claude"?"클로드":"제미나이")+"가 모든 문단을 다시 살핍니다":"규칙 밑줄만 됩니다"}">맞춤법</button><span id="spellstate" class="muted" style="font-size:12.5px"></span>
     <button class="btn small" onclick="toggleFocus()" id="focusbtn">집중 모드</button>
     <button class="btn small ink" onclick="saveWriting()" title="⌘S">간직하기</button>
   </div>
@@ -1945,7 +2016,7 @@ write(){
         ${stkLayer("write")}
         <input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput()">
         <div class="meta"><span class="pen" style="font-size:20px">${esc(w?.date||today())}</span><span id="wcount"></span><span id="draftstamp" class="draftstamp"></span><span id="refhint" class="refhint" style="display:none"></span></div>
-        <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput();refHint()" onkeyup="refHint()" onclick="refHint()" style="--penink:${penInk()}" placeholder="여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다.">${esc(w?.body??seed)}</textarea>
+        <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput();refHint();spellAutoKick()" onkeyup="refHint()" onclick="refHint();spellPopClose()" style="--penink:${penInk()}" placeholder="여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다.">${esc(w?.body??seed)}</textarea>
       </div>
     </div>
     <aside>
@@ -2044,10 +2115,9 @@ settings(){
   <div class="setgroup">아침 알림 · 화면 · 앱</div>
   <div class="grid">
   ${reminderSection()}
-  ${themeSection()}
-  ${lookSection()}
   ${appSection()}
   ${quietSection()}
+  ${lookSection()}
   </div>
   <div class="setgroup">연결</div>
   <div class="grid">
@@ -2212,7 +2282,11 @@ function paintHeads(){
   const cs=getComputedStyle(t); m.style.cssText=`top:${t.offsetTop}px;left:${t.offsetLeft}px;width:${t.clientWidth}px;padding:${cs.padding};font:${cs.font};letter-spacing:${cs.letterSpacing};color:${cs.color}`;
   // 소제목 줄 안의 영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보이므로 그 부분만 원래 글자(보이지 않는 자리)로 둡니다
   const boldLine=l=>l.split(/([A-Za-z0-9@._\-\/:'"%+=<>]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");
-  m.innerHTML=t.value.split("\n").map(l=>HEAD_RE.test(l)?boldLine(l):`<span>${esc(l)}</span>`).join("\n");
+  const plain=(l,head)=>head?boldLine(l):`<span>${esc(l)}</span>`;
+  const errs=spellLines(t.value);
+  m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[]; if(!E.length) return plain(l,head);
+    let out="", last=0; E.forEach(x=>{ out+=plain(l.slice(last,x.s),head)+`<i class="sp ${x.src}" data-l="${i}" data-s="${x.s}" data-e="${x.e}" title="${esc(x.to)}${x.why?" — "+esc(x.why):""}">${esc(l.slice(x.s,x.e))}</i>`; last=x.e; }); return out+plain(l.slice(last),head); }).join("\n");
+  const n=errs.reduce((a,x)=>a+x.length,0), st=$("#spellstate"); if(st&&!SPELL_AI_BUSY) st.textContent=n?`밑줄 ${n}`:"";
 }
 // 글자 칸에 프로그램이 글을 넣을 때는 브라우저의 '입력' 명령으로 넣어, ⌘Z(되돌리기)·⇧⌘Z(다시 하기)가 그대로 듣게 합니다
 function tInsert(b,txt,s,e){
@@ -2245,18 +2319,20 @@ function fontStep(d){ const L=applyLook(); const cur=+L.fs||(isTouch()?17:18); l
 function lookSet(k,v){ const L=applyLook(); if(v==null||v===""||v===0) delete L[k]; else L[k]=v; try{ localStorage.setItem("seojae.look",JSON.stringify(L)); }catch(_){} applyLook(); const b=$("#wbody"); if(b) b.style.setProperty("--penink",penInk()); if(tab==="settings") render(); }
 const PAPERS=[["","기본(밝기 따라)",""],["#fbf7ee","크림","#2e2721"],["#ffffff","흰 종이","#222222"],["#f3efe2","미색","#2e2721"],["#eef5e6","연두","#2b3326"],["#e9f1f7","하늘","#223040"],["#f8ecec","연분홍","#3a2626"],["#1f1b17","검은 종이","#e8dfcf"]];
 function lookSection(){
-  const L=applyLook(), fs=+L.fs||0;
-  return `<section class="sheet">
-    <p class="label">화면 꾸미기 <small class="hint" style="display:inline">· 이 기기만</small></p>
-    <p class="sub">노트의 종이 색·글자 색·글자 크기입니다. 휴대폰과 컴퓨터를 따로 정할 수 있고, 쓰기 화면의 「가−·가＋」도 이 값을 바꿉니다.</p>
-    <div class="setrow"><span class="k">글자 크기</span><div class="pills">${[["",isTouch()?"보통(17)":"보통(18)"],[16,"작게"],[20,"크게"],[22,"더 크게"],[26,"아주 크게"]].map(([v,n])=>`<button class="pill ${(fs||"")===v?"on":""}" onclick="lookSet('fs',${v===""?"''":v})">${n}</button>`).join("")}</div></div>
-    <div class="setrow"><span class="k">종이 색</span><div class="row" style="gap:8px;flex-wrap:wrap">${PAPERS.map(([bg,n,ink])=>`<span class="inkdot ${(L.bg||"")===bg?"on":""}" title="${n}" style="background:${bg||"linear-gradient(135deg,#fbf7ee 50%,#29231d 50%)"};width:26px;height:26px" onclick="lookSet('bg','${bg}');lookSet('ink','${(L.ink&&L.inkManual)?L.ink:ink}')"></span>`).join("")}</div></div>
-    <div class="setrow"><span class="k">글자 색</span><div class="row" style="gap:8px;flex-wrap:wrap"><span class="inkdot ${L.ink?"":"on"}" title="기본(펜 잉크 따라)" style="background:linear-gradient(135deg,#2e2721 50%,#7a4a22 50%);width:26px;height:26px" onclick="lookSet('ink','')"></span>${[["#2e2721","먹"],["#222222","검정"],["#24427a","청색"],["#7a4a22","세피아"],["#2f5d4e","녹색"],["#5a2d2d","적갈"],["#e8dfcf","밝은 글자(검은 종이용)"]].map(([c,n])=>`<span class="inkdot ${L.ink===c?"on":""}" title="${n}" style="background:${c};width:26px;height:26px" onclick="lookSet('ink','${c}')"></span>`).join("")}</div></div>
-    <p class="hint">쓰기 화면의 「펜과 종이」 잉크와 줄 노트·모눈은 모든 기기 공통이고, 여기 글자 색을 고르면 이 기기에서는 그것이 우선합니다.</p>
-    <hr class="dash">
-    <div class="setrow"><span class="k">매일성경 글자</span><div class="pills">${[["","보통(15)"],[13,"작게"],[17,"크게"],[20,"더 크게"],[24,"아주 크게"]].map(([v,n])=>`<button class="pill ${(+L.sufs||"")===v?"on":""}" onclick="lookSet('sufs',${v===""?"''":v})">${n}</button>`).join("")}</div></div>
-    <div class="setrow"><span class="k">매일성경 보기</span><div class="pills">${SU_VIEWS.map(([k,n,tip])=>`<button class="pill ${suView()===k?"on":""}" data-tip="${tip}" onclick="lookSet('suview','${k}')">${n}</button>`).join("")}<button class="pill ${L.sutall?"on":""}" data-tip="본문 칸을 스크롤 없이 다 펼쳐 둡니다" onclick="lookSet('sutall',${L.sutall?"''":1})">다 펼치기</button></div></div>
-    <p class="hint">쓰기 화면 맨 위 매일성경 카드의 본문·해설에 적용됩니다. 카드 안의 「가−·가＋」와 보기 단추도 같은 값을 바꿉니다. 휴대폰은 화면이 좁아 「나란히」도 절마다 위아래로 보입니다.</p>
+  const L=applyLook(), fs=+L.fs||0; let theme="light"; try{ theme=localStorage.getItem("seojae.theme")||"light"; }catch(_){}
+  const dot=(bg,n,on,fn)=>`<span class="inkdot ${on?"on":""}" title="${n}" style="background:${bg};width:24px;height:24px" onclick="${fn}"></span>`;
+  return `<section class="sheet wide">
+    <div class="row" style="gap:10px;align-items:baseline"><p class="label" style="margin:0">화면 꾸미기 <small class="hint" style="display:inline">· 이 기기만 — 휴대폰과 컴퓨터를 따로</small></p></div>
+    <div class="lookgrid">
+      <div class="setrow"><span class="k">밝기</span><div class="pills">${[["light","밝게","기기가 야간 모드여도 항상 밝은 종이 화면"],["dark","어둡게","항상 어두운 밤 서재 화면"],["auto","기기 따라","기기의 주간·야간 모드를 그대로"]].map(([v,n,d])=>`<button class="pill ${theme===v?"on":""}" data-tip="${d}" onclick="setTheme('${v}')">${n}</button>`).join("")}</div></div>
+      <div class="setrow"><span class="k">글자 크기</span><div class="pills">${[["",isTouch()?"보통(17)":"보통(18)"],[16,"작게"],[20,"크게"],[22,"더 크게"],[26,"아주 크게"]].map(([v,n])=>`<button class="pill ${(fs||"")===v?"on":""}" onclick="lookSet('fs',${v===""?"''":v})">${n}</button>`).join("")}</div></div>
+      <div class="setrow"><span class="k">종이 색</span><div class="row" style="gap:7px;flex-wrap:wrap;padding-top:4px">${PAPERS.map(([bg,n,ink])=>dot(bg||"linear-gradient(135deg,#fbf7ee 50%,#29231d 50%)",n,(L.bg||"")===bg,`lookSet('bg','${bg}');lookSet('ink','${(L.ink&&L.inkManual)?L.ink:ink}')`)).join("")}</div></div>
+      <div class="setrow"><span class="k">글자 색</span><div class="row" style="gap:7px;flex-wrap:wrap;padding-top:4px">${dot("linear-gradient(135deg,#2e2721 50%,#7a4a22 50%)","기본(펜 잉크 따라)",!L.ink,"lookSet('ink','')")}${[["#2e2721","먹"],["#222222","검정"],["#24427a","청색"],["#7a4a22","세피아"],["#2f5d4e","녹색"],["#5a2d2d","적갈"],["#e8dfcf","밝은 글자(검은 종이용)"]].map(([c,n])=>dot(c,n,L.ink===c,`lookSet('ink','${c}')`)).join("")}</div></div>
+      <div class="setrow"><span class="k">맞춤법 밑줄</span><div class="pills">${[["rules","규칙만","자주 틀리는 맞춤법·띄어쓰기 규칙으로 쓰는 즉시 밑줄 (인터넷 없이, 바로)"],["ai","규칙 + 인공지능","규칙 밑줄에 더해, 5초 쉬면 바뀐 문단을 인공지능(빠른 모델)이 조용히 살펴 밑줄을 보탭니다"],["off","끄기","밑줄을 긋지 않습니다"]].map(([k,n,tip])=>`<button class="pill ${spellMode()===k?"on":""}" data-tip="${tip}" onclick="lookSet('spell','${k}')" ${k==="ai"&&!CONF.ai?"disabled":""}>${n}</button>`).join("")}</div></div>
+      <div class="setrow"><span class="k">매일성경 글자</span><div class="pills">${[["","보통(15)"],[13,"작게"],[17,"크게"],[20,"더 크게"],[24,"아주 크게"]].map(([v,n])=>`<button class="pill ${(+L.sufs||"")===v?"on":""}" onclick="lookSet('sufs',${v===""?"''":v})">${n}</button>`).join("")}</div></div>
+      <div class="setrow"><span class="k">매일성경 보기</span><div class="pills">${SU_VIEWS.map(([k,n,tip])=>`<button class="pill ${suView()===k?"on":""}" data-tip="${tip}" onclick="lookSet('suview','${k}')">${n}</button>`).join("")}<button class="pill ${L.sutall?"on":""}" data-tip="본문 칸을 스크롤 없이 다 펼쳐 둡니다" onclick="lookSet('sutall',${L.sutall?"''":1})">다 펼치기</button></div></div>
+    </div>
+    <p class="hint" style="margin-top:12px">쓰기 화면의 「가−·가＋」, 매일성경 카드의 보기·글자 단추도 같은 값을 바꿉니다. 「펜과 종이」의 잉크·줄 노트는 모든 기기 공통이고, 여기 글자 색을 고르면 이 기기에서는 그것이 우선합니다.</p>
   </section>`;
 }
 function quietSection(){
@@ -2471,16 +2547,34 @@ async function searchBook(){
   }catch(e){ $("#bresults").innerHTML=`<p class="muted">검색하지 못했습니다.</p>`; }
 }
 // 도서관 분류(KDC 십진분류 큰 갈래): 국립중앙도서관 KDC 번호가 있으면 그것으로, 없으면 제목·출판사 낱말로 짐작합니다. 책 카드에서 직접 바꿀 수 있습니다
-const CATS=["종교(기독교)","종교(기타)","철학·심리","사회과학","자연과학","기술과학","예술","언어","문학","역사","총류"];
-const KDC_CAT=["총류","철학·심리","종교(기타)","사회과학","자연과학","기술과학","예술","언어","문학","역사"];
-function kdcCat(k){ k=String(k||"").trim(); if(!/^\d/.test(k)) return ""; if(k.startsWith("23")) return "종교(기독교)"; return KDC_CAT[+k[0]]||""; }
-const CAT_WORDS=[["종교(기독교)",/성경|성서|신앙|교회|목회|설교|기도|복음|하나님|예수|그리스도|묵상|큐티|제자|선교|신학|찬양|성령|십자가|말씀|주석|신약|구약|영성|경건|IVP|두란노|생명의말씀사|규장|좋은씨앗|CUP|홍성사|죠이|복있는사람|새물결|솔로몬|한국장로교|예수전도단|국제제자훈련원|비아토르|성서유니온/],
-  ["종교(기타)",/불교|불경|법륜|스님|이슬람|코란|유교|논어|맹자|도덕경|명상|선\(禪\)/],["철학·심리",/철학|심리|마음|인문학|니체|칸트|소크라테스|윤리|죽음|행복론|사유|존재|우울|불안|상담/],
-  ["역사",/역사|세계사|한국사|조선|고려|로마|전쟁|문명|근대|고대|중세|역사가/],["문학",/소설|시집|에세이|산문|수필|문학|이야기|詩|단편|장편|희곡|시인|작가|민음사|문학동네|창비|열린책들/],
-  ["자연과학",/과학|물리|생물|우주|수학|진화|뇌|지구|화학|천문|생명/],["기술과학",/건강|의학|요리|운동|IT|프로그래밍|코딩|컴퓨터|인공지능|AI|경영기술|농업|식단|다이어트/],["예술",/음악|미술|그림|예술|사진|영화|디자인|건축|서예|미학/],
-  ["언어",/영어|한국어|국어|일본어|중국어|문법|어휘|회화|글쓰기|말하기/],["사회과학",/경제|경영|리더십|자기계발|습관|성공|부자|투자|마케팅|교육|사회|정치|법|조직|협상|시간관리|일의|커리어|돈|심리학적|자녀|육아|교실/]];
-function guessCat(b){ const t=`${b.title||""} ${b.publisher||""} ${b.category||""}`; for(const [c,re] of CAT_WORDS) if(re.test(t)) return c; return ""; }
-const bookCat=b=>b.catMan||b.cat||kdcCat(b.kdc)||guessCat(b)||"";
+const CATS=["성경·주석","신학","목회·설교","신앙·영성·묵상","종교(기타)","철학","심리·상담","자기계발","경영·리더십","경제·투자","교육·자녀","사회·정치","인문·교양","역사","자연과학","컴퓨터·AI","기술·공학","건강·의학","생활·취미","예술","언어·글쓰기","소설","시·에세이","총류"];
+const OLD_CAT={"종교(기독교)":"신앙·영성·묵상","철학·심리":"철학","사회과학":"사회·정치","기술과학":"기술·공학","문학":"소설","언어":"언어·글쓰기"};   // 예전 큰 갈래 이름 → 새 이름
+// KDC(한국십진분류) 번호 → 갈래. 앞 세 자리로 봅니다 (233 성경, 231 교의신학, 232 신앙·명상, 234·235 목회·설교·전도 …)
+function kdcCat(k){ k=String(k||"").trim(); if(!/^\d/.test(k)) return ""; const d=k.slice(0,3).padEnd(3,"0"), n=+d, h=+d[0];
+  if(h===2){ if(d.startsWith("23")){ if(n===233) return "성경·주석"; if(n===231||n===236||n===237||n===238) return "신학"; if(n===232) return "신앙·영성·묵상"; if(n===234||n===235) return "목회·설교"; return "신앙·영성·묵상"; } return "종교(기타)"; }
+  if(h===0) return (n===4||n===5||n===3)?"컴퓨터·AI":"총류";
+  if(h===1) return (d.startsWith("15")||d.startsWith("18"))?"심리·상담":d.startsWith("19")?"자기계발":"철학";
+  if(h===3){ if(d.startsWith("32")) return n===325?"경영·리더십":"경제·투자"; if(d.startsWith("37")) return "교육·자녀"; return "사회·정치"; }
+  if(h===4) return "자연과학";
+  if(h===5){ if(d.startsWith("51")) return "건강·의학"; if(d.startsWith("59")) return "생활·취미"; if(n===5||d.startsWith("56")) return "컴퓨터·AI"; return "기술·공학"; }
+  if(h===6) return "예술"; if(h===7) return "언어·글쓰기";
+  if(h===8){ const t=d[2]; if(t==="3") return "소설"; if("1245".includes(t)) return "시·에세이"; return "인문·교양"; }
+  return "역사"; }
+// 국립중앙도서관 번호가 없을 때: 제목·출판사·소개 낱말로 짐작 (위에서부터 먼저 맞는 것)
+const CAT_WORDS=[
+  ["컴퓨터·AI",/클로드|claude|AI|인공지능|GPT|챗GPT|코딩|프로그래밍|파이썬|자바|개발자|컴퓨터|소프트웨어|데이터|알고리즘|디지털|프롬프트|노션|엑셀|코드|앱 만들기|IT\b|한빛미디어|위키북스|길벗|인사이트|제이펍|에이콘/i],
+  ["성경·주석",/주석|성경 연구|성서 연구|성경 강해|강해|원어|성경 개관|성경 읽기|통독|성경 공부|구약|신약/],["목회·설교",/설교|목회|교회 개척|예배|교회 성장|목사의|사역|제자훈련|소그룹|전도/],
+  ["신학",/신학|조직신학|교리|교회사|종교개혁|칼빈|칼뱅|루터|어거스틴|본회퍼|바르트|톰 라이트|신론|기독론|구원론|종말론/],
+  ["신앙·영성·묵상",/신앙|영성|묵상|큐티|기도|경건|제자|복음|하나님|예수|그리스도|성령|십자가|말씀|은혜|순례|헨리 나우웬|팀 켈러|IVP|두란노|생명의말씀사|규장|좋은씨앗|CUP|홍성사|죠이|복있는사람|새물결|솔로몬|한국장로교|예수전도단|국제제자훈련원|비아토르|성서유니온/],
+  ["종교(기타)",/불교|불경|법륜|스님|이슬람|코란|유교|논어|맹자|도덕경|명상|선\(禪\)/],
+  ["심리·상담",/심리|상담|마음 치유|감정|우울|불안|트라우마|애착|정신|치유|내면|자존감|관계의/],["철학",/철학|니체|칸트|소크라테스|플라톤|윤리|존재|사유|인문학 강의|고전 읽기/],
+  ["자기계발",/자기계발|습관|성공|부자|시간관리|생산성|목표|동기|마인드|아침형|미라클|인생을 바꾸|원씽|그릿|회복탄력성|몰입|메모의|독서법/],["경영·리더십",/경영|리더십|조직|마케팅|협상|스타트업|브랜드|전략|CEO|비즈니스|일의|커리어|피터 드러커/],
+  ["경제·투자",/경제|투자|주식|부동산|돈의|재테크|금융|자본|화폐|환율/],["교육·자녀",/교육|자녀|육아|아이|부모|교실|학교|청소년|공부법|독서 교육/],["사회·정치",/사회|정치|민주주의|법|국가|권력|불평등|노동|복지|정의란|도시|문명/],
+  ["역사",/역사|세계사|한국사|조선|고려|로마|전쟁|근대|고대|중세|사기\b|삼국/],["자연과학",/과학|물리|생물|우주|수학|진화|뇌과학|지구|화학|천문|생명/],["건강·의학",/건강|의학|질병|면역|식단|다이어트|운동|장수|수면|의사가/],["생활·취미",/요리|레시피|여행|정원|살림|취미|인테리어|반려|캠핑/],
+  ["예술",/음악|미술|그림|예술|사진|영화|디자인|건축|서예|미학|화가|작곡/],["언어·글쓰기",/영어|한국어|국어|일본어|중국어|문법|어휘|회화|글쓰기|문장|작문|말하기|우리말/],
+  ["소설",/소설|장편|단편|미스터리|추리|SF|판타지|민음사 세계문학|문학동네|창비|열린책들/],["시·에세이",/시집|에세이|산문|수필|詩|시인|일기|편지|여행기/],["인문·교양",/인문|교양|고전|문학|강의|세상을 바꾼|이야기/]];
+function guessCat(b){ const t=`${b.title||""} ${b.publisher||""} ${(b.description||"").slice(0,300)}`; for(const [c,re] of CAT_WORDS) if(re.test(t)) return c; return ""; }
+const bookCat=b=>b.catMan||kdcCat(b.kdc)||(CATS.includes(b.cat)?b.cat:"")||guessCat(b)||OLD_CAT[b.cat]||"";   // 직접 정한 것 > 도서관 번호 > 짐작
 function addBook(i){
   const src=i>=0?found[i]:{title:$("#bq").value.trim(),authors:[],cover:""};
   const b={id:uid(),title:src.title,authors:src.authors||[],publisher:src.publisher||"",isbn:src.isbn||"",cover:src.cover||"",page:0,total:src.pages||0,status:"읽는 중",started:today(),
