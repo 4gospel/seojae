@@ -982,7 +982,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="7564f6157e";
+const APP_BUILD="44b53af243";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1535,6 +1535,16 @@ function streak(){ // 쉬는 요일은 건너뛰고 셉니다 (쉬어도 끊기�
   return n;
 }
 
+// 대한민국 표준시로 지금 몇 시 몇 분인가 (기기 시계가 다른 나라로 맞춰져 있어도)
+function kstMinutes(){ try{ const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Seoul",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date()); const g=t=>+(p.find(x=>x.type===t)?.value||0); return (g("hour")%24)*60+g("minute"); }catch(_){ const d=new Date(); return d.getHours()*60+d.getMinutes(); } }
+const dayPart=()=>kstMinutes()<4*60+30?"새벽":"아침";   // 밤 12시 ~ 새벽 4시 30분은 「새벽」
+// 머리의 날 수: 밤 12시가 지나면 오늘이 다음 날째가 됩니다 (어제까지 이어졌으면 아직 읽기 전이어도 +1)
+function streakShown(){ const l=S.log[today()], done=!!(l&&(l.read||l.book||l.note||l.write)), n=streak(); return done?n:(n?n+1:0); }
+function paintStreak(){ const el=$("#streak"); if(!el) return; const s=streakShown();
+  el.innerHTML=(isReadDay()?"":`<span class="rest">쉬는 날</span>`)+(s?`<span class="n">${s}</span><span>일째 이어지는 ${dayPart()}</span>`:`<span>오늘의 첫 페이지</span>`); }
+let SHOWN_DAY=today(), SHOWN_PART=dayPart();
+setInterval(()=>{ const d=today(), p=dayPart(); if(d===SHOWN_DAY&&p===SHOWN_PART) return; const dayChanged=d!==SHOWN_DAY; SHOWN_DAY=d; SHOWN_PART=p; paintStreak(); if(tab==="today"||(dayChanged&&tab!=="write")) render(); },30000);   // 밤 12시·새벽 4시 30분을 넘으면 바로 바뀜
+
 // ───────── 화면 ─────────
 // 흐름: 밑줄(읽다 붙잡은 문장) → 글(그 문장으로 쓴 묵상·설교·에세이) → 원고(글을 모아 엮는 책)
 const TABS=[["today","오늘"],["qt","묵상"],["write","글쓰기"],["diary","일기"],["drawer","서랍"],["shelf","책장"]];   // 묵상 = 말씀 글(묵상·설교), 글쓰기 = 책 글·자유 글. 둘 다 같은 쓰기 화면(track 만 다름). 설정은 오른쪽 위 톱니
@@ -1573,7 +1583,7 @@ function render(){
   const keep=!NAV&&tab==="write"&&$("#wbody")?{e:editId,t:$("#wtitle").value,b:$("#wbody").value,p:$("#wpassage")?.value}:null;
   const gb=$("#gearbtn"); if(gb){ if(!gb.firstChild) gb.innerHTML=gearSvg(); gb.classList.toggle("on",tab==="settings"); }
   $("#nav").innerHTML=TABS.map(([k,n])=>`<button class="${(k==="qt"?tab==="write"&&track==="bible":k==="write"?tab==="write"&&track!=="bible":k===tab)?"on":""}" onclick="${k==="qt"?"go('write',{track:'bible'})":k==="write"?"go('write',{track:'book'})":`go('${k}')`}">${n}</button>`).join("");
-  const s=streak(); $("#streak").innerHTML=(isReadDay()?"":`<span class="rest">쉬는 날</span>`)+(s?`<span class="n">${s}</span><span>일째 이어지는 아침</span>`:`<span>오늘의 첫 페이지</span>`);
+  paintStreak();
   if(NEED_CONNECT||AUTH_FAIL){ $("#main").innerHTML=connectView(); return; }
   $("#main").innerHTML=(SERVER?"":`<div class="notice">지금은 파일만 열린 상태라 노션 연결과 자동 저장 파일이 동작하지 않습니다. <b>아침서재 열기.command</b>로 열어 주세요.</div>`)+VIEWS[tab]();
   AFTER[tab]?.();
@@ -2031,7 +2041,7 @@ today(){
   const ly=new Date(); ly.setFullYear(ly.getFullYear()-1); const old=S.writings.filter(w=>w.date===dkey(ly));
   const qb=pickQ("bible",t+"b"), qk=pickQ("book",t+"k");
   return `
-  <div class="dateline"><span class="d">${d.getMonth()+1}.${String(d.getDate()).padStart(2,"0")}</span><span class="w">${"일월화수목금토"[d.getDay()]}요일 아침, 말씀과 책 앞에서</span>
+  <div class="dateline"><span class="d">${d.getMonth()+1}.${String(d.getDate()).padStart(2,"0")}</span><span class="w">${"일월화수목금토"[d.getDay()]}요일 ${dayPart()}, 말씀과 책 앞에서</span>
     ${(()=>{ const L=S.log[t]||{}; const items=[["성경 읽기",!!(L.read||(L.bible||[]).length),"go('today')"],["묵상",tw.some(w=>w.track==="bible"),"go('write',{track:'bible'})"],["책 읽기",!!(L.book||Object.keys(L.books||{}).length),"go('shelf')"]];
       return `<span class="routine">${items.map(([n,on,fn])=>`<button type="button" class="${on?"on":""}" onclick="${fn}" title="${on?"오늘 했습니다":"아직입니다"}">${tickSvg(on)}${n}</button>`).join("")}</span>`; })()}</div>
   <div class="grid">
@@ -2273,7 +2283,7 @@ settings(){
   <div class="grid">
   <section class="sheet">
     <p class="label">이어지는 아침</p>
-    <p class="sub">지금 <b>${streak()}일째</b> 이어지고 있습니다${S.settings.streakFrom?` · ${S.settings.streakFrom}부터 센 것`:""}.</p>
+    <p class="sub">지금 <b>${streakShown()}일째</b> 이어지고 있습니다${S.settings.streakFrom?` · ${S.settings.streakFrom}부터 센 것`:""}.</p>
     <div class="row" style="margin-top:8px"><button class="btn" onclick="resetStreak()">오늘부터 다시 세기</button>${S.settings.streakFrom?`<button class="btn ghost" onclick="S.settings.streakFrom=null;save();render();toast('처음 기록부터 다시 셉니다')">처음 기록부터 세기</button>`:""}</div>
     <p class="hint">날 수만 새로 셉니다. 읽은 기록·글·일기는 하나도 지워지지 않습니다.</p>
   </section>
