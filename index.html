@@ -696,6 +696,15 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .tmore{display:none} .tools2{display:contents}
 @media (max-width:700px){ .tmore{display:inline-flex} .toolbar .tools2{display:none} .toolbar.open .tools2{display:contents} .undobtn,.fsbtn{min-height:40px;min-width:40px}
   .top{flex-wrap:nowrap;align-items:center} .brand{font-size:30px;padding:0} .brand small{display:none} .topright{gap:8px;padding-bottom:0} }
+/* 설교초안 쓰기 화면: 묵상과 다른 결 — 남색 봉인·남색 여백선·남색 카드 띠 */
+.draftmode .seal svg{filter:hue-rotate(200deg) saturate(.75) brightness(.9)}
+.draftmode .card-index{border-top-color:rgba(36,66,122,.2)}
+.draftmode .notebook .margin{background:rgba(36,66,122,.5)}
+.draftmode .label.bible,.draftmode .step .num{color:#24427a}
+.draftmode .step .num{border-color:#24427a}
+.draftmode .notebook{box-shadow:var(--shadow),inset 0 0 0 1px rgba(36,66,122,.08)}
+.draftmode .pill.on{border-color:#24427a;color:#24427a}
+:root[data-theme="dark"] .draftmode .label.bible,:root[data-theme="dark"] .draftmode .step .num{color:#9fc0ea}
 /* 되돌리기·다시 하기 단추 */
 .undobtn{font:inherit;border:1px solid var(--edge);background:var(--paper-2);border-radius:999px;min-width:34px;height:30px;cursor:pointer;color:var(--ink-soft);font-size:15px;padding:0 9px}
 .undobtn:hover{border-color:var(--deco)}
@@ -1016,7 +1025,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="fe0538b061";
+const APP_BUILD="5b2dc020f2";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2215,7 +2224,7 @@ write(){
   </div>
   <div id="draftpick"></div>
   ${srcCard(w,fws)}
-  <div class="writegrid">
+  <div class="writegrid ${dtype==="설교초안"?"draftmode":""}">
     <div>
       <div class="notebook ${paper}">
         <div class="margin"></div>
@@ -2250,7 +2259,7 @@ write(){
         <p class="step"><span class="num">2</span>간직하기</p>
         <div class="sealrow">
           <button class="seal" id="sealbtn" onclick="pressSeal()" aria-label="간직하기">${waxSeal()}</button>
-          <div class="sealtext"><b class="pen" style="font-size:24px">봉인을 누르면</b><br>${PLACE()}에 저장${canSync()?"되고, 노션에도 실립니다.":"됩니다."}<br><span class="muted">⌘S 를 눌러도 됩니다</span>
+          <div class="sealtext"><b class="pen" style="font-size:24px">${dtype==="설교초안"?"설교초안 봉인":"봉인을 누르면"}</b><br>${PLACE()}에 저장${canSync()?"되고, 노션에도 실립니다.":"됩니다."}<br><span class="muted">⌘S 를 눌러도 됩니다</span>
             <div id="syncstamp" style="margin-top:10px">${syncStamp(w)}${w?.syncError?`<div class="muted" style="margin-top:8px">${esc(w.syncError)}</div>`:""}</div></div>
         </div>
         <div class="row" style="margin-top:14px"><button class="btn small" onclick="copyW()" title="제목과 본문을 복사해 카톡·블로그 등에 붙여 넣을 수 있습니다">글 복사</button>
