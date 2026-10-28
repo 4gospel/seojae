@@ -303,6 +303,14 @@ body.aiopen #aitog{background:#7a5aa8;color:#fff;border-color:#7a5aa8}
 .pnav{display:flex;align-items:center;gap:8px;font:12.5px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft);margin:0 0 4px} .pnav button{border:0;background:none;font-size:17px;cursor:pointer;color:var(--ink-soft);padding:0 6px;border-radius:6px} .pnav button:hover:not(:disabled){background:color-mix(in srgb,var(--ink) 7%,transparent)} .pnav button:disabled{opacity:.25;cursor:default}
 .wsrow{display:flex;gap:8px;align-items:flex-start;padding:6px 4px;border-bottom:1px dashed var(--edge);cursor:pointer} .wsrow input{margin-top:3px} .wswhy{color:#7a5aa8}
 .stppl{display:flex;flex-wrap:wrap;gap:3px;padding:2px 8px 6px 34px} .stpp{border:1px solid var(--edge);background:none;border-radius:99px;padding:1px 9px;font:12.5px -apple-system,sans-serif;color:var(--ink);cursor:pointer} .stpp:hover,.stpp.on{border-color:#7a3b2e;color:#7a3b2e}
+.stltab{display:flex;gap:2px;background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:9px;padding:2px;margin:6px 4px 4px} .stltab button{flex:1;border:0;background:none;border-radius:7px;padding:5px 0;font:600 13px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft);cursor:pointer} .stltab button.on{background:var(--paper);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)} .stltab small{font-weight:400;color:var(--faint)}
+.wtree{display:grid;gap:1px;margin-top:2px} .wtk{margin:2px 0} .wtkh{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;cursor:pointer;font:600 13.5px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)} .wtkh:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)} .wtkh small{color:var(--faint);font-weight:400} .wtadd{margin-left:auto;border:0;background:none;color:var(--faint);cursor:pointer;font-size:15px;padding:0 4px;border-radius:5px;opacity:.6} .wtkh:hover .wtadd{opacity:1}
+.wdot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none} .wdot.sm{width:6px;height:6px}
+.wtl{display:grid;gap:0;margin-left:16px;border-left:1px solid var(--edge);padding-left:6px} .wti2{display:flex;align-items:center;gap:8px;border:0;background:none;text-align:left;padding:5px 8px;border-radius:7px;cursor:pointer;font:13.5px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)} .wti2:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)} .wti2.on{background:var(--paper);box-shadow:0 1px 2px rgba(0,0,0,.08);font-weight:600} .wti2.all{color:var(--ink-soft)}
+.cxtop2.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start} .cxtop2.two .cxego .cxgraph{max-width:none} .cxego.wide .cxgraph{max-width:none}
+.cxsecs{display:grid;gap:10px} .cxsec{border-top:1px solid var(--edge);padding-top:8px} .cxsech{display:flex;align-items:center;gap:6px} .cxsech b{font:800 18px "Nanum Myeongjo",serif;color:var(--ink)} .cxsech .btn{opacity:.5} .cxsec:hover .cxsech .btn{opacity:1}
+.cxsecb{font:16px/1.85 "Gowun Batang",serif;color:var(--ink);cursor:text;padding:4px 0;min-height:1.8em} .cxsecb .cxp-text{min-height:120px} a.cxm{text-decoration:none;font-weight:600;border-bottom:1px dotted currentColor}
+@media (max-width:900px){ .cxtop2.two{grid-template-columns:1fr} }
 .altlist{display:grid;gap:4px;margin:4px 0} .altc{border:0;background:none;text-align:left;padding:8px 10px;border-radius:9px;cursor:pointer;font:inherit;color:var(--ink);line-height:1.6} .altc:hover,.altc:focus{background:color-mix(in srgb,var(--ink) 7%,transparent)}
 .altnav{display:flex;justify-content:center;align-items:center;gap:10px} .altnav button{border:0;background:none;font-size:18px;cursor:pointer;color:var(--ink-soft);padding:0 8px} .altnav button:disabled{opacity:.3}
 #fbpanel .rfb{display:flex;gap:6px;margin-top:6px} #fbpanel .rfb button{border:1px solid var(--edge);background:var(--paper);border-radius:8px;padding:3px 12px;cursor:pointer;font:inherit;font-size:12.5px;color:var(--ink)} #fbpanel .rfb button.p{background:var(--ink);color:var(--paper);border-color:var(--ink)} #fbpanel .rfdiff{font-size:13.5px;line-height:1.7;margin:4px 0}
@@ -1673,7 +1681,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="b72ffb9b1b";
+const APP_BUILD="3f1b0845c1";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4800,11 +4808,11 @@ const ST_MAX=5; let ST_USED=(()=>{ try{ return JSON.parse(localStorage.getItem("
 function stTrim(keep){ let rest=STUDIO_TABS.filter(x=>x!=="home");
   while(rest.length>ST_MAX){ const old=rest.filter(x=>x!==keep).sort((a,b)=>(ST_USED[a]||0)-(ST_USED[b]||0))[0]; if(!old) break; STUDIO_TABS.splice(STUDIO_TABS.indexOf(old),1); delete ST_USED[old]; rest=STUDIO_TABS.filter(x=>x!=="home"); } }
 function stAdd(k){ if(!k||k==="draft") return; if(!STUDIO_TABS.includes("home")) STUDIO_TABS.unshift("home"); ST_USED[k]=Date.now(); if(!STUDIO_TABS.includes(k)) STUDIO_TABS.push(k); stTrim(k); stSave(); }
-function stValid(k){ if(["home","map","memo","res","codex","new","common"].includes(k)) return true; const [t,id]=[k.slice(0,k.indexOf(":")),k.slice(k.indexOf(":")+1)];
+function stValid(k){ if(["home","map","memo","res","codex","new","common"].includes(k)||/^cx(k|sys):/.test(k)) return true; const [t,id]=[k.slice(0,k.indexOf(":")),k.slice(k.indexOf(":")+1)];
   if(t==="w") return live().some(w=>w.id===id); if(t==="ms") return liveMs().some(m=>m.id===id); if(t==="cx") return codexLive().some(c=>c.id===id); return false; }
-function stLabel(k){ if(k==="home") return [ICO.closed.replace('class="ico"','class="ico" style="display:none"')+"⌂","글방 홈"]; if(k==="map") return ["✺","생각 지도"]; if(k==="common") return ["◎",CX_COMMON]; if(k==="memo") return ["▤","메모"]; if(k==="res") return ["⧉","자료 모음"]; if(k==="codex") return ["◎",G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex||"인물·주제 노트"]; if(k==="new") return ["＋","새 원고"]; if(k==="draft"){ if(stCur()==="draft") return ["✎","새 글"]; const d=bookDraft(); return ["✎",d?.title?d.title+" (쓰던 글)":"쓰던 새 글"]; }
+function stLabel(k){ if(k==="home") return [ICO.closed.replace('class="ico"','class="ico" style="display:none"')+"⌂","글방 홈"]; if(k==="map") return ["✺","생각 지도"]; if(k==="common") return ["◎",CX_COMMON]; if(k.startsWith("cxk:")) return ["⋰",k==="cxk:*"?"월드 전체":k.slice(4)+" 전체"]; if(k==="cxsys:bg") return ["▣","월드 배경"]; if(k==="cxsys:rules") return ["⚙","정리 규칙"]; if(k==="memo") return ["▤","메모"]; if(k==="res") return ["⧉","자료 모음"]; if(k==="codex") return ["◎",G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex||"인물·주제 노트"]; if(k==="new") return ["＋","새 원고"]; if(k==="draft"){ if(stCur()==="draft") return ["✎","새 글"]; const d=bookDraft(); return ["✎",d?.title?d.title+" (쓰던 글)":"쓰던 새 글"]; }
   const id=k.slice(k.indexOf(":")+1); if(k.startsWith("w:")){ const w=S.writings.find(x=>x.id===id); return ["✎",w?.title||"(제목 없음)"]; } if(k.startsWith("ms:")) return ["▦",S.manuscripts.find(x=>x.id===id)?.title||"원고"]; if(k.startsWith("cx:")) return ["◎",codexLive().find(c=>c.id===id)?.name||"노트"]; return ["",k]; }
-function stOpen(k){ document.body.classList.remove("stnav"); if(k==="draft"){ if(tab==="write"&&!editId) return; const d=bookDraft(); return go('write',{new:true,track:"book",ms:d?.ms||null}); } if(k.startsWith("ms:")) stMsSwitch(k.slice(3)); stAdd(k);
+function stOpen(k){ document.body.classList.remove("stnav"); if((k==="codex"||/^cx(k|sys)?:/.test(k))&&ST_LTAB!=="world"){ ST_LTAB="world"; try{ localStorage.setItem("seojae.stLtab","world"); }catch(_){} } if(k==="draft"){ if(tab==="write"&&!editId) return; const d=bookDraft(); return go('write',{new:true,track:"book",ms:d?.ms||null}); } if(k.startsWith("ms:")) stMsSwitch(k.slice(3)); stAdd(k);
   if(k.startsWith("w:")) return go('write',{edit:k.slice(2)});
   ROOM_NEW=k==="new"; ROOM_CODEX=k.startsWith("cx:")?k.slice(3):null; ROOM_MAP=k==="map"; ST_ACT=k;
   if(k.startsWith("ms:")){ ROOM_MS=k.slice(3); try{ localStorage.setItem("seojae.roomMs",ROOM_MS); }catch(_){} }
@@ -4841,8 +4849,9 @@ function stSide(cur){ const ms=liveMs(), m=ms.find(x=>x.id===ROOM_MS)||ms[0]||nu
     <div class="stmsbox g-${esc(m?.genre||"free")}"><p class="stsech stmsh">지금 원고</p>
     <details class="stms"><summary title="${m?`『${esc(m.title)}』 · ${esc(g.n)} — 원고 바꾸기`:"원고 고르기"}"><span class="stlogo g-${esc(m?.genre||"free")}">${m?esc(g.ic):"✎"}</span><span class="stmst"><span class="stn">${esc(m?.title||"원고 고르기")}</span>${m?`<small class="stgen g-${esc(m.genre||"free")}">${esc(g.n)} · ${msList(m).length}${esc(g.item)}</small>`:""}</span><span class="stud">바꾸기 ▾</span></summary>
       <div class="stmsmenu">${ms.map(x=>`<button class="${m&&x.id===m.id?"on":""}" onclick="this.closest('details').open=false;stOpen('ms:${x.id}')"><span class="stlogo sm g-${esc(x.genre||"free")}">${esc(G(x).ic)}</span><span><b>${esc(x.title)}</b><small>${esc(G(x).n)} · ${msList(x).length}${esc(G(x).item)}</small></span></button>`).join("")}<button onclick="this.closest('details').open=false;stOpen('new')">＋ 새 원고</button></div></details>
-    ${m?`<div class="stnavs">${nav("memo","▤","메모 (포스트잇)",seeds)}${nav("res","⧉","자료 모음",(m?.research||[]).length)}${nav("codex","◎",esc(g.codex||"인물·주제 노트"),cxScope(m?.id).length)}${m.genre==="novel"?(()=>{ const pp=cxScope(m.id).filter(c=>c.kind==="인물").sort((a,b)=>a.name.localeCompare(b.name,"ko")); return pp.length?`<div class="stppl">${pp.slice(0,12).map(c=>`<button class="stpp ${cur==="cx:"+c.id?"on":""}" onclick="stOpen('cx:${c.id}')" title="${esc((c.props||[]).filter(p=>p.v).map(p=>p.k+": "+p.v).join(" · "))}">☺ ${esc(c.name)}</button>`).join("")}${pp.length>12?`<button class="stpp" onclick="stOpen('codex')">… ${pp.length-12}명 더</button>`:""}</div>`:""; })():""}</div>`:""}
-    <div class="stsec"><p class="stsech">목차</p><div id="sttree" data-m="${m?.id||""}">${stTree(m,cur)}</div></div></div>
+    ${m?`<div class="stltab"><button class="${ST_LTAB!=="world"?"on":""}" onclick="stLtab('ms')">원고</button><button class="${ST_LTAB==="world"?"on":""}" onclick="stLtab('world')">${m.genre==="novel"?"월드":"노트"} <small>${cxScope(m.id).length||""}</small></button></div>`:""}
+    ${m&&ST_LTAB==="world"?worldTree(m,cur)+"</div>":`${m?`<div class="stnavs">${nav("memo","▤","메모 (포스트잇)",seeds)}${nav("res","⧉","자료 모음",(m?.research||[]).length)}</div>`:""}
+    <div class="stsec"><p class="stsech">목차</p><div id="sttree" data-m="${m?.id||""}">${stTree(m,cur)}</div></div></div>`}
     <div class="stcommon"><p class="stsech"><span class="combadge">공통</span> 모든 말씀 글</p><button class="stnavi ${cur==="common"||(cur.startsWith("cx:")&&cxOrphan(codexLive().find(c=>"cx:"+c.id===cur)||{}))?"on":""}" onclick="stOpen('common')"><span class="sti">◎</span>${CX_COMMON}<span class="stc">${codexLive().filter(cxOrphan).length||""}</span></button></div>
     <div class="stfoot"><button onclick="go('drawer',{sub:'trash'})"><span class="sti">${ICO.trash}</span>휴지통</button><button onclick="go('drawer',{sub:'all'})"><span class="sti">${ICO.search}</span>서랍 (모든 글)</button><button onclick="go('settings')"><span class="sti">⚙</span>설정</button></div></aside>`; }
 function studioWrap(cur,main){ stAdd(cur); return `<div class="studio">${stSide(cur)}<div class="stmain">${stTabs(cur)}${main}</div></div><div class="stback" onclick="document.body.classList.remove('stnav')"></div>`; }
@@ -4999,6 +5008,8 @@ function roomPage(){
   else if(cur==="memo") main=stMemo(m);
   else if(cur==="codex") main=stCodexList();
   else if(cur==="common") main=stCodexList(true);
+  else if(cur.startsWith("cxk:")&&m) main=cxKindPage(m,cur.slice(4));
+  else if(cur.startsWith("cxsys:")&&m) main=cxSysPage(m,cur.slice(6));
   else if(cur==="res") main=m?resPage(m):stHome(m);
   else if(cur.startsWith("ms:")&&m) main=msPageHtml(m);
   else main=stHome(m);
@@ -5197,7 +5208,7 @@ function cxCopy(id,mid){ const c=(S.codex||[]).find(x=>x.id===id), m=S.manuscrip
   toast(`「${c.name}」${jp(c.name,"을","를")} 『${m.title}』의 노트로 복사했습니다 — 공통 원본은 그대로입니다`); render(); }
 function cxCopyMenu(id,ev){ ev?.stopPropagation(); const ms=liveMs().filter(m=>!m.rule); if(!ms.length) return toast("원고가 아직 없습니다");
   const r=ev?.target?.getBoundingClientRect?.()||{left:innerWidth/2,bottom:innerHeight/2}; ctxOpen(r.left,r.bottom+4,"어느 원고로 복사할까요?",ms.map(m=>({t:`『${m.title}』`,ic:"⧉",fn:()=>cxCopy(id,m.id)}))); }
-const cxScope=mid=>{ const ok=mid&&liveMs().some(m=>m.id===mid); return codexLive().filter(c=>ok?c.ms===mid:cxOrphan(c)); };
+const cxScope=mid=>{ const ok=mid&&liveMs().some(m=>m.id===mid); return codexLive().filter(c=>!c.sys&&(ok?c.ms===mid:cxOrphan(c))); };   // sys(월드 배경·정리 규칙)는 빼고
 function codexIn(text,mid){ const t=String(text||""); return cxScope(mid===undefined?cxMsNow():mid).filter(c=>cxNames(c).some(n=>t.includes(n))); }
 function codexHits(c){ const ns=cxNames(c), hit=t=>ns.some(n=>String(t||"").includes(n)), own=c.ms&&liveMs().find(m=>m.id===c.ms), inMs=own?new Set(msList(own).map(w=>w.id)):null;
   const ws=live().filter(w=>(!inMs||inMs.has(w.id))&&(hit(w.title)||hit(w.body)||hit(w.passage))).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
@@ -5272,11 +5283,12 @@ function codexPage(c){ const com=cxOrphan(c), W=cxW(c), PK=cxPK(c), P=cxP(PK); C
       <label class="cxf"><span>다른 이름</span><input id="cxalias" value="${esc((c.aliases||[]).join(", "))}" placeholder="${esc(W.alias)}"><small>쉼표로 — 이 이름들이 나온 글도 함께 모읍니다</small></label>
       <label class="cxf"><span>속한 곳</span><select id="cxms" title="노트는 속한 원고를 열었을 때만 보입니다"><option value="">공통 · ${CX_COMMON}</option>${liveMs().filter(x=>!x.rule).map(x=>`<option value="${x.id}" ${c.ms===x.id?"selected":""}>『${esc(x.title)}』</option>`).join("")}</select></label>
     </div>
-    ${sec(P.propH,P.propSub,`<div id="cxprops" class="cxprops">${props.map(p=>cxPropRow(p.k,p.v)).join("")}</div>
+    <div class="cxtop2 ${P.rel&&((c.rel||[]).length||bk.rels.length)?"two":""}">${sec(P.propH,P.propSub,`<div id="cxprops" class="cxprops">${props.map(p=>cxPropRow(p.k,p.v)).join("")}</div>
       <div class="row" style="gap:6px"><button type="button" class="btn small ghost" onclick="cxAddProp()">＋ 칸</button><button type="button" class="btn small ghost" onclick="cxFillTpl()">기본 칸 채우기</button></div>`)}
+    ${P.rel&&((c.rel||[]).length||bk.rels.length)?sec(`${P.views.find(v=>v[0]==="graph")?.[1]||"관계도"}`,"이 항목을 가운데 두고 — 누르면 그 항목으로",`<div class="cxego">${cxGraph([c,...new Set([...(c.rel||[]).map(r=>codexLive().find(x=>x.id===r.to)),...bk.rels.map(x=>x.from)].filter(Boolean))],c.id)}</div>`):""}</div>
     ${sec(P.noteH,P.noteSub,`<textarea id="cxbody" class="cxp-text" placeholder="${esc(W.note)}">${esc(c.body||"")}</textarea>`)}
+    ${com?"":sec("섹션","외모·성격·전개처럼 이름 붙은 글 — 다른 항목 이름은 저절로 링크",cxSecsHtml(c))}
     ${!P.secret?"":sec("🔒 비밀","작가만 봅니다 — 설정집을 공개용으로 내보낼 때 빠집니다",`<textarea id="cxsecret" class="cxp-text small" placeholder="반전, 숨긴 과거, 아직 독자에게 밝히지 않은 것…">${esc(c.secret||"")}</textarea>`)}${!P.rel?"":sec(P.rel,P.relSub,`<div id="cxrels" class="cxprops">${(c.rel||[]).map(r=>cxRelRow(c,r)).join("")}</div><div><button type="button" class="btn small ghost" onclick="cxAddRel('${c.id}')">＋ 관계</button></div>`)}
-    ${P.rel&&((c.rel||[]).length||bk.rels.length)?sec(`${P.views.find(v=>v[0]==="graph")?.[1]||"관계도"}`,"이 항목을 가운데 두고 — 누르면 그 항목으로",`<div class="cxego">${cxGraph([c,...new Set([...(c.rel||[]).map(r=>codexLive().find(x=>x.id===r.to)),...bk.rels.map(x=>x.from)].filter(Boolean))],c.id)}</div>`):""}
     <div class="cxp-save"><button class="btn ghost" onclick="codexClose('${c.id}')" title="Esc">닫기</button><button class="btn ink" onclick="codexSave('${c.id}')" title="⌘S">간직 <small style="opacity:.6">⌘S</small></button></div>
     ${bk.rels.length||bk.ment.length||out.length?sec("연결","",`<div class="cxback">
       ${bk.rels.length?`<div><small class="muted">이 항목을 가리키는 관계</small> ${bk.rels.map(x=>`${chip(x.from)}<small class="muted">${x.label?" → "+esc(x.label):""}</small>`).join(" ")}</div>`:""}
@@ -5352,7 +5364,7 @@ function cxGraph(cs,centerId){ const ids=new Set(cs.map(c=>c.id)), E=cs.flatMap(
   const hub=centerId?N.length>=3:N.length>=5&&deg(N[0].id)>=3;   // 관계가 많은 항목 하나는 가운데 (다섯 개 넘을 때)
   N.forEach((c,i)=>{ if(hub&&i===0){ P[c.id]=[cx,cy]; return; } const k=hub?i-1:i, n=hub?N.length-1:N.length, t=-Math.PI/2+2*Math.PI*k/n+(n===2?Math.PI/4:0); P[c.id]=[cx+R*Math.cos(t),cy+R*Math.sin(t)]; });
   const pairs={}; E.forEach(e=>{ const key=[e.a,e.b].sort().join(); pairs[key]=(pairs[key]||0)+1; e.n=pairs[key]; e.key=key; });   // 서로 가리키는 관계는 양쪽으로 휘게 (방향이 반대라 저절로 반대편)
-  const col={인물:"#b0703f",장소:"#5f8a68",조직:"#7d6aa8",사물:"#a08a3c",사건:"#b0534a",개념:"#4f7fa8"};
+  const col=CX_COLOR;
   return `<div class="cxgraph"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="관계도"><defs><marker id="cxar" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
     ${E.map(e=>{ const [x1,y1]=P[e.a],[x2,y2]=P[e.b], dx=x2-x1, dy=y2-y1, d=Math.hypot(dx,dy)||1, ux=dx/d, uy=dy/d, off=pairs[e.key]>1?30+(e.n>2?(e.n-2)*16:0):0, mx=(x1+x2)/2-uy*off, my=(y1+y2)/2+ux*off, sx=x1+ux*26, sy=y1+uy*26, ex=x2-ux*30, ey=y2-uy*30;
       return `<path d="M${sx.toFixed(1)} ${sy.toFixed(1)} Q${(mx*2-(sx+ex)/2).toFixed(1)} ${(my*2-(sy+ey)/2).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}" class="cxe" marker-end="url(#cxar)"/>${e.l?`<text x="${mx.toFixed(1)}" y="${(my-4).toFixed(1)}" class="cxel">${esc(e.l)}</text>`:""}`; }).join("")}
@@ -5421,7 +5433,7 @@ let TW_RAF=0; function typeCenter(){ if(!TYPEW||TW_RAF) return; TW_RAF=requestAn
 // 모드: 「질문」 묻고 답하기(넣을 문장은 「<<<넣기」 카드) · 「제안」 고칠 곳 목록 → 하나씩 비교해 보고 ✓ 적용 (mode:"suggest"). 펜시브의 「기본(AI가 바로 고침)」은 두지 않음.
 // 맥락 칩: AI가 무엇을 읽는지 입력창 위에 보임(이 글·고른 곳·본문, ＋원고 자료). 갈래마다 선: 묵상은 질문만(넣기 카드 없음), 묵상·설교초안·시의 고치기는 비문만.
 // 대화는 글마다 이 기기에만(기기의 큰 저장소 IndexedDB "aiChats", 키 seojae.ai.<글 번호>), 기록 파일에는 넣지 않음.
-let AI_MSGS=[], AI_KEY="", AI_BUSY=false, AI_REFS=false;
+let AI_MSGS=[], AI_KEY="", AI_BUSY=false, AI_REFS=false, AI_WORLD=true;   // AI_WORLD: 월드(노트·배경·정리 규칙)도 함께 읽게 — 기본 켬
 const aiKeyNow=()=>"seojae.ai."+(editId||"new");
 // 대화 보관: 예전에는 localStorage(아이폰은 기기 사본과 같은 5MB 칸)에 쌓였음 → 처음 한 번 IndexedDB로 옮기고 지움. 대화는 80개(최근 쓴 순)까지
 let AI_DB=null, AI_DB_T=0;
@@ -5482,8 +5494,10 @@ document.addEventListener("toggle",e=>{ const d=e.target; if(!d.open||!d.matches
 const undoHint=()=>isTouch()?"↶ 단추로 되돌리기":"⌘Z로 되돌리기";
 const aiBodyText=b=>stripMemo(b.value).split("\n").filter(l=>!SLIDE_RE.test(l)).join("\n");
 const aiRefsText=m=>(m?.research||[]).slice(0,12).map(r=>`- ${r.t||"자료"}: ${String(r.body||"").slice(0,700)}${r.src?` (출처: ${r.src})`:""}`).join("\n").slice(0,6000);
-function aiChips(sel,k){ const b=$("#wbody"), n=b?aiBodyText(b).length:0, P=$("#wpassage")?.value||k.w?.passage||"", rn=(k.m?.research||[]).length;
-  return `<div class="aichips" title="AI가 읽는 것"><span>이 글 · ${n.toLocaleString()}자${n>14000?" (길어서 앞뒤만)":""}</span>${sel?`<span>고른 곳 ${sel.t.length.toLocaleString()}자</span>`:`<span>커서 근처</span>`}${P?`<span>본문 ${esc(P)}</span>`:""}<button onclick="vrOpen('rules')" title="AI가 함께 따르는 규칙과 말투 기준">규칙 ${vrList("rules").filter(x=>x.on!==false).length} · 말투 ${vrList("voice").length}</button>${rn?`<button class="${AI_REFS?"on":""}" onclick="AI_REFS=!AI_REFS;aiDraw()" title="이 원고의 자료 모음도 함께 읽게 합니다 (사실·인용은 자료에 있는 것만 씀)">${AI_REFS?"✓":"＋"} 원고 자료 ${rn}</button>`:""}</div>`; }
+// 월드(노트 항목·섹션·배경 + 정리 규칙)를 AI에게 — 피드백·설정 정리와 같은 내용
+const aiWorldText=m=>{ if(!m) return ""; const r=cxSys(m.id,"rules")?.body; return (fbSettings(m)+(r?`\n[정리 규칙] ${r.replace(/\s+/g," ").slice(0,800)}`:"")).trim(); };
+function aiChips(sel,k){ const b=$("#wbody"), n=b?aiBodyText(b).length:0, P=$("#wpassage")?.value||k.w?.passage||"", rn=(k.m?.research||[]).length, wn=k.m?cxScope(k.m.id).length+(cxSys(k.m.id,"bg")?.body?1:0):0, wl=k.m?.genre==="novel"?"월드":"노트";
+  return `<div class="aichips" title="AI가 읽는 것"><span>이 글 · ${n.toLocaleString()}자${n>14000?" (길어서 앞뒤만)":""}</span>${sel?`<span>고른 곳 ${sel.t.length.toLocaleString()}자</span>`:`<span>커서 근처</span>`}${P?`<span>본문 ${esc(P)}</span>`:""}<button onclick="vrOpen('rules')" title="AI가 함께 따르는 규칙과 말투 기준">규칙 ${vrList("rules").filter(x=>x.on!==false).length} · 말투 ${vrList("voice").length}</button>${rn?`<button class="${AI_REFS?"on":""}" onclick="AI_REFS=!AI_REFS;aiDraw()" title="이 원고의 자료 모음도 함께 읽게 합니다 (사실·인용은 자료에 있는 것만 씀)">${AI_REFS?"✓":"＋"} 원고 자료 ${rn}</button>`:""}${wn?`<button class="${AI_WORLD?"on":""}" onclick="AI_WORLD=!AI_WORLD;aiDraw()" title="이 원고의 ${wl}(인물·장소·배경·섹션·정리 규칙)를 함께 읽고, 설정과 어긋나는 곳도 짚습니다">${AI_WORLD?"✓":"＋"} ${wl} ${wn}</button>`:""}</div>`; }
 function aiSugHtml(m,i){ const pend=(m.items||[]).filter(x=>!x.st).length;
   return `<div class="msg ai">${m.items.length?`<b>고칠 곳 ${m.items.length}</b> <span class="muted" style="font-size:12px">— 하나씩 비교해 보고 넣으세요</span>`:"고칠 곳을 찾지 못했습니다."}
     ${m.items.map((it,j)=>`<div class="sug2 ${it.st||""}"><div class="rfdiff">${rfDiffHtml(it.from,it.to)}</div>${it.why?`<small>${esc(it.why)}</small>`:""}<div class="row">${it.st==="done"?`<span class="muted" style="font-size:12px">✓ 넣음</span>`:it.st==="drop"?`<span class="muted" style="font-size:12px">버림</span>`:`<button class="p" onclick="aiSugApply(${i},${j})">✓ 적용</button><button onclick="aiSugDrop(${i},${j})">버리기</button><button onclick="aiSugShow(${i},${j})">글에서 보기</button>`}</div></div>`).join("")}
@@ -5517,7 +5531,7 @@ async function aiSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
   if(ta) ta.value=""; const sel=aiSelNow(), k=aiGenre(), pos=b.selectionEnd, near=b.value.slice(Math.max(0,pos-600),pos+600), ask=aiAsk(), key=AI_KEY;
   AI_MSGS.push({role:"me",text:q}); AI_BUSY=true; aiStore(); aiDraw();
   const body=aiBodyText(b), samples=body.split("\n").filter(l=>l.trim().length>40).slice(0,3).join("\n");
-  const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,sermon:k.sermon,card:cardForAI(k.w),...vrFor(k.sermon),refs:AI_REFS?aiRefsText(k.m):"",samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
+  const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,sermon:k.sermon,card:cardForAI(k.w),...vrFor(k.sermon),refs:AI_REFS?aiRefsText(k.m):"",world:AI_WORLD?aiWorldText(k.m):"",samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
   const hist=AI_MSGS.filter(m=>m.role!=="err"&&m.text).slice(-12).map(m=>({role:m.role,text:m.text}));
   let add; try{ if(ask==="suggest"){ const r=await gcall("coWrite",{mode:"suggest",messages:hist,doc}); add={role:"ai",text:`(제안 ${r.items.length}곳)`,items:r.items.map(x=>({...x})),ai:r.ai}; }
     else { const r=await gcall("coWrite",{messages:hist,doc}); add={role:"ai",text:r.text,ai:r.ai,sel:sel||null,pos}; } }
@@ -5665,7 +5679,7 @@ function rfAltPage(d){ if(!RF) return; const n=RF.page+d; if(n<0) return; if(n>=
 const FB_CRIT={novel:["구성","인물","개연성","문장","몰입"],paper:["논증","근거·인용","구성","문체","독창성"],sermon:["본문 충실","한 문장","구조","적용","전달"],essay:["장면","진정성","문장","여운"],selfhelp:["메시지","사례","실천","구성"],poem:["이미지","리듬","낱말","여운"],free:["구성","문장","전달"]};
 let FB=null;   // {wid,busy,err,scores,strong,weak,items[{from,to,kind,note,st}],ai,at,crit}
 // 이 원고의 노트(설정) — 피드백이 설정과 어긋난 곳을 찾도록
-function fbSettings(m){ if(!m) return ""; return cxScope(m.id).map(c=>`${c.name}${c.kind?`(${c.kind})`:""}${(c.aliases||[]).length?` [다른 이름: ${c.aliases.join(", ")}]`:""}: ${(c.props||[]).filter(p=>p.v).map(p=>`${p.k}=${p.v}`).join("; ")}${(c.rel||[]).length?` · 관계: ${c.rel.map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`${r.label||"—"}→${t.name}`:""; }).filter(Boolean).join(", ")}`:""}${c.body?` · ${c.body.replace(/\s+/g," ").slice(0,160)}`:""}`).join("\n").slice(0,6000); }
+function fbSettings(m){ if(!m) return ""; const bg=cxSys(m.id,"bg"); return (bg?.body?`[배경] ${bg.body.replace(/\s+/g," ").slice(0,1200)}\n`:"")+cxScope(m.id).map(c=>`${c.name}${c.kind?`(${c.kind})`:""}${(c.aliases||[]).length?` [다른 이름: ${c.aliases.join(", ")}]`:""}: ${(c.props||[]).filter(p=>p.v).map(p=>`${p.k}=${p.v}`).join("; ")}${(c.rel||[]).length?` · 관계: ${c.rel.map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`${r.label||"—"}→${t.name}`:""; }).filter(Boolean).join(", ")}`:""}${c.body?` · ${c.body.replace(/\s+/g," ").slice(0,160)}`:""}${(c.secs||[]).filter(x=>x.t).map(x=>` · ${x.h}: ${x.t.replace(/\s+/g," ").slice(0,120)}`).join("")}`).join("\n").slice(0,6000); }
 async function fbStart(){ const b=$("#wbody"); if(!b) return; const k=aiGenre(); if(k.meditation) return toast("묵상에는 점수를 매기지 않습니다 — ✦ AI 창에서 질문으로 함께 보세요");
   if(chars(b.value)<80) return toast("피드백을 받으려면 조금 더 써 주세요 (80자 넘게)");
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
@@ -5758,7 +5772,7 @@ async function wsStart(scope){ const w=editId&&S.writings.find(x=>x.id===editId)
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
   const P=cxP(m.genre&&CX_PROF[m.genre]?m.genre:"free"), text=scope==="piece"&&tab==="write"&&$("#wbody")?aiBodyText($("#wbody")):msList(m).map(x=>`■ ${x.title||""}\n${stripMemo(x.body||"")}`).join("\n\n");
   WS={mid:m.id,busy:true,scope}; wsDraw();
-  try{ const r=await gcall("coWrite",{mode:"worldsync",body:text,settings:fbSettings(m),kinds:P.kinds.filter(k=>k!=="기타"),tpl:P.kinds.map(k=>`${k}: ${(P.tpl[k]||[]).join("·")}`).join(" / "),title:m.title,genre:G(m).n});
+  try{ const r=await gcall("coWrite",{mode:"worldsync",body:text,settings:fbSettings(m),rules:cxSys(m.id,"rules")?.body||"",kinds:P.kinds.filter(k=>k!=="기타"),tpl:P.kinds.map(k=>`${k}: ${(P.tpl[k]||[]).join("·")}`).join(" / "),title:m.title,genre:G(m).n});
     if(!WS||WS.mid!==m.id) return; const has=n=>cxScope(m.id).some(c=>cxNames(c).includes(n));
     Object.assign(WS,{busy:false,add:(r.add||[]).filter(x=>!has(x.name)),update:(r.update||[]).filter(x=>has(x.name)),rel:(r.rel||[]),ai:r.ai}); WS.pick=new Set([...WS.add.map((x,i)=>"a"+i),...WS.update.map((x,i)=>"u"+i),...WS.rel.map((x,i)=>"r"+i)]); }
   catch(e){ if(WS) Object.assign(WS,{busy:false,err:"정리하지 못했습니다: "+e.message}); } wsDraw(); }
@@ -5778,6 +5792,59 @@ function wsDraw(){ if(!WS) return $("#wspanel")?.remove(); let p=$("#wspanel"); 
       ${WS.rel.length?`<p class="fbt">새 관계 ${WS.rel.length}</p>${WS.rel.map((x,i)=>box("r"+i,`<b>${esc(x.a)}</b> —${esc(x.label)}→ <b>${esc(x.b)}</b>${x.why?`<br><small class="wswhy">「${esc(x.why)}」</small>`:""}`)).join("")}`:""}
       ${WS.add.length+WS.update.length+WS.rel.length?`<div class="row" style="gap:6px;margin-top:10px"><button class="btn small ink" onclick="wsApply()">고른 것 노트에 넣기 (${WS.pick.size})</button></div>`:`<p class="muted">노트에 더할 것을 찾지 못했습니다 — 설정이 잘 정리되어 있습니다.</p>`}
       <small class="muted">${esc(WS.ai||"")}</small>`}`; }
+// ───────── 왼쪽 칸 탭 「원고 | 월드」 (2026-10-29, 타입탁 월드를 본뜸 — 릴리즈 노트로 확인한 구성) ─────────
+// 월드 = 월드 배경(시대·무대처럼 특정 항목에 속하지 않는 설정) · 종류별 항목(+ 그 종류 「전체」 그래프) · 전체 그래프 · 월드 정리 규칙(설정 정리 AI가 따름)
+// 배경·규칙은 노트 항목에 sys:"bg"|"rules" 를 붙여 그 원고에 둠(항목마다 합침 — 저장 방식 그대로). 일반 목록·그래프·찾기에서는 빠짐
+let ST_LTAB=(()=>{ try{ return localStorage.getItem("seojae.stLtab")||"ms"; }catch(_){ return "ms"; } })(), WT_FOLD=new Set();
+function stLtab(t){ ST_LTAB=t; try{ localStorage.setItem("seojae.stLtab",t); }catch(_){} render(); }
+const CX_COLOR={인물:"#5b5bd6",사람:"#5b5bd6",학자:"#5b5bd6",장소:"#6fa3d8",지명:"#6fa3d8",조직:"#9a74c9",사물:"#93b34f",물건:"#93b34f",사건:"#d0806a",개념:"#e0956f",용어:"#e0956f",이론:"#e0956f",기술:"#e0956f",문헌:"#8a7a66",자료:"#8a7a66",예화:"#c08a3e",주제:"#4f9a8a","장면·기억":"#c0779a",이미지:"#7fa86a",낱말:"#7fa86a",계절:"#6fa3d8",사례:"#c08a3e","연구·통계":"#8a7a66",실천:"#4f9a8a",인용:"#8a7a66"};
+const cxCol=c=>CX_COLOR[c?.kind]||"#8a7a66";
+function cxSys(mid,key,make){ let c=codexLive().find(x=>x.ms===mid&&x.sys===key); if(!c&&make){ c={id:uid(),ms:mid,sys:key,name:key==="bg"?"월드 배경":"월드 정리 규칙",aliases:[],body:"",updated:new Date().toISOString()}; (S.codex=S.codex||[]).push(c); save(); } return c; }
+function worldTree(m,cur){ const P=cxP(cxPK({ms:m.id})), all=cxScope(m.id), novel=m.genre==="novel", kinds=[...new Set([...P.kinds,...all.map(c=>c.kind).filter(Boolean)])].filter(k=>k!=="기타"||all.some(c=>c.kind==="기타"));
+  const it=(k,ic,n,extra)=>`<button class="stnavi wti ${cur===k?"on":""}" onclick="stOpen('${k}')"><span class="sti">${ic}</span>${n}${extra||""}</button>`;
+  return `<div class="wtree">${it("cxsys:bg","▣",novel?"월드 배경":"배경 · 전체 설정")}
+    ${kinds.map(k=>{ const L=all.filter(c=>c.kind===k).sort((a,b)=>a.name.localeCompare(b.name,"ko")), f=WT_FOLD.has(k);
+      return `<div class="wtk"><div class="wtkh" onclick="WT_FOLD.has(${jsArg(k).replace(/"/g,"&quot;")})?WT_FOLD.delete(${jsArg(k).replace(/"/g,"&quot;")}):WT_FOLD.add(${jsArg(k).replace(/"/g,"&quot;")});render()"><i class="wdot" style="background:${CX_COLOR[k]||"#8a7a66"}"></i><span>${esc(k)}</span><small>${L.length||""}</small><button class="wtadd" onclick="event.stopPropagation();cxNewKind(${jsArg(k).replace(/"/g,"&quot;")})" title="새 ${esc(k)}">＋</button></div>
+        ${f?"":`<div class="wtl">${L.map(c=>`<button class="wti2 ${cur==="cx:"+c.id?"on":""}" onclick="stOpen('cx:${c.id}')"><i class="wdot sm" style="background:${cxCol(c)}"></i>${esc(c.name)}</button>`).join("")}${L.length?`<button class="wti2 all ${cur==="cxk:"+k?"on":""}" onclick="stOpen('cxk:${esc(k)}')">⋰ 전체</button>`:""}</div>`}</div>`; }).join("")}
+    ${all.some(c=>!c.kind)?it("codex","◎","종류 없음",`<span class="stc">${all.filter(c=>!c.kind).length}</span>`):""}
+    ${it("cxk:*","⋰","전체")}${it("cxsys:rules","⚙",novel?"월드 정리 규칙":"정리 규칙")}
+    <button class="stnavi wti" onclick="wsStart('ms')" title="원고 전체를 읽고 노트와 견주어 제안"><span class="sti">✦</span>원고에서 설정 정리</button></div>`; }
+function cxNewKind(kind){ const m=S.manuscripts.find(x=>x.id===ROOM_MS); if(!m) return; const name=(prompt(`새 ${kind} 이름`,"")||"").trim(); if(!name) return;
+  const c={id:uid(),name,kind,ms:m.id,aliases:[],body:"",updated:new Date().toISOString()}; S.codex.push(c); save(); stOpen("cx:"+c.id); }
+// 종류 「전체」 · 월드 「전체」: 그 종류 항목과 이어진 항목까지 그래프로, 아래에 카드
+function cxKindPage(m,kind){ const all=cxScope(m.id), base=kind==="*"?all:all.filter(c=>c.kind===kind), ids=new Set(base.map(c=>c.id));
+  base.forEach(c=>(c.rel||[]).forEach(r=>ids.add(r.to))); all.forEach(c=>(c.rel||[]).forEach(r=>{ if(ids.has(r.to)&&base.some(b=>b.id===r.to)) ids.add(c.id); }));
+  const cs=all.filter(c=>ids.has(c.id));
+  return `<section class="sthome cxlist"><div class="row" style="align-items:center;gap:8px"><h2 class="sthello" style="font-size:24px;margin:0">${kind==="*"?"월드 전체":esc(kind)}</h2><span class="spacer"></span>${kind==="*"?"":`<button class="btn small" onclick="cxNewKind(${jsArg(kind).replace(/"/g,"&quot;")})">＋ 새 ${esc(kind)}</button>`}</div>
+    <div class="cxego wide">${cxGraph(cs)}</div>
+    <div class="strec" style="margin-top:12px">${base.map(c=>`<button class="strc" onclick="stOpen('cx:${c.id}')"><b><i class="wdot sm" style="background:${cxCol(c)}"></i> ${esc(c.name)}</b><span>${esc(((c.props||[]).find(p=>p.v)?.v)||(c.body||"").slice(0,50))}</span><small>${esc(c.kind||"")}${(c.rel||[]).length?` · 관계 ${c.rel.length}`:""}</small></button>`).join("")||`<p class="muted">아직 없습니다.</p>`}</div></section>`; }
+// 월드 배경 · 정리 규칙 화면
+function cxSysPage(m,key){ const c=cxSys(m.id,key,true), bg=key==="bg";
+  return `<section class="sheet roommain codexpage"><div class="cxp-top"><span class="muted" style="font-size:13px">${m.genre==="novel"?"월드":"노트"} / ${bg?"배경":"정리 규칙"}</span></div>
+    <h2 class="cxp-title" style="border:0">${bg?(m.genre==="novel"?"월드 배경":"배경 · 전체 설정"):"정리 규칙"}</h2>
+    <p class="muted" style="margin:-8px 0 12px">${bg?"시대·무대·사회 질서처럼 특정 인물이나 장소에 속하지 않는 전체 설정. AI 피드백·설정 정리가 이 글을 함께 읽습니다.":"AI가 「설정 정리」로 노트를 채울 때 따를 기준. 예: 「인물 나이는 시즌 1 기준으로」 「기술은 원리와 한계를 나눠 적기」 「사건에는 회차 번호」"}</p>
+    <textarea id="cxsys" class="cxp-text" style="min-height:${bg?320:200}px" placeholder="${bg?"예: 2045년 서울. 뇌-컴퓨터 연결이 상용화된 사회…":"한 줄에 규칙 하나"}" oninput="cxSysKick('${c.id}')">${esc(c.body||"")}</textarea>
+    <div class="cxp-save"><span id="cxstamp" class="cxp-stamp"></span><button class="btn ink" onclick="cxSysSave('${c.id}')">간직 <small style="opacity:.6">⌘S</small></button></div></section>`; }
+let CXS_T=0; function cxSysKick(id){ cxStamp("✎ 쓰는 중…"); clearTimeout(CXS_T); CXS_T=setTimeout(()=>cxSysSave(id,true),2500); }
+function cxSysSave(id,auto){ const c=(S.codex||[]).find(x=>x.id===id), v=$("#cxsys")?.value; if(!c||v==null) return; if(v!==c.body){ c.body=v; c.updated=new Date().toISOString(); save(); } cxStamp("✓ 간직됨"); if(!auto) toast("간직했습니다"); }
+document.addEventListener("keydown",e=>{ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="s"&&$("#cxsys")){ e.preventDefault(); const k=ST_ACT.slice(6), m=S.manuscripts.find(x=>x.id===ROOM_MS); const c=m&&cxSys(m.id,k); if(c) cxSysSave(c.id); } });
+// 섹션 (타입탁 노드의 「외모」「성격과 심리」처럼 이름 붙은 글) — 다른 항목 이름은 저절로 링크
+const CX_SECS={인물:["외모","성격과 심리","전개"],사람:["기억나는 장면","전개"],장소:["환경","역할과 의미"],지명:["환경","역할과 의미"],조직:["구성","목적과 활동"],사물:["생김새","쓰임과 의미"],사건:["경과","결과와 영향"],개념:["원리와 기능","규칙과 한계"],기술:["원리와 기능","개발 과정"],용어:["정의와 쓰임"],학자:["생애","핵심 주장"],문헌:["요약","비판"],이론:["핵심","적용과 한계"]};
+function cxLinkify(text,self,mid){ const L=cxScope(mid).filter(c=>c.id!==self.id).flatMap(c=>cxNames(c).map(n=>[n,c])).sort((a,b)=>b[0].length-a[0].length); let h=esc(text||"");
+  if(!L.length) return h.replace(/\n/g,"<br>"); const map=new Map(L.map(([n,c])=>[esc(n),c])), re=new RegExp([...map.keys()].map(n=>n.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|"),"g");
+  return h.replace(re,n=>{ const c=map.get(n); return `<a href="#" class="cxm" style="color:${cxCol(c)}" onclick="stOpen('cx:${c.id}');return false" title="${esc(c.kind||"")}">${n}</a>`; }).replace(/\n/g,"<br>"); }
+function cxSecsHtml(c){ const mid=cxHome(c)||ROOM_MS, S2=c.secs||[], have=new Set(S2.map(s=>s.h)), sug=(CX_SECS[c.kind]||[]).filter(h=>!have.has(h));
+  return `<div class="cxsecs">${S2.map(s=>`<section class="cxsec" data-s="${s.id}"><div class="cxsech"><b>${esc(s.h)}</b><span class="spacer"></span><small class="muted">${s.u?esc(stAgo(s.u)):""}</small><button class="btn small ghost" onclick="cxSecEdit('${c.id}','${s.id}')" title="고치기">✎</button><button class="btn small ghost" onclick="cxSecDel('${c.id}','${s.id}')" title="섹션 지우기">✕</button></div>
+      <div class="cxsecb" onclick="if(!event.target.closest('a'))cxSecEdit('${c.id}','${s.id}')">${s.t?cxLinkify(s.t,c,mid):`<span class="muted">눌러서 쓰기</span>`}</div></section>`).join("")}
+    <div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn small ghost" onclick="cxSecAdd('${c.id}')">＋ 새 섹션</button>${sug.map(h=>`<button class="btn small ghost" onclick="cxSecAdd('${c.id}',${jsArg(h).replace(/"/g,"&quot;")})">＋ ${esc(h)}</button>`).join("")}</div></div>`; }
+function cxSecAdd(id,h){ const c=(S.codex||[]).find(x=>x.id===id); if(!c) return; h=h||(prompt("섹션 이름 (예: 외모, 성격과 심리, 전개)","")||"").trim(); if(!h) return; const s={id:uid(),h,t:"",u:new Date().toISOString()};
+  c.secs=[...(c.secs||[]),s]; c.updated=s.u; save(); render(); setTimeout(()=>cxSecEdit(id,s.id),60); }
+function cxSecDel(id,sid){ const c=(S.codex||[]).find(x=>x.id===id); if(!c) return; const s=(c.secs||[]).find(x=>x.id===sid); if(s?.t&&!confirm(`「${s.h}」 섹션을 지울까요?`)) return; c.secs=(c.secs||[]).filter(x=>x.id!==sid); c.updated=new Date().toISOString(); save(); render(); }
+function cxSecEdit(id,sid){ const box=document.querySelector(`.cxsec[data-s="${sid}"] .cxsecb`), c=(S.codex||[]).find(x=>x.id===id), s=c?.secs?.find(x=>x.id===sid); if(!box||!s||box.querySelector("textarea")) return;
+  box.innerHTML=`<textarea class="cxp-text" placeholder="${esc(s.h)} — 다른 항목 이름을 쓰면 저절로 링크가 됩니다">${esc(s.t||"")}</textarea><small class="muted">바깥을 누르거나 ⌘S·Esc로 간직</small>`; const t=box.querySelector("textarea"); t.focus(); t.setSelectionRange(t.value.length,t.value.length);
+  const done=()=>{ const v=t.value; if(v!==(s.t||"")){ s.t=v; s.u=new Date().toISOString(); c.updated=s.u; save(); } box.innerHTML=s.t?cxLinkify(s.t,c,cxHome(c)||ROOM_MS):`<span class="muted">눌러서 쓰기</span>`; };
+  let tm=0; t.addEventListener("input",()=>{ clearTimeout(tm); tm=setTimeout(()=>{ if(t.value!==(s.t||"")){ s.t=t.value; s.u=new Date().toISOString(); c.updated=s.u; save(); } },800); });
+  t.addEventListener("blur",()=>{ clearTimeout(tm); done(); }); t.addEventListener("keydown",e=>{ if(e.key==="Escape"||((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="s")){ e.preventDefault(); e.stopPropagation(); t.blur(); } }); }
 // ───────── 분량 비율 · 검증표 · 점검 10문항 (팀장님 「AI 보조 원칙」 5-9·5-12 · 2·3장 · 8-4) ─────────
 // 검증표 w.meta.vtab={at,ai,rows:[{kind,claim,status,source,note,me}]} · 점검 w.meta.chk10={at,a:[{me,ai,why}]} — 카드처럼 글의 meta 칸(칸마다 시각으로 합침, 저장 형식 그대로). 말 속도 S.settings.spm(1분 음절, 기본 350)
 const SPM=()=>parseInt(S.settings.spm)||350;
