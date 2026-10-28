@@ -277,6 +277,7 @@ textarea.page.lined{background-image:repeating-linear-gradient(to bottom,transpa
 .hmirror{position:absolute;z-index:2;pointer-events:none;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;box-sizing:border-box;overflow:hidden;background:transparent}
 .hmirror span{visibility:hidden}
 .hmirror b{font-weight:800;color:var(--note-ink,var(--ink))}
+.hmirror i.rf{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,#7a5aa8 20%,transparent);border-radius:3px;box-shadow:0 0 0 1px color-mix(in srgb,#7a5aa8 30%,transparent)}   /* AI 다듬기로 고칠 곳 */
 /* 맞춤법 밑줄: 글자는 투명하게 두고 물결 밑줄만 보입니다. 누르면 제안 상자 */
 .hmirror i.sp{visibility:visible;font-style:normal;color:transparent;text-decoration:underline wavy var(--stamp);text-decoration-skip-ink:none;text-underline-offset:4px;text-decoration-thickness:1.5px;pointer-events:auto;cursor:pointer}
 .hmirror i.sp.ai{text-decoration-color:#2f6fb3}
@@ -704,6 +705,9 @@ body.focus .stside,body.focus .sttabs{display:none} body.focus .studio{grid-temp
 #aipanel .aii{display:flex;gap:6px;padding:10px 14px 6px;align-items:flex-end} #aipanel textarea{flex:1;min-height:42px;max-height:160px;resize:none;font:14.5px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif;padding:8px 10px;border-radius:10px}
 #aipanel .rssrc{display:grid;gap:2px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--edge);font-size:12px} #aipanel .rssrc b{font-size:11.5px;color:var(--faint)} #aipanel .rssrc a{color:var(--sepia);overflow:hidden;text-overflow:ellipsis;white-space:nowrap} #aipanel .rssrc span{color:var(--faint)}
 #aipanel .rsact{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px} #aipanel .rsact button{font:12.5px -apple-system,sans-serif;border:1px solid var(--edge);background:none;border-radius:999px;padding:2px 9px;cursor:pointer;color:var(--ink)} #aipanel .rsact button.p{border-color:#7a5aa8;color:#6b4a9a;font-weight:600}
+#aipanel .aimode{display:inline-flex;border:1px solid var(--edge);border-radius:999px;overflow:hidden;margin-left:4px} #aipanel .aimode button,#aipanel .aimode span{border:0;background:none;padding:2px 10px;font-size:12px;cursor:pointer;color:var(--ink-soft);border-radius:0} #aipanel .aimode span{cursor:default;color:#6b4a9a} #aipanel .aimode button.on{background:#7a5aa8;color:#fff}
+#aipanel .aichips{display:flex;gap:5px;flex-wrap:wrap;padding:8px 14px 0;font-size:11.5px} #aipanel .aichips span,#aipanel .aichips button{background:var(--paper-2);border:1px solid transparent;border-radius:999px;padding:1px 9px;color:var(--ink-soft);font:inherit;font-size:11.5px} #aipanel .aichips button{cursor:pointer;border-color:var(--edge)} #aipanel .aichips button.on{border-color:#7a5aa8;color:#6b4a9a}
+#aipanel .sug2{border:1px solid #c9b4e3;border-radius:10px;background:var(--paper);padding:8px 10px;margin:6px 0;display:grid;gap:4px} #aipanel .sug2.done,#aipanel .sug2.drop{opacity:.55} #aipanel .sug2 .row{gap:4px} #aipanel .sug2 button{font:12.5px -apple-system,sans-serif;border:1px solid var(--edge);background:none;border-radius:999px;padding:2px 9px;cursor:pointer;color:var(--ink)} #aipanel .sug2 button.p{border-color:#7a5aa8;color:#6b4a9a;font-weight:600}
 #aipanel .aif{padding:0 14px 10px;font-size:11.5px;color:var(--faint)} #aipanel .ctxsel{margin:6px 14px 0;font-size:12.5px;color:var(--ink-soft);background:color-mix(in srgb,#7a5aa8 8%,transparent);border-radius:8px;padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #aipanel .dots i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--faint);margin:0 2px;animation:aid 1s infinite} #aipanel .dots i:nth-child(2){animation-delay:.15s} #aipanel .dots i:nth-child(3){animation-delay:.3s} @keyframes aid{50%{opacity:.25}}
 @media (min-width:1100px){ body.aiopen main.wrap,body.aiopen header .wrap{max-width:none;margin-left:max(16px,calc(50vw - 790px));margin-right:432px} }   /* 위 메뉴(글쓰기·AI 단추)도 함께 */   /* AI 창이 열리면 본문을 왼쪽으로 붙여 겹치지 않게 */
@@ -927,6 +931,20 @@ sup.mmo{color:var(--sepia);cursor:pointer;font-size:12px;margin-left:1px;user-se
 .hlbar.memo{border-radius:10px;flex-direction:column;align-items:stretch;padding:10px;width:min(320px,calc(100vw - 24px))}
 .hlbar button{font:inherit;border:0;background:none;cursor:pointer;min-width:32px;height:32px;border-radius:50%;color:var(--ink-soft);font-size:15px}
 .hlbar button:hover{background:var(--paper-2)}
+.hlbar{max-width:calc(100vw - 16px);flex-wrap:wrap;justify-content:center} @media (max-width:700px){ .hlbar{border-radius:18px} }   /* 휴대폰: 화면 폭을 넘으면 두 줄로 */
+.hlbar .rfd{width:auto;border-radius:999px;padding:0 10px;font-size:13px;white-space:nowrap} .hlbar .rfgo{color:#6b4a9a;font-weight:700} .hlbar .rfm{color:#7a5aa8;padding:0 4px 0 6px} .hlbar .rfwhy{color:var(--faint);padding:0 8px;font-size:12px;white-space:nowrap}
+.hlbar input#rfi{border:1px solid var(--edge);border-radius:999px;padding:4px 10px;font:14px -apple-system,"Apple SD Gothic Neo",sans-serif;width:min(260px,58vw)}
+#rfcard{position:fixed;z-index:75;width:min(560px,calc(100vw - 24px));background:var(--paper) var(--grain);border:1px solid #c9b4e3;border-radius:12px;box-shadow:0 14px 34px -14px rgba(0,0,0,.45);padding:10px 14px 12px;display:grid;gap:8px;font:14.5px/1.6 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
+#rfcard .rfh{display:flex;align-items:center;gap:6px;font-size:13px;color:#6b4a9a} #rfcard .rfh .spacer{flex:1} #rfcard .rfh button{border:0;background:none;cursor:pointer;color:var(--faint);font-size:15px;padding:2px 6px}
+#rfcard small{color:var(--faint)} #rfcard .warn{color:var(--bible);font-size:13.5px}
+#rfcard .dots i{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--faint);margin:0 2px;animation:aid 1s infinite} #rfcard .dots i:nth-child(2){animation-delay:.15s} #rfcard .dots i:nth-child(3){animation-delay:.3s}
+.rfdiff{font-family:"Gowun Batang",serif;font-size:15.5px;line-height:1.75;word-break:break-word}
+.rfdiff del{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--bible)}
+.rfdiff ins{text-decoration:underline;text-decoration-color:#7a5aa8;text-decoration-thickness:2px;text-underline-offset:3px;font-weight:700;color:var(--ink)}
+#rfcard .rfb{display:flex;gap:6px;flex-wrap:wrap} #rfcard .rfb button{font:13px -apple-system,"Apple SD Gothic Neo",sans-serif;border:1px solid var(--edge);background:none;border-radius:999px;padding:4px 12px;cursor:pointer;color:var(--ink)} #rfcard .rfb button.p{background:#7a5aa8;border-color:#7a5aa8;color:#fff;font-weight:700} #rfcard .rfb button:disabled{opacity:.4;cursor:default}
+@media (max-width:700px){ #rfcard{left:0!important;right:0;bottom:0;top:auto!important;width:auto;border-radius:16px 16px 0 0;padding-bottom:calc(14px + env(safe-area-inset-bottom));max-height:60vh;overflow:auto;z-index:95} }
+#rfundo{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:96;background:var(--ink);color:var(--paper);border-radius:999px;padding:7px 8px 7px 16px;display:flex;gap:10px;align-items:center;font-size:14px;box-shadow:0 8px 22px -8px rgba(0,0,0,.5);white-space:nowrap} #rfundo button{border:0;border-radius:999px;background:var(--paper);color:var(--ink);padding:4px 12px;cursor:pointer;font:inherit;font-weight:700}
+@media (max-width:700px){ #rfundo{bottom:calc(84px + env(safe-area-inset-bottom))} }
 .hlbar .dot{width:18px;height:18px;border-radius:50%;display:block;margin:auto;border:1px solid rgba(0,0,0,.12)}
 .hlbar textarea{min-height:70px;font-size:15px}
 .dictpop{position:fixed;z-index:71;max-width:300px;background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:6px;box-shadow:0 8px 22px -8px rgba(0,0,0,.4);padding:10px 12px;font-size:14px;line-height:1.55}
@@ -1480,7 +1498,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="0a4ab57ac3";
+const APP_BUILD="26b32ff37b";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1950,7 +1968,7 @@ function selPieces(){
 }
 function hlBar(html,rect,memo){
   let b=$("#hlbar"); if(!b){ b=document.createElement("div"); b.id="hlbar"; document.body.appendChild(b); }
-  b.className="hlbar"+(memo?" memo":""); b.innerHTML=html; b.onmousedown=e=>{ if(!e.target.matches("textarea")) e.preventDefault(); };
+  b.className="hlbar"+(memo?" memo":""); b.innerHTML=html; b.onmousedown=e=>{ if(!e.target.matches("textarea,input")) e.preventDefault(); };
   const w=b.offsetWidth, h=b.offsetHeight; let x=rect.left+rect.width/2-w/2, y=rect.top-h-10; if(y<8) y=rect.bottom+10;
   b.style.left=Math.max(8,Math.min(innerWidth-w-8,x))+"px"; b.style.top=Math.max(8,Math.min(innerHeight-h-8,y))+"px";
 }
@@ -1958,7 +1976,7 @@ const hlClose=()=>{ $("#hlbar")?.remove(); HLSEL=null; };
 // 글쓰기 칸에서 글자를 고르면: 형광펜·밑줄·각주 표시를 글 속에 넣습니다
 let WSEL=null;
 function wTools(){
-  return HLC.map(([k,c])=>`<button title="형광펜" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")
+  return `<button class="rfd rfgo" title="AI로 다듬기 — 고친 안을 비교해 보고 넣습니다" onclick="rfMenu()">✦ 다듬기</button>`+HLC.map(([k,c])=>`<button title="형광펜" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")
     +`<button title="밑줄" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button title="각주 달기 (글 아래에 번호로 붙습니다)" onclick="wMark('fn')">${ICO.pen.replace('class="ico"','class="ico" style="margin:0"')}</button><button title="표시 지우기" onclick="wMark('clear')">${ICO.trash.replace('class="ico"','class="ico" style="margin:0"')}</button><button title="닫기" onclick="hlClose()">✕</button>`;
 }
 function wMark(kind,color){
@@ -2289,7 +2307,7 @@ function go(t,o={}){
   NAV=true; try{ goInner(t,o); }finally{ NAV=false; }
 }
 let TRACK_PICK=false;   // 메뉴(묵상/글쓰기)로 갈래를 정해 들어왔는가
-function goInner(t,o){ TRACK_PICK=!!o.track; if(t!=="write"){ if(AI_MODE!=="research") aiClose(); keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
+function goInner(t,o){ TRACK_PICK=!!o.track; if(RF){ RF=null; $("#rfcard")?.remove(); } if(t!=="write"){ if(AI_MODE!=="research") aiClose(); keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
   if(t==="write"&&!o.edit&&!o.fromNote&&!o.fromWriting&&!o.new){   // 쓰기로 들어오면 오늘 쓴 글이 있을 때 그 글을 이어서 (묵상 먼저). 새로 쓰려면 「새 글」
     const tr=o.track||track, ws=live().filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
   { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew&&ew.trashed){ t="drawer"; o={sub:"trash"}; setTimeout(()=>toast("휴지통에 있는 글입니다. 「되살리기」를 누른 뒤 열 수 있습니다"),100); } }
@@ -3248,8 +3266,10 @@ function paintHeads(){
   // 소제목 줄 안의 영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보이므로 그 부분만 원래 글자(보이지 않는 자리)로 둡니다
   const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):`<span>${esc(l)}</span>`;
-  const errs=spellLines(t.value);
-  m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[]; if(!E.length) return plain(l,head);
+  const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null; let off=0;   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
+  m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[], st=off; off+=l.length+1;
+    if(rf&&rf.s<st+l.length+1&&rf.e>st){ const a=Math.max(0,rf.s-st), z=Math.min(l.length,rf.e-st); return plain(l.slice(0,a),head)+`<i class="rf">${esc(l.slice(a,z))}</i>`+plain(l.slice(z),head); }
+    if(!E.length) return plain(l,head);
     let out="", last=0; E.forEach(x=>{ out+=plain(l.slice(last,x.s),head)+`<i class="sp ${x.src}" data-l="${i}" data-s="${x.s}" data-e="${x.e}" title="${esc(x.to)}${x.why?" — "+esc(x.why):""}">${esc(l.slice(x.s,x.e))}</i>`; last=x.e; }); return out+plain(l.slice(last),head); }).join("\n");
   const n=errs.reduce((a,x)=>a+x.length,0), st=$("#spellstate"); if(st&&!SPELL_AI_BUSY) st.textContent=n?`밑줄 ${n}`:"";
 }
@@ -4545,19 +4565,43 @@ let TW_RAF=0; function typeCenter(){ if(!TYPEW||TW_RAF) return; TW_RAF=requestAn
   const y=ta.getBoundingClientRect().top+scrollY+caretY(ta); const want=y-innerHeight*0.42; if(Math.abs(want-scrollY)>4) scrollTo({top:Math.max(0,want),behavior:"auto"}); }); }
 ["input","keyup","click"].forEach(ev=>document.addEventListener(ev,e=>{ if(TYPEW&&e.target?.id==="wbody") typeCenter(); }));
 // ───────── AI 글쓰기 도우미 (펜시브 「에이전트」처럼) ─────────
-// 오른쪽 창에서 지금 글을 함께 보며 묻고 답함. 서버 coWrite_(클로드 우선). 넣을 문장은 카드로 — 사람이 「넣기」를 눌러야 들어감(⌘Z 되돌리기).
-// 대화는 글마다 이 기기에만(localStorage seojae.ai.<글 번호>), 기록 파일에는 넣지 않음. 설교·시는 이어 쓰기 없이 질문·구조·표현 제안까지.
-let AI_MSGS=[], AI_KEY="", AI_BUSY=false;
+// 오른쪽 창에서 지금 글을 함께 보며 묻고 답함. 서버 coWrite_(클로드 우선). 고치는 것은 늘 카드로 — 사람이 누르는 것만 글에 들어감(⌘Z 되돌리기).
+// 모드: 「질문」 묻고 답하기(넣을 문장은 「<<<넣기」 카드) · 「제안」 고칠 곳 목록 → 하나씩 비교해 보고 ✓ 적용 (mode:"suggest"). 펜시브의 「기본(AI가 바로 고침)」은 두지 않음.
+// 맥락 칩: AI가 무엇을 읽는지 입력창 위에 보임(이 글·고른 곳·본문, ＋원고 자료). 갈래마다 선: 묵상은 질문만(넣기 카드 없음), 묵상·설교초안·시의 고치기는 비문만.
+// 대화는 글마다 이 기기에만(기기의 큰 저장소 IndexedDB "aiChats", 키 seojae.ai.<글 번호>), 기록 파일에는 넣지 않음.
+let AI_MSGS=[], AI_KEY="", AI_BUSY=false, AI_REFS=false;
 const aiKeyNow=()=>"seojae.ai."+(editId||"new");
-function aiLoad(){ AI_KEY=aiKeyNow(); try{ AI_MSGS=JSON.parse(localStorage.getItem(AI_KEY)||"[]"); }catch(_){ AI_MSGS=[]; } }
-function aiStore(){ try{ localStorage.setItem(AI_KEY,JSON.stringify(AI_MSGS.slice(-30))); }catch(_){} }
+// 대화 보관: 예전에는 localStorage(아이폰은 기기 사본과 같은 5MB 칸)에 쌓였음 → 처음 한 번 IndexedDB로 옮기고 지움. 대화는 80개(최근 쓴 순)까지
+let AI_DB=null, AI_DB_T=0;
+async function aiDbBoot(){ try{ await idb(); }catch(_){ return; }   // 큰 저장소를 못 쓰는 기기는 예전처럼 localStorage
+  let db=await idbGet("aiChats"); if(!db||typeof db!=="object") db={}; const moved=[];
+  try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(!k?.startsWith("seojae.ai.")) continue; let v=[]; try{ v=JSON.parse(localStorage.getItem(k)||"[]"); }catch(_){}
+    if(Array.isArray(v)&&!((db[k]?.m||[]).length>=v.length)) db[k]={m:v,at:Date.now()}; moved.push(k); } }catch(_){}
+  AI_DB=db; if(moved.length){ await idbSet("aiChats",db); const back=await idbGet("aiChats"); if(back&&moved.every(k=>back[k])) moved.forEach(k=>{ try{ localStorage.removeItem(k); }catch(_){} }); }   // 옮긴 것이 확인된 뒤에만 지움
+  if($("#aipanel")){ AI_MODE==="research"?rsLoad():aiLoad(); aiDraw(); } }
+setTimeout(aiDbBoot,0);
+function chatGet(k){ if(AI_DB) return (AI_DB[k]?.m||[]).slice(); try{ return JSON.parse(localStorage.getItem(k)||"[]"); }catch(_){ return []; } }
+function chatPut(k,msgs){ msgs=msgs.slice(-30);
+  if(!AI_DB){ try{ localStorage.setItem(k,JSON.stringify(msgs)); }catch(_){} return; }
+  AI_DB[k]={m:msgs,at:Date.now()}; const ks=Object.keys(AI_DB); if(ks.length>80) ks.sort((a,b)=>(AI_DB[a].at||0)-(AI_DB[b].at||0)).slice(0,ks.length-80).forEach(x=>delete AI_DB[x]);
+  clearTimeout(AI_DB_T); AI_DB_T=setTimeout(()=>idbSet("aiChats",AI_DB),300); }
+function aiLoad(){ AI_KEY=aiKeyNow(); AI_MSGS=chatGet(AI_KEY); }
+function aiStore(){ chatPut(AI_KEY,AI_MSGS); }
 function aiGenre(){ const w=editId&&S.writings.find(x=>x.id===editId), m=w?wMs(w):null, g=G(m), type=$("#wtype")?.value||w?.type||"";
-  const sermon=/설교/.test(type)||m?.genre==="sermon", poem=m?.genre==="poem";
-  return {w,m,g,name:m?g.n:(type||"글"),item:m?g.item:"",focus:m?g.focus:(sermon?GENRES.sermon.focus:""),noContinue:sermon||poem,sermon,poem,kind:m?.genre||(sermon?"sermon":"free")}; }
+  const sermon=/설교/.test(type)||m?.genre==="sermon", poem=m?.genre==="poem", meditation=type==="묵상"&&!m;
+  return {w,m,g,name:m?g.n:(type||"글"),item:m?g.item:"",focus:m?g.focus:(sermon?GENRES.sermon.focus:""),noContinue:sermon||poem||meditation,sermon,poem,meditation,kind:m?.genre||(sermon?"sermon":"free")}; }
+const aiAsk=()=>{ if(aiGenre().meditation) return "ask"; try{ return localStorage.getItem("seojae.aiAsk")==="suggest"?"suggest":"ask"; }catch(_){ return "ask"; } };
+function aiSetAsk(v){ try{ localStorage.setItem("seojae.aiAsk",v); }catch(_){} aiDraw(); $("#aiin")?.focus(); }
 function aiQuick(sel){ const k=aiGenre(); const q=[];
+  if(aiAsk()==="suggest"){ const only=!rfDirs().free;
+    q.push(["비문","주어·서술어 호응이 어긋나거나 조사가 틀린 문장을 찾아 고쳐 주세요"]); if(only) return q;
+    q.push(["어색한 곳","어색하거나 매끄럽지 않은 문장을 찾아 고쳐 주세요"],["군더더기","뜻을 흐리지 않고 줄일 수 있는 군말을 찾아 줄여 주세요"],["되풀이","같은 낱말·표현이 되풀이되는 곳을 찾아 고쳐 주세요"]);
+    if(rfDirs().dirs.includes("ear")) q.push(["귀 → 눈","설교 말투(여러분·되풀이·구어체)를 책에서 읽는 문장으로 바꿀 곳을 찾아 고쳐 주세요 — 내용은 그대로"]);
+    return q; }
+  if(k.meditation) return [["관찰 질문","이 본문을 처음 읽는 사람처럼 관찰 질문 다섯 개만 주세요"],["본문 배경","이 본문의 역사·문화 배경 가운데 확실한 것만 짧게, 출처와 함께 알려 주세요"],["적용 점검","내 묵상의 적용이 본문에서 나오는지 질문으로 짚어 주세요"],["막혔어요","묵상이 막혔습니다. 다시 본문으로 돌아가게 하는 질문 세 개만 해 주세요"]];
   if(sel){ q.push(["고른 곳 다듬기","고른 곳을 더 낫게 다듬을 방법을 두세 가지 제안해 주세요"],["더 쉽게","고른 곳을 처음 듣는 사람도 바로 알아듣게 쉽게 고쳐 주세요"],["더 짧게","고른 곳을 뜻은 그대로 두고 더 짧게 줄여 주세요"]); }
   q.push(["막혔어요","지금 글에서 막혔습니다. 다음으로 생각을 이어 갈 수 있게 질문 세 개만 해 주세요"],["흐름 점검","지금 글의 흐름에서 끊기거나 건너뛰는 곳을 짚어 주세요"],["제목 후보","이 글에 어울리는 제목 후보 다섯 개를 주세요"],["한 줄 요약","이 글의 핵심을 한 문장으로 말해 주세요"]);
-  if(k.sermon) q.push(["적용 구체화","적용이 더 구체적이 되려면 무엇을 바꾸면 좋을지 제안해 주세요"],["예화 방향","이 본문에 어울릴 예화의 방향을 세 가지 제안해 주세요 (지어낸 이야기를 사실처럼 쓰지 말 것)"],["본문 해석 점검","해석이 본문에서 나오는지, 지나친 데는 없는지 짚어 주세요"]);
+  if(k.sermon) q.push(["적용 구체화","적용이 더 구체적이 되려면 무엇을 바꾸면 좋을지 질문으로 짚어 주세요"],["예화 찾기","이 설교에 쓸 만한 예화를 지어내지 말고, 원고 자료에 있는 것 가운데서만 찾아 주세요. 없으면 어떤 경험을 떠올려 보면 좋을지 질문만 해 주세요"],["본문 해석 점검","해석이 본문에서 나오는지, 지나친 데는 없는지 짚어 주세요"],["대지 점검","대지가 중심 메시지 하나로 모이는지 짚어 주세요"]);
   else if(k.kind==="essay") q.push(["장면 살리기","설명 대신 장면으로 보여 줄 수 있는 곳을 짚어 주세요"],["여운","마지막 문장의 여운을 살릴 방법을 제안해 주세요"]);
   else if(k.kind==="novel") q.push(["다음 장면","다음 장면에서 갈등을 키울 방향을 세 가지 주세요"],["인물 일관성","인물의 말과 행동이 어긋나는 곳을 짚어 주세요"]);
   else if(k.poem) q.push(["이미지","살아 있지 않은 이미지와 상투적인 표현을 짚어 주세요"],["행갈이","행갈이와 리듬을 살펴봐 주세요"]);
@@ -4572,41 +4616,131 @@ const paintNavAi=()=>$("#nav .navai")?.classList.toggle("on",AI_MODE==="research
 function aiSelNow(){ const b=$("#wbody"); if(!b) return null; const s=b.selectionStart, e=b.selectionEnd; return e>s?{s,e,t:b.value.slice(s,e)}:null; }
 function aiFmt(t){ const parts=[]; let i=0; String(t||"").replace(/<<<넣기\s*\n?([\s\S]*?)\n?>>>/g,(m,body,off)=>{ parts.push({k:"t",v:t.slice(i,off)}); parts.push({k:"s",v:body.trim()}); i=off+m.length; return m; }); parts.push({k:"t",v:String(t||"").slice(i)}); return parts; }
 function aiText(t){ return esc(t.trim()).replace(/\*\*([^*\n]+)\*\*/g,"<b>$1</b>").replace(/(^|\n)- (.+)/g,"$1• $2").replace(/\n/g,"<br>"); }
-function aiDraw(){ const el=$("#aipanel"); if(!el) return; if(AI_MODE==="research") return rsDraw(); const sel=aiSelNow(), k=aiGenre(), cr=CONF.claude, keyOK=!!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini);
-  el.innerHTML=`<div class="aih"><span style="color:#7a5aa8;font-size:17px">✦</span><b>글쓰기 도우미</b><span class="muted" style="font-size:12px">${esc(k.name)}</span><span class="spacer"></span><button onclick="rsOpen()" title="웹에서 자료를 찾아 원고 자료 모음에 담는 조사 도우미">조사 ↗</button>${AI_MSGS.length?`<button onclick="aiReset()" title="대화를 비웁니다">새 대화</button>`:""}<button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div>
-    <div class="aim" id="aimsgs">${AI_MSGS.length?AI_MSGS.map((m,i)=>m.role==="me"?`<div class="msg me">${aiText(m.text)}</div>`:m.role==="err"?`<div class="msg err">${esc(m.text)}</div>`
-      :`<div class="msg ai">${aiFmt(m.text).map((p,j)=>p.k==="t"?(p.v.trim()?aiText(p.v):""):`<div class="sug">${esc(p.v)}<div class="row"><button class="p" onclick="aiPut(${i},${j},'ins')">커서 자리에 넣기</button>${m.sel?`<button onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""}<button onclick="aiPut(${i},${j},'copy')">복사</button></div></div>`).join("")}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`).join("")
-      :`<div class="msg ai">지금 쓰는 글을 함께 보고 있어요. 막힌 곳, 다듬고 싶은 문장, 제목, 흐름… 무엇이든 물어보세요.<br><span class="muted" style="font-size:12.5px">글은 바꾸지 않고 제안만 합니다. 넣고 싶은 문장은 「넣기」를 누르면 들어가고 ⌘Z로 되돌릴 수 있어요.${k.noContinue?` ${esc(k.name)}은 대신 이어 쓰지 않고 질문·구조·표현을 함께 봅니다.`:""}</span></div>`}
+const aiBodyText=b=>stripMemo(b.value).split("\n").filter(l=>!SLIDE_RE.test(l)).join("\n");
+const aiRefsText=m=>(m?.research||[]).slice(0,12).map(r=>`- ${r.t||"자료"}: ${String(r.body||"").slice(0,700)}${r.src?` (출처: ${r.src})`:""}`).join("\n").slice(0,6000);
+function aiChips(sel,k){ const b=$("#wbody"), n=b?aiBodyText(b).length:0, P=$("#wpassage")?.value||k.w?.passage||"", rn=(k.m?.research||[]).length;
+  return `<div class="aichips" title="AI가 읽는 것"><span>이 글 · ${n.toLocaleString()}자${n>14000?" (길어서 앞뒤만)":""}</span>${sel?`<span>고른 곳 ${sel.t.length.toLocaleString()}자</span>`:`<span>커서 근처</span>`}${P?`<span>본문 ${esc(P)}</span>`:""}${rn?`<button class="${AI_REFS?"on":""}" onclick="AI_REFS=!AI_REFS;aiDraw()" title="이 원고의 자료 모음도 함께 읽게 합니다 (사실·인용은 자료에 있는 것만 씀)">${AI_REFS?"✓":"＋"} 원고 자료 ${rn}</button>`:""}</div>`; }
+function aiSugHtml(m,i){ const pend=(m.items||[]).filter(x=>!x.st).length;
+  return `<div class="msg ai">${m.items.length?`<b>고칠 곳 ${m.items.length}</b> <span class="muted" style="font-size:12px">— 하나씩 비교해 보고 넣으세요</span>`:"고칠 곳을 찾지 못했습니다."}
+    ${m.items.map((it,j)=>`<div class="sug2 ${it.st||""}"><div class="rfdiff">${rfDiffHtml(it.from,it.to)}</div>${it.why?`<small>${esc(it.why)}</small>`:""}<div class="row">${it.st==="done"?`<span class="muted" style="font-size:12px">✓ 넣음</span>`:it.st==="drop"?`<span class="muted" style="font-size:12px">버림</span>`:`<button class="p" onclick="aiSugApply(${i},${j})">✓ 적용</button><button onclick="aiSugDrop(${i},${j})">버리기</button><button onclick="aiSugShow(${i},${j})">글에서 보기</button>`}</div></div>`).join("")}
+    ${pend>1?`<div class="row" style="margin-top:4px"><button class="btn small ghost" onclick="aiSugAll(${i})">남은 ${pend}곳 모두 적용</button></div>`:""}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`; }
+function aiDraw(){ const el=$("#aipanel"); if(!el) return; if(AI_MODE==="research") return rsDraw(); const sel=aiSelNow(), k=aiGenre(), cr=CONF.claude, keyOK=!!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini), ask=aiAsk(), keep=$("#aiin")?.value||"";
+  el.innerHTML=`<div class="aih"><span style="color:#7a5aa8;font-size:17px">✦</span><b>글쓰기 도우미</b><span class="muted" style="font-size:12px">${esc(k.name)}</span>${k.meditation?`<span class="aimode"><span title="묵상은 글쓴이의 기도라 AI가 문장을 지어 주지 않습니다">질문만</span></span>`:`<span class="aimode"><button class="${ask==="ask"?"on":""}" onclick="aiSetAsk('ask')" title="묻고 답하기 — 넣을 문장은 카드로">질문</button><button class="${ask==="suggest"?"on":""}" onclick="aiSetAsk('suggest')" title="고칠 곳을 찾아 하나씩 비교해 보고 적용">제안</button></span>`}<span class="spacer"></span><button onclick="rsOpen()" title="웹에서 자료를 찾아 원고 자료 모음에 담는 조사 도우미">조사 ↗</button>${AI_MSGS.length?`<button onclick="aiReset()" title="대화를 비웁니다">새 대화</button>`:""}<button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div>
+    <div class="aim" id="aimsgs">${AI_MSGS.length?AI_MSGS.map((m,i)=>m.role==="me"?`<div class="msg me">${aiText(m.text)}</div>`:m.role==="err"?`<div class="msg err">${esc(m.text)}</div>`:m.items?aiSugHtml(m,i)
+      :`<div class="msg ai">${aiFmt(m.text).map((p,j)=>p.k==="t"?(p.v.trim()?aiText(p.v):""):`<div class="sug">${esc(p.v)}<div class="row">${k.meditation?"":`<button class="p" onclick="aiPut(${i},${j},'ins')">커서 자리에 넣기</button>${m.sel?`<button onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""}`}<button onclick="aiPut(${i},${j},'copy')">복사</button></div></div>`).join("")}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`).join("")
+      :k.meditation?`<div class="msg ai">묵상은 팀장님이 말씀 앞에서 쓰는 글이라, 저는 문장을 지어 드리지 않고 <b>질문</b>만 합니다. 본문을 다시 보게 하는 관찰 질문, 확실한 배경 사실(출처와 함께), 맞춤법을 도와 드려요.</div>`
+      :ask==="suggest"?`<div class="msg ai"><b>제안 모드</b> — 무엇을 고칠지 말씀하시면(예: 「어색한 문장」) 글에서 고칠 곳을 찾아 「전 → 후」로 보여 드립니다. 하나씩 보고 ✓ 적용을 누른 것만 글에 들어가고 ⌘Z로 되돌릴 수 있어요.${rfDirs().free?"":`<br><span class="muted" style="font-size:12.5px">${esc(k.name)}은 비문(주어·서술어 호응, 조사)만 고칩니다.</span>`}</div>`
+      :`<div class="msg ai">지금 쓰는 글을 함께 보고 있어요. 막힌 곳, 다듬고 싶은 문장, 제목, 흐름… 무엇이든 물어보세요.<br><span class="muted" style="font-size:12.5px">글은 바꾸지 않고 제안만 합니다. 넣고 싶은 문장은 「넣기」를 누르면 들어가고 ⌘Z로 되돌릴 수 있어요. 문장을 고르고 「✦ 다듬기」를 누르면 그 자리에서 고친 안을 비교해 볼 수 있어요.${k.noContinue?` ${esc(k.name)}은 대신 이어 쓰지 않고 질문·구조·표현을 함께 봅니다.`:""}</span></div>`}
       ${AI_BUSY?`<div class="msg ai dots"><i></i><i></i><i></i></div>`:""}</div>
     ${sel?`<div class="ctxsel">고른 곳: 「${esc(sel.t.replace(/\s+/g," ").slice(0,60))}${sel.t.length>60?"…":""}」</div>`:""}
+    ${aiChips(sel,k)}
     <div class="aiq">${aiQuick(sel).map(([n,q])=>`<button onclick="aiSend(${jsArg(q)})">${esc(n)}</button>`).join("")}</div>
-    <div class="aii"><textarea id="aiin" rows="1" placeholder="${keyOK?"물어볼 것 (엔터로 보내기, ⇧엔터 줄바꿈)":"설정에서 AI 열쇠를 먼저 넣어 주세요"}" ${AI_BUSY?"disabled":""}></textarea><button class="btn ink small" onclick="aiSend()" ${AI_BUSY?"disabled":""}>보내기</button></div>
+    <div class="aii"><textarea id="aiin" rows="1" placeholder="${keyOK?(ask==="suggest"?"무엇을 고칠까요? (엔터로 보내기)":"물어볼 것 (엔터로 보내기, ⇧엔터 줄바꿈)"):"설정에서 AI 열쇠를 먼저 넣어 주세요"}" ${AI_BUSY?"disabled":""}></textarea><button class="btn ink small" onclick="aiSend()" ${AI_BUSY?"disabled":""}>보내기</button></div>
     <div class="aif">${keyOK?`클로드가 먼저, 안 되면 제미나이${cr&&cr.left!=null?` · 크레딧 남음 약 $${(+cr.left).toFixed(2)}`:""}`:`<a href="#" onclick="aiClose();goAiKey();return false">AI 열쇠 넣으러 가기 →</a>`}</div>`;
-  const ta=$("#aiin"); if(ta){ ta.onkeydown=e=>{ if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&e.keyCode!==229){ e.preventDefault(); aiSend(); } }; ta.oninput=()=>{ ta.style.height="auto"; ta.style.height=Math.min(160,ta.scrollHeight)+"px"; }; }
+  const ta=$("#aiin"); if(ta){ ta.value=keep; ta.onkeydown=e=>{ if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&e.keyCode!==229){ e.preventDefault(); aiSend(); } }; ta.oninput=()=>{ ta.style.height="auto"; ta.style.height=Math.min(160,ta.scrollHeight)+"px"; }; }
   const box=$("#aimsgs"); if(box) box.scrollTop=box.scrollHeight; }
 function aiReset(){ if(AI_MSGS.length&&!confirm("이 글의 AI 대화를 비울까요?")) return; AI_MSGS=[]; aiStore(); aiDraw(); }
 async function aiSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!q||AI_BUSY) return; const b=$("#wbody"); if(!b) return;
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
-  const sel=aiSelNow(), k=aiGenre(), pos=b.selectionEnd, near=b.value.slice(Math.max(0,pos-600),pos+600);
+  if(ta) ta.value=""; const sel=aiSelNow(), k=aiGenre(), pos=b.selectionEnd, near=b.value.slice(Math.max(0,pos-600),pos+600), ask=aiAsk(), key=AI_KEY;
   AI_MSGS.push({role:"me",text:q}); AI_BUSY=true; aiStore(); aiDraw();
-  const doc={title:$("#wtitle")?.value||"",body:stripMemo(b.value).split("\n").filter(l=>!SLIDE_RE.test(l)).join("\n"),genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue};
-  try{ const r=await gcall("coWrite",{messages:AI_MSGS.filter(m=>m.role!=="err").slice(-12).map(m=>({role:m.role,text:m.text})),doc}); AI_MSGS.push({role:"ai",text:r.text,ai:r.ai,sel:sel||null,pos}); }
-  catch(e){ AI_MSGS.push({role:"err",text:"답을 받지 못했습니다: "+e.message}); }
-  AI_BUSY=false; aiStore(); aiDraw(); }
+  const body=aiBodyText(b), samples=body.split("\n").filter(l=>l.trim().length>40).slice(0,3).join("\n");
+  const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,refs:AI_REFS?aiRefsText(k.m):"",samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
+  const hist=AI_MSGS.filter(m=>m.role!=="err"&&m.text).slice(-12).map(m=>({role:m.role,text:m.text}));
+  let add; try{ if(ask==="suggest"){ const r=await gcall("coWrite",{mode:"suggest",messages:hist,doc}); add={role:"ai",text:`(제안 ${r.items.length}곳)`,items:r.items.map(x=>({...x})),ai:r.ai}; }
+    else { const r=await gcall("coWrite",{messages:hist,doc}); add={role:"ai",text:r.text,ai:r.ai,sel:sel||null,pos}; } }
+  catch(e){ add={role:"err",text:"답을 받지 못했습니다: "+e.message}; }
+  AI_BUSY=false; if(AI_KEY===key){ AI_MSGS.push(add); aiStore(); } else { const L=chatGet(key); L.push(add); chatPut(key,L); }   // 기다리는 사이 다른 글로 옮겼으면 물었던 글의 대화에
+  aiDraw(); }
 function aiPut(i,j,mode){ const m=AI_MSGS[i], p=m&&aiFmt(m.text)[j], b=$("#wbody"); if(!p||!b) return;
   if(mode==="copy") return clip(p.v);
   if(mode==="rep"){ const sl=m.sel; if(!sl||b.value.slice(sl.s,sl.e)!==sl.t) return toast("고른 곳이 그 뒤 바뀌어 바꿀 수 없습니다 — 「커서 자리에 넣기」를 써 주세요"); tInsert(b,p.v,sl.s,sl.e); }
   else { const at=b.selectionEnd??b.value.length, pre=b.value.slice(0,at); tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+p.v+"\n",at,at); }
   toast("넣었습니다 (⌘Z로 되돌리기)"); }
+// 제안 하나 적용: 원문 구절이 글에 딱 한 번 있을 때만 그 자리를 바꿈 (그사이 바뀌었거나 여러 곳이면 넣지 않고 알림)
+function aiSugFind(it){ const b=$("#wbody"); if(!b) return -2; const i=b.value.indexOf(it.from); if(i<0) return -1; return b.value.indexOf(it.from,i+1)>=0?-3:i; }
+function aiSugApply(i,j,quiet){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); if(!it||it.st||!b) return false; const at=aiSugFind(it);
+  if(at===-1){ if(!quiet) toast("글에서 이 구절을 찾지 못했습니다 (그사이 바뀌었을 수 있어요)"); return false; }
+  if(at===-3){ if(!quiet) toast("같은 구절이 여러 곳에 있어 넣지 않았습니다 — 「글에서 보기」로 찾아 직접 고쳐 주세요"); return false; }
+  tInsert(b,it.to,at,at+it.from.length); it.st="done"; aiStore(); if(!quiet){ aiDraw(); toast("넣었습니다 (⌘Z로 되돌리기)"); } return true; }
+function aiSugDrop(i,j){ const it=AI_MSGS[i]?.items?.[j]; if(!it) return; it.st="drop"; aiStore(); aiDraw(); }
+function aiSugAll(i){ const L=AI_MSGS[i]?.items||[]; let n=0, skip=0; L.forEach((it,j)=>{ if(it.st) return; aiSugApply(i,j,true)?n++:skip++; }); aiDraw(); toast(`${n}곳을 넣었습니다${skip?` · ${skip}곳은 글에서 찾지 못해 남겨 둠`:""} (⌘Z로 하나씩 되돌리기)`); }
+function aiSugShow(i,j){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); if(!it||!b) return; const at=b.value.indexOf(it.from); if(at<0) return toast("글에서 이 구절을 찾지 못했습니다");
+  if(READVIEW) toggleRead(); b.focus({preventScroll:true}); b.setSelectionRange(at,at+it.from.length);
+  const lh=parseFloat(getComputedStyle(b).lineHeight)||30, line=b.value.slice(0,at).split("\n").length; scrollTo({top:b.getBoundingClientRect().top+scrollY+line*lh-innerHeight/3,behavior:"smooth"}); }
+// ───────── AI 구간 다듬기 (펜시브처럼) ─────────
+// 글자를 고르고 「✦ 다듬기」(고르기 막대·오른쪽 버튼 메뉴) → 방향 → 서버 coWrite_(mode:"refine") → 고를 곳에 옅은 보라 바탕(거울 층) + 비교 상자(지운 곳 취소선·바뀐 곳 굵은 밑줄)
+// ✓ 적용(⌘Z, 알림의 「되돌리기」) · ✗ 취소(Esc) · ↻ 다시. 기다리는 사이 그 부분을 고치면: 글에서 딱 한 번 나오면 그 자리를 따라가고, 아니면 적용하지 않음. 한 번에 4,000자.
+// 갈래마다: 묵상·설교초안·시는 「비문 고치기」만, 설교집·신앙 에세이 원고에는 「귀 → 눈」(설교 말투 → 책 문장)도.
+const RF_DIRS={polish:["다듬기","뜻은 그대로 두고 더 자연스럽고 매끄럽게"],short:["줄이기","뜻은 그대로, 더 짧고 간결하게"],easy:["쉽게","처음 읽는 사람도 바로 알아듣게 쉬운 말로"],breath:["문장 호흡","너무 긴 문장은 나누고, 짧게 끊긴 문장은 이어 읽는 호흡이 고르게"],fix:["비문 고치기","주어·서술어 호응, 조사, 어색한 문장 구조만 바로잡기 — 표현은 최대한 그대로"],ear:["귀 → 눈","설교 말투(여러분·되풀이·구어체·청중에게 묻는 말)를 책에서 읽는 문장으로 — 내용과 논지는 그대로"]};
+function rfDirs(){ const k=aiGenre(); if(k.meditation||k.poem||(k.sermon&&k.m?.genre!=="sermon")) return {dirs:["fix"],free:false,why:k.meditation?"묵상":k.poem?"시":"설교초안"};
+  const d=["polish","short","easy","breath","fix"]; if(k.m&&(k.m.genre==="sermon"||k.m.genre==="essay")) d.push("ear"); return {dirs:d,free:true}; }
+const wdTok=t=>String(t).match(/\s+|[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9]+|[^\s가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9]/g)||[];
+function rfDiffHtml(a,b){ const A=wdTok(a), B=wdTok(b); if(A.length*B.length>2500000) return `<del>${esc(a)}</del><br><ins>${esc(b)}</ins>`;
+  return arrDiff(A,B).map(x=>x.t==="same"?esc(x.s):x.t==="del"?`<del>${esc(x.s)}</del>`:`<ins>${esc(x.s)}</ins>`).join("").replace(/<\/del><del>/g,"").replace(/<\/ins><ins>/g,"").replace(/\n/g,"<br>"); }
+let RF=null, RF_UNDO=null;   // RF: {s,e,orig,dir,instr,busy,to,why,same,err,stale,wid,n}
+function rfMenu(){ const b=$("#wbody"); if(!b) return; if(!WSEL||WSEL.e<=WSEL.s) WSEL={s:b.selectionStart,e:b.selectionEnd}; if(WSEL.e<=WSEL.s) return toast("다듬을 문장을 먼저 고르세요");
+  const {dirs,free,why}=rfDirs(), r=$("#hlbar")?.getBoundingClientRect()||{left:innerWidth/2,top:140,width:0,height:0,bottom:160};
+  hlBar(`<span class="rfm">✦</span>${dirs.map(d=>`<button class="rfd" title="${esc(RF_DIRS[d][1])}" onclick="rfStart('${d}')">${RF_DIRS[d][0]}</button>`).join("")}${free?`<button class="rfd" title="어떻게 고칠지 직접 말하기" onclick="rfAskBox()">부탁…</button>`:`<small class="rfwhy">${why}은 비문만 고칩니다</small>`}`,r); }
+function rfAskBox(){ const r=$("#hlbar")?.getBoundingClientRect()||{left:innerWidth/2,top:140,width:0,height:0,bottom:160};
+  hlBar(`<span class="rfm">✦</span><input id="rfi" placeholder="어떻게 고칠까요? (예: 더 따뜻하게)" onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();rfStart('custom')}"><button class="rfd" onclick="rfStart('custom')">보내기</button>`,r); setTimeout(()=>$("#rfi")?.focus(),30); }
+async function rfStart(dir,again){ const b=$("#wbody"); if(!b) return; const instr=dir==="custom"?(again?RF?.instr:($("#rfi")?.value||"").trim())||"":"";
+  if(dir==="custom"&&!instr) return toast("어떻게 고칠지 적어 주세요");
+  let s,e; if(again&&RF){ rfCheck(); if(RF.stale) return toast("그사이 이 부분이 바뀌었습니다 — 다시 골라 주세요"); s=RF.s; e=RF.e; } else { const w=WSEL&&WSEL.e>WSEL.s?WSEL:{s:b.selectionStart,e:b.selectionEnd}; s=w.s; e=w.e; }
+  hlClose(); while(s<e&&/\s/.test(b.value[s])) s++; while(e>s&&/\s/.test(b.value[e-1])) e--;
+  const orig=b.value.slice(s,e); if(!orig) return toast("다듬을 문장을 먼저 고르세요"); if(orig.length>4000) return toast("한 번에 4,000자까지 다듬을 수 있습니다 — 조금 나눠서 골라 주세요");
+  if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
+  if(dir!=="custom"&&!rfDirs().dirs.includes(dir)) return toast("이 글에서는 쓸 수 없는 다듬기입니다");
+  const k=aiGenre(), n=(RF?.n||0)+1, body=b.value;
+  RF={s,e,orig,dir,instr,busy:true,wid:editId||"new",n}; paintHeads(); rfDraw();
+  const samples=body.split("\n").filter(l=>l.trim().length>40&&!orig.includes(l)&&!l.includes(orig)).slice(0,3).join("\n");
+  const label=dir==="custom"?"글쓴이의 부탁대로":RF_DIRS[dir][0]+" — "+RF_DIRS[dir][1];
+  try{ const r=await gcall("coWrite",{mode:"refine",text:orig,before:body.slice(Math.max(0,s-800),s),after:body.slice(e,e+800),dir:label,instr,title:$("#wtitle")?.value||"",genre:k.name,samples});
+    if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,to:r.to,why:r.why,same:r.same,ai:r.ai}); }
+  catch(err){ if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,err:err.message}); }
+  rfCheck(); paintHeads(); rfDraw(); }
+// 고칠 곳이 그대로인지: 자리가 밀렸으면 원문을 다시 찾아 따라가고(딱 한 곳일 때만), 아니면 무효
+function rfCheck(){ const b=$("#wbody"); if(!RF) return; if(!b||(editId||"new")!==RF.wid) return rfClose(); if(b.value.slice(RF.s,RF.e)===RF.orig){ RF.stale=false; return; }
+  const i=b.value.indexOf(RF.orig); if(i>=0&&b.value.indexOf(RF.orig,i+1)<0){ RF.s=i; RF.e=i+RF.orig.length; RF.stale=false; } else RF.stale=true; }
+function rfDraw(){ if(!RF) return $("#rfcard")?.remove(); let c=$("#rfcard"); if(!c){ c=document.createElement("div"); c.id="rfcard"; document.body.appendChild(c); c.onmousedown=e=>{ if(!e.target.closest("input,textarea")) e.preventDefault(); }; }
+  const L=RF.dir==="custom"?"부탁: "+RF.instr:RF_DIRS[RF.dir]?.[0]||"다듬기", ready=!RF.busy&&!RF.err&&RF.to!=null&&!RF.same&&!RF.stale;
+  c.innerHTML=`<div class="rfh"><b>✦ ${esc(L)}</b><span class="spacer"></span><button onclick="rfClose()" title="취소 (Esc)">✕</button></div>
+    ${RF.busy?`<div class="muted">고친 안을 받는 중… <span class="dots"><i></i><i></i><i></i></span></div>`
+      :RF.err?`<div class="warn">${esc(RF.err)}</div>`
+      :RF.stale?`<div class="warn">그사이 이 부분이 바뀌어 적용할 수 없습니다. 다시 골라 다듬어 주세요.</div>`
+      :RF.same?`<div class="muted">고칠 곳을 찾지 못했습니다. 지금 문장 그대로 좋습니다.</div>`
+      :`<div class="rfdiff">${rfDiffHtml(RF.orig,RF.to)}</div>${RF.why?`<small>${esc(RF.why)}</small>`:""}`}
+    <div class="rfb"><button class="p" onclick="rfApply()" ${ready?"":"disabled"}>✓ 적용</button><button onclick="rfClose()">✗ 취소</button><button onclick="rfStart('${RF.dir}',true)" ${RF.busy||RF.stale?"disabled":""}>↻ 다시</button>${ready?`<button onclick="clip(RF.to,'고친 안을 복사했습니다')">복사</button>`:""}</div>`;
+  rfPlace(); }
+function rfPlace(){ const c=$("#rfcard"); if(!c) return; if(innerWidth<=700){ c.style.left=c.style.top=""; return; }
+  const b=$("#wbody"), marks=[...document.querySelectorAll("#hmirror i.rf")], br=b?.getBoundingClientRect(); if(!br) return;
+  const last=marks.at(-1)?.getBoundingClientRect(), first=marks[0]?.getBoundingClientRect(), h=c.offsetHeight, w=c.offsetWidth;
+  let top=last?last.bottom+10:innerHeight/2; if(top+h>innerHeight-12) top=first?first.top-h-10:innerHeight-h-12; top=Math.max(12,Math.min(innerHeight-h-12,top));
+  c.style.left=Math.max(12,Math.min(innerWidth-w-12,br.left+8))+"px"; c.style.top=top+"px"; }
+addEventListener("scroll",()=>{ if(RF) rfPlace(); },{passive:true}); addEventListener("resize",()=>{ if(RF) rfPlace(); });
+function rfClose(){ RF=null; $("#rfcard")?.remove(); paintHeads(); }
+function rfApply(){ const b=$("#wbody"); if(!b||!RF||RF.busy||RF.to==null||RF.same) return; rfCheck(); if(!RF) return;
+  if(RF.stale){ rfDraw(); return toast("그사이 이 부분이 바뀌어 적용하지 않았습니다"); }
+  const before=b.value, {s,e,to}=RF; RF=null; $("#rfcard")?.remove(); tInsert(b,to,s,e); paintHeads();
+  RF_UNDO={wid:editId||"new",before,after:b.value}; rfUndoBar(); }
+// 적용 뒤 8초 동안 「되돌리기」 (⌘Z가 안 듣는 기기를 위해 적용 전 글을 이 기기 메모리에 잠시 둠)
+function rfUndoBar(){ let u=$("#rfundo"); if(!u){ u=document.createElement("div"); u.id="rfundo"; document.body.appendChild(u); }
+  u.innerHTML=`<span>다듬은 글을 넣었습니다</span><button onclick="rfUndo()">되돌리기</button>`; clearTimeout(u._t); u._t=setTimeout(()=>{ u.remove(); RF_UNDO=null; },8000); }
+function rfUndo(){ const b=$("#wbody"), U=RF_UNDO; $("#rfundo")?.remove(); RF_UNDO=null; if(!b||!U||(editId||"new")!==U.wid) return;
+  if(b.value!==U.after) return toast("그 뒤에 글이 바뀌어 여기서는 되돌릴 수 없습니다 — ⌘Z를 써 주세요");
+  b.focus(); let ok=false; try{ ok=document.execCommand("undo"); }catch(_){} if(!ok||b.value!==U.before){ b.value=U.before; }
+  grow(); countW(); draftInput(); paintHeads(); toast("되돌렸습니다"); }
+document.addEventListener("input",e=>{ if(RF&&e.target?.id==="wbody"){ const was=RF.stale; rfCheck(); paintHeads(); if(RF&&RF.stale!==was) rfDraw(); else rfPlace(); } });   // 거울 층 바탕도 따라가게
+document.addEventListener("keydown",e=>{ if(RF&&e.key==="Escape"){ e.preventDefault(); e.stopPropagation(); rfClose(); } },true);
 // ───────── AI 조사 도우미 ─────────
 // 위 메뉴 「글쓰기」 옆 ✦ AI → 오른쪽 창(휴대폰은 아래)에서 대화하며 자료를 찾음. 서버 coWrite_(mode:"research") — 웹 검색 후 출처와 함께 답함.
-// 어느 화면에서나 열리고, 다른 화면으로 가도 그대로. 대화는 원고마다 이 기기에만(seojae.ai.r.<원고 번호>), 기록 파일에는 넣지 않음.
+// 어느 화면에서나 열리고, 다른 화면으로 가도 그대로. 대화는 원고마다 이 기기에만(기기 큰 저장소 aiChats, 키 seojae.ai.r.<원고 번호>), 기록 파일에는 넣지 않음.
 // 답은 「자료 모음에 담기」(원고 m.research — 원고가 없으면 끄적이기)나 「커서 자리에 넣기」를 눌러야 들어감. 저절로 글을 고치지 않음.
 let RS_MSGS=[], RS_KEY="";
 const rsMs=()=>{ const w=tab==="write"&&editId&&S.writings.find(x=>x.id===editId); return (w&&wMs(w))||liveMs().find(m=>m.id===ROOM_MS&&!m.rule)||null; };
 const rsKeyNow=()=>"seojae.ai.r."+(rsMs()?.id||"all");
-function rsLoad(){ RS_KEY=rsKeyNow(); try{ RS_MSGS=JSON.parse(localStorage.getItem(RS_KEY)||"[]"); }catch(_){ RS_MSGS=[]; } }
-function rsStore(){ try{ localStorage.setItem(RS_KEY,JSON.stringify(RS_MSGS.slice(-30))); }catch(_){} }
+function rsLoad(){ RS_KEY=rsKeyNow(); RS_MSGS=chatGet(RS_KEY); }
+function rsStore(){ chatPut(RS_KEY,RS_MSGS); }
 function rsOpen(prefill){ AI_MODE="research"; let el=$("#aipanel"); if(!el){ el=document.createElement("div"); el.id="aipanel"; document.body.appendChild(el); }
   document.body.classList.add("aiopen"); rsDraw(); paintNavAi(); const t=$("#aiin"); if(t){ if(prefill) t.value=prefill; if(matchMedia("(pointer:fine)").matches) t.focus(); } }
 function rsToggle(){ if($("#aipanel")&&AI_MODE==="research") return aiClose(); rsOpen(); }
@@ -4637,7 +4771,7 @@ async function rsSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
   let add; try{ const r=await gcall("coWrite",{mode:"research",messages:RS_MSGS.filter(x=>x.role!=="err").slice(-10).map(x=>({role:x.role,text:x.text})),ctx}); add={role:"ai",text:r.text,ai:r.ai,src:r.sources||[],q}; }
   catch(e){ add={role:"err",text:"답을 받지 못했습니다: "+e.message}; }
   AI_BUSY=false; if(RS_KEY===key){ RS_MSGS.push(add); rsStore(); }
-  else { try{ const L=JSON.parse(localStorage.getItem(key)||"[]"); L.push(add); localStorage.setItem(key,JSON.stringify(L.slice(-30))); }catch(_){} }   // 기다리는 사이 원고를 바꿨으면 물었던 원고 대화에
+  else { const L=chatGet(key); L.push(add); chatPut(key,L); }   // 기다리는 사이 원고를 바꿨으면 물었던 원고 대화에
   if($("#aipanel")&&AI_MODE==="research") rsDraw(); }
 const rsBody=x=>String(x.text||"").replace(/\*\*([^*\n]+)\*\*/g,"$1").trim();
 const rsSrcLine=x=>(x.src||[]).map(u=>`${u.title} ${u.url}`).join("\n");
@@ -4719,6 +4853,7 @@ function ctxEditor(){ const b=$("#wbody"); const s=b.selectionStart, e=b.selecti
   const lineStart=b.value.lastIndexOf("\n",s-1)+1, putLine=t=>{ const pre=b.value.slice(0,lineStart); tInsert(b,(b.value.slice(lineStart,s).trim()?"\n":"")+t,s,s); };
   return [has?`「${b.value.slice(s,e).replace(/\s+/g," ").slice(0,24)}${e-s>24?"…":""}」`:"",[
     sp?{t:`「${sp.from}」 → 「${sp.to}」`,ic:"✓",fn:()=>spellFix(li,sp.s,sp.e)}:null,sp?"-":null,
+    has?{t:"AI로 다듬기",ic:"✦",sub:rfDirs().dirs.map(d=>({t:RF_DIRS[d][0],fn:()=>{ WSEL={s,e}; rfStart(d); }}))}:null,
     has?{t:"형광펜",ic:"🖍",sub:HLC.map(([k,c])=>({t:{y:"노랑",g:"초록",p:"분홍",b:"파랑"}[k]||k,ic:`<span class="dot" style="background:${c}"></span>`,fn:()=>{ WSEL={s,e}; wMark('hl',k); }}))}:null,
     has?{t:"밑줄",ic:"U",fn:()=>{ WSEL={s,e}; wMark('ul'); }}:null,
     has?{t:"각주 달기",ic:"¹",fn:()=>{ WSEL={s,e}; wMark('fn'); }}:null,
