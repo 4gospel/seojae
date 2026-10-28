@@ -610,11 +610,17 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .mplayer .mp-ccm .ci{display:flex;gap:6px;align-items:flex-start;padding:4px 2px;border-top:1px dashed var(--edge)} .mplayer .mp-ccm .ci div{display:grid;min-width:0;flex:1}
 .mplayer .mp-ccm .ci b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .mplayer .mp-ccm .ci.on b{color:var(--sepia)} .mplayer .mp-note{font-size:11px}
 /* 음악 창 「작게」: 목록·제목·안내를 접고 영상만 200×200 (유튜브 규칙상 이보다 작게 하거나 가릴 수 없음) + 위에 가는 줄(끌기·▴·✕) */
+.mplayer[data-size="l"]{width:356px} .mplayer[data-size="l"] .mp-vid,.mplayer[data-size="l"] .mp-vid iframe{width:330px!important;height:330px!important}
+.mplayer[data-lock="1"] .spl-t{cursor:default} .mplayer .spl-t button.on{color:var(--sepia)}
+.mplayer .mp-menu{position:absolute;right:8px;top:34px;z-index:2;background:var(--paper);border:1px solid var(--edge);border-radius:10px;box-shadow:0 10px 24px -10px rgba(0,0,0,.4);padding:8px 10px;display:grid;gap:6px;font-size:12.5px;min-width:190px}
+.mplayer .mp-menu[hidden]{display:none} .mplayer .mp-menu .r{display:flex;gap:4px;align-items:center;flex-wrap:wrap} .mplayer .mp-menu .r>span{color:var(--faint);min-width:30px}
+.mplayer .mp-menu button{border:1px solid var(--edge);border-radius:999px;padding:2px 9px;font-size:12.5px} .mplayer .mp-menu button.on{background:var(--ink);color:var(--paper)}
+.mplayer .ymb{font-size:10.5px;border:1px solid currentColor;border-radius:4px;padding:0 3px;margin-right:4px;color:#c00}
 .mplayer.min{width:auto;padding:4px 4px 4px;gap:2px;border-radius:12px}
 .mplayer.min .spl-t{gap:2px;min-height:22px} .mplayer.min .spl-t div,.mplayer.min .mp-ccm,.mplayer.min .mp-note{display:none} .mplayer.min .spl-ic{font-size:13px;padding-left:4px}
 .mplayer.min .spl-t button{font-size:13px;padding:0 6px} .mplayer.min [data-min]{transform:rotate(180deg)}
 .mplayer.min .mp-vid,.mplayer.min .mp-vid iframe{width:200px!important;height:200px!important}
-@media (max-width:700px){ .mplayer{left:12px;right:auto;width:250px} .mplayer.min{width:auto} }
+@media (max-width:700px){ .mplayer{left:12px;right:auto;width:250px} .mplayer.min{width:auto} .mplayer[data-size="l"]{width:calc(100vw - 24px)} .mplayer[data-size="l"] .mp-vid,.mplayer[data-size="l"] .mp-vid iframe{width:min(330px,calc(100vw - 50px))!important;height:min(330px,calc(100vw - 50px))!important} }   /* 휴대폰 「크게」는 화면 폭에 맞춤 */
 .kbt{border-collapse:collapse;font-size:14.5px} .kbt td{padding:5px 8px;border-bottom:1px dashed var(--edge);vertical-align:top} .kbt td:first-child{white-space:nowrap} kbd{font:600 12.5px/1.6 -apple-system,sans-serif;background:var(--paper-2,#efe7da);border:1px solid var(--edge);border-bottom-width:2px;border-radius:5px;padding:1px 7px;color:var(--ink)}
 /* ───── 글방 = 작업실 (펜시브식) ───── */
 .studio{display:grid;grid-template-columns:236px minmax(0,1fr);gap:22px;align-items:start}
@@ -1465,7 +1471,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="38e1ce37a6";
+const APP_BUILD="eb15b9e2a0";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1678,7 +1684,7 @@ function suListen(){ if(!SU?.audio) return; let el=$("#suplayer"); const a0=el?.
   try{ const p=JSON.parse(localStorage.getItem("seojae.suAudio")||"null"); if(p?.src===src&&p.t>5) a.addEventListener("loadedmetadata",()=>{ if(p.t<a.duration-5) a.currentTime=p.t; },{once:true}); }catch(_){}
   let lastSave=0; a.ontimeupdate=()=>{ if(Date.now()-lastSave<4000) return; lastSave=Date.now(); try{ localStorage.setItem("seojae.suAudio",JSON.stringify({src,t:Math.floor(a.currentTime)})); }catch(_){} };
   a.onended=()=>{ try{ localStorage.removeItem("seojae.suAudio"); }catch(_){} el.classList.remove("playing"); };
-  const pp=el.querySelector("[data-pp]"); a.onplay=()=>{ el.classList.add("playing"); pp.textContent="❚❚"; }; a.onpause=()=>{ el.classList.remove("playing"); pp.textContent="▶"; };
+  const pp=el.querySelector("[data-pp]"); a.onplay=()=>{ el.classList.add("playing"); pp.textContent="❚❚"; try{ if(MUSIC.playing) MP?.pauseVideo(); }catch(_){} }; a.onpause=()=>{ el.classList.remove("playing"); pp.textContent="▶"; };   // 말씀 듣기를 켜면 찬송가·CCM은 멈춤
   pp.onclick=()=>{ a.paused?a.play().catch(()=>{}):a.pause(); };
   a.addEventListener("timeupdate",()=>{ if(a.duration) el.style.setProperty("--p",(a.currentTime/a.duration*100).toFixed(1)); });
   a.onerror=()=>toast("듣기 파일을 받지 못했습니다 — 인터넷 연결을 확인해 주세요");
@@ -1694,12 +1700,12 @@ function suListen(){ if(!SU?.audio) return; let el=$("#suplayer"); const a0=el?.
 function suPlace(el,key="seojae.suPos"){ let p=null; try{ p=JSON.parse(localStorage.getItem(key)||"null"); }catch(_){} if(!p){ el.style.left=el.style.top=el.style.right=el.style.bottom=""; return; }
   Object.assign(el.style,{right:"auto",bottom:"auto"}); const r=el.getBoundingClientRect(), x=Math.max(6,Math.min(innerWidth-r.width-6,p.x)), y=Math.max(6,Math.min(innerHeight-r.height-6,p.y)); Object.assign(el.style,{left:x+"px",top:y+"px"}); }   // 크기가 바뀐 즉시 화면 안으로
 function suDrag(el,key="seojae.suPos"){ if(el.dataset.drag) return; el.dataset.drag="1"; let st=null;
-  el.addEventListener("pointerdown",e=>{ if(e.button>0||e.target.closest("button,audio,a,input")) return; if(!el.classList.contains("min")&&!e.target.closest(".spl-t")) return;
+  el.addEventListener("pointerdown",e=>{ if(e.button>0||e.target.closest("button,audio,a,input,.mp-menu")||el.dataset.lock==="1") return; if(!el.classList.contains("min")&&!e.target.closest(".spl-t")) return;
     const r=el.getBoundingClientRect(); st={dx:e.clientX-r.left,dy:e.clientY-r.top,x0:e.clientX,y0:e.clientY,moved:false}; try{ el.setPointerCapture(e.pointerId); }catch(_){} });
   el.addEventListener("pointermove",e=>{ if(!st) return; if(!st.moved&&Math.hypot(e.clientX-st.x0,e.clientY-st.y0)<5) return; st.moved=true; el.classList.add("drag");
     const r=el.getBoundingClientRect(), x=Math.max(6,Math.min(innerWidth-r.width-6,e.clientX-st.dx)), y=Math.max(6,Math.min(innerHeight-r.height-6,e.clientY-st.dy));
     Object.assign(el.style,{left:x+"px",top:y+"px",right:"auto",bottom:"auto"}); e.preventDefault(); });
-  const end=()=>{ if(!st) return; if(st.moved){ const r=el.getBoundingClientRect(); try{ localStorage.setItem(key,JSON.stringify({x:Math.round(r.left),y:Math.round(r.top)})); }catch(_){} } st=null; el.classList.remove("drag"); };
+  const end=()=>{ if(!st) return; if(st.moved){ const r=el.getBoundingClientRect(); try{ localStorage.setItem(key,JSON.stringify({x:Math.round(r.left),y:Math.round(r.top)})); if(key==="seojae.mpPos") localStorage.setItem("seojae.mpDock",""); }catch(_){} } st=null; el.classList.remove("drag"); };
   el.addEventListener("pointerup",end); el.addEventListener("pointercancel",end);
   addEventListener("resize",()=>{ if(!el.hidden) suPlace(el,key); }); }
 // ───────── 찬송가·CCM 듣기: 서버 musicFind(유튜브 검색 열쇠) → 앱 안 작은 유튜브 창. 열쇠가 없으면 유튜브뮤직 검색을 새 창으로 ─────────
@@ -1717,20 +1723,42 @@ function ytLoad(){ if(window.YT?.Player) return Promise.resolve(); return YT_P||
   const sc=document.createElement("script"); sc.src="https://www.youtube.com/iframe_api"; sc.onerror=()=>{ YT_P=null; no(new Error("유튜브를 불러오지 못했습니다 — 인터넷 연결을 확인해 주세요")); }; document.head.appendChild(sc); })); }
 function mpCard(){ let el=$("#mplayer");
   if(!el){ el=document.createElement("div"); el.id="mplayer"; el.className="suplayer mplayer"; el.hidden=true;
-    el.innerHTML=`<div class="spl-t"><span class="spl-ic">♪</span><div><b id="mp-t">찬송가·CCM</b><small id="mp-s">유튜브</small></div><span class="spacer"></span><button data-ym title="유튜브뮤직에서 이어 듣기 (앱 안 재생은 멈춤)">♫↗</button><button data-min title="작게 / 크게">▾</button><button data-x title="닫기 (멈춤)">✕</button></div>
+    el.innerHTML=`<div class="spl-t"><span class="spl-ic">♪</span><div><b id="mp-t">찬송가·CCM</b><small id="mp-s">유튜브뮤직 음원 우선</small></div><span class="spacer"></span><button data-ym title="유튜브뮤직에서 이어 듣기 (앱 안 재생은 멈춤)">♫↗</button><button data-min title="크기 바꾸기 (작게 → 보통 → 크게)">▾</button><button data-lock title="자리 고정 (끌리지 않게)">📌</button><button data-menu title="크기·자리">⋯</button><button data-x title="닫기 (멈춤)">✕</button></div>
+      <div class="mp-menu" hidden><div class="r"><span>크기</span><button data-sz="s">작게</button><button data-sz="m">보통</button><button data-sz="l">크게</button></div><div class="r"><span>자리</span><button data-dk="tl" title="왼쪽 위">↖</button><button data-dk="tr" title="오른쪽 위">↗</button><button data-dk="bl" title="왼쪽 아래">↙</button><button data-dk="br" title="오른쪽 아래">↘</button><button data-dk="" title="끌어서 둔 곳">자유</button></div><div class="r"><span>고정</span><button data-lk>📌 끌리지 않게</button></div></div>
       <div class="mp-vid" id="mpbox"><span>▶를 누르면 여기서 재생됩니다</span></div><div class="mp-ccm" id="mpccm"></div><small class="mp-note">유튜브 영상 · 위 줄을 잡고 옮길 수 있습니다</small>`;
     document.body.appendChild(el); el.querySelector("[data-x]").onclick=mpClose; suDrag(el,"seojae.mpPos");
     el.querySelector("[data-ym]").onclick=()=>{ const q=MUSIC.q||(hymnNo()?"새찬송가 "+hymnNo()+"장":""); if(!q) return; try{ MP?.pauseVideo(); }catch(_){} window.open("https://music.youtube.com/search?q="+encodeURIComponent(q),"_blank","noopener"); };
-    el.querySelector("[data-min]").onclick=()=>{ el.classList.toggle("min"); try{ localStorage.setItem("seojae.mpMin",el.classList.contains("min")?"1":"0"); }catch(_){} suPlace(el,"seojae.mpPos"); };
-    try{ if(localStorage.getItem("seojae.mpMin")==="1") el.classList.add("min"); }catch(_){} }   // 작게 상태는 이 기기에 기억
-  el.hidden=false; suPlace(el,"seojae.mpPos"); return el; }
+    const cyc={s:"m",m:"l",l:"s"};
+    el.querySelector("[data-min]").onclick=()=>mpSize(cyc[el.dataset.size||"m"]);
+    el.querySelector("[data-lock]").onclick=el.querySelector("[data-lk]").onclick=()=>mpLock(el.dataset.lock!=="1");
+    el.querySelector("[data-menu]").onclick=e=>{ e.stopPropagation(); const m=el.querySelector(".mp-menu"); m.hidden=!m.hidden; };
+    el.querySelectorAll("[data-sz]").forEach(b=>b.onclick=()=>mpSize(b.dataset.sz));
+    el.querySelectorAll("[data-dk]").forEach(b=>b.onclick=()=>mpDockSet(b.dataset.dk));
+    document.addEventListener("pointerdown",e=>{ const m=el.querySelector(".mp-menu"); if(!m.hidden&&!e.target.closest("#mplayer .mp-menu,#mplayer [data-menu]")) m.hidden=true; });
+    addEventListener("resize",()=>{ if(!el.hidden) mpPlace(el); });
+    let sz="m", lk="0"; try{ sz=localStorage.getItem("seojae.mpSize")||(localStorage.getItem("seojae.mpMin")==="1"?"s":"m"); lk=localStorage.getItem("seojae.mpLock")||"0"; }catch(_){}
+    mpSize(sz,true); mpLock(lk==="1",true); }   // 크기·자리·고정은 이 기기에 기억
+  el.hidden=false; mpPlace(el); return el; }
+// 크기: s 작게(영상 200×200만) · m 보통(영상 224×200 + 목록) · l 크게(영상 330×330 + 목록). 유튜브 규칙상 영상은 200×200보다 작게·가리게 하지 않음
+function mpSize(z,quiet){ const el=$("#mplayer"); if(!el) return; z=["s","m","l"].includes(z)?z:"m"; el.dataset.size=z; el.classList.toggle("min",z==="s");
+  try{ MP?.setSize?.(z==="l"?330:z==="s"?200:224,z==="l"?330:200); }catch(_){}
+  el.querySelectorAll("[data-sz]").forEach(b=>b.classList.toggle("on",b.dataset.sz===z)); if(!quiet) try{ localStorage.setItem("seojae.mpSize",z); }catch(_){} mpPlace(el); }
+// 자리: 네 귀퉁이에 붙이거나(창 크기가 바뀌어도 그 귀퉁이), 「자유」면 끌어서 둔 곳(seojae.mpPos)
+const mpDock=()=>{ try{ return localStorage.getItem("seojae.mpDock")||""; }catch(_){ return ""; } };
+function mpDockSet(d){ try{ localStorage.setItem("seojae.mpDock",d||""); }catch(_){} const el=$("#mplayer"); if(!el) return; el.querySelectorAll("[data-dk]").forEach(b=>b.classList.toggle("on",b.dataset.dk===(d||""))); mpPlace(el); }
+function mpPlace(el){ const d=mpDock(); el.querySelectorAll("[data-dk]").forEach(b=>b.classList.toggle("on",b.dataset.dk===d)); if(!d) return suPlace(el,"seojae.mpPos");
+  const m=12, low=innerWidth<=700?78:12; Object.assign(el.style,{right:"auto",bottom:"auto"}); const r=el.getBoundingClientRect();
+  const x=d[1]==="l"?m:innerWidth-r.width-m, y=d[0]==="t"?m:innerHeight-r.height-low; Object.assign(el.style,{left:Math.max(6,x)+"px",top:Math.max(6,y)+"px"}); }
+// 고정: 끌리지 않게(머리 줄을 잡아도 안 움직임)
+function mpLock(on,quiet){ const el=$("#mplayer"); if(!el) return; el.dataset.lock=on?"1":"0"; el.querySelector("[data-lock]")?.classList.toggle("on",on); el.querySelector("[data-lk]")?.classList.toggle("on",on);
+  if(!quiet){ try{ localStorage.setItem("seojae.mpLock",on?"1":"0"); }catch(_){} toast(on?"플레이어 자리를 고정했습니다":"플레이어를 다시 끌어 옮길 수 있습니다"); } }
 function mpClose(){ try{ MP?.stopVideo(); }catch(_){} const el=$("#mplayer"); if(el) el.hidden=true; MUSIC.playing=false; MUSIC.cur=null; MUSIC.slot=""; paintHymnCtl(); paintCcm(); }
-async function mpPlay(id,title,sub,slot){ mpCard(); $("#mp-t").textContent=title||"찬송가"; $("#mp-s").textContent=sub||"유튜브";
+async function mpPlay(id,title,sub,slot,ym){ mpCard(); $("#mp-t").textContent=title||"찬송가"; $("#mp-s").innerHTML=(ym?`<span class="ymb" title="유튜브뮤직 공식 음원">MUSIC</span>`:"")+esc(sub||"유튜브");
   try{ await ytLoad(); }catch(e){ return toast(e.message); }
-  MUSIC.cur=id; MUSIC.slot=slot||""; MUSIC.playing=false; MUSIC.q=slot==="hymn"?`새찬송가 ${hymnNo()}장`:[title,sub].filter(Boolean).join(" ");   // 유튜브뮤직으로 넘길 때 찾을 말
+  MUSIC.cur=id; MUSIC.slot=slot||""; MUSIC.playing=false; MUSIC.q=slot==="hymn"?`새찬송가 ${hymnNo()}장`:[title,sub].filter(Boolean).join(" "); MUSIC.ym=!!ym;   // 유튜브뮤직으로 넘길 때 찾을 말
   if(MP&&MP.loadVideoById){ MP.loadVideoById(id); MP.setVolume(mpVol()); }
-  else { $("#mpbox").innerHTML=`<div id="mpvid"></div>`; MP=new YT.Player("mpvid",{width:224,height:200,videoId:id,playerVars:{autoplay:1,playsinline:1,rel:0,modestbranding:1},
-    events:{onReady:e=>{ try{ e.target.setVolume(mpVol()); e.target.playVideo(); }catch(_){} }, onStateChange:e=>{ MUSIC.playing=e.data===1; if(e.data===0) MUSIC.playing=false; paintHymnCtl(); paintCcm(); }, onError:mpErr}}); }
+  else { $("#mpbox").innerHTML=`<div id="mpvid"></div>`; const z=$("#mplayer")?.dataset.size||"m"; MP=new YT.Player("mpvid",{width:z==="l"?330:z==="s"?200:224,height:z==="l"?330:200,videoId:id,playerVars:{autoplay:1,playsinline:1,rel:0,modestbranding:1},
+    events:{onReady:e=>{ try{ e.target.setVolume(mpVol()); e.target.playVideo(); }catch(_){} }, onStateChange:e=>{ MUSIC.playing=e.data===1; if(e.data===0) MUSIC.playing=false; if(e.data===1){ const sa=$("#suplayer audio"); if(sa&&!sa.paused) sa.pause(); } paintHymnCtl(); paintCcm(); }, onError:mpErr}}); }
   paintHymnCtl(); paintCcm(); }
 async function mpErr(){ const wasHymn=MUSIC.slot==="hymn";
   if(wasHymn&&!MUSIC.retry){ MUSIC.retry=true; try{ const r=await musicCall({hymn:hymnNo(),refresh:true}); if(r.hymn?.id&&r.hymn.id!==MUSIC.cur){ MUSIC.v=r.hymn; return mpPlay(r.hymn.id,`새찬송가 ${hymnNo()}장`,r.hymn.title,"hymn"); } }catch(_){} }
@@ -1739,7 +1767,7 @@ async function hymnToggle(){ const n=hymnNo(); if(!n) return;
   if(MP&&MUSIC.slot==="hymn"&&MUSIC.key===n){ try{ MUSIC.playing?MP.pauseVideo():MP.playVideo(); }catch(_){} mpCard(); return; }
   const b=document.querySelector("[data-hb]"); b?.classList.add("busy");
   try{ if(MUSIC.key!==n||!MUSIC.v){ const r=await musicCall({hymn:n}); MUSIC.key=n; MUSIC.v=r.hymn; MUSIC.ccm=null; MUSIC.retry=false; }
-    await mpPlay(MUSIC.v.id,`새찬송가 ${n}장`,MUSIC.v.title,"hymn"); }
+    await mpPlay(MUSIC.v.id,`새찬송가 ${n}장`,MUSIC.v.title,"hymn",MUSIC.v.ym); }
   catch(e){ toast(e.message||"찬송가를 찾지 못했습니다"); }
   finally{ b?.classList.remove("busy"); } }
 async function ccmOpen(refresh){ const n=hymnNo(); mpCard(); const box=$("#mpccm");
@@ -1751,10 +1779,10 @@ async function ccmOpen(refresh){ const n=hymnNo(); mpCard(); const box=$("#mpccm
   catch(e){ box.innerHTML=`<span class="muted" style="font-size:12.5px">${esc(e.message||"추천을 받지 못했습니다")}</span>`; return; }
   paintCcm(); }
 function paintCcm(){ const box=$("#mpccm"); if(!box||!MUSIC.ccm) return;
-  box.innerHTML=(MUSIC.ccm.length?MUSIC.ccm.map((c,i)=>`<div class="ci ${MUSIC.slot==="ccm:"+i?"on":""}"><button class="hb ${MUSIC.slot==="ccm:"+i&&MUSIC.playing?"on":""}" onclick="ccmPlay(${i})" title="듣기">${MUSIC.slot==="ccm:"+i&&MUSIC.playing?"❚❚":"▶"}</button><div><b title="${esc(c.title)}">${esc(c.song)}</b><small>${esc(c.artist)}${c.why?" · "+esc(c.why):""}</small></div></div>`).join("")
+  box.innerHTML=(MUSIC.ccm.length?MUSIC.ccm.map((c,i)=>`<div class="ci ${MUSIC.slot==="ccm:"+i?"on":""}"><button class="hb ${MUSIC.slot==="ccm:"+i&&MUSIC.playing?"on":""}" onclick="ccmPlay(${i})" title="듣기">${MUSIC.slot==="ccm:"+i&&MUSIC.playing?"❚❚":"▶"}</button><div><b title="${esc(c.title)}">${c.ym?`<span class="ymb" title="유튜브뮤직 공식 음원">MUSIC</span>`:""}${esc(c.song)}</b><small>${esc(c.artist)}${c.why?" · "+esc(c.why):""}</small></div></div>`).join("")
     :`<span class="muted" style="font-size:12.5px">유튜브에서 확인된 곡이 없습니다.</span>`)
     +`<div class="row" style="gap:6px;justify-content:space-between"><small class="muted" style="font-size:11px">AI가 고르고 유튜브에서 찾은 곡만</small><button class="hb" onclick="ccmOpen(true)" title="다른 곡으로 다시 고르기">다시 고르기</button></div>`; }
-function ccmPlay(i){ const c=MUSIC.ccm?.[i]; if(!c) return; if(MP&&MUSIC.slot==="ccm:"+i){ try{ MUSIC.playing?MP.pauseVideo():MP.playVideo(); }catch(_){} return; } mpPlay(c.id,c.song,c.artist,"ccm:"+i); }
+function ccmPlay(i){ const c=MUSIC.ccm?.[i]; if(!c) return; if(MP&&MUSIC.slot==="ccm:"+i){ try{ MUSIC.playing?MP.pauseVideo():MP.playVideo(); }catch(_){} return; } mpPlay(c.id,c.song,c.artist,"ccm:"+i,c.ym); }
 function musicSection(){
   return `<section class="sheet tape ${CONF.yt?"compact":""}">
     <p class="label">찬송가·CCM 듣기</p>
