@@ -652,7 +652,7 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 body.stdragging,body.stdragging *{user-select:none!important;-webkit-user-select:none!important;cursor:grabbing!important} .stnode.dragging{opacity:.4}
 .stnode.dropb{box-shadow:inset 0 2px 0 var(--accent,#8a5a2b)} .stnode.dropa{box-shadow:inset 0 -2px 0 var(--accent,#8a5a2b)} .stnode.dropin{background:color-mix(in srgb,var(--accent,#8a5a2b) 16%,transparent);outline:1px dashed var(--accent,#8a5a2b)}
 .sthd{display:grid;padding-left:calc(14px + var(--d,0)*14px);margin:0 0 4px;border-left:1px solid var(--edge);margin-left:calc(12px + var(--d,0)*14px - 14px)} .sthead{border:0;background:none;text-align:left;font:inherit;font-size:12.5px;color:var(--ink-soft);padding:3px 6px;border-radius:6px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .sthead:hover{background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink)} .sthead.tpl{color:var(--faint);font-style:italic}
-.staddrow{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-left:30px} .staddrow .stadd{flex:none;margin:4px 0 0} .staddrow .stadd.q{font-weight:700}
+.staddrow{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-left:30px} .staddrow .stadd{flex:none;margin:4px 0 0} .staddrow .stadd.minor{opacity:.7} .staddrow .stadd.q{font-weight:700}
 .strules{width:100%;border-collapse:collapse;font-size:14px} .strules th,.strules td{border-bottom:1px solid var(--edge);padding:6px 8px;text-align:left;vertical-align:top} .strl{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14.5px} .stnode.part{color:var(--ink-soft);font-weight:600} .stnode.part .sti{font-size:10px}
 .sttabrow>.sttab:first-child{position:sticky;left:0;z-index:2;background:var(--desk,var(--paper-2));box-shadow:6px 0 8px -6px rgba(0,0,0,.15)}   /* 탭이 넘쳐도 「홈」은 늘 보이게 */
 @media (max-width:700px){ .toolbar .discardbtn{display:none} }   /* 휴대폰: 휴지통은 「다듬기 ▾」 안에만 (간직하기 옆에서 잘못 누르지 않게, 도구 줄이 세 줄이 되지 않게) */
@@ -1569,7 +1569,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="9c56405a4a";
+const APP_BUILD="653033dae5";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4643,7 +4643,7 @@ function stTree(m,cur){ if(!m) return `<p class="muted st-empty">원고가 아�
     out+=`<div class="stnode w ${cur===k?"on":""}" data-k="${w.id}" style="--d:${d}" onclick="stOpen('${k}')" title="${esc(stOf(w))} · ${c.toLocaleString()}자">${grip}<span class="sti">✎</span>${pn?`<span class="stno">${pn}</span>`:""}<span class="stn" ${cur===k?`data-drafttitle data-empty="(제목 없음)"`:""}>${esc(w.title||"(제목 없음)")}</span>${big?`<span class="stbig" title="${c.toLocaleString()}자 — 알맞은 길이(${sx.size[1].toLocaleString()}자)보다 꽤 깁니다. ■ 소제목에서 나눌지 생각해 보세요 (쓰기 ▾ → 커서에서 나누기)">✂</span>`:""}<i class="dot ${ST_CLS[stOf(w)]}"></i></div>`;
     if(cur===k) out+=`<div class="sthd" data-w="${w.id}" style="--d:${d+1}">${stHeadsInner(w)}</div>`; });
   const dr=stDraftOf(m); if(dr) out+=`<div class="stnode w draft ${cur==="draft"?"on":""}" style="--d:1" onclick="stOpen('draft')" title="아직 간직하기 전입니다 — 간직하면 이 원고에 들어갑니다"><span class="sti">✎</span><span class="stn" data-drafttitle data-empty="새 ${esc(g.item)}">${esc(dr.t||"새 "+g.item)}</span><small class="stdr">${cur==="draft"?"쓰는 중":"쓰던 글"}</small></div>`;
-  return out+(m.rule?"":`<div class="staddrow"><button class="stadd" onclick="roomNewPiece('${m.id}')">＋ 새 ${esc(g.item)}</button><button class="stadd sm" onclick="addPart('${m.id}',${sx.main})" title="목차 칸(${esc(g.parts[sx.main-1])}) — 글이 아니라 칸막이">＋ ${esc(g.parts[sx.main-1])}</button><button class="stadd sm q" onclick="stRules('${m.id}')" title="장·절·소제목을 어떻게 나누나">?</button></div>`); }
+  return out+(m.rule?"":`<div class="staddrow">${[1,2].map(lv=>`<button class="stadd sm ${lv===sx.main?"":"minor"}" onclick="addPart('${m.id}',${lv})" title="목차 칸(${esc(g.parts[lv-1])}) — 글이 아니라 칸막이${lv===sx.main?"":" · 길 때만"}">＋ ${esc(g.parts[lv-1])}</button>`).join("")}<button class="stadd" onclick="roomNewPiece('${m.id}')" title="글 하나 — 서랍의 낱장">＋ 새 ${esc(g.item)}</button><button class="stadd sm q" onclick="stRules('${m.id}')" title="장·절·소제목을 어떻게 나누나">?</button></div>`); }
 // 간직 전 새 글도 목차·탭에 제목으로 보이게 (제목을 치면 바로 바뀜). 지금 쓰는 새 글이면 그 칸, 아니면 남겨 둔 쓰던 글(임시 보관)
 function stDraftOf(m){ if(tab==="write"&&!editId&&track==="book"&&SEL_MS===m.id){ const d=bookDraft(); return {t:($("#wtitle")?.value??(d?.ms===m.id?d.title:"")??"").trim()}; }
   const d=bookDraft(); return d&&d.ms===m.id?{t:String(d.title||"").trim()}:null; }
