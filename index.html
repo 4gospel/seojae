@@ -739,6 +739,7 @@ body.stdragging,body.stdragging *{user-select:none!important;-webkit-user-select
 .vrrow{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--edge);border-radius:10px;padding:8px 10px;background:var(--paper)} .vrrow.off{opacity:.5} .vrrow textarea,.vrrow input{width:100%;margin-top:4px;font-size:14px}
 .vrcheck{border-left:3px solid #7a5aa8;padding:6px 10px;background:var(--paper);font-size:14px}
 #aipanel .msg.me .mkrule{display:block;margin:4px 0 0 auto;border:0;background:none;color:var(--faint);font-size:11px;cursor:pointer;padding:0} #aipanel .msg.me .mkrule:hover{color:#6b4a9a;text-decoration:underline}
+.scdiff{border:1px dashed var(--sepia);border-radius:10px;padding:8px 10px;margin:0 0 10px;display:grid;gap:6px;font-size:13px} .scdrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center} .scdrow>small{min-width:120px;color:var(--ink-soft)} .scdrow .btn{white-space:normal;text-align:left;max-width:100%}
 .dcard{margin:6px 0 14px;border:1px solid color-mix(in srgb,var(--book) 35%,var(--edge));border-radius:10px;background:color-mix(in srgb,var(--book) 4%,var(--paper));font:14px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif}
 .dcard>summary{cursor:pointer;padding:8px 12px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;list-style:none} .dcard>summary::-webkit-details-marker{display:none} .dcard>summary b{color:var(--book)}
 .dcard .dcsum{color:var(--ink-soft);min-width:0} .dcard .dcsum.ok{color:var(--ink);font-weight:600} .dcard .dcwarn{color:var(--sepia);font-size:12px}
@@ -1706,7 +1707,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="875d5266ea";
+const APP_BUILD="454dd8c5aa";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4850,7 +4851,9 @@ function stRules(mid){ const m=S.manuscripts.find(x=>x.id===mid)||S.manuscripts.
 let ARCH_GROUP=(()=>{ try{ return localStorage.getItem("seojae.archGroup")!=="0"; }catch(_){ return true; } })();
 function archGroupSet(v){ ARCH_GROUP=v; try{ localStorage.setItem("seojae.archGroup",v?"1":"0"); }catch(_){} renderArchive(); }
 
-function saveScene(wid,k,v){ metaSet(wid,k,v); }
+function saveScene(wid,k,v){ metaSet(wid,k,v); const w=S.writings.find(x=>x.id===wid); if(!w||!isNovelW(w)) return;
+  if(k==="turn"&&String(v).trim()!==String(wMeta(w,"c1")).trim()){ const was=!!wMeta(w,"cok"); metaSet(wid,"c1",v); if(was){ metaSet(wid,"cok",""); toast("장면이 할 일이 바뀌어 확정을 풀었습니다 — 설계 카드에서 다시 「확정」을 눌러 주세요"); } }
+  scTwinPaint(w); }
 function setWStatus(wid,st){ const w=S.writings.find(x=>x.id===wid); if(!w||!WSTATUS.includes(st)||w.status===st) return; w.status=st; w.updated=new Date().toISOString(); save(); render(); toast(`「${w.title||"(제목 없음)"}」 → ${st}`); if(canSync()) syncWriting(w,true); }
 function saveMsGoal(mid,keepOpen){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const g=+$("#msgoal").value, d=$("#msdue").value;
   m.goal=g>0?Math.round(g):null; m.due=/^\d{4}-\d{2}-\d{2}$/.test(d)?d:null; m.updated=new Date().toISOString(); save(); toast("목표·마감을 저장했습니다");
@@ -5154,7 +5157,7 @@ document.addEventListener("toggle",e=>{ if(e.target.matches?.("details.tgrp")&&e
 let SIDE_TAB="memo"; try{ SIDE_TAB=localStorage.getItem("seojae.sidetab")||"memo"; }catch(_){}
 function sideTab(k){ SIDE_TAB=k; try{ localStorage.setItem("seojae.sidetab",k); }catch(_){} document.querySelectorAll(".stabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k)); document.querySelectorAll(".spanel").forEach(p=>p.hidden=p.dataset.k!==k); }
 function sideTabs(w){ const m=wMs(w), g=G(m), cx=w?codexIn(w.body+" "+(w.title||"")):[], rv=w&&(m||w.type==="설교초안");
-  const memo=`${m&&w&&g.scene?`<div class="sceneform"><p class="hint" style="margin:0 0 4px">장면 정보 — 코르크보드 카드에 보입니다</p>${SCENE_F.map(([k,n])=>`<label class="field"><span>${n}</span><input value="${esc(wMeta(w,k))}" onchange="saveScene('${w.id}','${k}',this.value)"></label>`).join("")}</div>`:""}
+  const memo=`${m&&w&&g.scene?sceneFormHtml(w):""}
     ${m&&w?`<label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>`:""}
     ${jotBox()}`;
   const res=m?resSideHtml(m):`<p class="hint">이 글이 원고에 들어 있으면 그 원고의 자료가 여기에 보입니다.</p>`;
@@ -5169,7 +5172,7 @@ function wSideRoom(w){ const m=wMs(w), cx=w?codexIn(w.body+" "+(w.title||"")):[]
   return `<div class="card-index roomside">
     ${rv?`<div class="revside">${revNotesHtml(w,true)}<button class="btn small" onclick="reviewOne('${w.id}')">${ICO.search}${w.review?"다시 검토 받기":"이 글 검토 받기"}</button></div>`:""}
     ${m?`<p class="step" style="margin-top:0"><span class="num">${ICO.closed}</span>원고 곁 칸 <small class="hint" style="display:inline">· ${esc(G(m).n)}</small></p>
-      ${G(m).scene?`<div class="sceneform"><p class="hint" style="margin:0 0 4px">장면 정보 — 코르크보드 카드에 보입니다</p>${SCENE_F.map(([k,n])=>`<label class="field"><span>${n}</span><input value="${esc(wMeta(w,k))}" onchange="saveScene('${w.id}','${k}',this.value)"></label>`).join("")}</div>`:""}
+      ${G(m).scene?sceneFormHtml(w):""}
       <label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>
       ${(m.research||[]).length?`<details class="more" open><summary>원고 자료 ${(m.research||[]).length}</summary>${resSideHtml(m)}</details>`:`<p class="hint">원고 자료는 글방 → 「자료 모음」에서 모아 둡니다.</p>`}`:""}
     ${cx.length?`<details class="more" ${m?"":"open"}><summary>이 글에 나온 인물·주제 ${cx.length}</summary>${cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="cxsidebody">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join("")}</details>`:""}
@@ -5672,7 +5675,34 @@ const CARD_F=[["c1","한 문장","이 글이 말할 것 — 하나만"],["cfn","
 const OWN_F=[["own1","도입 첫 문단"],["own2","1인칭 고백"],["own3","결론 마지막 문단"],["own4","기도문"]];
 // 논문은 연구 질문부터, 소설은 장면이 할 일부터 (2026-10-29 팀장님 승인) — 서버 cardLb_ 와 같은 이름
 const CARD_SETS={paper:[["c1","연구 질문","이 논문(절)이 답하려는 물음 하나"],["cfn","가설·주장","질문에 대한 잠정적 답"],["ctg","연구의 공백","선행 연구가 다루지 않은 것"],["cpath","연구 방법","문헌 분석·설문·주석 연구 등"],["cstory","핵심 근거·자료","주장을 받칠 1차 자료"],["cbudget","분량 예산","예: 이 절 3,000자 · 전체 40쪽"]],
-  novel:[["c1","장면이 할 일","이 장면이 끝나면 무엇이 바뀌나 — 하나만"],["cfn","인물의 목표·갈등","원하는 것 / 막는 것"],["ctg","독자에게 남길 것","정서나 질문"],["cpath","전환점","장면이 꺾이는 순간"],["cstory","시점·장소·때","누구의 눈으로, 어디서, 언제"],["cbudget","분량 예산","예: 4,000자"]]};
+  novel:[["c1","장면이 할 일","이 장면이 끝나면 무엇이 바뀌나 — 하나만"],["goal","인물의 목표","이 장면에서 원하는 것","cfn"],["conf","갈등·장애","막는 것"],["ctg","독자에게 남길 것","정서나 질문"],["cpath","전환점","장면이 꺾이는 순간"],["pov","시점 인물","누구의 눈으로","cstory"],["loc","장소","어디서"],["when","때","언제"],["cbudget","분량 예산","예: 4,000자"]]};
+// 소설: 설계 카드와 곁 칸 장면 정보는 같은 칸(w.meta)을 함께 씀 — 「장면이 할 일」(c1) = 「결과」(turn), 목표·갈등·시점·장소·때는 장면 정보 칸 그대로
+// 예전 카드 칸 cfn(목표·갈등)·cstory(시점·장소·때)는 지우지 않고 남겨 둠 — 새 칸이 비었으면 옮기고, 다르면 「두 곳 내용이 다름」으로 고르게 함
+const isNovelW=w=>cardKindOf(w)?.kind==="novel";
+const scNorm=v=>String(v||"").replace(/[\s·,，\/|]+/g,"");
+const scSplit=(v,n)=>{ const p=String(v||"").split(/\s*(?:\/|·|,|，|\|)\s*/).map(x=>x.trim()).filter(Boolean); if(p.length<=n) return p; return [...p.slice(0,n-1),p.slice(n-1).join(" · ")]; };
+const SC_OLD={cfn:{keys:["goal","conf"],n:"인물의 목표·갈등",sep:" / "},cstory:{keys:["pov","loc","when"],n:"시점·장소·때",sep:" · "}};
+function scDiffs(w){ if(!isNovelW(w)) return []; const out=[], c1=wMeta(w,"c1"), tu=wMeta(w,"turn");
+  if(c1&&tu&&c1.trim()!==tu.trim()) out.push({k:"turn",n:"장면이 할 일 ↔ 결과",old:tu,cur:c1});
+  for(const [ok,o] of Object.entries(SC_OLD)){ const old=wMeta(w,ok); if(!old) continue; const cur=o.keys.map(k=>wMeta(w,k)).filter(Boolean).join(o.sep); if(cur&&scNorm(cur)!==scNorm(old)) out.push({k:ok,n:o.n,old,cur}); }
+  return out; }
+// 한쪽만 적혀 있으면 빈 쪽으로 옮김 (글마다 한 번, 그리기가 끝난 뒤)
+const SC_SYNCED=new Set();
+function scSyncLater(w){ if(!w||!isNovelW(w)||SC_SYNCED.has(w.id)) return ""; SC_SYNCED.add(w.id);
+  setTimeout(()=>{ const x=S.writings.find(y=>y.id===w.id); if(!x) return; let n=0; const c1=wMeta(x,"c1"), tu=wMeta(x,"turn");
+    if(c1&&!tu){ metaSet(x.id,"turn",c1); n++; } else if(tu&&!c1){ metaSet(x.id,"c1",tu); n++; }
+    for(const [ok,o] of Object.entries(SC_OLD)){ const old=wMeta(x,ok); if(old&&o.keys.every(k=>!wMeta(x,k))){ scSplit(old,o.keys.length).forEach((v,i)=>metaSet(x.id,o.keys[i],v)); n++; } }
+    if(n){ save(); scTwinPaint(x); } },0); return ""; }
+// 한쪽에서 고치면 다른 쪽 칸도 같은 값으로 (화면에 둘 다 열려 있을 때)
+function scTwinPaint(w){ if(!w||editId!==w.id) return; document.querySelectorAll(".sceneform [data-sk]").forEach(el=>{ if(el!==document.activeElement) el.value=wMeta(w,el.dataset.sk); }); if($(".dcard")) cardPaint(); paintSceneWarn(w); }
+function paintSceneWarn(w){ const b=$(".sceneform .scwarn"); if(b) b.outerHTML=sceneWarn(w); }
+const sceneWarn=w=>{ const d=scDiffs(w); return `<p class="scwarn hint" ${d.length?"":"hidden"} style="margin:2px 0 6px;color:var(--sepia)">⚠ 설계 카드와 두 곳 내용이 다름 ${d.length}곳 — 설계 카드에서 고르세요</p>`; };
+function sceneFormHtml(w){ const nv=isNovelW(w); return `<div class="sceneform">${scSyncLater(w)}<p class="hint" style="margin:0 0 4px">장면 정보 — 코르크보드 카드에 보입니다${nv?" · 설계 카드와 같은 칸이라 한쪽에서 고치면 같이 바뀝니다":""}</p>${nv?sceneWarn(w):""}${SCENE_F.map(([k,n])=>`<label class="field"><span>${nv&&k==="turn"?"결과 — 무엇이 바뀌나 <small>(= 장면이 할 일)</small>":n}</span><input data-sk="${k}" value="${esc(wMeta(w,k))}" onchange="saveScene('${w.id}','${k}',this.value)"></label>`).join("")}</div>`; }
+function scPick(k,which){ const w=cardW(); if(!w) return; const d=scDiffs(w).find(x=>x.k===k); if(!d) return;
+  if(k==="turn"){ if(which==="old"){ cardSet("c1",d.old); } else metaSet(w.id,"turn",d.cur); }
+  else { const o=SC_OLD[k]; if(which==="old") scSplit(d.old,o.keys.length).concat(["","",""]).slice(0,o.keys.length).forEach((v,i)=>metaSet(w.id,o.keys[i],v)); else metaSet(w.id,k,d.cur); }
+  save(); scTwinPaint(w); toast("한 가지로 맞췄습니다"); }
+const scDiffHtml=w=>{ const d=scDiffs(w); if(!d.length) return ""; return `<div class="scdiff"><b>두 곳 내용이 다름</b> <small class="muted">— 하나를 고르면 그 내용으로 맞춥니다 (아무것도 지우지 않았습니다)</small>${d.map(x=>`<div class="scdrow"><small>${esc(x.n)}</small><button type="button" class="btn small ghost" onclick="scPick('${x.k}','old')" title="${x.k==="turn"?"곁 칸 장면 정보의 결과":"예전 설계 카드에 적은 것"}">${x.k==="turn"?"장면 정보":"예전 카드"}: ${esc(x.old)}</button><button type="button" class="btn small ghost" onclick="scPick('${x.k}','cur')" title="지금 설계 카드 칸">지금 카드: ${esc(x.cur)}</button></div>`).join("")}</div>`; };
 const cardF=w=>CARD_SETS[cardKindOf(w)?.kind]||CARD_F;
 const ownF=w=>{ const k=cardKindOf(w); return k?.sermon?OWN_F:k?.kind==="essay"?OWN_F.slice(0,3):[]; };   // 에세이: 도입 첫 문단·1인칭 고백·마지막 문단 (기도문 없음)
 // 묵상·설교초안에 이미 사람이 쓴 것 → 카드 칸 칩 (누르면 들어감, 원칙 1-3)
@@ -5683,7 +5713,7 @@ function seedChips(w,k){ if(!cardKindOf(w)?.sermon) return ""; const B=[w.body||
   return `<div class="cchips"><small class="muted" style="align-self:center">묵상·초안에서:</small>${val.map(x=>`<button type="button" class="cchip" onclick="cardPick('${k}',${jsArg(x).replace(/"/g,"&quot;")})" title="눌러야 들어갑니다">${esc(x.replace(/\n/g," / ").slice(0,80))}</button>`).join("")}</div>`; }
 let CARD_OPEN=new Set(), CARD_AI=null, CARD_ASKED=new Set();   // CARD_AI: 받은 후보 {id, ones, stories, func, target, path, budget, ask}
 function cardKindOf(w){ const m=w?wMs(w):null, sermon=/설교/.test(w?.type||"")||m?.genre==="sermon", med=(w?.type==="묵상")&&!m, poem=m?.genre==="poem"; return med||poem?null:{sermon,kind:sermon?"sermon":(m?.genre||"free")}; }
-const cardHas=w=>!!w&&(CARD_F.some(([k])=>wMeta(w,k))||!!wMeta(w,"c3"));
+const cardHas=w=>!!w&&(CARD_F.some(([k])=>wMeta(w,k))||!!wMeta(w,"c3")||(isNovelW(w)&&!!wMeta(w,"turn")));
 const cardShown=w=>!!w&&!!cardKindOf(w)&&(cardKindOf(w).sermon||cardHas(w)||CARD_OPEN.has(w.id));
 function cardHtml(w){ if(!w) return /설교/.test(NEW_TYPE||"")?`<p class="hint dcardhint">✎ 몇 자 쓰면 저절로 간직되고, 그때부터 <b>설계 카드</b>(세 줄 · 한 문장 · 네 자리)를 쓸 수 있습니다.</p>`:"";
   if(!cardShown(w)) return ""; const ok=wMeta(w,"cok"), one=wMeta(w,"c1"), sermon=cardKindOf(w).sermon, open=CARD_OPEN.has(w.id)||!one;
@@ -5691,9 +5721,9 @@ function cardHtml(w){ if(!w) return /설교/.test(NEW_TYPE||"")?`<p class="hint 
   return `<details class="dcard" ${open?"open":""} ontoggle="this.open?CARD_OPEN.add('${w.id}'):CARD_OPEN.delete('${w.id}')"><summary><b>설계 카드</b> <span class="dcsum ${ok?"ok":""}">${one?`${ok?"✓ ":""}${esc(one)}`:`아직 정하지 않았습니다 — ${cardF(w)[0][1]}`}</span>${!ok?`<small class="dcwarn">${cardKindOf(w).kind==="paper"?"AI 구조안은":"AI 초안은"} ${cardF(w)[0][1]}을 확정한 뒤에</small>`:""}</summary>
     <div class="dcbody">
       <label class="field dc3"><span>내가 받은 것 세 줄 <small>— 본문을 먼저 읽고. AI는 여기서 출발합니다</small></span><textarea id="c3" rows="3" placeholder="1.&#10;2.&#10;3." onchange="cardSet('c3',this.value)">${esc(wMeta(w,"c3"))}</textarea>${seedChips(w,"c3")}</label>
-      <div class="dcgrid">${cardF(w).map(([k,n,ph])=>`<label class="field ${k==="c1"?"dcone":""}"><span>${n}${k==="cpath"&&!CARD_SETS[cardKindOf(w).kind]?` <small>${sermon?"그리스도로 가는 길":"핵심으로 가는 길"}</small>`:""}</span>${k==="c1"?`<div class="row" style="gap:6px;flex-wrap:nowrap"><input id="card-c1" value="${esc(one)}" placeholder="${esc(ph)}" onchange="cardSet('c1',this.value)" style="flex:1;min-width:0"><button type="button" class="btn small ${ok?"ink":""}" onclick="cardOk()" title="${ok?"확정을 풉니다":"이 한 문장으로 확정 — 그 뒤에만 AI 초안"}">${ok?"✓ 확정됨":"확정"}</button></div>`:`<input id="card-${k}" value="${esc(wMeta(w,k))}" placeholder="${esc(ph)}" onchange="cardSet('${k}',this.value)">`}
-          ${k==="c1"?seedChips(w,"c1"):""}${C&&k==="c1"&&C.ones.length?`<div class="cchips">${C.ones.map(v=>chip("c1",v)).join("")}</div>`:""}${C&&k==="cstory"&&C.stories.length?`<div class="cchips">${C.stories.map(v=>chip("cstory",v)).join("")}</div>`:""}
-          ${C&&{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[k]&&C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[k]]?`<div class="cchips">${chip(k,C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[k]])}</div>`:""}</label>`).join("")}</div>
+      ${scSyncLater(w)}${scDiffHtml(w)}<div class="dcgrid">${cardF(w).map(([k,n,ph,ak=k])=>`<label class="field ${k==="c1"?"dcone":""}"><span>${n}${k==="cpath"&&!CARD_SETS[cardKindOf(w).kind]?` <small>${sermon?"그리스도로 가는 길":"핵심으로 가는 길"}</small>`:""}</span>${k==="c1"?`<div class="row" style="gap:6px;flex-wrap:nowrap"><input id="card-c1" value="${esc(one)}" placeholder="${esc(ph)}" onchange="cardSet('c1',this.value)" style="flex:1;min-width:0"><button type="button" class="btn small ${ok?"ink":""}" onclick="cardOk()" title="${ok?"확정을 풉니다":"이 한 문장으로 확정 — 그 뒤에만 AI 초안"}">${ok?"✓ 확정됨":"확정"}</button></div>`:`<input id="card-${k}" value="${esc(wMeta(w,k))}" placeholder="${esc(ph)}" onchange="cardSet('${k}',this.value)">`}
+          ${k==="c1"?seedChips(w,"c1"):""}${C&&k==="c1"&&C.ones.length?`<div class="cchips">${C.ones.map(v=>chip("c1",v)).join("")}</div>`:""}${C&&ak==="cstory"&&C.stories.length?`<div class="cchips">${C.stories.map(v=>chip("cstory",v)).join("")}</div>`:""}
+          ${C&&{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[ak]&&C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[ak]]?`<div class="cchips">${chip(ak,C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[ak]])}</div>`:""}</label>`).join("")}</div>
       <div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn small aibtn" onclick="cardAI()" id="cardaibtn">✦ AI 카드 초안</button><small class="muted" id="cardaist">${C?.ask?esc(C.ask):C?"후보를 누르면 칸에 들어갑니다. 고치거나 고르는 것은 직접 — 한 문장은 「확정」까지":"세 줄에서 출발해 여섯 칸 후보를 냅니다 (고르는 것은 직접)"}</small></div>
       <div class="dctools">${sermon?`<div><b style="font-size:13.5px">분량 비율</b> <small class="muted">— 도입 10 · 본론 70 · 결론 20%, 결론 최소 1,000자 (원칙 5-9·5-12)</small><div id="ratiobar">${ratioHtml(w.body||"")}</div></div>`:""}
         <div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn small" onclick="vfOpen()" title="연도·인명·숫자·인용·원어·예화를 출처와 대조 (원칙 2·3장)">검증표${vfLeft(w)?` <small class="warn">${vfLeft(w)}</small>`:""}</button><button type="button" class="btn small" onclick="ckOpen()" title="완성 전 점검 질문 10개 — 아니오만 고칩니다 (원칙 8-4)">점검 10문항${ckSum(w)}</button></div></div>
@@ -5701,11 +5731,12 @@ function cardHtml(w){ if(!w) return /설교/.test(NEW_TYPE||"")?`<p class="hint 
     </div></details>`; }
 function cardW(){ return editId&&S.writings.find(x=>x.id===editId); }
 function cardSet(k,v){ const w=cardW(); if(!w) return; const was=wMeta(w,k); metaSet(w.id,k,v);
+  if(isNovelW(w)){ if(k==="c1") metaSet(w.id,"turn",v); if(k==="c1"||SCENE_F.some(([x])=>x===k)){ document.querySelectorAll(`.sceneform [data-sk="${k==="c1"?"turn":k}"]`).forEach(el=>el.value=wMeta(w,k)); paintSceneWarn(w); } }
   if(k==="c1"&&wMeta(w,"cok")&&String(v).trim()!==String(was).trim()){ metaSet(w.id,"cok",""); toast("한 문장이 바뀌어 확정을 풀었습니다 — 다시 「확정」을 눌러 주세요"); cardPaint(); }
   else if(k==="c1") cardPaint(); }
 function cardOk(){ const w=cardW(); if(!w) return; const v=($("#card-c1")?.value||"").trim(); if(!wMeta(w,"cok")&&!v) return toast("한 문장을 먼저 적어 주세요");
   if(v!==wMeta(w,"c1")) metaSet(w.id,"c1",v); metaSet(w.id,"cok",wMeta(w,"cok")?"":new Date().toISOString()); cardPaint(); toast(wMeta(w,"cok")?"한 문장을 확정했습니다 — 이제 AI 구조안·초안을 청할 수 있습니다":"확정을 풀었습니다"); }
-function cardPick(k,v){ const w=cardW(); if(!w) return; const el=$("#card-"+k); if(el) el.value=v; cardSet(k,v); if(k!=="c1") cardPaint(); }
+function cardPick(k,v){ const w=cardW(); if(!w) return; if(isNovelW(w)&&SC_OLD[k]){ const o=SC_OLD[k]; scSplit(v,o.keys.length).concat(["","",""]).slice(0,o.keys.length).forEach((x,i)=>cardSet(o.keys[i],x)); return cardPaint(); } const el=$("#card-"+k); if(el) el.value=v; cardSet(k,v); if(k!=="c1") cardPaint(); }
 // 카드 부분만 다시 그림 (본문 칸은 그대로 — 쓰던 글·커서를 건드리지 않음)
 function cardPaint(){ const old=$(".dcard"), w=cardW(); if(!old||!w) return; const t=document.createElement("div"); t.innerHTML=cardHtml(w); const nw=t.firstElementChild; if(nw) old.replaceWith(nw); paintHeads(); }
 function cardOpen(){ const w=cardW(); if(!w) return toast("몇 자 써서 간직되면 설계 카드를 쓸 수 있습니다"); CARD_OPEN.add(w.id); if($(".dcard")){ $(".dcard").open=true; } else render(); setTimeout(()=>{ $(".dcard")?.scrollIntoView({block:"start",behavior:"smooth"}); $("#c3")?.focus(); },80); }
@@ -5718,7 +5749,7 @@ async function cardAI(){ const w=cardW(); if(!w) return; const k=aiGenre(), thre
     CARD_AI={id:w.id,...r}; CARD_OPEN.add(w.id); cardPaint(); }
   catch(e){ if(b){ b.disabled=false; b.textContent="✦ AI 카드 초안"; } if(st) st.textContent="받지 못했습니다: "+e.message; } }
 // 도우미에 함께 보낼 카드 (확정 여부·아직 직접 쓰지 않은 자리)
-function cardForAI(w){ if(!w||!cardShown(w)) return null; return {ok:!!wMeta(w,"cok"),three:wMeta(w,"c3"),one:wMeta(w,"c1"),func:wMeta(w,"cfn"),target:wMeta(w,"ctg"),path:wMeta(w,"cpath"),story:wMeta(w,"cstory"),budget:wMeta(w,"cbudget"),kind:cardKindOf(w).kind,sermon:cardKindOf(w).sermon,own:ownF(w).filter(([k])=>!wMeta(w,k)).map(([,n])=>n).join(" · ")}; }
+function cardForAI(w){ if(!w||!cardShown(w)) return null; return {ok:!!wMeta(w,"cok"),three:wMeta(w,"c3"),one:wMeta(w,"c1"),func:isNovelW(w)?(["goal","conf"].map(k=>wMeta(w,k)).filter(Boolean).join(" / ")||wMeta(w,"cfn")):wMeta(w,"cfn"),target:wMeta(w,"ctg"),path:wMeta(w,"cpath"),story:isNovelW(w)?(["pov","loc","when"].map(k=>wMeta(w,k)).filter(Boolean).join(" · ")||wMeta(w,"cstory")):wMeta(w,"cstory"),budget:wMeta(w,"cbudget"),kind:cardKindOf(w).kind,sermon:cardKindOf(w).sermon,own:ownF(w).filter(([k])=>!wMeta(w,k)).map(([,n])=>n).join(" · ")}; }
 // (설교 글인지는 화면 칸이 아니라 글로 판단) 네 자리: 본문에서 도입 첫 문단 · 1인칭 고백(〔고백〕·〔직접 쓸 자리: 1인칭 고백〕 줄) · 결론 마지막 문단 · 기도문(■ …기도·축도 아래)을 줄 번호 → 이름으로 (설교 글만)
 function ownZones(text){ const z=new Map(); const cw=editId&&S.writings.find(x=>x.id===editId); if(!text||!(cw?(cardKindOf(cw)?.sermon||cardKindOf(cw)?.kind==="essay"):/설교/.test($("#wtype")?.value||NEW_TYPE||""))) return z; const L=text.split("\n"), isH=l=>/^\s*■/.test(l), blank=l=>!l.trim();
   let sec=""; const secOf=L.map(l=>{ if(isH(l)) sec=l; return sec; }), prayer=i=>/기도|축도/.test(secOf[i]), skip=i=>/본문 낭독|중심 메시지|본문 관찰|더 살펴볼|씨앗|설계/.test(secOf[i]);
