@@ -682,7 +682,7 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 @media (pointer:coarse){ .stgrip{display:inline-block;padding:8px 6px} }
 body.stdragging,body.stdragging *{user-select:none!important;-webkit-user-select:none!important;cursor:grabbing!important} .stnode.dragging{opacity:.4}
 .stnode.dropb{box-shadow:inset 0 2px 0 var(--accent,#8a5a2b)} .stnode.dropa{box-shadow:inset 0 -2px 0 var(--accent,#8a5a2b)} .stnode.dropin{background:color-mix(in srgb,var(--accent,#8a5a2b) 16%,transparent);outline:1px dashed var(--accent,#8a5a2b)}
-.sthd{display:grid;padding-left:calc(14px + var(--d,0)*14px);margin:0 0 4px;border-left:1px solid var(--edge);margin-left:calc(12px + var(--d,0)*14px - 14px)} .sthead{border:0;background:none;text-align:left;font:inherit;font-size:12.5px;color:var(--ink-soft);padding:3px 6px;border-radius:6px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .sthead:hover{background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink)} .sthead.tpl{color:var(--faint);font-style:italic}
+.sthd{display:grid;padding-left:calc(14px + var(--d,0)*14px);margin:0 0 4px;border-left:1px solid var(--edge);margin-left:calc(12px + var(--d,0)*14px - 14px)} .sthead{border:0;background:none;text-align:left;font:inherit;font-size:12.5px;color:var(--ink-soft);padding:3px 6px;border-radius:6px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .sthead:hover{background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink)} .sthead.tpl{color:var(--faint);font-style:italic} .stretpl{border:1px dashed var(--sepia);background:none;color:var(--sepia);border-radius:7px;font:12px -apple-system,sans-serif;padding:3px 8px;margin:4px 6px;cursor:pointer;text-align:left} .stretpl:hover{background:color-mix(in srgb,var(--sepia) 10%,transparent)}
 .staddrow{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-left:30px} .staddrow .stadd{flex:none;margin:4px 0 0} .staddrow .stadd.minor{opacity:.7} .staddrow .stadd.q{font-weight:700}
 .strules{width:100%;border-collapse:collapse;font-size:14px} .strules th,.strules td{border-bottom:1px solid var(--edge);padding:6px 8px;text-align:left;vertical-align:top} .strl{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14.5px} .stnode.part{color:var(--ink-soft);font-weight:600} .stnode.part .sti{font-size:10px}
 .sttabrow>.sttab:first-child{position:sticky;left:0;z-index:2;background:var(--desk,var(--paper-2));box-shadow:6px 0 8px -6px rgba(0,0,0,.15)}   /* 탭이 넘쳐도 「홈」은 늘 보이게 */
@@ -1634,7 +1634,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="f34c75afa4";
+const APP_BUILD="ffd1f7bb31";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3615,8 +3615,26 @@ function restorePrev(id,k){ const w=S.writings.find(x=>x.id===id), v=w?.prev?.[k
   if(b.value.trim()&&!confirm("지금 본문 대신 이전 판을 넣을까요? (간직해야 확정됩니다)")) return; tInsert(b,v.body,0,b.value.length); toast("이전 판을 불러왔습니다. 봉인을 누르면 간직됩니다 (↶ 로 되돌리기)"); }
 // 원고 안 글이면 원고 성격의 길잡이·틀을 먼저 (논문·소설·시집 꼭지의 글 종류가 「자유 글」이라 엉뚱한 틀이 들어가던 것)
 const wMsNow=w=>(w&&wMs(w))||(!w&&SEL_MS&&S.manuscripts.find(m=>m.id===SEL_MS))||null;
-function wGuide(w){ const m=wMsNow(w); return m?G(m).guide||"":""; }
-function wTplNow(){ const w=editId&&S.writings.find(x=>x.id===editId), m=wMsNow(w); if(m) return {tpl:gTpl(G(m)),name:G(m).n};
+// 논문 절의 역할에 맞는 길잡이 (2026-10-29 팀장님: 「들어가는 말」에 「이 단락의 주장·근거·정리」가 뜸) — 절 제목, 없으면 그 절이 든 장 이름으로 역할을 알아냄
+// 학술 논문의 관례(IMRaD·국내 학위논문 목차): 서론 = 배경 → 문제 → 목적·질문 → 방법 → 구성, 결론 = 요약 → 의의 → 한계 → 제언
+const PAPER_ROLES=[["intro",/들어가|서론|머리말|여는|연구의 필요|문제 제기|문제의 제기/],["concl",/나가|결론|맺는|맺음|마치며|닫는|요약 및|제언|시사점|한계/],["lit",/선행|문헌|이론적|이론|배경|개념|고찰/],["method",/방법|설계|대상|절차|측정|자료 수집/],["result",/결과|분석|발견|실태/],["discuss",/논의|해석|토론|고찰과/]];
+const PAPER_TPL={
+  intro:{n:"들어가는 말",tpl:"■ 연구 배경 — 왜 이 주제가 지금 중요한가\n\n■ 문제 제기 — 아직 풀리지 않은 것\n\n■ 연구 목적과 연구 질문\n\n■ 연구 방법 개관\n\n■ 이 논문의 구성\n",guide:"들어가는 말 — 배경 → 문제 → 목적·질문 → 방법 → 구성 순으로. 나가는 말에서 답할 질문을 여기서 분명히 세웁니다."},
+  lit:{n:"선행 연구·이론",tpl:"■ 핵심 개념의 정의\n\n■ 선행 연구 ① — 주제별로 묶어서\n\n■ 선행 연구 ②\n\n■ 종합 — 선행 연구가 말한 것과 아직 말하지 않은 것\n",guide:"선행 연구 — 연구자 순서가 아니라 주제별로 묶고, 마지막에 이 논문이 채울 빈자리(연구의 공백)를 짚습니다. 인용마다 각주(⌘⇧F)."},
+  method:{n:"연구 방법",tpl:"■ 연구 설계\n\n■ 연구 대상·자료\n\n■ 자료 수집·측정\n\n■ 분석 방법\n\n■ 연구 윤리와 한계\n",guide:"연구 방법 — 다른 사람이 그대로 따라 할 수 있을 만큼 구체적으로."},
+  result:{n:"연구 결과",tpl:"■ 결과 개요\n\n■ 결과 ① — 연구 질문 1에 대한 답\n\n■ 결과 ②\n\n■ 표·그림 설명\n",guide:"결과 — 해석은 아끼고, 연구 질문 순서대로 발견한 것을 보여 줍니다."},
+  discuss:{n:"논의",tpl:"■ 결과의 의미 — 선행 연구와 비교\n\n■ 예상과 다른 점\n\n■ 시사점\n",guide:"논의 — 결과가 무엇을 뜻하는지, 선행 연구와 어떻게 같고 다른지."},
+  concl:{n:"나가는 말",tpl:"■ 연구 요약 — 질문과 답\n\n■ 의의와 시사점\n\n■ 연구의 한계\n\n■ 후속 연구 제언\n",guide:"나가는 말 — 새 주장을 꺼내지 않고, 들어가는 말의 질문에 답하며 닫습니다."}};
+function paperRole(w,title){ const m=w?wMs(w):S.manuscripts.find(x=>x.id===SEL_MS); if(m?.genre!=="paper") return null; const t=String(title??w?.title??"");
+  const hit=x=>PAPER_ROLES.find(([,re])=>re.test(x))?.[0]; return hit(t)||(w&&m?hit(msPath(m,w.id).slice(-1)[0]||""):null)||null; }
+// 틀만 들어 있고 내 글이 없는가 (예전 틀이면 맞는 길잡이로 바꿔도 잃을 것이 없음)
+function onlyTpl(body){ const tl=new Set([...GENRE_TPL_LINES]); return !String(body||"").split("\n").some(l=>l.trim()&&!tl.has(l.trim())); }
+function pieceRetpl(wid){ const w=S.writings.find(x=>x.id===wid), r=paperRole(w); if(!w||!r) return; const tpl=PAPER_TPL[r].tpl, b=tab==="write"&&editId===wid?$("#wbody"):null, cur=b?b.value:w.body;
+  if(!onlyTpl(cur)) return toast("이미 쓴 글이 있어 바꾸지 않았습니다 — 쓰기 ▾ → 틀 넣기로 커서 자리에 넣을 수 있습니다");
+  if(b){ tInsert(b,tpl,0,b.value.length); } else { w.body=tpl; w.updated=new Date().toISOString(); save(); render(); }
+  toast(`「${PAPER_TPL[r].n}」 길잡이로 바꿨습니다 (↶ 로 되돌리기)`); }
+function wGuide(w){ const m=wMsNow(w); if(m?.genre==="paper"){ const r=paperRole(w,$("#wtitle")?.value); if(r) return PAPER_TPL[r].guide; } return m?G(m).guide||"":""; }
+function wTplNow(){ const w=editId&&S.writings.find(x=>x.id===editId), m=wMsNow(w); if(m?.genre==="paper"){ const r=paperRole(w,$("#wtitle")?.value); if(r) return {tpl:PAPER_TPL[r].tpl,name:PAPER_TPL[r].n}; } if(m) return {tpl:gTpl(G(m)),name:G(m).n};
   const t=$("#wtype")?.value||w?.type||NEW_TYPE||(track==="bible"?"묵상":"자유 글"); return {tpl:typeTpl(track,t),name:t}; }   // 쓰기 화면을 처음 그릴 때는 글 종류 상자가 아직 없음 → 글·새 글 종류로
 function insertTemplate(){ const b=$("#wbody"); if(!b) return; const {tpl,name}=wTplNow(); if(!tpl) return toast(`${name}에는 틀이 없습니다. 마음 가는 대로 쓰세요`);
   if(!b.value.trim()){ tInsert(b,tpl,0,b.value.length); b.selectionStart=b.selectionEnd=tpl.indexOf("\n")>0?tpl.indexOf("\n"):tpl.length; return; }
@@ -4245,7 +4263,7 @@ sup.fnref{font-size:.6em} ol.fn{font-size:.7em;line-height:1.5;clear:both}
 `; }
 // 강단용 본문: 노션 설교문 짜임 그대로 — 🎬 슬라이드 줄(+그림, 오른쪽), 🎙️ 전달 큐(노란 상자, 읽지 않음), > 성경 낭독(파랑 굵게), 🙏 기도, 📖 머리 상자, 【설교자의 자리】(주황)
 let TPL_HEADS=null;   // 앱 틀의 소제목 줄(「 — 안내말」을 지울 것) — 노션 설교문의 「도입 — 말의 무게」 같은 제목은 그대로
-function tplHeads(){ if(TPL_HEADS) return TPL_HEADS; TPL_HEADS=new Set(); [TYPES.bible,TYPES.book,typeof LEGACY_TYPES==="object"?LEGACY_TYPES:{}].forEach(T=>Object.values(T||{}).forEach(v=>String(v||"").split("\n").forEach(x=>{ if(x.trim().startsWith("■")) TPL_HEADS.add(x.trim()); }))); Object.values(GENRES).forEach(g=>String(g.tpl||"").split("\n").forEach(x=>{ if(x.trim().startsWith("■")) TPL_HEADS.add(x.trim()); })); return TPL_HEADS; }
+function tplHeads(){ if(TPL_HEADS) return TPL_HEADS; TPL_HEADS=new Set(); [TYPES.bible,TYPES.book,typeof LEGACY_TYPES==="object"?LEGACY_TYPES:{}].forEach(T=>Object.values(T||{}).forEach(v=>String(v||"").split("\n").forEach(x=>{ if(x.trim().startsWith("■")) TPL_HEADS.add(x.trim()); }))); Object.values(GENRES).forEach(g=>String((g.tpl||"")+"\n"+(g.oldTpl||"")).split("\n").forEach(x=>{ if(x.trim().startsWith("■")) TPL_HEADS.add(x.trim()); })); Object.values(PAPER_TPL).forEach(x=>x.tpl.split("\n").forEach(l=>{ if(l.trim().startsWith("■")) TPL_HEADS.add(l.trim()); })); return TPL_HEADS; }
 function pulpitPara(w){ const d=w.slides&&SLIDES[w.slides.deck], imgs=d?.imgs||[], fn=[];
   const L=stripMemo(w.body||"").split("\n").map(l=>l.trim());
   const rich=l=>richHtml(l,fn).replace(/【([^】\n]{1,30})】/g,'<span class="spot">【$1】</span>');
@@ -4519,7 +4537,7 @@ const GENRES={
 };
 const G=m=>GENRES[m?.genre]||GENRES.free;
 const gTpl=g=>g.tplFrom?(TYPES.bible[g.tplFrom]??TYPES.book[g.tplFrom]??""):(g.tpl||"");
-const GENRE_TPL_LINES=new Set(Object.values(GENRES).map(g=>gTpl(g)+"\n"+(g.oldTpl||"")+"\n"+(g.tplFrom==="설교초안"||g===GENRES.sermon?TYPES.bible["설교초안"]||"":"")).join("\n").split("\n").map(l=>l.trim()).filter(Boolean));   // 틀만 있는 글은 자동 간직·미리보기에서 빼려고
+const GENRE_TPL_LINES=new Set(Object.values(GENRES).map(g=>gTpl(g)+"\n"+(g===GENRES.paper?Object.values(PAPER_TPL).map(x=>x.tpl).join("\n"):"")+"\n"+(g.oldTpl||"")+"\n"+(g.tplFrom==="설교초안"||g===GENRES.sermon?TYPES.bible["설교초안"]||"":"")).join("\n").split("\n").map(l=>l.trim()).filter(Boolean));   // 틀만 있는 글은 자동 간직·미리보기에서 빼려고
 function msAmount(m){ const u=G(m).unit; return u==="편"?msList(m).length:u==="자"?msChars(m):msPages(m); }
 const unitFmt=(n,u)=>u==="자"?n.toLocaleString()+"자":n+u;
 function setMsGenre(mid,g){ const m=S.manuscripts.find(x=>x.id===mid); if(!m||!GENRES[g]) return; m.genre=g; save(); roomBase(); toast(`「${m.title}」의 성격을 ${GENRES[g].n}(으)로 정했습니다`); render(); }
@@ -4628,7 +4646,8 @@ document.addEventListener("contextmenu",e=>{ const n=e.target.closest?.("#sttree
 // 지금 글의 ■ 소제목(항·대지) — 워드 탐색 창처럼 목차에 작게, 누르면 그 줄로
 function wHeads(text){ const out=[]; String(text||"").split("\n").forEach((l,i)=>{ const mm=l.match(/^\s*■\s*(.+)/); if(mm) out.push({i,t:mm[1].trim()}); }); return out; }
 function stHeadsInner(w){ const t=tab==="write"&&editId===w.id?($("#wbody")?.value??w.body):w.body, tp=tplHeads();
-  return wHeads(t).map(h=>`<button class="sthead ${tp.has("■ "+h.t)?"tpl":""}" onclick="stGoHead('${w.id}',${h.i})" title="이 소제목으로">${esc(h.t.slice(0,40))}</button>`).join(""); }
+  const r=paperRole(w,tab==="write"&&editId===w.id?$("#wtitle")?.value:undefined), want=r&&PAPER_TPL[r].tpl, swap=want&&onlyTpl(t)&&t.trim()&&t.trim()!==want.trim()?`<button class="stretpl" onclick="pieceRetpl('${w.id}')" title="지금은 틀만 있어 바꿔도 잃는 글이 없습니다">↻ 「${esc(PAPER_TPL[r].n)}」 길잡이로</button>`:"";
+  return wHeads(t).map(h=>`<button class="sthead ${tp.has("■ "+h.t)?"tpl":""}" onclick="stGoHead('${w.id}',${h.i})" title="${tp.has("■ "+h.t)?"길잡이 소제목 — 내보낼 때 빠집니다":"이 소제목으로"}">${esc(h.t.slice(0,40))}</button>`).join("")+swap; }
 function stGoHead(wid,i){ document.body.classList.remove("stnav"); if(!(tab==="write"&&editId===wid)){ go('write',{edit:wid}); return setTimeout(()=>stGoHead(wid,i),300); }
   const b=$("#wbody"); if(!b) return; const L=b.value.split("\n"); let pos=0; for(let k=0;k<i&&k<L.length;k++) pos+=L[k].length+1;
   b.focus(); b.setSelectionRange(pos,pos+(L[i]||"").length); const y=b.getBoundingClientRect().top+scrollY+caretY(b); scrollTo({top:Math.max(0,y-innerHeight*.3),behavior:"smooth"}); }
