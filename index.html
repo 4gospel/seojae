@@ -828,7 +828,7 @@ body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-
 .cxgtools{position:absolute;right:8px;bottom:8px;display:flex;gap:2px;background:color-mix(in srgb,var(--paper) 88%,transparent);border:1px solid var(--edge);border-radius:8px;padding:2px;z-index:2} .cxgtools button{border:0;background:none;width:28px;height:26px;border-radius:6px;cursor:pointer;color:var(--ink-soft);font:15px -apple-system,sans-serif} .cxgtools button:hover{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
 .cxlegend{position:absolute;left:10px;bottom:8px;display:flex;gap:10px;flex-wrap:wrap;font:11.5px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft);pointer-events:none} .cxlegend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px} .cxlegend .muted{opacity:.7}
 .cxego.full{height:100%;min-height:0} .cxego.full .cxgraph{height:100%;max-width:none;display:flex;flex-direction:column} .cxego.full .cxgraph svg{flex:1;min-height:0;width:100%;height:100%} .cxn.center circle{stroke:var(--ink);stroke-width:3}
-.cxn circle{transition:filter .25s,opacity .25s} .cxn.sel circle{stroke:var(--ink);stroke-width:3;filter:drop-shadow(0 0 6px rgba(0,0,0,.35))} .cxn.lit circle{filter:drop-shadow(0 0 calc(4px + 10px*var(--gl,.5)) color-mix(in srgb,currentColor calc(100%*var(--gl,.5)),transparent)) brightness(calc(1 + .25*var(--gl,.5)));color:#f4c04a} [data-cxg].lit .cxn.dim{opacity:.28} [data-cxg].lit .cxn.dim .cxnl{opacity:.6}
+.cxn circle{transition:filter .2s,opacity .2s} .cxn.sel circle{stroke:var(--ink);stroke-width:3;filter:drop-shadow(0 0 6px rgba(0,0,0,.35))} .cxn.lit circle{filter:drop-shadow(0 0 calc(4px + 10px*var(--gl,.5)) color-mix(in srgb,currentColor calc(100%*var(--gl,.5)),transparent)) brightness(calc(1 + .25*var(--gl,.5)));color:#f4c04a} [data-cxg].lit .cxn.dim{opacity:.28} [data-cxg].lit .cxn.dim .cxnl{opacity:.6}
 .cxe.good{opacity:.85} .cxe.bad{opacity:.85} .cxe.mixed{opacity:.9}
 .cxrel select[data-rtone]{flex:0 0 auto;width:auto;min-width:72px} .cxmut{flex:0 0 auto;font-size:12.5px;white-space:nowrap}
 .cxktools{align-items:center;gap:8px;margin:12px 0 8px} .cxkset{position:relative} .cxkset .btn.on{background:color-mix(in srgb,var(--ink) 8%,transparent)}
@@ -1696,7 +1696,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="5381d09193";
+const APP_BUILD="e668d9ff3a";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -5905,6 +5905,8 @@ function cxGlow(g,id){ const c=codexLive().find(x=>x.id===id); if(!c) return; co
     W[x.id]=w; });
   const max=Math.max(1,...Object.values(W)); g.classList.add("lit");
   g.querySelectorAll("[data-cxn]").forEach(el=>{ el.classList.remove("sel","lit","dim"); el.style.removeProperty("--gl"); if(el.dataset.cxn===id){ el.classList.add("sel"); return; } const w=W[el.dataset.cxn]||0; if(w>0){ el.classList.add("lit"); el.style.setProperty("--gl",(0.35+0.65*Math.min(1,w/max)).toFixed(2)); } else el.classList.add("dim"); }); }
+document.addEventListener("pointerover",e=>{ const n=e.target.closest?.("[data-cxn]"); if(!n||e.pointerType==="touch") return; const g=n.closest("[data-cxg]"); if(g.querySelector(".cxpop")) return; cxGlow(g,n.dataset.cxn); });
+document.addEventListener("pointerout",e=>{ const n=e.target.closest?.("[data-cxn]"); if(!n) return; const g=n.closest("[data-cxg]"); if(g.querySelector(".cxpop")||n.contains(e.relatedTarget)) return; cxGlowClear(); });
 function cxGlowClear(){ document.querySelectorAll("[data-cxg].lit").forEach(g=>{ g.classList.remove("lit"); g.querySelectorAll("[data-cxn]").forEach(el=>{ el.classList.remove("sel","lit","dim"); el.style.removeProperty("--gl"); }); }); }
 // 노드 팝업: 이름(누르면 그 항목으로) · 값 있는 속성 · 관계 · 이 이름이 나오는 다른 항목(종류/섹션별)
 function cxPop(id,e){ const g=e?.target?.closest?.("[data-cxg]"); if(!g) return stOpen("cx:"+id); const c=codexLive().find(x=>x.id===id); if(!c) return; const old=g.querySelector(".cxpop"); if(old){ const was=old.dataset.id; old.remove(); if(was===id){ cxGlowClear(); return; } } cxGlow(g,id);
