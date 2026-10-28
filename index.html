@@ -648,6 +648,14 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .stnode{padding-left:calc(8px + var(--d,0)*14px);font-size:13.5px} .stnode.part{color:var(--ink-soft);font-weight:600} .stnode.part .sti{font-size:10px}
 .sttabrow>.sttab:first-child{position:sticky;left:0;z-index:2;background:var(--desk,var(--paper-2));box-shadow:6px 0 8px -6px rgba(0,0,0,.15)}   /* 탭이 넘쳐도 「홈」은 늘 보이게 */
 @media (max-width:700px){ .toolbar .discardbtn{display:none} }   /* 휴대폰: 휴지통은 「다듬기 ▾」 안에만 (간직하기 옆에서 잘못 누르지 않게, 도구 줄이 세 줄이 되지 않게) */
+.dcard{margin:6px 0 14px;border:1px solid color-mix(in srgb,var(--book) 35%,var(--edge));border-radius:10px;background:color-mix(in srgb,var(--book) 4%,var(--paper));font:14px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif}
+.dcard>summary{cursor:pointer;padding:8px 12px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;list-style:none} .dcard>summary::-webkit-details-marker{display:none} .dcard>summary b{color:var(--book)}
+.dcard .dcsum{color:var(--ink-soft);min-width:0} .dcard .dcsum.ok{color:var(--ink);font-weight:600} .dcard .dcwarn{color:var(--sepia);font-size:12px}
+.dcbody{display:grid;gap:10px;padding:4px 12px 12px} .dcgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px} .dcgrid .dcone{grid-column:1/-1} @media (max-width:700px){ .dcgrid{grid-template-columns:1fr} }
+.dcard .field{margin:0} .dcard .field>span{font-size:12.5px;color:var(--ink-soft)} .dcard input,.dcard textarea{font:14px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif}
+.cchips{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px} .cchip{border:1px dashed #b9a3d9;background:var(--paper);border-radius:8px;padding:3px 8px;font:12.5px/1.4 -apple-system,sans-serif;color:var(--ink);cursor:pointer;text-align:left} .cchip:hover{border-style:solid;border-color:#7a5aa8}
+.dcown{display:flex;gap:6px 12px;flex-wrap:wrap;align-items:center;border-top:1px dashed var(--edge);padding-top:8px} .dcardhint{margin:2px 0 10px}
+.hmirror i.ownl{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,var(--book) 10%,transparent);box-shadow:inset 3px 0 0 color-mix(in srgb,var(--book) 45%,transparent)}   /* 직접 쓸 네 자리 */
 .mfhits{display:grid;gap:6px;max-height:46vh;overflow:auto} .mfhit{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--edge);border-radius:10px;padding:8px 10px;background:var(--paper);cursor:pointer} .mfhit>div{min-width:0}
 .mfctx{font-size:13.5px;color:var(--ink-soft);margin-top:3px;word-break:break-all} .mfctx mark{background:color-mix(in srgb,var(--bible) 22%,transparent);color:inherit;text-decoration:line-through} .mfctx ins{text-decoration:none;background:color-mix(in srgb,var(--book) 22%,transparent);font-weight:700}
 .mvlist{display:grid;gap:4px} .mvrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px 8px;border-radius:8px;border:1px solid var(--edge)} .mvrow.on{border-color:var(--sepia);background:var(--paper-2)}
@@ -1534,7 +1542,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="ffcd153f68";
+const APP_BUILD="f6caf7767d";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3012,7 +3020,7 @@ write0(){
     <span class="row touchonly" style="gap:4px"><button class="undobtn" onclick="tUndo()" title="되돌리기">↶</button><button class="undobtn" onclick="tUndo(true)" title="다시 하기">↷</button></span>
     <button class="btn small focusexit" onclick="toggleFocus()">집중 나가기</button>
     <details class="tgrp"><summary class="btn small">쓰기 ▾</summary><div class="tgmenu">
-      ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}
+      ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}${w&&cardKindOf(w)&&!cardKindOf(w).sermon?`<button class="btn small" onclick="tgClose();cardOpen()" title="한 문장·기능·겨냥할 자리… 초안 전에 글을 설계합니다">설계 카드</button>`:""}
       <button class="btn small" onclick="toggleFocus();tgClose()" id="focusbtn">집중 모드</button>
       <button class="btn small ${TYPEW?"on":""}" onclick="toggleTypew()" id="twbtn" title="쓰는 줄을 늘 화면 가운데에 둡니다">타자기</button>
       <span class="row" style="gap:4px" title="글자 크기 (이 기기만)"><span class="muted" style="font-size:12.5px">글자</span><button class="fsbtn" onclick="fontStep(-1)">가−</button><button class="fsbtn" onclick="fontStep(1)">가＋</button></span>
@@ -3042,6 +3050,7 @@ write0(){
         ${stkLayer("write")}
         <input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput();autoKeepKick()">
         <div class="meta"><span class="pen" style="font-size:20px">${esc(w?.date||today())}</span><span id="wcount"></span><span id="draftstamp" class="draftstamp"></span><span id="refhint" class="refhint" style="display:none"></span></div>
+        ${cardHtml(w)}
         <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput();refHint();spellAutoKick();autoKeepKick()" onkeyup="refHint()" onclick="refHint();spellPopClose()" style="--penink:${penInk()}" placeholder="${esc(wGuide(w)||(isTouch()?"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다.":"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다."))}">${esc(w?.body??seed)}</textarea>
       </div>
     </div>
@@ -3310,7 +3319,7 @@ function updatePage(){ let p=+$("#pg").value; const b=curBook(); if(!b) return; 
 
 // ───────── 동작: 글쓰기 ─────────
 let HEADS_RAF=0;
-function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.height="auto"; t.style.height=Math.max(t.scrollHeight,innerHeight*.62)+"px"; if(scrollY!==y) scrollTo(0,y); if(!HEADS_RAF) HEADS_RAF=requestAnimationFrame(()=>{ HEADS_RAF=0; paintHeads(); }); }
+function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.height="auto"; t.style.height=Math.max(t.scrollHeight,innerHeight*.62)+"px"; if(scrollY!==y) scrollTo(0,y); if(!HEADS_RAF){ HEADS_RAF=requestAnimationFrame(()=>{ HEADS_RAF=0; paintHeads(); }); setTimeout(()=>{ if(HEADS_RAF){ cancelAnimationFrame(HEADS_RAF); HEADS_RAF=0; paintHeads(); } },200); } }   // 화면 그리기가 늦어도(가려진 창·느린 기기) 0.2초 안에는 거울 층을 그림
 // 소제목(■ 줄)과 주석 요약의 ◆ 줄을 굵게: 글자 칸(textarea)은 줄마다 모양을 바꿀 수 없어, 같은 자리에 투명한 거울 층을 겹쳐 그 줄만 굵은 글자로 한 번 더 그립니다
 // (한글은 굵게 해도 글자 폭이 같아 정확히 겹칩니다. 다른 줄은 보이지 않게 두되 자리는 차지해 줄바꿈이 같습니다)
 const HEAD_RE=/^\s*(■|◆|▣|※\s*주석 요약|※\s*요약 끝)/;
@@ -3330,10 +3339,11 @@ function paintHeads(){
   const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):markLine(l);
   const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null; let off=0;   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
+  const OZ=ownZones(t.value);
   m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[], st=off; off+=l.length+1;
     if(rf&&rf.s<st+l.length+1&&rf.e>st){ const a=Math.max(0,rf.s-st), z=Math.min(l.length,rf.e-st); return plain(l.slice(0,a),head)+`<i class="rf">${esc(l.slice(a,z))}</i>`+plain(l.slice(z),head); }
     if(!E.length) return plain(l,head);
-    let out="", last=0; E.forEach(x=>{ out+=plain(l.slice(last,x.s),head)+`<i class="sp ${x.src}" data-l="${i}" data-s="${x.s}" data-e="${x.e}" title="${esc(x.to)}${x.why?" — "+esc(x.why):""}">${esc(l.slice(x.s,x.e))}</i>`; last=x.e; }); return out+plain(l.slice(last),head); }).join("\n");
+    let out="", last=0; E.forEach(x=>{ out+=plain(l.slice(last,x.s),head)+`<i class="sp ${x.src}" data-l="${i}" data-s="${x.s}" data-e="${x.e}" title="${esc(x.to)}${x.why?" — "+esc(x.why):""}">${esc(l.slice(x.s,x.e))}</i>`; last=x.e; }); return out+plain(l.slice(last),head); }).map((h,i)=>OZ.has(i)?`<i class="ownl">${h}</i>`:h).join("\n");
   const n=errs.reduce((a,x)=>a+x.length,0), st=$("#spellstate"); if(st&&!SPELL_AI_BUSY) st.textContent=n?`밑줄 ${n}`:"";
 }
 // 글자 칸에 프로그램이 글을 넣을 때는 브라우저의 '입력' 명령으로 넣어, ⌘Z(되돌리기)·⇧⌘Z(다시 하기)가 그대로 듣게 합니다
@@ -3349,7 +3359,8 @@ function tUndo(redo){ const b=$("#wbody"); if(!b) return; if(READVIEW) return to
 function countW(){ const v=$("#wbody")?.value||""; const fn=(v.match(/\[\^/g)||[]).length, el=$("#wcount"); if(!el) return; const g=wMsNow(editId&&S.writings.find(x=>x.id===editId))?.genre;
   if(g==="poem"){ const L=stripMemo(v).replace(/\s+$/,"").split("\n"), lines=L.filter(l=>l.trim()).length, st=lines?L.join("\n").trim().split(/\n\s*\n/).length:0; el.textContent=`${lines}행 · ${st}연 · ${chars(v).toLocaleString()}자${fn?` · 각주 ${fn}`:""}`; return; }   // 시: 행·연
   const sermon=/설교/.test($("#wtype")?.value||"")||g==="sermon", mins=sermon?Math.round(chars(stripMemo(v))*1.2/350):0;
-  el.textContent=`${sermon&&mins?`말하면 약 ${mins}분 · `:""}${G(wMsNow(editId&&S.writings.find(x=>x.id===editId))).unit==="자"?"":`원고지 약 ${Math.ceil(charsAll(v)/200)}매 · `}${charsAll(v).toLocaleString()}자(공백 포함) · ${chars(v).toLocaleString()}자(제외)${fn?` · 각주 ${fn}`:""}`; }
+  const tgt=parseInt(wMeta(editId&&S.writings.find(x=>x.id===editId),"cbudget"))||0;
+  el.textContent=`${sermon&&mins?`말하면 약 ${mins}분${tgt?` / 목표 ${tgt}분`:""} · `:""}${G(wMsNow(editId&&S.writings.find(x=>x.id===editId))).unit==="자"?"":`원고지 약 ${Math.ceil(charsAll(v)/200)}매 · `}${charsAll(v).toLocaleString()}자(공백 포함) · ${chars(v).toLocaleString()}자(제외)${fn?` · 각주 ${fn}`:""}`; }
 // 펜 잉크: 이 기기 꾸미기(설정 → 화면 꾸미기)의 글자 색이 있으면 그것, 없으면 모든 기기 공통 잉크, 둘 다 없으면 기본 먹색
 // 공통 잉크(모든 기기)가 어두운 화면에서 안 보이지 않도록 밝은 짝으로 (이 기기에서 직접 고른 L.ink는 그대로)
 const INK_DARK={"#2e2721":"#ece2d2","#24427a":"#9fc0ea","#7a4a22":"#e0b98f","#2f5d4e":"#8fcfb8"};
@@ -4219,7 +4230,7 @@ function tplBases(){ if(TPL_BASES) return TPL_BASES; TPL_BASES=new Set([...tplHe
 function expPrefs(m){ let p={}; try{ p=JSON.parse(localStorage.getItem("seojae.expPrefs")||"{}")||{}; }catch(_){} return Object.assign({strip:true,hl:false,notes:"piece"},p,(m&&m.id!=="__one"&&m.exportOpts?.prefs)||{}); }
 function expPrefsSave(m,p){ try{ localStorage.setItem("seojae.expPrefs",JSON.stringify(p)); }catch(_){} if(m&&m.id!=="__one"&&S.manuscripts.includes(m)){ m.exportOpts=Object.assign({},m.exportOpts||{},{prefs:p}); save(); } }
 // 본문을 내보내기용으로: 메모·슬라이드 줄 빼고, 틀 소제목 줄을 빼고(그 아래 글은 남김), 형광펜 표시를 풂
-function expBody(body,P){ P=P||{}; let L=stripMemo(body||"").split("\n").filter(l=>!SLIDE_RE.test(l));
+function expBody(body,P){ P=P||{}; let L=stripMemo(body||"").split("\n").filter(l=>!SLIDE_RE.test(l)&&!/^\s*〔(직접 쓸 자리|고백)[^〕]*〕\s*$/.test(l));
   if(P.strip){ const B=tplBases(); L=L.filter(l=>!(l.trim().startsWith("■")&&B.has(hdBase(l)))); }
   if(!P.hl) L=L.map(l=>l.replace(/==(?:[ygpb]:)?([^=\n]+?)==/g,"$1"));
   return L.join("\n"); }
@@ -4853,8 +4864,7 @@ function aiQuick(sel){ const k=aiGenre(); const q=[];
   if(k.meditation) return [["관찰 질문","이 본문을 처음 읽는 사람처럼 관찰 질문 다섯 개만 주세요"],["본문 배경","이 본문의 역사·문화 배경 가운데 확실한 것만 짧게, 출처와 함께 알려 주세요"],["적용 점검","내 묵상의 적용이 본문에서 나오는지 질문으로 짚어 주세요"],["막혔어요","묵상이 막혔습니다. 다시 본문으로 돌아가게 하는 질문 세 개만 해 주세요"]];
   if(sel){ q.push(["고른 곳 다듬기","고른 곳을 더 낫게 다듬을 방법을 두세 가지 제안해 주세요"],["더 쉽게","고른 곳을 처음 듣는 사람도 바로 알아듣게 쉽게 고쳐 주세요"],["더 짧게","고른 곳을 뜻은 그대로 두고 더 짧게 줄여 주세요"]); }
   q.push(["막혔어요","지금 글에서 막혔습니다. 다음으로 생각을 이어 갈 수 있게 질문 세 개만 해 주세요"],["흐름 점검","지금 글의 흐름에서 끊기거나 건너뛰는 곳을 짚어 주세요"],["제목 후보","이 글에 어울리는 제목 후보 다섯 개를 주세요"],["한 줄 요약","이 글의 핵심을 한 문장으로 말해 주세요"]);
-  if(k.sermon) return [["세 줄로 시작","…본문을 먼저 읽고 내가 받은 것 세 줄입니다. 이 세 줄에서 출발해 설계 카드 초안을 주세요 (한 문장 후보 2~3개 · 기능 · 겨냥할 자리 · 그리스도로 가는 길 · 주 예화 후보 · 분량 예산 20분):\n1. \n2. \n3. "],
-    ["설계 카드","지금 글을 보고 설계 카드 여섯 칸 초안을 주세요. 한 문장은 후보 2~3개로. 세 줄이 글에 없으면 한 번만 청해 주세요."],
+  if(k.sermon) return [["세 줄로 시작","§card3"],["설계 카드","§cardai"],
     ["구조안","설계 카드의 한 문장을 따라 대지 구조안을 두 가지 주세요. 대지마다 한 줄, 그리스도로 가는 길과 위로가 겨냥하는 자리를 표시해 주세요."],
     ["초안 쓰기","§draft"],
     ["예화 조사","⌕이 설교의 한 문장에 맞는 예화 후보를 넓게 찾아 주세요(역사·문학·영화·음악·요즘 문화·한국 사상·최신 뉴스). 후보마다 출처, 사실 여부 (확인함)/(확인 못 함), 허구 작품이면 허구라고 밝혀 주세요. 주 예화 하나와 보조 두세 개를 고를 수 있게 짧게."],
@@ -4905,8 +4915,9 @@ function aiDraw(){ const el=$("#aipanel"); if(!el) return; if(AI_MODE==="researc
 // 빠른 단추: 「…」로 시작하면 입력칸에 채우기만(사람이 먼저 쓰게), 「⌕」는 조사 도우미(웹 검색·출처)로, 「§draft」는 설계 카드의 한 문장이 글에 있을 때만 초안 (원칙 1-3·1-4)
 function aiQuickGo(q){ if(q.startsWith("…")){ const t=$("#aiin"); if(t){ t.value=q.slice(1); t.focus(); t.setSelectionRange(t.value.length,t.value.length); t.oninput?.(); } return; }
   if(q.startsWith("⌕")){ return rsOpen(), setTimeout(()=>rsSend(q.slice(1)),50); }
-  if(q==="§draft"){ const b=$("#wbody")?.value||""; if(!/(■\s*)?(설계 카드|한 문장)\s*[—:：\-]?\s*\S/.test(b)){ toast("먼저 설계 카드의 「한 문장」을 정해 글에 적어 주세요 (원칙 1-4) — 카드 초안을 청합니다"); return aiSend("지금 글을 보고 설계 카드 여섯 칸 초안을 주세요. 한 문장은 후보 2~3개로."); }
-    return aiSend("글에 적은 설계 카드의 한 문장과 구조를 따라 초안을 써 주세요. 도입 첫 문단·1인칭 고백·결론 마지막 문단·기도문은 〔직접 쓸 자리: …〕로 비워 두고, 성경은 새한글 문구(확인 못 하면 표시), 예화는 사실 확인 꼬리표를 붙여 주세요. 카드에서 벗어나지 마세요."); }
+  if(q==="§card3"){ cardOpen(); return; } if(q==="§cardai"){ cardOpen(); return cardAI(); }
+  if(q==="§draft"){ const w=cardW(); if(!w||!wMeta(w,"cok")){ toast("한 문장을 확정하기 전에는 초안을 쓰지 않습니다 (원칙 1-4) — 설계 카드에서 한 문장을 정하고 「확정」을 눌러 주세요"); return cardOpen(); }
+    return aiSend("설계 카드의 확정된 한 문장과 구조를 따라 초안을 써 주세요. 도입 첫 문단·1인칭 고백·결론 마지막 문단·기도문은 〔직접 쓸 자리: …〕로 비워 두고, 성경은 새한글 문구(확인 못 하면 표시), 예화는 사실 확인 꼬리표를 붙여 주세요. 카드에서 벗어나지 마세요."); }
   aiSend(q); }
 function aiReset(){ if(AI_MSGS.length&&!confirm("이 글의 AI 대화를 비울까요?")) return; AI_MSGS=[]; aiStore(); aiDraw(); }
 async function aiSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!q||AI_BUSY) return; const b=$("#wbody"); if(!b) return;
@@ -4914,7 +4925,7 @@ async function aiSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
   if(ta) ta.value=""; const sel=aiSelNow(), k=aiGenre(), pos=b.selectionEnd, near=b.value.slice(Math.max(0,pos-600),pos+600), ask=aiAsk(), key=AI_KEY;
   AI_MSGS.push({role:"me",text:q}); AI_BUSY=true; aiStore(); aiDraw();
   const body=aiBodyText(b), samples=body.split("\n").filter(l=>l.trim().length>40).slice(0,3).join("\n");
-  const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,sermon:k.sermon,refs:AI_REFS?aiRefsText(k.m):"",samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
+  const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,sermon:k.sermon,card:cardForAI(k.w),refs:AI_REFS?aiRefsText(k.m):"",samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
   const hist=AI_MSGS.filter(m=>m.role!=="err"&&m.text).slice(-12).map(m=>({role:m.role,text:m.text}));
   let add; try{ if(ask==="suggest"){ const r=await gcall("coWrite",{mode:"suggest",messages:hist,doc}); add={role:"ai",text:`(제안 ${r.items.length}곳)`,items:r.items.map(x=>({...x})),ai:r.ai}; }
     else { const r=await gcall("coWrite",{messages:hist,doc}); add={role:"ai",text:r.text,ai:r.ai,sel:sel||null,pos}; } }
@@ -4923,8 +4934,8 @@ async function aiSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
   aiDraw(); }
 function aiPut(i,j,mode){ const m=AI_MSGS[i], p=m&&aiFmt(m.text)[j], b=$("#wbody"); if(!p||!b) return;
   if(mode==="copy") return clip(p.v);
-  if(mode==="rep"){ const sl=m.sel; if(!sl||b.value.slice(sl.s,sl.e)!==sl.t) return toast("고른 곳이 그 뒤 바뀌어 바꿀 수 없습니다 — 「커서 자리에 넣기」를 써 주세요"); tInsert(b,p.v,sl.s,sl.e); }
-  else { const at=caretAt(b).e, pre=b.value.slice(0,at); tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+p.v+"\n",at,at); }
+  if(mode==="rep"){ const sl=m.sel; if(!sl||b.value.slice(sl.s,sl.e)!==sl.t) return toast("고른 곳이 그 뒤 바뀌어 바꿀 수 없습니다 — 「커서 자리에 넣기」를 써 주세요"); const oz=ownHit(b.value,sl.s,sl.e); if(oz) return toast(`「${oz}」은 직접 쓰는 자리입니다 (원칙 1-5) — 복사해서 참고만 하세요`); tInsert(b,p.v,sl.s,sl.e); }
+  else { const at=caretAt(b).e, pre=b.value.slice(0,at); { const oz=ownHit(b.value,at,at); if(oz) return toast(`커서가 「${oz}」에 있습니다 — 직접 쓰는 자리라 AI 문장을 넣지 않습니다 (원칙 1-5)`); } tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+p.v+"\n",at,at); }
   toast("넣었습니다 ("+undoHint()+")"); aiShowCaret(); }
 // 휴대폰: AI 창이 본문을 덮으므로 넣은 뒤에는 창을 닫고 넣은 자리로 (✦ AI로 다시 열면 대화가 그대로)
 function aiShowCaret(){ if(innerWidth>700) return; const b=$("#wbody"); if(!b) return; aiClose(); const lh=parseFloat(getComputedStyle(b).lineHeight)||30, line=b.value.slice(0,b.selectionEnd).split("\n").length;
@@ -4934,12 +4945,66 @@ function aiSugFind(it){ const b=$("#wbody"); if(!b) return -2; const i=b.value.i
 function aiSugApply(i,j,quiet){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); if(!it||it.st||!b) return false; const at=aiSugFind(it);
   if(at===-1){ if(!quiet) toast("글에서 이 구절을 찾지 못했습니다 (그사이 바뀌었을 수 있어요)"); return false; }
   if(at===-3){ if(!quiet) toast("같은 구절이 여러 곳에 있어 넣지 않았습니다 — 「글에서 보기」로 찾아 직접 고쳐 주세요"); return false; }
+  { const oz=ownHit(b.value,at,at+it.from.length); if(oz){ if(!quiet) toast(`「${oz}」은 직접 쓰는 자리라 넣지 않았습니다 (원칙 1-5) — 참고만 하세요`); return false; } }
   tInsert(b,it.to,at,at+it.from.length); it.st="done"; aiStore(); if(!quiet){ aiDraw(); toast("넣었습니다 ("+undoHint()+")"); } return true; }
 function aiSugDrop(i,j){ const it=AI_MSGS[i]?.items?.[j]; if(!it) return; it.st="drop"; aiStore(); aiDraw(); }
 function aiSugAll(i){ const L=AI_MSGS[i]?.items||[]; let n=0, skip=0; L.forEach((it,j)=>{ if(it.st) return; aiSugApply(i,j,true)?n++:skip++; }); aiDraw(); toast(`${n}곳을 넣었습니다${skip?` · ${skip}곳은 글에서 찾지 못해 남겨 둠`:""} (⌘Z로 하나씩 되돌리기)`); }
 function aiSugShow(i,j){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); if(!it||!b) return; const at=b.value.indexOf(it.from); if(at<0) return toast("글에서 이 구절을 찾지 못했습니다");
   if(READVIEW) toggleRead(); b.focus({preventScroll:true}); b.setSelectionRange(at,at+it.from.length);
   const lh=parseFloat(getComputedStyle(b).lineHeight)||30, line=b.value.slice(0,at).split("\n").length; scrollTo({top:b.getBoundingClientRect().top+scrollY+line*lh-innerHeight/3,behavior:"smooth"}); }
+// ───────── 설계 카드 · 네 자리 (팀장님 「AI 보조 원칙」 1-3·1-4·1-5 — 참고/AI_글쓰기보조_원칙.md) ─────────
+// 카드는 글의 w.meta 칸(칸마다 시각으로 합침 — 저장 형식 그대로, 본문 밖이라 내보내기에 안 섞임): c3 세 줄 · c1 한 문장 · cfn 기능 · ctg 겨냥할 자리 · cpath 가는 길 · cstory 주 예화 · cbudget 분량 · cok 한 문장 확정 시각 · own1~4 네 자리 「직접 씀」
+// 설교 글은 늘 보이고(접힘), 다른 글은 쓰기 ▾ → 설계 카드로 폄. 묵상·시는 없음. AI 초안은 한 문장을 확정한 뒤에만(§draft).
+const CARD_F=[["c1","한 문장","이 글이 말할 것 — 하나만"],["cfn","기능","독자(청중)에게 일어날 일"],["ctg","겨냥할 자리","독자의 아픔·필요 (설교: 타락한 상태)"],["cpath","가는 길","설교: 그리스도로 가는 길 / 글: 핵심으로 가는 길"],["cstory","주 예화","도입에서 열고 결론에서 닫을 예화 하나"],["cbudget","분량 예산","예: 20분 · 도입 10% · 본론 70% · 결론 20%"]];
+const OWN_F=[["own1","도입 첫 문단"],["own2","1인칭 고백"],["own3","결론 마지막 문단"],["own4","기도문"]];
+let CARD_OPEN=new Set(), CARD_AI=null, CARD_ASKED=new Set();   // CARD_AI: 받은 후보 {id, ones, stories, func, target, path, budget, ask}
+function cardKindOf(w){ const m=w?wMs(w):null, sermon=/설교/.test(w?.type||"")||m?.genre==="sermon", med=(w?.type==="묵상")&&!m, poem=m?.genre==="poem"; return med||poem?null:{sermon}; }
+const cardHas=w=>!!w&&(CARD_F.some(([k])=>wMeta(w,k))||!!wMeta(w,"c3"));
+const cardShown=w=>!!w&&!!cardKindOf(w)&&(cardKindOf(w).sermon||cardHas(w)||CARD_OPEN.has(w.id));
+function cardHtml(w){ if(!w) return /설교/.test(NEW_TYPE||"")?`<p class="hint dcardhint">✎ 몇 자 쓰면 저절로 간직되고, 그때부터 <b>설계 카드</b>(세 줄 · 한 문장 · 네 자리)를 쓸 수 있습니다.</p>`:"";
+  if(!cardShown(w)) return ""; const ok=wMeta(w,"cok"), one=wMeta(w,"c1"), sermon=cardKindOf(w).sermon, open=CARD_OPEN.has(w.id)||!one;
+  const C=CARD_AI&&CARD_AI.id===w.id?CARD_AI:null, chip=(k,v)=>`<button type="button" class="cchip" onclick="cardPick('${k}',${jsArg(v)})">${esc(v)}</button>`;
+  return `<details class="dcard" ${open?"open":""} ontoggle="this.open?CARD_OPEN.add('${w.id}'):CARD_OPEN.delete('${w.id}')"><summary><b>설계 카드</b> <span class="dcsum ${ok?"ok":""}">${one?`${ok?"✓ ":""}${esc(one)}`:"한 문장을 아직 정하지 않았습니다"}</span>${!ok?`<small class="dcwarn">AI 초안은 한 문장을 확정한 뒤에</small>`:""}</summary>
+    <div class="dcbody">
+      <label class="field dc3"><span>내가 받은 것 세 줄 <small>— 본문을 먼저 읽고. AI는 여기서 출발합니다</small></span><textarea id="c3" rows="3" placeholder="1.&#10;2.&#10;3." onchange="cardSet('c3',this.value)">${esc(wMeta(w,"c3"))}</textarea></label>
+      <div class="dcgrid">${CARD_F.map(([k,n,ph])=>`<label class="field ${k==="c1"?"dcone":""}"><span>${n}${k==="cpath"?` <small>${sermon?"그리스도로 가는 길":"핵심으로 가는 길"}</small>`:""}</span>${k==="c1"?`<div class="row" style="gap:6px;flex-wrap:nowrap"><input id="card-c1" value="${esc(one)}" placeholder="${esc(ph)}" onchange="cardSet('c1',this.value)" style="flex:1;min-width:0"><button type="button" class="btn small ${ok?"ink":""}" onclick="cardOk()" title="${ok?"확정을 풉니다":"이 한 문장으로 확정 — 그 뒤에만 AI 초안"}">${ok?"✓ 확정됨":"확정"}</button></div>`:`<input id="card-${k}" value="${esc(wMeta(w,k))}" placeholder="${esc(ph)}" onchange="cardSet('${k}',this.value)">`}
+          ${C&&k==="c1"&&C.ones.length?`<div class="cchips">${C.ones.map(v=>chip("c1",v)).join("")}</div>`:""}${C&&k==="cstory"&&C.stories.length?`<div class="cchips">${C.stories.map(v=>chip("cstory",v)).join("")}</div>`:""}
+          ${C&&{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[k]&&C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[k]]?`<div class="cchips">${chip(k,C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[k]])}</div>`:""}</label>`).join("")}</div>
+      <div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn small aibtn" onclick="cardAI()" id="cardaibtn">✦ AI 카드 초안</button><small class="muted" id="cardaist">${C?.ask?esc(C.ask):C?"후보를 누르면 칸에 들어갑니다. 고치거나 고르는 것은 직접 — 한 문장은 「확정」까지":"세 줄에서 출발해 여섯 칸 후보를 냅니다 (고르는 것은 직접)"}</small></div>
+      <div class="dcown"><span><b>직접 쓸 네 자리</b> <small class="muted">— 본문에 옅은 초록 바탕. AI는 이 자리를 고쳐 넣지 않습니다</small></span><span class="pills">${OWN_F.map(([k,n])=>`<label class="chk"><input type="checkbox" ${wMeta(w,k)?"checked":""} onchange="cardSet('${k}',this.checked?'1':'')"> ${n}</label>`).join("")}</span></div>
+    </div></details>`; }
+function cardW(){ return editId&&S.writings.find(x=>x.id===editId); }
+function cardSet(k,v){ const w=cardW(); if(!w) return; const was=wMeta(w,k); metaSet(w.id,k,v);
+  if(k==="c1"&&wMeta(w,"cok")&&String(v).trim()!==String(was).trim()){ metaSet(w.id,"cok",""); toast("한 문장이 바뀌어 확정을 풀었습니다 — 다시 「확정」을 눌러 주세요"); cardPaint(); }
+  else if(k==="c1") cardPaint(); }
+function cardOk(){ const w=cardW(); if(!w) return; const v=($("#card-c1")?.value||"").trim(); if(!wMeta(w,"cok")&&!v) return toast("한 문장을 먼저 적어 주세요");
+  if(v!==wMeta(w,"c1")) metaSet(w.id,"c1",v); metaSet(w.id,"cok",wMeta(w,"cok")?"":new Date().toISOString()); cardPaint(); toast(wMeta(w,"cok")?"한 문장을 확정했습니다 — 이제 AI 구조안·초안을 청할 수 있습니다":"확정을 풀었습니다"); }
+function cardPick(k,v){ const w=cardW(); if(!w) return; const el=$("#card-"+k); if(el) el.value=v; cardSet(k,v); if(k!=="c1") cardPaint(); }
+// 카드 부분만 다시 그림 (본문 칸은 그대로 — 쓰던 글·커서를 건드리지 않음)
+function cardPaint(){ const old=$(".dcard"), w=cardW(); if(!old||!w) return; const t=document.createElement("div"); t.innerHTML=cardHtml(w); const nw=t.firstElementChild; if(nw) old.replaceWith(nw); paintHeads(); }
+function cardOpen(){ const w=cardW(); if(!w) return toast("몇 자 써서 간직되면 설계 카드를 쓸 수 있습니다"); CARD_OPEN.add(w.id); if($(".dcard")){ $(".dcard").open=true; } else render(); setTimeout(()=>{ $(".dcard")?.scrollIntoView({block:"start",behavior:"smooth"}); $("#c3")?.focus(); },80); }
+async function cardAI(){ const w=cardW(); if(!w) return; const k=aiGenre(), three=($("#c3")?.value||wMeta(w,"c3")||"").trim();
+  if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
+  if(!three&&!CARD_ASKED.has(w.id)){ CARD_ASKED.add(w.id); $("#c3")?.focus(); return toast("본문을 먼저 읽고 「내가 받은 것」 세 줄을 적어 주세요 — 한 번 더 누르면 세 줄 없이도 초안을 냅니다 (원칙 1-3)"); }   // 한 번만 청하고, 작업은 멈추지 않음
+  const b=$("#cardaibtn"), st=$("#cardaist"); if(b){ b.disabled=true; b.textContent="카드 초안을 받는 중…"; }
+  const mins=parseInt(wMeta(w,"cbudget"))||20;
+  try{ const r=await gcall("coWrite",{mode:"card",three,title:$("#wtitle")?.value||w.title||"",passage:$("#wpassage")?.value||w.passage||"",genre:k.name,sermon:k.sermon,minutes:k.sermon?mins:0,body:aiBodyText($("#wbody")||{value:w.body||""})});
+    CARD_AI={id:w.id,...r}; CARD_OPEN.add(w.id); cardPaint(); }
+  catch(e){ if(b){ b.disabled=false; b.textContent="✦ AI 카드 초안"; } if(st) st.textContent="받지 못했습니다: "+e.message; } }
+// 도우미에 함께 보낼 카드 (확정 여부·아직 직접 쓰지 않은 자리)
+function cardForAI(w){ if(!w||!cardShown(w)) return null; return {ok:!!wMeta(w,"cok"),three:wMeta(w,"c3"),one:wMeta(w,"c1"),func:wMeta(w,"cfn"),target:wMeta(w,"ctg"),path:wMeta(w,"cpath"),story:wMeta(w,"cstory"),budget:wMeta(w,"cbudget"),own:OWN_F.filter(([k])=>!wMeta(w,k)).map(([,n])=>n).join(" · ")}; }
+// (설교 글인지는 화면 칸이 아니라 글로 판단) 네 자리: 본문에서 도입 첫 문단 · 1인칭 고백(〔고백〕·〔직접 쓸 자리: 1인칭 고백〕 줄) · 결론 마지막 문단 · 기도문(■ …기도·축도 아래)을 줄 번호 → 이름으로 (설교 글만)
+function ownZones(text){ const z=new Map(); const cw=editId&&S.writings.find(x=>x.id===editId); if(!text||!(cw?cardKindOf(cw)?.sermon:/설교/.test($("#wtype")?.value||NEW_TYPE||""))) return z; const L=text.split("\n"), isH=l=>/^\s*■/.test(l), blank=l=>!l.trim();
+  let sec=""; const secOf=L.map(l=>{ if(isH(l)) sec=l; return sec; }), prayer=i=>/기도|축도/.test(secOf[i]), skip=i=>/본문 낭독|중심 메시지|본문 관찰|더 살펴볼|씨앗|설계/.test(secOf[i]);
+  L.forEach((l,i)=>{ if(!isH(l)&&!blank(l)&&prayer(i)) z.set(i,"기도문"); const m=l.match(/〔(?:직접 쓸 자리\s*:?\s*)?([^〕]*)〕/); if(m) z.set(i,/고백/.test(m[1])?"1인칭 고백":/도입/.test(m[1])?"도입 첫 문단":/결론/.test(m[1])?"결론 마지막 문단":/기도/.test(m[1])?"기도문":"직접 쓸 자리"); });
+  const body=i=>!isH(L[i])&&!blank(L[i])&&!prayer(i)&&!skip(i)&&!/〔/.test(L[i]);
+  const block=(i,dir)=>{ const out=[]; while(i>=0&&i<L.length&&body(i)){ out.push(i); i+=dir; } return out; };
+  const hasIntro=L.findIndex(l=>isH(l)&&/서론|도입/.test(l)), first=L.findIndex((l,i)=>i>hasIntro&&body(i));
+  if(first>=0) block(first,1).slice(0,1).forEach(i=>z.has(i)||z.set(i,"도입 첫 문단"));   // 한 줄이 한 문단
+  const pStart=L.findIndex((l,i)=>isH(l)&&/기도|축도/.test(l)), endAt=pStart>=0?pStart:L.length; let last=-1; for(let i=endAt-1;i>=0;i--){ if(body(i)){ last=i; break; } }
+  if(last>=0&&last!==first) z.has(last)||z.set(last,"결론 마지막 문단");
+  return z; }
+function ownHit(text,s,e){ const z=ownZones(text); if(!z.size) return ""; const a=text.slice(0,s).split("\n").length-1, b=text.slice(0,Math.max(s,e-1)).split("\n").length-1; for(let i=a;i<=b;i++) if(z.has(i)) return z.get(i); return ""; }
 // ───────── AI 구간 다듬기 (펜시브처럼) ─────────
 // 글자를 고르고 「✦ 다듬기」(고르기 막대·오른쪽 버튼 메뉴) → 방향 → 서버 coWrite_(mode:"refine") → 고를 곳에 옅은 보라 바탕(거울 층) + 비교 상자(지운 곳 취소선·바뀐 곳 굵은 밑줄)
 // ✓ 적용(⌘Z, 알림의 「되돌리기」) · ✗ 취소(Esc) · ↻ 다시. 기다리는 사이 그 부분을 고치면: 글에서 딱 한 번 나오면 그 자리를 따라가고, 아니면 적용하지 않음. 한 번에 4,000자.
@@ -4966,7 +5031,8 @@ async function rfStart(dir,again){ const b=$("#wbody"); if(!b) return; const ins
   if(dir==="custom"&&!instr) return toast("어떻게 고칠지 적어 주세요");
   let s,e; if(again&&RF){ rfCheck(); if(RF.stale) return toast("그사이 이 부분이 바뀌었습니다 — 다시 골라 주세요"); s=RF.s; e=RF.e; } else { const w=WSEL&&WSEL.e>WSEL.s?WSEL:{s:b.selectionStart,e:b.selectionEnd}; s=w.s; e=w.e; }
   hlClose(); while(s<e&&/\s/.test(b.value[s])) s++; while(e>s&&/\s/.test(b.value[e-1])) e--;
-  const orig=b.value.slice(s,e); if(!orig) return toast("다듬을 문장을 먼저 고르세요"); if(orig.length>4000) return toast("한 번에 4,000자까지 다듬을 수 있습니다 — 조금 나눠서 골라 주세요");
+  const orig=b.value.slice(s,e); if(!orig) return toast("다듬을 문장을 먼저 고르세요");
+  { const oz=ownHit(b.value,s,e); if(oz&&dir!=="fix") return toast(`「${oz}」은 직접 쓰는 자리입니다 (원칙 1-5) — 여기서는 「비문 고치기」만 됩니다`); } if(orig.length>4000) return toast("한 번에 4,000자까지 다듬을 수 있습니다 — 조금 나눠서 골라 주세요");
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
   if(dir!=="custom"&&!rfDirs().dirs.includes(dir)) return toast("이 글에서는 쓸 수 없는 다듬기입니다");
   const k=aiGenre(), n=(RF?.n||0)+1, body=b.value;
