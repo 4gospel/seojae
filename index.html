@@ -648,6 +648,10 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .stnode{padding-left:calc(8px + var(--d,0)*14px);font-size:13.5px} .stnode.part{color:var(--ink-soft);font-weight:600} .stnode.part .sti{font-size:10px}
 .sttabrow>.sttab:first-child{position:sticky;left:0;z-index:2;background:var(--desk,var(--paper-2));box-shadow:6px 0 8px -6px rgba(0,0,0,.15)}   /* 탭이 넘쳐도 「홈」은 늘 보이게 */
 @media (max-width:700px){ .toolbar .discardbtn{display:none} }   /* 휴대폰: 휴지통은 「다듬기 ▾」 안에만 (간직하기 옆에서 잘못 누르지 않게, 도구 줄이 세 줄이 되지 않게) */
+.vrform{display:grid;gap:6px;border:1px solid var(--edge);border-radius:10px;padding:10px;background:var(--paper-2)} .vrlist{display:grid;gap:6px;max-height:46vh;overflow:auto}
+.vrrow{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--edge);border-radius:10px;padding:8px 10px;background:var(--paper)} .vrrow.off{opacity:.5} .vrrow textarea,.vrrow input{width:100%;margin-top:4px;font-size:14px}
+.vrcheck{border-left:3px solid #7a5aa8;padding:6px 10px;background:var(--paper);font-size:14px}
+#aipanel .msg.me .mkrule{display:block;margin:4px 0 0 auto;border:0;background:none;color:var(--faint);font-size:11px;cursor:pointer;padding:0} #aipanel .msg.me .mkrule:hover{color:#6b4a9a;text-decoration:underline}
 .dcard{margin:6px 0 14px;border:1px solid color-mix(in srgb,var(--book) 35%,var(--edge));border-radius:10px;background:color-mix(in srgb,var(--book) 4%,var(--paper));font:14px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif}
 .dcard>summary{cursor:pointer;padding:8px 12px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;list-style:none} .dcard>summary::-webkit-details-marker{display:none} .dcard>summary b{color:var(--book)}
 .dcard .dcsum{color:var(--ink-soft);min-width:0} .dcard .dcsum.ok{color:var(--ink);font-weight:600} .dcard .dcwarn{color:var(--sepia);font-size:12px}
@@ -1542,7 +1546,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="f6caf7767d";
+const APP_BUILD="cef7ac9da9";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2026,7 +2030,7 @@ const hlClose=()=>{ $("#hlbar")?.remove(); HLSEL=null; };
 let WSEL=null;
 function wTools(){
   return `<button class="rfd rfgo" title="AI로 다듬기 — 고친 안을 비교해 보고 넣습니다" onclick="rfMenu()">✦ 다듬기</button>`+HLC.map(([k,c])=>`<button title="형광펜" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")
-    +`<button title="밑줄" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button title="각주 달기 (고른 글 뒤에 번호로 붙습니다)" onclick="wMark('fn')" style="font-weight:700;font-family:Georgia,serif">¹</button><button title="표시 지우기 (형광펜·밑줄만 지우고 글은 그대로)" onclick="wMark('clear')">⌫</button><button title="닫기" onclick="hlClose()">✕</button>`;
+    +`<button title="밑줄" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button title="각주 달기 (고른 글 뒤에 번호로 붙습니다)" onclick="wMark('fn')" style="font-weight:700;font-family:Georgia,serif">¹</button><button title="표시 지우기 (형광펜·밑줄만 지우고 글은 그대로)" onclick="wMark('clear')">⌫</button><button class="rfd" title="이 문장을 말투 기준으로 담기 — AI가 이 말투를 따릅니다" onclick="voiceAddSel()">말투</button><button title="닫기" onclick="hlClose()">✕</button>`;
 }
 function wMark(kind,color){
   const b=$("#wbody"); if(!b||!WSEL) return hlClose();
@@ -3161,6 +3165,7 @@ settings(){
   ${reminderSection()}
   ${appSection()}
   ${musicSection()}
+  ${vrSection()}
   ${quietSection()}
   ${lookSection()}
   </div>
@@ -4892,14 +4897,14 @@ const undoHint=()=>isTouch()?"↶ 단추로 되돌리기":"⌘Z로 되돌리기"
 const aiBodyText=b=>stripMemo(b.value).split("\n").filter(l=>!SLIDE_RE.test(l)).join("\n");
 const aiRefsText=m=>(m?.research||[]).slice(0,12).map(r=>`- ${r.t||"자료"}: ${String(r.body||"").slice(0,700)}${r.src?` (출처: ${r.src})`:""}`).join("\n").slice(0,6000);
 function aiChips(sel,k){ const b=$("#wbody"), n=b?aiBodyText(b).length:0, P=$("#wpassage")?.value||k.w?.passage||"", rn=(k.m?.research||[]).length;
-  return `<div class="aichips" title="AI가 읽는 것"><span>이 글 · ${n.toLocaleString()}자${n>14000?" (길어서 앞뒤만)":""}</span>${sel?`<span>고른 곳 ${sel.t.length.toLocaleString()}자</span>`:`<span>커서 근처</span>`}${P?`<span>본문 ${esc(P)}</span>`:""}${rn?`<button class="${AI_REFS?"on":""}" onclick="AI_REFS=!AI_REFS;aiDraw()" title="이 원고의 자료 모음도 함께 읽게 합니다 (사실·인용은 자료에 있는 것만 씀)">${AI_REFS?"✓":"＋"} 원고 자료 ${rn}</button>`:""}</div>`; }
+  return `<div class="aichips" title="AI가 읽는 것"><span>이 글 · ${n.toLocaleString()}자${n>14000?" (길어서 앞뒤만)":""}</span>${sel?`<span>고른 곳 ${sel.t.length.toLocaleString()}자</span>`:`<span>커서 근처</span>`}${P?`<span>본문 ${esc(P)}</span>`:""}<button onclick="vrOpen('rules')" title="AI가 함께 따르는 규칙과 말투 기준">규칙 ${vrList("rules").filter(x=>x.on!==false).length} · 말투 ${vrList("voice").length}</button>${rn?`<button class="${AI_REFS?"on":""}" onclick="AI_REFS=!AI_REFS;aiDraw()" title="이 원고의 자료 모음도 함께 읽게 합니다 (사실·인용은 자료에 있는 것만 씀)">${AI_REFS?"✓":"＋"} 원고 자료 ${rn}</button>`:""}</div>`; }
 function aiSugHtml(m,i){ const pend=(m.items||[]).filter(x=>!x.st).length;
   return `<div class="msg ai">${m.items.length?`<b>고칠 곳 ${m.items.length}</b> <span class="muted" style="font-size:12px">— 하나씩 비교해 보고 넣으세요</span>`:"고칠 곳을 찾지 못했습니다."}
     ${m.items.map((it,j)=>`<div class="sug2 ${it.st||""}"><div class="rfdiff">${rfDiffHtml(it.from,it.to)}</div>${it.why?`<small>${esc(it.why)}</small>`:""}<div class="row">${it.st==="done"?`<span class="muted" style="font-size:12px">✓ 넣음</span>`:it.st==="drop"?`<span class="muted" style="font-size:12px">버림</span>`:`<button class="p" onclick="aiSugApply(${i},${j})">✓ 적용</button><button onclick="aiSugDrop(${i},${j})">버리기</button><button onclick="aiSugShow(${i},${j})">글에서 보기</button>`}</div></div>`).join("")}
     ${pend>1?`<div class="row" style="margin-top:4px"><button class="btn small ghost" onclick="aiSugAll(${i})">남은 ${pend}곳 모두 적용</button></div>`:""}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`; }
 function aiDraw(){ const el=$("#aipanel"); if(!el) return; if(AI_MODE==="research") return rsDraw(); const sel=aiSelNow(), k=aiGenre(), cr=CONF.claude, keyOK=!!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini), ask=aiAsk(), keep=$("#aiin")?.value||"";
   el.innerHTML=`<div class="aih"><span style="color:#7a5aa8;font-size:17px">✦</span><b>글쓰기 도우미</b><span class="muted" style="font-size:12px">${esc(k.name)}</span>${k.meditation?`<span class="aimode"><span title="묵상은 글쓴이의 기도라 AI가 문장을 지어 주지 않습니다">질문만</span></span>`:`<span class="aimode"><button class="${ask==="ask"?"on":""}" onclick="aiSetAsk('ask')" title="묻고 답하기 — 넣을 문장은 카드로">질문</button><button class="${ask==="suggest"?"on":""}" onclick="aiSetAsk('suggest')" title="고칠 곳을 찾아 하나씩 비교해 보고 적용">제안</button></span>`}<span class="spacer"></span><button onclick="rsOpen()" title="웹에서 자료를 찾아 원고 자료 모음에 담는 조사 도우미">조사 ↗</button>${AI_MSGS.length?`<button onclick="aiReset()" title="대화를 비웁니다">새 대화</button>`:""}<button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div>
-    <div class="aim" id="aimsgs">${AI_MSGS.length?AI_MSGS.map((m,i)=>m.role==="me"?`<div class="msg me">${aiText(m.text)}</div>`:m.role==="err"?`<div class="msg err">${esc(m.text)}</div>`:m.items?aiSugHtml(m,i)
+    <div class="aim" id="aimsgs">${AI_MSGS.length?AI_MSGS.map((m,i)=>m.role==="me"?`<div class="msg me">${aiText(m.text)}<button class="mkrule" onclick="ruleFromMsg(${i})" title="이 지적을 규칙으로 남기면 다음 AI 요청마다 함께 갑니다 (원칙 8-1)">규칙으로</button></div>`:m.role==="err"?`<div class="msg err">${esc(m.text)}</div>`:m.items?aiSugHtml(m,i)
       :`<div class="msg ai">${aiFmt(m.text).map((p,j)=>p.k==="t"?(p.v.trim()?aiText(p.v):""):`<div class="sug">${esc(p.v)}<div class="row">${k.meditation?"":k.poem?(m.sel?`<button class="p" onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""):`<button class="p" onclick="aiPut(${i},${j},'ins')">커서 자리에 넣기</button>${m.sel?`<button onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""}`}<button onclick="aiPut(${i},${j},'copy')">복사</button></div></div>`).join("")}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`).join("")
       :k.meditation?`<div class="msg ai">묵상은 팀장님이 말씀 앞에서 쓰는 글이라, 저는 문장을 지어 드리지 않고 <b>질문</b>만 합니다. 본문을 다시 보게 하는 관찰 질문, 확실한 배경 사실(출처와 함께), 맞춤법을 도와 드려요.</div>`
       :ask==="suggest"?`<div class="msg ai"><b>제안 모드</b> — 무엇을 고칠지 말씀하시면(예: 「어색한 문장」) 글에서 고칠 곳을 찾아 「전 → 후」로 보여 드립니다. 하나씩 보고 ✓ 적용을 누른 것만 글에 들어가고 ⌘Z로 되돌릴 수 있어요.${rfDirs().free?"":`<br><span class="muted" style="font-size:12.5px">${esc(k.name)}은 비문(주어·서술어 호응, 조사)만 고칩니다.</span>`}</div>`
@@ -4925,7 +4930,7 @@ async function aiSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
   if(ta) ta.value=""; const sel=aiSelNow(), k=aiGenre(), pos=b.selectionEnd, near=b.value.slice(Math.max(0,pos-600),pos+600), ask=aiAsk(), key=AI_KEY;
   AI_MSGS.push({role:"me",text:q}); AI_BUSY=true; aiStore(); aiDraw();
   const body=aiBodyText(b), samples=body.split("\n").filter(l=>l.trim().length>40).slice(0,3).join("\n");
-  const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,sermon:k.sermon,card:cardForAI(k.w),refs:AI_REFS?aiRefsText(k.m):"",samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
+  const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,sermon:k.sermon,card:cardForAI(k.w),...vrFor(k.sermon),refs:AI_REFS?aiRefsText(k.m):"",samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
   const hist=AI_MSGS.filter(m=>m.role!=="err"&&m.text).slice(-12).map(m=>({role:m.role,text:m.text}));
   let add; try{ if(ask==="suggest"){ const r=await gcall("coWrite",{mode:"suggest",messages:hist,doc}); add={role:"ai",text:`(제안 ${r.items.length}곳)`,items:r.items.map(x=>({...x})),ai:r.ai}; }
     else { const r=await gcall("coWrite",{messages:hist,doc}); add={role:"ai",text:r.text,ai:r.ai,sel:sel||null,pos}; } }
@@ -4988,7 +4993,7 @@ async function cardAI(){ const w=cardW(); if(!w) return; const k=aiGenre(), thre
   if(!three&&!CARD_ASKED.has(w.id)){ CARD_ASKED.add(w.id); $("#c3")?.focus(); return toast("본문을 먼저 읽고 「내가 받은 것」 세 줄을 적어 주세요 — 한 번 더 누르면 세 줄 없이도 초안을 냅니다 (원칙 1-3)"); }   // 한 번만 청하고, 작업은 멈추지 않음
   const b=$("#cardaibtn"), st=$("#cardaist"); if(b){ b.disabled=true; b.textContent="카드 초안을 받는 중…"; }
   const mins=parseInt(wMeta(w,"cbudget"))||20;
-  try{ const r=await gcall("coWrite",{mode:"card",three,title:$("#wtitle")?.value||w.title||"",passage:$("#wpassage")?.value||w.passage||"",genre:k.name,sermon:k.sermon,minutes:k.sermon?mins:0,body:aiBodyText($("#wbody")||{value:w.body||""})});
+  try{ const r=await gcall("coWrite",{mode:"card",...vrFor(k.sermon),three,title:$("#wtitle")?.value||w.title||"",passage:$("#wpassage")?.value||w.passage||"",genre:k.name,sermon:k.sermon,minutes:k.sermon?mins:0,body:aiBodyText($("#wbody")||{value:w.body||""})});
     CARD_AI={id:w.id,...r}; CARD_OPEN.add(w.id); cardPaint(); }
   catch(e){ if(b){ b.disabled=false; b.textContent="✦ AI 카드 초안"; } if(st) st.textContent="받지 못했습니다: "+e.message; } }
 // 도우미에 함께 보낼 카드 (확정 여부·아직 직접 쓰지 않은 자리)
@@ -5005,6 +5010,53 @@ function ownZones(text){ const z=new Map(); const cw=editId&&S.writings.find(x=>
   if(last>=0&&last!==first) z.has(last)||z.set(last,"결론 마지막 문단");
   return z; }
 function ownHit(text,s,e){ const z=ownZones(text); if(!z.size) return ""; const a=text.slice(0,s).split("\n").length-1, b=text.slice(0,Math.max(s,e-1)).split("\n").length-1; for(let i=a;i<=b;i++) if(z.has(i)) return z.get(i); return ""; }
+// ───────── 말투 기준 · 규칙 저장소 (팀장님 「AI 보조 원칙」 1-6 · 8-1 · 8-2) ─────────
+// 설정 S.settings.voice=[{id,t,k:"설교"|"글"|"모두",at}] — 팀장님이 직접 고친 문장(말투 기준). S.settings.rules=[{id,t,why,how,k,on,at}] — 지적 → 규칙(날짜·계기·적용 방법).
+// 켜 둔 규칙과 그 갈래의 말투 기준을 모든 글쓰기 AI(도우미·제안·다듬기·설계 카드)에 함께 보냄(서버 vrText_). 설정이라 모든 기기에서 같이 쓰고, 지운 것은 묘비로.
+const vrList=k=>(S.settings[k]||[]).filter(x=>!(S.deleted||{})[x.id]);
+function vrFor(sermon){ const kind=sermon?"설교":"글";
+  const voice=vrList("voice").filter(x=>x.k==="모두"||x.k===kind).slice(-12).map(x=>"- "+x.t).join("\n").slice(0,2500);
+  const rules=vrList("rules").filter(x=>x.on!==false&&(x.k==="모두"||x.k===kind)).map(x=>`- ${x.t}${x.how?` (적용: ${x.how})`:""}`).join("\n").slice(0,3000);
+  return {voice,rules}; }
+function vrSave(k,list){ S.settings[k]=list; save(); }
+function voiceAdd(t,kind){ t=String(t||"").trim(); if(!t) return; if(t.length>600) return toast("말투 기준 문장은 600자까지 담을 수 있습니다 — 조금 나눠 주세요"); const L=vrList("voice"); if(L.some(x=>x.t===t)) return toast("이미 담긴 문장입니다");
+  L.push({id:uid(),t,k:kind||(aiGenre().sermon?"설교":"글"),at:today()}); vrSave("voice",L.slice(-40)); toast("말투 기준으로 담았습니다 — 다음 AI 문장부터 이 말투를 따릅니다"); }
+function voiceAddSel(){ const b=$("#wbody"); if(!b) return; const s=WSEL?.s??b.selectionStart, e=WSEL?.e??b.selectionEnd; if(e<=s) return toast("말투 기준으로 담을 문장을 고르세요"); hlClose(); voiceAdd(stripMk(b.value.slice(s,e))); }
+function ruleAdd(r){ const t=String(r.t||"").trim(); if(!t) return toast("규칙을 적어 주세요"); const L=vrList("rules"); L.push({id:uid(),t,why:String(r.why||"").trim(),how:String(r.how||"").trim(),k:r.k||"모두",on:true,at:today()}); vrSave("rules",L); }
+function ruleFromMsg(i){ const m=AI_MSGS[i]; if(!m) return; vrOpen("rules",{t:m.text.slice(0,300),why:`AI 창에서 한 지적 (${today()})`}); }
+function vrOpen(tab0,pre){ const ov=document.createElement("div"); ov.className="bookview sendview"; let vt=tab0||"rules", check=null, editing=null;
+  const sermonNow=tab==="write"&&aiGenre().sermon;   // 쓰기 화면에서 열면 그 글의 갈래를 기본 범위로
+  const draw=()=>{ const R=vrList("rules"), V=vrList("voice"), kinds=["모두","설교","글"], ksel=(v,attr)=>`<select ${attr} style="width:auto">${kinds.map(x=>`<option ${v===x?"selected":""}>${x}</option>`).join("")}</select>`;
+    ov.innerHTML=`<section class="sheet" style="max-width:700px;margin:36px auto;display:grid;gap:12px">
+      <div class="row"><p class="label" style="margin:0">AI가 따를 것</p><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div>
+      <div class="pills"><button class="pill ${vt==="rules"?"on":""}" data-tab="rules">규칙 ${R.filter(x=>x.on!==false).length}/${R.length}</button><button class="pill ${vt==="voice"?"on":""}" data-tab="voice">말투 기준 ${V.length}</button></div>
+      ${vt==="rules"?`<p class="hint" style="margin:0">지적·요청·평가를 규칙으로 남기면, 켜 둔 규칙은 다음 AI 요청마다 함께 갑니다 (원칙 8-1). 날짜·계기(왜)·적용 방법(어떻게)을 함께 적어 두면 나중에 정리하기 좋습니다.</p>
+        <div class="vrform"><textarea id="vr-t" placeholder="규칙 (예: 결론에 새 정보·요약 나열·훈계 목록을 넣지 않는다)" rows="2">${esc(pre?.t||"")}</textarea>
+          <div class="row" style="gap:6px;flex-wrap:wrap"><input id="vr-why" placeholder="계기 — 왜 생겼나 (예: 「마무리가 너무 급하다」 10-07)" value="${esc(pre?.why||"")}" style="flex:2;min-width:180px"><input id="vr-how" placeholder="적용 방법 — 어떻게" style="flex:2;min-width:160px"><span class="muted" style="font-size:12.5px">범위</span>${ksel(sermonNow?"설교":"모두",'id="vr-k"')}<button class="btn small ink" data-add>규칙 남기기</button></div></div>
+        <div class="vrlist">${R.slice().reverse().map((x,n)=>`<div class="vrrow ${x.on===false?"off":""}"><label class="chk" title="끄면 AI에 보내지 않음"><input type="checkbox" data-on="${x.id}" ${x.on!==false?"checked":""}></label><div style="min-width:0;flex:1">${editing===x.id?`<textarea data-et="${x.id}" rows="2">${esc(x.t)}</textarea><input data-ew="${x.id}" value="${esc(x.why||"")}" placeholder="계기"><input data-eh="${x.id}" value="${esc(x.how||"")}" placeholder="적용 방법">`:`<b>${R.length-n}. ${esc(x.t)}</b>${x.why||x.how?`<div class="muted" style="font-size:12.5px">${x.why?"계기: "+esc(x.why):""}${x.why&&x.how?" · ":""}${x.how?"적용: "+esc(x.how):""}</div>`:""}`}<small class="muted">${esc(x.at||"")} · ${esc(x.k||"모두")}</small></div>
+            ${editing===x.id?`<button class="btn small ink" data-esave="${x.id}">저장</button>`:`<button class="btn small ghost" data-edit="${x.id}">고치기</button>`}<button class="btn small ghost" data-del="${x.id}" title="지우기 (고칠 규칙이면 「고치기」로 — 바뀐 규칙은 지우거나 무엇으로 바뀌었는지 적기)">✕</button></div>`).join("")||`<p class="muted" style="margin:0">아직 규칙이 없습니다. AI 창에서 내가 쓴 말 아래 「규칙으로」를 눌러도 됩니다.</p>`}</div>
+        ${R.length>1?`<div class="row" style="gap:8px"><button class="btn small" data-check ${SERVER?"":"disabled"}>✦ 규칙 점검 (부딪히는·낡은 규칙 찾기)</button><small class="muted">원칙 8-2 — 짚기만 하고 고치는 것은 직접</small></div>`:""}
+        ${check?`<div class="vrcheck">${check.busy?`<span class="muted">점검하는 중…</span>`:check.err?`<span class="warn">${esc(check.err)}</span>`:aiText(check.text)}</div>`:""}`
+      :`<p class="hint" style="margin:0">팀장님이 직접 쓰거나 고친 문장을 담아 두면, AI가 새로 쓰거나 다듬는 문장이 이 말투를 따릅니다 (원칙 1-6). 사실·인용·원문은 바꾸지 않습니다. 쓰기 화면에서 문장을 고르고 「말투」를 눌러도 담깁니다.</p>
+        <div class="vrform"><textarea id="vo-t" placeholder="말투가 잘 드러난 내 문장 하나 (예: 어떻게 보면, 우리는 모두 길 위에 서 있는 사람들이지요.)" rows="2"></textarea><div class="row" style="gap:6px"><span class="muted" style="font-size:12.5px">쓰이는 글</span>${ksel(sermonNow?"설교":"모두",'id="vo-k"')}<button class="btn small ink" data-vadd>담기</button></div></div>
+        <div class="vrlist">${V.slice().reverse().map(x=>`<div class="vrrow"><div style="min-width:0;flex:1">「${esc(x.t)}」<br><small class="muted">${esc(x.at||"")} · ${esc(x.k||"모두")}</small></div><button class="btn small ghost" data-vdel="${x.id}">✕</button></div>`).join("")||`<p class="muted" style="margin:0">아직 담긴 문장이 없습니다.</p>`}</div>`}
+    </section>`;
+    ov.querySelector("[data-x]").onclick=()=>ov.remove();
+    ov.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{ vt=b.dataset.tab; draw(); });
+    ov.querySelector("[data-add]")?.addEventListener("click",()=>{ ruleAdd({t:ov.querySelector("#vr-t").value,why:ov.querySelector("#vr-why").value,how:ov.querySelector("#vr-how").value,k:ov.querySelector("#vr-k").value}); pre=null; draw(); });
+    ov.querySelectorAll("[data-on]").forEach(c=>c.onchange=()=>{ const L=vrList("rules"), x=L.find(r=>r.id===c.dataset.on); if(x){ x.on=c.checked; vrSave("rules",L); } draw(); });
+    ov.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{ editing=b.dataset.edit; draw(); });
+    ov.querySelectorAll("[data-esave]").forEach(b=>b.onclick=()=>{ const id=b.dataset.esave, L=vrList("rules"), x=L.find(r=>r.id===id); if(x){ x.t=ov.querySelector(`[data-et="${id}"]`).value.trim()||x.t; x.why=ov.querySelector(`[data-ew="${id}"]`).value.trim(); x.how=ov.querySelector(`[data-eh="${id}"]`).value.trim(); x.at=today(); vrSave("rules",L); } editing=null; draw(); });
+    ov.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ if(!confirm("이 규칙을 지울까요? (잠시 쓰지 않으려면 왼쪽 체크를 끄면 됩니다)")) return; tomb(b.dataset.del); vrSave("rules",vrList("rules").filter(r=>r.id!==b.dataset.del)); draw(); });
+    ov.querySelector("[data-check]")?.addEventListener("click",async()=>{ check={busy:true}; draw(); const R2=vrList("rules"); const txt=R2.map((x,n)=>`${n+1}. ${x.t}${x.on===false?" (꺼 둠)":""} — 날짜 ${x.at||"?"} · 범위 ${x.k||"모두"}${x.why?` · 계기: ${x.why}`:""}${x.how?` · 적용: ${x.how}`:""}`).join("\n");
+      try{ const r=await gcall("coWrite",{mode:"rulecheck",rules:txt}); check={text:r.text}; }catch(e){ check={err:"점검하지 못했습니다: "+e.message}; } draw(); });
+    ov.querySelector("[data-vadd]")?.addEventListener("click",()=>{ voiceAdd(ov.querySelector("#vo-t").value,ov.querySelector("#vo-k").value); draw(); });
+    ov.querySelectorAll("[data-vdel]").forEach(b=>b.onclick=()=>{ tomb(b.dataset.vdel); vrSave("voice",vrList("voice").filter(r=>r.id!==b.dataset.vdel)); draw(); }); };
+  document.body.appendChild(ov); draw(); if(pre) setTimeout(()=>ov.querySelector("#vr-t")?.focus(),30); }
+function vrSection(){ const R=vrList("rules"), V=vrList("voice");
+  return `<section class="sheet tape compact"><p class="label">AI가 따를 것 — 규칙 · 말투 기준</p>
+    <p class="sub">글을 쓰며 받은 지적을 <b>규칙</b>으로 남기고(원칙 8-1), 내가 직접 고친 문장을 <b>말투 기준</b>으로 담아 두면(1-6) 모든 AI 글쓰기 도움이 함께 따릅니다. 원칙 문서 자체는 서버에 늘 들어 있습니다.</p>
+    <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn small" onclick="vrOpen('rules')">규칙 ${R.filter(x=>x.on!==false).length}개 켜짐 · 고치기</button><button class="btn small" onclick="vrOpen('voice')">말투 기준 ${V.length}문장</button></div></section>`; }
 // ───────── AI 구간 다듬기 (펜시브처럼) ─────────
 // 글자를 고르고 「✦ 다듬기」(고르기 막대·오른쪽 버튼 메뉴) → 방향 → 서버 coWrite_(mode:"refine") → 고를 곳에 옅은 보라 바탕(거울 층) + 비교 상자(지운 곳 취소선·바뀐 곳 굵은 밑줄)
 // ✓ 적용(⌘Z, 알림의 「되돌리기」) · ✗ 취소(Esc) · ↻ 다시. 기다리는 사이 그 부분을 고치면: 글에서 딱 한 번 나오면 그 자리를 따라가고, 아니면 적용하지 않음. 한 번에 4,000자.
@@ -5039,7 +5091,7 @@ async function rfStart(dir,again){ const b=$("#wbody"); if(!b) return; const ins
   RF={s,e,orig,dir,instr,busy:true,wid:editId||"new",n}; paintHeads(); rfDraw();
   const samples=body.split("\n").filter(l=>l.trim().length>40&&!orig.includes(l)&&!l.includes(orig)).slice(0,3).join("\n");
   const label=dir==="custom"?"글쓴이의 부탁대로":RF_DIRS[dir][0]+" — "+RF_DIRS[dir][1];
-  try{ const r=await gcall("coWrite",{mode:"refine",text:orig,before:body.slice(Math.max(0,s-800),s),after:body.slice(e,e+800),dir:label,instr,title:$("#wtitle")?.value||"",genre:k.name,samples,poem:k.poem,sermon:k.sermon});
+  try{ const r=await gcall("coWrite",{mode:"refine",text:orig,before:body.slice(Math.max(0,s-800),s),after:body.slice(e,e+800),dir:label,instr,title:$("#wtitle")?.value||"",genre:k.name,samples,poem:k.poem,sermon:k.sermon,...vrFor(k.sermon)});
     if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,to:r.to,why:r.why,same:r.same,ai:r.ai,shape:!r.same&&lineShape(orig)!==lineShape(r.to),poem:!!k.poem}); }
   catch(err){ if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,err:err.message}); }
   rfCheck(); paintHeads(); rfDraw(); }
@@ -5202,6 +5254,7 @@ function ctxEditor(){ const b=$("#wbody"); const s=b.selectionStart, e=b.selecti
     has?{t:"밑줄",ic:"U",fn:()=>{ WSEL={s,e}; wMark('ul'); }}:null,
     {t:has?"각주 달기":"커서 자리에 각주",ic:"¹",fn:()=>{ if(has){ WSEL={s,e}; wMark('fn'); } else fnBox(s,null,"…"+b.value.slice(Math.max(0,s-24),s).replace(/\s+/g," ").trim()); }},
     has?{t:"표시 지우기",ic:"⌫",fn:()=>{ WSEL={s,e}; wMark('clear'); }}:null,
+    has?{t:"말투 기준으로 담기",ic:"♪",fn:()=>{ WSEL={s,e}; voiceAddSel(); }}:null,
     has?{t:"끄적이기에 담기",ic:"✐",fn:()=>{ (S.jots=S.jots||[]).push({id:uid(),t:b.value.slice(s,e).trim().slice(0,2000),updated:new Date().toISOString()}); save(); toast("끄적이기에 담았습니다"); if($("#jotlist")) jotPaint(); }}:null,
     has?"-":null,
     has?{t:"잘라내기",ic:"✂",fn:()=>{ const t=b.value.slice(s,e); navigator.clipboard?.writeText(t).then(()=>tInsert(b,"",s,e),()=>toast("잘라내지 못했습니다")); }}:null,
