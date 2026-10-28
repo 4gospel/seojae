@@ -96,6 +96,9 @@ nav button.navroom{margin-left:auto;display:flex;align-items:center;gap:6px;back
 nav button.navroom .ico{width:16px;height:16px;stroke:#d9b779}
 nav button.navroom:hover{color:#fff}
 nav button.navroom.on{background:linear-gradient(180deg,#34425c,#2a3650);color:#fff;box-shadow:0 -2px 0 #d9b779 inset;font-weight:400}
+nav button.navai{display:flex;align-items:center;gap:4px;margin-left:6px;background:color-mix(in srgb,#7a5aa8 12%,var(--paper));color:#6b4a9a;border-color:#c9b4e3;font-weight:700;padding:8px 13px 7px}
+nav button.navai.on{background:#7a5aa8;color:#fff;box-shadow:none}
+:root[data-theme="dark"] nav button.navai{color:#d7c4f0;border-color:#5e4a80}
 :root[data-theme="dark"] nav button.navroom{background:linear-gradient(180deg,#3a4a68,#2c3852);border-color:#46577a}
 .navline{height:1px;background:var(--edge)}
 main.wrap{padding:34px 16px 80px}
@@ -439,6 +442,8 @@ hr.dash{border:0;border-top:1px dashed var(--edge);margin:18px 0}
   nav button.on{background:var(--paper-2);box-shadow:none;color:var(--sepia)}
   nav button.navroom{margin-left:4px;flex:1.15;justify-content:center;gap:3px;border-radius:10px;font-size:17px;padding:8px 0}
   nav button.navroom.on{background:linear-gradient(180deg,#34425c,#2a3650);color:#fff;box-shadow:inset 0 -2px 0 #d9b779}
+  nav button.navai{flex:.62;margin-left:4px;justify-content:center;flex-direction:column;gap:0;border-radius:10px;font-size:15px;line-height:1.1;padding:5px 0} nav button.navai span{font-size:10.5px}
+  nav button.navai.on{background:#7a5aa8;color:#fff}
   main.wrap{padding:24px 16px 30px}
   .grid{gap:24px;grid-template-columns:1fr}
   .sheet{padding:20px 18px 18px}
@@ -602,13 +607,15 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 @media (max-width:700px){ .suplayer{right:12px;bottom:calc(70px + env(safe-area-inset-bottom));width:calc(100vw - 24px)} .suplayer:not(.mplayer).min{width:84px} }
 @media print{ .suplayer{display:none} }
 /* 찬송가·CCM 듣기: 찬송가 자리의 은은한 조작 단추 + 작은 유튜브 창(유튜브 규칙상 영상은 보이게, 200×200 이상) */
-.hymnbox{white-space:nowrap} .hb{border:0;background:none;color:var(--faint);font:inherit;font-size:12.5px;line-height:1;padding:3px 6px;border-radius:999px;cursor:pointer;opacity:.7;vertical-align:baseline;text-decoration:none}
+.hymnbox{white-space:nowrap} .hymnbox .hb[data-hb]{opacity:1;color:var(--sepia);font-weight:700;border:1px solid color-mix(in srgb,var(--sepia) 45%,transparent);padding:3px 9px;margin-left:2px} .hymnbox .hb[data-hb]::after{content:" 듣기";font-size:12px} .hymnbox .hb[data-hb].on::after{content:""} .hb{border:0;background:none;color:var(--faint);font:inherit;font-size:12.5px;line-height:1;padding:3px 6px;border-radius:999px;cursor:pointer;opacity:.7;vertical-align:baseline;text-decoration:none}
 .hb:hover{opacity:1;color:var(--ink);background:color-mix(in srgb,var(--ink) 8%,transparent)} .hb.on{color:var(--sepia);opacity:1} .hb.busy{opacity:.4;pointer-events:none}
 .hbvol{width:58px;height:12px;vertical-align:middle;accent-color:var(--sepia);opacity:.65;margin:0 2px} .hbvol:hover{opacity:1}
 .mplayer{left:16px;right:auto;width:250px} .mplayer .mp-vid{width:224px;height:200px;margin:0 auto;border-radius:8px;overflow:hidden;background:#111;display:grid;place-items:center;color:#aaa;font-size:12.5px;text-align:center}
 .mplayer .mp-vid iframe{width:224px;height:200px;border:0;display:block} .mplayer .mp-ccm{display:grid;gap:4px;max-height:200px;overflow:auto}
 .mplayer .mp-ccm .ci{display:flex;gap:6px;align-items:flex-start;padding:4px 2px;border-top:1px dashed var(--edge)} .mplayer .mp-ccm .ci div{display:grid;min-width:0;flex:1}
-.mplayer .mp-ccm .ci b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .mplayer .mp-ccm .ci.on b{color:var(--sepia)} .mplayer .mp-note{font-size:11px}
+.mplayer .mp-ctl{display:flex;align-items:center;justify-content:center;gap:8px;position:relative} .mplayer .mp-ctl button{border:1px solid var(--edge);background:var(--paper);border-radius:50%;width:32px;height:32px;padding:0;cursor:pointer;font-size:13px;color:var(--ink);display:grid;place-items:center} .mplayer .mp-ctl button.pp{width:40px;height:40px;background:var(--ink);color:var(--paper);border-color:var(--ink);font-size:15px} .mplayer .mp-ctl small{position:absolute;right:2px;color:var(--faint);font-size:11px}
+.mplayer.min .mp-ctl{gap:6px} .mplayer.min .mp-ctl button{width:28px;height:28px} .mplayer.min .mp-ctl button.pp{width:34px;height:34px} .mplayer.min .mp-ctl small{display:none}
+.mplayer .mp-ccm .ci .mel{font-size:11px;white-space:nowrap;align-self:center;text-decoration:none} .mplayer .mp-ccm .ci b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .mplayer .mp-ccm .ci.on b{color:var(--sepia)} .mplayer .mp-note{font-size:11px}
 /* 음악 창 「작게」: 목록·제목·안내를 접고 영상만 200×200 (유튜브 규칙상 이보다 작게 하거나 가릴 수 없음) + 위에 가는 줄(끌기·▴·✕) */
 .mplayer[data-size="l"]{width:356px} .mplayer[data-size="l"] .mp-vid,.mplayer[data-size="l"] .mp-vid iframe{width:330px!important;height:330px!important}
 .mplayer[data-lock="1"] .spl-t{cursor:default} .mplayer .spl-t button.on{color:var(--sepia)}
@@ -695,9 +702,11 @@ body.focus .stside,body.focus .sttabs{display:none} body.focus .studio{grid-temp
 #aipanel .sug .row{margin-top:6px;gap:4px;font-family:-apple-system,sans-serif} #aipanel .sug button{font:12.5px -apple-system,sans-serif;border:1px solid var(--edge);background:none;border-radius:999px;padding:2px 9px;cursor:pointer;color:var(--ink)} #aipanel .sug button.p{border-color:#7a5aa8;color:#6b4a9a;font-weight:600}
 #aipanel .aiq{display:flex;gap:6px;flex-wrap:wrap;padding:8px 14px 0} #aipanel .aiq button{border:1px solid var(--edge);background:none;border-radius:999px;padding:3px 10px;font:12.5px -apple-system,"Apple SD Gothic Neo",sans-serif;cursor:pointer;color:var(--ink-soft)} #aipanel .aiq button:hover{border-color:#7a5aa8;color:#6b4a9a}
 #aipanel .aii{display:flex;gap:6px;padding:10px 14px 6px;align-items:flex-end} #aipanel textarea{flex:1;min-height:42px;max-height:160px;resize:none;font:14.5px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif;padding:8px 10px;border-radius:10px}
+#aipanel .rssrc{display:grid;gap:2px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--edge);font-size:12px} #aipanel .rssrc b{font-size:11.5px;color:var(--faint)} #aipanel .rssrc a{color:var(--sepia);overflow:hidden;text-overflow:ellipsis;white-space:nowrap} #aipanel .rssrc span{color:var(--faint)}
+#aipanel .rsact{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px} #aipanel .rsact button{font:12.5px -apple-system,sans-serif;border:1px solid var(--edge);background:none;border-radius:999px;padding:2px 9px;cursor:pointer;color:var(--ink)} #aipanel .rsact button.p{border-color:#7a5aa8;color:#6b4a9a;font-weight:600}
 #aipanel .aif{padding:0 14px 10px;font-size:11.5px;color:var(--faint)} #aipanel .ctxsel{margin:6px 14px 0;font-size:12.5px;color:var(--ink-soft);background:color-mix(in srgb,#7a5aa8 8%,transparent);border-radius:8px;padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #aipanel .dots i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--faint);margin:0 2px;animation:aid 1s infinite} #aipanel .dots i:nth-child(2){animation-delay:.15s} #aipanel .dots i:nth-child(3){animation-delay:.3s} @keyframes aid{50%{opacity:.25}}
-@media (min-width:1100px){ body.aiopen main.wrap{max-width:none;margin-left:max(16px,calc(50vw - 790px));margin-right:432px} }   /* AI 창이 열리면 본문을 왼쪽으로 붙여 겹치지 않게 */
+@media (min-width:1100px){ body.aiopen main.wrap,body.aiopen header .wrap{max-width:none;margin-left:max(16px,calc(50vw - 790px));margin-right:432px} }   /* 위 메뉴(글쓰기·AI 단추)도 함께 */   /* AI 창이 열리면 본문을 왼쪽으로 붙여 겹치지 않게 */
 @media (max-width:700px){ #aipanel{left:0;right:0;top:auto;bottom:0;width:auto;height:78vh;border-radius:16px 16px 0 0} }
 .ctxmenu{position:fixed;z-index:120;min-width:220px;max-width:min(320px,calc(100vw - 16px));max-height:calc(100vh - 16px);overflow:auto;background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:10px;box-shadow:0 14px 34px -10px rgba(0,0,0,.45);padding:5px;font:14.5px/1.35 -apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink)}
 .ctxmenu .cth{padding:6px 10px 4px;font-size:12.5px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -856,7 +865,7 @@ body.typew #wbody{padding-bottom:45vh}
 /* 스티커 */
 .notebook{position:relative}
 .stk-layer{position:absolute;inset:0;pointer-events:none;z-index:5}
-.stk{position:absolute;pointer-events:auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;line-height:1}
+.stk{position:absolute;pointer-events:auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;line-height:1}
 .stk.sel{outline:1.5px dashed var(--sepia);outline-offset:5px;border-radius:6px}
 .stk .se{display:block;font-size:42px;filter:drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff) drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff) drop-shadow(0 2.5px 2px rgba(0,0,0,.28))}
 .stk .tape{display:block;width:130px;height:30px;opacity:.85;clip-path:polygon(2% 0,98% 6%,100% 30%,98% 52%,100% 76%,97% 100%,3% 95%,0 70%,2% 48%,0 24%)}
@@ -873,7 +882,7 @@ body.typew #wbody{padding-bottom:45vh}
 .stk-palette{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:60;width:min(620px,calc(100vw - 24px));background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:12px;box-shadow:0 10px 30px -10px rgba(0,0,0,.45);padding:10px 12px 12px}
 .stk-palette .ptabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
 .stk-palette .pgrid{display:flex;flex-wrap:wrap;gap:6px;max-height:150px;overflow:auto}
-.stk-palette .pi{border:1px solid transparent;background:var(--paper-2);border-radius:8px;cursor:pointer;min-width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:28px;padding:0 6px}
+.stk-palette .pi{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;border:1px solid transparent;background:var(--paper-2);border-radius:8px;cursor:pointer;min-width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:28px;padding:0 6px}
 .stk-palette .pi:hover{border-color:var(--deco)}
 .stk-palette .pi .tape{width:70px;height:18px;display:block}
 .stk-palette .pi .sst{font-family:"Nanum Pen Script";font-size:17px;color:var(--stamp);border:1.5px solid currentColor;border-radius:999px;padding:2px 8px}
@@ -1471,7 +1480,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="3cf01f9fd0";
+const APP_BUILD="435f4d9ee6";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1713,10 +1722,13 @@ let MUSIC={key:"",v:null,ccm:null,cur:null,slot:"",playing:false,retry:false}, M
 const hymnNo=()=>String(SU?.hymn||"").replace(/[^0-9]/g,"").slice(0,4);
 const mpVol=()=>{ let v=50; try{ v=+(localStorage.getItem("seojae.mpVol")??50); }catch(_){} return isFinite(v)?v:50; };
 function mpSetVol(v){ try{ localStorage.setItem("seojae.mpVol",String(v)); }catch(_){} try{ MP?.setVolume(+v); }catch(_){} }
+// 멜론: 앱 안 재생기를 내주지 않아 검색 결과로만 넘김 (휴대폰은 멜론 앱이 있으면 앱으로, 듣기는 멜론 이용권으로)
+const melonUrl=q=>"https://www.melon.com/search/total/index.htm?q="+encodeURIComponent(q);
+const melonLink=(q,cls)=>`<a class="${cls||"hb"}" href="${melonUrl(q)}" target="_blank" rel="noopener" title="멜론에서 찾기 (멜론 이용권으로 멜론에서 듣기)">멜론 ↗</a>`;
 function hymnCtl(){ const n=hymnNo(); if(!n) return "";
-  if(!SERVER||!CONF.yt) return ` <a class="hb" href="https://music.youtube.com/search?q=${encodeURIComponent("새찬송가 "+n+"장")}" target="_blank" rel="noopener" title="유튜브뮤직에서 찾기 (설정 → 찬송가·CCM 듣기에 유튜브 열쇠를 넣으면 여기서 바로 재생)">♪ ↗</a>`;
+  if(!SERVER||!CONF.yt) return ` <a class="hb" href="https://music.youtube.com/search?q=${encodeURIComponent("새찬송가 "+n+"장")}" target="_blank" rel="noopener" title="유튜브뮤직에서 찾기 (설정 → 찬송가·CCM 듣기에 유튜브 열쇠를 넣으면 여기서 바로 재생)">♪ ↗</a>${melonLink("새찬송가 "+n+"장")}`;
   const on=MUSIC.playing&&MUSIC.slot==="hymn";
-  return ` <button class="hb ${on?"on":""}" data-hb onclick="hymnToggle()" title="${on?"멈춤":"찬송가 듣기 (유튜브)"}">${on?"❚❚":"▶"}</button>${MUSIC.cur?`<input class="hbvol" type="range" min="0" max="100" value="${mpVol()}" oninput="mpSetVol(this.value)" title="음량">`:""}<button class="hb" onclick="ccmOpen()" title="오늘 본문·찬송가와 같은 주제의 CCM 추천">CCM</button>`; }
+  return ` <button class="hb ${on?"on":""}" data-hb onclick="hymnToggle()" title="${on?"멈춤":"찬송가 듣기 (유튜브)"}">${on?"❚❚":"▶"}</button>${MUSIC.cur?`<input class="hbvol" type="range" min="0" max="100" value="${mpVol()}" oninput="mpSetVol(this.value)" title="음량">`:""}<button class="hb" onclick="ccmOpen()" title="오늘 본문·찬송가와 같은 주제의 CCM 추천">CCM</button>${melonLink("새찬송가 "+n+"장")}`; }
 function paintHymnCtl(){ const b=$("#hymnbox"); if(!b||!SU?.hymn) return; b.innerHTML=`찬송가 ${esc(SU.hymn)}장${hymnCtl()}`; }
 async function musicCall(body){ if(GAS) return gcall("musicFind",body); const r=await fetch("/api/music",{method:"POST",body:JSON.stringify(body)}); const j=await r.json(); if(j&&j.ok===false) throw new Error(j.error||"서버 오류"); return j; }
 function ytLoad(){ if(window.YT?.Player) return Promise.resolve(); return YT_P||(YT_P=new Promise((ok,no)=>{ const prev=window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady=()=>{ try{ prev?.(); }catch(_){} ok(); };
@@ -1724,8 +1736,8 @@ function ytLoad(){ if(window.YT?.Player) return Promise.resolve(); return YT_P||
 function mpCard(){ let el=$("#mplayer");
   if(!el){ el=document.createElement("div"); el.id="mplayer"; el.className="suplayer mplayer"; el.hidden=true;
     el.innerHTML=`<div class="spl-t"><span class="spl-ic">♪</span><div><b id="mp-t">찬송가·CCM</b><small id="mp-s">유튜브뮤직 음원 우선</small></div><span class="spacer"></span><button data-min title="크기 바꾸기 (작게 → 보통 → 크게)">▾</button><button data-lock title="자리 고정 (끌리지 않게)">📌</button><button data-menu title="크기·자리">⋯</button><button data-x title="닫기 (멈춤)">✕</button></div>
-      <div class="mp-menu" hidden><div class="r"><span>크기</span><button data-sz="s">작게</button><button data-sz="m">보통</button><button data-sz="l">크게</button></div><div class="r"><span>자리</span><button data-dk="tl" title="왼쪽 위">↖</button><button data-dk="tr" title="오른쪽 위">↗</button><button data-dk="bl" title="왼쪽 아래">↙</button><button data-dk="br" title="오른쪽 아래">↘</button><button data-dk="" title="끌어서 둔 곳">자유</button></div><div class="r"><span>고정</span><button data-lk>📌 끌리지 않게</button></div></div>
-      <div class="mp-vid" id="mpbox"><span>▶를 누르면 여기서 재생됩니다</span></div><div class="mp-ccm" id="mpccm"></div><small class="mp-note">유튜브 영상 · 위 줄을 잡고 옮길 수 있습니다</small>`;
+      <div class="mp-menu" hidden><div class="r"><span>크기</span><button data-sz="s">작게</button><button data-sz="m">보통</button><button data-sz="l">크게</button></div><div class="r"><span>자리</span><button data-dk="tl" title="왼쪽 위">↖</button><button data-dk="tr" title="오른쪽 위">↗</button><button data-dk="bl" title="왼쪽 아래">↙</button><button data-dk="br" title="오른쪽 아래">↘</button><button data-dk="" title="끌어서 둔 곳">자유</button></div><div class="r"><span>고정</span><button data-lk>📌 끌리지 않게</button></div><div class="r"><span>재생</span><button data-auto="1" title="곡이 끝나면 다음 곡 (찬송가 → CCM 차례로)">이어 듣기</button><button data-auto="0">한 곡씩</button><button data-auto="r" title="지금 곡을 끝나면 처음부터 다시 (찬송을 외우며 부를 때)">한 곡 반복</button></div></div>
+      <div class="mp-vid" id="mpbox"><span>▶를 누르면 여기서 재생됩니다</span></div><div class="mp-ctl"><button data-prev title="이전 곡 (3초 넘게 들었으면 이 곡 처음으로)">⏮&#xFE0E;</button><button data-pp class="pp" title="재생 · 멈춤">▶</button><button data-next title="다음 곡">⏭&#xFE0E;</button><small id="mp-pos"></small></div><div class="mp-ccm" id="mpccm"></div><small class="mp-note">유튜브 영상 · 위 줄을 잡고 옮길 수 있습니다</small>`;
     document.body.appendChild(el); el.querySelector("[data-x]").onclick=mpClose; suDrag(el,"seojae.mpPos");
     const cyc={s:"m",m:"l",l:"s"};
     el.querySelector("[data-min]").onclick=()=>mpSize(cyc[el.dataset.size||"m"]);
@@ -1733,6 +1745,10 @@ function mpCard(){ let el=$("#mplayer");
     el.querySelector("[data-menu]").onclick=e=>{ e.stopPropagation(); const m=el.querySelector(".mp-menu"); m.hidden=!m.hidden; };
     el.querySelectorAll("[data-sz]").forEach(b=>b.onclick=()=>mpSize(b.dataset.sz));
     el.querySelectorAll("[data-dk]").forEach(b=>b.onclick=()=>mpDockSet(b.dataset.dk));
+    const autoMark=()=>el.querySelectorAll("[data-auto]").forEach(b=>b.classList.toggle("on",b.dataset.auto===mpAutoMode()));
+    el.querySelectorAll("[data-auto]").forEach(b=>b.onclick=()=>{ try{ localStorage.setItem("seojae.mpAuto",b.dataset.auto); }catch(_){} autoMark(); paintMpCtl(); toast({"1":"곡이 끝나면 다음 곡을 이어서 틉니다","0":"한 곡씩 틉니다","r":"지금 곡을 되풀이해 틉니다"}[mpAutoMode()]); }); autoMark();
+    el.querySelector("[data-prev]").onclick=()=>mpSkip(-1); el.querySelector("[data-next]").onclick=()=>mpSkip(1);
+    el.querySelector("[data-pp]").onclick=()=>{ if(!MUSIC.cur) return hymnToggle(); try{ MUSIC.playing?MP.pauseVideo():MP.playVideo(); }catch(_){} };
     document.addEventListener("pointerdown",e=>{ const m=el.querySelector(".mp-menu"); if(!m.hidden&&!e.target.closest("#mplayer .mp-menu,#mplayer [data-menu]")) m.hidden=true; });
     addEventListener("resize",()=>{ if(!el.hidden) mpPlace(el); });
     let sz="m", lk="0"; try{ sz=localStorage.getItem("seojae.mpSize")||(localStorage.getItem("seojae.mpMin")==="1"?"s":"m"); lk=localStorage.getItem("seojae.mpLock")||"0"; }catch(_){}
@@ -1751,17 +1767,33 @@ function mpPlace(el){ const d=mpDock(); el.querySelectorAll("[data-dk]").forEach
 // 고정: 끌리지 않게(머리 줄을 잡아도 안 움직임)
 function mpLock(on,quiet){ const el=$("#mplayer"); if(!el) return; el.dataset.lock=on?"1":"0"; el.querySelector("[data-lock]")?.classList.toggle("on",on); el.querySelector("[data-lk]")?.classList.toggle("on",on);
   if(!quiet){ try{ localStorage.setItem("seojae.mpLock",on?"1":"0"); }catch(_){} toast(on?"플레이어 자리를 고정했습니다":"플레이어를 다시 끌어 옮길 수 있습니다"); } }
+// 재생 방식(이 기기에 기억): "1" 이어 듣기 — 찬송가 다음은 CCM 첫 곡(목록이 없으면 받아 옴), CCM은 목록 차례대로, 마지막 곡에서 멈춤 · "0" 한 곡씩 · "r" 한 곡 반복
+const mpAutoMode=()=>{ let v="1"; try{ v=localStorage.getItem("seojae.mpAuto")||"1"; }catch(_){} return ["1","0","r"].includes(v)?v:"1"; };
+const mpAuto=()=>mpAutoMode()==="1";
+// 재생 목록: 오늘 찬송가 → CCM 차례
+const mpQueue=()=>[...(hymnNo()?["hymn"]:[]),...(MUSIC.ccm||[]).map((_,i)=>"ccm:"+i)];
+function mpGo(slot){ if(slot==="hymn") return hymnToggle(); ccmPlay(+slot.slice(4)); }
+async function mpSkip(d){ if(d<0){ try{ if(MUSIC.cur&&MP?.getCurrentTime?.()>3){ MP.seekTo(0,true); MP.playVideo(); return; } }catch(_){} }
+  if(d>0&&MUSIC.slot==="hymn"&&!MUSIC.ccm) await ccmOpen();
+  const q=mpQueue(), i=q.indexOf(MUSIC.slot), nx=i<0?(d>0?q[0]:null):q[i+d]; if(!nx) return toast(d>0?"마지막 곡입니다":"첫 곡입니다"); mpGo(nx); }
+function paintMpCtl(){ const el=$("#mplayer"); if(!el) return; const pp=el.querySelector("[data-pp]"); if(pp){ pp.textContent=MUSIC.playing?"❚❚":"▶"; pp.title=MUSIC.playing?"멈춤":"재생"; }
+  const q=mpQueue(), i=q.indexOf(MUSIC.slot), pos=$("#mp-pos"); if(pos) pos.textContent=(i>=0&&q.length>1?`${i+1} / ${q.length}`:"")+(mpAutoMode()==="r"?" · 🔁":""); }
+async function mpNext(){ if(mpAutoMode()==="r"){ try{ MP.seekTo(0,true); MP.playVideo(); }catch(_){} return; } if(!mpAuto()) return; const s=MUSIC.slot||"";
+  if(s==="hymn"){ if(!MUSIC.ccm) await ccmOpen(); if(MUSIC.slot==="hymn"&&MUSIC.ccm?.length) ccmPlay(0); return; }   // 받는 사이에 다른 곡을 골랐으면 그대로
+  const m=s.match(/^ccm:(\d+)$/); if(m&&MUSIC.ccm?.[+m[1]+1]) ccmPlay(+m[1]+1); }
 function mpClose(){ try{ MP?.stopVideo(); }catch(_){} const el=$("#mplayer"); if(el) el.hidden=true; MUSIC.playing=false; MUSIC.cur=null; MUSIC.slot=""; paintHymnCtl(); paintCcm(); }
 async function mpPlay(id,title,sub,slot,ym){ mpCard(); $("#mp-t").textContent=title||"찬송가"; $("#mp-s").innerHTML=(ym?`<span class="ymb" title="유튜브뮤직 공식 음원">MUSIC</span>`:"")+esc(sub||"유튜브");
   try{ await ytLoad(); }catch(e){ return toast(e.message); }
   MUSIC.cur=id; MUSIC.slot=slot||""; MUSIC.playing=false; MUSIC.q=slot==="hymn"?`새찬송가 ${hymnNo()}장`:[title,sub].filter(Boolean).join(" "); MUSIC.ym=!!ym;   // 유튜브뮤직으로 넘길 때 찾을 말
   if(MP&&MP.loadVideoById){ MP.loadVideoById(id); MP.setVolume(mpVol()); }
   else { $("#mpbox").innerHTML=`<div id="mpvid"></div>`; const z=$("#mplayer")?.dataset.size||"m"; MP=new YT.Player("mpvid",{width:z==="l"?330:z==="s"?200:224,height:z==="l"?330:200,videoId:id,playerVars:{autoplay:1,playsinline:1,rel:0,modestbranding:1},
-    events:{onReady:e=>{ try{ e.target.setVolume(mpVol()); e.target.playVideo(); }catch(_){} }, onStateChange:e=>{ MUSIC.playing=e.data===1; if(e.data===0) MUSIC.playing=false; if(e.data===1){ const sa=$("#suplayer audio"); if(sa&&!sa.paused) sa.pause(); } paintHymnCtl(); paintCcm(); }, onError:mpErr}}); }
+    events:{onReady:e=>{ try{ e.target.setVolume(mpVol()); e.target.playVideo(); }catch(_){} }, onStateChange:e=>{ MUSIC.playing=e.data===1; if(e.data===0){ MUSIC.playing=false; setTimeout(mpNext,600); } if(e.data===1){ const sa=$("#suplayer audio"); if(sa&&!sa.paused) sa.pause(); } paintHymnCtl(); paintCcm(); }, onError:mpErr}}); }
   paintHymnCtl(); paintCcm(); }
 async function mpErr(){ const wasHymn=MUSIC.slot==="hymn";
   if(wasHymn&&!MUSIC.retry){ MUSIC.retry=true; try{ const r=await musicCall({hymn:hymnNo(),refresh:true}); if(r.hymn?.id&&r.hymn.id!==MUSIC.cur){ MUSIC.v=r.hymn; return mpPlay(r.hymn.id,`새찬송가 ${hymnNo()}장`,r.hymn.title,"hymn"); } }catch(_){} }
-  toast("이 영상은 여기서 재생할 수 없습니다 — 다른 곡을 골라 보세요"); MUSIC.playing=false; paintHymnCtl(); }
+  MUSIC.playing=false; paintHymnCtl();
+  if(mpAuto()&&MUSIC.slot.startsWith("ccm:")&&MUSIC.ccm?.[+MUSIC.slot.slice(4)+1]){ toast("이 곡은 여기서 재생할 수 없어 다음 곡으로 넘어갑니다"); return mpNext(); }
+  toast("이 영상은 여기서 재생할 수 없습니다 — 다른 곡을 골라 보세요"); }
 async function hymnToggle(){ const n=hymnNo(); if(!n) return;
   if(MP&&MUSIC.slot==="hymn"&&MUSIC.key===n){ try{ MUSIC.playing?MP.pauseVideo():MP.playVideo(); }catch(_){} mpCard(); return; }
   const b=document.querySelector("[data-hb]"); b?.classList.add("busy");
@@ -1777,8 +1809,9 @@ async function ccmOpen(refresh){ const n=hymnNo(); mpCard(); const box=$("#mpccm
   try{ const r=await musicCall({kind:"ccm",hymn:n,date:SU?.date||today(),passage:suPassage(SU)?.label||"",title:SU?.title||"",refresh:!!refresh}); MUSIC.ccm=r.ccm||[]; }
   catch(e){ box.innerHTML=`<span class="muted" style="font-size:12.5px">${esc(e.message||"추천을 받지 못했습니다")}</span>`; return; }
   paintCcm(); }
-function paintCcm(){ const box=$("#mpccm"); if(!box||!MUSIC.ccm) return;
-  box.innerHTML=(MUSIC.ccm.length?MUSIC.ccm.map((c,i)=>`<div class="ci ${MUSIC.slot==="ccm:"+i?"on":""}"><button class="hb ${MUSIC.slot==="ccm:"+i&&MUSIC.playing?"on":""}" onclick="ccmPlay(${i})" title="듣기">${MUSIC.slot==="ccm:"+i&&MUSIC.playing?"❚❚":"▶"}</button><div><b title="${esc(c.title)}">${c.ym?`<span class="ymb" title="유튜브뮤직 공식 음원">MUSIC</span>`:""}${esc(c.song)}</b><small>${esc(c.artist)}${c.why?" · "+esc(c.why):""}</small></div></div>`).join("")
+function paintCcm(){ paintMpCtl(); const box=$("#mpccm"); if(!box||!MUSIC.ccm) return; const n=hymnNo(), hOn=MUSIC.slot==="hymn";
+  box.innerHTML=(n?`<div class="ci ${hOn?"on":""}"><button class="hb ${hOn&&MUSIC.playing?"on":""}" onclick="hymnToggle()" title="듣기">${hOn&&MUSIC.playing?"❚❚":"▶"}</button><div><b>${MUSIC.v?.ym?`<span class="ymb" title="유튜브뮤직 공식 음원">MUSIC</span>`:""}새찬송가 ${esc(n)}장</b><small>오늘의 찬송가${MUSIC.v?.title?" · "+esc(MUSIC.v.title):""}</small></div>${melonLink("새찬송가 "+n+"장","hb mel")}</div>`:"")
+    +(MUSIC.ccm.length?MUSIC.ccm.map((c,i)=>`<div class="ci ${MUSIC.slot==="ccm:"+i?"on":""}"><button class="hb ${MUSIC.slot==="ccm:"+i&&MUSIC.playing?"on":""}" onclick="ccmPlay(${i})" title="듣기">${MUSIC.slot==="ccm:"+i&&MUSIC.playing?"❚❚":"▶"}</button><div><b title="${esc(c.title)}">${c.ym?`<span class="ymb" title="유튜브뮤직 공식 음원">MUSIC</span>`:""}${esc(c.song)}</b><small>${esc(c.artist)}${c.why?" · "+esc(c.why):""}</small></div>${melonLink(c.song+" "+c.artist,"hb mel")}</div>`).join("")
     :`<span class="muted" style="font-size:12.5px">유튜브에서 확인된 곡이 없습니다.</span>`)
     +`<div class="row" style="gap:6px;justify-content:space-between"><small class="muted" style="font-size:11px">AI가 고르고 유튜브에서 찾은 곡만</small><button class="hb" onclick="ccmOpen(true)" title="다른 곡으로 다시 고르기">다시 고르기</button></div>`; }
 function ccmPlay(i){ const c=MUSIC.ccm?.[i]; if(!c) return; if(MP&&MUSIC.slot==="ccm:"+i){ try{ MUSIC.playing?MP.pauseVideo():MP.playVideo(); }catch(_){} return; } mpPlay(c.id,c.song,c.artist,"ccm:"+i,c.ym); }
@@ -2233,6 +2266,7 @@ setInterval(()=>{ const d=today(), p=dayPart(); if(d===SHOWN_DAY&&p===SHOWN_PART
 
 // ───────── 화면 ─────────
 // 흐름: 밑줄(읽다 붙잡은 문장) → 글(그 문장으로 쓴 묵상·설교·에세이) → 원고(글을 모아 엮는 책)
+let AI_MODE="write";   // 오른쪽 AI 창: write 글쓰기 도우미 · research 조사 도우미 (아래 「AI 조사 도우미」)
 const TABS=[["today","오늘"],["qt","묵상"],["diary","일기"],["drawer","서랍"],["shelf","책장"],["write","글쓰기"]];   // 글쓰기(글방)는 따로 떨어진 특별한 방 — 맨 오른쪽, 다른 모양   // 묵상 = 말씀 글(묵상·설교), 글쓰기 = 책 글·자유 글. 둘 다 같은 쓰기 화면(track 만 다름). 설정은 오른쪽 위 톱니
 // 손으로 그린 듯 조금씩 다른 톱니 — 놋쇠 열쇠 같은 아날로그 느낌
 function gearSvg(){
@@ -2258,7 +2292,7 @@ function go(t,o={}){
   NAV=true; try{ goInner(t,o); }finally{ NAV=false; }
 }
 let TRACK_PICK=false;   // 메뉴(묵상/글쓰기)로 갈래를 정해 들어왔는가
-function goInner(t,o){ TRACK_PICK=!!o.track; if(t!=="write"){ aiClose(); keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
+function goInner(t,o){ TRACK_PICK=!!o.track; if(t!=="write"){ if(AI_MODE!=="research") aiClose(); keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
   if(t==="write"&&!o.edit&&!o.fromNote&&!o.fromWriting&&!o.new){   // 쓰기로 들어오면 오늘 쓴 글이 있을 때 그 글을 이어서 (묵상 먼저). 새로 쓰려면 「새 글」
     const tr=o.track||track, ws=live().filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
   { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew&&ew.trashed){ t="drawer"; o={sub:"trash"}; setTimeout(()=>toast("휴지통에 있는 글입니다. 「되살리기」를 누른 뒤 열 수 있습니다"),100); } }
@@ -2270,11 +2304,12 @@ function render(){
   // 같은 쓰기 화면을 다시 그릴 때(말씀/책 바꾸기, 합친 뒤 등) 쓰던 제목·본문을 그대로 지켜 줍니다
   const keep=!NAV&&tab==="write"&&$("#wbody")?{e:editId,t:$("#wtitle").value,b:$("#wbody").value,p:$("#wpassage")?.value}:null;
   const gb=$("#gearbtn"); if(gb){ if(!gb.firstChild) gb.innerHTML=gearSvg(); gb.classList.toggle("on",tab==="settings"); }
-  $("#nav").innerHTML=TABS.map(([k,n])=>`<button class="${k==="write"?"navroom ":""}${(k==="qt"?tab==="write"&&track==="bible":k==="write"?tab==="room"||(tab==="write"&&track!=="bible"):k===tab)?"on":""}" onclick="${k==="qt"?"go('write',{track:'bible'})":k==="write"?"go('room')":`go('${k}')`}">${k==="write"?`${ICO.pen}<span>${n}</span>`:n}</button>`).join("");
+  $("#nav").innerHTML=TABS.map(([k,n])=>`<button class="${k==="write"?"navroom ":""}${(k==="qt"?tab==="write"&&track==="bible":k==="write"?tab==="room"||(tab==="write"&&track!=="bible"):k===tab)?"on":""}" onclick="${k==="qt"?"go('write',{track:'bible'})":k==="write"?"go('room')":`go('${k}')`}">${k==="write"?`${ICO.pen}<span>${n}</span>`:n}</button>`).join("")+`<button class="navai ${AI_MODE==="research"&&$("#aipanel")?"on":""}" onclick="rsToggle()" title="AI 조사 도우미 — 오른쪽 창에서 대화하며 자료를 찾습니다">✦<span>AI</span></button>`;
   paintStreak();
   if(NEED_CONNECT||AUTH_FAIL){ $("#main").innerHTML=connectView(); return; }
   $("#main").innerHTML=(SERVER?"":GAS?`<div class="notice">구글 서버에 아직 닿지 못해 이 기기의 사본을 보여 드립니다. 인터넷을 확인한 뒤 <a href="#" onclick="fetchFresh(false);return false">다시 시도</a></div>`:location.protocol==="file:"?`<div class="notice">파일로 직접 연 상태라 저장이 되지 않습니다. 아침 서재 주소(인터넷)로 열어 주세요.</div>`:"")+VIEWS[tab]();
   AFTER[tab]?.();
+  if(AI_MODE==="research"&&$("#aipanel")) rsDraw();   // 원고가 바뀌면 그 원고의 조사 대화로
   { const r=$(".sttabrow"), on=r?.querySelector(".sttab.on"); if(on){ const a=on.getBoundingClientRect(), b=r.getBoundingClientRect(); if(a.left<b.left||a.right>b.right) r.scrollLeft+=a.left-b.left-12; } }   // 지금 보는 탭이 탭 줄 밖에 숨지 않게 (휴대폰)
   if(keep&&keep.e===editId&&$("#wbody")){ $("#wtitle").value=keep.t; $("#wbody").value=keep.b; if(keep.p!=null&&$("#wpassage")) $("#wpassage").value=keep.p; grow(); countW(); }
 }
@@ -2721,7 +2756,36 @@ function stkInner(ctx){
     +(sel?`<div class="stk-tools" style="left:clamp(112px,${sel.x}%,calc(100% - 112px));top:calc(${sel.y}% + ${Math.round(34*(sel.s||1))}px)"><button onclick="stkAct('l')" title="왼쪽으로 돌리기">⟲</button><button onclick="stkAct('r')" title="오른쪽으로 돌리기">⟳</button><button onclick="stkAct('-')" title="작게">−</button><button onclick="stkAct('+')" title="크게">＋</button><button onclick="stkAct('f')" title="맨 앞으로">⇡</button><button onclick="stkAct('x')" title="떼기">${ICO.trash.replace('class="ico"','class="ico" style="margin:0"')}</button></div>`:"");
 }
 const stkLayer=ctx=>`<div class="stk-layer" data-ctx="${esc(ctx)}">${stkInner(ctx)}</div>`;
-function paintStk(){ document.querySelectorAll(".stk-layer").forEach(l=>l.innerHTML=stkInner(l.dataset.ctx)); paintPalette(); }
+function paintStk(){ document.querySelectorAll(".stk-layer").forEach(l=>l.innerHTML=stkInner(l.dataset.ctx)); paintPalette(); stkFitAll(); }
+// 스티커가 글자를 가리지 않게: 글 줄·입력 칸·단추 글씨가 차지한 자리(종이 안 px)를 모아, 겹치면 가장 가까운 빈자리로 옮깁니다
+function stkTextRects(layer){ const box=layer.parentElement, lr=layer.getBoundingClientRect(), out=[];
+  const add=r=>{ if(r.width>0&&r.height>0) out.push({l:r.left-lr.left,t:r.top-lr.top,r:r.right-lr.left,b:r.bottom-lr.top}); };
+  box.querySelectorAll("textarea,input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=hidden]):not([type=file]),select").forEach(el=>{ if(!el.closest(".stk-layer")&&el.offsetParent) add(el.getBoundingClientRect()); });
+  const w=document.createTreeWalker(box,NodeFilter.SHOW_TEXT,{acceptNode:n=>!n.nodeValue.trim()||n.parentElement?.closest(".stk-layer,textarea,select,script,style")?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  const rg=document.createRange(); for(let n; (n=w.nextNode());){ rg.selectNodeContents(n); for(const r of rg.getClientRects()) add(r); }
+  return out; }
+// (cx,cy)에 둔 스티커가 글자와 겹치면 가장 가까운 빈자리 {x,y}, 겹치지 않거나 빈자리가 없으면 null
+function stkSpot(layer,el,cx,cy,R){ const lw=layer.clientWidth, lh=layer.clientHeight, er=el.getBoundingClientRect();
+  const hw=er.width/2*.92, hh=er.height/2*.92;   // 귀퉁이가 살짝 닿는 것은 괜찮게
+  R=(R||stkTextRects(layer)).filter(q=>q.b>cy-700&&q.t<cy+700);
+  const hit=(x,y)=>R.some(q=>x+hw>q.l&&x-hw<q.r&&y+hh>q.t&&y-hh<q.b); if(!hit(cx,cy)) return null;
+  const ex=Math.min(hw,18), st=6; let best=null, bd=Infinity;   // 큰 스티커는 종이 가장자리 밖으로 조금 나가도 됨
+  for(let y=Math.max(hh,cy-600); y<=Math.min(lh-hh,cy+600); y+=st){ const dy=(y-cy)**2; if(dy>=bd) continue;
+    for(let x=ex; x<=lw-ex; x+=st){ const d=dy+(x-cx)**2; if(d<bd&&!hit(x,y)){ bd=d; best={x,y}; } } }
+  return best; }
+// 붙이거나 옮긴 스티커를 빈자리로 옮겨 저장할 자리로 삼음
+function stkSettle(t){ const el=document.querySelector(`.stk[data-id="${t.id}"]`), layer=el?.parentElement; if(!layer) return;
+  el.style.cssText=stkStyle(t); const lw=layer.clientWidth, lh=layer.clientHeight, p=stkSpot(layer,el,t.x/100*lw,t.yp??t.y/100*lh); if(!p) return;
+  t.x=+(p.x/lw*100).toFixed(2); t.yp=Math.round(p.y); t.y=+(t.yp/lh*100).toFixed(2); el.style.cssText=stkStyle(t); }
+// 화면에 그릴 때: 다른 기기(폭이 다른 화면)에서 붙인 스티커가 이 화면의 글자를 가리면 보이는 자리만 비켜 둠 (저장은 그대로)
+let STK_FIT=0;
+function stkFitAll(){ cancelAnimationFrame(STK_FIT); STK_FIT=requestAnimationFrame(()=>{ if(STK_DRAG) return;
+  document.querySelectorAll(".stk-layer").forEach(layer=>{ const L=stkList(layer.dataset.ctx), lw=layer.clientWidth, lh=layer.clientHeight; if(!L.length||!lw) return; const R=stkTextRects(layer);
+    layer.querySelectorAll(".stk").forEach(el=>{ const t=L.find(x=>x.id===el.dataset.id); if(!t) return; el.style.cssText=stkStyle(t); delete el.dataset.fx; delete el.dataset.fy;
+      const cy=t.yp??t.y/100*lh, p=stkSpot(layer,el,t.x/100*lw,cy,R); let x=t.x/100*lw, y=cy;
+      if(p){ x=p.x; y=p.y; el.dataset.fx=(x/lw*100).toFixed(2); el.dataset.fy=Math.round(y); el.style.cssText=stkStyle({...t,x:+el.dataset.fx,yp:+el.dataset.fy}); }
+      const tl=el.classList.contains("sel")&&layer.querySelector(".stk-tools"); if(tl){ tl.style.left=`clamp(112px,${x}px,calc(100% - 112px))`; tl.style.top=`${y+Math.round(34*(t.s||1))}px`; } }); }); }); }
+addEventListener("resize",()=>stkFitAll()); document.fonts?.ready.then(()=>stkFitAll());
 function curLayer(){ return $(".stk-layer"); }
 function addSticker(k){
   if(STK_MODE==="text"&&tab==="write"){ if(!k.startsWith("e:")) return toast("글 속에는 이모지만 넣을 수 있습니다");
@@ -2733,7 +2797,7 @@ function addSticker(k){
   if(ta&&r.width>600){ const lh=parseFloat(getComputedStyle(ta).lineHeight)||36, line=ta.value.slice(0,ta.selectionStart??ta.value.length).split("\n").length; x=(r.width-56)/r.width*100+(Math.random()*4-2); yp=ta.offsetTop+Math.min(ta.scrollHeight-24,line*lh-lh/2)+(Math.random()*10-5); }
   else { x=cl((innerWidth/2-r.left)/r.width*100+(Math.random()*16-8)); yp=Math.max(30,Math.min(r.height-30,innerHeight*.42-r.top+(Math.random()*40-20))); }
   const t={id:uid(),k,x:cl(x),y:cl(yp/r.height*100),yp:Math.round(yp),r:Math.round(Math.random()*24-12),s:1};
-  stkList(ctx).push(t); STK_SEL=t.id; stkCommit(ctx); paintStk();
+  stkList(ctx).push(t); STK_SEL=t.id; paintStk(); stkSettle(t); stkCommit(ctx); paintStk();
 }
 function stkAct(op){
   const layer=document.querySelector(`.stk[data-id="${STK_SEL}"]`)?.parentElement; if(!layer) return; const ctx=layer.dataset.ctx, L=stkList(ctx), i=L.findIndex(t=>t.id===STK_SEL); if(i<0) return; const t=L[i];
@@ -2787,13 +2851,13 @@ document.addEventListener("pointerdown",e=>{
   e.preventDefault(); const layer=el.parentElement, ctx=layer.dataset.ctx, t=stkList(ctx).find(x=>x.id===el.dataset.id); if(!t) return;
   if(STK_SEL!==t.id){ STK_SEL=t.id; document.querySelectorAll(".stk.sel").forEach(x=>x.classList.remove("sel")); el.classList.add("sel"); layer.querySelector(".stk-tools")?.remove(); }
   const lr=layer.getBoundingClientRect(); if(t.yp==null) t.yp=Math.round(t.y/100*lr.height);   // 옛 % 자리를 px 로 옮겨 둠
-  STK_DRAG={el,ctx,t,r:lr,sx:e.clientX,sy:e.clientY,x0:t.x,y0:t.yp,moved:false};
+  STK_DRAG={el,ctx,t,r:lr,sx:e.clientX,sy:e.clientY,x0:el.dataset.fx?+el.dataset.fx:t.x,y0:el.dataset.fy?+el.dataset.fy:t.yp,moved:false};   // 비켜 보이던 스티커는 보이는 자리에서 잡음
   try{ el.setPointerCapture(e.pointerId); }catch(_){}
 });
 document.addEventListener("pointermove",e=>{ const g=STK_DRAG; if(!g) return;
   const dx=e.clientX-g.sx, dy=e.clientY-g.sy; if(Math.abs(dx)+Math.abs(dy)>3) g.moved=true;
   g.t.x=Math.max(0,Math.min(100,g.x0+dx/g.r.width*100)); g.t.yp=Math.max(0,Math.min(g.r.height,g.y0+dy)); g.t.y=+(g.t.yp/g.r.height*100).toFixed(2); g.el.style.cssText=stkStyle(g.t); });
-document.addEventListener("pointerup",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; g.t.x=+g.t.x.toFixed(2); g.t.yp=Math.round(g.t.yp); if(g.moved) stkCommit(g.ctx); paintStk(); });
+document.addEventListener("pointerup",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; g.t.x=+g.t.x.toFixed(2); g.t.yp=Math.round(g.t.yp); if(g.moved){ stkSettle(g.t); stkCommit(g.ctx); } paintStk(); });   // 글자 위에 놓으면 가까운 빈자리로
 document.addEventListener("pointercancel",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; if(g.moved) stkCommit(g.ctx); paintStk(); });
 document.addEventListener("keydown",e=>{ if(STK_SEL&&(e.key==="Delete"||e.key==="Backspace")&&!e.target.matches?.("input,textarea,select")){ e.preventDefault(); stkAct("x"); } });
 
@@ -3081,8 +3145,8 @@ settings(){
 }
 };
 const AFTER={
-  diary(){ paintPalette(); },
-  write(){ if($("#aipanel")){ if(AI_KEY!==aiKeyNow()) aiLoad(); aiDraw(); } READVIEW=false; EDIT_BASE=editId?(S.writings.find(x=>x.id===editId)?.updated||null):null; EDIT_WARNED=false; grow(); countW(); restoreDraft(); paintPalette(); paintSu(); keepAwake(true); },
+  diary(){ paintPalette(); stkFitAll(); },
+  write(){ if($("#aipanel")){ if(AI_KEY!==aiKeyNow()) aiLoad(); aiDraw(); } READVIEW=false; EDIT_BASE=editId?(S.writings.find(x=>x.id===editId)?.updated||null):null; EDIT_WARNED=false; grow(); countW(); restoreDraft(); paintPalette(); stkFitAll(); paintSu(); keepAwake(true); },
   drawer(){ if(drawerSub==="all") renderArchive(); },
   room(){ roomDnd(); },
   today(){ pomoPaint(); },
@@ -4504,14 +4568,15 @@ function aiQuick(sel){ const k=aiGenre(); const q=[];
   else if(k.kind==="selfhelp") q.push(["실천 과제","독자가 오늘 해 볼 실천 과제를 더 구체적으로 제안해 주세요"]);
   return q; }
 function aiOpen(prefill){ if(tab!=="write"||!$("#wbody")) return toast("글 쓰는 화면에서 열 수 있습니다");
-  if(AI_KEY!==aiKeyNow()) aiLoad(); let el=$("#aipanel"); if(!el){ el=document.createElement("div"); el.id="aipanel"; document.body.appendChild(el); }
-  document.body.classList.add("aiopen"); aiDraw(); const t=$("#aiin"); if(t){ if(prefill){ t.value=prefill; } t.focus(); } }
-function aiClose(){ $("#aipanel")?.remove(); document.body.classList.remove("aiopen"); }
+  AI_MODE="write"; if(AI_KEY!==aiKeyNow()) aiLoad(); let el=$("#aipanel"); if(!el){ el=document.createElement("div"); el.id="aipanel"; document.body.appendChild(el); }
+  document.body.classList.add("aiopen"); aiDraw(); paintNavAi(); const t=$("#aiin"); if(t){ if(prefill){ t.value=prefill; } t.focus(); } }
+function aiClose(){ $("#aipanel")?.remove(); document.body.classList.remove("aiopen"); AI_MODE="write"; paintNavAi(); }
+const paintNavAi=()=>$("#nav .navai")?.classList.toggle("on",AI_MODE==="research"&&!!$("#aipanel"));
 function aiSelNow(){ const b=$("#wbody"); if(!b) return null; const s=b.selectionStart, e=b.selectionEnd; return e>s?{s,e,t:b.value.slice(s,e)}:null; }
 function aiFmt(t){ const parts=[]; let i=0; String(t||"").replace(/<<<넣기\s*\n?([\s\S]*?)\n?>>>/g,(m,body,off)=>{ parts.push({k:"t",v:t.slice(i,off)}); parts.push({k:"s",v:body.trim()}); i=off+m.length; return m; }); parts.push({k:"t",v:String(t||"").slice(i)}); return parts; }
 function aiText(t){ return esc(t.trim()).replace(/\*\*([^*\n]+)\*\*/g,"<b>$1</b>").replace(/(^|\n)- (.+)/g,"$1• $2").replace(/\n/g,"<br>"); }
-function aiDraw(){ const el=$("#aipanel"); if(!el) return; const sel=aiSelNow(), k=aiGenre(), cr=CONF.claude, keyOK=!!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini);
-  el.innerHTML=`<div class="aih"><span style="color:#7a5aa8;font-size:17px">✦</span><b>글쓰기 도우미</b><span class="muted" style="font-size:12px">${esc(k.name)}</span><span class="spacer"></span>${AI_MSGS.length?`<button onclick="aiReset()" title="대화를 비웁니다">새 대화</button>`:""}<button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div>
+function aiDraw(){ const el=$("#aipanel"); if(!el) return; if(AI_MODE==="research") return rsDraw(); const sel=aiSelNow(), k=aiGenre(), cr=CONF.claude, keyOK=!!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini);
+  el.innerHTML=`<div class="aih"><span style="color:#7a5aa8;font-size:17px">✦</span><b>글쓰기 도우미</b><span class="muted" style="font-size:12px">${esc(k.name)}</span><span class="spacer"></span><button onclick="rsOpen()" title="웹에서 자료를 찾아 원고 자료 모음에 담는 조사 도우미">조사 ↗</button>${AI_MSGS.length?`<button onclick="aiReset()" title="대화를 비웁니다">새 대화</button>`:""}<button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div>
     <div class="aim" id="aimsgs">${AI_MSGS.length?AI_MSGS.map((m,i)=>m.role==="me"?`<div class="msg me">${aiText(m.text)}</div>`:m.role==="err"?`<div class="msg err">${esc(m.text)}</div>`
       :`<div class="msg ai">${aiFmt(m.text).map((p,j)=>p.k==="t"?(p.v.trim()?aiText(p.v):""):`<div class="sug">${esc(p.v)}<div class="row"><button class="p" onclick="aiPut(${i},${j},'ins')">커서 자리에 넣기</button>${m.sel?`<button onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""}<button onclick="aiPut(${i},${j},'copy')">복사</button></div></div>`).join("")}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`).join("")
       :`<div class="msg ai">지금 쓰는 글을 함께 보고 있어요. 막힌 곳, 다듬고 싶은 문장, 제목, 흐름… 무엇이든 물어보세요.<br><span class="muted" style="font-size:12.5px">글은 바꾸지 않고 제안만 합니다. 넣고 싶은 문장은 「넣기」를 누르면 들어가고 ⌘Z로 되돌릴 수 있어요.${k.noContinue?` ${esc(k.name)}은 대신 이어 쓰지 않고 질문·구조·표현을 함께 봅니다.`:""}</span></div>`}
@@ -4536,6 +4601,60 @@ function aiPut(i,j,mode){ const m=AI_MSGS[i], p=m&&aiFmt(m.text)[j], b=$("#wbody
   if(mode==="rep"){ const sl=m.sel; if(!sl||b.value.slice(sl.s,sl.e)!==sl.t) return toast("고른 곳이 그 뒤 바뀌어 바꿀 수 없습니다 — 「커서 자리에 넣기」를 써 주세요"); tInsert(b,p.v,sl.s,sl.e); }
   else { const at=b.selectionEnd??b.value.length, pre=b.value.slice(0,at); tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+p.v+"\n",at,at); }
   toast("넣었습니다 (⌘Z로 되돌리기)"); }
+// ───────── AI 조사 도우미 ─────────
+// 위 메뉴 「글쓰기」 옆 ✦ AI → 오른쪽 창(휴대폰은 아래)에서 대화하며 자료를 찾음. 서버 coWrite_(mode:"research") — 웹 검색 후 출처와 함께 답함.
+// 어느 화면에서나 열리고, 다른 화면으로 가도 그대로. 대화는 원고마다 이 기기에만(seojae.ai.r.<원고 번호>), 기록 파일에는 넣지 않음.
+// 답은 「자료 모음에 담기」(원고 m.research — 원고가 없으면 끄적이기)나 「커서 자리에 넣기」를 눌러야 들어감. 저절로 글을 고치지 않음.
+let RS_MSGS=[], RS_KEY="";
+const rsMs=()=>{ const w=tab==="write"&&editId&&S.writings.find(x=>x.id===editId); return (w&&wMs(w))||liveMs().find(m=>m.id===ROOM_MS&&!m.rule)||null; };
+const rsKeyNow=()=>"seojae.ai.r."+(rsMs()?.id||"all");
+function rsLoad(){ RS_KEY=rsKeyNow(); try{ RS_MSGS=JSON.parse(localStorage.getItem(RS_KEY)||"[]"); }catch(_){ RS_MSGS=[]; } }
+function rsStore(){ try{ localStorage.setItem(RS_KEY,JSON.stringify(RS_MSGS.slice(-30))); }catch(_){} }
+function rsOpen(prefill){ AI_MODE="research"; let el=$("#aipanel"); if(!el){ el=document.createElement("div"); el.id="aipanel"; document.body.appendChild(el); }
+  document.body.classList.add("aiopen"); rsDraw(); paintNavAi(); const t=$("#aiin"); if(t){ if(prefill) t.value=prefill; if(matchMedia("(pointer:fine)").matches) t.focus(); } }
+function rsToggle(){ if($("#aipanel")&&AI_MODE==="research") return aiClose(); rsOpen(); }
+function rsQuick(){ const m=rsMs(), w=tab==="write"&&editId&&S.writings.find(x=>x.id===editId), p=$("#wpassage")?.value||w?.passage||"", topic=(w?.title||m?.title||"").trim();
+  const q=[]; if(p) q.push(["본문 배경",`${p}의 역사·문화 배경을 조사해 주세요`]);
+  if(topic) q.push(["주제 자료",`「${topic}」에 쓸 만한 자료(책·논문·믿을 만한 글)를 찾아 주세요`]);
+  q.push(["인용 출처 확인","제가 붙여 넣는 인용문이 누구의 어느 책(쪽)에서 나왔는지 확인해 주세요: "],["사실 확인","다음 내용이 사실인지 출처와 함께 확인해 주세요: "],["관련 책","이 주제를 다룬 한국어 책을 찾아 주세요: "]);
+  return q; }
+function rsDraw(){ const el=$("#aipanel"); if(!el) return; if(RS_KEY!==rsKeyNow()) rsLoad(); const keep=$("#aiin")?.value||"", m=rsMs(), canWrite=tab==="write"&&!!$("#wbody"), keyOK=!!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini);
+  el.innerHTML=`<div class="aih"><span style="color:#7a5aa8;font-size:17px">✦</span><b>조사 도우미</b><span class="muted" style="font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m?esc(m.title):"원고 밖"}</span><span class="spacer"></span>${canWrite?`<button onclick="aiOpen()" title="지금 쓰는 글을 함께 보는 글쓰기 도우미">이 글 ↗</button>`:""}${RS_MSGS.length?`<button onclick="rsReset()" title="대화를 비웁니다">새 대화</button>`:""}<button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div>
+    <div class="aim" id="aimsgs">${RS_MSGS.length?RS_MSGS.map((x,i)=>x.role==="me"?`<div class="msg me">${aiText(x.text)}</div>`:x.role==="err"?`<div class="msg err">${esc(x.text)}</div>`
+      :`<div class="msg ai">${aiText(x.text)}${(x.src||[]).length?`<div class="rssrc"><b>출처</b>${x.src.map(u=>`<a href="${esc(u.url)}" target="_blank" rel="noopener">${esc(u.title||u.url)}</a>`).join("")}</div>`:`<div class="rssrc"><b>출처</b><span>검색한 웹 자료가 없습니다 — 사실은 따로 확인해 주세요</span></div>`}
+        <div class="rsact"><button class="p" onclick="rsKeep(${i})">${m?"자료 모음에 담기":"자료로 담기…"}</button>${canWrite?`<button onclick="rsPut(${i})">커서 자리에 넣기</button>`:""}<button onclick="rsCopy(${i})">복사</button></div>${x.ai?`<small>${esc(x.ai)}</small>`:""}</div>`).join("")
+      :`<div class="msg ai">무엇을 조사할까요? 성경 본문의 배경, 인용문의 출처, 책·자료 찾기, 사실 확인…<br><span class="muted" style="font-size:12.5px">웹에서 찾아 출처와 함께 답합니다. 쓸 만한 답은 「자료 모음에 담기」를 누르면 ${m?`「${esc(m.title)}」 원고의 자료 모음에`:"고른 원고의 자료 모음에"} 들어갑니다. 출처가 없는 내용은 사실로 쓰기 전에 꼭 확인해 주세요.</span></div>`}
+      ${AI_BUSY?`<div class="msg ai dots"><i></i><i></i><i></i></div>`:""}</div>
+    <div class="aiq">${rsQuick().map(([n,q])=>`<button onclick="${/: $/.test(q)?`rsPrefill(${jsArg(q)})`:`rsSend(${jsArg(q)})`}">${esc(n)}</button>`).join("")}</div>
+    <div class="aii"><textarea id="aiin" rows="1" placeholder="${keyOK?"조사할 것 (엔터로 보내기, ⇧엔터 줄바꿈)":"설정에서 AI 열쇠를 먼저 넣어 주세요"}" ${AI_BUSY?"disabled":""}></textarea><button class="btn ink small" onclick="rsSend()" ${AI_BUSY?"disabled":""}>보내기</button></div>
+    <div class="aif">${keyOK?`웹 검색 · 클로드가 먼저, 안 되면 제미나이${CONF.claude?.left!=null?` · 크레딧 남음 약 $${(+CONF.claude.left).toFixed(2)}`:""}`:`<a href="#" onclick="aiClose();goAiKey();return false">AI 열쇠 넣으러 가기 →</a>`}</div>`;
+  const ta=$("#aiin"); if(ta){ ta.value=keep; ta.onkeydown=e=>{ if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&e.keyCode!==229){ e.preventDefault(); rsSend(); } }; ta.oninput=()=>{ ta.style.height="auto"; ta.style.height=Math.min(160,ta.scrollHeight)+"px"; }; }
+  const box=$("#aimsgs"); if(box) box.scrollTop=box.scrollHeight; }
+function rsPrefill(q){ const t=$("#aiin"); if(!t) return; t.value=q; t.focus(); t.setSelectionRange(q.length,q.length); }
+function rsReset(){ if(RS_MSGS.length&&!confirm("조사 대화를 비울까요? (자료 모음에 담은 것은 그대로)")) return; RS_MSGS=[]; rsStore(); rsDraw(); }
+async function rsSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!q||AI_BUSY) return;
+  if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
+  if(ta) ta.value=""; const key=RS_KEY, m=rsMs(), w=tab==="write"&&editId&&S.writings.find(x=>x.id===editId), sel=tab==="write"?aiSelNow():null;
+  RS_MSGS.push({role:"me",text:q}); AI_BUSY=true; rsStore(); rsDraw();
+  const ctx={ms:m?.title||"",genre:m?G(m).n:"",title:$("#wtitle")?.value||w?.title||"",passage:$("#wpassage")?.value||w?.passage||"",sel:sel?.t||""};
+  let add; try{ const r=await gcall("coWrite",{mode:"research",messages:RS_MSGS.filter(x=>x.role!=="err").slice(-10).map(x=>({role:x.role,text:x.text})),ctx}); add={role:"ai",text:r.text,ai:r.ai,src:r.sources||[],q}; }
+  catch(e){ add={role:"err",text:"답을 받지 못했습니다: "+e.message}; }
+  AI_BUSY=false; if(RS_KEY===key){ RS_MSGS.push(add); rsStore(); }
+  else { try{ const L=JSON.parse(localStorage.getItem(key)||"[]"); L.push(add); localStorage.setItem(key,JSON.stringify(L.slice(-30))); }catch(_){} }   // 기다리는 사이 원고를 바꿨으면 물었던 원고 대화에
+  if($("#aipanel")&&AI_MODE==="research") rsDraw(); }
+const rsBody=x=>String(x.text||"").replace(/\*\*([^*\n]+)\*\*/g,"$1").trim();
+const rsSrcLine=x=>(x.src||[]).map(u=>`${u.title} ${u.url}`).join("\n");
+function rsCopy(i){ const x=RS_MSGS[i]; if(x) clip(rsBody(x)+((x.src||[]).length?"\n\n출처\n"+rsSrcLine(x):"")); }
+function rsPut(i){ const x=RS_MSGS[i], b=$("#wbody"); if(!x||!b) return; const at=b.selectionEnd??b.value.length, pre=b.value.slice(0,at);
+  tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+rsBody(x)+"\n",at,at); toast("넣었습니다 (⌘Z로 되돌리기)"); }
+// 담기: 지금 원고의 자료 모음에. 원고가 없으면 어느 원고에 담을지 고르고, 원고가 하나도 없으면 끄적이기에
+function rsKeep(i,mid){ const x=RS_MSGS[i]; if(!x) return; const m=mid?S.manuscripts.find(y=>y.id===mid):rsMs();
+  if(!m){ const L=liveMs().filter(y=>!y.rule);
+    if(!L.length){ (S.jots=S.jots||[]).push({id:uid(),t:(rsBody(x)+((x.src||[]).length?"\n\n출처\n"+rsSrcLine(x):"")).slice(0,2000),updated:new Date().toISOString()}); save(); return toast("원고가 없어 끄적이기에 담았습니다"); }
+    return ctxOpen(innerWidth/2,innerHeight/3,"어느 원고의 자료 모음에 담을까요?",L.map(y=>({t:y.title||"(이름 없음)",ic:"📚",fn:()=>rsKeep(i,y.id)})),isTouch()); }
+  const t=(x.q||"AI 조사").replace(/\s+/g," ").slice(0,60), src=(x.src||[]).length?x.src.map(u=>`${u.title} ${u.url}`).join(" · ").slice(0,600):"AI 조사 · 출처 없음(확인 필요)";
+  (m.research=m.research||[]).unshift({id:uid(),t,body:rsBody(x),src,at:today(),u:new Date().toISOString()}); m.updated=new Date().toISOString(); save();
+  toast(`「${m.title}」 자료 모음에 담았습니다`); if(tab==="room"||tab==="write") render(); }
 // ───────── 오른쪽 버튼 메뉴 ─────────
 // 컴퓨터: 오른쪽 클릭 → 누른 자리에 메뉴 (⇧를 누른 채 오른쪽 클릭이면 브라우저 원래 메뉴).
 // 휴대폰: 목록(글·원고·책·슬라이드)을 길게 누르면 아래에서 메뉴가 올라옴. 글 칸·성경 본문은 휴대폰의 글자 고르기를 그대로 둠.
@@ -4563,7 +4682,7 @@ addEventListener("scroll",()=>{ if(CTX&&!CTX.classList.contains("sheet")) ctxClo
 // 무엇을 눌렀나: 가까운 요소의 onclick(글 열기·책 열기·원고 고르기·슬라이드)에서 번호를 찾음
 const CTX_PAT=[[/go\('write',\{edit:'([\w-]+)'/,"w"],[/stOpen\('w:([\w-]+)'\)/,"w"],[/stOpen\('ms:([\w-]+)'\)/,"m"],[/restoreWriting\('([\w-]+)'\)/,"w"],[/openBook\('([\w-]+)'\)/,"b"],[/roomPick\('([\w-]+)'\)/,"m"],[/restoreMs\('([\w-]+)'\)/,"m"],[/slideInsert\((\d+)\)/,"s"]];
 function ctxFind(t){ let el=t;
-  for(let d=0; el&&el!==document.body&&d<7; d++, el=el.parentElement){ if(el.closest?.(".ctxmenu,#wbody,input,textarea,select,.sendview,.bookview")) return null;
+  for(let d=0; el&&el!==document.body&&d<7; d++, el=el.parentElement){ if(el.closest?.(".ctxmenu,#wbody,input,textarea,select,.sendview,.bookview,.stk-layer,.stk-palette")) return null;
     const own=el.getAttribute?.("onclick")||""; for(const [re,k] of CTX_PAT){ const m=own.match(re); if(m) return {k,id:m[1]}; }
     if(d>0&&el.querySelectorAll){ for(const [re,k] of CTX_PAT){ const ids=[...new Set([...el.querySelectorAll("[onclick]")].map(x=>(x.getAttribute("onclick")||"").match(re)).filter(Boolean).map(m=>m[1]))]; if(ids.length===1) return {k,id:ids[0]}; if(ids.length>1) break; } } }
   return null; }
@@ -4637,7 +4756,7 @@ document.addEventListener("touchstart",e=>{ if(e.touches.length!==1||CTX) return
   const p=e.touches[0]; clearTimeout(LP?.t); LP={x:p.clientX,y:p.clientY,f,fired:false,t:setTimeout(()=>{ const r=LP.f.k==="w"?ctxWriting(LP.f.id):LP.f.k==="b"?ctxBook(LP.f.id):LP.f.k==="m"?ctxMs(LP.f.id):ctxSlide(LP.f.id); if(!r) return; LP.fired=true; navigator.vibrate?.(12); getSelection()?.removeAllRanges(); ctxOpen(0,0,r[0],r[1],true); },520)}; },{passive:true});
 document.addEventListener("touchmove",e=>{ if(!LP) return; const p=e.touches[0]; if(Math.hypot(p.clientX-LP.x,p.clientY-LP.y)>10){ clearTimeout(LP.t); LP=null; } },{passive:true});
 document.addEventListener("touchend",e=>{ if(!LP) return; clearTimeout(LP.t); if(LP.fired){ e.preventDefault(); } LP=null; },{passive:false});
-document.addEventListener("contextmenu",e=>{ if(isTouch()&&ctxFind(e.target)) e.preventDefault(); });   // 길게 누를 때 브라우저 링크 메뉴가 겹치지 않게
+document.addEventListener("contextmenu",e=>{ if(isTouch()&&(ctxFind(e.target)||e.target.closest?.(".stk-layer,.stk-palette"))) e.preventDefault(); });   // 길게 누를 때 브라우저 링크 메뉴가 겹치지 않게
 // ───────── 키보드 ─────────
 // 엔터: 한 줄 칸에서 누르면 그 칸의 확인 단추(같은 줄의 다음 단추, 없으면 그 상자의 진한 단추)를 누름. 한글 조합 중 엔터는 무시.
 // ⌘/Ctrl+엔터: 여러 줄 칸(메모·각주·노트·자료·독후감)에서 저장. Esc: 맨 위 창·상자 닫기. ⌘E: 읽기 모드. ?: 단축키 안내.
