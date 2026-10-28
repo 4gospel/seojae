@@ -658,6 +658,12 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .dcbody{display:grid;gap:10px;padding:4px 12px 12px} .dcgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px} .dcgrid .dcone{grid-column:1/-1} @media (max-width:700px){ .dcgrid{grid-template-columns:1fr} }
 .dcard .field{margin:0} .dcard .field>span{font-size:12.5px;color:var(--ink-soft)} .dcard input,.dcard textarea{font:14px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif}
 .cchips{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px} .cchip{border:1px dashed #b9a3d9;background:var(--paper);border-radius:8px;padding:3px 8px;font:12.5px/1.4 -apple-system,sans-serif;color:var(--ink);cursor:pointer;text-align:left} .cchip:hover{border-style:solid;border-color:#7a5aa8}
+.rbar{display:grid;gap:4px} .rtrack{position:relative;display:flex;height:18px;border-radius:9px;overflow:hidden;background:var(--edge)} .rs{display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;white-space:nowrap;overflow:hidden;min-width:0} .rs.intro{background:#7d8fae} .rs.body{background:#5f8a68} .rs.end{background:#b07a4f} .rmark{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink);opacity:.45} input.spm{width:62px;padding:1px 4px;font-size:12.5px;display:inline-block}
+.dctools{display:grid;gap:8px;border-top:1px dashed var(--edge);padding-top:8px}
+.vflist,.cklist{display:grid;gap:8px} .vfrow,.ckrow{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--edge);border-radius:10px;padding:8px 10px;background:var(--paper)}
+.vfst{flex:none;font-size:12px;padding:2px 8px;border-radius:99px;background:var(--edge);white-space:nowrap} .vfrow.st0 .vfst{background:#d9ead9;color:#245c2f} .vfrow.st1 .vfst{background:#f1e6c8;color:#7a5a12} .vfrow.st2 .vfst{background:#f4d6d0;color:#8a2c1c}
+.vfme{display:grid;gap:4px;justify-items:end;flex:none} .vfsrc a{word-break:break-all} .ckrow .ckn{flex:none;width:22px;font-weight:700;color:var(--muted)} .ckrow.no{border-color:#c9826f} .ckrow.yes{opacity:.75} .ckai{font-size:13px;color:var(--muted)} .ckbtns{display:flex;gap:4px;flex:none}
+@media (max-width:640px){ .vfrow,.ckrow{flex-wrap:wrap} .vfme{flex-direction:row;display:flex;width:100%;justify-content:flex-end} .ckbtns{width:100%;justify-content:flex-end} }
 .dcown{display:flex;gap:6px 12px;flex-wrap:wrap;align-items:center;border-top:1px dashed var(--edge);padding-top:8px} .dcardhint{margin:2px 0 10px}
 .hmirror i.ownl{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,var(--book) 10%,transparent);box-shadow:inset 3px 0 0 color-mix(in srgb,var(--book) 45%,transparent)}   /* 직접 쓸 네 자리 */
 .mfhits{display:grid;gap:6px;max-height:46vh;overflow:auto} .mfhit{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--edge);border-radius:10px;padding:8px 10px;background:var(--paper);cursor:pointer} .mfhit>div{min-width:0}
@@ -1546,7 +1552,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="cef7ac9da9";
+const APP_BUILD="6ff1500623";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3024,7 +3030,7 @@ write0(){
     <span class="row touchonly" style="gap:4px"><button class="undobtn" onclick="tUndo()" title="되돌리기">↶</button><button class="undobtn" onclick="tUndo(true)" title="다시 하기">↷</button></span>
     <button class="btn small focusexit" onclick="toggleFocus()">집중 나가기</button>
     <details class="tgrp"><summary class="btn small">쓰기 ▾</summary><div class="tgmenu">
-      ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}${w&&cardKindOf(w)&&!cardKindOf(w).sermon?`<button class="btn small" onclick="tgClose();cardOpen()" title="한 문장·기능·겨냥할 자리… 초안 전에 글을 설계합니다">설계 카드</button>`:""}
+      ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}${w&&cardKindOf(w)&&!cardKindOf(w).sermon?`<button class="btn small" onclick="tgClose();cardOpen()" title="한 문장·기능·겨냥할 자리… 초안 전에 글을 설계합니다">설계 카드</button>`:""}${w&&cardKindOf(w)?`<button class="btn small" onclick="tgClose();vfOpen()" title="사실 주장을 출처와 대조합니다">검증표</button><button class="btn small" onclick="tgClose();ckOpen()" title="완성 전 점검 질문 10개">점검 10문항</button>`:""}
       <button class="btn small" onclick="toggleFocus();tgClose()" id="focusbtn">집중 모드</button>
       <button class="btn small ${TYPEW?"on":""}" onclick="toggleTypew()" id="twbtn" title="쓰는 줄을 늘 화면 가운데에 둡니다">타자기</button>
       <span class="row" style="gap:4px" title="글자 크기 (이 기기만)"><span class="muted" style="font-size:12.5px">글자</span><button class="fsbtn" onclick="fontStep(-1)">가−</button><button class="fsbtn" onclick="fontStep(1)">가＋</button></span>
@@ -3363,7 +3369,7 @@ function tUndo(redo){ const b=$("#wbody"); if(!b) return; if(READVIEW) return to
   if(!ok||b.value===before) toast(redo?"다시 할 것이 없습니다":"되돌릴 것이 없습니다"); grow(); countW(); draftInput(); }
 function countW(){ const v=$("#wbody")?.value||""; const fn=(v.match(/\[\^/g)||[]).length, el=$("#wcount"); if(!el) return; const g=wMsNow(editId&&S.writings.find(x=>x.id===editId))?.genre;
   if(g==="poem"){ const L=stripMemo(v).replace(/\s+$/,"").split("\n"), lines=L.filter(l=>l.trim()).length, st=lines?L.join("\n").trim().split(/\n\s*\n/).length:0; el.textContent=`${lines}행 · ${st}연 · ${chars(v).toLocaleString()}자${fn?` · 각주 ${fn}`:""}`; return; }   // 시: 행·연
-  const sermon=/설교/.test($("#wtype")?.value||"")||g==="sermon", mins=sermon?Math.round(chars(stripMemo(v))*1.2/350):0;
+  const sermon=/설교/.test($("#wtype")?.value||"")||g==="sermon", mins=sermon?Math.round(chars(stripMemo(v))*1.2/SPM()):0; if(sermon) ratioPaint();
   const tgt=parseInt(wMeta(editId&&S.writings.find(x=>x.id===editId),"cbudget"))||0;
   el.textContent=`${sermon&&mins?`말하면 약 ${mins}분${tgt?` / 목표 ${tgt}분`:""} · `:""}${G(wMsNow(editId&&S.writings.find(x=>x.id===editId))).unit==="자"?"":`원고지 약 ${Math.ceil(charsAll(v)/200)}매 · `}${charsAll(v).toLocaleString()}자(공백 포함) · ${chars(v).toLocaleString()}자(제외)${fn?` · 각주 ${fn}`:""}`; }
 // 펜 잉크: 이 기기 꾸미기(설정 → 화면 꾸미기)의 글자 색이 있으면 그것, 없으면 모든 기기 공통 잉크, 둘 다 없으면 기본 먹색
@@ -4873,10 +4879,10 @@ function aiQuick(sel){ const k=aiGenre(); const q=[];
     ["구조안","설계 카드의 한 문장을 따라 대지 구조안을 두 가지 주세요. 대지마다 한 줄, 그리스도로 가는 길과 위로가 겨냥하는 자리를 표시해 주세요."],
     ["초안 쓰기","§draft"],
     ["예화 조사","⌕이 설교의 한 문장에 맞는 예화 후보를 넓게 찾아 주세요(역사·문학·영화·음악·요즘 문화·한국 사상·최신 뉴스). 후보마다 출처, 사실 여부 (확인함)/(확인 못 함), 허구 작품이면 허구라고 밝혀 주세요. 주 예화 하나와 보조 두세 개를 고를 수 있게 짧게."],
-    ["사실 확인","⌕이 설교 원고에 나온 연도·인명·숫자·인용·원어 주장을 모두 뽑아 (확인함)/(추론)/(확인 못 함)으로 나누고, 공식 출처로 확인한 근거와 사람이 직접 대조할 곳을 짚어 주세요."],
+    ["검증표","§verify"],
     ["생각 점검","제 생각(고른 곳이 있으면 그곳, 없으면 글 전체)을 복음주의 신학과 성결교회 전통 기준으로 점검해 주세요: 큰 방향 → 맞는 점(근거) → 다듬을 점(왜) → 바꿔 쓸 문장 제안."],
     ["본문 해석 점검","해석이 본문에서 나오는지, 본문이 말하지 않는 동기를 단정한 곳은 없는지, 의견이 갈리는 곳을 한 견해로만 말하지 않았는지 짚어 주세요"],
-    ["점검 10문항","완성 전 점검 질문 10개(한 문장이 도입 끝과 결론에 있는가 · 청중이 무엇을 하게 되는가 · 본문이 말하지 않는 동기 단정 · 원어 두 개 이하 · 예화가 한 문장에 기여·주 예화가 처음과 끝에 · 그리스도로 가는 길·해석적 읽기 표시 · 위로가 겨냥하는 자리·값싼 위로를 막는 문장 · 결론 20%·지난번과 다른 틀 · 제목이 약속한 것을 지키는가 · 이 글이 먼저 나에게 한 말)로 이 원고를 보고, 질문마다 예/아니오와 근거 한 줄을 주세요. 아니오인 것만 고칠 방향을 주세요."]];
+    ["점검 10문항","§chk10"]];
   else if(k.kind==="essay") q.push(["장면 살리기","설명 대신 장면으로 보여 줄 수 있는 곳을 짚어 주세요"],["여운","마지막 문장의 여운을 살릴 방법을 제안해 주세요"]);
   else if(k.kind==="novel") q.push(["다음 장면","다음 장면에서 갈등을 키울 방향을 세 가지 주세요"],["인물 일관성","인물의 말과 행동이 어긋나는 곳을 짚어 주세요"]);
   else if(k.poem) q.push(["이미지","살아 있지 않은 이미지와 상투적인 표현을 짚어 주세요"],["행갈이","행갈이와 리듬을 살펴봐 주세요"]);
@@ -4920,6 +4926,7 @@ function aiDraw(){ const el=$("#aipanel"); if(!el) return; if(AI_MODE==="researc
 // 빠른 단추: 「…」로 시작하면 입력칸에 채우기만(사람이 먼저 쓰게), 「⌕」는 조사 도우미(웹 검색·출처)로, 「§draft」는 설계 카드의 한 문장이 글에 있을 때만 초안 (원칙 1-3·1-4)
 function aiQuickGo(q){ if(q.startsWith("…")){ const t=$("#aiin"); if(t){ t.value=q.slice(1); t.focus(); t.setSelectionRange(t.value.length,t.value.length); t.oninput?.(); } return; }
   if(q.startsWith("⌕")){ return rsOpen(), setTimeout(()=>rsSend(q.slice(1)),50); }
+  if(q==="§verify") return vfOpen(); if(q==="§chk10") return ckOpen();
   if(q==="§card3"){ cardOpen(); return; } if(q==="§cardai"){ cardOpen(); return cardAI(); }
   if(q==="§draft"){ const w=cardW(); if(!w||!wMeta(w,"cok")){ toast("한 문장을 확정하기 전에는 초안을 쓰지 않습니다 (원칙 1-4) — 설계 카드에서 한 문장을 정하고 「확정」을 눌러 주세요"); return cardOpen(); }
     return aiSend("설계 카드의 확정된 한 문장과 구조를 따라 초안을 써 주세요. 도입 첫 문단·1인칭 고백·결론 마지막 문단·기도문은 〔직접 쓸 자리: …〕로 비워 두고, 성경은 새한글 문구(확인 못 하면 표시), 예화는 사실 확인 꼬리표를 붙여 주세요. 카드에서 벗어나지 마세요."); }
@@ -4976,6 +4983,8 @@ function cardHtml(w){ if(!w) return /설교/.test(NEW_TYPE||"")?`<p class="hint 
           ${C&&k==="c1"&&C.ones.length?`<div class="cchips">${C.ones.map(v=>chip("c1",v)).join("")}</div>`:""}${C&&k==="cstory"&&C.stories.length?`<div class="cchips">${C.stories.map(v=>chip("cstory",v)).join("")}</div>`:""}
           ${C&&{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[k]&&C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[k]]?`<div class="cchips">${chip(k,C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[k]])}</div>`:""}</label>`).join("")}</div>
       <div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn small aibtn" onclick="cardAI()" id="cardaibtn">✦ AI 카드 초안</button><small class="muted" id="cardaist">${C?.ask?esc(C.ask):C?"후보를 누르면 칸에 들어갑니다. 고치거나 고르는 것은 직접 — 한 문장은 「확정」까지":"세 줄에서 출발해 여섯 칸 후보를 냅니다 (고르는 것은 직접)"}</small></div>
+      <div class="dctools">${sermon?`<div><b style="font-size:13.5px">분량 비율</b> <small class="muted">— 도입 10 · 본론 70 · 결론 20%, 결론 최소 1,000자 (원칙 5-9·5-12)</small><div id="ratiobar">${ratioHtml(w.body||"")}</div></div>`:""}
+        <div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn small" onclick="vfOpen()" title="연도·인명·숫자·인용·원어·예화를 출처와 대조 (원칙 2·3장)">검증표${vfLeft(w)?` <small class="warn">${vfLeft(w)}</small>`:""}</button><button type="button" class="btn small" onclick="ckOpen()" title="완성 전 점검 질문 10개 — 아니오만 고칩니다 (원칙 8-4)">점검 10문항${ckSum(w)}</button></div></div>
       <div class="dcown"><span><b>직접 쓸 네 자리</b> <small class="muted">— 본문에 옅은 초록 바탕. AI는 이 자리를 고쳐 넣지 않습니다</small></span><span class="pills">${OWN_F.map(([k,n])=>`<label class="chk"><input type="checkbox" ${wMeta(w,k)?"checked":""} onchange="cardSet('${k}',this.checked?'1':'')"> ${n}</label>`).join("")}</span></div>
     </div></details>`; }
 function cardW(){ return editId&&S.writings.find(x=>x.id===editId); }
@@ -5010,6 +5019,92 @@ function ownZones(text){ const z=new Map(); const cw=editId&&S.writings.find(x=>
   if(last>=0&&last!==first) z.has(last)||z.set(last,"결론 마지막 문단");
   return z; }
 function ownHit(text,s,e){ const z=ownZones(text); if(!z.size) return ""; const a=text.slice(0,s).split("\n").length-1, b=text.slice(0,Math.max(s,e-1)).split("\n").length-1; for(let i=a;i<=b;i++) if(z.has(i)) return z.get(i); return ""; }
+// ───────── 분량 비율 · 검증표 · 점검 10문항 (팀장님 「AI 보조 원칙」 5-9·5-12 · 2·3장 · 8-4) ─────────
+// 검증표 w.meta.vtab={at,ai,rows:[{kind,claim,status,source,note,me}]} · 점검 w.meta.chk10={at,a:[{me,ai,why}]} — 카드처럼 글의 meta 칸(칸마다 시각으로 합침, 저장 형식 그대로). 말 속도 S.settings.spm(1분 음절, 기본 350)
+const SPM=()=>parseInt(S.settings.spm)||350;
+// ■ 칸 이름으로 도입·본론·결론을 나눔. 준비 칸(본문 낭독·중심 메시지·주해·뼈대·후보·더 살펴볼…)과 기도·축도·부록은 셈에서 뺌
+function sermonRatio(text){ const n={intro:0,body:0,end:0}; let cur=null, named=false;
+  for(const l of stripMemo(text||"").split("\n")){ if(/^\s*■/.test(l)){ const h=l.replace(/^\s*■\s*/,"");
+      cur=/본문 낭독|중심 메시지|본문 주해|본문의 흐름|본문에서 붙잡|신학|듣는 이|뼈대|후보|더 살펴볼|설계|씨앗|기도|축도|설교 길이|묵상에서|부록|검증표|떠오른 메시지|결단·초청/.test(h)?null:/서론|도입|들어가/.test(h)?"intro":/결론|맺음|맺는|나가며|나가는|마무리/.test(h)?"end":"body";
+      if(cur==="intro"||cur==="end") named=true; continue; }
+    if(cur) n[cur]+=chars(l); }
+  return {...n,tot:n.intro+n.body+n.end,named}; }
+function ratioHtml(text){ const r=sermonRatio(text); if(!r.tot) return `<small class="muted">■ 서론 · 대지 · ■ 결론 칸에 글이 생기면 비율을 잽니다</small>`;
+  const p=k=>Math.round(r[k]*100/r.tot), spm=SPM(), warn=[];
+  if(!r.named) warn.push("■ 서론·■ 결론 칸 이름을 찾지 못해 모두 본론으로 셉니다");
+  else { const pe=p("end"), pi=p("intro"); if(r.end<1000) warn.push(`결론 ${r.end.toLocaleString()}자 — 최소 1,000자`); if(pe<15) warn.push(`결론 ${pe}% — 20% 안팎으로`); else if(pe>30) warn.push(`결론 ${pe}% — 늘어지지 않는지`); if(pi>20) warn.push(`도입 ${pi}% — 10% 안팎으로`); }
+  const seg=(k,n)=>r[k]?`<span class="rs ${k}" style="flex:${r[k]}" title="${n} ${r[k].toLocaleString()}자 · 말하면 약 ${(r[k]*1.2/spm).toFixed(1)}분">${p(k)>=8?`${n} ${p(k)}%`:""}</span>`:"";
+  return `<div class="rbar"><div class="rtrack">${seg("intro","도입")}${seg("body","본론")}${seg("end","결론")}<i class="rmark" style="left:10%" title="목표: 도입 10%"></i><i class="rmark" style="left:80%" title="목표: 결론 20%"></i></div>
+    <small class="muted">도입 ${p("intro")}% · 본론 ${p("body")}% · 결론 ${p("end")}% (${r.end.toLocaleString()}자) · 말하면 약 ${Math.round(r.tot*1.2/spm)}분 · 1분에 <input class="spm" type="number" min="150" max="600" step="10" value="${spm}" onchange="spmSet(this.value)" title="1분에 말하는 음절(공백 제외). 지난 영상 길이와 그 원고의 음절 수로 재서 바꾸세요 — 모든 기기 같이 (원칙 5-12)">음절</small>
+    ${warn.length?`<small class="warn">${warn.map(esc).join(" · ")}</small>`:""}</div>`; }
+function spmSet(v){ v=parseInt(v); if(!(v>=150&&v<=600)) return toast("1분 음절은 150~600 사이로 적어 주세요"); S.settings.spm=v; save(); countW(); }
+function ratioPaint(){ const el=$("#ratiobar"); if(el&&!el.contains(document.activeElement)) el.innerHTML=ratioHtml($("#wbody")?.value||""); }
+
+// 검증표 (원칙 2장 사실·3장 부록) — AI가 대조, 판단·고침은 글쓴이. 본문에 단 (확인함)·(추론)·(확인 못 함) 꼬리표도 함께 모음
+const VF_ST=["확인함","추론","확인 못 함"], VF_TAG=/[(（](확인함|추론|확인 못 함)[)）]/;
+function vfTags(text){ const out=[]; stripMemo(text||"").split("\n").forEach(l=>{ if(/^\s*■\s*부록/.test(l)) return; const m=l.match(VF_TAG); if(m) out.push({kind:"꼬리표",claim:l.replace(new RegExp(VF_TAG.source,"g"),"").replace(/^\s*[■◆·\-]\s*/,"").trim().slice(0,120),status:m[1],source:"",note:"",tag:1}); }); return out; }
+const vfGet=w=>{ const t=wMeta(w,"vtab"); return t&&Array.isArray(t.rows)?t:{rows:[]}; };
+const vfLeft=w=>vfGet(w).rows.filter(x=>x.status!=="확인함"&&!x.me).length;
+function vfAppendix(w,rows){ const mark=x=>x.me?" ✓직접 확인":"";
+  return `\n■ 부록 — 검증표 (${today()})\n`+rows.map(x=>`· [${x.status}] ${x.claim}${x.note?` — ${x.note}`:""}${x.source?` (출처: ${x.source})`:""}${mark(x)}`).join("\n")+"\n"; }
+function vfOpen(){ const w=cardW(); if(!w) return toast("몇 자 써서 간직되면 검증표를 만들 수 있습니다");
+  const ov=document.createElement("div"); ov.className="bookview sendview"; let busy=false, err="", filt="";
+  const draw=()=>{ const T=vfGet(w), rows=[...T.rows,...vfTags($("#wbody")?.value??w.body).filter(t=>!T.rows.some(x=>x.claim===t.claim))], cnt=s=>rows.filter(x=>x.status===s).length, left=vfLeft(w);
+    ov.innerHTML=`<section class="sheet" style="max-width:820px;margin:36px auto;display:grid;gap:12px">
+      <div class="row"><p class="label" style="margin:0">검증표 — ${esc(w.title||"제목 없음")}</p><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div>
+      <p class="hint" style="margin:0">AI가 글에서 연도·인명·숫자·인용·성경 문구·원어·예화의 사실을 뽑아 웹으로 대조합니다. <b>확인함</b> 출처와 맞음 · <b>추론</b> 해석이니 그렇다고 밝힐 것 · <b>확인 못 함</b> 직접 대조할 것 (원칙 2·3장). 고치는 것은 직접 — 대조를 마친 줄은 「직접 확인」에 표시하세요. 본문에 (확인함)·(추론)·(확인 못 함) 꼬리표를 단 문장도 여기 모입니다.</p>
+      <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn small aibtn" data-ai ${busy||!SERVER?"disabled":""}>${busy?"글을 출처와 대조하는 중… (1분쯤)":T.rows.length?"✦ 다시 검증":"✦ AI로 검증표 만들기"}</button>
+        <span class="pills">${["","확인함","추론","확인 못 함"].map(s=>`<button class="pill ${filt===s?"on":""}" data-f="${s}">${s||"모두"} ${s?cnt(s):rows.length}</button>`).join("")}</span><span class="spacer"></span>
+        ${rows.length?`<button class="btn small" data-ins title="원고 맨 끝에 ■ 부록 — 검증표 칸으로 넣습니다. 내보내기에도 실리니, 독자에게 보이고 싶지 않으면 내보내기 전에 지우세요 (↶ 되돌리기)">원고 끝 부록으로 넣기</button>`:""}</div>
+      ${err?`<p class="warn" style="margin:0">${esc(err)}</p>`:""}${!SERVER?`<small class="muted">구글 서버에 닿아야 AI 검증을 쓸 수 있습니다. 꼬리표 모으기·부록 넣기는 됩니다.</small>`:""}
+      ${T.at?`<small class="muted">${esc(T.at)} 검증${T.ai?` · ${esc(T.ai)}`:""}${left?` · <b>아직 대조할 줄 ${left}</b>`:" · 모두 확인됨"}</small>`:""}
+      <div class="vflist">${rows.map((x,i)=>filt&&x.status!==filt?"":`<div class="vfrow st${VF_ST.indexOf(x.status)}"><span class="vfst">${esc(x.status)}</span><div style="min-width:0;flex:1"><b>${esc(x.claim)}</b> <small class="muted">${esc(x.kind||"")}</small>${x.note?`<div style="font-size:13px">${esc(x.note)}</div>`:""}${x.source?`<small class="muted vfsrc">${/^https?:\/\//.test(x.source)?`<a href="${esc(x.source)}" target="_blank" rel="noopener">${esc(x.source.slice(0,80))}</a>`:esc(x.source)}</small>`:""}</div>
+          <div class="vfme"><button class="btn small ghost" data-go="${i}" title="본문에서 이 구절로">본문</button>${x.tag?"":`<label class="chk" title="직접 대조했으면 표시"><input type="checkbox" data-me="${i}" ${x.me?"checked":""}> 직접 확인</label>`}</div></div>`).join("")||`<p class="muted" style="margin:0">아직 검증표가 없습니다.</p>`}</div></section>`;
+    ov.querySelector("[data-x]").onclick=()=>{ ov.remove(); cardPaint(); };
+    ov.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{ filt=b.dataset.f; draw(); });
+    ov.querySelectorAll("[data-me]").forEach(c=>c.onchange=()=>{ const T2=vfGet(w), x=T2.rows[+c.dataset.me]; if(!x) return; x.me=c.checked?today():""; metaSet(w.id,"vtab",{...T2,rows:T2.rows.map(r=>({...r}))}); save(); draw(); });
+    ov.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ const x=rows[+b.dataset.go], el=$("#wbody"); if(!x||!el) return; const key=x.claim.replace(/[「」"“”'‘’]/g,"").trim();
+      let at=el.value.indexOf(key); for(let n=Math.min(key.length,24);at<0&&n>=6;n-=6) at=el.value.indexOf(key.slice(0,n));
+      if(at<0) return toast("본문에서 같은 구절을 찾지 못했습니다 — 고쳐 썼거나 AI가 줄여 옮긴 구절입니다"); ov.remove(); el.focus(); el.setSelectionRange(at,at+Math.min(key.length,60)); el.blur(); el.focus(); });
+    ov.querySelector("[data-ins]")?.addEventListener("click",()=>{ const el=$("#wbody"); if(!el) return; if(/^\s*■\s*부록\s*—\s*검증표/m.test(el.value)&&!confirm("원고에 이미 검증표 부록이 있습니다. 새 표를 하나 더 넣을까요? (옛 표는 직접 지워 주세요)")) return;
+      tInsert(el,vfAppendix(w,rows),el.value.length,el.value.length); ov.remove(); setTimeout(()=>el.scrollIntoView({behavior:"smooth",block:"end"}),50); toast("원고 끝에 검증표 부록을 넣었습니다 (↶ 로 되돌리기)"); });
+    ov.querySelector("[data-ai]")?.addEventListener("click",async()=>{ if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
+      const k=aiGenre(); busy=true; err=""; draw();
+      try{ const r=await gcall("coWrite",{mode:"verify",body:aiBodyText($("#wbody")||{value:w.body||""}),title:$("#wtitle")?.value||w.title||"",passage:$("#wpassage")?.value||w.passage||"",genre:k.name,sermon:k.sermon});
+        const old=vfGet(w).rows; metaSet(w.id,"vtab",{at:today(),ai:r.ai||"",rows:(r.rows||[]).map(x=>({...x,me:old.find(o=>o.claim===x.claim)?.me||""}))}); save(); }
+      catch(e){ err="검증하지 못했습니다: "+e.message; } busy=false; draw(); }); };
+  document.body.appendChild(ov); draw(); }
+
+// 점검 10문항 (원칙 8-4) — 「예/아니오」는 글쓴이가. AI 의견은 참고로만. 아니오인 것만 고침
+const CK_Q=["이 글을 한 문장으로 말할 수 있는가? 그 문장이 도입 끝과 결론에 있는가?","독자(청중)는 이 글을 읽고(듣고) 무엇을 하게 되는가?","원 자료가 말하지 않는 동기를 단정한 문장은 없는가?","본문에 넣은 원어(전문 지식)는 두 개 이하인가? 듣자마자 이해되는가?","예화마다 한 문장에 기여하는가? 주 예화가 처음과 끝에 있는가?","핵심(그리스도)으로 가는 길은 무엇인가? 해석적 읽기라면 그렇다고 밝혔는가?","위로가 겨냥하는 자리가 분명한가? 값싼 위로를 막는 문장이 있는가?","결론이 전체의 20% 안팎인가? 지난번과 같은 틀은 아닌가?","제목이 약속한 것을 원고가 지키는가?","이 글이 먼저 나에게 한 말은 무엇인가?"];
+const ckGet=w=>{ const t=wMeta(w,"chk10"); return t&&Array.isArray(t.a)?t:{a:[]}; };
+function ckSum(w){ const a=ckGet(w).a, y=a.filter(x=>x?.me==="예").length, n=a.filter(x=>x?.me==="아니오").length; return y||n?` <small class="${n?"warn":"muted"}">${y}/10${n?` · 아니오 ${n}`:""}</small>`:""; }
+function ckOpen(){ const w=cardW(); if(!w) return toast("몇 자 써서 간직되면 점검할 수 있습니다");
+  const ov=document.createElement("div"); ov.className="bookview sendview"; let busy=false, err="", onlyNo=false;
+  const put=a=>{ metaSet(w.id,"chk10",{at:today(),a}); save(); };
+  const draw=()=>{ const T=ckGet(w), A=CK_Q.map((q,i)=>T.a[i]||{}), y=A.filter(x=>x.me==="예").length, n=A.filter(x=>x.me==="아니오").length, sermon=aiGenre().sermon;
+    const auto=i=>{ if(i===7&&sermon){ const r=sermonRatio($("#wbody")?.value??w.body); if(r.tot&&r.named) return `분량 막대: 결론 ${Math.round(r.end*100/r.tot)}% · ${r.end.toLocaleString()}자`; }
+      if(i===0){ const c=wMeta(w,"c1"); if(c) return `설계 카드의 한 문장: 「${c}」`; } return ""; };
+    ov.innerHTML=`<section class="sheet" style="max-width:760px;margin:36px auto;display:grid;gap:12px">
+      <div class="row"><p class="label" style="margin:0">완성 전 점검 10문항 — ${esc(w.title||"제목 없음")}</p><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div>
+      <p class="hint" style="margin:0">질문마다 직접 「예 / 아니오」를 고르세요. <b>아니오가 나온 항목만 고칩니다</b> (원칙 8-4). AI 의견은 참고로만 보입니다 — 체크는 늘 직접.</p>
+      <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn small aibtn" data-ai ${busy||!SERVER?"disabled":""}>${busy?"원고를 읽는 중…":"✦ AI 의견 받기"}</button><span class="pills"><button class="pill ${!onlyNo?"on":""}" data-only="0">모두 10</button><button class="pill ${onlyNo?"on":""}" data-only="1">아니오만 ${n}</button></span><span class="spacer"></span><b style="font-size:14px">예 ${y} · 아니오 ${n} · 남음 ${10-y-n}</b><button class="btn small ghost" data-clear title="체크를 모두 지웁니다">새로 점검</button></div>
+      ${err?`<p class="warn" style="margin:0">${esc(err)}</p>`:""}
+      <div class="cklist">${CK_Q.map((q,i)=>{ const x=A[i]; if(onlyNo&&x.me!=="아니오") return ""; const au=auto(i);
+        return `<div class="ckrow ${x.me==="아니오"?"no":x.me==="예"?"yes":""}"><span class="ckn">${i+1}</span><div style="min-width:0;flex:1"><div>${esc(q)}</div>${au?`<div class="ckai">▸ ${esc(au)}</div>`:""}${x.ai?`<div class="ckai">AI: <b>${esc(x.ai)}</b>${x.why?` — ${esc(x.why)}`:""}</div>`:""}
+          ${x.me==="아니오"?`<button class="btn small ghost" data-ask="${i}" style="margin-top:4px" title="AI 창에서 고칠 방향만 묻습니다 (고쳐 쓰지는 않음)">✦ 고칠 방향 묻기</button>`:""}</div>
+          <div class="ckbtns"><button class="pill ${x.me==="예"?"on":""}" data-me="${i}" data-v="예">예</button><button class="pill ${x.me==="아니오"?"on":""}" data-me="${i}" data-v="아니오">아니오</button></div></div>`; }).join("")||`<p class="muted" style="margin:0">아니오가 없습니다.</p>`}</div></section>`;
+    ov.querySelector("[data-x]").onclick=()=>{ ov.remove(); cardPaint(); };
+    ov.querySelectorAll("[data-only]").forEach(b=>b.onclick=()=>{ onlyNo=b.dataset.only==="1"; draw(); });
+    ov.querySelectorAll("[data-me]").forEach(b=>b.onclick=()=>{ const a=CK_Q.map((q,i)=>({...(ckGet(w).a[i]||{})})), i=+b.dataset.me; a[i].me=a[i].me===b.dataset.v?"":b.dataset.v; put(a); draw(); });
+    ov.querySelector("[data-clear]").onclick=()=>{ if(!confirm("체크와 AI 의견을 모두 지우고 새로 점검할까요?")) return; metaSet(w.id,"chk10",""); save(); draw(); };
+    ov.querySelectorAll("[data-ask]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.ask; ov.remove(); aiOpen(`점검 ${i+1}번 「${CK_Q[i]}」에 아니오가 나왔습니다. 원고 어디를 어떻게 고치면 될지 방향만 짚어 주세요 (대신 쓰지 말고).`); });
+    ov.querySelector("[data-ai]")?.addEventListener("click",async()=>{ if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
+      const k=aiGenre(); busy=true; err=""; draw();
+      try{ const r=await gcall("coWrite",{mode:"check10",questions:CK_Q,body:aiBodyText($("#wbody")||{value:w.body||""}),card:cardForAI(w),genre:k.name,sermon:k.sermon,...vrFor(k.sermon)});
+        const a=CK_Q.map((q,i)=>({...(ckGet(w).a[i]||{}),ai:r.answers?.[i]?.ans||"",why:r.answers?.[i]?.why||""})); put(a); }
+      catch(e){ err="의견을 받지 못했습니다: "+e.message; } busy=false; draw(); }); };
+  document.body.appendChild(ov); draw(); }
 // ───────── 말투 기준 · 규칙 저장소 (팀장님 「AI 보조 원칙」 1-6 · 8-1 · 8-2) ─────────
 // 설정 S.settings.voice=[{id,t,k:"설교"|"글"|"모두",at}] — 팀장님이 직접 고친 문장(말투 기준). S.settings.rules=[{id,t,why,how,k,on,at}] — 지적 → 규칙(날짜·계기·적용 방법).
 // 켜 둔 규칙과 그 갈래의 말투 기준을 모든 글쓰기 AI(도우미·제안·다듬기·설계 카드)에 함께 보냄(서버 vrText_). 설정이라 모든 기기에서 같이 쓰고, 지운 것은 묘비로.
