@@ -1471,7 +1471,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="eb15b9e2a0";
+const APP_BUILD="3cf01f9fd0";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1723,11 +1723,10 @@ function ytLoad(){ if(window.YT?.Player) return Promise.resolve(); return YT_P||
   const sc=document.createElement("script"); sc.src="https://www.youtube.com/iframe_api"; sc.onerror=()=>{ YT_P=null; no(new Error("유튜브를 불러오지 못했습니다 — 인터넷 연결을 확인해 주세요")); }; document.head.appendChild(sc); })); }
 function mpCard(){ let el=$("#mplayer");
   if(!el){ el=document.createElement("div"); el.id="mplayer"; el.className="suplayer mplayer"; el.hidden=true;
-    el.innerHTML=`<div class="spl-t"><span class="spl-ic">♪</span><div><b id="mp-t">찬송가·CCM</b><small id="mp-s">유튜브뮤직 음원 우선</small></div><span class="spacer"></span><button data-ym title="유튜브뮤직에서 이어 듣기 (앱 안 재생은 멈춤)">♫↗</button><button data-min title="크기 바꾸기 (작게 → 보통 → 크게)">▾</button><button data-lock title="자리 고정 (끌리지 않게)">📌</button><button data-menu title="크기·자리">⋯</button><button data-x title="닫기 (멈춤)">✕</button></div>
+    el.innerHTML=`<div class="spl-t"><span class="spl-ic">♪</span><div><b id="mp-t">찬송가·CCM</b><small id="mp-s">유튜브뮤직 음원 우선</small></div><span class="spacer"></span><button data-min title="크기 바꾸기 (작게 → 보통 → 크게)">▾</button><button data-lock title="자리 고정 (끌리지 않게)">📌</button><button data-menu title="크기·자리">⋯</button><button data-x title="닫기 (멈춤)">✕</button></div>
       <div class="mp-menu" hidden><div class="r"><span>크기</span><button data-sz="s">작게</button><button data-sz="m">보통</button><button data-sz="l">크게</button></div><div class="r"><span>자리</span><button data-dk="tl" title="왼쪽 위">↖</button><button data-dk="tr" title="오른쪽 위">↗</button><button data-dk="bl" title="왼쪽 아래">↙</button><button data-dk="br" title="오른쪽 아래">↘</button><button data-dk="" title="끌어서 둔 곳">자유</button></div><div class="r"><span>고정</span><button data-lk>📌 끌리지 않게</button></div></div>
       <div class="mp-vid" id="mpbox"><span>▶를 누르면 여기서 재생됩니다</span></div><div class="mp-ccm" id="mpccm"></div><small class="mp-note">유튜브 영상 · 위 줄을 잡고 옮길 수 있습니다</small>`;
     document.body.appendChild(el); el.querySelector("[data-x]").onclick=mpClose; suDrag(el,"seojae.mpPos");
-    el.querySelector("[data-ym]").onclick=()=>{ const q=MUSIC.q||(hymnNo()?"새찬송가 "+hymnNo()+"장":""); if(!q) return; try{ MP?.pauseVideo(); }catch(_){} window.open("https://music.youtube.com/search?q="+encodeURIComponent(q),"_blank","noopener"); };
     const cyc={s:"m",m:"l",l:"s"};
     el.querySelector("[data-min]").onclick=()=>mpSize(cyc[el.dataset.size||"m"]);
     el.querySelector("[data-lock]").onclick=el.querySelector("[data-lk]").onclick=()=>mpLock(el.dataset.lock!=="1");
