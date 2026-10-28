@@ -770,7 +770,7 @@ body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-
 .cxp-sec{border:1px solid var(--edge);border-radius:12px;padding:12px 14px;margin-top:14px;background:color-mix(in srgb,var(--paper) 70%,#fff)} :root[data-theme="dark"] .cxp-sec{background:var(--paper)}
 .cxp-sec h4{margin:0 0 10px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:13.5px;color:var(--ink)} .cxp-sec h4 small{font-weight:400;font-size:12px;color:var(--faint)}
 .cxp-text{display:block;width:100%;min-height:150px;resize:vertical;border:1px solid var(--edge);border-radius:8px;background:color-mix(in srgb,var(--paper) 50%,#fff);padding:10px 12px;font:16px/1.85 "Gowun Batang",serif;color:var(--ink)} .cxp-text.small{min-height:80px}
-.cxp-save{display:flex;justify-content:flex-end;margin-top:12px} .codexpage .cxback{border:0;padding:0;margin:0}
+.cxp-save{display:flex;justify-content:flex-end;gap:6px;margin-top:12px} .cxp-x{border:1px solid var(--edge)!important} .codexpage .cxback{border:0;padding:0;margin:0}
 .codexpage .cxhit{padding:8px 0;border-top:1px dashed var(--edge)} .codexpage .cxhit:first-child{border-top:0;padding-top:0}
 .cxsidebody{white-space:pre-wrap;font:14.5px/1.7 "Gowun Batang",serif;color:var(--ink);margin:4px 0}
 @media (max-width:700px){ .cxp-grid{grid-template-columns:1fr} .cxp-title{font-size:24px} }
@@ -1634,7 +1634,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="f5f1cd7d89";
+const APP_BUILD="bb9eb6c2d6";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -5099,7 +5099,7 @@ function codexPage(c){ const com=cxOrphan(c), W=cxW(c), PK=cxPK(c), P=cxP(PK); C
   const props=(c.props||[]).length?c.props:(P.tpl[c.kind||""]||[]).map(k=>({k,v:""}));   // 새 말씀 노트는 기본 칸을 미리 펼쳐 둠
   const sec=(h,sub,inner)=>`<section class="cxp-sec"><h4>${h}${sub?`<small>${sub}</small>`:""}</h4>${inner}</section>`;
   return `<section class="sheet roommain codexpage ${com?"common":""}">${com?`<div class="comband"><span class="combadge">공통</span> 「${CX_COMMON}」 — 모든 말씀 글이 함께 씁니다 <button class="btn small ghost" onclick="cxCopyMenu('${c.id}',event)">⧉ 내 원고로 복사</button></div>`:""}
-    <div class="cxp-top"><button class="cxp-back" onclick="ROOM_CODEX=null;stOpen('${com?"common":"codex"}')">‹ ${com?CX_COMMON:"설정 목록"}</button><span class="spacer"></span><button class="btn small ink" onclick="codexSave('${c.id}')">간직</button><button class="btn small ghost danger" onclick="codexDel('${c.id}')">지우기</button></div>
+    <div class="cxp-top"><button class="cxp-back" onclick="ROOM_CODEX=null;stOpen('${com?"common":"codex"}')">‹ ${com?CX_COMMON:"설정 목록"}</button><span class="spacer"></span><button class="btn small ink" onclick="codexSave('${c.id}')">간직</button><button class="btn small ghost danger" onclick="codexDel('${c.id}')">지우기</button><button class="btn small ghost cxp-x" onclick="codexClose('${c.id}')" title="닫기 (Esc) — 고친 것은 간직하고 목록으로">닫기 ✕</button></div>
     <input id="cxname" class="cxp-title" value="${esc(c.name)}" placeholder="이름" aria-label="이름">
     <div class="cxp-grid">
       <label class="cxf"><span>종류</span><select id="cxkind" onchange="cxKindTpl()"><option value="">—</option>${[...P.kinds,...(c.kind&&!P.kinds.includes(c.kind)?[c.kind]:[])].map(k=>`<option value="${k}" ${c.kind===k?"selected":""}>${k}</option>`).join("")}</select></label>
@@ -5110,7 +5110,7 @@ function codexPage(c){ const com=cxOrphan(c), W=cxW(c), PK=cxPK(c), P=cxP(PK); C
       <div class="row" style="gap:6px"><button type="button" class="btn small ghost" onclick="cxAddProp()">＋ 칸</button><button type="button" class="btn small ghost" onclick="cxFillTpl()">기본 칸 채우기</button></div>`)}
     ${sec(P.noteH,P.noteSub,`<textarea id="cxbody" class="cxp-text" placeholder="${esc(W.note)}">${esc(c.body||"")}</textarea>`)}
     ${!P.secret?"":sec("🔒 비밀","작가만 봅니다 — 설정집을 공개용으로 내보낼 때 빠집니다",`<textarea id="cxsecret" class="cxp-text small" placeholder="반전, 숨긴 과거, 아직 독자에게 밝히지 않은 것…">${esc(c.secret||"")}</textarea>`)}${!P.rel?"":sec(P.rel,P.relSub,`<div id="cxrels" class="cxprops">${(c.rel||[]).map(r=>cxRelRow(c,r)).join("")}</div><div><button type="button" class="btn small ghost" onclick="cxAddRel('${c.id}')">＋ 관계</button></div>`)}
-    <div class="cxp-save"><button class="btn ink" onclick="codexSave('${c.id}')">간직</button></div>
+    <div class="cxp-save"><button class="btn ghost" onclick="codexClose('${c.id}')" title="Esc">닫기</button><button class="btn ink" onclick="codexSave('${c.id}')">간직</button></div>
     ${bk.rels.length||bk.ment.length||out.length?sec("연결","",`<div class="cxback">
       ${bk.rels.length?`<div><small class="muted">이 항목을 가리키는 관계</small> ${bk.rels.map(x=>`${chip(x.from)}<small class="muted">${x.label?" → "+esc(x.label):""}</small>`).join(" ")}</div>`:""}
       ${bk.ment.length?`<div><small class="muted">이 이름이 나온 다른 노트</small> ${bk.ment.map(chip).join(" ")}</div>`:""}
@@ -5121,14 +5121,21 @@ function codexPage(c){ const com=cxOrphan(c), W=cxW(c), PK=cxPK(c), P=cxP(PK); C
   </section>`; }
 // 말씀 노트: 종류를 바꿨을 때 아직 아무것도 안 적은 칸이면 그 종류의 기본 칸으로
 function cxKindTpl(){ const box=$("#cxprops"); if(!box) return; const vals=[...box.querySelectorAll("[data-pv]")].some(x=>x.value.trim()); if(vals) return; const T=cxP(CX_PAGE_K).tpl; box.innerHTML=(T[$("#cxkind").value]||T[""]||[]).map(k=>cxPropRow(k,"")).join(""); }
-function codexSave(id){ const c=(S.codex||[]).find(x=>x.id===id); if(!c) return; const name=$("#cxname").value.trim(); if(!name) return toast("이름을 적어 주세요");
-  c.name=name; c.aliases=$("#cxalias").value.split(/[,，、]/).map(x=>x.trim()).filter(Boolean); c.body=$("#cxbody").value;
-  const kind=$("#cxkind")?.value||""; if(kind) c.kind=kind; else delete c.kind;
-  if($("#cxms")){ const ms=$("#cxms").value; if(ms) c.ms=ms; else delete c.ms; }
-  const props=[...document.querySelectorAll("#cxprops .cxprop")].map(r=>({k:r.querySelector("[data-pk]").value.trim(),v:r.querySelector("[data-pv]").value.trim()})).filter(p=>p.k||p.v); if(props.length) c.props=props; else delete c.props;
-  const sec=($("#cxsecret")?.value||"").trim(); if(sec) c.secret=sec; else delete c.secret;
-  const rel=[...document.querySelectorAll("#cxrels .cxrel")].map(r=>({to:r.querySelector("[data-rt]").value,label:r.querySelector("[data-rl]").value.trim()})).filter(r=>r.to); if(rel.length) c.rel=rel; else delete c.rel;
-  c.updated=new Date().toISOString(); save(); toast("간직했습니다"); render(); }
+// 노트 화면의 칸 값 (간직·닫기에서 함께 씀)
+function cxForm(){ return {name:($("#cxname")?.value||"").trim(),aliases:($("#cxalias")?.value||"").split(/[,，、]/).map(x=>x.trim()).filter(Boolean),body:$("#cxbody")?.value||"",kind:$("#cxkind")?.value||"",ms:$("#cxms")?$("#cxms").value:undefined,
+  props:[...document.querySelectorAll("#cxprops .cxprop")].map(r=>({k:r.querySelector("[data-pk]").value.trim(),v:r.querySelector("[data-pv]").value.trim()})).filter(p=>p.k||p.v),
+  secret:($("#cxsecret")?.value||"").trim(),rel:[...document.querySelectorAll("#cxrels .cxrel")].map(r=>({to:r.querySelector("[data-rt]").value,label:r.querySelector("[data-rl]").value.trim()})).filter(r=>r.to)}; }
+function cxChanged(c){ const f=cxForm(), vals=L=>JSON.stringify((L||[]).filter(p=>p.v).map(p=>[p.k,p.v]));
+  return f.name!==c.name||f.aliases.join()!==(c.aliases||[]).join()||f.body!==(c.body||"")||f.kind!==(c.kind||"")||(f.ms!==undefined&&f.ms!==(c.ms||""))||vals(f.props)!==vals(c.props)||f.secret!==(c.secret||"")||JSON.stringify(f.rel)!==JSON.stringify(c.rel||[]); }
+function codexSave(id,quiet){ const c=(S.codex||[]).find(x=>x.id===id); if(!c) return false; const f=cxForm(); if(!f.name){ toast("이름을 적어 주세요"); return false; }
+  c.name=f.name; c.aliases=f.aliases; c.body=f.body; if(f.kind) c.kind=f.kind; else delete c.kind;
+  if(f.ms!==undefined){ if(f.ms) c.ms=f.ms; else delete c.ms; }
+  if(f.props.length) c.props=f.props; else delete c.props; if(f.secret) c.secret=f.secret; else delete c.secret; if(f.rel.length) c.rel=f.rel; else delete c.rel;
+  c.updated=new Date().toISOString(); save(); toast("간직했습니다"); if(!quiet) render(); return true; }
+// 닫기 (단추·Esc): 고친 것이 있으면 간직하고, 그 노트가 있던 목록으로. 노트 탭도 닫음
+function codexClose(id){ const c=(S.codex||[]).find(x=>x.id===id); if(!c) return; if(cxChanged(c)&&!codexSave(id,true)) return;
+  const back=cxOrphan(c)?"common":"codex", t=STUDIO_TABS.indexOf("cx:"+id); if(t>=0) STUDIO_TABS.splice(t,1); ROOM_CODEX=null; stOpen(back); }
+document.addEventListener("keydown",e=>{ if(e.key!=="Escape"||e.isComposing||!ROOM_CODEX||tab!=="room"||!$(".codexpage")||CTX||document.querySelector(".sendview,.bookview")) return; e.preventDefault(); codexClose(ROOM_CODEX); });
 // 설정 목록: 카드 · 표(같은 종류 비교) · 관계도
 let CW_VIEW="abc";
 const cxCopyBtn=c=>`<button class="btn small ghost cxclaim" onclick="cxCopyMenu('${c.id}',event)" title="원고의 노트로 복사합니다 (원본은 공통에 그대로)">⧉ 원고로</button>`;
