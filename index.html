@@ -1634,7 +1634,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="bb9eb6c2d6";
+const APP_BUILD="b2eb886a11";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -5099,7 +5099,7 @@ function codexPage(c){ const com=cxOrphan(c), W=cxW(c), PK=cxPK(c), P=cxP(PK); C
   const props=(c.props||[]).length?c.props:(P.tpl[c.kind||""]||[]).map(k=>({k,v:""}));   // 새 말씀 노트는 기본 칸을 미리 펼쳐 둠
   const sec=(h,sub,inner)=>`<section class="cxp-sec"><h4>${h}${sub?`<small>${sub}</small>`:""}</h4>${inner}</section>`;
   return `<section class="sheet roommain codexpage ${com?"common":""}">${com?`<div class="comband"><span class="combadge">공통</span> 「${CX_COMMON}」 — 모든 말씀 글이 함께 씁니다 <button class="btn small ghost" onclick="cxCopyMenu('${c.id}',event)">⧉ 내 원고로 복사</button></div>`:""}
-    <div class="cxp-top"><button class="cxp-back" onclick="ROOM_CODEX=null;stOpen('${com?"common":"codex"}')">‹ ${com?CX_COMMON:"설정 목록"}</button><span class="spacer"></span><button class="btn small ink" onclick="codexSave('${c.id}')">간직</button><button class="btn small ghost danger" onclick="codexDel('${c.id}')">지우기</button><button class="btn small ghost cxp-x" onclick="codexClose('${c.id}')" title="닫기 (Esc) — 고친 것은 간직하고 목록으로">닫기 ✕</button></div>
+    <div class="cxp-top"><button class="cxp-back" onclick="ROOM_CODEX=null;stOpen('${com?"common":"codex"}')">‹ ${com?CX_COMMON:"설정 목록"}</button><span class="spacer"></span><button class="btn small ink" onclick="codexSave('${c.id}')" title="⌘S">간직</button><button class="btn small ghost danger" onclick="codexDel('${c.id}')">지우기</button><button class="btn small ghost cxp-x" onclick="codexClose('${c.id}')" title="닫기 (Esc) — 고친 것은 간직하고 목록으로">닫기 ✕</button></div>
     <input id="cxname" class="cxp-title" value="${esc(c.name)}" placeholder="이름" aria-label="이름">
     <div class="cxp-grid">
       <label class="cxf"><span>종류</span><select id="cxkind" onchange="cxKindTpl()"><option value="">—</option>${[...P.kinds,...(c.kind&&!P.kinds.includes(c.kind)?[c.kind]:[])].map(k=>`<option value="${k}" ${c.kind===k?"selected":""}>${k}</option>`).join("")}</select></label>
@@ -5110,7 +5110,7 @@ function codexPage(c){ const com=cxOrphan(c), W=cxW(c), PK=cxPK(c), P=cxP(PK); C
       <div class="row" style="gap:6px"><button type="button" class="btn small ghost" onclick="cxAddProp()">＋ 칸</button><button type="button" class="btn small ghost" onclick="cxFillTpl()">기본 칸 채우기</button></div>`)}
     ${sec(P.noteH,P.noteSub,`<textarea id="cxbody" class="cxp-text" placeholder="${esc(W.note)}">${esc(c.body||"")}</textarea>`)}
     ${!P.secret?"":sec("🔒 비밀","작가만 봅니다 — 설정집을 공개용으로 내보낼 때 빠집니다",`<textarea id="cxsecret" class="cxp-text small" placeholder="반전, 숨긴 과거, 아직 독자에게 밝히지 않은 것…">${esc(c.secret||"")}</textarea>`)}${!P.rel?"":sec(P.rel,P.relSub,`<div id="cxrels" class="cxprops">${(c.rel||[]).map(r=>cxRelRow(c,r)).join("")}</div><div><button type="button" class="btn small ghost" onclick="cxAddRel('${c.id}')">＋ 관계</button></div>`)}
-    <div class="cxp-save"><button class="btn ghost" onclick="codexClose('${c.id}')" title="Esc">닫기</button><button class="btn ink" onclick="codexSave('${c.id}')">간직</button></div>
+    <div class="cxp-save"><button class="btn ghost" onclick="codexClose('${c.id}')" title="Esc">닫기</button><button class="btn ink" onclick="codexSave('${c.id}')" title="⌘S">간직 <small style="opacity:.6">⌘S</small></button></div>
     ${bk.rels.length||bk.ment.length||out.length?sec("연결","",`<div class="cxback">
       ${bk.rels.length?`<div><small class="muted">이 항목을 가리키는 관계</small> ${bk.rels.map(x=>`${chip(x.from)}<small class="muted">${x.label?" → "+esc(x.label):""}</small>`).join(" ")}</div>`:""}
       ${bk.ment.length?`<div><small class="muted">이 이름이 나온 다른 노트</small> ${bk.ment.map(chip).join(" ")}</div>`:""}
@@ -6522,6 +6522,7 @@ document.addEventListener("focusin",e=>{ if(e.target.matches?.("textarea,input:n
 document.addEventListener("focusout",()=>setTimeout(()=>{ if(!document.activeElement?.matches?.("textarea,input,select")) document.body.classList.remove("typing"); },60));
 document.addEventListener("keydown",e=>{
   if((e.metaKey||e.ctrlKey)&&e.key==="s"&&tab==="write"){ e.preventDefault(); saveWriting(); }
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="s"&&tab==="room"&&ROOM_CODEX&&$(".codexpage")){ e.preventDefault(); codexSave(ROOM_CODEX,true); }   // 노트 화면 「간직」 (⌘S·Ctrl+S) — 화면을 다시 그리지 않아 커서 그대로
   if(e.ctrlKey&&!e.metaKey&&e.key==="y"&&tab==="write"&&e.target.matches?.("#wbody")){ e.preventDefault(); tUndo(true); }   // 윈도우식 다시 하기 (⌘Z·⇧⌘Z·Ctrl+Z 는 브라우저가 그대로 처리)
   if(e.key==="Escape"&&document.body.classList.contains("focus")) toggleFocus();
 });
