@@ -586,8 +586,14 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .suplayer .spl-t{display:flex;gap:8px;align-items:center} .suplayer .spl-t div{display:grid;min-width:0} .suplayer .spl-t b,.suplayer .spl-t small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .suplayer small{color:var(--faint);font-size:12px}
 .suplayer .spl-ic{font-size:20px} .suplayer audio{width:100%;height:36px} .suplayer .spl-b{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
 .suplayer button{font:inherit;font-size:12.5px;border:1px solid var(--edge);background:none;color:inherit;border-radius:999px;padding:2px 9px;cursor:pointer} .suplayer button.on{background:var(--ink);color:var(--paper)} .suplayer .spl-t button{border:0;font-size:15px;padding:2px 6px}
-.suplayer.min{width:auto;max-width:min(320px,calc(100vw - 24px))} .suplayer.min .spl-b,.suplayer.min audio{display:none} .suplayer.min [data-min]{transform:rotate(180deg)} .suplayer.playing .spl-ic{animation:splp 1.6s ease-in-out infinite} @keyframes splp{50%{opacity:.4}}
-@media (max-width:700px){ .suplayer{left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom));width:auto} }
+.suplayer[hidden]{display:none!important}   /* ✕ 닫기: display:grid 가 hidden 을 덮지 않게 */
+.suplayer .spl-t{cursor:grab;touch-action:none;user-select:none} .suplayer.drag,.suplayer.drag .spl-t{cursor:grabbing} .suplayer .spl-pp{display:none}
+.suplayer.min{width:84px;height:84px;max-width:none;padding:0;border-radius:20px;display:block;cursor:grab;touch-action:none;user-select:none;background:conic-gradient(color-mix(in srgb,var(--sepia) 38%,transparent) calc(var(--p,0)*1%),transparent 0) padding-box,var(--paper) var(--grain);border:3px solid var(--edge)}
+.suplayer.min .spl-b,.suplayer.min audio,.suplayer.min .spl-t div,.suplayer.min .spl-t .spacer{display:none} .suplayer.min .spl-t{position:static;display:block}
+.suplayer.min .spl-ic{position:absolute;left:0;right:0;top:9px;text-align:center;font-size:15px;pointer-events:none}
+.suplayer.min .spl-pp{display:grid;place-items:center;position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);font-size:17px;padding:0}
+.suplayer.min [data-min],.suplayer.min [data-x]{position:absolute;top:2px;width:24px;height:24px;padding:0;font-size:12px;border:0;background:none;color:var(--faint)} .suplayer.min [data-min]{left:2px;transform:rotate(180deg)} .suplayer.min [data-x]{right:2px} .suplayer.playing .spl-ic{animation:splp 1.6s ease-in-out infinite} @keyframes splp{50%{opacity:.4}}
+@media (max-width:700px){ .suplayer{right:12px;bottom:calc(70px + env(safe-area-inset-bottom));width:calc(100vw - 24px)} .suplayer.min{width:84px} }
 @media print{ .suplayer{display:none} }
 .kbt{border-collapse:collapse;font-size:14.5px} .kbt td{padding:5px 8px;border-bottom:1px dashed var(--edge);vertical-align:top} .kbt td:first-child{white-space:nowrap} kbd{font:600 12.5px/1.6 -apple-system,sans-serif;background:var(--paper-2,#efe7da);border:1px solid var(--edge);border-bottom-width:2px;border-radius:5px;padding:1px 7px;color:var(--ink)}
 /* ───── 글방 = 작업실 (펜시브식) ───── */
@@ -1439,7 +1445,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="ee621637aa";
+const APP_BUILD="65262c434b";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1640,27 +1646,42 @@ function sideTip(){ if(document.querySelector(".sidetip")) return; const mac=/Ma
   ov.querySelector("[data-ok]").onclick=done; ov.querySelector("[data-x]").onclick=done; ov.onclick=e=>{ if(e.target===ov) done(); }; }
 // ───────── 매일성경 듣기: 앱 안 작은 재생기 — 메뉴를 옮겨도 계속, 빠르기·10초 이동, 들은 자리 기억, 잠금 화면 조절 ─────────
 function suListen(){ if(!SU?.audio) return; let el=$("#suplayer"); const a0=el?.querySelector("audio");
-  if(el&&el.dataset.src===SU.audio){ el.hidden=false; el.classList.remove("min"); if(a0.paused) a0.play().catch(()=>{}); return; }
+  if(el&&el.dataset.src===SU.audio){ el.hidden=false; el.classList.remove("min"); suPlace(el); if(a0.paused) a0.play().catch(()=>{}); return; }
   if(!el){ el=document.createElement("div"); el.id="suplayer"; el.className="suplayer"; document.body.appendChild(el); }
   let rate=1; try{ rate=+localStorage.getItem("seojae.suRate")||1; }catch(_){}
   const src=SU.audio, title=`${SU.title||"매일성경"}`, sub=`${SU.book||""} ${SU.range||""}`.trim();
   el.dataset.src=src; el.hidden=false; el.classList.remove("min");
-  el.innerHTML=`<div class="spl-t"><span class="spl-ic">🎧</span><div><b>${esc(title)}</b><small>매일성경 · ${esc(sub)}</small></div><span class="spacer"></span><button data-min title="작게 / 크게">▾</button><button data-x title="닫기">✕</button></div>
+  el.innerHTML=`<div class="spl-t"><span class="spl-ic">🎧</span><div><b>${esc(title)}</b><small>매일성경 · ${esc(sub)}</small></div><span class="spacer"></span><button class="spl-pp" data-pp title="재생 / 멈춤">▶</button><button data-min title="작게 / 크게">▾</button><button data-x title="닫기">✕</button></div>
     <audio controls preload="metadata" src="${esc(src)}"></audio>
     <div class="spl-b"><button data-sk="-10">↺ 10초</button><button data-sk="10">10초 ↻</button><span class="spacer"></span>${[0.8,1,1.2,1.5].map(r=>`<button data-r="${r}" class="${r===rate?"on":""}">${r}×</button>`).join("")}</div>`;
   const a=el.querySelector("audio"); a.playbackRate=rate;
   try{ const p=JSON.parse(localStorage.getItem("seojae.suAudio")||"null"); if(p?.src===src&&p.t>5) a.addEventListener("loadedmetadata",()=>{ if(p.t<a.duration-5) a.currentTime=p.t; },{once:true}); }catch(_){}
   let lastSave=0; a.ontimeupdate=()=>{ if(Date.now()-lastSave<4000) return; lastSave=Date.now(); try{ localStorage.setItem("seojae.suAudio",JSON.stringify({src,t:Math.floor(a.currentTime)})); }catch(_){} };
   a.onended=()=>{ try{ localStorage.removeItem("seojae.suAudio"); }catch(_){} el.classList.remove("playing"); };
-  a.onplay=()=>el.classList.add("playing"); a.onpause=()=>el.classList.remove("playing");
+  const pp=el.querySelector("[data-pp]"); a.onplay=()=>{ el.classList.add("playing"); pp.textContent="❚❚"; }; a.onpause=()=>{ el.classList.remove("playing"); pp.textContent="▶"; };
+  pp.onclick=()=>{ a.paused?a.play().catch(()=>{}):a.pause(); };
+  a.addEventListener("timeupdate",()=>{ if(a.duration) el.style.setProperty("--p",(a.currentTime/a.duration*100).toFixed(1)); });
   a.onerror=()=>toast("듣기 파일을 받지 못했습니다 — 인터넷 연결을 확인해 주세요");
   el.querySelector("[data-x]").onclick=()=>{ a.pause(); el.hidden=true; };
-  el.querySelector("[data-min]").onclick=()=>el.classList.toggle("min");
+  el.querySelector("[data-min]").onclick=()=>{ el.classList.toggle("min"); suPlace(el); };
+  suDrag(el); suPlace(el);
   el.querySelectorAll("[data-sk]").forEach(b=>b.onclick=()=>{ a.currentTime=Math.max(0,Math.min((a.duration||1e9)-1,a.currentTime+(+b.dataset.sk))); });
   el.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{ a.playbackRate=+b.dataset.r; try{ localStorage.setItem("seojae.suRate",b.dataset.r); }catch(_){} el.querySelectorAll("[data-r]").forEach(x=>x.classList.toggle("on",x===b)); });
   if("mediaSession" in navigator){ try{ navigator.mediaSession.metadata=new MediaMetadata({title,artist:"매일성경 · 성서유니온",album:sub});
     navigator.mediaSession.setActionHandler("seekbackward",()=>{ a.currentTime=Math.max(0,a.currentTime-10); }); navigator.mediaSession.setActionHandler("seekforward",()=>{ a.currentTime+=10; }); }catch(_){} }
   a.play().catch(()=>{}); }
+// 재생기 끌어 옮기기: 위 줄(작게일 때는 어디든)을 잡고 끕니다. 자리는 이 기기에 기억(seojae.suPos), 화면 밖으로는 못 나감
+function suPlace(el){ let p=null; try{ p=JSON.parse(localStorage.getItem("seojae.suPos")||"null"); }catch(_){} if(!p){ el.style.left=el.style.top=el.style.right=el.style.bottom=""; return; }
+  Object.assign(el.style,{right:"auto",bottom:"auto"}); const r=el.getBoundingClientRect(), x=Math.max(6,Math.min(innerWidth-r.width-6,p.x)), y=Math.max(6,Math.min(innerHeight-r.height-6,p.y)); Object.assign(el.style,{left:x+"px",top:y+"px"}); }   // 크기가 바뀐 즉시 화면 안으로
+function suDrag(el){ if(el.dataset.drag) return; el.dataset.drag="1"; let st=null;
+  el.addEventListener("pointerdown",e=>{ if(e.button>0||e.target.closest("button,audio,a,input")) return; if(!el.classList.contains("min")&&!e.target.closest(".spl-t")) return;
+    const r=el.getBoundingClientRect(); st={dx:e.clientX-r.left,dy:e.clientY-r.top,x0:e.clientX,y0:e.clientY,moved:false}; try{ el.setPointerCapture(e.pointerId); }catch(_){} });
+  el.addEventListener("pointermove",e=>{ if(!st) return; if(!st.moved&&Math.hypot(e.clientX-st.x0,e.clientY-st.y0)<5) return; st.moved=true; el.classList.add("drag");
+    const r=el.getBoundingClientRect(), x=Math.max(6,Math.min(innerWidth-r.width-6,e.clientX-st.dx)), y=Math.max(6,Math.min(innerHeight-r.height-6,e.clientY-st.dy));
+    Object.assign(el.style,{left:x+"px",top:y+"px",right:"auto",bottom:"auto"}); e.preventDefault(); });
+  const end=()=>{ if(!st) return; if(st.moved){ const r=el.getBoundingClientRect(); try{ localStorage.setItem("seojae.suPos",JSON.stringify({x:Math.round(r.left),y:Math.round(r.top)})); }catch(_){} } st=null; el.classList.remove("drag"); };
+  el.addEventListener("pointerup",end); el.addEventListener("pointercancel",end);
+  addEventListener("resize",()=>{ if(!el.hidden) suPlace(el); }); }
 function popBible(u){
   const wide=matchMedia("(pointer:fine)").matches&&screen.availWidth>900;
   const W=Math.min(560,Math.round(screen.availWidth*.38)), H=Math.round(screen.availHeight*.86);
@@ -1738,12 +1759,12 @@ async function paintSu(){
     ${date!==today()&&!(cur&&cur.date===date)?`<div class="muted" style="font-size:13.5px;margin-top:4px">${dayWs.length?`이날 쓴 글: ${dayWs.map(w=>`<a href="#" onclick="go('write',{edit:'${w.id}'});return false">[${esc(wTag(w))}] ${esc(w.title||w.passage||"(제목 없음)")}</a>`).join(", ")}`:"이날 쓴 묵상이 없습니다. 「이 본문으로 쓰기」를 누르면 오늘 날짜로 새 글을 씁니다."}</div>`:""}
     <div class="sut"><b>${esc(SU.title)}</b> · ${esc(P.label)}${SU.hymn?` · <span class="muted">찬송가 ${esc(SU.hymn)}장</span>`:""}</div>
     <div class="links"><button class="btn small ink" onclick="suUse()">이 본문으로 쓰기</button>
-      <a class="btn small ghost" href="${esc(suOfficial(P,"NKT"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새한글 ↗</a><a class="btn small ghost" href="${esc(suOfficial(P,"RNKSV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새번역 ↗</a><a class="btn small ghost" href="${esc(suNiv(P))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">NIV ↗</a><button class="btn small ghost" onclick="sideTip()" title="성경 창을 띄워 둔 채 쓰는 법">ⓘ</button><button class="btn small ghost" onclick="pipBible()" title="오늘 본문(개역한글·영어)을 다른 창보다 늘 위에 떠 있는 작은 창으로 띄웁니다 (크롬·엣지)">${ICO.closed}위에 띄우기</button>
+      <a class="btn small ghost" href="${esc(suOfficial(P,"NKRV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)" title="개역개정은 저작권 때문에 앱 안에 넣을 수 없어 대한성서공회 사이트에서 같은 구절을 엽니다">개역개정 ↗</a><a class="btn small ghost" href="${esc(suOfficial(P,"NKT"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새한글 ↗</a><a class="btn small ghost" href="${esc(suOfficial(P,"RNKSV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새번역 ↗</a><a class="btn small ghost" href="${esc(suNiv(P))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">NIV ↗</a><button class="btn small ghost" onclick="sideTip()" title="성경 창을 띄워 둔 채 쓰는 법">ⓘ</button><button class="btn small ghost" onclick="pipBible()" title="오늘 본문(개역한글·영어)을 다른 창보다 늘 위에 떠 있는 작은 창으로 띄웁니다 (크롬·엣지)">${ICO.closed}위에 띄우기</button>
       ${SU.audio?`<button class="btn small ghost" onclick="suListen()" title="앱 안 작은 재생기로 듣습니다. 다른 메뉴로 옮겨도 계속 들립니다">${ICO.audio}듣기</button>`:""}<button class="btn small ghost" id="subtn" onclick="suNoteToggle()">${ICO.book}해설 보기</button></div>
     <details class="more"><summary>말씀 앞에서 묻기 <small class="hint" style="display:inline">· 오늘의 질문</small></summary><ol class="q" style="margin:4px 0 0">${pickQ("bible",today()+"b").map(q=>`<li>${esc(q)}</li>`).join("")}</ol></details>
     <div id="sunote"></div>
     ${open?`<div class="row" style="gap:6px;margin-top:10px;flex-wrap:wrap"><span class="muted" style="font-size:12.5px">보기</span><span class="pills">${SU_VIEWS.map(([k,n,tip])=>`<button class="pill ${suView()===k?"on":""}" style="padding:3px 10px;font-size:13px" data-tip="${tip}" onclick="lookSet('suview','${k}');paintSuText()">${n}</button>`).join("")}</span><span class="spacer"></span><span class="row" style="gap:4px" title="매일성경 글자 크기 (이 기기만)"><button class="fsbtn" onclick="suFont(-1)">가−</button><button class="fsbtn" onclick="suFont(1)">가＋</button></span><button class="fsbtn" onclick="lookSet('sutall',applyLook().sutall?'':1);paintSuText()" title="본문 칸을 다 펼쳐 스크롤 없이 봅니다">${applyLook().sutall?"칸 줄이기":"다 펼치기"}</button></div>
-      <div class="sutext" id="sutext"><span class="muted">본문을 불러오는 중…</span></div><small class="hint">앱 안 본문: 개역한글 · World English Bible (둘 다 저작권이 끝난 공개본). 새한글·새번역·NIV는 저작권 때문에 위 단추로 공식 사이트에서 같은 구절을 엽니다.</small>`:""}`;
+      <div class="sutext" id="sutext"><span class="muted">본문을 불러오는 중…</span></div><small class="hint">앱 안 본문: 개역한글 · World English Bible (둘 다 저작권이 끝난 공개본). 개역개정·새한글·새번역·NIV는 저작권 때문에 위 단추로 공식 사이트에서 같은 구절을 엽니다.</small>`:""}`;
   if(!open) return;
   try{ if(!SUT||SUT.label!==P.label){ const t=await suTexts(P); if(gen!==SUGEN) return; SUT=t; SUT.label=P.label; } }catch(e){ const t=$("#sutext"); if(t) t.innerHTML=`<span class="muted">본문을 불러오지 못했습니다. 위 단추로 열어 주세요.</span>`; return; }
   paintSuText();
