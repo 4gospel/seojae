@@ -807,7 +807,8 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .readview.pulpit .rvbody::after{content:"";display:block;clear:both}
 .readview.pulpit p{margin:0 0 .75em} .readview.pulpit p.li{padding-left:1.1em;text-indent:-1.1em;margin-bottom:.4em}
 .readview.pulpit h4{font-family:inherit;font-size:1.2em;font-weight:800;color:var(--ink);border-bottom:2px solid #8a2a1f;padding-bottom:3px;margin:1.5em 0 .6em;clear:both}
-.readview.pulpit .cue{font-weight:800;color:#a05a26;font-size:.9em;margin:1.2em 0 .3em;padding-top:.4em;border-top:1px dashed #d9b48c}
+.readview.pulpit .clr{clear:right;height:0} .readview.pulpit .talk,.readview.pulpit .pbox,.readview.pulpit blockquote{display:flow-root}
+.readview.pulpit .cue{font-weight:800;color:#a05a26;font-size:.9em;line-height:1.5;margin:1.2em 0 .3em;padding-top:.4em;border-top:1px dashed #d9b48c}
 .readview.pulpit .cue .n{background:#8a4b1f;color:#fff;border-radius:4px;padding:0 .45em;margin-right:.35em} .readview.pulpit .cue .t{font-weight:400;color:var(--faint)}
 .readview.pulpit figure.sl{float:right;clear:right;width:min(38%,360px);margin:1.3em 0 .6em 1em;position:relative;border:1px solid #b9a58c;border-radius:6px;overflow:hidden;background:#fff}
 .readview.pulpit figure.sl img{display:block;width:100%} .readview.pulpit figure.sl .noimg{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:#999;font-size:13px}
@@ -815,6 +816,7 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .readview.pulpit .talk{background:#fff3bf;color:#5c4a08;border-radius:6px;padding:.3em .7em;font-size:.8em;line-height:1.55;margin:0 0 .8em} .readview.pulpit .talk b{margin-right:.4em}
 .readview.pulpit .pbox{border-radius:8px;padding:.6em .9em;margin:0 0 1em;line-height:1.7} .readview.pulpit .pbox.head{background:#f6efe2;color:#3d2a1c} .readview.pulpit .pbox.note{background:#f1f1ef;color:#444;font-size:.9em}
 .readview.pulpit .pbox.pray{background:#f1ebf8;border-left:4px solid #7a5aa8;color:#2c2140} .readview.pulpit .pbox.pray::before{content:"🙏 기도";display:block;font-weight:800;font-size:.8em;color:#7a5aa8}
+.readview.pulpit .pbox.bless{background:#eef4f8;border-left:4px solid #3b6e8f;color:#1f3442} .readview.pulpit .pbox.bless::before{content:"🕊 축도";display:block;font-weight:800;font-size:.8em;color:#3b6e8f}
 .readview.pulpit blockquote.scr{font-weight:700;color:#1d4c94;background:#f1f5fc;border-left:4px solid #1d4c94;border-radius:0 6px 6px 0;padding:.6em .9em;margin:.5em 0 1em}
 .readview.pulpit blockquote{margin:.5em 0 1em;padding:.2em .9em;border-left:3px solid #8a2a1f;font-weight:700} .readview.pulpit blockquote cite{display:block;text-align:right;font-weight:400;font-size:.8em;color:var(--faint)}
 .readview.pulpit .spot{color:#d9480f;font-weight:800} .readview.pulpit hr.pr{border:0;border-top:1px solid var(--edge);margin:1.4em 0;clear:both} .readview.pulpit ol.fn{font-size:.75em;clear:both}
@@ -1337,7 +1339,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="ff2da9ad71";
+const APP_BUILD="d7842450dc";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2644,7 +2646,7 @@ write(){
           ${track==="bible"?`<div class="field" id="lenbox" style="${dtype==="묵상을설교로"?"":"display:none"}"><span>설교 길이 <small class="hint" style="display:inline">· 노션 태그와 완성 뒤 색인 종류(긴설교→주일설교, 짧은설교→새벽설교)에 쓰입니다</small></span>
             <div class="pills">${SLEN.map(([n,d])=>`<button type="button" class="pill ${selLen===n?"on":""}" data-tip="${d}" onclick="selLen=selLen==='${n}'?null:'${n}';this.parentNode.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',b.textContent===selLen))">${n}</button>`).join("")}</div></div>`:""}
           <label class="field"><span>글의 상태</span><select id="wstatus" style="width:auto">${WSTATUS.map(x=>`<option ${(w?.status||"초고")===x?"selected":""}>${x}</option>`).join("")}</select><small class="hint">씨앗 → 초고 → 다듬는 중 → 완성. 서랍에서 상태가 보입니다.</small></label>
-          <label class="field"><span>원고에 넣기</span><select id="wms"><option value="">고르지 않음</option>${S.manuscripts.filter(m=>!m.rule&&!(w&&m.items.includes(w.id))).map(m=>`<option value="${m.id}" ${SEL_MS===m.id?"selected":""}>${esc(m.title)}</option>`).join("")}</select>            <small class="hint">${(()=>{ const inMs=w?msOf(w):[]; return inMs.length?`지금 들어 있는 원고: ${inMs.map(m=>`${ICO.closed}${esc(m.title)}`).join(", ")}`:"직접 고른 원고에 넣을 수 있습니다. 조건으로 모으는 원고에는 주제·본문·종류에 맞으면 저절로 들어갑니다."; })()}</small></label>
+          <label class="field"><span>원고에 넣기</span><select id="wms"><option value="">고르지 않음</option>${liveMs().filter(m=>!m.rule&&!(w&&m.items.includes(w.id))).map(m=>`<option value="${m.id}" ${SEL_MS===m.id?"selected":""}>${esc(m.title)}</option>`).join("")}</select>            <small class="hint">${(()=>{ const inMs=w?msOf(w):[]; return inMs.length?`지금 들어 있는 원고: ${inMs.map(m=>`${ICO.closed}${esc(m.title)}`).join(", ")}`:"직접 고른 원고에 넣을 수 있습니다. 조건으로 모으는 원고에는 주제·본문·종류에 맞으면 저절로 들어갑니다."; })()}</small></label>
         </details>
         <hr class="dash">
         <p class="step"><span class="num">2</span>간직하기</p>
@@ -2704,7 +2706,7 @@ shelf(){
 room(){ return roomPage(); },
 drawer(){
   const segBtn=(k,n)=>`<span class="chip ${drawerSub===k?"on":""}" onclick="drawerSub='${k}';msDraft=null;render()">${n}</span>`;
-  const head=`<div class="row" style="margin-bottom:10px"><h2>서랍</h2><span class="spacer"></span>${segBtn("all","모든 기록")}${segBtn("ms","원고 — 책으로 엮기")}${segBtn("trash",`휴지통${trashed().length?" "+trashed().length:""}`)}</div><div style="height:22px"></div>`;
+  const head=`<div class="row" style="margin-bottom:10px"><h2>서랍</h2><span class="spacer"></span>${segBtn("all","모든 기록")}${segBtn("ms","원고 — 책으로 엮기")}${segBtn("trash",`휴지통${(()=>{ const n=trashed().length+S.manuscripts.filter(m=>m.trashed).length; return n?" "+n:""; })()}`)}</div><div style="height:22px"></div>`;
   if(drawerSub==="trash") return head+trashView();
   if(drawerSub==="ms") return head+`
   <section class="sheet" style="margin-bottom:30px">
@@ -2714,7 +2716,7 @@ drawer(){
       <button class="plancard bigchoice" onclick="newMsDraft('manual')"><div class="pc-head"><b>${ICO.pen}직접 고르기</b></div><div class="pc-how">마음에 드는 글을 하나씩 골라 넣고, 순서를 직접 정합니다.</div></button>
     </div>`}
   </section>
-  <div class="grid">${S.manuscripts.map(msCardHtml).join("")||`<p class="muted">아직 원고가 없습니다. 위에서 만들어 보세요.</p>`}</div>`;
+  <div class="grid">${liveMs().map(msCardHtml).join("")||`<p class="muted">아직 원고가 없습니다. 위에서 만들어 보세요.</p>`}</div>`;
   return head+`
   <section class="sheet" style="margin-bottom:26px">
     <div class="row"><input id="q" placeholder="낱말로 찾기 (제목, 본문, 성경 본문…)" style="flex:1" oninput="clearTimeout(window._aq);window._aq=setTimeout(renderArchive,150)"></div>
@@ -3175,15 +3177,21 @@ async function restoreWriting(id){
 function purgeWriting(id){ const w=S.writings.find(x=>x.id===id); if(!w) return; if(!confirm("이 글을 완전히 지울까요? 되살릴 수 없습니다.")) return;
   tomb(id); S.writings=S.writings.filter(x=>x.id!==id); save(); render(); }
 function purgeOldTrash(){ const lim=new Date(Date.now()-TRASH_DAYS*864e5).toISOString(); let n=0;
-  S.writings.filter(w=>w.trashed&&w.trashed<lim).forEach(w=>{ (S.deleted=S.deleted||{})[w.id]=w.trashed; n++; }); if(n){ S.writings=S.writings.filter(w=>!(w.trashed&&w.trashed<lim)); save(); } }
+  S.writings.filter(w=>w.trashed&&w.trashed<lim).forEach(w=>{ (S.deleted=S.deleted||{})[w.id]=w.trashed; n++; }); if(n) S.writings=S.writings.filter(w=>!(w.trashed&&w.trashed<lim));
+  const old=S.manuscripts.filter(m=>m.trashed&&m.trashed<lim); old.forEach(m=>{ (S.deleted=S.deleted||{})[m.id]=m.trashed; }); if(old.length) S.manuscripts=S.manuscripts.filter(m=>!(m.trashed&&m.trashed<lim));
+  if(n||old.length) save(); }
 // 목록 미리보기: 틀 줄(■ 관찰 — … 같은 빈 소제목)은 빼고 쓴 내용만
 function pv(w,n){ const tl=new Set([...(typeTpl(w.track,w.type)||"").split("\n").map(x=>x.trim()).filter(Boolean),...GENRE_TPL_LINES]); return stripMk((w.body||"").split("\n").filter(x=>!tl.has(x.trim())).join("\n")).replace(/\s+/g," ").trim().slice(0,n); }
 function trashView(){
   const T=trashed();
   const left=w=>Math.max(0,TRASH_DAYS-Math.floor((Date.now()-new Date(w.trashed).getTime())/864e5));
-  return `<section class="sheet" style="margin-bottom:26px"><p class="label">휴지통</p>
+  const TM=S.manuscripts.filter(m=>m.trashed).sort((a,b)=>(b.trashed||"").localeCompare(a.trashed||""));
+  return `${TM.length?`<section class="sheet" style="margin-bottom:26px"><p class="label">휴지통 · 원고</p>
+    ${TM.map(m=>{ const n=S.writings.filter(w=>w.trashedWith===m.id).length; return `<div class="item"><div class="row"><b class="myeongjo" style="font-size:18px">${ICO.closed}${esc(m.title||"(이름 없음)")}</b><span class="muted">${esc(G(m).n)} · ${(m.items||[]).filter(x=>!String(x).startsWith("part:")).length}꼭지${n?` · 꼭지 글 ${n}편 함께`:""}</span><span class="spacer"></span><span class="muted" style="font-size:13px">${left(m)}일 뒤 완전히 지워짐</span></div>
+      <div class="row" style="margin-top:6px"><button class="btn small ink" onclick="restoreMs('${m.id}')">되살리기</button><button class="btn small danger" onclick="purgeMs('${m.id}')">완전히 지우기</button></div></div>`; }).join("")}</section>`:""}
+  <section class="sheet" style="margin-bottom:26px"><p class="label">휴지통</p>
     <p class="sub">지운 글은 여기에 ${TRASH_DAYS}일 동안 남습니다. 되살리면 서랍·달력·노션에 다시 나타납니다.</p>
-    ${T.length?T.map(w=>`<div class="item"><div class="row"><span class="label ${w.track}" style="margin:0;font-size:19px">[${esc(wTag(w))}]</span>${w.passage?`<span class="muted">${esc(w.passage)}</span>`:""}<span class="spacer"></span><span class="muted" style="font-size:13px">${left(w)}일 뒤 완전히 지워짐</span></div>
+    ${T.length?T.map(w=>`<div class="item"><div class="row"><span class="label ${w.track}" style="margin:0;font-size:19px">[${esc(wTag(w))}]</span>${w.passage?`<span class="muted">${esc(w.passage)}</span>`:""}<span class="spacer"></span><span class="muted" style="font-size:13px">${w.trashedWith?`「${esc(S.manuscripts.find(m=>m.id===w.trashedWith)?.title||"")}」 원고와 함께 · `:""}${left(w)}일 뒤 완전히 지워짐</span></div>
       <div class="myeongjo" style="font-size:17px"><b>${esc(w.title||"(제목 없음)")}</b> <span class="muted" style="font-size:13px">· ${esc(w.date)} 쓴 글 · ${chars(w.body).toLocaleString()}자</span></div>
       <div class="sub" style="margin-top:2px">${esc(pv(w,120))}…</div>
       <div class="row" style="margin-top:6px"><button class="btn small ink" onclick="restoreWriting('${w.id}')">되살리기</button><button class="btn small danger" onclick="purgeWriting('${w.id}')">완전히 지우기</button></div></div>`).join("")
@@ -3474,7 +3482,8 @@ function msList(m){
   if(m.rule) return live().filter(w=>matches(w,m.rule)).sort(m.order==="date"?(a,b)=>a.date.localeCompare(b.date):bibleOrder);
   return (m.items||[]).map(id=>S.writings.find(w=>w.id===id)).filter(w=>w&&!w.trashed);
 }
-const msOf=w=>S.manuscripts.filter(m=>msList(m).includes(w));
+const msOf=w=>liveMs().filter(m=>msList(m).includes(w));
+const liveMs=()=>S.manuscripts.filter(m=>!m.trashed);
 function ruleText(r){ const p=[];
   if(r.types?.length) p.push(r.types.join("·")); if(r.books?.length) p.push(r.books.map(i=>BIBLE[i][0]).join("·"));
   if(r.topics?.length) p.push("주제 "+r.topics.join("·")); if(r.readBooks?.length) p.push("책 "+r.readBooks.map(id=>S.books.find(b=>b.id===id)?.title||"").join("·"));
@@ -3508,7 +3517,29 @@ function setOrder(id,o){ const m=S.manuscripts.find(x=>x.id===id); m.order=o; ms
 function msAdd(mid,wid){ if(!wid) return; const m=S.manuscripts.find(x=>x.id===mid); if(!m.items.includes(wid)) m.items.push(wid); msChanged(m); }
 function msMove(mid,wid,dir){ const m=S.manuscripts.find(x=>x.id===mid), k=m.items.indexOf(wid), j=k+dir; if(j<0||j>=m.items.length) return; [m.items[k],m.items[j]]=[m.items[j],m.items[k]]; msChanged(m); }
 function msRemove(mid,wid){ const m=S.manuscripts.find(x=>x.id===mid); m.items=m.items.filter(x=>x!==wid); msChanged(m,S.writings.filter(w=>w.id===wid)); }
-function delMs(id){ if(!confirm("원고 묶음만 풉니다. 글은 그대로 남습니다.")) return; const m=S.manuscripts.find(x=>x.id===id), ws=msList(m); tomb(id); S.manuscripts=S.manuscripts.filter(x=>x.id!==id); syncSeq(ws); save(); render(); }
+// 원고 휴지통: m.trashed(시각)만 붙이고 30일 뒤 완전히 지움. 「원고와 꼭지 글 모두」면 꼭지 글에도 trashed + trashedWith(원고 번호) — 원고를 되살리면 함께 돌아옴
+function delMs(id){ const m=S.manuscripts.find(x=>x.id===id); if(!m) return; const ws=m.rule?[]:msList(m), mine=ws.filter(w=>!liveMs().some(o=>o.id!==id&&!o.rule&&(o.items||[]).includes(w.id)));
+  const ov=document.createElement("div"); ov.className="bookview sendview";
+  ov.innerHTML=`<section class="sheet" style="max-width:560px;margin:60px auto;display:grid;gap:12px">
+    <p class="label" style="margin:0">${ICO.trash}「${esc(m.title||"원고")}」 휴지통에 넣기</p>
+    <p class="sub" style="margin:0">${TRASH_DAYS}일 안에 서랍 → 휴지통에서 되살릴 수 있습니다. 차례·부·장·자료·목표도 그대로 돌아옵니다.</p>
+    <div style="display:grid;gap:8px"><button class="btn ${mine.length?"":"ink"}" data-k="ms">원고만 휴지통에 <small class="muted">— 꼭지 글 ${ws.length}편은 서랍에 그대로</small></button>
+    ${mine.length?`<button class="btn ink" data-k="all">원고와 꼭지 글 ${mine.length}편 모두 휴지통에</button>`:""}
+    ${ws.length>mine.length?`<p class="hint" style="margin:0">다른 원고에도 들어 있는 글 ${ws.length-mine.length}편은 지우지 않습니다.</p>`:""}
+    <button class="btn ghost" data-x>그만두기</button></div></section>`;
+  document.body.appendChild(ov); ov.querySelector("[data-x]").onclick=()=>ov.remove();
+  ov.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{ const now=new Date().toISOString(), pages=[]; m.trashed=now; m.updated=now;
+    if(b.dataset.k==="all") mine.forEach(w=>{ w.trashed=now; w.updated=now; w.trashedWith=m.id; pages.push(w.notion?.page,w.notion?.index); });
+    if(ROOM_MS===id){ ROOM_MS=null; try{ localStorage.removeItem("seojae.roomMs"); }catch(_){} }
+    save(); if(pages.filter(Boolean).length) trashInNotion(pages.filter(Boolean)); ov.remove(); render();
+    toast(`「${m.title}」을 휴지통에 넣었습니다 (${TRASH_DAYS}일 안에 서랍 → 휴지통에서 되살림)`); }); }
+async function restoreMs(id){ const m=S.manuscripts.find(x=>x.id===id); if(!m?.trashed) return; const now=new Date().toISOString();
+  delete m.trashed; m.updated=now; const ws=S.writings.filter(w=>w.trashed&&w.trashedWith===id), pages=[];
+  ws.forEach(w=>{ delete w.trashed; delete w.trashedWith; w.updated=now; pages.push(w.notion?.page,w.notion?.index); });
+  ROOM_MS=id; try{ localStorage.setItem("seojae.roomMs",id); }catch(_){} save(); render(); toast(`「${m.title}」을 되살렸습니다${ws.length?` · 꼭지 글 ${ws.length}편도 함께`:""}`);
+  const pg=pages.filter(Boolean); if(pg.length&&SERVER&&CONF.notion){ try{ await gcall("notionRestore",{pages:pg}); }catch(_){} } }
+function purgeMs(id){ const m=S.manuscripts.find(x=>x.id===id); if(!m||!confirm(`「${m.title}」 원고를 완전히 지울까요? 되살릴 수 없습니다.\n(함께 넣은 꼭지 글은 휴지통에 남아 따로 되살릴 수 있습니다)`)) return;
+  S.writings.forEach(w=>{ if(w.trashedWith===id){ delete w.trashedWith; w.updated=new Date().toISOString(); } }); tomb(id); S.manuscripts=S.manuscripts.filter(x=>x.id!==id); save(); render(); }
 function exportMs(id){ // 성경 순서로 모은 원고는 성경책마다 장(章) 제목이 붙습니다
   const m=S.manuscripts.find(x=>x.id===id); let out=`# ${m.title}\n\n`, part=null; const pb=partsBefore(m);
   msList(m).forEach((w,i)=>{ const x=wRef(w), name=x?BIBLE[x.book][0]:null;
@@ -3618,15 +3649,17 @@ html{font-family:"Nanum Gothic","Apple SD Gothic Neo","Malgun Gothic",sans-serif
 .pbox.note{background:#f1f1ef;color:#444;font-size:.9em}
 .pbox.pray{background:#f1ebf8;border-left:2.5pt solid #7a5aa8;color:#2c2140;line-height:1.85}
 .pbox.pray::before{content:"🙏 기도";display:block;font-weight:800;font-size:.8em;color:#7a5aa8;margin-bottom:1mm}
+.pbox.bless{background:#eef4f8;border-left:2.5pt solid #3b6e8f;color:#1f3442;line-height:1.85} .pbox.bless::before{content:"🕊 축도";display:block;font-weight:800;font-size:.8em;color:#3b6e8f;margin-bottom:1mm}
 h4{font-family:"Nanum Gothic",sans-serif;font-weight:800;font-size:1.22em;color:#3d2a1c;border-bottom:1.3pt solid #8a2a1f;padding:0 0 1.2mm;margin:8mm 0 3.5mm;break-after:avoid;clear:both}
 p{text-indent:0;text-align:left;line-height:1.85;margin:0 0 .7em;word-break:keep-all;overflow-wrap:break-word;orphans:2;widows:2}
 p.li{padding-left:1.1em;text-indent:-1.1em;margin-bottom:.35em}
-.cue{font-weight:800;color:#8a4b1f;font-size:.92em;margin:5mm 0 1.5mm;padding-top:1.5mm;border-top:.7pt dashed #d9b48c;break-after:avoid}
+.cue{font-weight:800;color:#8a4b1f;font-size:.92em;line-height:1.5;margin:5mm 0 1.5mm;padding-top:1.5mm;border-top:.7pt dashed #d9b48c;break-after:avoid}
 .cue .n{display:inline-block;background:#8a4b1f;color:#fff;border-radius:1mm;padding:0 2mm;margin-right:1.5mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .cue .t{font-weight:400;color:#7a6a5a}
 figure.sl{float:right;clear:right;width:62mm;margin:5mm 0 3mm 5mm;position:relative;border:.8pt solid #b9a58c;border-radius:1.2mm;overflow:hidden;background:#fff;break-inside:avoid}
 figure.sl img{display:block;width:100%} figure.sl .noimg{height:30mm;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:9pt}
 figure.sl figcaption{position:absolute;left:0;top:0;background:#8a4b1f;color:#fff;font:800 9pt "Nanum Gothic",sans-serif;padding:.4mm 2mm;border-radius:0 0 1.2mm 0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.clr{clear:right;height:0} .talk,.pbox,blockquote.scr,blockquote{display:flow-root}
 .talk{clear:none;background:#fff3bf;border-radius:1.5mm;padding:1.3mm 3mm;font-size:.8em;line-height:1.55;color:#5c4a08;margin:0 0 3mm;break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .talk b{margin-right:1.5mm}
 blockquote.scr{font-family:inherit;font-weight:700;color:#1d4c94;background:#f1f5fc;border-left:2.5pt solid #1d4c94;border-radius:0 1.5mm 1.5mm 0;padding:2.5mm 4mm;margin:2mm 0 4mm;line-height:1.75;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -3646,9 +3679,9 @@ function tplHeads(){ if(TPL_HEADS) return TPL_HEADS; TPL_HEADS=new Set(); [TYPES
 function pulpitPara(w){ const d=w.slides&&SLIDES[w.slides.deck], imgs=d?.imgs||[], fn=[];
   const L=stripMemo(w.body||"").split("\n").map(l=>l.trim());
   const rich=l=>richHtml(l,fn).replace(/【([^】\n]{1,30})】/g,'<span class="spot">【$1】</span>');
-  const fig=n=>`<figure class="sl">${imgs[n-1]?`<img src="${imgs[n-1]}" alt="">`:`<div class="noimg">슬라이드 ${n}</div>`}<figcaption>${n}</figcaption></figure>`;
+  const fig=n=>`<div class="clr"></div><figure class="sl">${imgs[n-1]?`<img src="${imgs[n-1]}" alt="">`:`<div class="noimg">슬라이드 ${n}</div>`}<figcaption>${n}</figcaption></figure>`;
   const cueHtml=t=>{ const m=t.match(/^(슬라이드\s*\d+)\s*(?:·\s*)?(.*)$/); if(!m) return `<div class="cue">🎬 ${rich(t)}</div>`; const [a,...r]=m[2].split(/\s+—\s+/); return `<div class="cue"><span class="n">🎬 ${esc(m[1])}</span>${rich(a||"")}${r.length?` <span class="t">— ${rich(r.join(" — "))}</span>`:""}</div>`; };
-  const BOX=[[/^📖\s*/,"head"],[/^🙏\s*/,"pray"],[/^🧭\s*/,"skip"]];
+  const BOX=[[/^📖\s*/,"head"],[/^🙏\s*/,"pray"],[/^🕊️?\s*/,"bless"],[/^🧭\s*/,"skip"]];
   let out="", k=0; const next=()=>{ let j=k+1; while(j<L.length&&!L[j]) j++; return j; };
   while(k<L.length){ const l=L[k]; if(!l){ k++; continue; }
     let m;
@@ -3841,7 +3874,7 @@ function msCardHtml(m,i){
     ${m.rule?"":others.length?`<select onchange="msAdd('${m.id}',this.value)"><option value="">＋ 간직한 글 더하기…</option>${others.map(w=>`<option value="${w.id}">${esc(w.date)} · ${esc(w.title||w.body.slice(0,20))}</option>`).join("")}</select>`:""}
     <div class="row" style="margin-top:12px">
       ${m.rule?`<button class="btn small" onclick="editRule('${m.id}')">조건 고치기</button><button class="btn small" onclick="freezeMs('${m.id}')" title="지금 모인 글로 고정하고 순서를 직접 정합니다">직접 다듬기로 바꾸기</button>`:""}
-      <button class="btn small ink" onclick="exportPdf('${m.id}')">${ICO.closed}책 모양 PDF</button><button class="btn small" onclick="exportMs('${m.id}')">원고 내려받기</button><button class="btn small danger" onclick="delMs('${m.id}')">묶음 풀기</button></div>
+      <button class="btn small ink" onclick="exportPdf('${m.id}')">${ICO.closed}책 모양 PDF</button><button class="btn small" onclick="exportMs('${m.id}')">원고 내려받기</button><button class="btn small danger" onclick="delMs('${m.id}')">${ICO.trash}휴지통에</button></div>
   </section>`;
 }
 
@@ -3911,7 +3944,7 @@ function setWStatus(wid,st){ const w=S.writings.find(x=>x.id===wid); if(!w||!WST
 function saveMsGoal(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const g=+$("#msgoal").value, d=$("#msdue").value;
   m.goal=g>0?Math.round(g):null; m.due=/^\d{4}-\d{2}-\d{2}$/.test(d)?d:null; save(); toast("목표를 저장했습니다"); render(); }
 function roomPage(){
-  const ms=S.manuscripts; let m=ms.find(x=>x.id===ROOM_MS)||ms[0]||null; if(m) ROOM_MS=m.id;
+  const ms=liveMs(); let m=ms.find(x=>x.id===ROOM_MS)||ms[0]||null; if(m) ROOM_MS=m.id;
   const lastBook=live().filter(w=>w.track==="book").sort((a,b)=>(b.updated||b.date||"").localeCompare(a.updated||a.date||""))[0];
   let dr=null; try{ dr=JSON.parse(localStorage.getItem("seojae.draft.new")||"null"); }catch(_){}
   const top=`<div class="roomtop"><div><h2 style="margin:0">글방</h2><p class="muted" style="margin:2px 0 0">책 글·자유 글을 쓰고, 원고로 엮어 다듬는 곳</p></div><span class="spacer"></span>
@@ -3975,7 +4008,7 @@ function roomPage(){
       <p class="hint" style="margin-top:8px">${m.rule?"조건으로 모으는 원고는 순서가 저절로 정해집니다. 부·장을 나누려면 「직접 다듬기로 바꾸기」.":"줄을 끌어 순서를 바꿉니다(휴대폰은 ↑↓). 부·장 아래에 놓인 꼭지가 그 부·장에 들어갑니다."}</p>`;
   }
   const foot=`${m.review?`<div class="revall"><p class="label" style="margin:0 0 4px">원고 검토 <small class="hint" style="display:inline">· ${esc((m.review.at||"").slice(0,10))} · ${esc(m.review.ai||"")}</small></p><p class="sub" style="margin:0">${esc(m.review.overall||"")}</p><p class="hint" style="margin:4px 0 0">꼭지마다 짚을 점은 목차의 「검토」 표시, 이어 보기, 쓰기 화면 곁 칸에 있습니다.</p></div>`:""}
-  <div class="row" style="margin-top:14px;gap:6px"><button class="btn small" onclick="reviewMs('${m.id}')" title="클로드가 원고를 읽고 흐름·되풀이·연결을 짚어 줍니다. 본문은 바꾸지 않습니다">${ICO.search}원고 검토 받기</button><button class="btn small ink" onclick="sendOpen('ms','${m.id}')">${ICO.closed}보내기·가져오기</button>${m.rule?`<button class="btn small" onclick="go('drawer',{sub:'ms'})">조건 고치기</button>`:""}<span class="spacer"></span><button class="btn small danger" onclick="delMs('${m.id}')">묶음 풀기</button></div>`;
+  <div class="row" style="margin-top:14px;gap:6px"><button class="btn small" onclick="reviewMs('${m.id}')" title="클로드가 원고를 읽고 흐름·되풀이·연결을 짚어 줍니다. 본문은 바꾸지 않습니다">${ICO.search}원고 검토 받기</button><button class="btn small ink" onclick="sendOpen('ms','${m.id}')">${ICO.closed}보내기·가져오기</button>${m.rule?`<button class="btn small" onclick="go('drawer',{sub:'ms'})">조건 고치기</button>`:""}<span class="spacer"></span><button class="btn small danger" onclick="delMs('${m.id}')">${ICO.trash}휴지통에</button></div>`;
   return top+`<div class="roomgrid">${shelf}<section class="sheet roommain">${head}${bar}${body}${foot}</section></div>`;
 }
 // 끌어 옮기기 연결 (목차·코르크보드: 순서, 상태 보드: 상태)
@@ -4002,14 +4035,14 @@ function roomDnd(){
 }
 // ───────── 글방 2단계: 세 칸 쓰기·이어 보기·타자기·자료 칸·인물·주제 노트 ─────────
 // 열린 글이 들어 있는 원고 (글방에서 고른 원고를 먼저)
-function wMs(w){ if(!w) return null; const ms=S.manuscripts.filter(m=>!m.rule&&(m.items||[]).includes(w.id)); return ms.find(m=>m.id===ROOM_MS)||ms[0]||null; }
+function wMs(w){ if(!w) return null; const ms=liveMs().filter(m=>!m.rule&&(m.items||[]).includes(w.id)); return ms.find(m=>m.id===ROOM_MS)||ms[0]||null; }
 function wBinder(w){ const m=wMs(w); if(!m) return ""; let n=0;
   return `<nav class="wbinder nofocus"><p class="label" style="margin:0 0 4px;font-size:18px"><a href="#" onclick="roomPick('${m.id}');go('room');return false" style="color:inherit;text-decoration:none">${ICO.closed}${esc(m.title)}</a></p>
     <ol>${msSeq(m).map(x=>x.p?`<li class="wbp lv${x.p.lv}">${esc(x.p.t)}</li>`:`<li class="${x.w.id===w.id?"cur":""}"><i class="dot ${ST_CLS[stOf(x.w)]}"></i><a href="#" onclick="go('write',{edit:'${x.w.id}'});return false">${++n}. ${esc(x.w.title||"(제목 없음)")}</a></li>`).join("")}</ol>
     <p class="hint" style="margin-top:8px">${msPages(m)}${m.goal?" / "+m.goal:""}매 · <a href="#" onclick="ROOM_VIEW='scriv';roomPick('${m.id}');go('room');return false">이어 보기</a></p></nav>`; }
 // 곁 칸: 꼭지 메모 · 원고 자료 · 이 글에 나온 인물·주제
 // 쓰기 화면 머리의 모드 띠: 이 글이 들어 있는 원고와 그 성격. 여러 원고에 들었으면 골라서 그 원고 안에서 엽니다
-function modeBand(w){ if(!w) return ""; const ms=S.manuscripts.filter(m=>!m.rule&&(m.items||[]).includes(w.id)); if(!ms.length) return "";
+function modeBand(w){ if(!w) return ""; const ms=liveMs().filter(m=>!m.rule&&(m.items||[]).includes(w.id)); if(!ms.length) return "";
   const m=wMs(w), g=G(m);
   return `<span class="modeband nofocus g-${esc(m.genre||"free")}" title="이 글이 들어 있는 원고 — 원고의 성격에 맞게 도구가 바뀝니다">${g.ic} ${esc(g.n)} ${ms.length>1?`<select onchange="ROOM_MS=this.value;try{localStorage.setItem('seojae.roomMs',this.value)}catch(_){};render()">${ms.map(x=>`<option value="${x.id}" ${x.id===m.id?"selected":""}>『${esc(x.title)}』</option>`).join("")}</select>`:`『${esc(m.title)}』`}</span>`; }
 function tgClose(){ document.querySelectorAll("details.tgrp[open]").forEach(d=>d.open=false); }
@@ -4025,7 +4058,7 @@ function sideTabs(w){ const m=wMs(w), g=G(m), cx=w?codexIn(w.body+" "+(w.title||
   const res=m?((m.research||[]).length?(m.research||[]).map(r=>`<div class="rsrc"><b>${esc(r.t||"자료")}</b><span class="muted">${esc((r.body||"").slice(0,120))}${(r.body||"").length>120?"…":""}</span><button class="btn small" onclick="resInsert('${m.id}','${r.id}')">넣기</button></div>`).join(""):`<p class="hint">원고 자료는 글방 → 「자료」에서 모아 두면 여기서 「넣기」로 꺼내 씁니다.</p>`):`<p class="hint">이 글이 원고에 들어 있으면 그 원고의 자료가 여기에 보입니다.</p>`;
   const notes=cx.length?cx.map(c=>`<details class="cxside"><summary>${esc(c.name)}</summary><div class="pen" style="font-size:18px;white-space:pre-wrap">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join(""):`<p class="hint">이 글에 나온 ${esc(g.codex)}가 여기에 모입니다. 노트는 글방 왼쪽에서 만듭니다.</p>`;
   const ai=rv?`<div class="revside">${revNotesHtml(w,true)}<button class="btn small" onclick="reviewOne('${w.id}')">${ICO.search}${w.review?"다시 검토 받기":"이 글 검토 받기"}</button><p class="hint">AI는 본문을 바꾸지 않고 짚을 점만 메모로 남깁니다.</p></div>`:`<p class="hint">원고에 넣은 글과 설교초안은 AI 검토를 받을 수 있습니다. 묻기·막힐 때 질문은 곧 더해집니다.</p>`;
-  const sl=!!(w&&(w.slides||/설교/.test(w.type||"")||g.item==="설교"));
+  const sl=!!(w&&(w.slides||/설교/.test(w.type||"")||g.item==="설교"||/^\s*(🎬|▣\s*슬라이드)/m.test(w.body||"")));
   const tabs=[["memo","메모"],...(sl?[["slides","슬라이드"+(w.slides?" "+w.slides.n:"")]]:[]),["res","자료"+(m&&(m.research||[]).length?" "+m.research.length:"")],["notes","노트"+(cx.length?" "+cx.length:"")],["ai","AI"+(w?.review?.notes?.length?" "+w.review.notes.length:"")]];
   const cur=tabs.some(t=>t[0]===SIDE_TAB)?SIDE_TAB:"memo";
   return `<div class="sidetabs"><div class="stabs">${tabs.map(([k,n])=>`<button type="button" data-k="${k}" class="${k===cur?"on":""}" onclick="sideTab('${k}')">${n}</button>`).join("")}</div>
@@ -4214,7 +4247,7 @@ function notionImportOpen(mid){ if(!SERVER) return toast("구글 서버에 닿�
     if(old){ pv.innerHTML=`<p>이미 가져온 글이 있습니다: <b>${esc(old.title||"(제목 없음)")}</b> (${esc(old.date)})</p><div class="row" style="gap:6px"><button class="btn ink" data-cmp>그 글과 원본 비교</button><button class="btn" data-open>그 글 열기</button><button class="btn ghost" data-anyway>그래도 새로 만들기</button></div>`;
       pv.querySelector("[data-cmp]").onclick=()=>{ ov.remove(); impCompareNotion(old,R); }; pv.querySelector("[data-open]").onclick=()=>{ ov.remove(); go('write',{edit:old.id}); }; pv.querySelector("[data-anyway]").onclick=()=>form(); return; }
     form(); };
-  const form=()=>{ const tt=impTitle(R.title), others=S.manuscripts.filter(x=>!x.rule);
+  const form=()=>{ const tt=impTitle(R.title), others=liveMs().filter(x=>!x.rule);
     pv.innerHTML=`<div style="display:grid;gap:8px"><label class="field"><span>제목</span><input id="ni-t" value="${esc(tt.title)}"></label>
       <label class="field"><span>본문 위치 <small class="hint" style="display:inline">· 성경 구절이면 (비워도 됨)</small></span><input id="ni-p" value="${esc(tt.passage)}"></label>
       <div class="row" style="gap:10px;flex-wrap:wrap"><label class="field"><span>글의 상태</span><select id="ni-s" style="width:auto">${WSTATUS.map(x=>`<option ${x==="완성"?"selected":""}>${x}</option>`).join("")}</select></label>
@@ -4368,7 +4401,7 @@ function mapGraph(){ const lim=MAP_RANGE==="all"?"":dkey(new Date(Date.now()-(+M
   ws.forEach(w=>{ (w.fromWritings||(w.fromWriting?[w.fromWriting]:[])).forEach(f=>{ const s=S.writings.find(x=>x.id===f&&!x.trashed); if(s){ add(s.id,s.track==="bible"?"bible":"book",s.title||s.passage||"(제목 없음)",`go('write',{edit:'${s.id}'})`); link(s.id,w.id); } });
     if(w.fromNote){ const n=S.notes.find(x=>x.id===w.fromNote); if(n){ add(n.id,"note",(n.text||"").slice(0,18),`go('write',{edit:'${w.id}'})`); link(n.id,w.id); if(n.bookId){ const b=S.books.find(x=>x.id===n.bookId); if(b){ add(b.id,"shelf",b.title,`go('shelf');setTimeout(()=>openBook('${b.id}'),80)`); link(b.id,n.id); } } } }
     if(w.bookId){ const b=S.books.find(x=>x.id===w.bookId); if(b){ add(b.id,"shelf",b.title,`go('shelf');setTimeout(()=>openBook('${b.id}'),80)`); link(b.id,w.id); } } });
-  S.manuscripts.forEach(m=>{ const its=msList(m).filter(w=>N.has(w.id)); if(!its.length) return; add(m.id,"ms",m.title,`roomPick('${m.id}');go('room')`); its.forEach(w=>link(m.id,w.id)); });
+  liveMs().forEach(m=>{ const its=msList(m).filter(w=>N.has(w.id)); if(!its.length) return; add(m.id,"ms",m.title,`roomPick('${m.id}');go('room')`); its.forEach(w=>link(m.id,w.id)); });
   return {nodes:[...N.values()],edges:E}; }
 function mapLayout(g,W,H){ const ns=g.nodes, idx=new Map(ns.map((n,i)=>[n.id,i])); let seed=7; const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
   ns.forEach(n=>{ n.x=W/2+(rnd()-.5)*W*.8; n.y=H/2+(rnd()-.5)*H*.8; n.vx=0; n.vy=0; });
@@ -4425,7 +4458,7 @@ function filterBar(){
 let ARCH_MAX=80;
 function renderArchive(){
   const q=($("#q")?.value||"").trim().toLowerCase(), f=filt, items=[];
-  const msMap=new Map(S.manuscripts.map(m=>[m.id,new Set(msList(m).map(w=>w.id))])), msOfFast=w=>S.manuscripts.filter(m=>msMap.get(m.id).has(w.id));   // 원고 소속은 한 번만 계산
+  const msMap=new Map(liveMs().map(m=>[m.id,new Set(msList(m).map(w=>w.id))])), msOfFast=w=>liveMs().filter(m=>msMap.get(m.id).has(w.id));   // 원고 소속은 한 번만 계산
   const bookOk=x=>f.book===""||(x&&x.book===+f.book);
   live().forEach(w=>{   // 서랍에는 실제로 쓴 글만 (밑줄은 오늘 화면·일기에서 봅니다)
 
