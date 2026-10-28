@@ -637,7 +637,11 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .studio{display:grid;grid-template-columns:236px minmax(0,1fr);gap:22px;align-items:start}
 .stside{position:sticky;top:10px;max-height:calc(100vh - 20px);overflow:auto;background:color-mix(in srgb,var(--paper) 72%,var(--edge));border:1px solid var(--edge);border-radius:14px;padding:10px 8px;display:flex;flex-direction:column;gap:4px;font:14px/1.35 -apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);scrollbar-width:thin}
 .stms summary{list-style:none;display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:9px;cursor:pointer;font-weight:600} .stms summary::-webkit-details-marker{display:none} .stms summary:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
-.stlogo{width:26px;height:26px;border-radius:7px;background:#2f3b52;color:#efe6d4;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none} .stud{margin-left:auto;opacity:.45;font-size:12px}
+/* 원고 성격: 아이콘과 색 (모드 띠와 같은 색) — 접혀 있어도 무슨 글인지 보임 */
+.stlogo.g-sermon,.stgen.g-sermon{--gc:#2f3b52} .stlogo.g-essay,.stgen.g-essay{--gc:#6b7a3a} .stlogo.g-novel,.stgen.g-novel{--gc:#7a3b2e} .stlogo.g-poem,.stgen.g-poem{--gc:#6a4b7a} .stlogo.g-selfhelp,.stgen.g-selfhelp{--gc:#b86a2a} .stlogo.g-paper,.stgen.g-paper{--gc:#4a6274} .stlogo.g-free,.stgen.g-free{--gc:#5a5048}
+.stmst{display:grid;min-width:0;line-height:1.25} .stmst .stn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .stgen{font-weight:600;font-size:11.5px;color:var(--gc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis} :root[data-theme="dark"] .stgen{filter:brightness(1.8)}
+.stms .stmsmenu button{display:flex;align-items:center;gap:10px;text-align:left} .stms .stmsmenu button>span:last-child{display:grid;min-width:0} .stlogo.sm{width:24px;height:24px;font-size:13px}
+.stlogo{width:26px;height:26px;border-radius:7px;background:var(--gc,#2f3b52);color:#efe6d4;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none} .stud{margin-left:auto;opacity:.45;font-size:12px}
 .stmsmenu{display:grid;gap:2px;padding:4px;margin:4px 0 6px;border:1px solid var(--edge);border-radius:10px;background:var(--paper)} .stmsmenu button{display:grid;text-align:left;border:0;background:none;padding:6px 8px;border-radius:7px;cursor:pointer;color:var(--ink);font:inherit} .stmsmenu button small{color:var(--faint);font-size:12px} .stmsmenu button:hover,.stmsmenu button.on{background:color-mix(in srgb,var(--ink) 7%,transparent)}
 .stnavs{display:grid;gap:1px;margin:2px 0 4px}
 .stnavi,.stnode,.stfoot button{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;color:var(--ink);font:inherit;padding:6px 8px;border-radius:7px;cursor:pointer;text-align:left}
@@ -1588,7 +1592,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="80e8f70c2e";
+const APP_BUILD="e5908c31e2";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4682,8 +4686,8 @@ function stFold(id){ ST_FOLD.has(id)?ST_FOLD.delete(id):ST_FOLD.add(id); stSave(
 function stSide(cur){ const ms=liveMs(), m=ms.find(x=>x.id===ROOM_MS)||ms[0]||null; const g=G(m), seeds=(m?.seeds||[]).filter(x=>!x.done).length;
   const nav=(k,ic,n,c)=>`<button class="stnavi ${cur===k||(k==="codex"&&cur.startsWith("cx:")&&!cxOrphan(codexLive().find(c=>"cx:"+c.id===cur)||{}))?"on":""}" onclick="stOpen('${k}')"><span class="sti">${ic}</span>${n}${c?`<span class="stc">${c}</span>`:""}</button>`;
   return `<aside class="stside" id="stside">
-    <details class="stms"><summary><span class="stlogo">${esc((m?.title||"글").trim().slice(0,1))}</span><span class="stn">${esc(m?.title||"원고 고르기")}</span><span class="stud">바꾸기 ▾</span></summary>
-      <div class="stmsmenu">${ms.map(x=>`<button class="${m&&x.id===m.id?"on":""}" onclick="this.closest('details').open=false;stOpen('ms:${x.id}')"><b>${esc(x.title)}</b><small>${esc(G(x).n)} · ${msList(x).length}${esc(G(x).item)}</small></button>`).join("")}<button onclick="this.closest('details').open=false;stOpen('new')">＋ 새 원고</button></div></details>
+    <details class="stms"><summary title="${m?`『${esc(m.title)}』 · ${esc(g.n)} — 원고 바꾸기`:"원고 고르기"}"><span class="stlogo g-${esc(m?.genre||"free")}">${m?esc(g.ic):"✎"}</span><span class="stmst"><span class="stn">${esc(m?.title||"원고 고르기")}</span>${m?`<small class="stgen g-${esc(m.genre||"free")}">${esc(g.n)} · ${msList(m).length}${esc(g.item)}</small>`:""}</span><span class="stud">바꾸기 ▾</span></summary>
+      <div class="stmsmenu">${ms.map(x=>`<button class="${m&&x.id===m.id?"on":""}" onclick="this.closest('details').open=false;stOpen('ms:${x.id}')"><span class="stlogo sm g-${esc(x.genre||"free")}">${esc(G(x).ic)}</span><span><b>${esc(x.title)}</b><small>${esc(G(x).n)} · ${msList(x).length}${esc(G(x).item)}</small></span></button>`).join("")}<button onclick="this.closest('details').open=false;stOpen('new')">＋ 새 원고</button></div></details>
     <div class="stnavs">${nav("home","⌂","홈")}${nav("memo","▤","메모 (포스트잇)",seeds)}${nav("res","⧉","자료 모음",(m?.research||[]).length)}${nav("codex","◎",esc(g.codex||"인물·주제 노트"),cxScope(m?.id).length)}${nav("map","⋰","글 연결 그림")}</div>
     <div class="stsec"><p class="stsech">목차</p><div id="sttree" data-m="${m?.id||""}">${stTree(m,cur)}</div></div>
     <div class="stcommon"><p class="stsech"><span class="combadge">공통</span> 모든 말씀 글</p><button class="stnavi ${cur==="common"||(cur.startsWith("cx:")&&cxOrphan(codexLive().find(c=>"cx:"+c.id===cur)||{}))?"on":""}" onclick="stOpen('common')"><span class="sti">◎</span>${CX_COMMON}<span class="stc">${codexLive().filter(cxOrphan).length||""}</span></button></div>
