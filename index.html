@@ -290,12 +290,19 @@ sup.enref{font-size:.7em;color:#4f7fa8;font-family:Georgia,serif} .enhead{margin
 .hmirror i.mkh{visibility:visible;font-style:normal;color:transparent;border-radius:2px} .hmirror i.mku{visibility:visible;font-style:normal;color:transparent;text-decoration:underline;text-decoration-color:var(--sepia);text-decoration-thickness:1.5px;text-underline-offset:5px}
 body.aiopen #aitog{background:#7a5aa8;color:#fff;border-color:#7a5aa8}
 .hmirror i.fb{visibility:visible;font-style:normal;color:transparent;background:rgba(214,92,92,.10);box-shadow:inset 0 -2px 0 rgba(200,70,70,.45);border-radius:2px}
-#fbpanel{position:fixed;right:14px;top:84px;bottom:14px;width:min(380px,92vw);z-index:60;overflow:auto;background:var(--paper);border:1px solid var(--edge);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:12px 14px;font:13.5px/1.55 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
-#fbpanel .fbh{display:flex;align-items:center;gap:6px;margin-bottom:8px} #fbpanel .fbh button{border:0;background:none;cursor:pointer;font-size:15px;color:var(--ink-soft);padding:2px 6px;border-radius:6px} #fbpanel .fbh button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.fbpanel{position:fixed;right:14px;top:84px;bottom:14px;width:min(380px,92vw);z-index:60;overflow:auto;background:var(--paper);border:1px solid var(--edge);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:12px 14px;font:13.5px/1.55 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
+.fbpanel .fbh{display:flex;align-items:center;gap:6px;margin-bottom:8px} .fbpanel .fbh button{border:0;background:none;cursor:pointer;font-size:15px;color:var(--ink-soft);padding:2px 6px;border-radius:6px} .fbpanel .fbh button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
 .fbscores{display:grid;gap:4px;margin-bottom:8px} .fbs{display:grid;grid-template-columns:78px 1fr 18px;gap:8px;align-items:center;cursor:help} .fbs span{font-size:12.5px;color:var(--ink-soft)} .fbbar{height:7px;border-radius:4px;background:var(--edge);overflow:hidden} .fbbar i{display:block;height:100%;background:#7a5aa8;border-radius:4px}
 .fbt{margin:10px 0 4px;font-weight:600} .fbl{margin:0;padding-left:18px} .fbl li{margin:2px 0} .fbl.ok li::marker{color:#4f8a5a} .fbl.no li::marker{color:#c0533f}
 .fbi{border:1px solid var(--edge);border-radius:10px;padding:8px 10px;margin:6px 0;background:color-mix(in srgb,var(--paper) 60%,#fff)} .fbi.done{opacity:.6} .fbi a{color:var(--ink);text-decoration:none;font-size:13px} .fbi a:hover{text-decoration:underline} .fbn{color:#a33a2c;margin:4px 0;font-size:13px}
 .fbk{flex:none;font-size:11px;border-radius:99px;padding:0 7px;background:var(--edge);color:var(--ink-soft)} .fbk.k-설정\ 어긋남,.fbk.k-개연성{background:#f4d6d0;color:#8a2c1c} .fbk.k-사실\ 확인{background:#f1e6c8;color:#7a5a12}
+.hmirror i.sty{visibility:visible;font-style:normal;color:transparent;text-decoration:underline wavy #d4a017;text-decoration-skip-ink:none;text-underline-offset:4px;background:rgba(240,200,60,.14);border-radius:2px}
+.styrow{display:grid;grid-template-columns:92px 1fr 24px;gap:8px;align-items:center;padding:7px 8px;border-radius:8px;cursor:pointer;border-bottom:1px solid var(--edge)} .styrow:hover,.styrow.on{background:color-mix(in srgb,#d4a017 12%,transparent)} .styrow.none{cursor:default;opacity:.55} .styrow.none:hover{background:none}
+.styk{font-weight:600;font-size:13px} .stys{font-size:12.5px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .styrow b{text-align:right;color:#a0522d}
+.stynav{display:flex;align-items:center;gap:8px;padding:4px 8px 8px;flex-wrap:wrap} .stynav button{border:1px solid var(--edge);background:var(--paper);border-radius:7px;cursor:pointer;padding:0 9px}
+.pnav{display:flex;align-items:center;gap:8px;font:12.5px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft);margin:0 0 4px} .pnav button{border:0;background:none;font-size:17px;cursor:pointer;color:var(--ink-soft);padding:0 6px;border-radius:6px} .pnav button:hover:not(:disabled){background:color-mix(in srgb,var(--ink) 7%,transparent)} .pnav button:disabled{opacity:.25;cursor:default}
+.wsrow{display:flex;gap:8px;align-items:flex-start;padding:6px 4px;border-bottom:1px dashed var(--edge);cursor:pointer} .wsrow input{margin-top:3px} .wswhy{color:#7a5aa8}
+.stppl{display:flex;flex-wrap:wrap;gap:3px;padding:2px 8px 6px 34px} .stpp{border:1px solid var(--edge);background:none;border-radius:99px;padding:1px 9px;font:12.5px -apple-system,sans-serif;color:var(--ink);cursor:pointer} .stpp:hover,.stpp.on{border-color:#7a3b2e;color:#7a3b2e}
 .altlist{display:grid;gap:4px;margin:4px 0} .altc{border:0;background:none;text-align:left;padding:8px 10px;border-radius:9px;cursor:pointer;font:inherit;color:var(--ink);line-height:1.6} .altc:hover,.altc:focus{background:color-mix(in srgb,var(--ink) 7%,transparent)}
 .altnav{display:flex;justify-content:center;align-items:center;gap:10px} .altnav button{border:0;background:none;font-size:18px;cursor:pointer;color:var(--ink-soft);padding:0 8px} .altnav button:disabled{opacity:.3}
 #fbpanel .rfb{display:flex;gap:6px;margin-top:6px} #fbpanel .rfb button{border:1px solid var(--edge);background:var(--paper);border-radius:8px;padding:3px 12px;cursor:pointer;font:inherit;font-size:12.5px;color:var(--ink)} #fbpanel .rfb button.p{background:var(--ink);color:var(--paper);border-color:var(--ink)} #fbpanel .rfdiff{font-size:13.5px;line-height:1.7;margin:4px 0}
@@ -310,7 +317,7 @@ body.aiopen #aitog{background:#7a5aa8;color:#fff;border-color:#7a5aa8}
 .rsrc .row .btn{font-size:12px;padding:2px 8px}
 @media (max-width:700px){ .resgrid,.resgrid.four{grid-template-columns:1fr 1fr} }
 .cxego .cxgraph{max-width:520px} .cxego .hint{display:none}
-@media (max-width:700px){ #fbpanel{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:70vh} }
+@media (max-width:700px){ .fbpanel{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:70vh} }
 .hmirror i.rf{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,#7a5aa8 20%,transparent);border-radius:3px;box-shadow:0 0 0 1px color-mix(in srgb,#7a5aa8 30%,transparent)}   /* AI 다듬기로 고칠 곳 */
 /* 맞춤법 밑줄: 글자는 투명하게 두고 물결 밑줄만 보입니다. 누르면 제안 상자 */
 .hmirror i.sp{visibility:visible;font-style:normal;color:transparent;text-decoration:underline wavy var(--stamp);text-decoration-skip-ink:none;text-underline-offset:4px;text-decoration-thickness:1.5px;pointer-events:auto;cursor:pointer}
@@ -1666,7 +1673,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="763761db61";
+const APP_BUILD="b72ffb9b1b";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3162,6 +3169,7 @@ write0(){
         <select id="paper" style="width:auto" onchange="setPaper(this.value)"><option value="lined" ${paper==="lined"?"selected":""}>줄 노트</option><option value="grid" ${paper==="grid"?"selected":""}>모눈</option><option value="blank" ${paper==="blank"?"selected":""}>무지</option></select></div>
     </div></details>
     <details class="tgrp nofocus"><summary class="btn small">다듬기 ▾</summary><div class="tgmenu">
+      <span class="row" style="gap:4px"><button class="btn small" onclick="tgClose();styOpen()" title="반복어·같은 시작과 끝·버릇 말·뻔한 표현·군더더기·수동과 명사화·대사 꼬리말·시점과 시제 (기계로 셈)">✎ 문체 점검</button><button class="btn small aibtn" onclick="tgClose();fbStart()" title="AI 점수·첨삭">✦ 피드백</button>${w&&wMs(w)&&!wMs(w).rule?`<button class="btn small aibtn" onclick="tgClose();wsStart('piece')" title="이 글에 나온 인물·장소·관계를 노트와 견주어 제안">✦ 설정 정리</button>`:""}</span>
       <span class="row" style="gap:4px"><button class="btn small" onclick="spellCheck()" id="spellbtn" title="쓰는 즉시 규칙으로 밑줄이 그어지고, 누르면 ${CONF.ai?(CONF.ai==="claude"?"클로드":"제미나이")+"가 모든 문단을 다시 살핍니다":"규칙 밑줄만 됩니다"}">맞춤법</button><span id="spellstate" class="muted" style="font-size:12.5px"></span></span>
       <button class="btn small" onclick="toggleStk();tgClose()">${ICO.flower}스티커</button>
       <button class="btn small sidebtn" onclick="toggleSide();tgClose()" id="sidebtn" title="오른쪽 칸(달력·글 정보·간직)을 펴거나 접습니다">${track==="book"?(document.body.classList.contains("staside")?"옆 칸 접기 ›":"옆 칸 펴기 ‹"):document.body.classList.contains("sidefold")?"옆 칸 펴기 ‹":wMs(w)?"옆 칸 접기 › 목차 보기":"옆 칸 접기 ›"}</button>
@@ -3183,7 +3191,7 @@ write0(){
       <div class="notebook ${paper}" style="${DOC_MODE?docVars(w):""}">
         ${DOC_MODE?docBar(w):""}<div class="margin"></div>
         ${stkLayer("write")}
-        <input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput();autoKeepKick()">
+        ${pieceNav(w)}<input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput();autoKeepKick()">
         <div class="meta"><span class="pen" style="font-size:20px">${esc(w?.date||today())}</span><span id="wcount"></span><span id="draftstamp" class="draftstamp"></span><span id="refhint" class="refhint" style="display:none"></span></div>
         ${cardHtml(w)}
         <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput();refHint();spellAutoKick();autoKeepKick()" onkeyup="refHint()" onclick="refHint();spellPopClose()" style="--penink:${penInk()}" placeholder="${esc(wGuide(w)||(isTouch()?"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다.":"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다."))}">${esc(w?.body??seed)}</textarea>
@@ -3482,7 +3490,7 @@ function paintHeads(){
   const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):markLine(l);
   FN_C={f:0,e:0}; const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null; let off=0;
-  const RG=[...(rf?[{s:rf.s,e:rf.e,c:"rf"}]:[]),...fbRanges(t.value)].sort((a,b)=>a.s-b.s).filter((r,i,A)=>!A.slice(0,i).some(q=>q.e>r.s));   // AI 다듬기(보라) · 첨삭(분홍 밑줄)   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
+  const RG=[...(rf?[{s:rf.s,e:rf.e,c:"rf"}]:[]),...fbRanges(t.value),...styRanges(t.value)].sort((a,b)=>a.s-b.s).filter((r,i,A)=>!A.slice(0,i).some(q=>q.e>r.s));   // AI 다듬기(보라) · 첨삭(분홍 밑줄)   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
   const OZ=ownZones(t.value);
   m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[], st=off; off+=l.length+1;
     const hit=RG.filter(r=>r.s<st+l.length+1&&r.e>st); if(hit.length){ let o="",cur=0; hit.forEach(r=>{ const a=Math.max(cur,r.s-st), z=Math.min(l.length,r.e-st); if(z<=a) return; o+=plain(l.slice(cur,a),head)+`<i class="${r.c}">${esc(l.slice(a,z))}</i>`; cur=z; }); return o+plain(l.slice(cur),head); }
@@ -4833,7 +4841,7 @@ function stSide(cur){ const ms=liveMs(), m=ms.find(x=>x.id===ROOM_MS)||ms[0]||nu
     <div class="stmsbox g-${esc(m?.genre||"free")}"><p class="stsech stmsh">지금 원고</p>
     <details class="stms"><summary title="${m?`『${esc(m.title)}』 · ${esc(g.n)} — 원고 바꾸기`:"원고 고르기"}"><span class="stlogo g-${esc(m?.genre||"free")}">${m?esc(g.ic):"✎"}</span><span class="stmst"><span class="stn">${esc(m?.title||"원고 고르기")}</span>${m?`<small class="stgen g-${esc(m.genre||"free")}">${esc(g.n)} · ${msList(m).length}${esc(g.item)}</small>`:""}</span><span class="stud">바꾸기 ▾</span></summary>
       <div class="stmsmenu">${ms.map(x=>`<button class="${m&&x.id===m.id?"on":""}" onclick="this.closest('details').open=false;stOpen('ms:${x.id}')"><span class="stlogo sm g-${esc(x.genre||"free")}">${esc(G(x).ic)}</span><span><b>${esc(x.title)}</b><small>${esc(G(x).n)} · ${msList(x).length}${esc(G(x).item)}</small></span></button>`).join("")}<button onclick="this.closest('details').open=false;stOpen('new')">＋ 새 원고</button></div></details>
-    ${m?`<div class="stnavs">${nav("memo","▤","메모 (포스트잇)",seeds)}${nav("res","⧉","자료 모음",(m?.research||[]).length)}${nav("codex","◎",esc(g.codex||"인물·주제 노트"),cxScope(m?.id).length)}</div>`:""}
+    ${m?`<div class="stnavs">${nav("memo","▤","메모 (포스트잇)",seeds)}${nav("res","⧉","자료 모음",(m?.research||[]).length)}${nav("codex","◎",esc(g.codex||"인물·주제 노트"),cxScope(m?.id).length)}${m.genre==="novel"?(()=>{ const pp=cxScope(m.id).filter(c=>c.kind==="인물").sort((a,b)=>a.name.localeCompare(b.name,"ko")); return pp.length?`<div class="stppl">${pp.slice(0,12).map(c=>`<button class="stpp ${cur==="cx:"+c.id?"on":""}" onclick="stOpen('cx:${c.id}')" title="${esc((c.props||[]).filter(p=>p.v).map(p=>p.k+": "+p.v).join(" · "))}">☺ ${esc(c.name)}</button>`).join("")}${pp.length>12?`<button class="stpp" onclick="stOpen('codex')">… ${pp.length-12}명 더</button>`:""}</div>`:""; })():""}</div>`:""}
     <div class="stsec"><p class="stsech">목차</p><div id="sttree" data-m="${m?.id||""}">${stTree(m,cur)}</div></div></div>
     <div class="stcommon"><p class="stsech"><span class="combadge">공통</span> 모든 말씀 글</p><button class="stnavi ${cur==="common"||(cur.startsWith("cx:")&&cxOrphan(codexLive().find(c=>"cx:"+c.id===cur)||{}))?"on":""}" onclick="stOpen('common')"><span class="sti">◎</span>${CX_COMMON}<span class="stc">${codexLive().filter(cxOrphan).length||""}</span></button></div>
     <div class="stfoot"><button onclick="go('drawer',{sub:'trash'})"><span class="sti">${ICO.trash}</span>휴지통</button><button onclick="go('drawer',{sub:'all'})"><span class="sti">${ICO.search}</span>서랍 (모든 글)</button><button onclick="go('settings')"><span class="sti">⚙</span>설정</button></div></aside>`; }
@@ -5335,7 +5343,7 @@ function stCodexList(common){ const P=cxP(common?"common":cxPK()), V=P.views.som
     <p class="sub">${common?"성경 인물·지명·용어마다 노트를 두면, 그 이름이 나온 묵상·설교 글이 저절로 모입니다.":`${esc(P.intro)}`}</p>
     ${kinds.length&&!common?`<div class="pills" style="margin-bottom:10px">${V==="table"?"":pill("","모두 "+all.length)}${kinds.map(k=>pill(k,`${CX_ICON[k]||"◎"} ${k} ${all.filter(c=>c.kind===k).length}`)).join("")}${V!=="table"&&all.some(c=>!c.kind)?pill("-","종류 없음"):""}</div>`:""}
     ${body}
-    <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" onclick="codexNew(${common?"true":""})">＋ ${common?"말씀 노트":"항목"}</button><span class="spacer"></span>${all.length&&!common&&P.export?`<button class="btn small" onclick="cxExport(false)" title="HTML 한 파일 — 항목마다 바로 가는 링크">${esc(P.export)} 내보내기${P.secret?" (공개용)":""}</button>${P.secret?`<button class="btn small ghost" onclick="cxExport(true)" title="비밀까지 담은 작가용">작가용 (비밀 포함)</button>`:""}`:""}</div></section>`; }
+    <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" onclick="codexNew(${common?"true":""})">＋ ${common?"말씀 노트":"항목"}</button>${common?"":`<button class="btn aibtn" onclick="wsStart('ms')" title="원고 전체를 읽고, 노트에 없는 항목·달라진 속성·새 관계를 제안 (골라서 넣기)">✦ 원고에서 설정 정리</button>`}<span class="spacer"></span>${all.length&&!common&&P.export?`<button class="btn small" onclick="cxExport(false)" title="HTML 한 파일 — 항목마다 바로 가는 링크">${esc(P.export)} 내보내기${P.secret?" (공개용)":""}</button>${P.secret?`<button class="btn small ghost" onclick="cxExport(true)" title="비밀까지 담은 작가용">작가용 (비밀 포함)</button>`:""}`:""}</div></section>`; }
 // 관계도: 항목을 원에 놓고 이름 붙은 관계를 선으로 (누르면 그 항목으로)
 function cxGraph(cs,centerId){ const ids=new Set(cs.map(c=>c.id)), E=cs.flatMap(c=>(c.rel||[]).filter(r=>ids.has(r.to)).map(r=>({a:c.id,b:r.to,l:r.label||""})));
   if(!cs.length) return `<p class="muted">항목이 없습니다.</p>`; if(!E.length) return `<p class="muted">아직 이어진 것이 없습니다. 항목에서 「＋ ${esc(cxP(cxPK()).rel||"관계")}」로 이름 붙은 관계(${esc(cxP(cxPK()).relEx||"")}…)를 이으면 여기에 그려집니다.</p>`;
@@ -5614,7 +5622,7 @@ function docBar(w){ const d=docStyle(w), m=docOwn(w), z=docZoom(), opt=(v,list,f
     <select title="첫 줄 들여쓰기 — 쪽 미리보기·내보내기에서 보입니다" onchange="docSet('ind',+this.value)">${opt(d.ind,[0,1,2],x=>x?`들여쓰기 ${x}자`:"들여쓰기 없음")}</select>
     <select title="문단 사이 간격 — 쪽 미리보기·내보내기에서 보입니다" onchange="docSet('sp',+this.value)">${opt(d.sp,[0,.5,1],x=>x?`문단 간격 ${x===1?"한":"반"} 줄`:"문단 간격 없음")}</select>
     <span class="dbg"><button type="button" class="dbb" onclick="docWrap('**')" title="굵게 (⌘B)"><b>B</b></button><button type="button" class="dbb" onclick="docWrap('*')" title="기울임 (⌘I)"><i style="font-family:Georgia,serif">I</i></button></span><span class="dbg"><button type="button" class="dbb" onclick="docHead()" title="이 줄을 ■ 소제목으로 (다시 누르면 풀림)"><b>■</b> 소제목</button><button type="button" class="dbb" onclick="docMk('hl','y')" title="고른 글자에 형광펜"><span class="dot" style="background:#f3d36b"></span></button><button type="button" class="dbb" onclick="docMk('ul')" title="고른 글자에 밑줄"><u>밑줄</u></button><button type="button" class="dbb" onclick="fnHere()" title="각주 (⌘⇧F)"><b style="font-family:Georgia,serif">¹</b></button></span>
-    <span class="dbg"><button type="button" class="dbb" onclick="altHere()" title="커서가 있는 문장을 바꿔 쓴 후보 4개">✦ 다른 표현</button><button type="button" class="dbb" onclick="fbStart()" title="점수·강점·약점과 첨삭">✦ 피드백</button></span>
+    <span class="dbg"><button type="button" class="dbb" onclick="altHere()" title="커서가 있는 문장을 바꿔 쓴 후보 4개">✦ 다른 표현</button><button type="button" class="dbb" onclick="fbStart()" title="점수·강점·약점과 첨삭">✦ 피드백</button><button type="button" class="dbb" onclick="styOpen()" title="문체 점검 (기계로 셈)">✎ 문체</button></span>
     <span class="spacer"></span><button type="button" class="dbb" onclick="toggleRead()" title="들여쓰기·문단 간격까지 쪽 모양으로 봅니다">쪽 미리보기</button>
     <select title="확대 (이 기기)" onchange="docZoomSet(+this.value)">${opt(z,[75,90,100,110,125,150],x=>x+"%")}</select>
     <small class="muted dbscope" title="${m?"이 원고의 모든 글에 같은 모양 — 워드·PDF로 내보낼 때도":"원고에 들지 않은 글의 기본 모양"}">${m?`『${esc(m.title)}』 전체 · 내보내기도`:"모든 글 기본"}</small></div>`; }
@@ -5675,7 +5683,7 @@ function fbApply(i){ const x=FB?.items?.[i], b=$("#wbody"); if(!x||!b||!x.to) re
   const oz=ownHit(b.value,a,a+x.from.length); if(oz) return toast(`「${oz}」은 직접 쓰는 자리입니다 (원칙 1-5) — 코멘트를 보고 직접 고쳐 주세요`);
   tInsert(b,x.to,a,a+x.from.length); x.st="done"; fbDraw(); paintHeads(); toast("적용했습니다 (⌘Z로 되돌리기)"); }
 function fbDismiss(i){ const x=FB?.items?.[i]; if(!x) return; x.st="closed"; fbDraw(); paintHeads(); }
-function fbDraw(){ if(!FB) return $("#fbpanel")?.remove(); let p=$("#fbpanel"); if(!p){ p=document.createElement("aside"); p.id="fbpanel"; document.body.appendChild(p); p.onmousedown=e=>{ if(!e.target.closest("input,textarea,a")) e.preventDefault(); }; }
+function fbDraw(){ if(!FB) return $("#fbpanel")?.remove(); let p=$("#fbpanel"); if(!p){ p=document.createElement("aside"); p.id="fbpanel"; p.className="fbpanel"; document.body.appendChild(p); p.onmousedown=e=>{ if(!e.target.closest("input,textarea,a")) e.preventDefault(); }; }
   const bar=n=>`<span class="fbbar"><i style="width:${n*20}%"></i></span>`, open=(FB.items||[]).filter(x=>x.st==="open").length;
   p.innerHTML=`<div class="fbh"><b>✦ 피드백 · 첨삭</b><span class="spacer"></span>${FB.busy?"":`<button onclick="fbStart()" title="다시 받기">↻</button>`}<button onclick="fbClose()" title="닫기">✕</button></div>
     ${FB.busy?`<p class="muted">원고를 읽고 있습니다… <span class="dots"><i></i><i></i><i></i></span><br><small>기준: ${esc(FB.crit.join(" · "))}${aiGenre().m?" · 이 원고의 노트(설정)와 대조":""}</small></p>`
@@ -5683,12 +5691,93 @@ function fbDraw(){ if(!FB) return $("#fbpanel")?.remove(); let p=$("#fbpanel"); 
     :`<div class="fbscores">${(FB.scores||[]).map(x=>`<div class="fbs" title="${esc(x.why)}"><span>${esc(x.k)}</span>${bar(x.n)}<b>${x.n}</b></div>`).join("")}</div>
       ${(FB.strong||[]).length?`<p class="fbt">강점</p><ul class="fbl ok">${FB.strong.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
       ${(FB.weak||[]).length?`<p class="fbt">약점</p><ul class="fbl no">${FB.weak.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
-      <p class="fbt">첨삭 <small class="muted">${open}곳 남음 · 본문에 분홍 밑줄</small></p>
+      <p class="fbt" style="display:flex;align-items:center;gap:6px">첨삭 <small class="muted">${open}곳 남음 · 본문에 분홍 밑줄</small><span class="spacer"></span>${(FB.items||[]).filter(x=>x.st==="open"&&x.to).length>1&&!aiGenre().poem?`<button class="btn small" onclick="fbApplyAll()" title="대안이 있는 첨삭을 한꺼번에 (⌘Z로 되돌리기)">일괄 반영</button>`:""}</p>
       ${(FB.items||[]).map((x,i)=>x.st==="closed"?"":`<div class="fbi ${x.st}"><div class="row" style="gap:6px;align-items:baseline"><span class="fbk k-${esc(x.kind)}">${esc(x.kind)}</span><a href="#" onclick="fbGo(${i});return false" title="본문의 그 자리로">「${esc(x.from.slice(0,60))}${x.from.length>60?"…":""}」</a></div>
         <div class="fbn">${esc(x.note)}</div>${x.to&&x.st==="open"?`<div class="rfdiff">${rfDiffHtml(x.from,x.to)}</div>`:""}
         ${x.st==="done"?`<small class="muted">✓ 적용함</small>`:`<div class="rfb">${x.to&&!aiGenre().poem?`<button class="p" onclick="fbApply(${i})">✓ 적용</button>`:""}<button onclick="fbDismiss(${i})">닫기</button></div>`}</div>`).join("")||`<p class="muted">고칠 곳을 찾지 못했습니다.</p>`}
       <small class="muted">${esc(FB.ai||"")} · 점수와 코멘트는 참고만 — 고칠지는 글쓴이가 정합니다</small>`}`; }
 document.addEventListener("input",e=>{ if(FB&&e.target?.id==="wbody") paintHeads(); });
+// ───────── 문체 점검 · 장 넘기기 · 설정 정리 (2026-10-29, 타입탁 소설 화면을 본뜸) ─────────
+// 문체 점검은 기계로 셈(AI 없음, 비용 없음) — 반복어·같은 시작과 끝·버릇 말·뻔한 표현·군더더기·수동과 명사화, 소설·에세이는 대사 꼬리말·시점과 시제도. 누르면 본문에 노란 물결로
+const STY_HABIT=["정말","그냥","너무","약간","사실","어쩌면","왠지","문득","순간","갑자기","천천히","조용히","살짝","가만히","결국","역시","아주","매우","무척"];
+const STY_CLICHE=[/심장이\s*(쿵|철렁|덜컥|내려앉)/g,/눈물이\s*(주르륵|왈칵|핑)/g,/시간이\s*멈춘\s*(듯|것\s*같)/g,/숨이\s*멎/g,/온몸에\s*소름/g,/등골이\s*오싹/g,/머리가\s*하얘/g,/가슴이\s*(먹먹|벅차오)/g,/눈앞이\s*캄캄/g,/하늘이\s*무너지/g,/칼날\s*같은/g,/얼음\s*같은/g,/불꽃이\s*튀/g,/폭풍(의|이)\s*눈/g,/꿈만\s*같/g,/거짓말처럼/g,/마치\s*영화/g];
+const STY_FILLER=[/하는\s*것이다/g,/것이었다/g,/(할|볼|갈|될)\s*수\s*있었다/g,/것\s*같(았|다)/g,/단순히/g,/에\s*있어(서)?/g,/라고\s*할\s*수\s*있/g,/바로\s*그/g,/그런\s*것이/g];
+const STY_PASSIVE=[/되어지|되어졌/g,/(려|혀|겨|워|여)지(다|고|게|는|면|어|었|기)/g,/게\s*되었/g,/에\s*의해(서)?/g,/하게\s*되었/g,/됨에\s*따라/g,/함에\s*있어/g,/[을를]\s*통해(서)?/g,/[을를]\s*진행하/g];
+const STY_TAG=/[”"」]\s*(라고|하고)?\s*([가-힣]{1,6}[이가은는]\s*)?(말했다|물었다|대답했다|중얼거렸다|외쳤다|소리쳤다)/g;
+let STY=null;   // {wid, cats:[{k,n,tip,items[{s,e}],sample}], sel}
+function styWords(v){ const out=[]; for(const m of v.matchAll(/[가-힣]{2,}/g)){ let w=m[0]; if(w.length>2) w=w.replace(TH_JOSA,""); if(w.length<2||TH_STOP.has(w)) continue; out.push({w,s:m.index,e:m.index+m[0].length}); } return out; }
+function styleCheck(v,kind){ const cats=[], add=(k,tip,items,sample)=>cats.push({k,tip,items,n:items.length,sample:sample||""}), re=(L)=>{ const out=[]; L.forEach(r=>{ r.lastIndex=0; for(const m of v.matchAll(r)) out.push({s:m.index,e:m.index+m[0].length,t:m[0]}); }); return out.sort((a,b)=>a.s-b.s); };
+  // 반복어: 같은 낱말이 200자 안에서 거듭
+  const by=new Map(); styWords(v).forEach(x=>{ (by.get(x.w)||by.set(x.w,[]).get(x.w)).push(x); }); const rep=[]; const tops=[];
+  const names=new Set(cxScope(cxMsNow()).flatMap(c=>cxNames(c)));   // 인물·장소 이름은 거듭 나오는 게 자연스러움
+  by.forEach((L,w)=>{ if(L.length<3||STY_HABIT.includes(w)||names.has(w)) return; let near=0; for(let i=1;i<L.length;i++) if(L[i].s-L[i-1].s<200) near++; if(near>=2){ rep.push(...L); tops.push([w,L.length]); } });
+  add("반복어","같은 낱말이 가까이 거듭 나옵니다 — 장면의 속도가 단조로워질 수 있습니다",rep.sort((a,b)=>a.s-b.s),tops.sort((a,b)=>b[1]-a[1]).slice(0,4).map(([w,n])=>`「${w}」 ${n}`).join(" · "));
+  // 같은 시작·끝: 문장 셋이 잇달아 같은 낱말로 시작하거나 같은 낱말로 끝남
+  const S2=[...v.matchAll(/[^.!?\n]+[.!?]+["'」』”’]?/g)].map(m=>({s:m.index,e:m.index+m[0].length,t:m[0].trim()})).filter(x=>x.t.length>4), se=[];
+  for(let i=2;i<S2.length;i++){ const f=x=>x.t.split(/\s+/)[0], l=x=>x.t.replace(/[.!?"'」』”’]+$/,"").split(/\s+/).pop(); if((f(S2[i])===f(S2[i-1])&&f(S2[i])===f(S2[i-2]))||(l(S2[i])===l(S2[i-1])&&l(S2[i])===l(S2[i-2])&&l(S2[i]).length>1)) se.push(S2[i-2],S2[i-1],S2[i]); }
+  add("같은 시작·끝","잇단 세 문장이 같은 낱말로 시작하거나 끝납니다",[...new Map(se.map(x=>[x.s,x])).values()]);
+  // 버릇 말
+  const hab=[]; const hc=[]; STY_HABIT.forEach(w=>{ const L=[...v.matchAll(new RegExp(w,"g"))].map(m=>({s:m.index,e:m.index+w.length})); if(L.length>=3){ hab.push(...L); hc.push(`「${w}」 ${L.length}`); } });
+  add("버릇 말","자주 쓰는 부사·말버릇 — 세 번 넘게 나온 것",hab.sort((a,b)=>a.s-b.s),hc.slice(0,4).join(" · "));
+  add("뻔한 표현","익숙한 비유·관용 표현 — 이 장면만의 감각으로 바꿀 수 있는지",re(STY_CLICHE));
+  add("군더더기","빼도 뜻이 같은 말",re(STY_FILLER));
+  add("수동·명사화","행동의 주인이 흐려지는 말투",re(STY_PASSIVE));
+  if(kind==="novel"||kind==="essay"||kind==="free"){ add("대사 꼬리말","「…」 뒤에 붙는 「라고 말했다」 — 대사만으로 누구인지 알 수 있으면 뺄 수 있습니다",re([STY_TAG]));
+    const endSyl=t=>{ const m=t.replace(/[.!?"'」』”’\s]+$/,"").match(/([가-힣])다$/); return m?m[1]:""; }, jong=c=>(c.charCodeAt(0)-0xAC00)%28;   // 문장 끝 「○다」의 ○ 받침: ㅆ이면 과거, ㄴ이면(는다·한다·뛴다) 현재
+    const past=S2.filter(x=>{ const c=endSyl(x.t); return c&&jong(c)===20; }), pres=S2.filter(x=>{ const c=endSyl(x.t); return c&&(c==="는"||jong(c)===4); });
+    const minor=past.length&&pres.length?(past.length<pres.length?past:pres):[]; add("시점·시제",`과거형 ${past.length} · 현재형 ${pres.length} 문장 — 섞인 쪽(적은 쪽)을 보여 줍니다`,minor.length/(past.length+pres.length||1)>=.12?minor:[]); }
+  return cats; }
+function styOpen(){ const b=$("#wbody"); if(!b) return; const k=aiGenre(); STY={wid:editId||"new",cats:styleCheck(b.value,k.kind),sel:null,at:0}; styDraw(); paintHeads(); }
+function styClose(){ STY=null; $("#stypanel")?.remove(); paintHeads(); }
+function styRanges(v){ if(!STY||STY.sel==null||(editId||"new")!==STY.wid) return []; return (STY.cats[STY.sel]?.items||[]).filter(x=>v.slice(x.s,x.e)).map(x=>({s:x.s,e:x.e,c:"sty"})); }
+function stySel(i){ if(!STY) return; STY.sel=STY.sel===i?null:i; STY.at=0; styDraw(); paintHeads(); if(STY.sel!=null) styJump(0); }
+function styJump(d){ const b=$("#wbody"), L=STY?.cats[STY.sel]?.items||[]; if(!b||!L.length) return; STY.at=(STY.at+d+L.length)%L.length; const x=L[STY.at]; b.focus(); b.setSelectionRange(x.s,x.e); const y=b.getBoundingClientRect().top+scrollY+caretY(b); scrollTo({top:Math.max(0,y-innerHeight*.35),behavior:"smooth"}); styDraw(); }
+function styDraw(){ if(!STY) return $("#stypanel")?.remove(); let p=$("#stypanel"); if(!p){ p=document.createElement("aside"); p.id="stypanel"; p.className="fbpanel"; document.body.appendChild(p); p.onmousedown=e=>{ if(!e.target.closest("input,textarea,a")) e.preventDefault(); }; }
+  const tot=STY.cats.reduce((a,c)=>a+c.n,0);
+  p.innerHTML=`<div class="fbh"><b>✎ 문체 점검</b><small class="muted">${tot}곳</small><span class="spacer"></span><button onclick="styOpen()" title="다시 세기">↻</button><button onclick="styClose()" title="닫기">✕</button></div>
+    <p class="muted" style="margin:0 0 8px;font-size:12.5px">기계로 센 것이라 참고만 — 고칠지는 글쓴이가 정합니다. 줄을 누르면 본문에 노란 물결로 보이고 ‹ › 로 하나씩 갑니다.</p>
+    ${STY.cats.map((c,i)=>`<div class="styrow ${STY.sel===i?"on":""} ${c.n?"":"none"}" onclick="${c.n?`stySel(${i})`:""}" title="${esc(c.tip)}"><span class="styk">${esc(c.k)}</span><span class="stys">${c.n?esc(c.sample||c.items.slice(0,2).map(x=>"「"+(x.t||$("#wbody").value.slice(x.s,x.e)).slice(0,18)+"」").join(" · ")):"발견하지 못함"}</span><b>${c.n||""}</b></div>
+      ${STY.sel===i&&c.n?`<div class="stynav"><button onclick="event.stopPropagation();styJump(-1)">‹</button><small>${STY.at+1} / ${c.n}</small><button onclick="event.stopPropagation();styJump(1)">›</button><small class="muted">${esc(c.tip)}</small></div>`:""}`).join("")}
+    <div class="row" style="gap:6px;margin-top:10px"><button class="btn small aibtn" onclick="styClose();fbStart()" title="AI가 읽고 점수·첨삭">✦ AI 피드백으로</button></div>`; }
+document.addEventListener("input",e=>{ if(STY&&e.target?.id==="wbody"){ clearTimeout(STY._t); STY._t=setTimeout(()=>{ if(!STY) return; const sel=STY.sel; STY.cats=styleCheck(e.target.value,aiGenre().kind); STY.sel=sel; styDraw(); paintHeads(); },600); } });
+
+// 첨삭 일괄 반영 (적용할 대안이 있는 것만, 시·직접 쓸 자리는 빼고)
+function fbApplyAll(){ const b=$("#wbody"); if(!b||!FB) return; const k=aiGenre(); if(k.poem) return toast("시는 행을 바꿔 쓰지 않습니다 — 코멘트를 보고 직접 고쳐 주세요");
+  let n=0, skip=0; (FB.items||[]).forEach(x=>{ if(x.st!=="open"||!x.to) return; const a=b.value.indexOf(x.from); if(a<0||ownHit(b.value,a,a+x.from.length)){ skip++; return; } tInsert(b,x.to,a,a+x.from.length); x.st="done"; n++; });
+  fbDraw(); paintHeads(); toast(`${n}곳을 반영했습니다${skip?` · ${skip}곳은 찾지 못했거나 직접 쓸 자리라 뺐습니다`:""} (⌘Z로 되돌리기)`); }
+
+// 장 넘기기: 원고의 앞뒤 글로 (타입탁 「‹ 01.2 ›」)
+function pieceNav(w){ const m=w?wMs(w):null; if(!m||m.rule) return ""; const L=msList(m), i=L.findIndex(x=>x.id===w.id); if(i<0) return ""; const path=msPath(m,w.id).filter(Boolean).join(" › ");
+  const go2=x=>x?`go('write',{edit:'${x.id}'})`:"";
+  return `<div class="pnav nofocus"><button onclick="${go2(L[i-1])}" ${i?"":"disabled"} title="${esc(L[i-1]?.title||"")} (⌥↑)">‹</button><span>${i+1} / ${L.length}${path?` · ${esc(path)}`:""}</span><button onclick="${go2(L[i+1])}" ${i<L.length-1?"":"disabled"} title="${esc(L[i+1]?.title||"")} (⌥↓)">›</button></div>`; }
+document.addEventListener("keydown",e=>{ if(tab!=="write"||!e.altKey||e.metaKey||e.ctrlKey||!(e.key==="ArrowUp"||e.key==="ArrowDown")) return; const w=editId&&S.writings.find(x=>x.id===editId), m=w&&wMs(w); if(!m) return; const L=msList(m), i=L.findIndex(x=>x.id===w.id), t=L[i+(e.key==="ArrowUp"?-1:1)]; if(!t) return; e.preventDefault(); go('write',{edit:t.id}); });
+
+// 설정 정리: AI가 원고를 읽고 노트에 없는 인물·달라진 속성·새 관계를 제안 → 골라서 넣기
+let WS=null;   // {mid,busy,err,add,update,rel,pick:Set}
+async function wsStart(scope){ const w=editId&&S.writings.find(x=>x.id===editId), m=(tab==="write"?wMs(w):null)||S.manuscripts.find(x=>x.id===ROOM_MS); if(!m||m.rule) return toast("원고 안에서 쓸 수 있습니다");
+  if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
+  const P=cxP(m.genre&&CX_PROF[m.genre]?m.genre:"free"), text=scope==="piece"&&tab==="write"&&$("#wbody")?aiBodyText($("#wbody")):msList(m).map(x=>`■ ${x.title||""}\n${stripMemo(x.body||"")}`).join("\n\n");
+  WS={mid:m.id,busy:true,scope}; wsDraw();
+  try{ const r=await gcall("coWrite",{mode:"worldsync",body:text,settings:fbSettings(m),kinds:P.kinds.filter(k=>k!=="기타"),tpl:P.kinds.map(k=>`${k}: ${(P.tpl[k]||[]).join("·")}`).join(" / "),title:m.title,genre:G(m).n});
+    if(!WS||WS.mid!==m.id) return; const has=n=>cxScope(m.id).some(c=>cxNames(c).includes(n));
+    Object.assign(WS,{busy:false,add:(r.add||[]).filter(x=>!has(x.name)),update:(r.update||[]).filter(x=>has(x.name)),rel:(r.rel||[]),ai:r.ai}); WS.pick=new Set([...WS.add.map((x,i)=>"a"+i),...WS.update.map((x,i)=>"u"+i),...WS.rel.map((x,i)=>"r"+i)]); }
+  catch(e){ if(WS) Object.assign(WS,{busy:false,err:"정리하지 못했습니다: "+e.message}); } wsDraw(); }
+function wsTog(k){ if(!WS) return; WS.pick.has(k)?WS.pick.delete(k):WS.pick.add(k); wsDraw(); }
+function wsApply(){ if(!WS) return; const m=S.manuscripts.find(x=>x.id===WS.mid); if(!m) return; const now=new Date().toISOString(), find=n=>cxScope(m.id).find(c=>cxNames(c).includes(n)); let a=0,u=0,r=0;
+  WS.add.forEach((x,i)=>{ if(!WS.pick.has("a"+i)||find(x.name)) return; S.codex.push({id:uid(),name:x.name,ms:m.id,...(x.kind?{kind:x.kind}:{}),aliases:[],...(Object.keys(x.props).length?{props:Object.entries(x.props).map(([k,v])=>({k,v}))}:{}),body:x.note||"",updated:now}); a++; });
+  WS.update.forEach((x,i)=>{ if(!WS.pick.has("u"+i)) return; const c=find(x.name); if(!c) return; const P2=(c.props||[]).map(p=>({...p})); Object.entries(x.props).forEach(([k,v])=>{ const p=P2.find(y=>y.k===k); if(p) p.v=v; else P2.push({k,v}); }); c.props=P2; if(x.note) c.body=(c.body?c.body+"\n":"")+`(${today()}) ${x.note}`; c.updated=now; u++; });
+  WS.rel.forEach((x,i)=>{ if(!WS.pick.has("r"+i)) return; const A=find(x.a), B=find(x.b); if(!A||!B) return; A.rel=A.rel||[]; if(A.rel.some(q=>q.to===B.id&&q.label===x.label)) return; A.rel.push({to:B.id,label:x.label}); A.updated=now; r++; });
+  save(); toast(`노트에 넣었습니다 — 새 항목 ${a} · 고친 항목 ${u} · 관계 ${r}`); WS=null; wsDraw(); if(tab==="room") render(); }
+function wsDraw(){ if(!WS) return $("#wspanel")?.remove(); let p=$("#wspanel"); if(!p){ p=document.createElement("aside"); p.id="wspanel"; p.className="fbpanel"; document.body.appendChild(p); p.onmousedown=e=>{ if(!e.target.closest("input,textarea,a,label")) e.preventDefault(); }; }
+  const box=(k,html)=>`<label class="wsrow"><input type="checkbox" ${WS.pick?.has(k)?"checked":""} onchange="wsTog('${k}')"><span>${html}</span></label>`, pr=o=>Object.entries(o||{}).map(([k,v])=>`${esc(k)}=${esc(v)}`).join(" · ");
+  p.innerHTML=`<div class="fbh"><b>✦ 설정 정리</b><small class="muted">${WS.scope==="piece"?"이 글":"원고 전체"}에서</small><span class="spacer"></span><button onclick="WS=null;wsDraw()" title="닫기">✕</button></div>
+    ${WS.busy?`<p class="muted">원고를 읽고 노트와 견주는 중… <span class="dots"><i></i><i></i><i></i></span></p>`:WS.err?`<p class="warn">${esc(WS.err)}</p>`
+    :`<p class="muted" style="font-size:12.5px;margin:0 0 6px">글에 분명히 적힌 것만 제안합니다. 넣을 것만 고르세요.</p>
+      ${WS.add.length?`<p class="fbt">새 항목 ${WS.add.length}</p>${WS.add.map((x,i)=>box("a"+i,`<b>${esc(x.name)}</b> <small class="muted">${esc(x.kind||"")}</small>${pr(x.props)?`<br><small>${pr(x.props)}</small>`:""}${x.note?`<br><small class="muted">${esc(x.note)}</small>`:""}${x.why?`<br><small class="wswhy">「${esc(x.why)}」</small>`:""}`)).join("")}`:""}
+      ${WS.update.length?`<p class="fbt">고칠 항목 ${WS.update.length}</p>${WS.update.map((x,i)=>box("u"+i,`<b>${esc(x.name)}</b> ${pr(x.props)?`<small>${pr(x.props)}</small>`:""}${x.note?`<br><small class="muted">${esc(x.note)}</small>`:""}${x.why?`<br><small class="wswhy">「${esc(x.why)}」</small>`:""}`)).join("")}`:""}
+      ${WS.rel.length?`<p class="fbt">새 관계 ${WS.rel.length}</p>${WS.rel.map((x,i)=>box("r"+i,`<b>${esc(x.a)}</b> —${esc(x.label)}→ <b>${esc(x.b)}</b>${x.why?`<br><small class="wswhy">「${esc(x.why)}」</small>`:""}`)).join("")}`:""}
+      ${WS.add.length+WS.update.length+WS.rel.length?`<div class="row" style="gap:6px;margin-top:10px"><button class="btn small ink" onclick="wsApply()">고른 것 노트에 넣기 (${WS.pick.size})</button></div>`:`<p class="muted">노트에 더할 것을 찾지 못했습니다 — 설정이 잘 정리되어 있습니다.</p>`}
+      <small class="muted">${esc(WS.ai||"")}</small>`}`; }
 // ───────── 분량 비율 · 검증표 · 점검 10문항 (팀장님 「AI 보조 원칙」 5-9·5-12 · 2·3장 · 8-4) ─────────
 // 검증표 w.meta.vtab={at,ai,rows:[{kind,claim,status,source,note,me}]} · 점검 w.meta.chk10={at,a:[{me,ai,why}]} — 카드처럼 글의 meta 칸(칸마다 시각으로 합침, 저장 형식 그대로). 말 속도 S.settings.spm(1분 음절, 기본 350)
 const SPM=()=>parseInt(S.settings.spm)||350;
