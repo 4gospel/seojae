@@ -839,6 +839,11 @@ body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-
 .cxkprops{display:grid;gap:2px;font-size:12.5px;color:var(--ink);-webkit-line-clamp:unset;display:grid !important;min-height:0} .cxkprops em{font-style:normal;color:var(--faint);margin-right:6px;font-size:11.5px}
 .cxtable.cxk th{white-space:nowrap} .cxth{border:0;background:none;font:inherit;font-weight:600;color:inherit;cursor:pointer;padding:0} .cxth.on{color:var(--ink)} .cxthadd{width:36px;min-width:0 !important} .cxrels{display:flex;flex-wrap:wrap;gap:4px} .cxtable.cxk td.cxrels{display:table-cell} .cxtable.cxk td.cxrels a{margin:1px 3px 1px 0}
 .cxrchip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--edge);border-radius:8px;padding:2px 8px;text-decoration:none;color:var(--ink);font-size:13px;background:color-mix(in srgb,var(--ink) 3%,transparent)} .cxrchip small{color:var(--faint);font-size:11.5px} .cxrchip:hover{border-color:var(--ink-soft)}
+.stser{font-size:10px;color:var(--faint);margin-left:2px} .stser.ok{color:#3f9a5a} .stser.over{color:#d8a23c} .stser.pub{color:#5b5bd6;font-weight:700}
+.serbar{display:inline-block;width:64px;height:6px;border-radius:3px;background:color-mix(in srgb,var(--ink) 10%,transparent);vertical-align:middle;overflow:hidden;margin-right:4px} .serbar i{display:block;height:100%;background:#c94a4a} .serbar.ok i{background:#3f9a5a} .serbar.over i{background:#d8a23c}
+.pcmeta{font-size:11.5px;color:var(--ink-soft)} .ptime{list-style:none;padding:0;margin:0;display:grid;gap:4px} .ptime li{display:grid;grid-template-columns:34px 170px 1fr auto;gap:8px;align-items:center;padding:6px 10px;border:1px solid var(--edge);border-radius:8px;background:var(--paper);font-size:14px} .ptime li.jump{border-color:#d8a23c;background:color-mix(in srgb,#d8a23c 8%,var(--paper))} .pto{font:700 12px -apple-system,sans-serif;color:var(--faint);text-align:center} .ptime small{color:var(--faint)}
+.palibi td.clash{background:color-mix(in srgb,#c94a4a 16%,transparent);color:#a33}
+@media (max-width:700px){ .ptime li{grid-template-columns:28px 1fr} .ptime li small,.ptime li b{grid-column:2} }
 .cxhov{position:absolute;z-index:70;max-width:260px;min-width:170px;background:var(--paper);border:1px solid var(--edge);border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.12);padding:9px 11px 8px;font:13px/1.45 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)} .cxhov p{margin:0} .cxhn{display:flex;align-items:center;gap:6px} .cxhn b{font-size:14px} .cxhn small{color:var(--faint);font-size:11.5px}
 .cxhp,.cxhr{display:flex;flex-wrap:wrap;gap:3px 10px;margin-top:5px !important;font-size:12.5px} .cxhp em{font-style:normal;color:var(--faint)} .cxhr span{display:inline-flex;align-items:center;gap:4px} .cxhr small{color:var(--ink-soft)} .cxhb{margin-top:5px !important;color:var(--ink-soft);font-size:12.5px} .cxho{display:block;margin:6px 0 0 auto;border:0;background:none;color:var(--faint);font-size:12px;cursor:pointer;padding:0} .cxho:hover{color:var(--ink)}
 .cxpick{position:absolute;z-index:60;max-height:320px;overflow:auto;background:var(--paper);border:1px solid var(--edge);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:4px;font:14px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)} .cxpks{padding:8px 10px;color:var(--faint);border-bottom:1px solid var(--edge);margin-bottom:4px} .cxpkh{margin:6px 10px 2px;font-size:12px;color:var(--faint)} .cxpki{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;text-align:left;padding:7px 10px;border-radius:8px;cursor:pointer;color:var(--ink);font:inherit} .cxpki.cur{cursor:default} .cxpki small{color:var(--faint);font-size:12px} .cxpki.on,.cxpki:hover:not(.cur){background:color-mix(in srgb,var(--ink) 7%,transparent)} .cxpkf{padding:8px 10px 6px;border-top:1px solid var(--edge);margin-top:4px;font-size:12px;color:var(--faint)}
@@ -1599,7 +1604,7 @@ const CX_WORD={sermon:{what:"성경 인물·지명·용어·예화",ex:"다윗, 
 const CX_BIBLE={what:"성경 인물·지명·용어",ex:"모세, 광야, 언약",alias:"예: 시몬, 게바",note:"이 인물·지명·용어를 읽으며 붙잡은 것, 설교에서 말한 것, 더 공부할 것…"};
 const cxW=c=>c&&cxOrphan(c)?CX_BIBLE:(CX_WORD[S.manuscripts.find(x=>x.id===(c?.ms||ROOM_MS))?.genre]||CX_BIBLE);   // 말씀 노트(공통)는 늘 성경 낱말
 const SERMON_NEW_BTN=`<button class="btn small ghost" onclick="go('write',{new:true,track:'bible',type:'설교초안'})" title="묵상에서 나오지 않는 설교(절기·성구집·예식)를 설교초안으로 바로 시작합니다">＋ 새 설교초안</button>`;
-const SCENE_F=[["pov","시점 인물"],["loc","장소"],["when","때"],["goal","이 장면의 목표"],["conf","갈등·장애"],["turn","결과 — 무엇이 바뀌나"]];   // 소설 장면 정보 (w.meta 칸, 칸마다 시각으로 합침)
+const SCENE_F=[["pov","시점 인물"],["loc","장소"],["when","때"],["st","이야기 시각 — 정렬용 (예: 2045-03-02 21:00, D+3 아침)"],["goal","이 장면의 목표"],["conf","갈등·장애"],["turn","결과 — 무엇이 바뀌나"]];   // 소설 장면 정보 (w.meta 칸, 칸마다 시각으로 합침)
 const wMeta=(w,k)=>w?.meta?.[k]??w?.scene?.[k]??"";
 function metaSet(wid,k,v){ const w=S.writings.find(x=>x.id===wid); if(!w) return; const now=new Date().toISOString(); v=typeof v==="string"?v.trim():v;
   w.meta=Object.assign({},w.meta||{}); w.metaTs=Object.assign({},w.metaTs||{});
@@ -1701,7 +1706,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="0380d16bec";
+const APP_BUILD="875d5266ea";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3206,7 +3211,7 @@ write0(){
     <button class="btn small nofocus fnbtn" onmousedown="event.preventDefault()" onclick="fnHere()" title="각주 달기 — 고른 글 뒤에, 고르지 않았으면 커서 자리에 (⌘⇧F)"><b style="font-family:Georgia,serif">¹</b> 각주</button>
     <button class="btn small nofocus ${DOC_MODE?"on":""}" onclick="docToggle()" id="docbtn" title="워드처럼: 흰 쪽에 글꼴·크기·줄 간격·정렬·들여쓰기 (글은 그대로)">${DOC_MODE?"✎ 노트로":"📄 문서 모드"}</button>
     <button class="btn small" onclick="toggleRead()" id="readbtn" title="글을 건드리지 않고 보기만 합니다. 설교문은 슬라이드·전달 큐가 강단용 모양으로 보입니다">${ICO.eye}읽기 모드</button>
-    ${track!=="bible"||(dtype&&dtype!=="묵상")?`<button class="btn small nofocus" onclick="sendOpen('w')" title="노션·PDF·워드로 보냅니다 (묵상 말고는 구글에만 간직되어 있습니다)">보내기</button>`:""}
+    ${track!=="bible"||(dtype&&dtype!=="묵상")?`<button class="btn small nofocus" onclick="sendOpen('w')" title="노션·PDF·워드로 보냅니다 (묵상 말고는 구글에만 간직되어 있습니다)">보내기</button>`:""}${serBtns()}
     <button class="btn small aibtn nofocus" id="aitog" onclick="aiToggle()" title="AI 글쓰기 도우미 — 누르면 열고, 다시 누르면 닫습니다 (글은 바꾸지 않고 제안만)">✦ AI</button>
     <button class="btn small ghost nofocus discardbtn" onclick="discardPage()" title="${w?"이 글을 휴지통에 넣습니다 (30일 안에 서랍 → 휴지통에서 되살림)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"휴지통에":"버리기"}</button>
     <button class="btn small ink" onclick="saveWriting()" title="⌘S">간직하기</button>
@@ -3541,6 +3546,7 @@ function countW(){ const v=$("#wbody")?.value||""; const fn=(v.match(/\[\^/g)||[
   if(g==="poem"){ const L=stripMemo(v).replace(/\s+$/,"").split("\n"), lines=L.filter(l=>l.trim()).length, st=lines?L.join("\n").trim().split(/\n\s*\n/).length:0; el.textContent=`${lines}행 · ${st}연 · ${chars(v).toLocaleString()}자${fn?` · 각주 ${fn}`:""}`; return; }   // 시: 행·연
   const sermon=/설교/.test($("#wtype")?.value||"")||g==="sermon", mins=sermon?Math.round(chars(stripMemo(v))*1.2/SPM()):0; if(sermon) ratioPaint();
   const tgt=parseInt(wMeta(editId&&S.writings.find(x=>x.id===editId),"cbudget"))||0;
+  const sm=wMsNow(editId&&S.writings.find(x=>x.id===editId)); if(SERIAL(sm)){ const L2=serLen(sm,v); el.innerHTML=`<span class="serbar ${L2.st==="알맞음"?"ok":L2.st==="넘침"?"over":""}"><i style="width:${Math.min(100,L2.n/L2.a*100).toFixed(0)}%"></i></span> 이 화 <b>${L2.n.toLocaleString()}</b>자(공백 포함) / ${L2.a.toLocaleString()}~${L2.b.toLocaleString()} · ${L2.st}${L2.st==="부족"?` ${(L2.a-L2.n).toLocaleString()}자 더`:L2.st==="넘침"?` ${(L2.n-L2.b).toLocaleString()}자 넘음`:""} · ${chars(v).toLocaleString()}자(제외)`; return; }
   el.textContent=`${sermon&&mins?`말하면 약 ${mins}분${tgt?` / 목표 ${tgt}분`:""} · `:""}${G(wMsNow(editId&&S.writings.find(x=>x.id===editId))).unit==="자"?"":`원고지 약 ${Math.ceil(charsAll(v)/200)}매 · `}${charsAll(v).toLocaleString()}자(공백 포함) · ${chars(v).toLocaleString()}자(제외)${fn?` · 각주 ${fn}`:""}`; }
 // 펜 잉크: 이 기기 꾸미기(설정 → 화면 꾸미기)의 글자 색이 있으면 그것, 없으면 모든 기기 공통 잉크, 둘 다 없으면 기본 먹색
 // 공통 잉크(모든 기기)가 어두운 화면에서 안 보이지 않도록 밝은 짝으로 (이 기기에서 직접 고른 L.ink는 그대로)
@@ -4490,7 +4496,8 @@ function sendText(name,list,m,scope,md,P){ P=P||expPrefs(m); const gn=m?.genre||
   if(whole&&String(m.preface||"").trim()&&m.exportOpts?.preface!==false) out+=(md?`${hx(2)} 머리말\n\n`:`[머리말]\n\n`)+prose(expBody(m.preface,P),"머리말",3);
   list.forEach((w,i)=>{ const ps=pb.get(w.id)||[], tl=depth+2;
     ps.forEach(p=>{ const t=numT(partNum(m,p.id),p.t); out+=md?`${hx(p.lv+1)} ${t}\n\n`:`\n[${t}]\n\n`; });
-    if(gn==="novel"){ if(i>0&&!ps.length) out+="＊\n\n"; }   // 소설: 장면 제목 대신 ＊
+    if(gn==="novel"&&SERIAL(m)){ const t=`${epNo(m,w.id)}화${w.title&&!/^\s*\d+\s*화/.test(w.title)?" "+w.title:w.title?"":""}`; out+=md?`${hx(tl)} ${/^\s*\d+\s*화/.test(w.title||"")?w.title:t}\n\n`:`${/^\s*\d+\s*화/.test(w.title||"")?w.title:t}\n\n`; }   // 웹소설: 화마다 「N화 제목」
+    else if(gn==="novel"){ if(i>0&&!ps.length) out+="＊\n\n"; }   // 소설: 장면 제목 대신 ＊
     else { const t=(gn==="poem"?(w.title||"＊"):gn==="paper"?numT(pieceNum(m,w.id),w.title||"(제목 없음)"):(w.title||"(제목 없음)"))+(w.passage?" — "+w.passage:""); out+=md?`${hx(tl)} ${t}\n\n`:`${t}\n\n`; }
     out+=gn==="poem"?poemT(w.body,w.title):prose(expBody(w.body,P),w.title,tl+1); });
   if(ENX.length) out+=md?`${hx(2)} 미주\n\n`+ENX.map(x=>`[^e${x.n}]: ${x.t}${x.w?` — ${x.w}`:""}`).join("\n")+"\n\n":`[미주]\n`+ENX.map(x=>`[${romanL(x.n)}] ${x.t}${x.w?` — ${x.w}`:""}`).join("\n")+"\n\n";
@@ -4648,7 +4655,27 @@ const GENRES={
   selfhelp:{ic:"▲",n:"자기계발서",d:"핵심 메시지·사례·원리·실천으로 독자를 돕는 책",parts:["장","절"],item:"꼭지",unit:"매",type:"자기계발 글",tpl:"■ 핵심 메시지 — 한 문장\n\n■ 이야기·사례\n\n■ 원리 — 왜 그런가\n\n■ 실천 — 오늘 해 볼 한 가지\n",auto:true,codex:"인물·주제 노트",focus:"핵심 메시지가 분명한지, 사례가 주장을 뒷받침하는지, 실천 과제가 구체적인지, 장 사이의 논리 흐름, 같은 말의 되풀이",exp:{}},
   paper:{ic:"§",n:"논문·보고서",d:"장·절 번호, 근거와 인용, 참고 문헌을 갖춘 글",parts:["부","장"],item:"절",unit:"자",type:"자유 글",tpl:"■ 이 절의 물음\n\n■ 논증\n\n■ 자료·인용\n\n■ 소결\n",oldTpl:"■ 이 단락의 주장\n\n■ 근거와 자료\n\n■ 정리\n",guide:"이 절을 씁니다. 절 안의 항(1), 2) …)은 ■ 소제목으로 — 목차에 보이고 워드에서 제목 3단계가 됩니다. 각주는 위 「¹ 각주」(⌘⇧F).",codex:"용어·인물 노트",focus:"논증 구조, 주장마다 근거·출처가 있는지, 용어 정의, 인용·각주 형식, 객관적 문체, 장·절의 균형",exp:{fmt:"a4",biblio:true,number:true}}
 };
-const G=m=>GENRES[m?.genre]||GENRES.free;
+// 웹소설 연재: 소설 원고에 연재 설정(m.exportOpts.serial)을 켜면 단위가 「화」 — 화당 분량(공백 포함)·연재 요일·비축분·화 복사
+const SERIAL=m=>m?.genre==="novel"&&m.exportOpts?.serial?.on?m.exportOpts.serial:null;
+const serSize=m=>{ const s2=SERIAL(m)||{}; return [+s2.min||5000,+s2.max||5500]; };
+const G=m=>{ const g=GENRES[m?.genre]||GENRES.free; return SERIAL(m)?{...g,n:"웹소설",item:"화",guide:"한 화를 씁니다. 첫 세 줄에 훅, 끝에 다음 화를 누르게 하는 당김. 분량은 아래 숫자 줄에(공백 포함).",focus:g.focus+", 첫머리 훅과 화 끝 당김, 한 화 안의 보상(사이다), 모바일에서 읽기 좋은 짧은 문단"}:g; };
+const epNo=(m,wid)=>{ const L=msList(m).filter(w=>!isMatter(w.title||"")); const i=L.findIndex(w=>w.id===wid); return i>=0?i+1:0; };
+const serLen=(m,body)=>{ const n=charsAll(stripMemo(body||"")), [a,b]=serSize(m); return {n,a,b,st:n<a?"부족":n>b?"넘침":"알맞음"}; };
+function serSet(mid,k,v){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const ex={...(m.exportOpts||{})}, sr={...(ex.serial||{})};
+  if(k==="days"){ const d=+v, L=new Set(sr.days||[]); L.has(d)?L.delete(d):L.add(d); sr.days=[...L].sort(); } else if(k==="on"||k==="gap") sr[k]=!!v; else sr[k]=Math.max(0,parseInt(v)||0)||undefined;
+  ex.serial=sr; m.exportOpts=ex; m.updated=new Date().toISOString(); save(); render(); }
+// 비축분 = 아직 올리지 않았고 분량이 찬 화 · 다음 연재일 = 연재 요일 가운데 오늘부터 가장 가까운 날
+function serHead(m){ const sr=SERIAL(m); if(!sr) return ""; const L=msList(m).filter(w=>!isMatter(w.title||"")), up=L.filter(w=>wMeta(w,"pub")), [a]=serSize(m), stock=L.filter(w=>!wMeta(w,"pub")&&charsAll(stripMemo(w.body||""))>=a).length;
+  const days=sr.days||[], dn="일월화수목금토", t=new Date(); let nx=-1; for(let k=0;k<7&&days.length;k++){ if(days.includes((t.getDay()+k)%7)){ nx=k; break; } }
+  return ` · 올림 ${up.length}화 · 비축 ${stock}화${nx>=0?` · 다음 연재 ${nx===0?"오늘":dn[(t.getDay()+nx)%7]+"요일(D-"+nx+")"}`:""}${stock<3&&days.length?` <b style="color:#c94a4a">비축이 적습니다</b>`:""}`; }
+function serPub(wid){ const w=S.writings.find(x=>x.id===wid); if(!w) return; metaSet(w.id,"pub",wMeta(w,"pub")?"":today()); save(); render(); toast(wMeta(w,"pub")?"올림으로 표시했습니다":"올림 표시를 풀었습니다"); }
+// 이 화 복사: 「N화 제목」 + 본문(틀 줄·메모·각주 표시 빼고), 문단 사이 빈 줄은 설정대로 — 플랫폼 글쓰기 칸에 바로 붙여 넣게
+function serCopy(wid){ const w=S.writings.find(x=>x.id===wid), m=w&&wMs(w); if(!w||!m) return; const sr=SERIAL(m)||{}, b=$("#wbody")&&editId===wid?$("#wbody").value:w.body;
+  let body=expBody(b,expPrefs(m)).replace(/\[\^+[^\]]*\]/g,"").replace(/\*\*([^*\n]+)\*\*/g,"$1").replace(/\*([^*\n]+)\*/g,"$1").split("\n").map(l=>l.trim()).filter((l,i,A)=>l||(A[i-1]||"").trim()).join("\n").trim();
+  if(sr.gap!==false) body=body.split(/\n+/).filter(Boolean).join("\n\n");
+  clip(`${epNo(m,wid)}화 ${($("#wtitle")&&editId===wid?$("#wtitle").value:w.title)||""}`.trim()+"\n\n"+body); toast(`${epNo(m,wid)}화를 복사했습니다 (${charsAll(body).toLocaleString()}자) — 플랫폼 글쓰기 칸에 붙여 넣으세요`); }
+function serBtns(){ const w=editId&&S.writings.find(x=>x.id===editId), m=w&&wMs(w); if(!SERIAL(m)) return ""; const pub=wMeta(w,"pub");
+  return `<button class="btn small nofocus" onclick="serCopy('${w.id}')" title="「N화 제목」과 본문을 플랫폼에 붙여 넣기 좋게 복사">⧉ ${epNo(m,w.id)}화 복사</button><button class="btn small nofocus ${pub?"ink":""}" onclick="serPub('${w.id}')" title="플랫폼에 올렸으면 표시 — 비축분 셈에서 빠집니다">${pub?"✓ 올림 "+esc(pub.slice(5)):"올림 표시"}</button>`; }
 const gTpl=g=>g.tplFrom?(TYPES.bible[g.tplFrom]??TYPES.book[g.tplFrom]??""):(g.tpl||"");
 const GENRE_TPL_LINES=new Set(Object.values(GENRES).map(g=>gTpl(g)+"\n"+(g===GENRES.paper?Object.values(PAPER_TPL).map(x=>x.tpl).join("\n"):"")+"\n"+Object.values(ROLE_TPL).flatMap(o=>Object.values(o).map(x=>x.tpl)).join("\n")+"\n"+(g.oldTpl||"")+"\n"+(g.tplFrom==="설교초안"||g===GENRES.sermon?TYPES.bible["설교초안"]||"":"")).join("\n").split("\n").map(l=>l.trim()).filter(Boolean));   // 틀만 있는 글은 자동 간직·미리보기에서 빼려고
 function msAmount(m){ const u=G(m).unit; return u==="편"?msList(m).length:u==="자"?msChars(m):msPages(m); }
@@ -4732,7 +4759,7 @@ function partNum(m,pid){ const sc=numScheme(m); if(sc==="none") return ""; const
 const STRUCT={paper:{main:2,head:"항",ex:"1) 2) · 가. 나.",size:[1500,6000]},sermon:{main:1,head:"대지",ex:"첫째, 둘째, 셋째",size:[3000,12000]},essay:{main:2,head:"소제목",ex:"",size:[1500,6000]},novel:{main:2,head:"",ex:"",size:[1000,6000]},poem:{main:1,head:"",ex:"",size:[0,2000]},selfhelp:{main:1,head:"소제목",ex:"",size:[2000,8000]},free:{main:2,head:"소제목",ex:"",size:[1000,8000]}};
 const stx=m=>STRUCT[m?.genre]||STRUCT.free;
 const ROMAN=n=>{ let s=""; for(const [v,c] of [[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]]) while(n>=v){ s+=c; n-=v; } return s; };
-const numHas=t=>/^\s*(제\s*\d+\s*[부장절편막항]|\d+\s*[부장절편막](?=$|[\s.·:\-–—])|PART\s*\d+|[IVX]+\.|[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ]|\d+(\.\d+)*[.)]?(\s|$)|\(\d+\)|[가-하][.)]\s|[①-⑳])/i.test(t||"");   // 제목에 번호를 직접 적었으면 덧붙이지 않음
+const numHas=t=>/^\s*(제\s*\d+\s*[부장절편막항화]|\d+\s*[부장절편막화](?=$|[\s.·:\-–—])|PART\s*\d+|[IVX]+\.|[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ]|\d+(\.\d+)*[.)]?(\s|$)|\(\d+\)|[가-하][.)]\s|[①-⑳])/i.test(t||"");   // 제목에 번호를 직접 적었으면 덧붙이지 않음
 const numT=(n,t)=>!n||numHas(t)?(t||""):n+" "+(t||"");
 // 같은 글 안에서 위 칸 번호를 다시 1부터 (절 1. 2. …)
 // 논문식만 글(절)에 번호: 장 안에서 1. 2. — 장이 하나도 없으면 글이 곧 장이라 Ⅰ. Ⅱ., 첫 장 앞의 글(머리말 등)은 번호 없음
@@ -4862,8 +4889,8 @@ function stTree(m,cur){ if(!m) return `<p class="muted st-empty">원고가 아�
   out+=`<div class="stnode ms ${cur==="ms:"+m.id?"on":""}" onclick="stOpen('ms:${m.id}')" style="--d:0"><span class="sti">▦</span><span class="stn">${esc(m.title)}</span></div>`;
   seq.forEach(x=>{ if(x.p){ any=true; lv=x.p.lv; if(x.p.lv===1) hide=ST_FOLD.has(x.p.id)?1:0; else if(hide===2||(hide===0&&ST_FOLD.has(x.p.id))) hide=ST_FOLD.has(x.p.id)?2:0; if(hide===1&&x.p.lv>1) return;
       out+=`<div class="stnode part" data-k="part:${x.p.id}" style="--d:${x.p.lv-base+1}" onclick="stFold('${x.p.id}')" title="누르면 접고 폅니다${dnd?" · 끌면 안의 글과 함께 옮겨집니다 · 오른쪽 버튼: 이름·단계":""}">${grip}<span class="sti">${ST_FOLD.has(x.p.id)?"▸":"▾"}</span><span class="stn">${esc(num?numT(partNum(m,x.p.id),x.p.t):x.p.t)}</span>${m.rule?"":`<button class="stpadd" onclick="event.stopPropagation();roomNewPiece('${m.id}','${x.p.id}')" title="이 ${esc(g.parts[x.p.lv===1?0:1])} 끝에 새 ${esc(g.item)}">＋</button>`}</div>`; return; }
-    if(hide) return; const w=x.w, k="w:"+w.id, d=any?lv-base+2:1, c=chars(w.body), big=sx.size[1]&&c>sx.size[1]*1.5, pn=num&&!numHas(w.title)?pieceNum(m,w.id):"";
-    out+=`<div class="stnode w ${cur===k?"on":""}" data-k="${w.id}" style="--d:${d}" onclick="stOpen('${k}')" title="${esc(stOf(w))} · ${c.toLocaleString()}자">${grip}<span class="sti">✎</span>${pn?`<span class="stno">${pn}</span>`:""}<span class="stn" ${cur===k?`data-drafttitle data-empty="(제목 없음)"`:""}>${esc(w.title||"(제목 없음)")}</span>${big?`<span class="stbig" title="${c.toLocaleString()}자 — 알맞은 길이(${sx.size[1].toLocaleString()}자)보다 꽤 깁니다. ■ 소제목에서 나눌지 생각해 보세요 (쓰기 ▾ → 커서에서 나누기)">✂</span>`:""}<i class="dot ${ST_CLS[stOf(w)]}"></i></div>`;
+    if(hide) return; const w=x.w, k="w:"+w.id, d=any?lv-base+2:1, c=chars(w.body), sr=SERIAL(m), sl=sr?serLen(m,w.body):null, big=!sr&&sx.size[1]&&c>sx.size[1]*1.5, pn=sr?(/^\s*\d+\s*화/.test(w.title||"")?"":epNo(m,w.id)+"화"):num&&!numHas(w.title)?pieceNum(m,w.id):"";
+    out+=`<div class="stnode w ${cur===k?"on":""}" data-k="${w.id}" style="--d:${d}" onclick="stOpen('${k}')" title="${esc(stOf(w))} · ${c.toLocaleString()}자">${grip}<span class="sti">✎</span>${pn?`<span class="stno">${pn}</span>`:""}<span class="stn" ${cur===k?`data-drafttitle data-empty="(제목 없음)"`:""}>${esc(w.title||"(제목 없음)")}</span>${big?`<span class="stbig" title="${c.toLocaleString()}자 — 알맞은 길이(${sx.size[1].toLocaleString()}자)보다 꽤 깁니다. ■ 소제목에서 나눌지 생각해 보세요 (쓰기 ▾ → 커서에서 나누기)">✂</span>`:""}${sl?`<span class="stser ${sl.st==="알맞음"?"ok":sl.st==="넘침"?"over":""}" title="${sl.n.toLocaleString()}자(공백 포함) — ${sl.a.toLocaleString()}~${sl.b.toLocaleString()}자 ${sl.st}">${sl.st==="알맞음"?"●":sl.st==="넘침"?"▲":"○"}</span>`:""}${sr&&wMeta(w,"pub")?`<span class="stser pub" title="올림 ${esc(wMeta(w,"pub"))}">↑</span>`:""}<i class="dot ${ST_CLS[stOf(w)]}"></i></div>`;
     if(cur===k) out+=`<div class="sthd" data-w="${w.id}" style="--d:${d+1}">${stHeadsInner(w)}</div>`; });
   const dr=stDraftOf(m); if(dr) out+=`<div class="stnode w draft ${cur==="draft"?"on":""}" style="--d:1" onclick="stOpen('draft')" title="아직 간직하기 전입니다 — 간직하면 이 원고에 들어갑니다"><span class="sti">✎</span><span class="stn" data-drafttitle data-empty="새 ${esc(g.item)}">${esc(dr.t||"새 "+g.item)}</span><small class="stdr">${cur==="draft"?"쓰는 중":"쓰던 글"}</small></div>`;
   return out+(m.rule?"":`<div class="staddrow">${[1,2].map(lv=>`<button class="stadd sm ${lv===sx.main?"":"minor"}" onclick="addPart('${m.id}',${lv})" title="목차 칸(${esc(g.parts[lv-1])}) — 글이 아니라 칸막이${lv===sx.main?"":" · 길 때만"}">＋ ${esc(g.parts[lv-1])}</button>`).join("")}<button class="stadd" onclick="roomNewPiece('${m.id}')" title="글 하나 — 서랍의 낱장">＋ 새 ${esc(g.item)}</button><button class="stadd sm q" onclick="stRules('${m.id}')" title="장·절·소제목을 어떻게 나누나">?</button></div>`); }
@@ -5061,18 +5088,22 @@ function msPageHtml(m){ const g=G(m), ws=msList(m), chs=msChars(m), pages=msPage
   const views=[["binder","목차"],...(m.genre==="novel"?[["plot","플롯"]]:[]),["board","상태"],["scriv","이어 읽기"]];   // 목차와 카드는 같은 차례를 줄·카드로 보는 한 보기 (스크리브너 바인더·코르크보드처럼)
   return `<section class="stms-page"><div class="msh"><div class="ring">${m.goal?ringSvg(am/m.goal):ringSvg(0)}<span>${m.goal?Math.round(am/m.goal*100)+"%":""}</span></div>
       <div style="flex:1;min-width:0"><h2 class="sthello" style="font-size:26px;margin:0;text-align:left">${esc(m.title)}</h2>
-      <div class="muted">${esc(g.n)} · ${ws.length}${esc(g.item)} · 원고지 약 ${pages}매${m.goal?` · 목표 ${unitFmt(m.goal,g.unit)}`:""}${td>0?` · 오늘 +${unitFmt(td,g.unit)}`:""}${dd!=null?` · ${dd>0?"마감 D-"+dd:dd===0?"오늘 마감":"마감 "+(-dd)+"일 지남"}`:""}</div></div>
+      <div class="muted">${esc(g.n)} · ${ws.length}${esc(g.item)} · 원고지 약 ${pages}매${m.goal?` · 목표 ${unitFmt(m.goal,g.unit)}`:""}${td>0?` · 오늘 +${unitFmt(td,g.unit)}`:""}${dd!=null?` · ${dd>0?"마감 D-"+dd:dd===0?"오늘 마감":"마감 "+(-dd)+"일 지남"}`:""}${serHead(m)}</div></div>
       ${m.rule?"":`<button class="btn ink" onclick="roomNewPiece('${m.id}')">${ICO.pen}새 ${esc(g.item)}</button>`}
       <details class="stmore" ontoggle="if(!this.open&&this.dataset.dirty)render()"><summary class="btn" title="부·장 나누기, 써 둔 글 넣기, 성격·목표, 검토·보내기, 휴지통">원고 관리 ▾</summary><div class="stmmenu">
         <p class="mh">차례</p>
         ${m.rule?`<button onclick="freezeMs('${m.id}')"><i>✎</i>직접 다듬기로 바꾸기</button>`:`<button onclick="addPart('${m.id}',1)"><i>＋</i>${esc(g.parts[0])} 나누기</button><button onclick="addPart('${m.id}',2)"><i>＋</i>${esc(g.parts[1])} 나누기</button>
         ${others.length?`<label class="mpick"><i>＋</i><select onchange="msAdd('${m.id}',this.value)" aria-label="써 둔 글 넣기"><option value="">써 둔 글 넣기…</option>${others.map(w=>`<option value="${w.id}">${esc(w.date)} · [${esc(wTag(w))}] ${esc(w.title||pv(w,20))}</option>`).join("")}</select></label>`:""}`}
         <hr><p class="mh">원고 정보 <small>바꾸면 바로 저장</small></p>
-        <label class="mrow"><span>성격</span><select onchange="setMsGenre('${m.id}',this.value)">${Object.entries(GENRES).map(([k,x])=>`<option value="${k}" ${g===x?"selected":""}>${x.n}</option>`).join("")}</select></label>
+        <label class="mrow"><span>성격</span><select onchange="setMsGenre('${m.id}',this.value)">${Object.entries(GENRES).map(([k,x])=>`<option value="${k}" ${(m.genre||"free")===k?"selected":""}>${x.n}</option>`).join("")}</select></label>
         <label class="mrow"><span>목차 번호</span><select onchange="msNumSet('${m.id}',this.value)" title="성격에 맞는 기본값: ${esc(NUM_SCHEMES[NUM_DEF[m.genre]||"book"])}">${Object.entries(NUM_SCHEMES).map(([k,n])=>`<option value="${k}" ${numScheme(m)===k?"selected":""}>${esc(n)}${(NUM_DEF[m.genre]||"book")===k?" (기본)":""}</option>`).join("")}</select></label>
         <label class="mrow"><span>목표</span><input id="msgoal" type="number" min="0" inputmode="numeric" value="${m.goal||""}" placeholder="${g.unit==="매"?"원고지 매수":g.unit==="자"?"글자 수":"편 수"}" onchange="saveMsGoal('${m.id}',true)"><em>${esc(g.unit)}</em></label>
         <label class="mrow"><span>마감</span><input id="msdue" type="date" value="${esc(m.due||"")}" onchange="saveMsGoal('${m.id}',true)"></label>
-        <hr><button onclick="this.closest('details').open=false;msFindOpen('${m.id}')"><i>⌕</i>찾아 바꾸기</button><button onclick="this.closest('details').open=false;msVerOpen('${m.id}')"><i>⧉</i>원고 판 <small>전체 남기기·비교</small></button><hr><button onclick="roomRename('${m.id}')"><i>✎</i>이름 바꾸기</button><button onclick="reviewMs('${m.id}')"><i>✦</i>원고 검토 받기 (AI)</button><button onclick="sendOpen('ms','${m.id}')"><i>↗</i>보내기 · 가져오기 <small>PDF·워드·노션</small></button><hr><button class="danger" onclick="delMs('${m.id}')"><i>${ICO.trash.replace('class="ico"','class="ico" style="margin:0;width:14px;height:14px"')}</i>휴지통에</button></div></details></div>
+        ${m.genre==="novel"?(()=>{ const sr=m.exportOpts?.serial||{}, [a,b]=serSize({genre:"novel",exportOpts:{serial:{...sr,on:true}}}); return `<label class="mrow"><span>웹소설 연재</span><label class="chk"><input type="checkbox" ${sr.on?"checked":""} onchange="serSet('${m.id}','on',this.checked)"> 화 단위로 연재</label></label>
+        ${sr.on?`<label class="mrow"><span>화당 분량</span><input type="number" min="0" style="width:80px" value="${a}" onchange="serSet('${m.id}','min',this.value)"> ~ <input type="number" min="0" style="width:80px" value="${b}" onchange="serSet('${m.id}','max',this.value)"><em>자(공백 포함)</em></label>
+        <label class="mrow"><span>연재 요일</span><span class="pills">${[..."일월화수목금토"].map((d,i)=>`<button type="button" class="pill ${(sr.days||[]).includes(i)?"on":""}" onclick="event.preventDefault();serSet('${m.id}','days',${i})">${d}</button>`).join("")}</span></label>
+        <label class="mrow"><span>화 복사</span><label class="chk"><input type="checkbox" ${sr.gap!==false?"checked":""} onchange="serSet('${m.id}','gap',this.checked)"> 문단 사이 빈 줄</label></label>`:""}`; })():""}
+        <hr><button onclick="this.closest('details').open=false;msFindOpen('${m.id}')"><i>⌕</i>찾아 바꾸기</button><button onclick="this.closest('details').open=false;msVerOpen('${m.id}')"><i>⧉</i>원고 판 <small>전체 남기기·비교</small></button><hr><button onclick="roomRename('${m.id}')"><i>✎</i>이름 바꾸기</button><button onclick="reviewMs('${m.id}')"><i>✦</i>원고 검토 받기 (AI)</button>${(m.parts&&Object.keys(m.parts).length)?`<button onclick="this.closest('details').open=false;reviewPartMenu('${m.id}')"><i>✦</i>부·장 골라 검토 <small>장편은 나눠서</small></button>`:""}<button onclick="sendOpen('ms','${m.id}')"><i>↗</i>보내기 · 가져오기 <small>PDF·워드·노션</small></button><hr><button class="danger" onclick="delMs('${m.id}')"><i>${ICO.trash.replace('class="ico"','class="ico" style="margin:0;width:14px;height:14px"')}</i>휴지통에</button></div></details></div>
     <div class="stviews">${views.map(([k,n])=>`<button class="${(["research","cork"].includes(ROOM_VIEW)?"binder":ROOM_VIEW)===k?"on":""}" onclick="roomSetView('${k==="binder"&&ROOM_VIEW==="cork"?"cork":k}')">${n}</button>`).join("")}</div>
     ${viewNote(m,ROOM_VIEW==="research"?"binder":ROOM_VIEW)}
     ${msBodyHtml(m,ROOM_VIEW==="research"?"binder":ROOM_VIEW)}
@@ -5288,7 +5319,7 @@ function codexDel(id){ if(!confirm("이 노트를 지울까요? 글은 그대로
 // 노트 형식은 원고 성격마다 (2026-10-29 팀장님: 「모든 원고가 소설 형식으로 자료를 받음」) — 그 분야 사람이 실제로 모으는 자료의 갈래·칸
 // kinds 종류 · tpl 종류별 기본 칸("" = 종류 없을 때) · propH/noteH 칸 묶음 이름 · secret 작가만 칸 · rel 관계 이름(없으면 관계 없음) · views 보기 · export 내보내기 이름
 const CX_PROF={
-  novel:{kinds:["인물","장소","조직","사물","사건","개념","기타"],tpl:{인물:["나이","직업","외모","성격","말버릇","원하는 것","두려워하는 것","첫 등장"],장소:["위치","분위기","특징"],조직:["우두머리","목적","구성원"],사물:["주인","쓰임·능력"],사건:["때","곳","관련 인물","결과"],개념:["뜻","규칙·한계"],기타:[],"":[]},
+  novel:{kinds:["인물","장소","조직","사물","사건","단서·복선","개념","기타"],tpl:{"단서·복선":["심은 장면","회수 장면","독자에게 보이는 정도","가리키는 것"],인물:["나이","직업","외모","성격","말버릇","원하는 것","두려워하는 것","첫 등장"],장소:["위치","분위기","특징"],조직:["우두머리","목적","구성원"],사물:["주인","쓰임·능력"],사건:["때","곳","관련 인물","결과"],개념:["뜻","규칙·한계"],기타:[],"":[]},
     propH:"속성",propSub:"같은 종류끼리 「표」로 나란히 비교됩니다",noteH:"노트",noteSub:"설정집에 실리는 내용",secret:true,rel:"관계",relSub:"이름 붙은 관계 — 관계도에 선으로 그려집니다",relEx:"아버지, 옛 연인, 소속",views:[["list","카드"],["table","표"],["graph","관계도"]],export:"설정집",
     intro:"등장인물·장소마다 항목을 두면 그 이름이 나온 장면이 저절로 모입니다. 종류·속성·관계를 정하면 표와 관계도로 봅니다."},
   paper:{kinds:["용어","학자","문헌","이론","자료","기타"],tpl:{용어:["정의","정의 출처","이 논문에서의 뜻","영문·원어","관련 용어"],학자:["소속·시대","대표 저작","핵심 주장","이 논문에서 쓸 곳"],문헌:["저자","연도","제목","출판·학술지","쪽","핵심 내용","인용할 문장"],이론:["주창자","핵심 개념","적용 범위·한계","관련 문헌"],자료:["출처","수치·내용","확인 여부"],기타:["출처"],"":["정의","출처"]},
@@ -5451,20 +5482,33 @@ function plotNew(mid,beat){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) re
   for(let k=bi;k>=0&&!after;k--){ const same=ws.filter(w=>wMeta(w,"beat")===st[k]); if(same.length) after=same[same.length-1].id; }
   const id=uid(), now=new Date().toISOString(); S.writings.push({id,date:today(),track:g.track||"book",type:g.type||"자유 글",title:t,body:"",updated:now,meta:{beat},metaTs:{beat:now}});
   const at=after?it.indexOf(after)+1:(bi===0&&it.some(x=>!isPart(x))?it.findIndex(x=>!isPart(x)):it.length); it.splice(at<0?it.length:at,0,id); m.updated=now; save(); render(); toast(`계획 카드 「${t}」 — 목차에도 그 자리에 들어갔습니다. 누르면 이어서 씁니다`); }
-let PLOT_LINE="";
+let PLOT_LINE="", PLOT_POV="", PLOT_VIEW="beat";   // PLOT_VIEW: beat(단계) · time(이야기 시간순) · alibi(인물×시각→장소)
 function plotLines(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const t=prompt("줄거리 줄을 쉼표로 (예: 주 플롯, 수인과 도윤, 등대의 비밀) — 장면마다 어느 줄을 움직이는지 표시합니다. 비우면 줄 없이",(m.plot?.lines||[]).join(", ")); if(t==null) return;
   m.plot={...(m.plot||{}),lines:t.split(/[,，]/).map(x=>x.trim()).filter(Boolean).slice(0,8)}; m.updated=new Date().toISOString(); save(); PLOT_LINE=""; render(); }
 const PL_COL=["#b0703f","#4f7fa8","#5f8a68","#a0577a","#7d6aa8","#a08a3c","#b0534a","#4e8b8f"];
-function plotHtml(m,ws0){ const lines=m.plot?.lines||[], lc=n=>PL_COL[lines.indexOf(n)%PL_COL.length], ws=PLOT_LINE?ws0.filter(w=>wMeta(w,"pline")===PLOT_LINE):ws0, st=plotStages(m), cur=Object.entries(PLOT_SETS).find(([,v])=>v.join()===st.join())?.[0]||"직접", un=ws.filter(w=>!st.includes(wMeta(w,"beat")));
+// 이야기 시각 정렬 열쇠: 숫자를 자리 맞춰 비교(「D+3」·「3일째」도 숫자로), 비면 맨 뒤
+const stKey=t=>String(t||"").trim()?String(t).replace(/\d+/g,d=>d.padStart(6,"0")):"\uffff";
+function plotTimeHtml(m,ws){ const order=new Map(ws.map((w,i)=>[w.id,i+1])), L=ws.slice().sort((a,b)=>stKey(wMeta(a,"st")).localeCompare(stKey(wMeta(b,"st")))||order.get(a.id)-order.get(b.id)), no=ws.filter(w=>!wMeta(w,"st")).length;
+  return `<p class="hint">이야기 속 시간 순서입니다. 왼쪽 번호는 책 순서 — 번호가 뒤섞인 곳이 시간을 엇갈려 놓은 자리입니다.${no?` 「이야기 시각」이 빈 장면 ${no}개는 맨 뒤에.`:""} (장면 정보 → 이야기 시각)</p>
+    <ol class="ptime">${L.map((w,i)=>{ const o=order.get(w.id), prev=i?order.get(L[i-1].id):0; return `<li class="${prev&&o<prev?"jump":""}"><span class="pto" title="책 순서">${o}</span><b>${esc(wMeta(w,"st")||"—")}</b><a href="#" onclick="go('write',{edit:'${w.id}'});return false">${esc(w.title||"(제목 없음)")}</a><small>${esc([wMeta(w,"pov"),wMeta(w,"loc")].filter(Boolean).join(" · "))}</small></li>`; }).join("")}</ol>`; }
+function plotAlibiHtml(m,ws){ const L=ws.filter(w=>wMeta(w,"st")).sort((a,b)=>stKey(wMeta(a,"st")).localeCompare(stKey(wMeta(b,"st")))), P2=cxScope(m.id).filter(c=>c.kind==="인물"), cell=new Map();
+  L.forEach(w=>{ const inW=codexIn(w.body,m.id).filter(c=>c.kind==="인물"); inW.forEach(c=>cell.set(w.id+"|"+c.id,wMeta(w,"loc")||"✓")); const pv=P2.find(c=>cxNames(c).includes(wMeta(w,"pov"))); if(pv) cell.set(w.id+"|"+pv.id,(wMeta(w,"loc")||"✓")+" ◉"); });
+  const cols=P2.filter(c=>L.some(w=>cell.has(w.id+"|"+c.id)));
+  if(!L.length||!cols.length) return `<p class="muted">장면 정보에 「이야기 시각」과 「장소」를 적고, 본문에 인물 이름이 나오면 「누가 언제 어디에 있었나」 표가 됩니다 — 알리바이·동선 점검용.</p>`;
+  return `<p class="hint">인물 × 이야기 시각 → 그 장면의 장소 (◉ 시점 인물). 같은 시각에 두 곳에 있는 인물은 붉게 표시됩니다. 본문에 이름만 나와도(「그는 정원에 있었다」처럼 다른 곳 이야기라도) 그 장면 장소로 세니, 붉은 칸은 직접 살펴 주세요. 읽기만 하는 표입니다.</p><div class="cxtablewrap"><table class="cxtable palibi"><thead><tr><th>이야기 시각</th><th>장면</th>${cols.map(c=>`<th><i class="wdot sm" style="background:${cxCol(c)}"></i> ${esc(c.name)}</th>`).join("")}</tr></thead><tbody>
+    ${L.map(w=>`<tr><td><b>${esc(wMeta(w,"st"))}</b></td><td><a href="#" onclick="go('write',{edit:'${w.id}'});return false">${esc(w.title||"(제목 없음)")}</a></td>${cols.map(c=>{ const v=cell.get(w.id+"|"+c.id)||"", same=v&&L.some(x=>x.id!==w.id&&wMeta(x,"st")===wMeta(w,"st")&&cell.get(x.id+"|"+c.id)&&(wMeta(x,"loc")||"")!==(wMeta(w,"loc")||"")); return `<td class="${same?"clash":""}">${esc(v)}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>`; }
+function plotHtml(m,ws0){ const lines=m.plot?.lines||[], lc=n=>PL_COL[lines.indexOf(n)%PL_COL.length], povs=[...new Set(ws0.map(w=>wMeta(w,"pov")).filter(Boolean))], ws=ws0.filter(w=>(!PLOT_LINE||wMeta(w,"pline")===PLOT_LINE)&&(!PLOT_POV||wMeta(w,"pov")===PLOT_POV)), st=plotStages(m), cur=Object.entries(PLOT_SETS).find(([,v])=>v.join()===st.join())?.[0]||"직접", un=ws.filter(w=>!st.includes(wMeta(w,"beat")));
   const people=w=>codexIn(w.body,m.id).filter(c=>c.kind==="인물"||(!c.kind&&m.genre==="novel")).slice(0,5);
-  const card=w=>`<div class="scard pcard" draggable="true" data-w="${w.id}" ${wMeta(w,"pline")&&lines.includes(wMeta(w,"pline"))?`style="border-left:4px solid ${lc(wMeta(w,"pline"))}"`:""}><a href="#" onclick="go('write',{edit:'${w.id}'});return false"><b>${esc(w.title||"(제목 없음)")}</b></a>${chars(w.body)?"":`<span class="pcplan" title="아직 본문이 없는 계획 카드">계획</span>`}<span class="pcsum">${esc(w.summary||pv(w,60))}${m.rule?"":`<button class="sumed" onclick="wSum('${w.id}')" title="한 줄 요약 고치기">✎</button>`}</span>
+  const card=w=>`<div class="scard pcard" draggable="true" data-w="${w.id}" ${wMeta(w,"pline")&&lines.includes(wMeta(w,"pline"))?`style="border-left:4px solid ${lc(wMeta(w,"pline"))}"`:""}><a href="#" onclick="go('write',{edit:'${w.id}'});return false"><b>${esc(w.title||"(제목 없음)")}</b></a>${chars(w.body)?"":`<span class="pcplan" title="아직 본문이 없는 계획 카드">계획</span>`}${wMeta(w,"pov")||wMeta(w,"st")?`<span class="pcmeta">${wMeta(w,"pov")?`◉ ${esc(wMeta(w,"pov"))}`:""}${wMeta(w,"st")?` · ${esc(wMeta(w,"st"))}`:""}</span>`:""}<span class="pcsum">${esc(w.summary||pv(w,60))}${m.rule?"":`<button class="sumed" onclick="wSum('${w.id}')" title="한 줄 요약 고치기">✎</button>`}</span>
     ${lines.length?`<select class="plsel" onchange="metaSet('${w.id}','pline',this.value);render()" title="이 장면이 움직이는 줄거리 줄"><option value="">줄거리 줄 —</option>${lines.map(l=>`<option ${wMeta(w,"pline")===l?"selected":""}>${esc(l)}</option>`).join("")}</select>`:""}
     ${people(w).length?`<span class="pcppl">${people(w).map(c=>`<a href="#" onclick="stOpen('cx:${c.id}');return false" title="${esc(c.name)} 항목으로">${cxIc(c)} ${esc(c.name)}</a>`).join("")}</span>`:""}
     <select onchange="plotSet('${w.id}',this.value)" title="단계 옮기기">${[["","아직"],...st.map(s=>[s,s])].map(([v,n])=>`<option value="${esc(v)}" ${(wMeta(w,"beat")||"")===v||(!v&&!st.includes(wMeta(w,"beat")))?"selected":""}>${esc(n)}</option>`).join("")}</select></div>`;
   const col=(beat,name,list)=>`<div class="scol pcol" data-beat="${esc(beat)}"><p class="scolh">${esc(name)} <span class="muted">${list.length}</span></p>${list.map(card).join("")||`<p class="muted" style="font-size:13px;margin:6px 2px">비어 있음</p>`}${beat&&!m.rule?`<button class="btn small ghost" style="margin-top:6px" onclick="plotNew('${m.id}',${jsArg(beat)})" title="제목만으로 계획 카드를 놓습니다 (쓰기 화면으로 가지 않음)">＋ 계획 카드</button>`:""}</div>`;
   return `<div class="row" style="gap:8px;margin-bottom:8px;flex-wrap:wrap"><span class="muted" style="font-size:13px">단계</span><select style="width:auto" onchange="plotSetStages('${m.id}',this.value)">${[...Object.keys(PLOT_SETS),"직접"].map(k=>`<option ${k===cur?"selected":""}>${k}${k==="직접"?" 정하기…":""}</option>`).join("")}</select><button class="btn small ghost" onclick="plotLines('${m.id}')" title="플로터의 플롯라인처럼: 주 플롯·곁 줄거리를 나눠 장면마다 표시">줄거리 줄${lines.length?` ${lines.length}`:" 정하기"}</button>
-      ${lines.length?`<span class="pills">${[["","모두"],...lines.map(l=>[l,l])].map(([v,n])=>`<button class="pill ${PLOT_LINE===v?"on":""}" onclick="PLOT_LINE=${jsArg(v)};render()" ${v?`style="box-shadow:inset 3px 0 0 ${lc(v)}"`:""}>${esc(n)}</button>`).join("")}</span>`:""}</div>
-    <div class="sboard pboard">${un.length?col("","아직 정하지 않음",un):""}${st.map(s=>col(s,s,ws.filter(w=>wMeta(w,"beat")===s))).join("")}</div>`; }
+      ${lines.length?`<span class="pills">${[["","모두"],...lines.map(l=>[l,l])].map(([v,n])=>`<button class="pill ${PLOT_LINE===v?"on":""}" onclick="PLOT_LINE=${jsArg(v)};render()" ${v?`style="box-shadow:inset 3px 0 0 ${lc(v)}"`:""}>${esc(n)}</button>`).join("")}</span>`:""}
+      ${povs.length>1?`<span class="pills" title="시점 인물로 거르기"><span class="muted" style="font-size:13px;align-self:center">시점</span>${[["","모두"],...povs.map(p=>[p,`${p} ${ws0.filter(w=>wMeta(w,"pov")===p).length}`])].map(([v,n])=>`<button class="pill ${PLOT_POV===v?"on":""}" onclick="PLOT_POV=${jsArg(v).replace(/"/g,"&quot;")};render()">${esc(n)}</button>`).join("")}</span>`:""}
+      <span class="spacer"></span><span class="stviews" style="margin:0">${[["beat","단계"],["time","시간순"],["alibi","알리바이 표"]].map(([k,n])=>`<button class="${PLOT_VIEW===k?"on":""}" onclick="PLOT_VIEW='${k}';render()">${n}</button>`).join("")}</span></div>
+    ${PLOT_VIEW==="time"?plotTimeHtml(m,ws):PLOT_VIEW==="alibi"?plotAlibiHtml(m,ws):`<div class="sboard pboard">${un.length?col("","아직 정하지 않음",un):""}${st.map(s=>col(s,s,ws.filter(w=>wMeta(w,"beat")===s))).join("")}</div>`}`; }
 // 타자기 모드: 쓰는 줄을 화면 가운데에 (이 기기에 기억)
 let TYPEW=false; try{ TYPEW=localStorage.getItem("seojae.typew")==="1"; }catch(_){}
 if(TYPEW) document.body.classList.add("typew");
@@ -5757,7 +5801,7 @@ function fbSettings(m){ if(!m) return ""; const bg=cxSys(m.id,"bg"), pr=cxSys(m.
 async function fbStart(){ const b=$("#wbody"); if(!b) return; const k=aiGenre(); if(k.meditation) return toast("묵상에는 점수를 매기지 않습니다 — ✦ AI 창에서 질문으로 함께 보세요");
   if(chars(b.value)<80) return toast("피드백을 받으려면 조금 더 써 주세요 (80자 넘게)");
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
-  const crit=FB_CRIT[k.kind]||FB_CRIT.free, wid=editId||"new"; FB={wid,busy:true,crit}; fbDraw();
+  const crit=[...(FB_CRIT[k.kind]||FB_CRIT.free),...(SERIAL(k.m)?["첫머리 훅·끝 당김"]:[])].slice(0,6), wid=editId||"new"; FB={wid,busy:true,crit}; fbDraw();
   try{ const r=await gcall("coWrite",{mode:"feedback",around:aiAround(k.w),poem:k.poem,body:aiBodyText(b),title:$("#wtitle")?.value||"",genre:k.name,criteria:crit,settings:fbSettings(k.m),card:k.w?cardForAI(k.w):null,sermon:k.sermon,...vrFor(k.sermon)});
     if(!FB||FB.wid!==wid) return; Object.assign(FB,{busy:false,...r,at:new Date().toISOString(),items:(r.items||[]).map(x=>({...x,st:"open"}))}); }
   catch(e){ if(FB&&FB.wid===wid) Object.assign(FB,{busy:false,err:"피드백을 받지 못했습니다: "+e.message}); }
@@ -5814,6 +5858,8 @@ function styleCheck(v,kind){ const cats=[], add=(k,tip,items,sample)=>cats.push(
     const endSyl=t=>{ const m=t.replace(/[.!?"'」』”’\s]+$/,"").match(/([가-힣])다$/); return m?m[1]:""; }, jong=c=>(c.charCodeAt(0)-0xAC00)%28;   // 문장 끝 「○다」의 ○ 받침: ㅆ이면 과거, ㄴ이면(는다·한다·뛴다) 현재
     const past=S2.filter(x=>{ const c=endSyl(x.t); return c&&jong(c)===20; }), pres=S2.filter(x=>{ const c=endSyl(x.t); return c&&(c==="는"||jong(c)===4); });
     const minor=past.length&&pres.length?(past.length<pres.length?past:pres):[]; add("시점·시제",`과거형 ${past.length} · 현재형 ${pres.length} 문장 — 섞인 쪽(적은 쪽)을 보여 줍니다`,minor.length/(past.length+pres.length||1)>=.12?minor:[]); }
+  if(SERIAL(S.manuscripts.find(x=>x.id===cxMsNow()))){ const long=[]; let o2=0; v.split("\n").forEach(l=>{ if(l.trim().length>180&&!/^\s*[■◆]/.test(l)) long.push({s:o2,e:o2+l.length,t:l.slice(0,20)+"…"}); o2+=l.length+1; });   // 휴대폰 화면 다섯 줄 남짓
+    add("긴 문단","휴대폰에서 다섯 줄이 넘는 문단 — 웹소설은 짧게 끊어 읽힙니다",long); }
   return cats; }
 function styOpen(){ const b=$("#wbody"); if(!b) return; const k=aiGenre(); STY={wid:editId||"new",cats:styleCheck(b.value,k.kind),sel:null,at:0}; styDraw(); paintHeads(); }
 function styClose(){ STY=null; $("#stypanel")?.remove(); paintHeads(); }
@@ -5872,7 +5918,7 @@ function wsDraw(){ if(!WS) return $("#wspanel")?.remove(); let p=$("#wspanel"); 
 // 배경·규칙은 노트 항목에 sys:"bg"|"rules" 를 붙여 그 원고에 둠(항목마다 합침 — 저장 방식 그대로). 일반 목록·그래프·찾기에서는 빠짐
 let ST_LTAB=(()=>{ try{ return localStorage.getItem("seojae.stLtab")||"ms"; }catch(_){ return "ms"; } })(), WT_FOLD=new Set();
 function stLtab(t){ ST_LTAB=t; try{ localStorage.setItem("seojae.stLtab",t); }catch(_){} render(); }
-const CX_COLOR={인물:"#5b5bd6",사람:"#5b5bd6",학자:"#5b5bd6",장소:"#6fa3d8",지명:"#6fa3d8",조직:"#9a74c9",사물:"#93b34f",물건:"#93b34f",사건:"#d0806a",개념:"#e0956f",용어:"#e0956f",이론:"#e0956f",기술:"#e0956f",문헌:"#8a7a66",자료:"#8a7a66",예화:"#c08a3e",주제:"#4f9a8a","장면·기억":"#c0779a",이미지:"#7fa86a",낱말:"#7fa86a",계절:"#6fa3d8",사례:"#c08a3e","연구·통계":"#8a7a66",실천:"#4f9a8a",인용:"#8a7a66"};
+const CX_COLOR={"단서·복선":"#c08a3e",인물:"#5b5bd6",사람:"#5b5bd6",학자:"#5b5bd6",장소:"#6fa3d8",지명:"#6fa3d8",조직:"#9a74c9",사물:"#93b34f",물건:"#93b34f",사건:"#d0806a",개념:"#e0956f",용어:"#e0956f",이론:"#e0956f",기술:"#e0956f",문헌:"#8a7a66",자료:"#8a7a66",예화:"#c08a3e",주제:"#4f9a8a","장면·기억":"#c0779a",이미지:"#7fa86a",낱말:"#7fa86a",계절:"#6fa3d8",사례:"#c08a3e","연구·통계":"#8a7a66",실천:"#4f9a8a",인용:"#8a7a66"};
 const cxCol=c=>CX_COLOR[c?.kind]||"#8a7a66";
 // ───────── 관계도 (타입탁 월드 그래프처럼) — 관계 성격(좋음·나쁨·복잡)을 색과 선 모양으로, 이름은 선을 따라, 연결 많은 항목은 크게, 휠·단추로 확대, 끌어 옮기기, ⤢ 크게 보기 ─────────
 // 관계 r={to,label,tone:"good"|"bad"|"mixed"|"",mutual:true,w:"strong"|"weak"|""} — tone·mutual·w 는 2026-10-29 더한 칸(없으면 중립·한 방향·보통)
@@ -6153,8 +6199,9 @@ const CK_SETS={sermon:CK_Q,
   selfhelp:["핵심 메시지가 한 문장이고, 도입 끝과 맺음에 있는가?","독자는 이 글을 읽고 무엇을 하게 되는가? 오늘 해 볼 한 가지가 구체적인가?","사례·통계는 확인된 사실인가? 출처를 밝혔는가?","내 경험과 남의 사례가 균형을 이루는가?","주장마다 근거(사례·자료·논리)가 붙어 있는가?","독자를 탓하거나 다그치는 말투는 없는가?","실천 과제가 실제로 해 볼 수 있는 크기인가?","전문 용어를 풀어 썼는가? 처음 읽는 사람도 따라오는가?","제목이 약속한 것을 글이 지키는가?","이 글이 먼저 나에게 한 말은 무엇인가?"],
   novel:["이 장면이 할 일(무엇이 바뀌는가)이 분명한가?","장면 처음과 끝에 인물의 처지·감정이 달라졌는가?","인물의 목표와 그것을 막는 것(갈등)이 보이는가?","시점이 흔들리지 않는가? 시제가 한결같은가?","설명 대신 행동·대사·감각으로 보여 주는가?","대사가 인물마다 다른 목소리인가? 설정(말버릇)과 맞는가?","월드 설정(인물·장소·때)과 어긋나는 곳은 없는가?","앞 장면과 이어지고, 다음 장면으로 끌고 가는 것이 있는가?","복선·정보가 너무 이르거나 늦게 드러나지 않는가?","이 장면에서 내가 가장 쓰고 싶었던 순간은 어디인가?"],
   paper:["연구 질문이 한 문장으로 분명하고, 서론 끝에 있는가?","이 절이 연구 질문에 어떻게 이바지하는지 보이는가?","주장마다 근거(자료·인용·분석)가 붙어 있는가?","인용·각주를 원문·쪽수와 대조했는가?","선행 연구와 내 주장의 차이(연구의 공백)를 밝혔는가?","반대 견해나 이 연구의 한계를 다루었는가?","용어를 처음 쓸 때 정의했고, 끝까지 같은 뜻으로 쓰는가?","문장이 객관적인가(감정어·단정·과장 없이)?","결론이 본문에서 보인 것 이상을 주장하지 않는가?","참고 문헌과 본문의 인용이 서로 맞는가?"]};
+CK_SETS.webnovel=["첫 세 줄 안에 독자를 붙잡는 훅(사건·질문·이상한 것)이 있는가?","이 화가 할 일(무엇이 바뀌는가)이 분명한가?","이 화 안에 독자가 받는 보상(해결·반전·성장·사이다)이 하나 있는가?","마지막 문단이 다음 화를 누르게 하는 당김(위기·질문·폭로)으로 끝나는가?","앞 화에서 던진 떡밥을 잊지 않았는가? 새로 던진 떡밥을 메모했는가?","인물의 말과 행동이 설정(월드)과 맞는가?","모바일로 읽기 좋은가 — 문단이 짧고, 설명이 길게 이어지지 않는가?","대사와 서술의 비율이 장면 속도에 맞는가?","분량이 화당 목표에 맞는가?","이 화에서 내가 가장 쓰고 싶었던 장면은 어디인가?"];
 CK_SETS.free=CK_SETS.essay.map((q,i)=>i===3?"처음 읽는 사람도 따라올 수 있는가?":i===4?"맺음이 앞의 내용을 정리하되 새 주장을 덧붙이지 않는가?":q);
-const ckSet=w=>{ const k=cardKindOf(w)?.kind; return CK_SETS[k]?k:"free"; }, ckQ=w=>CK_SETS[ckSet(w)];
+const ckSet=w=>{ const k=cardKindOf(w)?.kind; if(k==="novel"&&SERIAL(wMs(w))) return "webnovel"; return CK_SETS[k]?k:"free"; }, ckQ=w=>CK_SETS[ckSet(w)];
 const ckGet=w=>{ const t=wMeta(w,"chk10"); return t&&Array.isArray(t.a)&&(t.set||"sermon")===ckSet(w)?t:{a:[]}; };   // 예전 답(set 없음)은 설교 질문으로 한 것
 function ckSum(w){ const a=ckGet(w).a, y=a.filter(x=>x?.me==="예").length, n=a.filter(x=>x?.me==="아니오").length; return y||n?` <small class="${n?"warn":"muted"}">${y}/10${n?` · 아니오 ${n}`:""}</small>`:""; }
 function ckOpen(){ const w=cardW(); if(!w) return toast("몇 자 써서 간직되면 점검할 수 있습니다");
@@ -6878,12 +6925,17 @@ async function reviewRun(title,kind,ws){ if(!SERVER||!GAS) return toast("구글 
   if(!confirm(`「${title}」 ${ws.length}꼭지(${tot.toLocaleString()}자)를 ${CONF.ai==="claude"?"클로드":"제미나이"}에게 보내 검토 메모를 받을까요?${CONF.ai==="claude"?"\n클로드 크레딧을 조금 씁니다(글이 길수록 더).":""}\n본문은 바꾸지 않습니다. 1~2분 걸릴 수 있습니다.${tot>60000||pieces.some(x=>x.text.length>9000)?`\n\n※ 한 번에 앞 60,000자(꼭지마다 9,000자)까지만 읽습니다 — 긴 원고는 장을 골라 나눠 받으세요.`:""}`)) return null;
   toast("검토를 받는 중입니다… (1~2분)"); try{ busy(true); }catch(_){}
   const gm=ws[0]?(wMs(ws[0])||S.manuscripts.find(x=>x.title===title)):null, gg=G(gm);
-  try{ const r=await gcall("reviewMs",{title,kind,pieces,genre:gm?.genre?gg.n:"",focus:gg.focus,item:gg.item}); if(!r.ok) throw new Error(r.error); const at=new Date().toISOString();
+  try{ const r=await gcall("reviewMs",{title,kind,pieces,genre:gm?.genre?gg.n:"",focus:gg.focus,item:gg.item,...(gm?.genre==="novel"?{settings:fbSettings(gm),serial:!!SERIAL(gm)}:{})}); if(!r.ok) throw new Error(r.error); const at=new Date().toISOString();
     ws.forEach(w=>{ const p=r.pieces.find(x=>x.id===w.id); w.review={at,ai:r.ai,notes:p?p.notes:[]}; w.updated=at; if(editId===w.id) EDIT_BASE=at; });
     save(); toast(`검토를 받았습니다 — 짚을 점 ${r.pieces.reduce((a,x)=>a+x.notes.length,0)}개`); return r; }
   catch(e){ toast("검토하지 못했습니다: "+e.message); return null; } finally{ try{ busy(false); }catch(_){} } }
 async function reviewMs(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const ws=msList(m); if(!ws.length) return toast("원고에 글이 없습니다");
   const r=await reviewRun(m.title,"원고",ws.slice(0,40)); if(r){ m.review={at:new Date().toISOString(),overall:r.overall,ai:r.ai}; save(); render(); } }
+// 부·장 하나만 검토 (장편은 원고 전체가 한 번에 다 읽히지 않으므로)
+function reviewPartMenu(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const seq=msSeq(m), parts=seq.filter(x=>x.p);
+  if(!parts.length) return toast("부·장이 없습니다 — 원고 전체 검토를 쓰세요");
+  ctxOpen(innerWidth/2,innerHeight/3,"어느 부·장을 검토할까요?",parts.map(x=>{ const i=seq.indexOf(x), ws=[]; for(let j=i+1;j<seq.length;j++){ if(seq[j].p&&seq[j].p.lv<=x.p.lv) break; if(seq[j].w) ws.push(seq[j].w); }
+    return {t:`${numT(partNum(m,x.p.id),x.p.t)} · ${ws.length}${G(m).item}`,ic:"✦",fn:()=>ws.length?reviewRun(`${m.title} — ${x.p.t}`,"원고",ws).then(r=>{ if(r) render(); }):toast("이 칸에 글이 없습니다")}; }),isTouch()); }
 async function reviewOne(wid){ const w=S.writings.find(x=>x.id===wid); if(!w) return; if($("#wbody")&&editId===wid&&writingUnsaved()) return toast("먼저 「간직하기」를 눌러 지금 글을 간직한 뒤 검토를 받아 주세요");
   const m=wMs(w); const r=await reviewRun(m?m.title:(w.title||"글"),w.type==="설교초안"?"설교초안":"원고 꼭지",[w]); if(r) render(); }
 // 서랍: 분류별로 걸러 보기
