@@ -1576,7 +1576,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="66fe3caf03";
+const APP_BUILD="edf999c733";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4944,9 +4944,11 @@ function scrivSave(wid){ const w=S.writings.find(x=>x.id===wid), t=$("#scta"); i
 let ROOM_CODEX=null;
 const cxNames=c=>[c.name,...(c.aliases||[])].map(x=>String(x||"").trim()).filter(x=>x.length>=2);
 const codexLive=()=>(S.codex||[]).filter(c=>!(S.deleted||{})[c.id]);
-// 원고마다 자기 노트 (2026-10-29): 항목에 c.ms(원고 번호)가 있으면 그 원고의 것, 없으면 모든 글에서 쓰는 공통 노트. 원고 안에서는 「이 원고 것 + 공통」만 보이고 찾음
+// 원고마다 자기 노트 창고 (2026-10-29 팀장님: 공통 자료 없이 원고마다): 항목의 c.ms(원고 번호)로 그 원고에만 속함. 원고 안에서는 그 원고의 노트만 보이고 찾음.
+// c.ms 가 없는 예전 노트(또는 원고가 지워진 노트)는 「주인 없는 노트」 — 원고에는 안 보이고, 노트 목록 아래에서 「이 원고로 가져오기」. 원고 밖 글(묵상)에서는 예전처럼 이 노트만 찾음
 const cxMsNow=()=>{ if(tab==="write"){ const w=editId&&S.writings.find(x=>x.id===editId); return wMs(w)?.id||null; } return ROOM_MS||null; };
-const cxScope=mid=>codexLive().filter(c=>!c.ms||c.ms===mid||!liveMs().some(m=>m.id===c.ms));   // 원고가 지워졌으면 공통처럼
+const cxOrphan=c=>!c.ms||!liveMs().some(m=>m.id===c.ms);
+const cxScope=mid=>{ const ok=mid&&liveMs().some(m=>m.id===mid); return codexLive().filter(c=>ok?c.ms===mid:cxOrphan(c)); };
 function codexIn(text,mid){ const t=String(text||""); return cxScope(mid===undefined?cxMsNow():mid).filter(c=>cxNames(c).some(n=>t.includes(n))); }
 function codexHits(c){ const ns=cxNames(c), hit=t=>ns.some(n=>String(t||"").includes(n)), own=c.ms&&liveMs().find(m=>m.id===c.ms), inMs=own?new Set(msList(own).map(w=>w.id)):null;
   const ws=live().filter(w=>(!inMs||inMs.has(w.id))&&(hit(w.title)||hit(w.body)||hit(w.passage))).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
@@ -4983,7 +4985,7 @@ function codexPage(c){ const ns=cxNames(c), {ws,notes}=codexHits(c), yrs=[...new
     <div class="row" style="gap:8px"><button class="btn small ghost" onclick="ROOM_CODEX=null;stOpen('codex')">‹ 설정 목록</button><span class="spacer"></span><button class="btn small danger" onclick="codexDel('${c.id}')">지우기</button></div>
     <div class="row" style="gap:8px;align-items:flex-end;margin-top:8px"><input id="cxname" class="title-in" value="${esc(c.name)}" style="flex:1;min-width:0"><label class="field" style="margin:0"><span>종류</span><select id="cxkind" style="width:auto"><option value="">—</option>${CX_KINDS.map(k=>`<option ${c.kind===k?"selected":""}>${k}</option>`).join("")}</select></label></div>
     <div class="row" style="gap:8px;flex-wrap:wrap;align-items:flex-end"><label class="field" style="flex:1;min-width:200px;margin:0"><span>다른 이름 (쉼표로 · 이 이름들이 나온 글도 함께 모읍니다)</span><input id="cxalias" value="${esc((c.aliases||[]).join(", "))}" placeholder="${esc(cxW().alias)}"></label>
-      <label class="field" style="margin:0"><span>속한 곳</span><select id="cxms" style="width:auto" title="이 원고의 노트는 그 원고를 열었을 때만 보입니다. 공통은 모든 원고·묵상에서 보입니다"><option value="">공통 (모든 글)</option>${liveMs().filter(x=>!x.rule).map(x=>`<option value="${x.id}" ${c.ms===x.id?"selected":""}>『${esc(x.title)}』</option>`).join("")}</select></label></div>
+      <label class="field" style="margin:0"><span>속한 곳</span><select id="cxms" style="width:auto" title="노트는 속한 원고를 열었을 때만 보입니다">${cxOrphan(c)?`<option value="">(아직 정하지 않음)</option>`:""}${liveMs().filter(x=>!x.rule).map(x=>`<option value="${x.id}" ${c.ms===x.id?"selected":""}>『${esc(x.title)}』</option>`).join("")}</select></label></div>
     <div class="field"><span>속성 <small class="muted">— 같은 종류끼리 「표」로 나란히 비교됩니다</small></span><div id="cxprops" class="cxprops">${(c.props||[]).map(p=>cxPropRow(p.k,p.v)).join("")}</div>
       <div class="row" style="gap:6px"><button type="button" class="btn small" onclick="cxAddProp()">＋ 속성</button><button type="button" class="btn small ghost" onclick="cxFillTpl()" title="종류에 맞는 기본 속성(인물: 나이·직업·외모·성격·말버릇·원하는 것…)을 채웁니다">기본 속성 채우기</button></div></div>
     <label class="field"><span>노트 <small class="muted">— 설정집에 실리는 내용</small></span><textarea id="cxbody" class="pen" style="font-size:20px;min-height:140px" placeholder="${esc(cxW().note)}">${esc(c.body||"")}</textarea></label>
@@ -5007,7 +5009,7 @@ function codexSave(id){ const c=(S.codex||[]).find(x=>x.id===id); if(!c) return;
   const rel=[...document.querySelectorAll("#cxrels .cxrel")].map(r=>({to:r.querySelector("[data-rt]").value,label:r.querySelector("[data-rl]").value.trim()})).filter(r=>r.to); if(rel.length) c.rel=rel; else delete c.rel;
   c.updated=new Date().toISOString(); save(); toast("간직했습니다"); render(); }
 // 설정 목록: 카드 · 표(같은 종류 비교) · 관계도
-function cxClaim(id){ const c=(S.codex||[]).find(x=>x.id===id), m=S.manuscripts.find(x=>x.id===ROOM_MS); if(!c||!m) return; c.ms=m.id; c.updated=new Date().toISOString(); save(); toast(`「${c.name}」${jp(c.name,"을","를")} 『${m.title}』의 노트로 옮겼습니다 — 다른 원고에서는 보이지 않습니다`); render(); }
+function cxClaim(id){ const c=(S.codex||[]).find(x=>x.id===id), m=S.manuscripts.find(x=>x.id===ROOM_MS); if(!c||!m) return; c.ms=m.id; c.updated=new Date().toISOString(); save(); toast(`「${c.name}」${jp(c.name,"을","를")} 『${m.title}』의 노트 창고로 옮겼습니다`); render(); }
 function stCodexList(){ const all=cxScope(ROOM_MS).slice().sort((a,b)=>a.name.localeCompare(b.name,"ko")), kinds=CX_KINDS.filter(k=>all.some(c=>c.kind===k)), cs=all.filter(c=>!CX_KIND||c.kind===CX_KIND||(CX_KIND==="-"&&!c.kind));
   const tab=(k,n)=>`<button class="${CX_VIEW===k?"on":""}" onclick="cxView('${k}')">${n}</button>`;
   const pill=(k,n)=>`<button class="pill ${CX_KIND===k?"on":""}" onclick="CX_KIND='${k}';render()">${n}</button>`;
@@ -5017,10 +5019,10 @@ function stCodexList(){ const all=cxScope(ROOM_MS).slice().sort((a,b)=>a.name.lo
       ${rows.map(c=>`<tr><td><a href="#" onclick="stOpen('cx:${c.id}');return false"><b>${esc(c.name)}</b></a></td>${cols.map(x=>`<td>${esc((c.props||[]).find(p=>p.k===x)?.v||"")}</td>`).join("")}<td>${(c.rel||[]).map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`${esc(r.label||"—")}: ${esc(t.name)}`:""; }).filter(Boolean).join("<br>")}</td><td>${codexHits(c).ws.length}</td></tr>`).join("")||`<tr><td colspan="9" class="muted">이 종류의 항목이 없습니다.</td></tr>`}</tbody></table></div>
       ${cols.length?"":`<p class="hint">속성을 채우면 열이 생깁니다 (항목 → 「기본 속성 채우기」).</p>`}`;
   } else if(CX_VIEW==="graph") body=cxGraph(cs);
-  else { const cardC=c=>{ const p=(c.props||[]).find(x=>x.v); return `<div class="strc cxcard" onclick="stOpen('cx:${c.id}')" role="button" tabindex="0"><b>${cxIc(c)} ${esc(c.name)}</b><span>${esc(p?`${p.k}: ${p.v}`:(c.body||"").slice(0,60))}</span><small>${c.kind?esc(c.kind)+" · ":""}나온 글 ${codexHits(c).ws.length}편${(c.rel||[]).length?` · 관계 ${c.rel.length}`:""}</small>${!c.ms&&ROOM_MS?`<button class="btn small ghost cxclaim" onclick="event.stopPropagation();cxClaim('${c.id}')" title="이 원고에서만 쓰는 노트로 옮깁니다">이 원고 것으로</button>`:""}</div>`; };
-    const mine=cs.filter(c=>c.ms), common=cs.filter(c=>!c.ms), mt=S.manuscripts.find(x=>x.id===ROOM_MS)?.title||"이 원고";
+  else { const cardC=c=>{ const p=(c.props||[]).find(x=>x.v); return `<div class="strc cxcard" onclick="stOpen('cx:${c.id}')" role="button" tabindex="0"><b>${cxIc(c)} ${esc(c.name)}</b><span>${esc(p?`${p.k}: ${p.v}`:(c.body||"").slice(0,60))}</span><small>${c.kind?esc(c.kind)+" · ":""}나온 글 ${codexHits(c).ws.length}편${(c.rel||[]).length?` · 관계 ${c.rel.length}`:""}</small>${cxOrphan(c)&&ROOM_MS?`<button class="btn small ghost cxclaim" onclick="event.stopPropagation();cxClaim('${c.id}')" title="이 원고의 노트 창고로 옮깁니다">이 원고로 가져오기</button>`:""}</div>`; };
+    const mine=cs, common=codexLive().filter(cxOrphan).sort((a,b)=>a.name.localeCompare(b.name,"ko")), mt=S.manuscripts.find(x=>x.id===ROOM_MS)?.title||"이 원고";
     body=`<p class="cxgh">『${esc(mt)}』의 노트 <span class="muted">${mine.length}</span></p><div class="strec">${mine.map(cardC).join("")||`<p class="muted" style="margin:0">이 원고에만 쓰는 노트가 아직 없습니다. 「＋ 항목」으로 만들면 이 원고를 열 때만 보입니다.</p>`}</div>
-      ${common.length?`<details class="cxcommon" ${mine.length?"":"open"}><summary class="cxgh">공통 노트 <span class="muted">${common.length} · 모든 원고와 묵상에서 보입니다</span></summary><div class="strec">${common.map(cardC).join("")}</div></details>`:""}`; }
+      ${common.length?`<details class="cxcommon"><summary class="cxgh">어느 원고에도 속하지 않은 예전 노트 <span class="muted">${common.length} · 이 원고에서 쓰는 노트면 「이 원고로 가져오기」</span></summary><div class="strec">${common.map(cardC).join("")}</div></details>`:""}`; }
   return `<section class="sthome cxlist"><div class="row" style="align-items:center;gap:8px;flex-wrap:wrap"><h2 class="sthello" style="font-size:24px;margin:0">${esc(G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex)}</h2><span class="spacer"></span><div class="stviews" style="margin:0">${tab("list","카드")}${tab("table","표")}${tab("graph","관계도")}</div></div>
     <p class="sub">${esc(cxW().what)}마다 항목을 두면 그 이름이 나온 글이 저절로 모입니다. 종류·속성·관계를 정하면 표와 관계도로 봅니다.</p>
     ${kinds.length?`<div class="pills" style="margin-bottom:10px">${CX_VIEW==="table"?"":pill("","모두 "+all.length)}${kinds.map(k=>pill(k,`${CX_ICON[k]} ${k} ${all.filter(c=>c.kind===k).length}`)).join("")}${CX_VIEW!=="table"&&all.some(c=>!c.kind)?pill("-","종류 없음"):""}</div>`:""}
