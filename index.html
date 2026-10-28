@@ -85,10 +85,17 @@ header{padding:22px 0 0}
 .streak{display:flex;align-items:baseline;gap:6px;font-family:"Nanum Pen Script";font-size:21px;color:var(--sepia);line-height:1;white-space:nowrap}
 .streak .n{font-family:"Nanum Myeongjo";font-weight:800;font-size:34px;color:var(--bible);letter-spacing:-.02em;line-height:1}
 .streak .rest{font-size:12.5px;font-family:"Gowun Batang";color:var(--faint);border:1px solid var(--edge);border-radius:999px;padding:1px 8px;margin-right:4px;align-self:center}
-nav{display:flex;gap:6px;margin-top:20px;overflow-x:auto;padding:0 2px}
+nav{display:flex;gap:6px;margin-top:20px;overflow-x:auto;overflow-y:hidden;padding:0 2px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
 nav button{font:inherit;font-size:15px;color:var(--ink-soft);background:var(--paper-2) var(--grain);border:1px solid var(--edge);border-bottom:0;border-radius:10px 10px 0 0;padding:8px 16px 7px;cursor:pointer;white-space:nowrap;transform:translateY(3px);transition:transform .15s}
 nav button:hover{transform:translateY(0)}
 nav button.on{background:var(--paper) var(--grain);color:var(--ink);font-weight:700;transform:translateY(1px);box-shadow:0 -2px 0 var(--sepia) inset}
+/* 글쓰기(글방): 다른 탭과 떨어진 먹빛 탭 — 펜 그림, 손글씨 이름 */
+nav button.navroom{margin-left:auto;display:flex;align-items:center;gap:6px;background:linear-gradient(180deg,#2f3b52,#253045);color:#efe6d4;border-color:#1d2536;font-family:"Nanum Pen Script";font-size:21px;line-height:1;padding:7px 18px 6px;letter-spacing:.02em}
+nav button.navroom .ico{width:16px;height:16px;stroke:#d9b779}
+nav button.navroom:hover{color:#fff}
+nav button.navroom.on{background:linear-gradient(180deg,#34425c,#2a3650);color:#fff;box-shadow:0 -2px 0 #d9b779 inset;font-weight:400}
+:root[data-theme="dark"] nav button.navroom{background:linear-gradient(180deg,#3a4a68,#2c3852);border-color:#46577a}
 .navline{height:1px;background:var(--edge)}
 main.wrap{padding:34px 16px 80px}
 
@@ -368,6 +375,24 @@ body.focus main.wrap{padding-top:40px}
 /* 집중 시간 (뽀모도로) */
 .stkcol{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 .pomomini{display:flex;align-items:center;gap:4px;font-size:13px;background:var(--paper);border:1px solid var(--edge);border-radius:999px;padding:2px 4px 2px 3px;box-shadow:0 4px 12px -8px rgba(0,0,0,.35)}
+/* 아날로그 집중 시계 */
+.pclock .face{fill:var(--paper);stroke:var(--edge);stroke-width:1.2}
+.pclock .wedge{fill:color-mix(in srgb,var(--bible) 78%,transparent)} .pclock.short .wedge,.pclock.long .wedge{fill:color-mix(in srgb,var(--book) 70%,transparent)}
+.pclock .tk{stroke:color-mix(in srgb,var(--ink) 35%,transparent);stroke-width:.8} .pclock .tk.m{stroke:var(--ink-soft);stroke-width:1.4}
+.pclock .cnum{font:600 11px "Nanum Myeongjo",serif;fill:var(--ink-soft);text-anchor:middle}
+.pclock .hand{stroke:var(--ink);stroke-width:2;stroke-linecap:round} .pclock .knob{fill:var(--ink)}
+.pomofloat{position:fixed;z-index:30;display:grid;justify-items:center;gap:4px;padding:10px 10px 8px;border-radius:14px;background:color-mix(in srgb,var(--paper) 82%,transparent);border:1px solid color-mix(in srgb,var(--edge) 70%,transparent);box-shadow:0 10px 26px -18px rgba(0,0,0,.45);opacity:.86;transition:opacity .25s}
+.pomofloat:hover{opacity:1}
+.pomofloat .pfinfo{display:flex;gap:6px;align-items:baseline}
+.pomofloat .pml{font-family:"Nanum Pen Script";font-size:19px;color:var(--bible);line-height:1} .pomofloat.short .pml,.pomofloat.long .pml{color:var(--book)}
+.pomofloat b{font-family:"Nanum Myeongjo";font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}
+.pomofloat .pfbtn{display:flex;gap:2px;opacity:0;transition:opacity .2s;height:24px}
+.pomofloat:hover .pfbtn,.pomofloat:focus-within .pfbtn{opacity:1}
+.pomofloat .pmb{width:26px;height:24px;border-radius:50%;border:0;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:10.5px}
+.pomofloat .pmb:hover{background:var(--paper-2);color:var(--ink)}
+.pomofloat.paused .pfdial{opacity:.55} .pomofloat.waiting{animation:pmw 1.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){ .pomofloat.waiting{animation:none} }
+@media print{ .pomofloat{display:none} }
 .pomomini .pmgo{display:flex;align-items:center;gap:6px;background:none;border:0;cursor:pointer;font:inherit;color:var(--ink);padding:0 2px}
 .pomomini .pml{font-family:"Nanum Pen Script";font-size:17px;color:var(--bible);line-height:1}
 .pomomini.short .pml,.pomomini.long .pml{color:var(--book)}
@@ -412,6 +437,8 @@ hr.dash{border:0;border-top:1px dashed var(--edge);margin:18px 0}
   nav button{flex:1;min-width:0;border:0;border-radius:8px;background:transparent;transform:none;padding:8px 0;font-size:13px}
   nav button:hover{transform:none}
   nav button.on{background:var(--paper-2);box-shadow:none;color:var(--sepia)}
+  nav button.navroom{margin-left:4px;flex:1.15;justify-content:center;gap:3px;border-radius:10px;font-size:17px;padding:8px 0}
+  nav button.navroom.on{background:linear-gradient(180deg,#34425c,#2a3650);color:#fff;box-shadow:inset 0 -2px 0 #d9b779}
   main.wrap{padding:24px 16px 30px}
   .grid{gap:24px;grid-template-columns:1fr}
   .sheet{padding:20px 18px 18px}
@@ -566,7 +593,13 @@ body.focus .wbinder,body.readmode .wbinder{display:none!important}
 .btn.on{background:var(--paper-2);border-color:var(--sepia)}
 body.typew #wbody{padding-bottom:45vh}
 /* 글방 */
-.roomtop{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.roomtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:18px;padding:16px 20px;border-radius:10px;background:linear-gradient(135deg,#2f3b52,#222c40);color:#efe6d4;box-shadow:0 14px 30px -22px rgba(20,24,40,.8)}
+.roomtop h2{font-family:"Nanum Pen Script";font-weight:400;font-size:34px;color:#f3ead8;letter-spacing:.02em}
+.roomtop .muted{color:#b9b3a6}
+.roomtop .btn{background:transparent;color:#efe6d4;border-color:#5b6886} .roomtop .btn:hover{border-color:#d9b779}
+.roomtop .btn.ink{background:#d9b779;color:#1f2638;border-color:#d9b779}
+.roomgrid .roomshelf .label{color:#2f3b52} :root[data-theme="dark"] .roomgrid .roomshelf .label{color:#9fb0d0}
+.roommain{border-top:3px solid #2f3b52}
 .roomgrid{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;align-items:start}
 @media (max-width:880px){ .roomgrid{grid-template-columns:1fr} }
 .roomshelf{display:grid;gap:4px;align-content:start}
@@ -1225,7 +1258,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="10716ac4cb";
+const APP_BUILD="66a04f9fe8";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1836,7 +1869,7 @@ setInterval(()=>{ const d=today(), p=dayPart(); if(d===SHOWN_DAY&&p===SHOWN_PART
 
 // ───────── 화면 ─────────
 // 흐름: 밑줄(읽다 붙잡은 문장) → 글(그 문장으로 쓴 묵상·설교·에세이) → 원고(글을 모아 엮는 책)
-const TABS=[["today","오늘"],["qt","묵상"],["write","글쓰기"],["diary","일기"],["drawer","서랍"],["shelf","책장"]];   // 묵상 = 말씀 글(묵상·설교), 글쓰기 = 책 글·자유 글. 둘 다 같은 쓰기 화면(track 만 다름). 설정은 오른쪽 위 톱니
+const TABS=[["today","오늘"],["qt","묵상"],["diary","일기"],["drawer","서랍"],["shelf","책장"],["write","글쓰기"]];   // 글쓰기(글방)는 따로 떨어진 특별한 방 — 맨 오른쪽, 다른 모양   // 묵상 = 말씀 글(묵상·설교), 글쓰기 = 책 글·자유 글. 둘 다 같은 쓰기 화면(track 만 다름). 설정은 오른쪽 위 톱니
 // 손으로 그린 듯 조금씩 다른 톱니 — 놋쇠 열쇠 같은 아날로그 느낌
 function gearSvg(){
   const n=9, cx=24, cy=24, pts=[];
@@ -1873,7 +1906,7 @@ function render(){
   // 같은 쓰기 화면을 다시 그릴 때(말씀/책 바꾸기, 합친 뒤 등) 쓰던 제목·본문을 그대로 지켜 줍니다
   const keep=!NAV&&tab==="write"&&$("#wbody")?{e:editId,t:$("#wtitle").value,b:$("#wbody").value,p:$("#wpassage")?.value}:null;
   const gb=$("#gearbtn"); if(gb){ if(!gb.firstChild) gb.innerHTML=gearSvg(); gb.classList.toggle("on",tab==="settings"); }
-  $("#nav").innerHTML=TABS.map(([k,n])=>`<button class="${(k==="qt"?tab==="write"&&track==="bible":k==="write"?tab==="room"||(tab==="write"&&track!=="bible"):k===tab)?"on":""}" onclick="${k==="qt"?"go('write',{track:'bible'})":k==="write"?"go('room')":`go('${k}')`}">${n}</button>`).join("");
+  $("#nav").innerHTML=TABS.map(([k,n])=>`<button class="${k==="write"?"navroom ":""}${(k==="qt"?tab==="write"&&track==="bible":k==="write"?tab==="room"||(tab==="write"&&track!=="bible"):k===tab)?"on":""}" onclick="${k==="qt"?"go('write',{track:'bible'})":k==="write"?"go('room')":`go('${k}')`}">${k==="write"?`${ICO.pen}<span>${n}</span>`:n}</button>`).join("");
   paintStreak();
   if(NEED_CONNECT||AUTH_FAIL){ $("#main").innerHTML=connectView(); return; }
   $("#main").innerHTML=(SERVER?"":GAS?`<div class="notice">구글 서버에 아직 닿지 못해 이 기기의 사본을 보여 드립니다. 인터넷을 확인한 뒤 <a href="#" onclick="fetchFresh(false);return false">다시 시도</a></div>`:location.protocol==="file:"?`<div class="notice">파일로 직접 연 상태라 저장이 되지 않습니다. 아침 서재 주소(인터넷)로 열어 주세요.</div>`:"")+VIEWS[tab]();
@@ -4042,12 +4075,35 @@ function pomoCardHtml(){
         <p class="hint">${P.phase==="focus"?`${c.focus}분 집중하고 ${c.short}분 쉽니다. ${c.rounds}번째 뒤에는 ${c.long}분.`:"쉬는 동안은 눈을 감거나 창밖을 보세요."}${c.dnd?" 집중하는 동안 방해금지가 켜집니다.":` <a href="#" onclick="go('settings');setTimeout(()=>$('#pomoset')?.scrollIntoView({block:'center'}),200);return false">맥 방해금지 함께 켜기</a>`}</p>
       </div></div>`;
 }
-function pomoMini(){ const el=$("#pomomini"); if(!el) return; const act=pomoActive(); el.hidden=!act; if(!act){ el.innerHTML=""; return; }
-  const left=pomoLeft(), tot=pomoLen(P.phase)*60000;
-  el.className="pomomini "+P.phase+(P.on?"":" paused")+(P.waiting?" waiting":"");
-  el.innerHTML=`<button class="pmgo" onclick="go('today');setTimeout(()=>$('#pomocard')?.scrollIntoView({block:'center',behavior:'smooth'}),80)" title="집중 시간 카드로">${pomoRing(22,1-left/tot,P.phase,3)}<span class="pml">${P.waiting?(P.phase==="focus"?"다음 집중":"쉼"):PH_NAME[P.phase]}</span><b>${P.waiting?"준비":mmss(left)}</b></button>`
-    +(P.on?`<button class="pmb" onclick="pomoPause()" title="잠시 멈춤" aria-label="잠시 멈춤">❙❙</button>`:`<button class="pmb" onclick="pomoStart()" title="${P.waiting?"시작":"이어서"}" aria-label="시작">▶</button>`)
-    +`<button class="pmb" onclick="pomoStop()" title="그만" aria-label="그만">■</button>`; }
+// 아날로그 집중 시계: 「타임 타이머」처럼 남은 시간만큼의 부채꼴(60분 문자판)이 12시 쪽으로 줄어듭니다
+function pomoClock(sz){ const left=pomoLeft(), min=left/60000, c=sz/2, R=c-2, r=R*.86, ph=P.phase;
+  const ang=Math.min(359.99,Math.max(0,min/60*360)), rad=a=>(a-90)*Math.PI/180, pt=(a,rr)=>[c+rr*Math.cos(rad(a)),c+rr*Math.sin(rad(a))];
+  const [x,y]=pt(ang,r), big=ang>180?1:0, ticks=[];
+  for(let i=0;i<60;i++){ const m=i%5===0, [x1,y1]=pt(i*6,R-1), [x2,y2]=pt(i*6,R-(m?sz*.09:sz*.045)); ticks.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" class="${m?"tk m":"tk"}"/>`); }
+  const nums=sz>=90?[0,15,30,45].map(n=>{ const [tx,ty]=pt(n*6,R-sz*.17); return `<text x="${tx.toFixed(1)}" y="${(ty+sz*.035).toFixed(1)}" class="cnum">${n}</text>`; }).join(""):"";
+  const [hx,hy]=pt(ang,r*.98);
+  return `<svg class="pclock ${ph}" width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" aria-hidden="true"><circle cx="${c}" cy="${c}" r="${R}" class="face"/>
+    ${ang>0.2?`<path d="M${c} ${c} L${c} ${(c-r).toFixed(1)} A${r} ${r} 0 ${big} 1 ${x.toFixed(1)} ${y.toFixed(1)} Z" class="wedge"/>`:""}
+    ${ticks.join("")}${nums}<line x1="${c}" y1="${c}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}" class="hand"/><circle cx="${c}" cy="${c}" r="${Math.max(2.5,sz*.045)}" class="knob"/></svg>`; }
+// 넓은 화면: 본문 오른쪽 빈 공간 위쪽에 고정(스크롤해도 보임). 좁은 화면: 머리의 날 수 아래에 작은 시계
+let PF=null;
+function pomoFloatRoom(){ if(matchMedia("(pointer:coarse)").matches&&innerWidth<1000) return 0; const m=$("#main"); if(!m) return 0; const r=m.getBoundingClientRect(); return innerWidth-r.right; }
+function pomoPlace(){ if(!PF||PF.hidden) return; const m=$("#main"), h=document.querySelector("header"); if(!m) return; const r=m.getBoundingClientRect(), room=innerWidth-r.right, w=PF.offsetWidth||150;
+  PF.style.left=Math.round(r.right+(room-w)/2)+"px"; PF.style.top=Math.round(Math.max(16,(h?h.getBoundingClientRect().bottom:0)+18))+"px"; }
+addEventListener("scroll",()=>{ if(PF&&!PF.hidden) pomoPlace(); },{passive:true});
+addEventListener("resize",()=>{ if(pomoActive()) pomoMini(); });
+function pomoMini(){ const el=$("#pomomini"); if(!el) return; const act=pomoActive();
+  if(!PF){ PF=document.createElement("div"); PF.id="pomofloat"; PF.hidden=true; document.body.appendChild(PF); }
+  const lbl=P.waiting?(P.phase==="focus"?"다음 집중":"쉼 준비"):PH_NAME[P.phase], tm=P.waiting?"준비":mmss(pomoLeft());
+  const btns=(P.on?`<button class="pmb" onclick="pomoPause()" title="잠시 멈춤" aria-label="잠시 멈춤">❙❙</button>`:`<button class="pmb" onclick="pomoStart()" title="${P.waiting?"시작":"이어서"}" aria-label="시작">▶</button>`)+`<button class="pmb" onclick="pomoStop()" title="그만" aria-label="그만">■</button>`;
+  const cls=P.phase+(P.on?"":" paused")+(P.waiting?" waiting":"");
+  const room=pomoFloatRoom(), float=act&&room>=128, dsz=Math.round(Math.max(96,Math.min(132,room-32)));   // 빈 공간 크기에 맞춰 96~132px
+  PF.hidden=!float; el.hidden=!act||float; if(!float) PF.dataset.k="";
+  if(float&&PF.dataset.k===cls&&PF.querySelector(".pfdial")){ PF.querySelector(".pfdial").innerHTML=pomoClock(dsz); PF.querySelector(".pfinfo").innerHTML=`<span class="pml">${lbl}</span><b>${tm}</b>`; pomoPlace(); }
+  else if(float){ PF.dataset.k=cls; PF.className="pomofloat "+cls; PF.innerHTML=`<div class="pfdial" title="${lbl} ${tm}">${pomoClock(dsz)}</div><div class="pfinfo"><span class="pml">${lbl}</span><b>${tm}</b></div><div class="pfbtn">${btns}<button class="pmb" onclick="go('today');setTimeout(()=>$('#pomocard')?.scrollIntoView({block:'center',behavior:'smooth'}),80)" title="집중 시간 카드로" aria-label="카드로">⌂</button></div>`; pomoPlace(); }
+  if(!act){ el.innerHTML=""; return; }
+  if(!float){ el.className="pomomini "+cls;
+    el.innerHTML=`<button class="pmgo" onclick="go('today');setTimeout(()=>$('#pomocard')?.scrollIntoView({block:'center',behavior:'smooth'}),80)" title="집중 시간 카드로">${pomoClock(34)}<span class="pml">${lbl}</span><b>${tm}</b></button>`+btns; } }
 function pomoPaint(full){ pomoMini(); const card=$("#pomocard"); if(!card) return;
   if(full||!$("#pomotime")) card.innerHTML=pomoCardHtml();
   else { const left=pomoLeft(), tot=pomoLen(P.phase)*60000, r=card.querySelector(".pomodial .parc"); $("#pomotime").textContent=mmss(left); if(r){ const c=+r.getAttribute("stroke-dasharray"); r.setAttribute("stroke-dashoffset",(c*(left/tot)).toFixed(1)); } }
