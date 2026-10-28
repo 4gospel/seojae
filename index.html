@@ -643,6 +643,7 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .stn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
 .stsech{margin:10px 8px 2px;font-size:12px;color:var(--faint);font-weight:700;letter-spacing:.04em}
 .stnode{padding-left:calc(8px + var(--d,0)*14px);font-size:13.5px} .stnode.part{color:var(--ink-soft);font-weight:600} .stnode.part .sti{font-size:10px}
+.stnode .stdr{margin-left:auto;flex:none;font-size:11px;font-weight:400;color:var(--sepia);border:1px solid color-mix(in srgb,var(--sepia) 40%,transparent);border-radius:999px;padding:0 6px} .stnode.draft .stn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stnode i.dot{width:7px;height:7px;border-radius:50%;flex:none;margin:0}
 .stadd{margin:4px 0 0 30px;border:1px dashed var(--edge);background:none;border-radius:7px;padding:4px 10px;font:inherit;font-size:12.5px;color:var(--ink-soft);cursor:pointer;align-self:flex-start}
 .stfoot{margin-top:10px;border-top:1px solid var(--edge);padding-top:6px;display:grid;gap:1px} .st-empty{padding:4px 10px;font-size:13px}
@@ -683,9 +684,19 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 @media (pointer:coarse){ .sttab button{min-width:30px;min-height:30px;font-size:18px;margin:-6px -2px -6px 0} }
 .stms-page .ring{position:relative;width:54px;height:54px;flex:none} .stms-page .ring svg{width:54px;height:54px} .stms-page .ring span{position:absolute;inset:0;display:grid;place-items:center;font:11px -apple-system,sans-serif;color:var(--faint)}
 .stmore{position:relative} .stmore summary{list-style:none;padding:6px 12px} .stmore summary::-webkit-details-marker{display:none}
-.stmmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:320px;background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:12px;box-shadow:0 14px 30px -12px rgba(0,0,0,.4);padding:6px;display:grid;gap:2px;font:14px -apple-system,"Apple SD Gothic Neo",sans-serif}
-.stmmenu>button{text-align:left;border:0;background:none;padding:7px 10px;border-radius:6px;cursor:pointer;color:var(--ink);font:inherit} .stmmenu>button:hover{background:color-mix(in srgb,var(--sepia) 14%,transparent)} .stmmenu .danger{color:var(--bible)}
-.stmmenu select{margin:2px 6px;font:inherit;width:auto} .stmmenu .mrow{display:flex;align-items:center;gap:6px;padding:4px 10px;flex-wrap:wrap;color:var(--ink-soft)} .stmmenu .mrow input{width:auto} .stmmenu hr{border:0;border-top:1px solid var(--edge);margin:4px}
+/* 원고 관리 메뉴: 구획(차례·원고 정보·원고) — 모든 줄이 같은 왼쪽 선(아이콘 칸 22px)에, 칸은 메뉴 폭 안에서만 */
+.stmmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:300px;max-width:calc(100vw - 24px);box-sizing:border-box;background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:12px;box-shadow:0 14px 30px -12px rgba(0,0,0,.4);padding:6px;display:grid;gap:1px;font:14px -apple-system,"Apple SD Gothic Neo",sans-serif}
+.stmmenu .mh{margin:6px 10px 2px;font-size:11.5px;letter-spacing:.06em;color:var(--faint);display:flex;justify-content:space-between;align-items:baseline} .stmmenu .mh small{letter-spacing:0;font-size:11px}
+.stmmenu>button,.stmmenu .mpick{display:flex;align-items:center;gap:8px;text-align:left;border:0;background:none;padding:7px 10px;border-radius:7px;cursor:pointer;color:var(--ink);font:inherit;min-height:34px;box-sizing:border-box;width:100%}
+.stmmenu>button:hover,.stmmenu .mpick:hover{background:color-mix(in srgb,var(--sepia) 12%,transparent)} .stmmenu .danger{color:var(--bible)}
+.stmmenu i{font-style:normal;width:16px;flex:none;text-align:center;color:var(--sepia);font-size:13px} .stmmenu .danger i{color:var(--bible)} .stmmenu>button small{color:var(--faint);font-size:12px;margin-left:2px}
+.stmmenu .mpick select{flex:1;min-width:0;width:100%;border:0;background:none;padding:0;margin:0;font:inherit;color:var(--ink);cursor:pointer;box-shadow:none;outline-offset:2px}
+.stmmenu .mrow{display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:8px;padding:4px 10px;color:var(--ink-soft);min-height:36px}
+.stmmenu .mrow span{font-size:13px;color:var(--faint)} .stmmenu .mrow em{font-style:normal;font-size:12.5px;color:var(--faint)}
+.stmmenu .mrow select,.stmmenu .mrow input{width:100%;min-width:0;box-sizing:border-box;margin:0;font:inherit;padding:5px 8px;border:1px solid var(--edge);border-radius:8px;background:var(--paper)}
+.stmmenu .mrow select{grid-column:2/4} .stmmenu .mrow input[type=date]{grid-column:2/4}
+.stmmenu hr{border:0;border-top:1px solid var(--edge);margin:5px 4px}
+@media (max-width:700px){ .stmmenu>button,.stmmenu .mpick{min-height:42px} .stmmenu .mrow{min-height:44px} }
 .stviews{display:inline-flex;gap:2px;padding:3px;border-radius:10px;background:color-mix(in srgb,var(--edge) 40%,transparent);margin-bottom:14px} .stviews button{border:0;background:none;padding:5px 14px;border-radius:8px;cursor:pointer;font:13.5px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft)} .stviews button.on{background:var(--paper);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .studio .writegrid{grid-template-columns:minmax(0,1fr)!important} .studio .writegrid>aside{display:none}
 body.staside .studio .writegrid{grid-template-columns:minmax(0,1fr) 290px!important} body.staside .studio .writegrid>aside{display:block}
@@ -761,6 +772,9 @@ body.focus .stside,body.focus .sttabs{display:none} body.focus .studio{grid-temp
   body.sidefold .writegrid.hasbinder .wbinder{display:block;position:sticky;top:12px;font-size:13.5px;max-height:calc(100vh - 24px);overflow:auto}
 }
 body.focus .wbinder,body.readmode .wbinder{display:none!important}
+/* 글방(.studio) 안에서는 쓰기 화면 차례 칸(.wbinder)을 숨기므로, 곁 칸을 접어 둔 채(sidefold) 원고에 든 글을 열어도 「210px 차례 + 글」 배치가 끼어들지 않게 (글 칸이 210px로 찌그러지던 문제) */
+#main .studio .writegrid,body.sidefold #main .studio .writegrid.hasbinder{grid-template-columns:minmax(0,1fr)!important}
+body.staside #main .studio .writegrid,body.staside.sidefold #main .studio .writegrid.hasbinder{grid-template-columns:minmax(0,1fr) 290px!important}
 .wbinder ol{list-style:none;margin:0;padding:0;display:grid;gap:1px}
 .wbinder li{display:flex;gap:6px;align-items:center;padding:4px 6px;border-radius:4px;min-width:0}
 .wbinder li a{color:var(--ink-soft);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1498,7 +1512,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="26b32ff37b";
+const APP_BUILD="69885dcd8b";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3161,7 +3175,7 @@ settings(){
 };
 const AFTER={
   diary(){ paintPalette(); stkFitAll(); },
-  write(){ if($("#aipanel")){ if(AI_KEY!==aiKeyNow()) aiLoad(); aiDraw(); } READVIEW=false; EDIT_BASE=editId?(S.writings.find(x=>x.id===editId)?.updated||null):null; EDIT_WARNED=false; grow(); countW(); restoreDraft(); paintPalette(); stkFitAll(); paintSu(); keepAwake(true); },
+  write(){ if($("#aipanel")){ if(AI_KEY!==aiKeyNow()) aiLoad(); aiDraw(); } READVIEW=false; EDIT_BASE=editId?(S.writings.find(x=>x.id===editId)?.updated||null):null; EDIT_WARNED=false; grow(); countW(); restoreDraft(); stDraftPaint(); paintPalette(); stkFitAll(); paintSu(); keepAwake(true); },
   drawer(){ if(drawerSub==="all") renderArchive(); },
   room(){ roomDnd(); },
   today(){ pomoPaint(); },
@@ -4317,8 +4331,9 @@ function roomNewPiece(mid){ const m=S.manuscripts.find(x=>x.id===mid); const g=G
 function partNum(m,pid){ let a=0,b=0,out=""; msSeq(m).forEach(x=>{ if(!x.p) return; if(x.p.lv===1){ a++; b=0; } else b++; if(x.p.id===pid) out=x.p.lv===1?`${a}.`:`${a||1}.${b}`; }); return out; }
 function saveScene(wid,k,v){ metaSet(wid,k,v); }
 function setWStatus(wid,st){ const w=S.writings.find(x=>x.id===wid); if(!w||!WSTATUS.includes(st)||w.status===st) return; w.status=st; w.updated=new Date().toISOString(); save(); render(); toast(`「${w.title||"(제목 없음)"}」 → ${st}`); if(canSync()) syncWriting(w,true); }
-function saveMsGoal(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const g=+$("#msgoal").value, d=$("#msdue").value;
-  m.goal=g>0?Math.round(g):null; m.due=/^\d{4}-\d{2}-\d{2}$/.test(d)?d:null; save(); toast("목표를 저장했습니다"); render(); }
+function saveMsGoal(mid,keepOpen){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const g=+$("#msgoal").value, d=$("#msdue").value;
+  m.goal=g>0?Math.round(g):null; m.due=/^\d{4}-\d{2}-\d{2}$/.test(d)?d:null; m.updated=new Date().toISOString(); save(); toast("목표·마감을 저장했습니다");
+  if(keepOpen){ const dt=$("details.stmore"); if(dt) dt.dataset.dirty="1"; return; } render(); }   // 메뉴 안에서 바꾸면 메뉴는 열어 둔 채, 닫을 때 머리 줄을 새로 그림
 // ───────── 글방 = 작업실 (펜시브식): 왼쪽 칸(원고 고르기·둘러보기·작품 나무·휴지통), 가운데 탭과 홈 ─────────
 let ST_ACT="home", STUDIO_TABS=(()=>{ try{ const t=JSON.parse(localStorage.getItem("seojae.stTabs")||"null"); return Array.isArray(t)&&t.length?t:["home"]; }catch(_){ return ["home"]; } })();
 let ST_FOLD=(()=>{ try{ return new Set(JSON.parse(localStorage.getItem("seojae.stFold")||"[]")); }catch(_){ return new Set(); } })();
@@ -4340,14 +4355,20 @@ function stClose(k,e){ e?.stopPropagation();
   if(cur===k) stOpen(STUDIO_TABS[Math.max(0,i-1)]||"home"); else { const bar=$(".sttabs"); if(bar) bar.outerHTML=stTabs(cur); } }
 function stCur(){ if(tab==="write") return editId?"w:"+editId:"draft"; return ROOM_NEW?"new":ROOM_CODEX?"cx:"+ROOM_CODEX:ROOM_MAP?"map":ST_ACT; }
 function stTabs(cur){ STUDIO_TABS=STUDIO_TABS.filter(stValid); if(!STUDIO_TABS.includes("home")) STUDIO_TABS.unshift("home"); const list=[...STUDIO_TABS]; if(!list.includes(cur)) list.push(cur); if(cur!=="draft"&&bookDraft()) list.push("draft");
-  return `<div class="sttabs"><button class="stburger" onclick="document.body.classList.toggle('stnav')" title="원고 목차·메모·자료">☰ 목차</button><div class="sttabrow">${list.map(k=>{ const [ic,n]=stLabel(k); return `<div class="sttab ${k===cur?"on":""}" onclick="stOpen('${k}')" title="${esc(n)}"><span class="sti">${ic}</span><span class="stn">${esc(n)}</span>${k==="home"?"":`<button onclick="stClose('${k}',event)" title="탭 닫기">×</button>`}</div>`; }).join("")}</div></div>`; }
+  return `<div class="sttabs"><button class="stburger" onclick="document.body.classList.toggle('stnav')" title="원고 목차·메모·자료">☰ 목차</button><div class="sttabrow">${list.map(k=>{ const [ic,n]=stLabel(k); return `<div class="sttab ${k===cur?"on":""}" onclick="stOpen('${k}')" title="${esc(n)}"><span class="sti">${ic}</span><span class="stn" ${k==="draft"&&k===cur?`data-drafttitle data-empty="새 글"`:""}>${esc(n)}</span>${k==="home"?"":`<button onclick="stClose('${k}',event)" title="탭 닫기">×</button>`}</div>`; }).join("")}</div></div>`; }
 function stTree(m,cur){ if(!m) return `<p class="muted st-empty">원고가 아직 없습니다.</p>`; const g=G(m); let out="", hide=0, lv=0;
   out+=`<div class="stnode ms ${cur==="ms:"+m.id?"on":""}" onclick="stOpen('ms:${m.id}')" style="--d:0"><span class="sti">▦</span><span class="stn">${esc(m.title)}</span></div>`;
   msSeq(m).forEach(x=>{ if(x.p){ lv=x.p.lv; if(x.p.lv===1) hide=ST_FOLD.has(x.p.id)?1:0; else if(hide===2||(hide===0&&ST_FOLD.has(x.p.id))) hide=ST_FOLD.has(x.p.id)?2:0; if(hide===1&&x.p.lv>1) return;
       out+=`<div class="stnode part" style="--d:${x.p.lv}" onclick="stFold('${x.p.id}')"><span class="sti">${ST_FOLD.has(x.p.id)?"▸":"▾"}</span><span class="stn">${esc(x.p.t)}</span></div>`; return; }
     if(hide) return; const w=x.w, k="w:"+w.id;
     out+=`<div class="stnode w ${cur===k?"on":""}" style="--d:${lv+1}" onclick="stOpen('${k}')" title="${esc(stOf(w))} · ${chars(w.body).toLocaleString()}자"><span class="sti">✎</span><span class="stn">${esc(w.title||"(제목 없음)")}</span><i class="dot ${ST_CLS[stOf(w)]}"></i></div>`; });
+  const dr=stDraftOf(m); if(dr) out+=`<div class="stnode w draft ${cur==="draft"?"on":""}" style="--d:1" onclick="stOpen('draft')" title="아직 간직하기 전입니다 — 간직하면 이 원고에 들어갑니다"><span class="sti">✎</span><span class="stn" data-drafttitle data-empty="새 ${esc(g.item)}">${esc(dr.t||"새 "+g.item)}</span><small class="stdr">${cur==="draft"?"쓰는 중":"쓰던 글"}</small></div>`;
   return out+(m.rule?"":`<button class="stadd" onclick="roomNewPiece('${m.id}')">＋ 새 ${esc(g.item)}</button>`); }
+// 간직 전 새 글도 목차·탭에 제목으로 보이게 (제목을 치면 바로 바뀜). 지금 쓰는 새 글이면 그 칸, 아니면 남겨 둔 쓰던 글(임시 보관)
+function stDraftOf(m){ if(tab==="write"&&!editId&&track==="book"&&SEL_MS===m.id){ const d=bookDraft(); return {t:($("#wtitle")?.value??(d?.ms===m.id?d.title:"")??"").trim()}; }
+  const d=bookDraft(); return d&&d.ms===m.id?{t:String(d.title||"").trim()}:null; }
+function stDraftPaint(){ if(tab!=="write"||editId) return; const t=($("#wtitle")?.value||"").trim(); document.querySelectorAll("[data-drafttitle]").forEach(x=>x.textContent=t||x.dataset.empty); }
+document.addEventListener("input",e=>{ if(e.target?.id==="wtitle") stDraftPaint(); });
 function stFold(id){ ST_FOLD.has(id)?ST_FOLD.delete(id):ST_FOLD.add(id); stSave(); const t=$("#sttree"); if(t){ const m=S.manuscripts.find(x=>x.id===ROOM_MS); t.innerHTML=stTree(m,stCur()); } }
 function stSide(cur){ const ms=liveMs(), m=ms.find(x=>x.id===ROOM_MS)||ms[0]||null; const g=G(m), seeds=(m?.seeds||[]).filter(x=>!x.done).length;
   const nav=(k,ic,n,c)=>`<button class="stnavi ${cur===k||(k==="codex"&&cur.startsWith("cx:"))?"on":""}" onclick="stOpen('${k}')"><span class="sti">${ic}</span>${n}${c?`<span class="stc">${c}</span>`:""}</button>`;
@@ -4440,12 +4461,15 @@ function msPageHtml(m){ const g=G(m), ws=msList(m), chs=msChars(m), pages=msPage
       <div style="flex:1;min-width:0"><h2 class="sthello" style="font-size:26px;margin:0;text-align:left">${esc(m.title)}</h2>
       <div class="muted">${esc(g.n)} · ${ws.length}${esc(g.item)} · 원고지 약 ${pages}매${m.goal?` · 목표 ${unitFmt(m.goal,g.unit)}`:""}${td>0?` · 오늘 +${unitFmt(td,g.unit)}`:""}${dd!=null?` · ${dd>0?"마감 D-"+dd:dd===0?"오늘 마감":"마감 "+(-dd)+"일 지남"}`:""}</div></div>
       ${m.rule?"":`<button class="btn ink" onclick="roomNewPiece('${m.id}')">${ICO.pen}새 ${esc(g.item)}</button>`}
-      <details class="stmore"><summary class="btn" title="부·장 나누기, 써 둔 글 넣기, 성격·목표, 검토·보내기, 휴지통">원고 관리 ▾</summary><div class="stmmenu">
-        ${m.rule?`<button onclick="freezeMs('${m.id}')">직접 다듬기로 바꾸기</button>`:`<button onclick="addPart('${m.id}',1)">＋ ${esc(g.parts[0])} 나누기</button><button onclick="addPart('${m.id}',2)">＋ ${esc(g.parts[1])} 나누기</button>
-        ${others.length?`<select onchange="msAdd('${m.id}',this.value)"><option value="">＋ 써 둔 글 넣기…</option>${others.map(w=>`<option value="${w.id}">${esc(w.date)} · [${esc(wTag(w))}] ${esc(w.title||pv(w,20))}</option>`).join("")}</select>`:""}`}
-        <hr><label class="mrow">글의 성격 <select onchange="setMsGenre('${m.id}',this.value)">${Object.entries(GENRES).map(([k,x])=>`<option value="${k}" ${g===x?"selected":""}>${x.n}</option>`).join("")}</select></label>
-        <div class="mrow">목표 <input id="msgoal" type="number" min="0" value="${m.goal||""}" placeholder="${g.unit==="매"?"원고지 매수":g.unit==="자"?"글자 수":"편 수"}" style="width:110px"> 마감 <input id="msdue" type="date" value="${esc(m.due||"")}"><button class="btn small" onclick="saveMsGoal('${m.id}')">저장</button></div>
-        <hr><button onclick="roomRename('${m.id}')">이름 바꾸기</button><button onclick="reviewMs('${m.id}')">원고 검토 받기 (AI)</button><button onclick="sendOpen('ms','${m.id}')">보내기 · 가져오기 (PDF·워드·노션)</button><button class="danger" onclick="delMs('${m.id}')">휴지통에</button></div></details></div>
+      <details class="stmore" ontoggle="if(!this.open&&this.dataset.dirty)render()"><summary class="btn" title="부·장 나누기, 써 둔 글 넣기, 성격·목표, 검토·보내기, 휴지통">원고 관리 ▾</summary><div class="stmmenu">
+        <p class="mh">차례</p>
+        ${m.rule?`<button onclick="freezeMs('${m.id}')"><i>✎</i>직접 다듬기로 바꾸기</button>`:`<button onclick="addPart('${m.id}',1)"><i>＋</i>${esc(g.parts[0])} 나누기</button><button onclick="addPart('${m.id}',2)"><i>＋</i>${esc(g.parts[1])} 나누기</button>
+        ${others.length?`<label class="mpick"><i>＋</i><select onchange="msAdd('${m.id}',this.value)" aria-label="써 둔 글 넣기"><option value="">써 둔 글 넣기…</option>${others.map(w=>`<option value="${w.id}">${esc(w.date)} · [${esc(wTag(w))}] ${esc(w.title||pv(w,20))}</option>`).join("")}</select></label>`:""}`}
+        <hr><p class="mh">원고 정보 <small>바꾸면 바로 저장</small></p>
+        <label class="mrow"><span>성격</span><select onchange="setMsGenre('${m.id}',this.value)">${Object.entries(GENRES).map(([k,x])=>`<option value="${k}" ${g===x?"selected":""}>${x.n}</option>`).join("")}</select></label>
+        <label class="mrow"><span>목표</span><input id="msgoal" type="number" min="0" inputmode="numeric" value="${m.goal||""}" placeholder="${g.unit==="매"?"원고지 매수":g.unit==="자"?"글자 수":"편 수"}" onchange="saveMsGoal('${m.id}',true)"><em>${esc(g.unit)}</em></label>
+        <label class="mrow"><span>마감</span><input id="msdue" type="date" value="${esc(m.due||"")}" onchange="saveMsGoal('${m.id}',true)"></label>
+        <hr><button onclick="roomRename('${m.id}')"><i>✎</i>이름 바꾸기</button><button onclick="reviewMs('${m.id}')"><i>✦</i>원고 검토 받기 (AI)</button><button onclick="sendOpen('ms','${m.id}')"><i>↗</i>보내기 · 가져오기 <small>PDF·워드·노션</small></button><hr><button class="danger" onclick="delMs('${m.id}')"><i>${ICO.trash.replace('class="ico"','class="ico" style="margin:0;width:14px;height:14px"')}</i>휴지통에</button></div></details></div>
     <div class="stviews">${views.map(([k,n])=>`<button class="${(ROOM_VIEW==="research"?"binder":ROOM_VIEW)===k?"on":""}" onclick="roomSetView('${k}')">${n}</button>`).join("")}</div>
     ${msBodyHtml(m,ROOM_VIEW==="research"?"binder":ROOM_VIEW)}
     ${m.review?`<div class="revall"><p class="label" style="margin:0 0 4px">원고 검토 <small class="hint" style="display:inline">· ${esc((m.review.at||"").slice(0,10))}</small></p><p class="sub" style="margin:0">${esc(m.review.overall||"")}</p></div>`:""}</section>`; }
