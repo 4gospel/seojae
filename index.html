@@ -645,6 +645,23 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .stmsmenu{display:grid;gap:2px;padding:4px;margin:4px 0 6px;border:1px solid var(--edge);border-radius:10px;background:var(--paper)} .stmsmenu button{display:grid;text-align:left;border:0;background:none;padding:6px 8px;border-radius:7px;cursor:pointer;color:var(--ink);font:inherit} .stmsmenu button small{color:var(--faint);font-size:12px} .stmsmenu button:hover,.stmsmenu button.on{background:color-mix(in srgb,var(--ink) 7%,transparent)}
 .stnavs{display:grid;gap:1px;margin:2px 0 4px}
 /* ① 글방 전체 — 맨 위, 원고보다 한 단계 위 */
+.stud{flex:none;white-space:nowrap;margin-left:auto;border:1px solid var(--edge);border-radius:99px;padding:2px 9px;font-size:11.5px;font-weight:500;opacity:1!important;color:var(--ink-soft);background:var(--paper);line-height:1.5} .stms summary:hover .stud{border-color:var(--sepia);color:var(--ink)} .stms[open] .stud{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cwtabs{margin:0 0 12px} .cwwrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px} .cwitem{display:inline-flex;align-items:center;gap:2px;border:1.5px dashed color-mix(in srgb,var(--common) 45%,transparent);border-radius:99px;padding:1px 4px 1px 2px}
+.cwchip{border:0;background:none;cursor:pointer;font:14px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--common);padding:3px 8px;border-radius:99px} .cwchip:hover{background:color-mix(in srgb,var(--common) 10%,transparent)} .cwchip small{color:var(--faint)}
+.cwbook{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:8px 0;border-bottom:1px dashed var(--edge)} .cwbook>b{min-width:90px;color:var(--ink)} .cwbook>span{display:flex;flex-wrap:wrap;gap:4px}
+.cwfreq{list-style:none;margin:0;padding:0;display:grid;gap:4px} .cwfreq li{display:flex;align-items:center;gap:6px} .cwfreq li>button:first-child{flex:1;display:grid;grid-template-columns:minmax(90px,160px) 1fr;gap:2px 10px;align-items:center;border:0;background:none;text-align:left;cursor:pointer;padding:6px 8px;border-radius:8px;color:var(--ink);font:14px -apple-system,sans-serif} .cwfreq li>button:first-child:hover{background:color-mix(in srgb,var(--common) 7%,transparent)} .cwfreq b{color:var(--common)} .cwfreq small{grid-column:2;color:var(--faint);font-size:12px}
+.cwbar{height:6px;border-radius:3px;background:var(--edge);overflow:hidden} .cwbar i{display:block;height:100%;background:var(--common)}
+.stthink>span:last-child{display:grid;line-height:1.25} .stthink small{font-size:11px;color:var(--faint);font-weight:400}
+.thmeet{border:1px solid var(--edge);border-radius:12px;background:var(--paper);padding:8px 12px;margin-bottom:12px} .thpair{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:5px 0;border-top:1px dashed var(--edge)} .thpair:first-of-type{border-top:0}
+.thpair>button:not(.btn){border:1px solid var(--edge);background:color-mix(in srgb,var(--paper) 60%,#fff);border-radius:10px;padding:4px 10px;cursor:pointer;display:grid;text-align:left;font:13.5px/1.35 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink);min-width:0;max-width:40%} .thpair b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .thpair small{color:var(--faint);font-size:11.5px}
+.thmid{font-size:12px;color:var(--sepia);white-space:nowrap} .thmid::before{content:"— "} .thmid::after{content:" —"}
+.thgraph{border:1px solid var(--edge);border-radius:12px;background:var(--paper)} .thgraph svg{width:100%;height:auto;display:block} .the{stroke:var(--sepia);opacity:.45} .thel{font:11.5px -apple-system,sans-serif;fill:var(--ink-soft);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:4px} .thn{cursor:pointer} .thn circle{stroke:var(--paper);stroke-width:3} .thn:hover circle{stroke:var(--ink)} .thnl{font:600 12.5px -apple-system,sans-serif;fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:4px} .thnl.big{font-size:14.5px} .thci{font:600 12px -apple-system,sans-serif;fill:#fff;text-anchor:middle}
+.thcard{border:1px solid var(--edge);border-radius:12px;background:var(--paper);padding:10px 14px;margin:10px 0} .thdot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.thchips{display:flex;flex-wrap:wrap;gap:4px} .thchips button{border:1px solid var(--edge);background:none;border-radius:99px;padding:1px 10px;font:12.5px -apple-system,sans-serif;color:var(--ink);cursor:pointer} .thchips button:hover{border-color:var(--sepia)} .thchips small{color:var(--faint)}
+.thnear,.thline{list-style:none;margin:0;padding:0;display:grid;gap:4px} .thli{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;text-align:left;padding:6px 8px;border-radius:8px;cursor:pointer;color:var(--ink);font:13.5px -apple-system,"Apple SD Gothic Neo",sans-serif;flex-wrap:wrap} .thli:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)} .thli small{color:var(--faint);font-size:12px}
+.thline{border-left:2px solid var(--edge);margin-left:6px;padding-left:10px} .thline li{display:flex;align-items:center;gap:6px} .thline .thdot{margin-left:-16px}
+.thask{margin-top:10px;border-left:3px solid #7a5aa8;background:color-mix(in srgb,#7a5aa8 7%,transparent);padding:8px 12px;border-radius:0 8px 8px 0;font-size:14px}
+.thhome{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;width:100%;text-align:left;border:1px solid var(--edge);border-radius:12px;background:var(--paper);padding:10px 14px;cursor:pointer;font:14px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)} .thhome span{color:var(--faint);font-size:12px} .thhome i{font-style:normal;color:var(--sepia);font-size:12.5px} .thhome i::before{content:"⟷ "} .thhome:hover{border-color:var(--sepia)}
 .sttop{display:grid;gap:2px;padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid var(--edge)}
 .sthomebtn{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;cursor:pointer;text-align:left;padding:8px;border-radius:10px;color:var(--ink);font:inherit}
 .sthomebtn:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)} .sthomebtn.on{background:var(--ink);color:var(--paper)} .sthomebtn.on small{color:color-mix(in srgb,var(--paper) 75%,transparent)}
@@ -1602,7 +1619,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="002a382a74";
+const APP_BUILD="d43d1ec9f6";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4662,7 +4679,7 @@ function stTrim(keep){ let rest=STUDIO_TABS.filter(x=>x!=="home");
 function stAdd(k){ if(!k||k==="draft") return; if(!STUDIO_TABS.includes("home")) STUDIO_TABS.unshift("home"); ST_USED[k]=Date.now(); if(!STUDIO_TABS.includes(k)) STUDIO_TABS.push(k); stTrim(k); stSave(); }
 function stValid(k){ if(["home","map","memo","res","codex","new","common"].includes(k)) return true; const [t,id]=[k.slice(0,k.indexOf(":")),k.slice(k.indexOf(":")+1)];
   if(t==="w") return live().some(w=>w.id===id); if(t==="ms") return liveMs().some(m=>m.id===id); if(t==="cx") return codexLive().some(c=>c.id===id); return false; }
-function stLabel(k){ if(k==="home") return [ICO.closed.replace('class="ico"','class="ico" style="display:none"')+"⌂","글방 홈"]; if(k==="map") return ["⋰","글 연결 그림"]; if(k==="common") return ["◎",CX_COMMON]; if(k==="memo") return ["▤","메모"]; if(k==="res") return ["⧉","자료 모음"]; if(k==="codex") return ["◎",G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex||"인물·주제 노트"]; if(k==="new") return ["＋","새 원고"]; if(k==="draft"){ if(stCur()==="draft") return ["✎","새 글"]; const d=bookDraft(); return ["✎",d?.title?d.title+" (쓰던 글)":"쓰던 새 글"]; }
+function stLabel(k){ if(k==="home") return [ICO.closed.replace('class="ico"','class="ico" style="display:none"')+"⌂","글방 홈"]; if(k==="map") return ["✺","생각 지도"]; if(k==="common") return ["◎",CX_COMMON]; if(k==="memo") return ["▤","메모"]; if(k==="res") return ["⧉","자료 모음"]; if(k==="codex") return ["◎",G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex||"인물·주제 노트"]; if(k==="new") return ["＋","새 원고"]; if(k==="draft"){ if(stCur()==="draft") return ["✎","새 글"]; const d=bookDraft(); return ["✎",d?.title?d.title+" (쓰던 글)":"쓰던 새 글"]; }
   const id=k.slice(k.indexOf(":")+1); if(k.startsWith("w:")){ const w=S.writings.find(x=>x.id===id); return ["✎",w?.title||"(제목 없음)"]; } if(k.startsWith("ms:")) return ["▦",S.manuscripts.find(x=>x.id===id)?.title||"원고"]; if(k.startsWith("cx:")) return ["◎",codexLive().find(c=>c.id===id)?.name||"노트"]; return ["",k]; }
 function stOpen(k){ document.body.classList.remove("stnav"); if(k==="draft"){ if(tab==="write"&&!editId) return; const d=bookDraft(); return go('write',{new:true,track:"book",ms:d?.ms||null}); } if(k.startsWith("ms:")) stMsSwitch(k.slice(3)); stAdd(k);
   if(k.startsWith("w:")) return go('write',{edit:k.slice(2)});
@@ -4697,7 +4714,7 @@ function stSide(cur){ const ms=liveMs(), m=ms.find(x=>x.id===ROOM_MS)||ms[0]||nu
   const nav=(k,ic,n,c)=>`<button class="stnavi ${cur===k||(k==="codex"&&cur.startsWith("cx:")&&!cxOrphan(codexLive().find(c=>"cx:"+c.id===cur)||{}))?"on":""}" onclick="stOpen('${k}')"><span class="sti">${ic}</span>${n}${c?`<span class="stc">${c}</span>`:""}</button>`;
   // 왼쪽 칸 세 단계: ① 글방 전체(홈 · 글 연결 그림 — 모든 원고에 걸침) ② 지금 원고 상자(원고 고르기 · 그 원고의 창고 · 목차) ③ 공통 창고(말씀 노트)
   return `<aside class="stside" id="stside">
-    <div class="sttop"><button class="sthomebtn ${cur==="home"?"on":""}" onclick="stOpen('home')" title="모든 원고를 아우르는 글방의 첫 화면 — 최근 글·목표·마감"><span class="sthomeic">⌂</span><span><b>글방 홈</b><small>모든 원고 · 최근 글 · 목표</small></span></button>${nav("map","⋰","글 연결 그림")}</div>
+    <div class="sttop"><button class="sthomebtn ${cur==="home"?"on":""}" onclick="stOpen('home')" title="모든 원고를 아우르는 글방의 첫 화면 — 최근 글·목표·마감"><span class="sthomeic">⌂</span><span><b>글방 홈</b><small>모든 원고 · 최근 글 · 목표</small></span></button><button class="stnavi stthink ${cur==="map"?"on":""}" onclick="stOpen('map')" title="모든 글(묵상·설교·글방·일기·밑줄) 사이를 생각으로 건너갑니다"><span class="sti">✺</span><span><b>생각 지도</b><small>모든 글 사이를 건너기</small></span></button></div>
     <div class="stmsbox g-${esc(m?.genre||"free")}"><p class="stsech stmsh">지금 원고</p>
     <details class="stms"><summary title="${m?`『${esc(m.title)}』 · ${esc(g.n)} — 원고 바꾸기`:"원고 고르기"}"><span class="stlogo g-${esc(m?.genre||"free")}">${m?esc(g.ic):"✎"}</span><span class="stmst"><span class="stn">${esc(m?.title||"원고 고르기")}</span>${m?`<small class="stgen g-${esc(m.genre||"free")}">${esc(g.n)} · ${msList(m).length}${esc(g.item)}</small>`:""}</span><span class="stud">바꾸기 ▾</span></summary>
       <div class="stmsmenu">${ms.map(x=>`<button class="${m&&x.id===m.id?"on":""}" onclick="this.closest('details').open=false;stOpen('ms:${x.id}')"><span class="stlogo sm g-${esc(x.genre||"free")}">${esc(G(x).ic)}</span><span><b>${esc(x.title)}</b><small>${esc(G(x).n)} · ${msList(x).length}${esc(G(x).item)}</small></span></button>`).join("")}<button onclick="this.closest('details').open=false;stOpen('new')">＋ 새 원고</button></div></details>
@@ -4714,6 +4731,7 @@ function stHome(m){ const g=G(m), rec=live().filter(w=>w.track==="book"||liveMs(
   const card=(on,ic,t,sk)=>`<button class="stcard" onclick="${on}"><span class="stct">${ic} ${t}</span><span class="sketch ${sk}"><i></i><i></i><i></i><i></i></span></button>`;
   return `<section class="sthome"><h2 class="sthello">${stHello()}</h2>
     <div class="stcards">${m&&!m.rule?card(`roomNewPiece('${m.id}')`,"✎",`새 ${esc(g.item)}`,"doc"):""}${card(`go('write',{track:'book',new:true,type:'자유 글'})`,"✐","자유 글","doc2")}${card(`stOpen('memo');setTimeout(()=>$('#memoin')?.focus(),60)`,"▤","새 메모","stk")}${m?card(`ROOM_VIEW='cork';stOpen('ms:${m.id}')`,"▦","목차 카드","cork"):""}${card(`stOpen('new')`,"＋","새 원고","stack")}</div>
+    ${thHomeCard()}
     <div class="row" style="align-items:baseline"><p class="sthl">최근에 연 글</p><span class="spacer"></span>${rec.length>=6?`<button class="btn small ghost" onclick="ST_REC_MORE=!ST_REC_MORE;render()">${ST_REC_MORE?"줄이기":"더 보기"}</button>`:""}</div>
     <div class="strec">${rec.map(w=>{ const wm=liveMs().find(x=>!x.rule&&(x.items||[]).includes(w.id)), where=wm?[wm.title,...msPath(wm,w.id)].join(" › "):"";
       return `<button class="strc" onclick="stOpen('w:${w.id}')"><b>✎ ${esc(w.title||"(제목 없음)")}</b><span>${esc(pv(w,60))}</span><small>${stAgo(w.updated||w.date)}${where?` · ${esc(where)}`:""}</small></button>`; }).join("")||`<p class="muted">아직 쓴 글이 없습니다.</p>`}</div>
@@ -4856,7 +4874,7 @@ function roomPage(){
   const cur=stCur(); let main;
   if(cur==="new") main=roomNewHtml();
   else if(cur.startsWith("cx:")){ const cx=codexLive().find(c=>c.id===ROOM_CODEX); main=cx?codexPage(cx):stCodexList(); }
-  else if(cur==="map") main=mapPage();
+  else if(cur==="map") main=thinkPage();
   else if(cur==="memo") main=stMemo(m);
   else if(cur==="codex") main=stCodexList();
   else if(cur==="common") main=stCodexList(true);
@@ -5060,11 +5078,24 @@ function codexSave(id){ const c=(S.codex||[]).find(x=>x.id===id); if(!c) return;
   const rel=[...document.querySelectorAll("#cxrels .cxrel")].map(r=>({to:r.querySelector("[data-rt]").value,label:r.querySelector("[data-rl]").value.trim()})).filter(r=>r.to); if(rel.length) c.rel=rel; else delete c.rel;
   c.updated=new Date().toISOString(); save(); toast("간직했습니다"); render(); }
 // 설정 목록: 카드 · 표(같은 종류 비교) · 관계도
+let CW_VIEW="abc"; const CW_NAME={장소:"지명",개념:"용어"};
+const cxCopyBtn=c=>`<button class="btn small ghost cxclaim" onclick="cxCopyMenu('${c.id}',event)" title="원고의 노트로 복사합니다 (원본은 공통에 그대로)">⧉ 원고로</button>`;
 function stCodexList(common){ const all=cxScope(common?null:ROOM_MS).slice().sort((a,b)=>a.name.localeCompare(b.name,"ko")), kinds=CX_KINDS.filter(k=>all.some(c=>c.kind===k)), cs=all.filter(c=>!CX_KIND||c.kind===CX_KIND||(CX_KIND==="-"&&!c.kind));
   const tab=(k,n)=>`<button class="${CX_VIEW===k?"on":""}" onclick="cxView('${k}')">${n}</button>`;
   const pill=(k,n)=>`<button class="pill ${CX_KIND===k?"on":""}" onclick="CX_KIND='${k}';render()">${n}</button>`;
   let body="";
-  if(CX_VIEW==="table"){ const k=CX_KIND&&CX_KIND!=="-"?CX_KIND:(kinds[0]||""), rows=all.filter(c=>c.kind===k), cols=[...new Set([...(CX_TPL[k]||[]),...rows.flatMap(c=>(c.props||[]).map(p=>p.k))])].filter(x=>rows.some(c=>(c.props||[]).some(p=>p.k===x&&p.v)));
+  if(common){ const tabC=(k,n)=>`<button class="${CW_VIEW===k?"on":""}" onclick="CW_VIEW='${k}';render()">${n}</button>`;   // 말씀 노트는 성경 인물·지명·용어 창고 — 가나다 · 성경 책별 · 자주 만난 순
+    const hits=new Map(all.map(c=>[c.id,codexHits(c).ws])), chip=c=>`<button class="cwchip" onclick="stOpen('cx:${c.id}')">${cxIc(c)} ${esc(c.name)} <small>${hits.get(c.id).length}</small></button>`;
+    let inner="";
+    if(CW_VIEW==="book"){ const byB=new Map(); all.forEach(c=>hits.get(c.id).forEach(w=>{ const r=wRef(w); if(!r) return; const m=byB.get(r.book)||new Map(); m.set(c.id,(m.get(c.id)||0)+1); byB.set(r.book,m); }));
+      inner=byB.size?[...byB].sort((a,b)=>a[0]-b[0]).map(([b,m])=>`<div class="cwbook"><b>📖 ${esc(BIBLE[b][0])}</b><span>${[...m].sort((x,y)=>y[1]-x[1]).map(([id,n])=>{ const c=all.find(x=>x.id===id); return `<button class="cwchip" onclick="stOpen('cx:${id}')">${esc(c.name)} <small>${n}</small></button>`; }).join("")}</span></div>`).join("")
+        :`<p class="muted">아직 성경 본문이 있는 묵상·설교에 나온 노트가 없습니다.</p>`; }
+    else if(CW_VIEW==="freq"){ const L=all.slice().sort((a,b)=>hits.get(b.id).length-hits.get(a.id).length);
+      inner=`<ol class="cwfreq">${L.map(c=>{ const ws=hits.get(c.id), last=ws[0]; return `<li><button onclick="stOpen('cx:${c.id}')"><b>${cxIc(c)} ${esc(c.name)}</b><span class="cwbar"><i style="width:${Math.min(100,ws.length*10)}%"></i></span><small>${ws.length}편${last?` · 마지막 ${esc(last.date||"")}${last.passage?" "+esc(last.passage):""}`:""}</small></button>${cxCopyBtn(c)}</li>`; }).join("")}</ol>`; }
+    else { const groups=[...CX_KINDS,""].map(k=>[k,all.filter(c=>(c.kind||"")===k)]).filter(([,l])=>l.length);
+      inner=groups.map(([k,l])=>`<p class="cxgh">${k?`${CX_ICON[k]} ${CW_NAME[k]||k}`:"종류 없음"} <span class="muted">${l.length}</span></p><div class="cwwrap">${l.map(c=>`<span class="cwitem">${chip(c)}${cxCopyBtn(c)}</span>`).join("")}</div>`).join(""); }
+    body=`<div class="stviews cwtabs">${tabC("abc","가나다")}${tabC("book","성경 책별")}${tabC("freq","자주 만난 순")}</div>${all.length?inner:`<p class="muted">아직 말씀 노트가 없습니다. 성경 인물·지명·용어처럼 여러 묵상에서 함께 쓰는 노트를 두세요.</p>`}`; }
+  else if(CX_VIEW==="table"){ const k=CX_KIND&&CX_KIND!=="-"?CX_KIND:(kinds[0]||""), rows=all.filter(c=>c.kind===k), cols=[...new Set([...(CX_TPL[k]||[]),...rows.flatMap(c=>(c.props||[]).map(p=>p.k))])].filter(x=>rows.some(c=>(c.props||[]).some(p=>p.k===x&&p.v)));
     body=!k?`<p class="muted">항목에 종류(인물·장소…)를 정하면 같은 종류끼리 표로 나란히 봅니다.</p>`:`<div class="cxtablewrap"><table class="cxtable"><thead><tr><th>${CX_ICON[k]} ${esc(k)}</th>${cols.map(x=>`<th>${esc(x)}</th>`).join("")}<th>관계</th><th>나온 글</th></tr></thead><tbody>
       ${rows.map(c=>`<tr><td><a href="#" onclick="stOpen('cx:${c.id}');return false"><b>${esc(c.name)}</b></a></td>${cols.map(x=>`<td>${esc((c.props||[]).find(p=>p.k===x)?.v||"")}</td>`).join("")}<td>${(c.rel||[]).map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`${esc(r.label||"—")}: ${esc(t.name)}`:""; }).filter(Boolean).join("<br>")}</td><td>${codexHits(c).ws.length}</td></tr>`).join("")||`<tr><td colspan="9" class="muted">이 종류의 항목이 없습니다.</td></tr>`}</tbody></table></div>
       ${cols.length?"":`<p class="hint">속성을 채우면 열이 생깁니다 (항목 → 「기본 속성 채우기」).</p>`}`;
@@ -5074,9 +5105,9 @@ function stCodexList(common){ const all=cxScope(common?null:ROOM_MS).slice().sor
     body=common?`<div class="strec comgrid">${mine.map(cardC).join("")||`<p class="muted" style="margin:0">아직 말씀 노트가 없습니다. 성경 인물·지명·용어처럼 여러 묵상에서 함께 쓰는 노트를 두세요.</p>`}</div>`
       :`<p class="cxgh">『${esc(mt)}』의 노트 <span class="muted">${mine.length}</span></p><div class="strec">${mine.map(cardC).join("")||`<p class="muted" style="margin:0">이 원고에만 쓰는 노트가 아직 없습니다. 「＋ 항목」으로 만들면 이 원고를 열 때만 보입니다.</p>`}</div>
       ${nCom?`<p class="cxcomlink"><span class="combadge">공통</span> 「${CX_COMMON}」에 ${nCom}개 — 이 원고에도 필요하면 거기서 「내 원고로 복사」 <button class="btn small ghost" onclick="stOpen('common')">말씀 노트 열기</button></p>`:""}`; }
-  return `<section class="sthome cxlist ${common?"common":""}">${common?`<div class="comband"><span class="combadge">공통</span> 모든 말씀 글(묵상·설교초안)이 함께 쓰는 창고 · 원고에는 섞이지 않고, 필요하면 「내 원고로 복사」</div>`:""}<div class="row" style="align-items:center;gap:8px;flex-wrap:wrap"><h2 class="sthello" style="font-size:24px;margin:0">${common?`◎ ${CX_COMMON}`:esc(G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex)}</h2><span class="spacer"></span><div class="stviews" style="margin:0">${tab("list","카드")}${tab("table","표")}${tab("graph","관계도")}</div></div>
+  return `<section class="sthome cxlist ${common?"common":""}">${common?`<div class="comband"><span class="combadge">공통</span> 모든 말씀 글(묵상·설교초안)이 함께 쓰는 창고 · 원고에는 섞이지 않고, 필요하면 「내 원고로 복사」</div>`:""}<div class="row" style="align-items:center;gap:8px;flex-wrap:wrap"><h2 class="sthello" style="font-size:24px;margin:0">${common?`◎ ${CX_COMMON}`:esc(G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex)}</h2><span class="spacer"></span>${common?"":`<div class="stviews" style="margin:0">${tab("list","카드")}${tab("table","표")}${tab("graph","관계도")}</div>`}</div>
     <p class="sub">${common?"성경 인물·지명·용어마다 노트를 두면, 그 이름이 나온 묵상·설교 글이 저절로 모입니다.":`${esc(cxW().what)}마다 항목을 두면 그 이름이 나온 글이 저절로 모입니다. 종류·속성·관계를 정하면 표와 관계도로 봅니다.`}</p>
-    ${kinds.length?`<div class="pills" style="margin-bottom:10px">${CX_VIEW==="table"?"":pill("","모두 "+all.length)}${kinds.map(k=>pill(k,`${CX_ICON[k]} ${k} ${all.filter(c=>c.kind===k).length}`)).join("")}${CX_VIEW!=="table"&&all.some(c=>!c.kind)?pill("-","종류 없음"):""}</div>`:""}
+    ${kinds.length&&!common?`<div class="pills" style="margin-bottom:10px">${CX_VIEW==="table"?"":pill("","모두 "+all.length)}${kinds.map(k=>pill(k,`${CX_ICON[k]} ${k} ${all.filter(c=>c.kind===k).length}`)).join("")}${CX_VIEW!=="table"&&all.some(c=>!c.kind)?pill("-","종류 없음"):""}</div>`:""}
     ${body}
     <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" onclick="codexNew(${common?"true":""})">＋ ${common?"말씀 노트":"항목"}</button><span class="spacer"></span>${all.length&&!common?`<button class="btn small" onclick="cxExport(false)" title="비밀은 빼고, 독자·함께 쓰는 사람에게 보여 줄 설정집 (HTML 한 파일 — 항목마다 바로 가는 링크)">설정집 내보내기 (공개용)</button><button class="btn small ghost" onclick="cxExport(true)" title="비밀까지 담은 작가용 설정집">작가용 (비밀 포함)</button>`:""}</div></section>`; }
 // 관계도: 항목을 원에 놓고 이름 붙은 관계를 선으로 (누르면 그 항목으로)
@@ -6048,6 +6079,73 @@ function delFilter(id){ S.settings.filters=(S.settings.filters||[]).filter(x=>x.
 function applyFilter(id){ const f=(S.settings.filters||[]).find(x=>x.id===id); if(!f) return; filt=Object.assign({track:"",kind:"",type:"",book:"",topic:""},f.f); go("drawer",{sub:"all"}); setTimeout(()=>{ const q=$("#q"); if(q) q.value=f.q||""; renderArchive(); },0); }
 // 연결 지도: 이미 저장된 연결(바탕 묵상 → 설교초안, 밑줄 → 글, 책 → 글·밑줄, 원고 → 꼭지)만으로 그립니다
 let ROOM_MAP=false, MAP_RANGE="90";
+// ───────── 생각 지도 (예전 「글 연결 그림」을 다시 만듦): 모든 글(묵상·설교·글방·일기)과 밑줄을 같은 주제·낱말·성경 책·노트 이름으로 이어,
+// 한 생각에서 이어진 생각으로 건너가고(가운데 바꾸기), 오래전 생각과 요즘 생각이 다시 만나는 곳을 보여 줌. 저장하는 것은 없음(그때그때 계산). 옛 「뿌리」(어디서 왔나) 그림은 탭으로 남김
+let TH_C=null, TH_VIEW="think", TH_ASK=null, TH_CACHE=null;
+const TH_JOSA=/(으로써|으로서|에게서|이라는|이라고|으로|에서|에게|까지|부터|처럼|보다|이며|이고|라는|라고|하는|했던|하던|했다|한다|하고|하며|하면|해서|이다|였다|입니다|합니다|은|는|이|가|을|를|의|에|와|과|도|만|로|며|고)$/;
+const TH_STOP=new Set("그리고 하지만 그러나 그래서 그런데 우리 나는 내가 너는 그는 그것 이것 저것 여기 거기 오늘 어제 내일 정말 너무 아주 다시 때문 통해 위해 대해 대한 같은 모든 어떤 그런 이런 저런 무엇 지금 이제 하나 한번 있는 없는 있다 없다 했다 한다 된다 되는 것을 것이 것은 그때 그냥 조금 많이 함께 서로 바로 계속 더욱 우리의 나의 자신 마음속".split(" "));
+function thTerms(text){ const out=[]; for(let w of String(text||"").match(/[가-힣]{2,}/g)||[]){ if(w.length>2) w=w.replace(TH_JOSA,""); if(w.length<2||w.length>7||TH_STOP.has(w)) continue; out.push(w); } return out; }
+const thRange=r=>(r||MAP_RANGE)==="all"?"":dkey(new Date(Date.now()-(+(r||MAP_RANGE))*864e5));
+let TH_CACHE_ALL=null;
+function thIndex(r){ const lim=thRange(r), key=[lim,S.writings.length,S.notes.length,Object.keys(S.diary||{}).length,S.rev,(S.codex||[]).length].join("|"); const hit=[TH_CACHE,TH_CACHE_ALL].find(c=>c?.key===key); if(hit) return hit;
+  const items=[], cx=codexLive().map(c=>({c,ns:cxNames(c)}));
+  live().filter(w=>!lim||(w.date||"")>=lim).forEach(w=>{ const ref=wRef(w); items.push({id:"w:"+w.id,kind:w.type==="설교초안"?"draft":w.track==="bible"?"bible":"book",label:w.title||w.passage||pv(w,16)||"(제목 없음)",date:w.date||"",text:stripMk(stripMemo(w.title+"\n"+(w.body||""))),tags:[...(w.topics||[]),...(w.tags||[])],book:ref?BIBLE[ref.book]?.[0]:null,open:`go('write',{edit:'${w.id}'})`}); });
+  (S.notes||[]).filter(n=>!lim||(n.date||"")>=lim).forEach(n=>items.push({id:"n:"+n.id,kind:"note",label:(n.text||"").replace(/\s+/g," ").slice(0,18),date:n.date||"",text:(n.text||"")+"\n"+(n.thought||""),tags:[],book:null,open:`growNote('${n.id}')`}));
+  Object.entries(S.diary||{}).filter(([d,v])=>(v?.t||"").trim()&&(!lim||d>=lim)).forEach(([d,v])=>items.push({id:"d:"+d,kind:"diary",label:`${d.slice(5).replace("-","/")} 일기`,date:d,text:v.t,tags:[],book:null,open:`diaryDate='${d}';go('diary')`}));
+  const df=new Map(), tf=items.map(it=>{ const m=new Map(); thTerms(it.text).forEach(t=>m.set(t,(m.get(t)||0)+1)); m.forEach((_,t)=>df.set(t,(df.get(t)||0)+1)); return m; }), N=items.length, maxDf=Math.max(3,N*.3);
+  items.forEach((it,i)=>{ const T=new Map(), add=(t,w)=>T.set(t,Math.max(T.get(t)||0,w));
+    it.tags.forEach(t=>t&&add("#"+t,3)); if(it.book) add("📖"+it.book,2);
+    cx.forEach(({c,ns})=>{ if(ns.some(n=>it.text.includes(n))) add("◎"+c.name,3); });
+    [...tf[i]].filter(([t])=>{ const d=df.get(t); return d>=2&&d<=maxDf; }).map(([t,f])=>[t,f*Math.log(N/df.get(t))]).sort((a,b)=>b[1]-a[1]).slice(0,7).forEach(([t])=>add(t,1));
+    it.T=T; });
+  const tdf=new Map(); items.forEach(it=>it.T.forEach((_,t)=>tdf.set(t,(tdf.get(t)||0)+1)));
+  const out={key,items,tdf,byId:new Map(items.map(it=>[it.id,it]))}; if(lim) TH_CACHE=out; else TH_CACHE_ALL=out; return out; }
+const thLbl=t=>t.startsWith("#")?t:t.startsWith("📖")?t.slice(2):t.startsWith("◎")?t.slice(1):t;
+// 두 생각이 함께 붙잡은 것 (드문 것일수록 무겁게)
+function thLink(a,b,I){ const sh=[]; let s=0; a.T.forEach((w,t)=>{ if(b.T.has(t)){ const v=Math.min(w,b.T.get(t))*Math.log(1+I.items.length/(I.tdf.get(t)||1)); s+=v; sh.push([t,v]); } }); return {s,sh:sh.sort((x,y)=>y[1]-x[1]).map(x=>x[0])}; }
+function thNear(it,I,n=10){ return I.items.filter(x=>x!==it).map(x=>({x,...thLink(it,x,I)})).filter(r=>r.s>0.8).sort((a,b)=>b.s-a.s).slice(0,n); }
+const thDays=(a,b)=>Math.abs((Date.parse(a)-Date.parse(b))/864e5)||0;
+const thAgo=d=>{ const n=Math.round(thDays(d,today())); return n<1?"오늘":n<31?n+"일 전":n<365?Math.round(n/30)+"달 전":(n/365).toFixed(n<730?1:0)+"년 전"; };
+// 다시 만난 생각: 요즘 쓴 것이 오래전(두 달 이상) 것과 같은 것을 붙잡고 있을 때
+function thMeet(I,k=3){ const recent=I.items.filter(x=>x.date&&thDays(x.date,today())<=45).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,14), seen=new Set(), out=[];
+  recent.forEach(a=>{ const best=I.items.filter(b=>b!==a&&b.date&&thDays(a.date,b.date)>=60).map(b=>({b,...thLink(a,b,I)})).filter(r=>r.s>1.5).sort((x,y)=>y.s-x.s)[0]; if(best&&!seen.has(best.b.id)){ seen.add(best.b.id); out.push({a,...best}); } });
+  return out.sort((x,y)=>y.s-x.s).slice(0,k); }
+let TH_COL_=null; const TH_COL=new Proxy({},{get:(_,k)=>(TH_COL_=TH_COL_||{...Object.fromEntries(Object.entries(MAP_KIND).map(([q,[,c]])=>[q,c])),diary:"#a0577a"})[k]});   // MAP_KIND 가 아래에서 정의되므로 쓸 때 만듦
+const TH_KN={bible:"묵상",draft:"설교초안",book:"글",note:"밑줄",diary:"일기"};
+function thGo(id){ if(!thIndex().byId.has(id)) MAP_RANGE="all"; TH_C=id; TH_ASK=null; render(); setTimeout(()=>document.querySelector(".thwrap")?.scrollIntoView({block:"start",behavior:"smooth"}),30); }
+function thTerm(t){ TH_C="t:"+t; TH_ASK=null; render(); }
+function thSeed(txt){ const m=liveMs().find(x=>x.id===ROOM_MS&&!x.rule); if(!m) return toast("원고를 하나 열어 두면 그 원고의 메모로 남깁니다"); const now=new Date().toISOString(); (m.seeds=m.seeds||[]).unshift({id:uid(),t:txt.slice(0,500),c:"b",done:false,at:now,u:now}); m.updated=now; save(); toast(`『${m.title}』 메모(포스트잇)에 남겼습니다`); }
+async function thAsk(a,b){ const I=thIndex(), A=I.byId.get(a), B=b?I.byId.get(b):null; if(!A) return; if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다");
+  TH_ASK={busy:true}; render(); const cut=x=>`[${TH_KN[x.kind]||"글"} · ${x.date} · ${x.label}]\n${x.text.slice(0,2500)}`;
+  try{ const r=await gcall("coWrite",{messages:[{role:"me",text:B?"이 두 글이 함께 붙잡고 있는 것을 한두 줄로 짚고, 내가 이 둘을 이어 더 생각해 볼 질문 세 개만 주세요. 글을 대신 쓰지 말고, 없는 사실을 지어내지 마세요.":"이 글에서 아직 다 말하지 않은 것 같은 생각을 짚고, 이어 생각해 볼 질문 세 개만 주세요. 대신 쓰지 마세요."}],doc:{title:"생각 지도",genre:"글",body:cut(A)+(B?"\n\n"+cut(B):"")}}); TH_ASK={text:r.text,ai:r.ai}; }
+  catch(e){ TH_ASK={err:"받지 못했습니다: "+e.message}; } render(); }
+function thinkPage(){ const I=thIndex(), tab2=(k,n)=>`<button class="pill ${TH_VIEW===k?"on":""}" onclick="TH_VIEW='${k}';render()">${n}</button>`;
+  const head=`<div class="row" style="gap:8px;flex-wrap:wrap;align-items:center"><h2 class="sthello" style="font-size:24px;margin:0">✺ 생각 지도</h2><span class="spacer"></span><span class="pills">${[["90","최근 3달"],["365","1년"],["all","전부"]].map(([k,n])=>`<button class="pill ${MAP_RANGE===k?"on":""}" onclick="MAP_RANGE='${k}';render()">${n}</button>`).join("")}</span><span class="pills">${tab2("think","생각 잇기")}${tab2("root","글의 뿌리")}</span></div>`;
+  if(TH_VIEW==="root") return `<section class="sthome">${head}<p class="sub">글이 어디서 왔는지 — 밑줄에서 키운 글, 묵상에서 나온 설교초안, 책에서 쓴 글, 원고에 담긴 글.</p>${mapPage().replace(/^<section class="sheet roommain">/,'<section class="sheet">')}</section>`;
+  if(!I.items.length) return `<section class="sthome">${head}<p class="muted">이 기간에는 글이 없습니다. 기간을 늘려 보세요.</p></section>`;
+  const meet=thMeet(thIndex("all")).filter(r=>I.byId.has(r.a.id)), ask=TH_ASK?`<div class="thask">${TH_ASK.busy?`<span class="muted">생각할 질문을 받는 중…</span>`:TH_ASK.err?`<span class="warn">${esc(TH_ASK.err)}</span>`:aiText(TH_ASK.text)+`<div class="row" style="margin-top:6px"><button class="btn small ghost" onclick="thSeed(${jsArg("✦ "+(TH_ASK.text||"").slice(0,480))})">📝 메모로 남기기</button></div>`}</div>`:"";
+  let center=TH_C&&(TH_C.startsWith("t:")||I.byId.has(TH_C))?TH_C:(meet[0]?.a.id||I.items.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""))[0].id), body="";
+  if(center.startsWith("t:")){ const t=center.slice(2), L=I.items.filter(x=>x.T.has(t)).sort((a,b)=>(a.date||"").localeCompare(b.date||"")), co=new Map(); L.forEach(x=>x.T.forEach((_,u)=>{ if(u!==t) co.set(u,(co.get(u)||0)+1); }));
+    body=`<div class="thwrap"><p class="cxgh">「${esc(thLbl(t))}」${jp(thLbl(t),"이","가")} 지나간 길 <span class="muted">${L.length}곳 · ${L[0]?.date||""} ~ ${L.at(-1)?.date||""}</span></p>
+      <ol class="thline">${L.map(x=>`<li><span class="thdot" style="background:${TH_COL[x.kind]}"></span><button class="thli" onclick="thGo('${x.id}')"><b>${esc(x.label)}</b><small>${esc(TH_KN[x.kind]||"")} · ${esc(x.date)} · ${thAgo(x.date)}</small></button></li>`).join("")}</ol>
+      ${co.size?`<p class="cxgh" style="margin-top:12px">함께 자주 나온 것</p><div class="thchips">${[...co].sort((a,b)=>b[1]-a[1]).slice(0,14).map(([u,n])=>`<button onclick="thTerm(${jsArg(u)})">${esc(thLbl(u))} <small>${n}</small></button>`).join("")}</div>`:""}</div>`; }
+  else { const C=I.byId.get(center), near=thNear(C,I), W=760, H=440, cx=W/2, cy=H/2, R=165;
+    const P=near.map((r,i)=>{ const t=-Math.PI/2+2*Math.PI*i/Math.max(1,near.length); return [cx+R*1.25*Math.cos(t),cy+R*Math.sin(t)]; });
+    body=`<div class="thwrap"><div class="thgraph"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="생각 지도">
+      ${near.map((r,i)=>{ const [x,y]=P[i], mx=cx+(x-cx)*.55, my=cy+(y-cy)*.55; return `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" class="the" style="stroke-width:${Math.min(5,1+r.s/3).toFixed(1)}"/><text x="${mx.toFixed(1)}" y="${my.toFixed(1)}" class="thel">${esc(thLbl(r.sh[0]))}</text>`; }).join("")}
+      <g class="thn thc" onclick="${C.open}"><circle cx="${cx}" cy="${cy}" r="34" style="fill:${TH_COL[C.kind]}"/><text x="${cx}" y="${cy+5}" class="thci">${esc(TH_KN[C.kind]||"")}</text><text x="${cx}" y="${cy+54}" class="thnl big">${esc(C.label.slice(0,18))}</text></g>
+      ${near.map((r,i)=>{ const [x,y]=P[i]; return `<g class="thn" onclick="thGo('${r.x.id}')" tabindex="0"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(10+Math.min(10,r.s*1.4)).toFixed(1)}" style="fill:${TH_COL[r.x.kind]}"/><text x="${x.toFixed(1)}" y="${(y+30).toFixed(1)}" class="thnl">${esc(r.x.label.slice(0,12))}</text><title>${esc(r.x.label)} · ${esc(r.x.date)} — 이어 준 것: ${esc(r.sh.slice(0,3).map(thLbl).join(", "))}</title></g>`; }).join("")}
+    </svg></div>
+    <div class="thcard"><div class="row" style="gap:8px;align-items:baseline;flex-wrap:wrap"><span class="thdot" style="background:${TH_COL[C.kind]}"></span><b style="font-size:17px">${esc(C.label)}</b><span class="muted">${esc(TH_KN[C.kind]||"")} · ${esc(C.date)} · ${thAgo(C.date)}</span><span class="spacer"></span><button class="btn small" onclick="${C.open}">${C.kind==="note"?"글로 키우기":"열기"}</button></div>
+      <p class="sub" style="margin:6px 0">${esc(C.text.replace(/\s+/g," ").slice(0,140))}…</p>
+      <div class="thchips">${[...C.T].sort((a,b)=>b[1]-a[1]).slice(0,12).map(([t])=>`<button onclick="thTerm(${jsArg(t)})" title="이 낱말이 지나간 길">${esc(thLbl(t))}</button>`).join("")}</div>
+      <div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap">${near[0]?`<button class="btn small aibtn" onclick="thAsk('${C.id}','${near[0].x.id}')" title="가장 가까운 생각과 이어 생각할 질문 (대신 쓰지 않음)">✦ 「${esc(near[0].x.label.slice(0,10))}」과 이어 생각할 질문</button>`:""}<button class="btn small ghost" onclick="thSeed(${jsArg(`생각 지도 · 「${C.label}」(${C.date})${near[0]?` ↔ 「${near[0].x.label}」(${near[0].x.date}) — 이어 준 것: ${near[0].sh.slice(0,3).map(thLbl).join(", ")}`:""}`)})">📝 메모로 남기기</button></div>${ask}</div>
+    ${near.length?`<ol class="thnear">${near.map(r=>`<li><button class="thli" onclick="thGo('${r.x.id}')"><span class="thdot" style="background:${TH_COL[r.x.kind]}"></span><b>${esc(r.x.label)}</b><small>${esc(TH_KN[r.x.kind]||"")} · ${esc(r.x.date)} · 이어 준 것: ${esc(r.sh.slice(0,3).map(thLbl).join(", "))}</small></button></li>`).join("")}</ol>`:`<p class="muted">이 글과 같은 것을 붙잡은 다른 글이 아직 없습니다. 기간을 늘리거나, 주제·노트 이름을 붙여 보세요.</p>`}</div>`; }
+  return `<section class="sthome thinkpage">${head}<p class="sub">한 생각을 누르면 그 생각이 가운데로 옵니다. 같은 주제·낱말·성경 책·노트 이름을 붙잡은 글끼리 이어집니다 — 묵상·설교·글방·일기·밑줄 모두.</p>
+    ${meet.length?`<div class="thmeet"><p class="cxgh">✺ 다시 만난 생각 <span class="muted">요즘 쓴 것이 오래전 생각과 같은 것을 붙잡고 있습니다</span></p>${meet.map(r=>`<div class="thpair"><button onclick="thGo('${r.a.id}')"><b>${esc(r.a.label)}</b><small>${thAgo(r.a.date)}</small></button><span class="thmid">${esc(r.sh.slice(0,2).map(thLbl).join(" · "))}</span><button onclick="thGo('${r.b.id}')"><b>${esc(r.b.label)}</b><small>${thAgo(r.b.date)}</small></button><button class="btn small ghost" onclick="thAsk('${r.a.id}','${r.b.id}')" title="이 둘을 이어 생각할 질문">✦</button></div>`).join("")}</div>`:""}
+    ${body}</section>`; }
+// 글방 홈에 한 줄: 다시 만난 생각 하나
+function thHomeCard(){ try{ const r=thMeet(thIndex("all"),1)[0]; if(!r) return ""; return `<p class="sthl">✺ 다시 만난 생각</p><button class="thhome" onclick="TH_C='${r.a.id}';TH_VIEW='think';MAP_RANGE='all';stOpen('map')"><b>${esc(r.a.label)}</b><span>${thAgo(r.a.date)}</span><i>${esc(r.sh.slice(0,2).map(thLbl).join(" · "))}</i><b>${esc(r.b.label)}</b><span>${thAgo(r.b.date)}</span></button>`; }catch(_){ return ""; } }
 function mapGraph(){ const lim=MAP_RANGE==="all"?"":dkey(new Date(Date.now()-(+MAP_RANGE)*864e5));
   const N=new Map(), E=[], add=(id,kind,label,open)=>{ if(!N.has(id)) N.set(id,{id,kind,label,open,deg:0}); return N.get(id); }, link=(a,b)=>{ if(N.has(a)&&N.has(b)&&a!==b){ E.push([a,b]); N.get(a).deg++; N.get(b).deg++; } };
   const ws=live().filter(w=>!lim||w.date>=lim);
