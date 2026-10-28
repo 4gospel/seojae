@@ -1576,7 +1576,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="002104c3b3";
+const APP_BUILD="66fe3caf03";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2404,7 +2404,7 @@ function go(t,o={}){
   NAV=true; try{ goInner(t,o); }finally{ NAV=false; }
 }
 let TRACK_PICK=false;   // 메뉴(묵상/글쓰기)로 갈래를 정해 들어왔는가
-function goInner(t,o){ TRACK_PICK=!!o.track; if(editId&&FRESH[editId]!=null&&o.edit!==editId) dropFresh(editId); if(SCRIV_EDIT){ if($("#scta")) scrivAuto(true); SCRIV_EDIT=null; } if(NEW_BUILD&&t!=="write") setTimeout(tryReload,800);   // 미뤄 둔 새 버전은 글 화면을 나갈 때 if(RF){ RF=null; $("#rfcard")?.remove(); } if(t!=="write"){ if(AI_MODE!=="research") aiClose(); keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
+function goInner(t,o){ TRACK_PICK=!!o.track; if(editId&&FRESH[editId]!=null&&o.edit!==editId) dropFresh(editId); if(SCRIV_EDIT){ if($("#scta")) scrivAuto(true); SCRIV_EDIT=null; } if(NEW_BUILD&&t!=="write") setTimeout(tryReload,800); if(RF){ RF=null; $("#rfcard")?.remove(); } if(t!=="write"){ if(AI_MODE!=="research") aiClose(); keepAwake(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }   // 미뤄 둔 새 버전은 글 화면을 나갈 때 · 다듬기 상자·AI 창 닫기
   if(t==="write"&&!o.edit&&!o.fromNote&&!o.fromWriting&&!o.new){   // 쓰기로 들어오면 오늘 쓴 글이 있을 때 그 글을 이어서 (묵상 먼저). 새로 쓰려면 「새 글」
     const tr=o.track||track, ws=live().filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
   { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew&&ew.trashed){ t="drawer"; o={sub:"trash"}; setTimeout(()=>toast("휴지통에 있는 글입니다. 「되살리기」를 누른 뒤 열 수 있습니다"),100); } }
@@ -3573,7 +3573,10 @@ function afterRemote(){ if(tab!=="write"||!editId) return; const w=S.writings.fi
   if(b.value===b.defaultValue&&t.value===t.defaultValue){ NAV=true; try{ render(); }finally{ NAV=false; } toast("다른 기기에서 고친 판으로 바꿨습니다"); }
   else if(!EDIT_WARNED){ EDIT_WARNED=true; toast("다른 기기에서 이 글이 바뀌었습니다. 「간직하기」를 누르면 지금 화면 글로 바뀌고, 다른 기기 판은 이전 판으로 남습니다"); } }
 function keepWriting(auto){
-  const b=$("#wbody"); if(!b) return null; const body=b.value; if(!body.trim()){ if(!auto) toast("아직 빈 페이지입니다"); return null; }
+  const b=$("#wbody"); if(!b) return null; const body=b.value;
+  if(!body.trim()){ const ew=editId&&!(S.deleted||{})[editId]&&S.writings.find(x=>x.id===editId), tt=($("#wtitle")?.value||"").trim();   // 본문은 아직 비었어도 이미 있는 글(새 꼭지·장면)의 제목은 간직 — 안 그러면 떠날 때 「(제목 없음)」이 됨
+    if(ew&&tt!==(ew.title||"")){ ew.title=tt; ew.updated=new Date().toISOString(); save(); EDIT_BASE=ew.updated; if(FRESH[ew.id]!=null&&tt) delete FRESH[ew.id]; if(auto){ $("#wtitle").defaultValue=tt; paintDraftStamp("간직됨"); } else toast("제목을 간직했습니다"); return ew; }
+    if(!auto) toast("아직 빈 페이지입니다"); return null; }
   if(auto){ const tl=new Set([...typeTpl(track,$("#wtype")?.value).split("\n").map(l=>l.trim()).filter(Boolean),...GENRE_TPL_LINES]); const own=stripMemo(body).split("\n").filter(l=>!tl.has(l.trim())).join(""); if((!editId&&chars(own)<15)||!writingUnsaved()) return null; }   // 틀만 넣고 아직 안 쓴 새 글은 간직하지 않음 (이미 있는 글은 몇 자를 고쳐도 간직)
   clearDraft();   // 임시 보관 칸(이 기기·구글)을 비움 — 새 글은 번호가 정해지기 전(칸 이름이 new 일 때) 비워야 합니다
   const data={type:$("#wtype").value,title:$("#wtitle").value.trim(),body,summary:$("#wsummary").value.trim(),topics:[...selTopics],status:$("#wstatus")?.value||"초고",updated:new Date().toISOString()};
@@ -4625,8 +4628,12 @@ let ST_FOLD=(()=>{ try{ return new Set(JSON.parse(localStorage.getItem("seojae.s
 // 원고마다 열어 둔 탭을 따로 기억: 원고를 바꾸면 그 원고의 탭(글·노트)이 따라 열림 (이 기기)
 function stMsSwitch(id){ if(!id||id===ROOM_MS) return; stSave(); let t=null; try{ t=JSON.parse(localStorage.getItem("seojae.stTabs."+id)||"null"); }catch(_){}
   ROOM_MS=id; STUDIO_TABS=Array.isArray(t)&&t.length?t:["home"]; ROOM_CODEX=null; }
-function stSave(){ try{ localStorage.setItem("seojae.stTabs",JSON.stringify(STUDIO_TABS.slice(-14))); if(typeof ROOM_MS!=="undefined"&&ROOM_MS) localStorage.setItem("seojae.stTabs."+ROOM_MS,JSON.stringify(STUDIO_TABS.slice(-14))); localStorage.setItem("seojae.stFold",JSON.stringify([...ST_FOLD])); }catch(_){} }
-function stAdd(k){ if(!k||k==="draft") return; if(!STUDIO_TABS.includes("home")) STUDIO_TABS.unshift("home"); if(!STUDIO_TABS.includes(k)) STUDIO_TABS.push(k); if(STUDIO_TABS.length>14) STUDIO_TABS.splice(1,1); stSave(); }
+function stSave(){ try{ const ks=Object.keys(ST_USED); if(ks.length>60) ks.sort((a,b)=>ST_USED[a]-ST_USED[b]).slice(0,ks.length-60).forEach(k=>delete ST_USED[k]); localStorage.setItem("seojae.stUsed",JSON.stringify(ST_USED)); localStorage.setItem("seojae.stTabs",JSON.stringify(STUDIO_TABS.slice(-14))); if(typeof ROOM_MS!=="undefined"&&ROOM_MS) localStorage.setItem("seojae.stTabs."+ROOM_MS,JSON.stringify(STUDIO_TABS.slice(-14))); localStorage.setItem("seojae.stFold",JSON.stringify([...ST_FOLD])); }catch(_){} }
+// 탭은 홈 + 최근에 연 5개까지: 넘치면 가장 오래 안 본 탭부터 닫힘 (자리는 연 순서 그대로)
+const ST_MAX=5; let ST_USED=(()=>{ try{ return JSON.parse(localStorage.getItem("seojae.stUsed")||"{}")||{}; }catch(_){ return {}; } })();
+function stTrim(keep){ let rest=STUDIO_TABS.filter(x=>x!=="home");
+  while(rest.length>ST_MAX){ const old=rest.filter(x=>x!==keep).sort((a,b)=>(ST_USED[a]||0)-(ST_USED[b]||0))[0]; if(!old) break; STUDIO_TABS.splice(STUDIO_TABS.indexOf(old),1); delete ST_USED[old]; rest=STUDIO_TABS.filter(x=>x!=="home"); } }
+function stAdd(k){ if(!k||k==="draft") return; if(!STUDIO_TABS.includes("home")) STUDIO_TABS.unshift("home"); ST_USED[k]=Date.now(); if(!STUDIO_TABS.includes(k)) STUDIO_TABS.push(k); stTrim(k); stSave(); }
 function stValid(k){ if(["home","map","memo","res","codex","new"].includes(k)) return true; const [t,id]=[k.slice(0,k.indexOf(":")),k.slice(k.indexOf(":")+1)];
   if(t==="w") return live().some(w=>w.id===id); if(t==="ms") return liveMs().some(m=>m.id===id); if(t==="cx") return codexLive().some(c=>c.id===id); return false; }
 function stLabel(k){ if(k==="home") return [ICO.closed.replace('class="ico"','class="ico" style="display:none"')+"⌂","홈"]; if(k==="map") return ["⋰","글 연결 그림"]; if(k==="memo") return ["▤","메모"]; if(k==="res") return ["⧉","자료 모음"]; if(k==="codex") return ["◎",G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex||"인물·주제 노트"]; if(k==="new") return ["＋","새 원고"]; if(k==="draft"){ if(stCur()==="draft") return ["✎","새 글"]; const d=bookDraft(); return ["✎",d?.title?d.title+" (쓰던 글)":"쓰던 새 글"]; }
