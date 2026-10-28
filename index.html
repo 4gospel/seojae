@@ -1634,7 +1634,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="cc55185a8f";
+const APP_BUILD="f5f1cd7d89";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -5040,7 +5040,9 @@ function cxSnip(t,ns){ t=stripMk(String(t||"")).replace(/\s+/g," "); let i=-1, n
   const a=Math.max(0,i-40), b=Math.min(t.length,i+n0.length+60); return (a?"…":"")+esc(t.slice(a,i))+`<mark>${esc(n0)}</mark>`+esc(t.slice(i+n0.length,b))+(b<t.length?"…":""); }
 function codexNew(common){ const W=common?CX_BIBLE:cxW(), name=(prompt(common?`말씀 노트 — 성경 인물·지명·용어 이름 (예: ${W.ex})`:`${W.what} 이름 (예: ${W.ex})`,"")||"").trim(); if(!name) return;
   const c={id:uid(),name,aliases:[],body:"",updated:new Date().toISOString()}; if(!common&&tab==="room"&&ROOM_MS&&liveMs().some(m=>m.id===ROOM_MS)) c.ms=ROOM_MS; (S.codex=S.codex||[]).push(c); ROOM_CODEX=c.id; save(); render(); }
-function codexDel(id){ if(!confirm("이 노트를 지울까요? 글은 그대로 남습니다.")) return; tomb(id); S.codex=(S.codex||[]).filter(x=>x.id!==id); ROOM_CODEX=null; save(); render(); }
+// 지운 뒤에는 그 노트가 있던 목록에 머묾 (말씀 노트면 말씀 노트, 원고 노트면 그 원고의 노트) — 지운 노트의 탭도 닫음
+function codexDel(id){ if(!confirm("이 노트를 지울까요? 글은 그대로 남습니다.")) return; const c=(S.codex||[]).find(x=>x.id===id), back=c&&cxOrphan(c)?"common":"codex";
+  tomb(id); S.codex=(S.codex||[]).filter(x=>x.id!==id); ROOM_CODEX=null; const t=STUDIO_TABS.indexOf("cx:"+id); if(t>=0) STUDIO_TABS.splice(t,1); save(); stOpen(back); toast("노트를 지웠습니다"); }
 // ───────── 설정집(월드) · 표 · 관계도 · 플롯 보드 · 설정집 내보내기 (타입탁 월드 · 펜시브 시트·백링크·그래프 · 노벨라 파트·블록 참고) ─────────
 // 노트 하나(S.codex[])에 kind 종류 · props[{k,v}] 속성 · secret 작가만 보는 비밀 · rel[{to,label}] 이름 붙은 관계를 더함 — 노트를 통째로 updated 로 합치는 방식은 그대로.
 // 장면의 플롯 단계는 글의 w.meta.beat, 원고의 단계 이름은 m.plot.stages (없으면 기본 5단). 연결(백링크)은 저장하지 않고 이름·관계로 그때그때 찾음.
