@@ -1681,7 +1681,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="3f1b0845c1";
+const APP_BUILD="38882f5ad4";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4400,7 +4400,12 @@ function sendOpen(kind,mid){
     ov.querySelectorAll("[data-imp]").forEach(b=>b.onclick=()=>{ ov.remove(); if(b.dataset.imp==="docx") docxPick(kind,mid); else notionImportOpen(mid); }); };
   document.body.appendChild(ov); draw(); }
 function sendRecord(to,list,m,extra){ const rec=Object.assign({id:uid(),at:new Date().toISOString(),to,ms:m?.id||null,ids:list.map(x=>x.id),name:m?.title||list[0]?.title||"",n:list.length,chars:list.reduce((a,x)=>a+charsAll(x.body||""),0),u:new Date().toISOString()},extra||{}); (S.sends=S.sends||[]).push(rec); save(); }
+// 내보내기 전에 마치지 않은 것을 알림 (원칙 1-5·7-6 — 기도문·고백 자리가 빈 채 조용히 나가지 않게)
+function expWarn(list){ const out=[]; list.forEach(w=>{ if(!w) return; const b=stripMemo(w.body||""), own=(b.match(/^\s*〔(직접 쓸 자리|고백)[^〕]*〕\s*$/gm)||[]).length, unk=(b.match(/[(（]확인 못 함[)）]/g)||[]).length, vf=wMeta(w,"vtab")?vfLeft(w):0, no=ckGet(w).a.filter(x=>x?.me==="아니오").length;
+    const t=[own?`비어 있는 직접 쓸 자리 ${own}곳(내보낼 때 빠짐)`:"",unk?`(확인 못 함) ${unk}곳`:"",vf?`검증표에 남은 줄 ${vf}`:"",no?`점검 10문항 「아니오」 ${no}`:""].filter(Boolean); if(t.length) out.push(`· ${w.title||"(제목 없음)"}: ${t.join(", ")}`); });
+  return out.length?`아직 마치지 않은 것이 있습니다.\n${out.slice(0,8).join("\n")}${out.length>8?`\n… 외 ${out.length-8}개`:""}`:""; }
 async function sendGo(to,list,m,ov,scope){ const st=ov.querySelector("[data-state]"), name=(m&&scope!=="one"?m.title:list[0]?.title)||"아침 서재 글";
+  { const wn=expWarn(list); if(wn&&!confirm(wn+"\n\n그래도 내보낼까요?")) return; }
   try{
     if(to==="notion"){ if(!canNotion()) return toast("노션이 연결되지 않았습니다 (설정 → 노션 연결)"); let n=0;
       if(list.some(x=>x.importFrom&&!x.notion?.page)&&!confirm("노션에서 가져온 글은 원래 페이지를 바꾸지 않고, 「설교&강의」에 새 페이지로 만듭니다. 보낼까요?")) return;
@@ -5115,8 +5120,8 @@ function saveMemo(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w||(w.memo
 // ───────── 자료 모음 = 원고의 자료 창고 (2026-10-29 다시 만듦) ─────────
 // 메모(포스트잇)는 「내 생각의 씨앗」, 자료 모음은 「바깥에서 가져온 근거」 — 출처와 함께 두고 인용·각주·참고 문헌으로 이어짐.
 // 원고 안 m.research=[{id,kind,t 제목,body 내용·원문,au 저자,yr 연도,pg 쪽,url,src(예전 한 줄 출처),note 내 생각,tags[],ok 확인 상태,at,u}] — 자료마다 u 시각으로 합침(mergeInner)
-const RES_KINDS=["인용","주석·해설","문헌","통계·자료","사례·예화","웹 글","기타"];
-const RES_IC={"인용":"❝","주석·해설":"✎","문헌":"▤","통계·자료":"▦","사례·예화":"❀","웹 글":"⌁","기타":"◎"};
+const RES_KINDS=["인용","주석·해설","문헌","통계·자료","사례·예화","웹 글","AI 조사","기타"];
+const RES_IC={"인용":"❝","주석·해설":"✎","문헌":"▤","통계·자료":"▦","사례·예화":"❀","웹 글":"⌁","AI 조사":"✦","기타":"◎"};
 let RES_EDIT=null, RES_Q="", RES_KIND="", RES_TAG="", RES_SORT="new", RES_VIEW=(()=>{ try{ return localStorage.getItem("seojae.resView")||"card"; }catch(_){ return "card"; } })();
 // 인용 표기: 저자, 『제목』, 연도, 쪽 (서지 칸이 없으면 예전 출처 한 줄)
 function resCite(r){ if(r.au||r.yr||r.pg) return [r.au,r.t?`『${r.t}』`:"",r.yr,r.pg?`${r.pg}쪽`:""].filter(Boolean).join(", "); return r.src||r.t||""; }
@@ -5166,6 +5171,10 @@ function resPage(m){ const all=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]
     <p class="hint">쓰는 화면 옆 칸 「자료」에서 「인용+각주」로 꺼내 쓰면, 「쓰인 곳」이 저절로 이어지고 문헌은 참고 문헌에 들어갑니다.</p></section>`; }
 // 쓰는 화면에서 꺼내 쓰기: 인용+각주 / 각주만 / 내용만
 function resInsert(mid,rid,how){ const m=S.manuscripts.find(x=>x.id===mid), r=m?.research?.find(x=>x.id===rid), b=$("#wbody"); if(!r||!b) return; const c=resCite(r);
+  // 원문 인용(「」)은 확인한 원문만 — AI 요약을 남의 말처럼 넣지 않음 (원칙 2-10)
+  if(how==="quote"&&r.kind==="AI 조사"&&r.ok!=="확인함") return toast("AI가 정리한 요약은 원문 인용으로 넣지 않습니다 — 자료를 열어 원문 문장으로 바꾸고 「확인함」으로 둔 뒤 넣어 주세요");
+  if(how!=="fn"&&r.ok==="확인 못 함"&&!confirm(`「${r.t||"자료"}」는 아직 「확인 못 함」입니다. 그래도 넣을까요?\n(넣은 뒤 원문과 대조해 주세요)`)) return;
+  { const oz=ownHit(b.value,caretAt(b).e,caretAt(b).e); if(oz) return toast(`커서가 「${oz}」에 있습니다 — 직접 쓰는 자리입니다 (원칙 1-5)`); }
   const txt=how==="fn"?(c?`[^${c.replace(/[\[\]]/g,"")}]`:""):how==="body"?(r.body||"")+"\n":`「${(r.body||"").replace(/\s*\n\s*/g," ")}」${c?`[^${c.replace(/[\[\]]/g,"")}]`:""}`;
   if(!txt) return toast("출처가 없어 각주를 만들 수 없습니다 — 자료에 저자·제목을 적어 주세요"); tInsert(b,txt); toast(how==="fn"?"각주를 넣었습니다":"자료를 넣었습니다"); }
 function resSideHtml(m){ const L=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]); if(!L.length) return `<p class="hint">원고 자료는 글방 → 「자료 모음」에서 모아 두면 여기서 꺼내 씁니다.</p>`;
@@ -5467,14 +5476,16 @@ function aiQuick(sel){ const k=aiGenre(); const q=[];
   if(sel){ q.push(["고른 곳 다듬기","고른 곳을 더 낫게 다듬을 방법을 두세 가지 제안해 주세요"],["더 쉽게","고른 곳을 처음 듣는 사람도 바로 알아듣게 쉽게 고쳐 주세요"],["더 짧게","고른 곳을 뜻은 그대로 두고 더 짧게 줄여 주세요"]); }
   q.push(["막혔어요","지금 글에서 막혔습니다. 다음으로 생각을 이어 갈 수 있게 질문 세 개만 해 주세요"],["흐름 점검","지금 글의 흐름에서 끊기거나 건너뛰는 곳을 짚어 주세요"],["제목 후보","이 글에 어울리는 제목 후보 다섯 개를 주세요"],["한 줄 요약","이 글의 핵심을 한 문장으로 말해 주세요"]);
   if(k.sermon) return [["세 줄로 시작","§card3"],["설계 카드","§cardai"],
-    ["구조안","설계 카드의 한 문장을 따라 대지 구조안을 두 가지 주세요. 대지마다 한 줄, 그리스도로 가는 길과 위로가 겨냥하는 자리를 표시해 주세요."],
+    ["구조안","§plan설계 카드의 한 문장을 따라 대지 구조안을 두 가지 주세요. 대지마다 한 줄, 그리스도로 가는 길과 위로가 겨냥하는 자리를 표시해 주세요."],
     ["초안 쓰기","§draft"],
     ["예화 조사","⌕이 설교의 한 문장에 맞는 예화 후보를 넓게 찾아 주세요(역사·문학·영화·음악·요즘 문화·한국 사상·최신 뉴스). 후보마다 출처, 사실 여부 (확인함)/(확인 못 함), 허구 작품이면 허구라고 밝혀 주세요. 주 예화 하나와 보조 두세 개를 고를 수 있게 짧게."],
     ["검증표","§verify"],
     ["생각 점검","제 생각(고른 곳이 있으면 그곳, 없으면 글 전체)을 복음주의 신학과 성결교회 전통 기준으로 점검해 주세요: 큰 방향 → 맞는 점(근거) → 다듬을 점(왜) → 바꿔 쓸 문장 제안."],
     ["본문 해석 점검","해석이 본문에서 나오는지, 본문이 말하지 않는 동기를 단정한 곳은 없는지, 의견이 갈리는 곳을 한 견해로만 말하지 않았는지 짚어 주세요"],
     ["점검 10문항","§chk10"]];
-  else if(k.kind==="essay") q.push(["장면 살리기","설명 대신 장면으로 보여 줄 수 있는 곳을 짚어 주세요"],["여운","마지막 문장의 여운을 살릴 방법을 제안해 주세요"]);
+  if(k.kind==="essay"||k.kind==="selfhelp") q.unshift(["세 줄로 시작","§card3"],["설계 카드","§cardai"],["구조안","§plan설계 카드의 한 문장을 따라 꼭지 구조안을 두 가지 주세요. 단락마다 한 줄로, 장면(사례)과 생각이 놓일 자리를 표시해 주세요."],["초안 쓰기","§draft"]);
+  if(k.kind==="selfhelp") q.push(["검증표","§verify"]);
+  if(k.kind==="essay") q.push(["장면 살리기","설명 대신 장면으로 보여 줄 수 있는 곳을 짚어 주세요"],["여운","마지막 문장의 여운을 살릴 방법을 제안해 주세요"]);
   else if(k.kind==="novel") q.push(["다음 장면","다음 장면에서 갈등을 키울 방향을 세 가지 주세요"],["인물 일관성","인물의 말과 행동이 어긋나는 곳을 짚어 주세요"]);
   else if(k.poem) q.push(["이미지","살아 있지 않은 이미지와 상투적인 표현을 짚어 주세요"],["행갈이","행갈이와 리듬을 살펴봐 주세요"]);
   else if(k.kind==="paper") q.push(["논증 점검","주장마다 근거가 있는지, 논리 구조를 점검해 주세요"]);
@@ -5495,6 +5506,11 @@ const undoHint=()=>isTouch()?"↶ 단추로 되돌리기":"⌘Z로 되돌리기"
 const aiBodyText=b=>stripMemo(b.value).split("\n").filter(l=>!SLIDE_RE.test(l)).join("\n");
 const aiRefsText=m=>(m?.research||[]).slice(0,12).map(r=>`- ${r.t||"자료"}: ${String(r.body||"").slice(0,700)}${r.src?` (출처: ${r.src})`:""}`).join("\n").slice(0,6000);
 // 월드(노트 항목·섹션·배경 + 정리 규칙)를 AI에게 — 피드백·설정 정리와 같은 내용
+// 원고 안 앞 두 글·뒤 한 글의 제목·요약(없으면 앞부분)과 플롯 단계 — 「앞 내용과 맞는지」를 볼 수 있게
+function aiAround(w){ const m=w&&wMs(w); if(!m) return ""; const L=msList(m), i=L.findIndex(x=>x.id===w.id); if(i<0) return "";
+  const one=x=>`「${x.title||"(제목 없음)"}」${wMeta(x,"beat")?` [${wMeta(x,"beat")}]`:""} ${(x.summary||stripMemo(x.body||"").replace(/\[\^+[^\]]*\]/g,"").replace(/\s+/g," ").slice(0,300)).trim()}`;
+  const pre=L.slice(Math.max(0,i-2),i).map(one), nx=L.slice(i+1,i+2).map(one);
+  return [`원고 「${m.title||""}」 ${L.length}개 가운데 ${i+1}번째${wMeta(w,"beat")?` · 이 글의 플롯 단계: ${wMeta(w,"beat")}`:""}`,...(pre.length?["앞 글:",...pre]:[]),...(nx.length?["뒤 글:",...nx]:[])].join("\n").slice(0,2400); }
 const aiWorldText=m=>{ if(!m) return ""; const r=cxSys(m.id,"rules")?.body; return (fbSettings(m)+(r?`\n[정리 규칙] ${r.replace(/\s+/g," ").slice(0,800)}`:"")).trim(); };
 function aiChips(sel,k){ const b=$("#wbody"), n=b?aiBodyText(b).length:0, P=$("#wpassage")?.value||k.w?.passage||"", rn=(k.m?.research||[]).length, wn=k.m?cxScope(k.m.id).length+(cxSys(k.m.id,"bg")?.body?1:0):0, wl=k.m?.genre==="novel"?"월드":"노트";
   return `<div class="aichips" title="AI가 읽는 것"><span>이 글 · ${n.toLocaleString()}자${n>14000?" (길어서 앞뒤만)":""}</span>${sel?`<span>고른 곳 ${sel.t.length.toLocaleString()}자</span>`:`<span>커서 근처</span>`}${P?`<span>본문 ${esc(P)}</span>`:""}<button onclick="vrOpen('rules')" title="AI가 함께 따르는 규칙과 말투 기준">규칙 ${vrList("rules").filter(x=>x.on!==false).length} · 말투 ${vrList("voice").length}</button>${rn?`<button class="${AI_REFS?"on":""}" onclick="AI_REFS=!AI_REFS;aiDraw()" title="이 원고의 자료 모음도 함께 읽게 합니다 (사실·인용은 자료에 있는 것만 씀)">${AI_REFS?"✓":"＋"} 원고 자료 ${rn}</button>`:""}${wn?`<button class="${AI_WORLD?"on":""}" onclick="AI_WORLD=!AI_WORLD;aiDraw()" title="이 원고의 ${wl}(인물·장소·배경·섹션·정리 규칙)를 함께 읽고, 설정과 어긋나는 곳도 짚습니다">${AI_WORLD?"✓":"＋"} ${wl} ${wn}</button>`:""}</div>`; }
@@ -5505,7 +5521,7 @@ function aiSugHtml(m,i){ const pend=(m.items||[]).filter(x=>!x.st).length;
 function aiDraw(){ const el=$("#aipanel"); if(!el) return; if(AI_MODE==="research") return rsDraw(); const sel=aiSelNow(), k=aiGenre(), cr=CONF.claude, keyOK=!!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini), ask=aiAsk(), keep=$("#aiin")?.value||"";
   el.innerHTML=`<div class="aih"><span style="color:#7a5aa8;font-size:17px">✦</span><b>글쓰기 도우미</b><span class="muted" style="font-size:12px">${esc(k.name)}</span>${k.meditation?`<span class="aimode"><span title="묵상은 글쓴이의 기도라 AI가 문장을 지어 주지 않습니다">질문만</span></span>`:`<span class="aimode"><button class="${ask==="ask"?"on":""}" onclick="aiSetAsk('ask')" title="묻고 답하기 — 넣을 문장은 카드로">질문</button><button class="${ask==="suggest"?"on":""}" onclick="aiSetAsk('suggest')" title="고칠 곳을 찾아 하나씩 비교해 보고 적용">제안</button></span>`}<span class="spacer"></span><button onclick="rsOpen()" title="웹에서 자료를 찾아 원고 자료 모음에 담는 조사 도우미">조사 ↗</button>${AI_MSGS.length?`<button onclick="aiReset()" title="대화를 비웁니다">새 대화</button>`:""}<button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div>
     <div class="aim" id="aimsgs">${AI_MSGS.length?AI_MSGS.map((m,i)=>m.role==="me"?`<div class="msg me">${aiText(m.text)}<button class="mkrule" onclick="ruleFromMsg(${i})" title="이 지적을 규칙으로 남기면 다음 AI 요청마다 함께 갑니다 (원칙 8-1)">규칙으로</button></div>`:m.role==="err"?`<div class="msg err">${esc(m.text)}</div>`:m.items?aiSugHtml(m,i)
-      :`<div class="msg ai">${aiFmt(m.text).map((p,j)=>p.k==="t"?(p.v.trim()?aiText(p.v):""):`<div class="sug">${esc(p.v)}<div class="row">${k.meditation?"":k.poem?(m.sel?`<button class="p" onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""):`<button class="p" onclick="aiPut(${i},${j},'ins')">커서 자리에 넣기</button>${m.sel?`<button onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""}`}<button onclick="aiPut(${i},${j},'copy')">복사</button></div></div>`).join("")}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`).join("")
+      :`<div class="msg ai">${aiFmt(m.text).map((p,j)=>p.k==="t"?(p.v.trim()?aiText(p.v):""):`<div class="sug">${esc(p.v)}<div class="row">${k.meditation?"":k.poem?"":`<button class="p" onclick="aiPut(${i},${j},'ins')">커서 자리에 넣기</button>${m.sel?`<button onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""}`}<button onclick="aiPut(${i},${j},'copy')">복사</button></div></div>`).join("")}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`).join("")
       :k.meditation?`<div class="msg ai">묵상은 팀장님이 말씀 앞에서 쓰는 글이라, 저는 문장을 지어 드리지 않고 <b>질문</b>만 합니다. 본문을 다시 보게 하는 관찰 질문, 확실한 배경 사실(출처와 함께), 맞춤법을 도와 드려요.</div>`
       :ask==="suggest"?`<div class="msg ai"><b>제안 모드</b> — 무엇을 고칠지 말씀하시면(예: 「어색한 문장」) 글에서 고칠 곳을 찾아 「전 → 후」로 보여 드립니다. 하나씩 보고 ✓ 적용을 누른 것만 글에 들어가고 ⌘Z로 되돌릴 수 있어요.${rfDirs().free?"":`<br><span class="muted" style="font-size:12.5px">${esc(k.name)}은 비문(주어·서술어 호응, 조사)만 고칩니다.</span>`}</div>`
       :`<div class="msg ai">지금 쓰는 글을 함께 보고 있어요. 막힌 곳, 다듬고 싶은 문장, 제목, 흐름… 무엇이든 물어보세요.<br><span class="muted" style="font-size:12.5px">글은 바꾸지 않고 제안만 합니다. 넣고 싶은 문장은 「넣기」를 누르면 들어가고 ⌘Z로 되돌릴 수 있어요. 문장을 고르고 「✦ 다듬기」를 누르면 그 자리에서 고친 안을 비교해 볼 수 있어요.${k.noContinue?` ${esc(k.name)}은 대신 이어 쓰지 않고 질문·구조·표현을 함께 봅니다.`:""}</span></div>`}
@@ -5522,7 +5538,9 @@ function aiQuickGo(q){ if(q.startsWith("…")){ const t=$("#aiin"); if(t){ t.val
   if(q.startsWith("⌕")){ return rsOpen(), setTimeout(()=>rsSend(q.slice(1)),50); }
   if(q==="§verify") return vfOpen(); if(q==="§chk10") return ckOpen();
   if(q==="§card3"){ cardOpen(); return; } if(q==="§cardai"){ cardOpen(); return cardAI(); }
+  if(q.startsWith("§plan")){ const w=cardW(); if(!w||!wMeta(w,"cok")){ toast("구조안도 한 문장을 확정한 뒤에 받습니다 (원칙 1-4) — 설계 카드에서 한 문장을 정하고 「확정」을 눌러 주세요"); return cardOpen(); } return aiSend(q.slice(5)); }
   if(q==="§draft"){ const w=cardW(); if(!w||!wMeta(w,"cok")){ toast("한 문장을 확정하기 전에는 초안을 쓰지 않습니다 (원칙 1-4) — 설계 카드에서 한 문장을 정하고 「확정」을 눌러 주세요"); return cardOpen(); }
+    if(!aiGenre().sermon) return aiSend("설계 카드의 확정된 한 문장과 구조를 따라 초안을 써 주세요. 1인칭 고백과 마지막 문단은 〔직접 쓸 자리: …〕로 비워 두고, 사례·통계·인용에는 사실 확인 꼬리표 (확인함)/(확인 못 함)를 붙여 주세요. 카드에서 벗어나지 마세요.");
     return aiSend("설계 카드의 확정된 한 문장과 구조를 따라 초안을 써 주세요. 도입 첫 문단·1인칭 고백·결론 마지막 문단·기도문은 〔직접 쓸 자리: …〕로 비워 두고, 성경은 새한글 문구(확인 못 하면 표시), 예화는 사실 확인 꼬리표를 붙여 주세요. 카드에서 벗어나지 마세요."); }
   aiSend(q); }
 function aiReset(){ if(AI_MSGS.length&&!confirm("이 글의 AI 대화를 비울까요?")) return; AI_MSGS=[]; aiStore(); aiDraw(); }
@@ -5531,7 +5549,7 @@ async function aiSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
   if(ta) ta.value=""; const sel=aiSelNow(), k=aiGenre(), pos=b.selectionEnd, near=b.value.slice(Math.max(0,pos-600),pos+600), ask=aiAsk(), key=AI_KEY;
   AI_MSGS.push({role:"me",text:q}); AI_BUSY=true; aiStore(); aiDraw();
   const body=aiBodyText(b), samples=body.split("\n").filter(l=>l.trim().length>40).slice(0,3).join("\n");
-  const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,sermon:k.sermon,card:cardForAI(k.w),...vrFor(k.sermon),refs:AI_REFS?aiRefsText(k.m):"",world:AI_WORLD?aiWorldText(k.m):"",samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
+  const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,poem:k.poem,sermon:k.sermon,card:cardForAI(k.w),...vrFor(k.sermon),refs:AI_REFS?aiRefsText(k.m):"",world:AI_WORLD?aiWorldText(k.m):"",around:aiAround(k.w),gate:(k.kind==="essay"||k.kind==="selfhelp")&&!(k.w&&wMeta(k.w,"cok")),samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
   const hist=AI_MSGS.filter(m=>m.role!=="err"&&m.text).slice(-12).map(m=>({role:m.role,text:m.text}));
   let add; try{ if(ask==="suggest"){ const r=await gcall("coWrite",{mode:"suggest",messages:hist,doc}); add={role:"ai",text:`(제안 ${r.items.length}곳)`,items:r.items.map(x=>({...x})),ai:r.ai}; }
     else { const r=await gcall("coWrite",{messages:hist,doc}); add={role:"ai",text:r.text,ai:r.ai,sel:sel||null,pos}; } }
@@ -5541,7 +5559,8 @@ async function aiSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
 function aiPut(i,j,mode){ const m=AI_MSGS[i], p=m&&aiFmt(m.text)[j], b=$("#wbody"); if(!p||!b) return;
   if(mode==="copy") return clip(p.v);
   if(mode==="rep"){ const sl=m.sel; if(!sl||b.value.slice(sl.s,sl.e)!==sl.t) return toast("고른 곳이 그 뒤 바뀌어 바꿀 수 없습니다 — 「커서 자리에 넣기」를 써 주세요"); const oz=ownHit(b.value,sl.s,sl.e); if(oz) return toast(`「${oz}」은 직접 쓰는 자리입니다 (원칙 1-5) — 복사해서 참고만 하세요`); tInsert(b,p.v,sl.s,sl.e); }
-  else { const at=caretAt(b).e, pre=b.value.slice(0,at); { const oz=ownHit(b.value,at,at); if(oz) return toast(`커서가 「${oz}」에 있습니다 — 직접 쓰는 자리라 AI 문장을 넣지 않습니다 (원칙 1-5)`); } tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+p.v+"\n",at,at); }
+  else { if(aiGenre().sermon&&p.v.length>600&&!/〔(직접 쓸 자리|고백)/.test(p.v)&&!confirm("이 초안에는 〔직접 쓸 자리〕 표시가 없습니다.\n그대로 넣으면 AI 문장이 도입 첫 문단·결론 마지막 문단 자리에 들어가 직접 쓴 글처럼 보일 수 있습니다 (원칙 1-5).\n그래도 넣을까요?")) return;
+    const at=caretAt(b).e, pre=b.value.slice(0,at); { const oz=ownHit(b.value,at,at); if(oz) return toast(`커서가 「${oz}」에 있습니다 — 직접 쓰는 자리라 AI 문장을 넣지 않습니다 (원칙 1-5)`); } tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+p.v+"\n",at,at); }
   toast("넣었습니다 ("+undoHint()+")"); aiShowCaret(); }
 // 휴대폰: AI 창이 본문을 덮으므로 넣은 뒤에는 창을 닫고 넣은 자리로 (✦ AI로 다시 열면 대화가 그대로)
 function aiShowCaret(){ if(innerWidth>700) return; const b=$("#wbody"); if(!b) return; aiClose(); const lh=parseFloat(getComputedStyle(b).lineHeight)||30, line=b.value.slice(0,b.selectionEnd).split("\n").length;
@@ -5684,7 +5703,7 @@ async function fbStart(){ const b=$("#wbody"); if(!b) return; const k=aiGenre();
   if(chars(b.value)<80) return toast("피드백을 받으려면 조금 더 써 주세요 (80자 넘게)");
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
   const crit=FB_CRIT[k.kind]||FB_CRIT.free, wid=editId||"new"; FB={wid,busy:true,crit}; fbDraw();
-  try{ const r=await gcall("coWrite",{mode:"feedback",body:aiBodyText(b),title:$("#wtitle")?.value||"",genre:k.name,criteria:crit,settings:fbSettings(k.m),card:k.w?cardForAI(k.w):null,sermon:k.sermon,...vrFor(k.sermon)});
+  try{ const r=await gcall("coWrite",{mode:"feedback",around:aiAround(k.w),poem:k.poem,body:aiBodyText(b),title:$("#wtitle")?.value||"",genre:k.name,criteria:crit,settings:fbSettings(k.m),card:k.w?cardForAI(k.w):null,sermon:k.sermon,...vrFor(k.sermon)});
     if(!FB||FB.wid!==wid) return; Object.assign(FB,{busy:false,...r,at:new Date().toISOString(),items:(r.items||[]).map(x=>({...x,st:"open"}))}); }
   catch(e){ if(FB&&FB.wid===wid) Object.assign(FB,{busy:false,err:"피드백을 받지 못했습니다: "+e.message}); }
   fbDraw(); paintHeads(); }
@@ -5771,6 +5790,7 @@ let WS=null;   // {mid,busy,err,add,update,rel,pick:Set}
 async function wsStart(scope){ const w=editId&&S.writings.find(x=>x.id===editId), m=(tab==="write"?wMs(w):null)||S.manuscripts.find(x=>x.id===ROOM_MS); if(!m||m.rule) return toast("원고 안에서 쓸 수 있습니다");
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
   const P=cxP(m.genre&&CX_PROF[m.genre]?m.genre:"free"), text=scope==="piece"&&tab==="write"&&$("#wbody")?aiBodyText($("#wbody")):msList(m).map(x=>`■ ${x.title||""}\n${stripMemo(x.body||"")}`).join("\n\n");
+  if(text.length>14000){ const upto=(text.slice(0,14000).match(/^■ .*/gm)||[]).pop()||""; if(!confirm(`원고가 길어(${text.length.toLocaleString()}자) AI는 앞 14,000자${upto?` — 「${upto.slice(2,40)}」까지`:""}만 읽습니다.\n뒤쪽은 글마다 「다듬기 ▾ → ✦ 설정 정리」로 하면 빠짐없이 됩니다. 계속할까요?`)) return; }
   WS={mid:m.id,busy:true,scope}; wsDraw();
   try{ const r=await gcall("coWrite",{mode:"worldsync",body:text,settings:fbSettings(m),rules:cxSys(m.id,"rules")?.body||"",kinds:P.kinds.filter(k=>k!=="기타"),tpl:P.kinds.map(k=>`${k}: ${(P.tpl[k]||[]).join("·")}`).join(" / "),title:m.title,genre:G(m).n});
     if(!WS||WS.mid!==m.id) return; const has=n=>cxScope(m.id).some(c=>cxNames(c).includes(n));
@@ -5896,7 +5916,7 @@ function vfOpen(){ const w=cardW(); if(!w) return toast("몇 자 써서 간직�
       tInsert(el,vfAppendix(w,rows),el.value.length,el.value.length); ov.remove(); setTimeout(()=>el.scrollIntoView({behavior:"smooth",block:"end"}),50); toast("원고 끝에 검증표 부록을 넣었습니다 (↶ 로 되돌리기)"); });
     ov.querySelector("[data-ai]")?.addEventListener("click",async()=>{ if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
       const k=aiGenre(); busy=true; err=""; draw();
-      try{ const r=await gcall("coWrite",{mode:"verify",body:aiBodyText($("#wbody")||{value:w.body||""}),title:$("#wtitle")?.value||w.title||"",passage:$("#wpassage")?.value||w.passage||"",genre:k.name,sermon:k.sermon});
+      try{ const r=await gcall("coWrite",{mode:"verify",body:aiBodyText($("#wbody")||{value:w.body||""}),title:$("#wtitle")?.value||w.title||"",passage:$("#wpassage")?.value||w.passage||"",genre:k.name,sermon:k.sermon,refs:aiRefsText(k.m)});
         const old=vfGet(w).rows; metaSet(w.id,"vtab",{at:today(),ai:r.ai||"",rows:(r.rows||[]).map(x=>({...x,me:old.find(o=>o.claim===x.claim)?.me||""}))}); save(); }
       catch(e){ err="검증하지 못했습니다: "+e.message; } busy=false; draw(); }); };
   document.body.appendChild(ov); draw(); }
@@ -5987,7 +6007,7 @@ const RF_DIRS={alt:["다른 표현","뜻은 그대로, 바꿔 쓴 후보 4개 �
   show:["보여 주기로","설명하는 문장을 장면·행동·감각으로 보여 주게 — 사건과 사실은 그대로"],dialog:["대사 다듬기","대사를 인물의 말투에 맞게 자연스럽게 — 내용은 그대로"],sense:["감각 살리기","보고 듣고 만지는 감각이 드러나게 — 없던 사건은 더하지 않음"],formal:["객관적 문체","학술 문체로 — 단정과 감정 표현을 줄이고 주장과 근거를 분명하게"],ear:["귀 → 눈","설교 말투(여러분·되풀이·구어체·청중에게 묻는 말)를 책에서 읽는 문장으로 — 내용과 논지는 그대로"]};
 function rfDirs(){ const k=aiGenre(); if(k.meditation||k.poem) return {dirs:["fix"],free:false,why:k.meditation?"묵상":"시"};
   if(k.sermon&&k.m?.genre!=="sermon") return {dirs:["alt","speak","short","breath","polish","fix"],free:true};   // 설교초안: 말하는 문장으로(원칙 1-6)·최소 수정(7-1)
-  const G2=k.m?.genre; const d=G2==="novel"?["alt","polish","short","breath","show","dialog","sense","fix"]:G2==="paper"?["alt","polish","short","formal","breath","fix"]:G2==="essay"?["alt","polish","short","breath","fix","ear"]:["alt","polish","short","easy","breath","fix"];
+  const G2=k.m?.genre; const d=G2==="novel"?["alt","polish","short","breath","show","dialog","sense","fix"]:G2==="paper"?["alt","polish","short","formal","breath","fix"]:G2==="essay"?["alt","polish","short","breath","show","sense","fix","ear"]:["alt","polish","short","easy","breath","fix"];
   if(G2==="sermon") d.push("ear","speak"); return {dirs:d,free:true}; }   // 성격마다 맞는 방향 (소설은 「쉽게」 대신 보여 주기·대사·감각, 논문은 객관적 문체)
 const wdTok=t=>String(t).match(/\s+|[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9]+|[^\s가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9]/g)||[];
 function rfDiffHtml(a,b){ const A=wdTok(a), B=wdTok(b); if(A.length*B.length>2500000) return `<del>${esc(a)}</del><br><ins>${esc(b)}</ins>`;
@@ -6012,11 +6032,11 @@ async function rfStart(dir,again){ const b=$("#wbody"); if(!b) return; const ins
   RF={s,e,orig,dir,instr,busy:true,wid:editId||"new",n,pages:again&&RF0?.dir==="alt"?RF0.pages||[]:[],page:0}; paintHeads(); rfDraw();
   const samples=body.split("\n").filter(l=>l.trim().length>40&&!orig.includes(l)&&!l.includes(orig)).slice(0,3).join("\n");
   const label=dir==="custom"?"글쓴이의 부탁대로":RF_DIRS[dir][0]+" — "+RF_DIRS[dir][1];
-  if(dir==="alt"){ try{ const r=await gcall("coWrite",{mode:"alts",text:orig,before:body.slice(Math.max(0,s-600),s),after:body.slice(e,e+600),title:$("#wtitle")?.value||"",genre:k.name,samples,sermon:k.sermon,avoid:RF.pages.flat(),...vrFor(k.sermon)});
+  if(dir==="alt"){ try{ const r=await gcall("coWrite",{mode:"alts",world:aiWorldText(k.m),text:orig,before:body.slice(Math.max(0,s-600),s),after:body.slice(e,e+600),title:$("#wtitle")?.value||"",genre:k.name,samples,sermon:k.sermon,avoid:RF.pages.flat(),...vrFor(k.sermon)});
       if(!RF||RF.n!==n) return; RF.pages.push(r.alts); RF.page=RF.pages.length-1; Object.assign(RF,{busy:false,ai:r.ai}); }
     catch(err){ if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,err:err.message}); }
     rfCheck(); paintHeads(); rfDraw(); return; }
-  try{ const r=await gcall("coWrite",{mode:"refine",text:orig,before:body.slice(Math.max(0,s-800),s),after:body.slice(e,e+800),dir:label,instr,title:$("#wtitle")?.value||"",genre:k.name,samples,poem:k.poem,sermon:k.sermon,...vrFor(k.sermon)});
+  try{ const r=await gcall("coWrite",{mode:"refine",world:aiWorldText(k.m),text:orig,before:body.slice(Math.max(0,s-800),s),after:body.slice(e,e+800),dir:label,instr,title:$("#wtitle")?.value||"",genre:k.name,samples,poem:k.poem,sermon:k.sermon,...vrFor(k.sermon)});
     if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,to:r.to,why:r.why,same:r.same,ai:r.ai,shape:!r.same&&lineShape(orig)!==lineShape(r.to),poem:!!k.poem}); }
   catch(err){ if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,err:err.message}); }
   rfCheck(); paintHeads(); rfDraw(); }
@@ -6089,7 +6109,7 @@ async function rsSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
   if(ta) ta.value=""; const key=RS_KEY, m=rsMs(), w=tab==="write"&&editId&&S.writings.find(x=>x.id===editId), sel=tab==="write"?aiSelNow():null;
   RS_MSGS.push({role:"me",text:q}); AI_BUSY=true; rsStore(); rsDraw();
-  const ctx={ms:m?.title||"",genre:m?G(m).n:"",title:$("#wtitle")?.value||w?.title||"",passage:$("#wpassage")?.value||w?.passage||"",sel:sel?.t||""};
+  const ctx={ms:m?.title||"",genre:m?G(m).n:"",title:$("#wtitle")?.value||w?.title||"",passage:$("#wpassage")?.value||w?.passage||"",sel:sel?.t||"",one:w?wMeta(w,"c1")||"":"",sermon:!!(w&&cardKindOf(w)?.sermon)};
   let add; try{ const r=await gcall("coWrite",{mode:"research",messages:RS_MSGS.filter(x=>x.role!=="err").slice(-10).map(x=>({role:x.role,text:x.text})),ctx}); add={role:"ai",text:r.text,ai:r.ai,src:r.sources||[],q}; }
   catch(e){ add={role:"err",text:"답을 받지 못했습니다: "+e.message}; }
   AI_BUSY=false; if(RS_KEY===key){ RS_MSGS.push(add); rsStore(); }
@@ -6098,7 +6118,7 @@ async function rsSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
 const rsBody=x=>String(x.text||"").replace(/\*\*([^*\n]+)\*\*/g,"$1").trim();
 const rsSrcLine=x=>(x.src||[]).map(u=>`${u.title} ${u.url}`).join("\n");
 function rsCopy(i){ const x=RS_MSGS[i]; if(x) clip(rsBody(x)+((x.src||[]).length?"\n\n출처\n"+rsSrcLine(x):"")); }
-function rsPut(i){ const x=RS_MSGS[i], b=$("#wbody"); if(!x||!b) return; const at=caretAt(b).e, pre=b.value.slice(0,at);
+function rsPut(i){ const x=RS_MSGS[i], b=$("#wbody"); if(!x||!b) return; const at=caretAt(b).e, pre=b.value.slice(0,at); { const oz=ownHit(b.value,at,at); if(oz) return toast(`커서가 「${oz}」에 있습니다 — 직접 쓰는 자리라 AI 문장을 넣지 않습니다 (원칙 1-5)`); }
   tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+rsBody(x)+"\n",at,at); toast("넣었습니다 ("+undoHint()+")"); }
 // 담기: 지금 원고의 자료 모음에. 원고가 없으면 어느 원고에 담을지 고르고, 원고가 하나도 없으면 끄적이기에
 function rsKeep(i,mid){ const x=RS_MSGS[i]; if(!x) return; const m=mid?S.manuscripts.find(y=>y.id===mid):rsMs();
@@ -6106,7 +6126,7 @@ function rsKeep(i,mid){ const x=RS_MSGS[i]; if(!x) return; const m=mid?S.manuscr
     if(!L.length){ (S.jots=S.jots||[]).push({id:uid(),t:(rsBody(x)+((x.src||[]).length?"\n\n출처\n"+rsSrcLine(x):"")).slice(0,2000),updated:new Date().toISOString()}); save(); return toast("원고가 없어 끄적이기에 담았습니다"); }
     return ctxOpen(innerWidth/2,innerHeight/3,"어느 원고의 자료 모음에 담을까요?",L.map(y=>({t:y.title||"(이름 없음)",ic:"📚",fn:()=>rsKeep(i,y.id)})),isTouch()); }
   const t=(x.q||"AI 조사").replace(/\s+/g," ").slice(0,60), src=(x.src||[]).length?x.src.map(u=>`${u.title} ${u.url}`).join(" · ").slice(0,600):"AI 조사 · 출처 없음(확인 필요)";
-  (m.research=m.research||[]).unshift({id:uid(),kind:"웹 글",t,body:rsBody(x),src,...((x.src||[])[0]?.url?{url:x.src[0].url}:{}),ok:(x.src||[]).length?"":"확인 못 함",at:today(),u:new Date().toISOString()}); m.updated=new Date().toISOString(); save();
+  (m.research=m.research||[]).unshift({id:uid(),kind:"AI 조사",t,body:rsBody(x),src,...((x.src||[])[0]?.url?{url:x.src[0].url}:{}),ok:"확인 못 함",note:"AI가 웹 검색으로 정리한 요약입니다 — 출처 원문을 열어 맞는지 보고, 인용할 문장은 원문 그대로 바꿔 넣은 뒤 「확인함」으로 (원칙 2-10)",at:today(),u:new Date().toISOString()}); m.updated=new Date().toISOString(); save();
   toast(`「${m.title}」 자료 모음에 담았습니다`); if(tab==="room"||tab==="write") render(); }
 // ───────── 오른쪽 버튼 메뉴 ─────────
 // 컴퓨터: 오른쪽 클릭 → 누른 자리에 메뉴 (⇧를 누른 채 오른쪽 클릭이면 브라우저 원래 메뉴).
@@ -6621,7 +6641,7 @@ function revFind(wid,q){ if(editId!==wid||!$("#wbody")){ go('write',{edit:wid});
   b.focus(); b.setSelectionRange(i,i+q.length); const y=b.getBoundingClientRect().top+scrollY+caretY(b); scrollTo({top:y-innerHeight*.4,behavior:"smooth"}); }
 async function reviewRun(title,kind,ws){ if(!SERVER||!GAS) return toast("구글 서버에 연결되어야 검토할 수 있습니다"); if(!CONF.ai) return toast("설정 → 주석 서재에 클로드(또는 제미나이) 열쇠가 있어야 합니다");
   const pieces=ws.map(w=>({id:w.id,title:w.title||"",text:stripMemo(w.body||"")})); const tot=pieces.reduce((a,x)=>a+x.text.length,0);
-  if(!confirm(`「${title}」 ${ws.length}꼭지(${tot.toLocaleString()}자)를 ${CONF.ai==="claude"?"클로드":"제미나이"}에게 보내 검토 메모를 받을까요?${CONF.ai==="claude"?"\n클로드 크레딧을 조금 씁니다(글이 길수록 더).":""}\n본문은 바꾸지 않습니다. 1~2분 걸릴 수 있습니다.`)) return null;
+  if(!confirm(`「${title}」 ${ws.length}꼭지(${tot.toLocaleString()}자)를 ${CONF.ai==="claude"?"클로드":"제미나이"}에게 보내 검토 메모를 받을까요?${CONF.ai==="claude"?"\n클로드 크레딧을 조금 씁니다(글이 길수록 더).":""}\n본문은 바꾸지 않습니다. 1~2분 걸릴 수 있습니다.${tot>60000||pieces.some(x=>x.text.length>9000)?`\n\n※ 한 번에 앞 60,000자(꼭지마다 9,000자)까지만 읽습니다 — 긴 원고는 장을 골라 나눠 받으세요.`:""}`)) return null;
   toast("검토를 받는 중입니다… (1~2분)"); try{ busy(true); }catch(_){}
   const gm=ws[0]?(wMs(ws[0])||S.manuscripts.find(x=>x.title===title)):null, gg=G(gm);
   try{ const r=await gcall("reviewMs",{title,kind,pieces,genre:gm?.genre?gg.n:"",focus:gg.focus,item:gg.item}); if(!r.ok) throw new Error(r.error); const at=new Date().toISOString();
