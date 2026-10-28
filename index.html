@@ -581,6 +581,11 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .binder .pnum{color:var(--sepia);font-variant-numeric:tabular-nums;margin-right:2px}
 /* 글방 3단계 */
 .snaps ol.prevs li{margin:6px 0}
+.slgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px;max-height:62vh;overflow:auto;padding:2px}
+.slth{position:relative;padding:0;border:1px solid var(--edge);border-radius:4px;background:#fff;cursor:pointer;aspect-ratio:16/9;overflow:hidden}
+.slth img{width:100%;height:100%;object-fit:contain;display:block} .slth span{position:absolute;left:3px;top:3px;font:700 11px/1.4 sans-serif;background:rgba(0,0,0,.6);color:#fff;border-radius:3px;padding:0 4px}
+.slth.on{outline:2px solid var(--book)} .slth.on span{background:color-mix(in srgb,var(--book) 80%,#000)} .slth:hover{outline:2px solid var(--sepia)}
+.drvlist{display:grid;gap:4px;max-height:46vh;overflow:auto} .drvlist button{display:flex;gap:8px;align-items:baseline;text-align:left;width:100%;border:1px solid var(--edge);border-radius:6px;padding:7px 10px;background:var(--sheet);cursor:pointer;color:var(--ink)} .drvlist button:hover{border-color:var(--sepia)} .drvlist button.best{border-color:var(--book);background:color-mix(in srgb,var(--book) 8%,var(--sheet))} .drvlist small{color:var(--faint);margin-left:auto;white-space:nowrap}
 .cmpview{max-width:1100px;margin:16px auto;font-size:15px;line-height:1.75;max-height:calc(100vh - 150px);overflow:auto}
 .cmphead,.cmpgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px} .cmphead{position:sticky;top:-24px;background:var(--sheet);padding:6px 0;border-bottom:1px solid var(--edge);font-weight:700;color:var(--ink-soft);z-index:1}
 .cmpsame{color:var(--faint);font-size:14px;white-space:pre-wrap} .cmpgap{color:var(--faint);font-size:13px;text-align:center;margin:4px 0}
@@ -795,6 +800,25 @@ sup.mmo{color:var(--sepia);cursor:pointer;font-size:12px;margin-left:1px;user-se
 sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .fnlist{margin:14px 0 0;padding:10px 0 0 22px;border-top:1px dashed var(--deco);font-size:14px;color:var(--ink-soft);line-height:1.6}
 .readview{white-space:pre-wrap;font-size:var(--note-fs,17px);line-height:var(--note-lh,34px);min-height:40vh;padding:4px 2px}
+.readview.sized{font-size:var(--rv-fs);line-height:1.95}
+.rvbar{position:sticky;top:0;z-index:3;display:flex;gap:8px;align-items:center;flex-wrap:wrap;white-space:normal;font:14px/1.4 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft);background:color-mix(in srgb,var(--note-bg,var(--sheet)) 94%,transparent);padding:6px 2px;margin:0 0 12px;border-bottom:1px dashed var(--edge)}
+.rvbar b{color:var(--ink)} .rvbar svg{width:16px;height:16px}
+.readview.pulpit{white-space:normal;font-family:-apple-system,"Apple SD Gothic Neo","Nanum Gothic","Malgun Gothic",sans-serif;font-size:var(--rv-fs,19px);line-height:1.85}
+.readview.pulpit .rvbody::after{content:"";display:block;clear:both}
+.readview.pulpit p{margin:0 0 .75em} .readview.pulpit p.li{padding-left:1.1em;text-indent:-1.1em;margin-bottom:.4em}
+.readview.pulpit h4{font-family:inherit;font-size:1.2em;font-weight:800;color:var(--ink);border-bottom:2px solid #8a2a1f;padding-bottom:3px;margin:1.5em 0 .6em;clear:both}
+.readview.pulpit .cue{font-weight:800;color:#a05a26;font-size:.9em;margin:1.2em 0 .3em;padding-top:.4em;border-top:1px dashed #d9b48c}
+.readview.pulpit .cue .n{background:#8a4b1f;color:#fff;border-radius:4px;padding:0 .45em;margin-right:.35em} .readview.pulpit .cue .t{font-weight:400;color:var(--faint)}
+.readview.pulpit figure.sl{float:right;clear:right;width:min(38%,360px);margin:1.3em 0 .6em 1em;position:relative;border:1px solid #b9a58c;border-radius:6px;overflow:hidden;background:#fff}
+.readview.pulpit figure.sl img{display:block;width:100%} .readview.pulpit figure.sl .noimg{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:#999;font-size:13px}
+.readview.pulpit figure.sl figcaption{position:absolute;left:0;top:0;background:#8a4b1f;color:#fff;font:800 12px/1.5 sans-serif;padding:0 7px;border-radius:0 0 6px 0}
+.readview.pulpit .talk{background:#fff3bf;color:#5c4a08;border-radius:6px;padding:.3em .7em;font-size:.8em;line-height:1.55;margin:0 0 .8em} .readview.pulpit .talk b{margin-right:.4em}
+.readview.pulpit .pbox{border-radius:8px;padding:.6em .9em;margin:0 0 1em;line-height:1.7} .readview.pulpit .pbox.head{background:#f6efe2;color:#3d2a1c} .readview.pulpit .pbox.note{background:#f1f1ef;color:#444;font-size:.9em}
+.readview.pulpit .pbox.pray{background:#f1ebf8;border-left:4px solid #7a5aa8;color:#2c2140} .readview.pulpit .pbox.pray::before{content:"🙏 기도";display:block;font-weight:800;font-size:.8em;color:#7a5aa8}
+.readview.pulpit blockquote.scr{font-weight:700;color:#1d4c94;background:#f1f5fc;border-left:4px solid #1d4c94;border-radius:0 6px 6px 0;padding:.6em .9em;margin:.5em 0 1em}
+.readview.pulpit blockquote{margin:.5em 0 1em;padding:.2em .9em;border-left:3px solid #8a2a1f;font-weight:700} .readview.pulpit blockquote cite{display:block;text-align:right;font-weight:400;font-size:.8em;color:var(--faint)}
+.readview.pulpit .spot{color:#d9480f;font-weight:800} .readview.pulpit hr.pr{border:0;border-top:1px solid var(--edge);margin:1.4em 0;clear:both} .readview.pulpit ol.fn{font-size:.75em;clear:both}
+@media (max-width:700px){ .readview.pulpit figure.sl{float:none;width:100%;margin:.6em 0} }
 .readview h4{font-family:"Nanum Myeongjo";font-weight:800;font-size:calc(var(--note-fs,17px) + 2px);margin:16px 0 2px;color:var(--ink)}
 .dw-body h4{font-family:"Nanum Myeongjo";font-weight:800}
 /* 주석 요약(※ 주석 요약 … ※ 요약 끝): 내 글과 다른 결로 — 고딕 계열·작은 글자·세피아색·옅은 바탕 */
@@ -1313,7 +1337,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="df7beabc8a";
+const APP_BUILD="ff2da9ad71";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1714,15 +1738,25 @@ document.addEventListener("keydown",e=>{
 });
 // 읽어 보기: 표시가 입혀진 모습으로 (각주는 아래에 번호로)
 let READVIEW=false;
+// 읽기 모드: 글자 칸을 숨기고(고칠 수 없음) 입혀진 모습으로 보기만. 설교문(🎬·▣·🎙 줄이나 슬라이드가 있는 글)은 강단용 짜임으로
+const readFs=()=>{ try{ const v=+localStorage.getItem("seojae.readfs"); return v>=12&&v<=34?v:null; }catch(_){ return null; } };
+function readFsStep(d){ const rv=$("#readview"); const cur=readFs()||(rv?.classList.contains("pulpit")?19:parseInt(getComputedStyle(rv||document.body).fontSize)||18), v=Math.max(12,Math.min(34,cur+d)); try{ localStorage.setItem("seojae.readfs",v); }catch(_){} if(rv){ rv.style.setProperty("--rv-fs",v+"px"); rv.classList.add("sized"); } }
 function toggleRead(){
-  const b=$("#wbody"), nb=$(".notebook"); if(!b) return; READVIEW=!READVIEW; let rv=$("#readview");
-  if(READVIEW){ const fn=[]; let memo=false; const html=b.value.split("\n").map(l=>{ const t=l.trim(); if(MEMO_START.test(t)) memo=true;
+  const b=$("#wbody"); if(!b) return; READVIEW=!READVIEW; let rv=$("#readview"); const ti=$("#wtitle");
+  if(READVIEW){ const w=editId&&S.writings.find(x=>x.id===editId), text=b.value, ser=!!w?.slides||/^\s*(🎬|▣|🎙)/m.test(text);
+    let html;
+    if(ser) html=pulpitPara({body:text,slides:w?.slides});
+    else { const fn=[]; let memo=false; html=text.split("\n").map(l=>{ const t=l.trim(); if(MEMO_START.test(t)) memo=true;
       const h=!memo&&l.startsWith("■")?`<h4>${richHtml(l.replace(/^■\s*/,""),fn)}</h4>`:memo?`<span class="memo-note ${MEMO_START.test(t)?"first":""} ${MEMO_END.test(t)?"last":""} ${/^◆/.test(t)?"head":""}">${richHtml(l,fn)}</span>`:richHtml(l,fn);   // 주석 요약은 다른 결로
-      if(MEMO_END.test(t)) memo=false; return h; }).join("\n");
-    if(!rv){ rv=document.createElement("div"); rv.id="readview"; rv.className="readview page"; b.after(rv); } rv.innerHTML=html+fnHtml(fn); b.style.display="none"; rv.style.display=""; const m=$("#hmirror"); if(m) m.style.display="none"; }
-  else { b.style.display=""; rv?.remove(); paintHeads(); }
+      if(MEMO_END.test(t)) memo=false; return h; }).join("\n")+fnHtml(fn); }
+    if(!rv){ rv=document.createElement("div"); rv.id="readview"; b.after(rv); }
+    const fs=readFs(); rv.className="readview page"+(ser?" pulpit":"")+(fs?" sized":""); if(fs) rv.style.setProperty("--rv-fs",fs+"px");
+    rv.innerHTML=`<div class="rvbar">${ICO.eye}<b>읽기 모드</b><span class="muted">보기만 합니다 — 글은 그대로</span><span class="spacer"></span><button class="fsbtn" onclick="readFsStep(-1)" title="글씨 작게">가−</button><button class="fsbtn" onclick="readFsStep(1)" title="글씨 크게">가＋</button><button class="btn small" onclick="toggleRead()">${ICO.pen}다시 쓰기</button></div>`+(ser?`<div class="rvbody">${html}</div>`:html);
+    b.style.display="none"; rv.style.display=""; const m=$("#hmirror"); if(m) m.style.display="none"; if(ti) ti.readOnly=true;
+    if(ser&&w?.slides&&!SLIDES[w.slides.deck]) slideData(w.slides.deck).then(d=>{ if(d&&READVIEW&&$("#readview")){ READVIEW=false; toggleRead(); } }); }
+  else { b.style.display=""; rv?.remove(); if(ti) ti.readOnly=false; paintHeads(); }
   document.body.classList.toggle("readmode",READVIEW);   // 옆 칸을 치우고 종이를 가로로 꽉 채운 미리보기
-  $("#readbtn").innerHTML=READVIEW?ICO.pen+"다시 쓰기":ICO.eye+"읽어 보기";
+  const rb=$("#readbtn"); if(rb) rb.innerHTML=READVIEW?ICO.pen+"다시 쓰기":ICO.eye+"읽기 모드";
 }
 function hlTools(){
   return HLC.map(([k,c])=>`<button title="형광펜" onclick="hlApply({color:'${k}'})"><span class="dot" style="background:${c}"></span></button>`).join("")
@@ -2569,12 +2603,12 @@ write(){
         <select id="paper" style="width:auto" onchange="setPaper(this.value)"><option value="lined" ${paper==="lined"?"selected":""}>줄 노트</option><option value="grid" ${paper==="grid"?"selected":""}>모눈</option><option value="blank" ${paper==="blank"?"selected":""}>무지</option></select></div>
     </div></details>
     <details class="tgrp nofocus"><summary class="btn small">다듬기 ▾</summary><div class="tgmenu">
-      <button class="btn small" onclick="toggleRead();tgClose()" id="readbtn" title="형광펜·밑줄·각주가 입혀진 모습으로 봅니다">${ICO.eye}읽어 보기</button>
       <span class="row" style="gap:4px"><button class="btn small" onclick="spellCheck()" id="spellbtn" title="쓰는 즉시 규칙으로 밑줄이 그어지고, 누르면 ${CONF.ai?(CONF.ai==="claude"?"클로드":"제미나이")+"가 모든 문단을 다시 살핍니다":"규칙 밑줄만 됩니다"}">맞춤법</button><span id="spellstate" class="muted" style="font-size:12.5px"></span></span>
       <button class="btn small" onclick="toggleStk();tgClose()">${ICO.flower}스티커</button>
       <button class="btn small sidebtn" onclick="toggleSide();tgClose()" id="sidebtn" title="오른쪽 칸을 접어 종이를 넓게 씁니다">${document.body.classList.contains("sidefold")?"옆 칸 펴기 ‹":"옆 칸 접기 ›"}</button>
       <button class="btn small ghost" onclick="tgClose();discardPage()" title="${w?"이 글을 휴지통에 넣습니다 (30일 안에 서랍 → 휴지통에서 되살림)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"휴지통에":"버리기"}</button>
     </div></details>
+    <button class="btn small" onclick="toggleRead()" id="readbtn" title="글을 건드리지 않고 보기만 합니다. 설교문은 슬라이드·전달 큐가 강단용 모양으로 보입니다">${ICO.eye}읽기 모드</button>
     ${track!=="bible"?`<button class="btn small nofocus" onclick="sendOpen('w')" title="노션·PDF·워드로 보냅니다 (글방 글은 구글에만 간직되어 있습니다)">보내기</button>`:""}
     <button class="btn small ink" onclick="saveWriting()" title="⌘S">간직하기</button>
   </div>
@@ -2858,13 +2892,13 @@ let HEADS_RAF=0;
 function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.height="auto"; t.style.height=Math.max(t.scrollHeight,innerHeight*.62)+"px"; if(scrollY!==y) scrollTo(0,y); if(!HEADS_RAF) HEADS_RAF=requestAnimationFrame(()=>{ HEADS_RAF=0; paintHeads(); }); }
 // 소제목(■ 줄)과 주석 요약의 ◆ 줄을 굵게: 글자 칸(textarea)은 줄마다 모양을 바꿀 수 없어, 같은 자리에 투명한 거울 층을 겹쳐 그 줄만 굵은 글자로 한 번 더 그립니다
 // (한글은 굵게 해도 글자 폭이 같아 정확히 겹칩니다. 다른 줄은 보이지 않게 두되 자리는 차지해 줄바꿈이 같습니다)
-const HEAD_RE=/^\s*(■|◆|※\s*주석 요약|※\s*요약 끝)/;
+const HEAD_RE=/^\s*(■|◆|▣|※\s*주석 요약|※\s*요약 끝)/;
 function paintHeads(){
   const t=$("#wbody"); if(!t) return; let m=$("#hmirror"); if(!m){ m=document.createElement("div"); m.id="hmirror"; m.className="hmirror"; m.setAttribute("aria-hidden","true"); t.after(m); }
   if(t.style.display==="none"){ m.style.display="none"; return; } m.style.display="";
   const cs=getComputedStyle(t); m.style.cssText=`top:${t.offsetTop}px;left:${t.offsetLeft}px;width:${t.clientWidth}px;padding:${cs.padding};font:${cs.font};letter-spacing:${cs.letterSpacing};color:${cs.color}`;
   // 소제목 줄 안의 영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보이므로 그 부분만 원래 글자(보이지 않는 자리)로 둡니다
-  const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
+  const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):`<span>${esc(l)}</span>`;
   const errs=spellLines(t.value);
   m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[]; if(!E.length) return plain(l,head);
@@ -3488,7 +3522,7 @@ function exportMs(id){ // 성경 순서로 모은 원고는 성경책마다 장(
 function bookHtml(m,ch,author,o={}){
   const e=x=>esc(x);
   // 틀의 소제목 가운데 내용이 없는 것은 빼고, 「 — 안내말」은 지워서 책에는 소제목만 남깁니다
-  const para=body=>{ const L=stripMemo(body).split("\n").map(l=>l.trim()).filter(Boolean), fn=[];
+  const para=body=>{ const L=stripMemo(body).split("\n").map(l=>l.trim()).filter(l=>l&&!SLIDE_RE.test(l)), fn=[];
     const html=L.filter((l,k)=>!l.startsWith("■")||(k+1<L.length&&!L[k+1].startsWith("■"))).map(l=>
     l.startsWith("■")?`<h4>${richHtml(l.replace(/^■\s*/,"").replace(/\s+—\s+.*$/,""),fn)}</h4>`
       :/^(==(?:[ygpb]:)?|__)?「/.test(l)?(()=>{ const m=l.match(/^(.*」)\s*\(([^()]{1,80})\)\s*$/); return m?`<blockquote>${richHtml(m[1],fn)}<cite>${e(m[2])}</cite></blockquote>`:`<blockquote>${richHtml(l,fn)}</blockquote>`; })()
@@ -3503,7 +3537,7 @@ function bookHtml(m,ch,author,o={}){
     if(GN==="novel"){ const brk=i>0&&!(pb.get(w.id)||[]).length; parts+=`${brk?`<p class="scenebreak">＊</p>`:""}<div class="scene" id="c${i}">${para(w.body)}</div>`; return; }
     if(grouped&&name&&name!==part){ part=name; parts+=`<section class="part"><h2 class="partname">${e(name)}</h2></section>`; toc+=`<li class="tocpart">${e(name)}</li>`; }
     toc+=`<li><a href="#c${i}">${i+1}. ${e(w.title||"(제목 없음)")}<span class="dots"></span></a></li>`;
-    parts+=`<section class="chapter" id="c${i}"><div class="num">${i+1}</div><h3>${e(w.title||"(제목 없음)")}</h3>${w.summary?`<div class="lede">${e(w.summary)}</div>`:""}${w.passage?`<div class="passage">${e(w.passage)}</div>`:""}${para(w.body)}</section>`; });
+    parts+=`<section class="chapter" id="c${i}"><div class="num">${i+1}</div><h3>${e(w.title||"(제목 없음)")}</h3>${w.summary?`<div class="lede">${e(w.summary)}</div>`:""}${w.passage?`<div class="passage">${e(w.passage)}</div>`:""}${o.fmt==="pulpit"?pulpitPara(w):para(w.body)}</section>`; });
   const total=ch.reduce((a,w)=>a+charsAll(w.body),0);
   return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>${e(m.title)}</title>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800${o.fmt==="pulpit"?"&family=Nanum+Gothic:wght@400;700;800":""}&display=swap" rel="stylesheet">
@@ -3570,24 +3604,69 @@ ${o.fmt==="pulpit"?"":`<section class="colophon">${e(m.title)}<br>${e(author||""
 </body></html>`;
 }
 // 강단용(태블릿) PDF: 표지·차례·판권 없이 바로 본문, 큰 고딕 글씨·넓은 줄 간격·대지 띠·성경 인용 상자·큰 쪽 번호 (위 기본 모양을 덮어씀)
-const PULPIT_FS={l:18,xl:21,xxl:24};
+const PULPIT_FS={l:12,xl:13.5,xxl:15};
 function pulpitCss(o){ const fs=PULPIT_FS[o.pfs]||PULPIT_FS.xl;
-  return `@page{size:170mm 255mm;margin:11mm 12mm 15mm 12mm;@bottom-center{content:none}@top-center{content:none}@bottom-right{content:counter(page) " / " counter(pages);font:700 13pt "Nanum Gothic",sans-serif;color:#555}}
-html{font-family:"Nanum Gothic","Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:${fs}pt;color:#111}
+  return `@page{size:210mm 297mm;margin:13mm 14mm 15mm 15mm;@bottom-center{content:none}@top-center{content:none}@top-right{content:string(booktitle);font:9pt "Nanum Gothic",sans-serif;color:#9a9a9a}@bottom-right{content:counter(page) " / " counter(pages);font:700 10.5pt "Nanum Gothic",sans-serif;color:#555}}
+html{font-family:"Nanum Gothic","Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:${fs}pt;color:#1b1b1b}
 .cover,.front,.colophon,.chapter .num{display:none!important}
-.chapter:first-of-type{break-before:auto} .chapter{padding-top:0} .chapter h3{font-family:"Nanum Gothic",sans-serif;font-weight:800;font-size:1.4em;line-height:1.3;margin:0 0 2.5mm;string-set:booktitle content()}
-.lede{font-family:inherit;font-size:.86em;color:#444;margin:0 0 3mm}
-.passage{display:inline-block;font-size:.92em;font-weight:800;color:#8a2a1f;letter-spacing:0;background:#f6efe2;border-radius:2mm;padding:1.5mm 4mm;margin:0 0 6mm}
-p{text-indent:0;text-align:left;line-height:1.72;margin:0 0 .65em;word-break:keep-all;overflow-wrap:break-word;orphans:2;widows:2}
-h4{font-family:"Nanum Gothic",sans-serif;font-weight:800;font-size:1.08em;color:#fff;background:#5b3a29;border-radius:1.5mm;padding:1.6mm 4mm;margin:7mm 0 3.5mm;break-after:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-blockquote{font-family:"Nanum Myeongjo",serif;font-weight:700;line-height:1.65;color:#2a1d14;background:#fbf4e4;border-left:3pt solid #8a2a1f;border-radius:0 2mm 2mm 0;padding:3mm 4.5mm;margin:2mm 0 5mm;break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-blockquote cite{font-size:.72em;color:#6d5b48;margin-top:1.5mm}
-mark.hl-y{background:#f3d77a}mark.hl-g{background:#bfe0b0}mark.hl-p{background:#f1bcc6}mark.hl-b{background:#b7d2ea}
-u.mku{text-decoration-thickness:1.6pt;text-underline-offset:3.5pt}
-sup.fnref{font-size:.55em} ol.fn{font-size:.6em;line-height:1.5;break-inside:auto}
-.part{height:auto;padding-top:50mm} .partname{font-family:"Nanum Gothic",sans-serif}
+.chapter:first-of-type{break-before:auto} .chapter{padding-top:0}
+.chapter h3{font-family:"Nanum Gothic",sans-serif;font-weight:800;font-size:1.65em;line-height:1.3;margin:0 0 2mm;string-set:booktitle content()}
+.lede{font-family:inherit;font-size:.9em;color:#555;margin:0 0 2mm}
+.passage{display:inline-block;font-size:.95em;font-weight:800;color:#8a2a1f;letter-spacing:0;background:#f6efe2;border-radius:1.5mm;padding:1mm 3.5mm;margin:0 0 4mm}
+.pbox{border-radius:2mm;padding:2.5mm 4mm;margin:0 0 4mm;line-height:1.65;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pbox.head{background:#f6efe2;color:#3d2a1c} .pbox.head b{font-size:1.05em}
+.pbox.note{background:#f1f1ef;color:#444;font-size:.9em}
+.pbox.pray{background:#f1ebf8;border-left:2.5pt solid #7a5aa8;color:#2c2140;line-height:1.85}
+.pbox.pray::before{content:"🙏 기도";display:block;font-weight:800;font-size:.8em;color:#7a5aa8;margin-bottom:1mm}
+h4{font-family:"Nanum Gothic",sans-serif;font-weight:800;font-size:1.22em;color:#3d2a1c;border-bottom:1.3pt solid #8a2a1f;padding:0 0 1.2mm;margin:8mm 0 3.5mm;break-after:avoid;clear:both}
+p{text-indent:0;text-align:left;line-height:1.85;margin:0 0 .7em;word-break:keep-all;overflow-wrap:break-word;orphans:2;widows:2}
+p.li{padding-left:1.1em;text-indent:-1.1em;margin-bottom:.35em}
+.cue{font-weight:800;color:#8a4b1f;font-size:.92em;margin:5mm 0 1.5mm;padding-top:1.5mm;border-top:.7pt dashed #d9b48c;break-after:avoid}
+.cue .n{display:inline-block;background:#8a4b1f;color:#fff;border-radius:1mm;padding:0 2mm;margin-right:1.5mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cue .t{font-weight:400;color:#7a6a5a}
+figure.sl{float:right;clear:right;width:62mm;margin:5mm 0 3mm 5mm;position:relative;border:.8pt solid #b9a58c;border-radius:1.2mm;overflow:hidden;background:#fff;break-inside:avoid}
+figure.sl img{display:block;width:100%} figure.sl .noimg{height:30mm;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:9pt}
+figure.sl figcaption{position:absolute;left:0;top:0;background:#8a4b1f;color:#fff;font:800 9pt "Nanum Gothic",sans-serif;padding:.4mm 2mm;border-radius:0 0 1.2mm 0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.talk{clear:none;background:#fff3bf;border-radius:1.5mm;padding:1.3mm 3mm;font-size:.8em;line-height:1.55;color:#5c4a08;margin:0 0 3mm;break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.talk b{margin-right:1.5mm}
+blockquote.scr{font-family:inherit;font-weight:700;color:#1d4c94;background:#f1f5fc;border-left:2.5pt solid #1d4c94;border-radius:0 1.5mm 1.5mm 0;padding:2.5mm 4mm;margin:2mm 0 4mm;line-height:1.75;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+blockquote{font-family:inherit;font-weight:700;color:#1d4c94;border-left:2.5pt solid #1d4c94;padding:1.5mm 4mm;margin:2mm 0 4mm;line-height:1.75}
+blockquote cite{font-size:.75em;color:#6d6d6d}
+.spot{color:#c2410c;font-weight:800}
+hr.pr{border:0;border-top:.7pt solid #cfc4b4;margin:5mm 0;clear:both}
+mark.hl-y{background:#f6e3a1}mark.hl-g{background:#cfe3c4}mark.hl-p{background:#f3cfd4}mark.hl-b{background:#cadcec}
+u.mku{text-decoration-thickness:1pt;text-underline-offset:2.5pt}
+sup.fnref{font-size:.6em} ol.fn{font-size:.7em;line-height:1.5;clear:both}
+.part{height:auto;padding-top:40mm} .partname{font-family:"Nanum Gothic",sans-serif}
 .sect{font-family:"Nanum Gothic",sans-serif;font-size:1em}
 `; }
+// 강단용 본문: 노션 설교문 짜임 그대로 — 🎬 슬라이드 줄(+그림, 오른쪽), 🎙️ 전달 큐(노란 상자, 읽지 않음), > 성경 낭독(파랑 굵게), 🙏 기도, 📖 머리 상자, 【설교자의 자리】(주황)
+let TPL_HEADS=null;   // 앱 틀의 소제목 줄(「 — 안내말」을 지울 것) — 노션 설교문의 「도입 — 말의 무게」 같은 제목은 그대로
+function tplHeads(){ if(TPL_HEADS) return TPL_HEADS; TPL_HEADS=new Set(); [TYPES.bible,TYPES.book,typeof LEGACY_TYPES==="object"?LEGACY_TYPES:{}].forEach(T=>Object.values(T||{}).forEach(v=>String(v||"").split("\n").forEach(x=>{ if(x.trim().startsWith("■")) TPL_HEADS.add(x.trim()); }))); Object.values(GENRES).forEach(g=>String(g.tpl||"").split("\n").forEach(x=>{ if(x.trim().startsWith("■")) TPL_HEADS.add(x.trim()); })); return TPL_HEADS; }
+function pulpitPara(w){ const d=w.slides&&SLIDES[w.slides.deck], imgs=d?.imgs||[], fn=[];
+  const L=stripMemo(w.body||"").split("\n").map(l=>l.trim());
+  const rich=l=>richHtml(l,fn).replace(/【([^】\n]{1,30})】/g,'<span class="spot">【$1】</span>');
+  const fig=n=>`<figure class="sl">${imgs[n-1]?`<img src="${imgs[n-1]}" alt="">`:`<div class="noimg">슬라이드 ${n}</div>`}<figcaption>${n}</figcaption></figure>`;
+  const cueHtml=t=>{ const m=t.match(/^(슬라이드\s*\d+)\s*(?:·\s*)?(.*)$/); if(!m) return `<div class="cue">🎬 ${rich(t)}</div>`; const [a,...r]=m[2].split(/\s+—\s+/); return `<div class="cue"><span class="n">🎬 ${esc(m[1])}</span>${rich(a||"")}${r.length?` <span class="t">— ${rich(r.join(" — "))}</span>`:""}</div>`; };
+  const BOX=[[/^📖\s*/,"head"],[/^🙏\s*/,"pray"],[/^🧭\s*/,"skip"]];
+  let out="", k=0; const next=()=>{ let j=k+1; while(j<L.length&&!L[j]) j++; return j; };
+  while(k<L.length){ const l=L[k]; if(!l){ k++; continue; }
+    let m;
+    if(/^🎬/.test(l)){ const j=next(); const sm=j<L.length&&L[j].match(SLIDE_RE); out+=(sm?fig(+sm[1]):"")+cueHtml(l.replace(/^🎬\s*/,"")); k=sm?j+1:k+1; continue; }
+    if((m=l.match(SLIDE_RE))){ const n=+m[1], lab=l.replace(SLIDE_RE,"").replace(/^\s*·\s*/,"")||(d?.texts?.[n-1]||"").slice(0,40); out+=fig(n)+`<div class="cue"><span class="n">🎬 슬라이드 ${n}</span>${esc(lab)}</div>`; k++; continue; }
+    if(/^🎙/.test(l)){ const t=l.replace(/^🎙️?\s*/,"").replace(/^전달\s*큐\s*[·:]\s*/,""); out+=`<div class="talk"><b>🎙 큐</b>${rich(t)}</div>`; k++; continue; }
+    const bx=BOX.find(([re])=>re.test(l));
+    if(bx){ const re=bx[0], grp=[]; while(k<L.length&&L[k]&&re.test(L[k])){ grp.push(L[k].replace(re,"")); k++; }
+      if(bx[1]==="skip"){ while(k<L.length&&(!L[k]||/^[•\-]\s/.test(L[k]))) k++; continue; }
+      out+=`<div class="pbox ${bx[1]}">${grp.map((g,i)=>i===0&&bx[1]==="head"?`<b>${rich(g)}</b>`:rich(g)).join("<br>")}</div>`; continue; }
+    if(/^>\s?/.test(l)){ const grp=[]; while(k<L.length&&/^>\s?/.test(L[k])){ grp.push(L[k].replace(/^>\s?/,"")); k++; } out+=`<blockquote class="scr">${grp.map(rich).join("<br>")}</blockquote>`; continue; }
+    if(/^\p{Extended_Pictographic}/u.test(l)&&!/^[🎬🎙]/u.test(l)){ const ic=[...l][0], grp=[]; while(k<L.length&&L[k]&&L[k].startsWith(ic)){ grp.push(L[k].slice(ic.length).trim()); k++; } out+=`<div class="pbox note">${ic} ${grp.map(rich).join("<br>")}</div>`; continue; }
+    if(l.startsWith("■")){ const j=next(); if(j>=L.length||L[j].startsWith("■")){ k++; continue; } out+=`<h4>${rich(l.replace(/^■\s*/,"").replace(tplHeads().has(l)?/\s+—\s+.*$/:/$^/,""))}</h4>`; k++; continue; }
+    if(/^-{3,}$/.test(l)){ out+=`<hr class="pr">`; k++; continue; }
+    if(/^(==(?:[ygpb]:)?|__)?「/.test(l)){ const mm=l.match(/^(.*」)\s*\(([^()]{1,80})\)\s*$/); out+=mm?`<blockquote>${rich(mm[1])}<cite>${esc(mm[2])}</cite></blockquote>`:`<blockquote>${rich(l)}</blockquote>`; k++; continue; }
+    if(/^[•☐]\s|^-\s/.test(l)){ out+=`<p class="li">${rich(l)}</p>`; k++; continue; }
+    out+=`<p>${rich(l)}</p>`; k++; }
+  return out+(fn.length?`<ol class="fn">${fn.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`:""); }
 // ───────── 보내기 센터: 글방 글은 구글에만 간직되고, 여기서 노션·PDF·워드·마크다운·텍스트로 보냅니다 ─────────
 // 보낸 기록 S.sends=[{id,at,to,scope,ms,ids,name,n,chars,u}] (목록 병합·묘비 대상)
 let TMP_MS=null;
@@ -3640,14 +3719,14 @@ async function saveBlob(name,blob){ try{ const f=new File([blob],name,{type:blob
 const LIBS={}; function loadLib(url,sri,glob){ if(window[glob]) return Promise.resolve(window[glob]); if(LIBS[url]) return LIBS[url];
   return LIBS[url]=new Promise((ok,no)=>{ const sc=document.createElement("script"); sc.src=url; if(sri){ sc.integrity=sri; sc.crossOrigin="anonymous"; } sc.onload=()=>window[glob]?ok(window[glob]):no(new Error("프로그램을 읽지 못했습니다")); sc.onerror=()=>{ delete LIBS[url]; no(new Error("인터넷에서 프로그램을 받지 못했습니다")); }; document.head.appendChild(sc); }); }
 // 글의 줄 → 보내기용 블록 (빈 틀 소제목·주석 요약은 빼고, 소제목의 「 — 안내말」은 지움)
-function sendBlocks(body){ const L=stripMemo(body||"").split("\n"), out=[];
+function sendBlocks(body){ const L=stripMemo(body||"").split("\n").filter(l=>!SLIDE_RE.test(l)), out=[];
   L.forEach((l,k)=>{ const t=l.trim(); if(t.startsWith("■")){ const nx=L.slice(k+1).find(x=>x.trim()); if(!nx||nx.trim().startsWith("■")) return; out.push({k:"h",t:t.replace(/^■\s*/,"").replace(/\s+—\s+.*$/,"")}); }
     else if(!t) out.push({k:"gap"}); else if(/^(==(?:[ygpb]:)?|__)?「/.test(t)) out.push({k:"q",t}); else out.push({k:"p",t}); });
   return out; }
 function sendText(name,list,m,scope,md){ const pb=m&&scope!=="one"?partsBefore(m):new Map(); let out=md?`# ${name}\n\n`:`${name}\n\n`;
   list.forEach((w,i)=>{ (pb.get(w.id)||[]).forEach(p=>{ out+=md?`\n${p.lv===1?"##":"###"} ${p.t}\n\n`:`\n[${p.t}]\n\n`; });
     out+=md?`#### ${w.title||"(제목 없음)"}${w.passage?` — ${w.passage}`:""}\n\n`:`${w.title||"(제목 없음)"}${w.passage?" — "+w.passage:""}\n\n`;
-    let t=stripMemo(w.body||"").trim(); if(md) t=t.replace(/__([^_\n]+?)__/g,"<u>$1</u>");   // 마크다운에서 __는 굵게가 되므로 밑줄은 <u>
+    let t=stripMemo(w.body||"").split("\n").filter(l=>!SLIDE_RE.test(l)).join("\n").trim(); if(md) t=t.replace(/__([^_\n]+?)__/g,"<u>$1</u>");   // 마크다운에서 __는 굵게가 되므로 밑줄은 <u>
     out+=plainWithNotes(t,md,(i+1)+"-")+"\n\n"; });
   return out; }
 // 워드(.docx): 진짜 각주, 소제목·인용·형광펜·밑줄, 부·장 제목, 쪽 번호. 시집은 행 그대로, 소설은 장면 사이 ＊
@@ -3682,8 +3761,8 @@ function exportPdf(id){
   const ov=document.createElement("div"); ov.className="bookview expopts";
   ov.innerHTML=`<section class="sheet" style="max-width:620px;margin:40px auto;display:grid;gap:12px">
     <p class="label" style="margin:0">${ICO.closed}「${esc(m.title)}」 책으로 묶기</p>
-    <div class="setrow"><span class="k">판형</span><div class="pills"><button class="pill ${o.fmt==="a5"?"on":""}" data-fmt="a5">A5 책 (표지·차례·쪽 번호)</button><button class="pill ${o.fmt==="a4"?"on":""}" data-fmt="a4">A4 투고 원고 (넓은 줄 간격)</button><button class="pill ${o.fmt==="pulpit"?"on":""}" data-fmt="pulpit" title="강단에서 태블릿으로 보기 좋게: 표지·차례 없이 큰 글씨">강단용 태블릿 (큰 글씨)</button></div></div>
-    <div class="setrow" id="eo-pfsrow" ${o.fmt==="pulpit"?"":"hidden"}><span class="k">글씨 크기</span><div class="pills">${[["l","크게"],["xl","더 크게"],["xxl","아주 크게"]].map(([k,n])=>`<button class="pill ${o.pfs===k?"on":""}" data-pfs="${k}">${n} <small>${PULPIT_FS[k]}pt</small></button>`).join("")}</div><small class="hint" style="display:block;width:100%">표지·차례 없이 첫 쪽부터 본문. 대지는 진한 띠, 성경 인용은 상자, 쪽 번호는 「3 / 12」로 크게. 태블릿 PDF 보기에서 「폭에 맞춤」으로 보세요.</small></div>
+    <div class="setrow"><span class="k">판형</span><div class="pills"><button class="pill ${o.fmt==="a5"?"on":""}" data-fmt="a5">A5 책 (표지·차례·쪽 번호)</button><button class="pill ${o.fmt==="a4"?"on":""}" data-fmt="a4">A4 투고 원고 (넓은 줄 간격)</button><button class="pill ${o.fmt==="pulpit"?"on":""}" data-fmt="pulpit" title="강단에서 12인치 태블릿(세로)으로 보기 좋게: 표지·차례 없이 A4 세로, 슬라이드 그림·전달 큐 상자">강단용 태블릿 (A4 세로·슬라이드)</button></div></div>
+    <div class="setrow" id="eo-pfsrow" ${o.fmt==="pulpit"?"":"hidden"}><span class="k">글씨 크기</span><div class="pills">${[["l","보통"],["xl","조금 크게"],["xxl","크게"]].map(([k,n])=>`<button class="pill ${o.pfs===k?"on":""}" data-pfs="${k}">${n} <small>${PULPIT_FS[k]}pt</small></button>`).join("")}</div><small class="hint" style="display:block;width:100%">표지·차례 없이 첫 쪽부터 본문(A4 세로 = 12인치 태블릿 세로 화면). 🎬 슬라이드 줄 옆 오른쪽에 그 슬라이드 그림, 🎙️ 전달 큐는 노란 작은 상자, 성경 낭독은 파란 굵은 글씨, 【설교자의 자리】는 주황. 쪽 번호는 「3 / 12」.</small></div>
     <label class="chk"><input type="checkbox" id="eo-done" ${o.done?"checked":""}> 「완성」 꼭지만 넣기 (${msList(m).filter(w=>w.status==="완성").length}꼭지)</label>
     <label class="chk"><input type="checkbox" id="eo-pre" ${o.preface?"checked":""}> 머리말 넣기</label>
     <textarea id="eo-preface" placeholder="머리말 — 이 책을 쓰게 된 까닭, 읽을 이에게 드리는 말 (비워 두면 넣지 않습니다)" style="min-height:120px">${esc(m.preface||"")}</textarea>
@@ -3705,6 +3784,7 @@ function msBiblio(m){ const ids=new Set(); msList(m).forEach(w=>{ if(w.bookId) i
 function bookPreview(id,o){
   const m=id==="__one"?TMP_MS:S.manuscripts.find(x=>x.id===id); let ch=msList(m); if(o.done) ch=ch.filter(w=>w.status==="완성"); if(o.ids) ch=ch.filter(w=>o.ids.includes(w.id));
   if(!ch.length) return toast("넣을 꼭지가 없습니다 (「완성」 꼭지만을 골랐다면 상태를 확인해 주세요)");
+  if(o.fmt==="pulpit"&&!o._sl){ o._sl=1; const need=ch.filter(w=>w.slides&&!SLIDES[w.slides.deck]); if(need.length){ toast("슬라이드 그림을 불러오는 중…"); return Promise.all(need.map(w=>slideData(w.slides.deck))).then(()=>bookPreview(id,o)); } }
   let author=S.settings.author;
   if(author==null){ author=(prompt("책 표지에 들어갈 지은이 이름을 적어 주세요 (비워 두어도 됩니다)","")||"").trim(); S.settings.author=author; save(); }
   const ov=document.createElement("div"); ov.className="bookview";
@@ -3945,10 +4025,11 @@ function sideTabs(w){ const m=wMs(w), g=G(m), cx=w?codexIn(w.body+" "+(w.title||
   const res=m?((m.research||[]).length?(m.research||[]).map(r=>`<div class="rsrc"><b>${esc(r.t||"자료")}</b><span class="muted">${esc((r.body||"").slice(0,120))}${(r.body||"").length>120?"…":""}</span><button class="btn small" onclick="resInsert('${m.id}','${r.id}')">넣기</button></div>`).join(""):`<p class="hint">원고 자료는 글방 → 「자료」에서 모아 두면 여기서 「넣기」로 꺼내 씁니다.</p>`):`<p class="hint">이 글이 원고에 들어 있으면 그 원고의 자료가 여기에 보입니다.</p>`;
   const notes=cx.length?cx.map(c=>`<details class="cxside"><summary>${esc(c.name)}</summary><div class="pen" style="font-size:18px;white-space:pre-wrap">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join(""):`<p class="hint">이 글에 나온 ${esc(g.codex)}가 여기에 모입니다. 노트는 글방 왼쪽에서 만듭니다.</p>`;
   const ai=rv?`<div class="revside">${revNotesHtml(w,true)}<button class="btn small" onclick="reviewOne('${w.id}')">${ICO.search}${w.review?"다시 검토 받기":"이 글 검토 받기"}</button><p class="hint">AI는 본문을 바꾸지 않고 짚을 점만 메모로 남깁니다.</p></div>`:`<p class="hint">원고에 넣은 글과 설교초안은 AI 검토를 받을 수 있습니다. 묻기·막힐 때 질문은 곧 더해집니다.</p>`;
-  const tabs=[["memo","메모"],["res","자료"+(m&&(m.research||[]).length?" "+m.research.length:"")],["notes","노트"+(cx.length?" "+cx.length:"")],["ai","AI"+(w?.review?.notes?.length?" "+w.review.notes.length:"")]];
+  const sl=!!(w&&(w.slides||/설교/.test(w.type||"")||g.item==="설교"));
+  const tabs=[["memo","메모"],...(sl?[["slides","슬라이드"+(w.slides?" "+w.slides.n:"")]]:[]),["res","자료"+(m&&(m.research||[]).length?" "+m.research.length:"")],["notes","노트"+(cx.length?" "+cx.length:"")],["ai","AI"+(w?.review?.notes?.length?" "+w.review.notes.length:"")]];
   const cur=tabs.some(t=>t[0]===SIDE_TAB)?SIDE_TAB:"memo";
   return `<div class="sidetabs"><div class="stabs">${tabs.map(([k,n])=>`<button type="button" data-k="${k}" class="${k===cur?"on":""}" onclick="sideTab('${k}')">${n}</button>`).join("")}</div>
-    ${[["memo",memo],["res",res],["notes",notes],["ai",ai]].map(([k,h])=>`<div class="spanel" data-k="${k}" ${k===cur?"":"hidden"}>${h}</div>`).join("")}</div>`; }
+    ${[["memo",memo],...(sl?[["slides",slideTabHtml(w)]]:[]),["res",res],["notes",notes],["ai",ai]].map(([k,h])=>`<div class="spanel" data-k="${k}" ${k===cur?"":"hidden"}>${h}</div>`).join("")}</div>`; }
 function wSideRoom(w){ const m=wMs(w), cx=w?codexIn(w.body+" "+(w.title||"")):[], rv=w&&(m||w.type==="설교초안"); if(!m&&!cx.length&&!rv) return "";
   return `<div class="card-index roomside">
     ${rv?`<div class="revside">${revNotesHtml(w,true)}<button class="btn small" onclick="reviewOne('${w.id}')">${ICO.search}${w.review?"다시 검토 받기":"이 글 검토 받기"}</button></div>`:""}
@@ -4012,13 +4093,108 @@ function caretY(ta){ const cs=getComputedStyle(ta), d=document.createElement("di
 let TW_RAF=0; function typeCenter(){ if(!TYPEW||TW_RAF) return; TW_RAF=requestAnimationFrame(()=>{ TW_RAF=0; const ta=$("#wbody"); if(!ta||document.activeElement!==ta) return;
   const y=ta.getBoundingClientRect().top+scrollY+caretY(ta); const want=y-innerHeight*0.42; if(Math.abs(want-scrollY)>4) scrollTo({top:Math.max(0,want),behavior:"auto"}); }); }
 ["input","keyup","click"].forEach(ev=>document.addEventListener(ev,e=>{ if(TYPEW&&e.target?.id==="wbody") typeCenter(); }));
+// ───────── 설교 슬라이드: PPT(드라이브·이 기기)·노션 그림 → 작은 그림 → 글 속 「▣ 슬라이드 n」 자리 → 강단용 PDF ─────────
+// 그림은 기록(data.json)에 넣지 않습니다: 이 기기 보관함(IndexedDB "seojae") + 드라이브 「아침 서재/슬라이드/<deck>.json」. 글에는 w.slides={deck,n,name,src,at,up}만.
+const PDFJS=["https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js","sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e","pdfjsLib"];
+const SLIDE_RE=/^\s*▣\s*슬라이드\s*(\d+)/;
+const SLIDES={}; let IDB=null, SLIDE_CHK={};
+function idb(){ return IDB||(IDB=new Promise((ok,no)=>{ try{ const r=indexedDB.open("seojae",1); r.onupgradeneeded=()=>r.result.createObjectStore("kv"); r.onsuccess=()=>ok(r.result); r.onerror=()=>no(r.error); }catch(e){ no(e); } })); }
+async function idbGet(k){ try{ const db=await idb(); return await new Promise(ok=>{ const q=db.transaction("kv").objectStore("kv").get(k); q.onsuccess=()=>ok(q.result||null); q.onerror=()=>ok(null); }); }catch(_){ return null; } }
+async function idbSet(k,v){ try{ const db=await idb(); await new Promise(ok=>{ const t=db.transaction("kv","readwrite"); t.objectStore("kv").put(v,k); t.oncomplete=ok; t.onerror=ok; }); }catch(_){} }
+async function slideData(deck){ if(!deck) return null; if(SLIDES[deck]) return SLIDES[deck]; let d=await idbGet("slides:"+deck);
+  if(!d&&SERVER){ try{ const r=await gcall("slideGet",{deck}); if(!r.missing){ d={imgs:r.imgs||[],texts:r.texts||[]}; idbSet("slides:"+deck,d); } }catch(_){} }
+  if(d) SLIDES[deck]=d; return d||null; }
+function shrinkImg(src,max=560){ return new Promise((ok,no)=>{ const im=new Image(); im.onload=()=>{ const k=Math.min(1,max/(im.naturalWidth||max)), c=document.createElement("canvas"); c.width=Math.max(1,Math.round(im.naturalWidth*k)); c.height=Math.max(1,Math.round(im.naturalHeight*k)); const g=c.getContext("2d"); g.fillStyle="#fff"; g.fillRect(0,0,c.width,c.height); g.drawImage(im,0,0,c.width,c.height); ok(c.toDataURL("image/jpeg",.72)); }; im.onerror=()=>no(new Error("그림을 읽지 못했습니다")); im.src=src; }); }
+async function pdfSlides(buf,prog){ const P=await loadLib(...PDFJS); P.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  const doc=await P.getDocument({data:buf}).promise, n=Math.min(doc.numPages,150), imgs=[], texts=[];
+  for(let i=1;i<=n;i++){ prog?.(i,n); const pg=await doc.getPage(i), v0=pg.getViewport({scale:1}), v=pg.getViewport({scale:560/v0.width}), c=document.createElement("canvas"); c.width=Math.round(v.width); c.height=Math.round(v.height);
+    const g=c.getContext("2d"); g.fillStyle="#fff"; g.fillRect(0,0,c.width,c.height); await pg.render({canvasContext:g,viewport:v}).promise; imgs.push(c.toDataURL("image/jpeg",.72));
+    try{ texts.push((await pg.getTextContent()).items.map(x=>x.str).join(" ").replace(/\s+/g," ").trim().slice(0,400)); }catch(_){ texts.push(""); } }
+  return {imgs,texts}; }
+const b64buf=b=>{ const s=atob(b), u=new Uint8Array(s.length); for(let i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u; };
+async function slideAttach(w,d,meta){ const deck=uid(); SLIDES[deck]=d; await idbSet("slides:"+deck,d); let up=false;
+  if(SERVER){ try{ await gcall("slideSave",{deck,imgs:d.imgs,texts:d.texts}); up=true; }catch(e){ toast("슬라이드 그림을 구글에 올리지 못해 이 기기에만 있습니다: "+e.message); } }
+  w.slides=Object.assign({deck,n:d.imgs.length,at:new Date().toISOString(),up},meta); w.updated=new Date().toISOString(); if(editId===w.id) EDIT_BASE=w.updated; save(); return deck; }
+const slideNums=body=>String(body||"").split("\n").map(l=>l.match(SLIDE_RE)).filter(Boolean).map(m=>+m[1]);
+function slideTabHtml(w){ if(!w) return `<p class="hint">글을 간직하면 슬라이드를 붙일 수 있습니다.</p>`;
+  if(!w.slides) return `<p class="hint">설교 PPT를 가져오면 슬라이드가 작은 그림으로 여기 모입니다. 그림을 누르면 글의 커서 자리에 「▣ 슬라이드 n」 줄이 들어가고, 강단용 PDF에서는 그 자리 오른쪽에 그림이 나옵니다.</p><button class="btn small ink" onclick="slidePick()">${ICO.down}PPT 가져오기</button><p class="hint" style="margin-top:8px">노션 설교문(슬라이드 포함)을 「보내기 · 가져오기 → 노션 페이지」로 가져오면 그림과 자리가 함께 들어옵니다.</p>`;
+  const s=w.slides, placed=new Set(slideNums(editId===w.id&&$("#wbody")?$("#wbody").value:w.body)); setTimeout(()=>slideFill(w),0);
+  return `<div class="slhead"><b>${esc(s.name||"슬라이드")}</b> <span class="muted">${s.n}장 · 자리 ${placed.size}</span><span id="slnew"></span></div>
+    <div class="row" style="gap:4px;flex-wrap:wrap;margin-top:6px"><button class="btn small" onclick="slideAuto('${w.id}')" title="슬라이드 글자와 설교 문단을 맞춰 「▣ 슬라이드」 줄을 넣습니다. ⌘Z로 되돌릴 수 있습니다">자동으로 자리 잡기</button><button class="btn small" onclick="slidePick()">다시 가져오기</button><button class="btn small ghost" onclick="slideDetach('${w.id}')">떼기</button></div>
+    <p class="hint" style="margin:6px 0 0">누르면 커서 자리에 넣습니다. 초록 테두리는 이미 넣은 슬라이드.</p>
+    <div class="slgrid">${Array.from({length:s.n},(_,i)=>`<button type="button" class="slth ${placed.has(i+1)?"on":""}" data-n="${i+1}" onclick="slideInsert(${i+1})"><img data-sl="${i}" alt=""><span>${i+1}</span></button>`).join("")}</div>`; }
+async function slideFill(w){ const d=await slideData(w.slides?.deck); const box=document.querySelector('.spanel[data-k="slides"]'); if(!box) return;
+  if(!d){ box.querySelector(".slgrid")?.insertAdjacentHTML("beforebegin",`<p class="muted">그림을 찾지 못했습니다 — 다른 기기에서 구글에 올리지 못한 슬라이드일 수 있습니다. 「다시 가져오기」를 눌러 주세요.</p>`); return; }
+  box.querySelectorAll("img[data-sl]").forEach(im=>{ const i=+im.dataset.sl; if(d.imgs[i]) im.src=d.imgs[i]; im.parentNode.title=`슬라이드 ${i+1}${d.texts[i]?" — "+d.texts[i].slice(0,60):""}`; });
+  const s=w.slides; if(s.src?.kind==="drive"&&SERVER&&!SLIDE_CHK[w.id]){ SLIDE_CHK[w.id]=1; try{ const r=await gcall("slideList",{}); const f=(r.files||[]).find(x=>x.id===s.src.id);
+      if(f&&s.src.modified&&f.modified>s.src.modified){ const el=$("#slnew"); if(el) el.innerHTML=` · <b style="color:var(--bible)">PPT가 그 뒤 고쳐졌습니다</b> <a href="#" onclick="slideRefresh('${w.id}');return false">새로 가져오기</a>`; } }catch(_){} } }
+function paintSlideTab(w){ const box=document.querySelector('.spanel[data-k="slides"]'); if(box) box.innerHTML=slideTabHtml(w); const tb=document.querySelector('.stabs [data-k="slides"]'); if(tb) tb.textContent="슬라이드"+(w.slides?" "+w.slides.n:""); }
+function slideInsert(n){ const b=$("#wbody"), w=editId&&S.writings.find(x=>x.id===editId); if(!b||!w?.slides) return; const s=b.selectionStart??b.value.length, pre=b.value.slice(0,s), post=b.value.slice(s);
+  const lab=(SLIDES[w.slides.deck]?.texts?.[n-1]||"").slice(0,30).trim();
+  tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+`▣ 슬라이드 ${n}${lab?" · "+lab:""}`+(post.startsWith("\n")?"":"\n")); document.querySelector(`.slth[data-n="${n}"]`)?.classList.add("on"); }
+function slideDetach(wid){ const w=S.writings.find(x=>x.id===wid); if(!w?.slides||!confirm("슬라이드를 떼고, 글 속 「▣ 슬라이드」 줄도 지울까요? (그림은 드라이브에 남습니다)")) return;
+  const b=$("#wbody"); if(b&&editId===wid){ const nb=b.value.split("\n").filter(l=>!SLIDE_RE.test(l)).join("\n"); if(nb!==b.value) tInsert(b,nb,0,b.value.length); }
+  delete w.slides; w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); paintSlideTab(w); toast("슬라이드를 뗐습니다"); }
+// 자동 자리 잡기: 슬라이드 글자와 문단의 두 글자 묶음이 얼마나 겹치는지로, 앞에서부터 차례대로(설교 흐름) 맞춥니다
+async function slideAuto(wid){ const w=S.writings.find(x=>x.id===wid), b=$("#wbody"); if(!w?.slides||!b) return; const d=await slideData(w.slides.deck); if(!d) return toast("슬라이드 그림을 찾지 못했습니다");
+  if(!(d.texts||[]).some(t=>t&&t.length>3)) return toast("슬라이드에 글자가 없어 자동으로 자리를 잡을 수 없습니다. 그림을 눌러 직접 넣어 주세요");
+  if(slideNums(b.value).length&&!confirm("이미 넣은 「▣ 슬라이드」 줄을 지우고 자동으로 다시 잡을까요? (⌘Z로 되돌릴 수 있습니다)")) return;
+  const L=b.value.split("\n").filter(l=>!SLIDE_RE.test(l)), bg=t=>{ const s=impNorm(t), set=new Set(); for(let i=0;i<s.length-1;i++) set.add(s.slice(i,i+2)); return set; };
+  const cand=[]; L.forEach((l,i)=>{ if(l.trim()&&!/^🎙/.test(l.trim())) cand.push({i,set:bg(l)}); });
+  const at=new Map(), add=(i,n)=>{ if(!at.has(i)) at.set(i,[]); at.get(i).push(n); }, miss=[]; let last=0; const top=bg((w.title||"")+" "+(w.passage||""));
+  d.texts.forEach((t,k)=>{ const sb=bg(t||""); if(sb.size<3){ miss.push(k+1); return; }
+    if(k===0){ let c=0; sb.forEach(x=>top.has(x)&&c++); if(c/sb.size>=.4){ add(-1,1); return; } }
+    let best=-1,bs=0; for(let j=last;j<cand.length;j++){ let c=0; sb.forEach(x=>cand[j].set.has(x)&&c++); if(c<3) continue; const sc=c/Math.min(sb.size,cand[j].set.size); if(sc>bs+.02){ bs=sc; best=j; } }
+    if(best>=0&&bs>=.45){ add(cand[best].i,k+1); last=best; } else miss.push(k+1); });
+  const out=[]; (at.get(-1)||[]).forEach(n=>out.push(`▣ 슬라이드 ${n}`)); L.forEach((l,i)=>{ (at.get(i)||[]).forEach(n=>out.push(`▣ 슬라이드 ${n}${d.texts[n-1]?" · "+d.texts[n-1].slice(0,30).trim():""}`)); out.push(l); });
+  tInsert(b,out.join("\n"),0,b.value.length); paintSlideTab(w);
+  const got=d.texts.length-miss.length; toast(`${got}장의 자리를 잡았습니다${miss.length?` · ${miss.length}장(${miss.slice(0,10).join(", ")}${miss.length>10?"…":""})은 맞는 문단이 없어 그림을 눌러 직접 넣어 주세요`:""} — ⌘Z로 되돌리기`); }
+// PPT 고르기: 드라이브 최근 PPT(설교 제목·본문과 이름이 맞는 것을 위로) 또는 이 기기의 .pptx·.pdf
+function slidePick(){ const w=editId&&S.writings.find(x=>x.id===editId); if(!w) return toast("먼저 「간직하기」로 글을 간직해 주세요"); if($("#wbody")&&writingUnsaved()) keepWriting(true);
+  const ov=document.createElement("div"); ov.className="bookview sendview";
+  ov.innerHTML=`<section class="sheet" style="max-width:640px;margin:36px auto;display:grid;gap:10px">
+    <div class="row"><p class="label" style="margin:0">${ICO.down}설교 PPT 가져오기</p><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div>
+    <p class="hint" style="margin:0">PPT를 구글 드라이브에 두면(맥은 「Google Drive」 폴더에 저장) 여기에 바로 보입니다. 원본은 드라이브에 그대로 두고, 슬라이드를 작은 그림으로만 가져옵니다.</p>
+    <div class="drvlist" data-list>${SERVER?`<p class="muted">드라이브에서 최근 PPT를 찾는 중…</p>`:`<p class="muted">구글 서버에 닿지 않아 드라이브 목록은 볼 수 없습니다.</p>`}</div>
+    <div class="row" style="gap:6px"><button class="btn small" data-file>이 기기에서 고르기 (.pptx · .pdf)</button><small class="hint">PowerPoint에서 「PDF로 내보내기」 한 파일이 가장 정확합니다.</small></div>
+    <span class="muted" data-state></span></section>`;
+  document.body.appendChild(ov); ov.querySelector("[data-x]").onclick=()=>ov.remove();
+  ov.querySelector("[data-file]").onclick=()=>{ const inp=document.createElement("input"); inp.type="file"; inp.accept=".pptx,.pdf,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation"; inp.style.display="none"; document.body.appendChild(inp);
+    inp.onchange=()=>{ const f=inp.files?.[0]; inp.remove(); if(!f) return; if(/\.pdf$/i.test(f.name)) return slideRun(w,ov,async()=>({buf:new Uint8Array(await f.arrayBuffer())}),{name:f.name,src:{kind:"file",name:f.name}});
+      if(!/\.pptx$/i.test(f.name)) return toast(".pptx 나 .pdf 파일을 골라 주세요 (예전 .ppt 는 PowerPoint에서 .pptx 로 저장)"); if(!SERVER) return toast("PPT 변환은 구글 서버가 필요합니다. PDF로 내보내 고르면 바로 됩니다"); if(f.size>35*1024*1024) return toast("PPT가 35MB를 넘습니다. 드라이브에 올리거나 PDF로 내보내 주세요");
+      slideRun(w,ov,async()=>{ const b64=await new Promise((ok,no)=>{ const r=new FileReader(); r.onload=()=>ok(String(r.result).split(",")[1]); r.onerror=()=>no(new Error("파일을 읽지 못했습니다")); r.readAsDataURL(f); }); const r=await gcall("slidePdf",{b64,name:f.name}); return {buf:b64buf(r.pdf),src:r.src}; },{name:f.name}); }; inp.click(); };
+  if(SERVER) gcall("slideList",{}).then(r=>{ const fs=r.files||[], tn=impNorm(w.title), pn=impNorm((w.passage||"").replace(/:.*$/,"")), wk=Date.now()-8*864e5;
+    const sc=f=>{ const n=impNorm(f.name); return (tn&&tn.length>=2&&n.includes(tn.slice(0,8))?5:0)+(pn&&n.includes(pn)?3:0)+(Date.parse(f.modified)>wk?1:0); };
+    const list=fs.map(f=>({f,s:sc(f)})).sort((a,b)=>b.s-a.s||(b.f.modified>a.f.modified?1:-1)).slice(0,15), box=ov.querySelector("[data-list]");
+    if(!list.length){ box.innerHTML=`<p class="muted">드라이브에서 PPT를 찾지 못했습니다. 「이 기기에서 고르기」를 써 주세요.</p>`; return; }
+    box.innerHTML=list.map((x,i)=>`<button type="button" class="${i===0&&x.s>=3?"best":""}" data-i="${i}">${i===0&&x.s>=3?"<b>추천</b> ":""}${esc(x.f.name)}<small>${esc((x.f.modified||"").slice(0,10))}${x.f.size?" · "+Math.round(x.f.size/1048576*10)/10+"MB":""}</small></button>`).join("");
+    box.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{ const f=list[+b.dataset.i].f; slideRun(w,ov,async()=>{ const r=await gcall("slidePdf",{id:f.id}); return {buf:b64buf(r.pdf),src:r.src}; },{name:f.name}); }); })
+    .catch(e=>{ ov.querySelector("[data-list]").innerHTML=`<p class="muted">드라이브 목록을 받지 못했습니다: ${esc(e.message)}</p>`; }); }
+async function slideRun(w,ov,get,meta){ const st=ov.querySelector("[data-state]"); ov.querySelectorAll("button").forEach(b=>{ if(!b.dataset.x) b.disabled=true; });
+  try{ st.textContent="PPT를 받아 PDF로 바꾸는 중… (구글 드라이브, 큰 PPT는 1분쯤)"; const g=await get();
+    const d=await pdfSlides(g.buf,(i,n)=>st.textContent=`슬라이드를 작은 그림으로 만드는 중… ${i}/${n}`); st.textContent="보관하는 중…";
+    await slideAttach(w,d,Object.assign({},meta,g.src?{src:Object.assign({kind:"drive"},g.src)}:{})); ov.remove(); toast(`슬라이드 ${d.imgs.length}장을 가져왔습니다`);
+    SIDE_TAB="slides"; try{ localStorage.setItem("seojae.sidetab","slides"); }catch(_){} if(document.querySelector('.spanel[data-k="slides"]')){ sideTab("slides"); paintSlideTab(w); }
+    const b=$("#wbody"); if(b&&editId===w.id&&!slideNums(b.value).length&&d.texts.some(t=>t.length>3)&&confirm("슬라이드 글자와 설교 문단을 맞춰 자리를 자동으로 잡을까요? (⌘Z로 되돌릴 수 있습니다)")) slideAuto(w.id); }
+  catch(e){ st.textContent="가져오지 못했습니다: "+e.message; ov.querySelectorAll("button").forEach(b=>b.disabled=false); } }
+function slideRefresh(wid){ const w=S.writings.find(x=>x.id===wid); if(!w?.slides?.src?.id) return; const ov=document.createElement("div"); ov.className="bookview sendview";
+  ov.innerHTML=`<section class="sheet" style="max-width:520px;margin:60px auto;display:grid;gap:10px"><p class="label" style="margin:0">PPT 새로 가져오기 — ${esc(w.slides.name||"")}</p><span class="muted" data-state></span><button class="btn small ghost" data-x>닫기</button></section>`;
+  document.body.appendChild(ov); ov.querySelector("[data-x]").onclick=()=>ov.remove(); SLIDE_CHK[wid]=1;
+  slideRun(w,ov,async()=>{ const r=await gcall("slidePdf",{id:w.slides.src.id}); return {buf:b64buf(r.pdf),src:r.src}; },{name:w.slides.name}); }
+// 노션 설교문의 그림(슬라이드)을 받아 작은 그림으로
+async function slidesFromNotion(w,R){ const urls=R.imgs.map(x=>x.url), imgs=[];
+  for(let i=0;i<urls.length;i+=6){ toast(`노션 슬라이드 그림을 받는 중… ${Math.min(i+6,urls.length)}/${urls.length}`);
+    let r; try{ r=await gcall("slideImgs",{urls:urls.slice(i,i+6)}); }catch(e){ r={imgs:urls.slice(i,i+6).map(()=>({}))}; }
+    for(const x of r.imgs){ try{ imgs.push(x.b64?await shrinkImg(`data:${x.mime};base64,${x.b64}`):""); }catch(_){ imgs.push(""); } } }
+  await slideAttach(w,{imgs,texts:R.imgs.map(x=>x.cue||"")},{name:`노션 설교문 그림 ${imgs.length}장`,src:{kind:"notion",page:R.page}});
+  const bad=imgs.filter(x=>!x).length; toast(`슬라이드 그림 ${imgs.length-bad}장을 붙였습니다${bad?` · ${bad}장은 받지 못함`:""}`); if(editId===w.id) paintSlideTab(w); }
 // ───────── 가져오기 (글방 3판 B2): 노션 페이지 → 새 글 · 워드 교정본 → 나란히 비교 ─────────
 // 노션 가져오기는 읽기만(서버 notionImport_). 가져온 글은 w.importFrom={kind:"notion",page,url,at,edited} — 자동으로 노션에 보내지 않음.
 // 비교는 「뜻 있는 줄」(빈 줄·빈 틀 소제목·주석 요약 상자 빼고) 단위로 하고, 받아들인 고침만 본래 글의 줄 자리에 끼워 넣습니다(빈 줄·소제목 안내말 보존).
 const JSZIP=["https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js","sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG","JSZip"];
 const impNorm=t=>String(t||"").replace(/\s+/g,"").replace(/[「」『』"'.,·…:;!?()\[\]]/g,"");
 function impLine(w){ const f=w.importFrom||{}; return `<div class="nstate" style="margin-top:6px"><i></i>노션에서 가져온 글${f.at?" · "+esc(f.at.slice(5,10).replace("-",".")):""}${f.url?` · <a href="${esc(safeUrl(f.url)||"#")}" target="_blank" rel="noopener">원본 열기</a>`:""}${SERVER?` · <a href="#" onclick="impRefresh('${w.id}');return false">원본 다시 받아 비교</a>`:""}</div>`; }
-function impTitle(t){ t=String(t||"").replace(/^\s*\[[^\]]*\]\s*/,"").trim(); const k=t.indexOf(" / "); if(k>0){ const a=t.slice(0,k).trim(), b=t.slice(k+3).trim(); if(/\d+\s*[:장]/.test(a)) return {passage:a,title:b}; } return {passage:"",title:t}; }
+function impTitle(t){ t=String(t||"").replace(/^\s*\[[^\]]*\]\s*/,"").replace(/\s*\((슬라이드|PPT)[^)]*\)\s*$/,"").trim(); const k=t.indexOf(" / "); if(k>0){ const a=t.slice(0,k).trim(), b=t.slice(k+3).trim(); if(/\d+\s*[:장]/.test(a)) return {passage:a,title:b}; } return {passage:"",title:t}; }
 function notionImportOpen(mid){ if(!SERVER) return toast("구글 서버에 닿아야 노션에서 가져올 수 있습니다"); if(!CONF.notion) return toast("노션이 연결되지 않았습니다 (설정 → 노션 연결)");
   const m=mid&&S.manuscripts.find(x=>x.id===mid); let R=null;
   const ov=document.createElement("div"); ov.className="bookview sendview";
@@ -4033,7 +4209,7 @@ function notionImportOpen(mid){ if(!SERVER) return toast("구글 서버에 닿�
     st.textContent="노션에서 읽는 중… (긴 페이지는 10초쯤)"; pv.innerHTML="";
     try{ R=await gcall("notionImport",{url}); }catch(e){ st.textContent="가져오지 못했습니다: "+e.message; return; }
     if(!R.body.trim()){ st.textContent="이 페이지에서 가져올 글자를 찾지 못했습니다 (표·그림만 있는 페이지일 수 있습니다)"; return; }
-    st.textContent=`읽었습니다 · ${charsAll(R.body).toLocaleString()}자${R.skipped?` · 표·그림 등 ${R.skipped}개는 노션에 두고 건너뜀`:""}${R.more?" · 페이지가 매우 길어 앞부분까지만":""}`;
+    st.textContent=`읽었습니다 · ${charsAll(R.body).toLocaleString()}자${R.imgs?.length?` · 슬라이드 그림 ${R.imgs.length}장도 함께 가져옵니다`:""}${R.skipped?` · 표·그림 등 ${R.skipped}개는 노션에 두고 건너뜀`:""}${R.more?" · 페이지가 매우 길어 앞부분까지만":""}`;
     const old=live().find(x=>x.importFrom?.page===R.page);
     if(old){ pv.innerHTML=`<p>이미 가져온 글이 있습니다: <b>${esc(old.title||"(제목 없음)")}</b> (${esc(old.date)})</p><div class="row" style="gap:6px"><button class="btn ink" data-cmp>그 글과 원본 비교</button><button class="btn" data-open>그 글 열기</button><button class="btn ghost" data-anyway>그래도 새로 만들기</button></div>`;
       pv.querySelector("[data-cmp]").onclick=()=>{ ov.remove(); impCompareNotion(old,R); }; pv.querySelector("[data-open]").onclick=()=>{ ov.remove(); go('write',{edit:old.id}); }; pv.querySelector("[data-anyway]").onclick=()=>form(); return; }
@@ -4049,7 +4225,8 @@ function notionImportOpen(mid){ if(!SERVER) return toast("구글 서버에 닿�
       const w={id:uid(),date:today(),track:"book",type:TYPES.book[g.type]!=null?g.type:"자유 글",title:pv.querySelector("#ni-t").value.trim()||R.title||"노션에서 가져온 글",body:R.body,summary:"",topics:[],status:pv.querySelector("#ni-s").value,updated:now,
         importFrom:{kind:"notion",page:R.page,url:R.url,at:now,edited:R.edited}};
       const ps=pv.querySelector("#ni-p").value.trim(); if(ps) w.passage=normPassage(ps);
-      S.writings.push(w); if(mm&&!mm.items.includes(w.id)) mm.items.push(w.id); save(); ov.remove(); toast("노션 글을 새 글로 가져왔습니다 (구글에 간직됨)"); go('write',{edit:w.id}); }; };
+      S.writings.push(w); if(mm&&!mm.items.includes(w.id)) mm.items.push(w.id); save(); ov.remove(); toast("노션 글을 새 글로 가져왔습니다 (구글에 간직됨)"); if(R.imgs?.length){ SIDE_TAB="slides"; try{ localStorage.setItem("seojae.sidetab","slides"); }catch(_){} } go('write',{edit:w.id});
+      if(R.imgs?.length){ slidesFromNotion(w,R).catch(e=>toast("슬라이드 그림을 받지 못했습니다: "+e.message)); } }; };
 }
 async function impRefresh(wid){ const w=S.writings.find(x=>x.id===wid); if(!w?.importFrom) return; toast("노션 원본을 읽는 중…");
   try{ const R=await gcall("notionImport",{url:w.importFrom.url||w.importFrom.page}); impCompareNotion(w,R); }catch(e){ toast("가져오지 못했습니다: "+e.message); } }
