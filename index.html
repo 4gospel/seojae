@@ -645,7 +645,7 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .stmsmenu{display:grid;gap:2px;padding:4px;margin:4px 0 6px;border:1px solid var(--edge);border-radius:10px;background:var(--paper)} .stmsmenu button{display:grid;text-align:left;border:0;background:none;padding:6px 8px;border-radius:7px;cursor:pointer;color:var(--ink);font:inherit} .stmsmenu button small{color:var(--faint);font-size:12px} .stmsmenu button:hover,.stmsmenu button.on{background:color-mix(in srgb,var(--ink) 7%,transparent)}
 .stnavs{display:grid;gap:1px;margin:2px 0 4px}
 /* ① 글방 전체 — 맨 위, 원고보다 한 단계 위 */
-.stud{flex:none;white-space:nowrap;margin-left:auto;border:1px solid var(--edge);border-radius:99px;padding:2px 9px;font-size:11.5px;font-weight:500;opacity:1!important;color:var(--ink-soft);background:var(--paper);line-height:1.5} .stms summary:hover .stud{border-color:var(--sepia);color:var(--ink)} .stms[open] .stud{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.stud{flex:none;white-space:nowrap;margin-left:auto;border:1px solid var(--edge);border-radius:99px;padding:2px 9px;font-size:11.5px;font-weight:500;opacity:1!important;color:var(--ink-soft);background:var(--paper);line-height:1.5} .stms summary .stud,.stms summary:hover .stud,.stms[open] summary .stud{background:transparent!important;box-shadow:none} .stms summary:hover .stud{border-color:var(--sepia);color:var(--ink)} .stms[open] .stud{border-color:var(--ink);color:var(--ink);font-size:0} .stms[open] .stud::after{content:"닫기 ▴";font-size:11.5px;color:var(--ink)}
 .cwtabs{margin:0 0 12px} .cwwrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px} .cwitem{display:inline-flex;align-items:center;gap:2px;border:1.5px dashed color-mix(in srgb,var(--common) 45%,transparent);border-radius:99px;padding:1px 4px 1px 2px}
 .cwchip{border:0;background:none;cursor:pointer;font:14px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--common);padding:3px 8px;border-radius:99px} .cwchip:hover{background:color-mix(in srgb,var(--common) 10%,transparent)} .cwchip small{color:var(--faint)}
 .cwbook{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:8px 0;border-bottom:1px dashed var(--edge)} .cwbook>b{min-width:90px;color:var(--ink)} .cwbook>span{display:flex;flex-wrap:wrap;gap:4px}
@@ -760,6 +760,20 @@ body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-
 .sumed{border:0;background:none;color:var(--faint);cursor:pointer;font-size:12px;padding:0 4px;opacity:.6} .sumed:hover{opacity:1;color:var(--ink)}
 .pcplan{justify-self:start;font-size:11px;border:1px dashed var(--sepia);color:var(--sepia);border-radius:99px;padding:0 7px} .plsel{font-size:12px;padding:2px 4px}
 .cxgh{font:600 14px -apple-system,"Apple SD Gothic Neo",sans-serif;margin:6px 0 8px;color:var(--ink)} .cxcommon{margin-top:14px} .cxcommon summary{cursor:pointer} .cxcard{position:relative;cursor:pointer} .cxclaim{justify-self:start;font-size:12px;padding:2px 8px}
+/* 노트 화면 — 필기체 없이 깔끔하게: 제목 명조, 칸 이름 작은 고딕, 칸마다 묶음 상자 */
+.codexpage{font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+.cxp-top{display:flex;gap:6px;align-items:center;margin-bottom:4px} .cxp-back{border:0;background:none;color:var(--ink-soft);font:13.5px -apple-system,sans-serif;cursor:pointer;padding:4px 0} .cxp-back:hover{color:var(--ink)}
+.cxp-title{display:block;width:100%;border:0;border-bottom:1px solid var(--edge);border-radius:0;background:none;font:800 28px/1.3 "Nanum Myeongjo",serif;color:var(--ink);padding:8px 0;margin:4px 0 16px} .cxp-title:focus{outline:none;border-bottom-color:var(--ink)} .codexpage.common .cxp-title{color:var(--common)}
+.cxp-grid{display:grid;grid-template-columns:150px 1fr 220px;gap:12px;align-items:start}
+.cxf{display:grid;gap:5px;margin:0} .cxf>span,.cxp-sec h4{font:600 12.5px/1.4 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft);letter-spacing:.01em} .cxf small{font-size:11.5px;color:var(--faint)}
+.codexpage .cxf input,.codexpage .cxf select,.codexpage .cxprop input,.codexpage .cxrel input,.codexpage .cxrel select{width:100%;border:1px solid var(--edge);border-radius:8px;background:color-mix(in srgb,var(--paper) 50%,#fff);padding:8px 10px;font:14.5px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
+.cxp-sec{border:1px solid var(--edge);border-radius:12px;padding:12px 14px;margin-top:14px;background:color-mix(in srgb,var(--paper) 70%,#fff)} :root[data-theme="dark"] .cxp-sec{background:var(--paper)}
+.cxp-sec h4{margin:0 0 10px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:13.5px;color:var(--ink)} .cxp-sec h4 small{font-weight:400;font-size:12px;color:var(--faint)}
+.cxp-text{display:block;width:100%;min-height:150px;resize:vertical;border:1px solid var(--edge);border-radius:8px;background:color-mix(in srgb,var(--paper) 50%,#fff);padding:10px 12px;font:16px/1.85 "Gowun Batang",serif;color:var(--ink)} .cxp-text.small{min-height:80px}
+.cxp-save{display:flex;justify-content:flex-end;margin-top:12px} .codexpage .cxback{border:0;padding:0;margin:0}
+.codexpage .cxhit{padding:8px 0;border-top:1px dashed var(--edge)} .codexpage .cxhit:first-child{border-top:0;padding-top:0}
+.cxsidebody{white-space:pre-wrap;font:14.5px/1.7 "Gowun Batang",serif;color:var(--ink);margin:4px 0}
+@media (max-width:700px){ .cxp-grid{grid-template-columns:1fr} .cxp-title{font-size:24px} }
 .cxprops{display:grid;gap:6px;margin-bottom:6px} .cxprop,.cxrel{display:flex;gap:6px;align-items:center} .cxprop [data-pk]{flex:0 0 32%;min-width:0} .cxprop [data-pv]{flex:1;min-width:0} .cxrel select{flex:0 0 40%;min-width:0} .cxrel input{flex:1;min-width:0}
 .cxback{border:1px dashed var(--edge);border-radius:10px;padding:10px 12px;margin-top:14px;display:grid;gap:6px} .cxchip{display:inline-block;border:1px solid var(--edge);border-radius:99px;padding:1px 10px;margin:2px 2px;font-size:13.5px;color:var(--ink);text-decoration:none;background:var(--paper)} .cxchip:hover{border-color:var(--sepia)}
 .cxtablewrap{overflow-x:auto;border:1px solid var(--edge);border-radius:10px;background:var(--paper)} .cxtable{border-collapse:collapse;width:100%;font:13.5px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif} .cxtable th,.cxtable td{border-bottom:1px solid var(--edge);padding:7px 10px;text-align:left;vertical-align:top;min-width:80px} .cxtable th{background:color-mix(in srgb,var(--ink) 5%,transparent);white-space:nowrap;position:sticky;top:0} .cxtable td:first-child{white-space:nowrap}
@@ -801,7 +815,7 @@ body.staside .studio .writegrid{grid-template-columns:minmax(0,1fr) 290px!import
 .studio .wbinder,.studio .mbtoc,.studio .backroom,.studio .toolbar .modeband,.studio .toolbar .tlabel,.studio .toolbar>button[onclick="insertTemplate()"]{display:none!important}
 .studio .toolbar #wtype{display:none} .studio .toolbar{flex-wrap:wrap;row-gap:6px}
 body.focus .stside,body.focus .sttabs{display:none} body.focus .studio{grid-template-columns:1fr} body.readmode .studio .writegrid>aside{display:none!important}
-@media (max-width:880px){ .studio{grid-template-columns:1fr} .stside{display:none} body.stnav .stside{display:flex;position:fixed;left:0;top:0;bottom:0;width:min(300px,84vw);z-index:110;max-height:none;border-radius:0 14px 14px 0;background:var(--paper) var(--grain)} body.stnav .stback{position:fixed;inset:0;z-index:109;background:rgba(30,20,10,.3)} .stburger{display:block;flex:none;border:1px solid var(--edge);background:none;border-radius:8px;padding:4px 10px;margin:0 4px 4px 0;cursor:pointer;color:var(--ink)} .sthello{font-size:24px;margin:12px 0 18px} .stcards{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px} .stcard .sketch{display:none} .stcard{padding:12px 14px;transform:none!important} .stud{font-size:0} .stud::after{content:"바꾸기 ▾";font-size:11.5px} body.staside .studio .writegrid{grid-template-columns:1fr!important} }
+@media (max-width:880px){ .studio{grid-template-columns:1fr} .stside{display:none} body.stnav .stside{display:flex;position:fixed;left:0;top:0;bottom:0;width:min(300px,84vw);z-index:110;max-height:none;border-radius:0 14px 14px 0;background:var(--paper) var(--grain)} body.stnav .stback{position:fixed;inset:0;z-index:109;background:rgba(30,20,10,.3)} .stburger{display:block;flex:none;border:1px solid var(--edge);background:none;border-radius:8px;padding:4px 10px;margin:0 4px 4px 0;cursor:pointer;color:var(--ink)} .sthello{font-size:24px;margin:12px 0 18px} .stcards{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px} .stcard .sketch{display:none} .stcard{padding:12px 14px;transform:none!important} .stud{font-size:0} .stms:not([open]) .stud::after{content:"바꾸기 ▾";font-size:11.5px;color:var(--ink-soft)} body.staside .studio .writegrid{grid-template-columns:1fr!important} }
 .aibtn{border-color:#7a5aa8!important;color:#6b4a9a!important;font-weight:700} .aibtn:hover{background:color-mix(in srgb,#7a5aa8 10%,transparent)!important}
 #aipanel{position:fixed;right:16px;top:86px;bottom:16px;width:min(400px,calc(100vw - 32px));z-index:86;display:flex;flex-direction:column;background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:16px;box-shadow:0 18px 40px -14px rgba(0,0,0,.45);font:14.5px/1.55 -apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink)}
 #aipanel .aih{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--edge)} #aipanel .aih b{font-size:15px} #aipanel .aih button{border:0;background:none;color:var(--ink-soft);cursor:pointer;font:inherit;font-size:13px;padding:3px 8px;border-radius:6px} #aipanel .aih button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
@@ -1514,9 +1528,9 @@ function mergeInner(win,lose,del){
 }
 // 글의 모드 정보 읽기·쓰기 (예전 scene 칸도 읽음). 쓸 때는 칸 시각을 남기고, 쓰는 중인 글이면 다른 기기 판으로 오해하지 않게 EDIT_BASE를 맞춤
 // 노트 문구를 원고 성격에 맞게 (설교·에세이는 성경 인물, 소설은 등장인물·장소, 논문은 용어·학자)
-const CX_WORD={novel:{what:"등장인물·장소",ex:"수인, 도윤, 등대",alias:"예: 오빠, 도윤이",note:"나이·외모·말버릇, 첫 등장, 다른 인물과의 관계, 장면마다 바뀐 것…"},paper:{what:"용어·학자",ex:"자기조절, 반두라, 습관 형성",alias:"예: self-regulation, 자기 조절",note:"정의(출처와 함께), 이 논문에서 쓰는 뜻, 관련 연구…"},selfhelp:{what:"개념·사례·인물",ex:"작은 습관, 환경 설계",alias:"예: 미니 습관",note:"정의, 쓴 사례, 출처…"},poem:{what:"이미지·낱말",ex:"우물, 새벽, 두레박",alias:"예: 샘",note:"이 이미지가 나온 시, 겹치는 뜻…"}};
+const CX_WORD={sermon:{what:"성경 인물·지명·용어·예화",ex:"다윗, 광야, 기다림",alias:"예: 시몬, 게바",note:"붙잡은 것, 설교에서 말한 것, 더 공부할 것…"},essay:{what:"사람·장소·장면",ex:"어머니, 새벽 부엌, 첫눈",alias:"예: 엄마",note:"그때의 소리·냄새·빛, 그때 마음, 지금 다시 보니…"},free:{what:"인물·주제",ex:"할머니, 용서",alias:"다른 이름",note:"이 인물·주제에 대해 적어 둘 것…"},novel:{what:"등장인물·장소",ex:"수인, 도윤, 등대",alias:"예: 오빠, 도윤이",note:"나이·외모·말버릇, 첫 등장, 다른 인물과의 관계, 장면마다 바뀐 것…"},paper:{what:"용어·학자",ex:"자기조절, 반두라, 습관 형성",alias:"예: self-regulation, 자기 조절",note:"정의(출처와 함께), 이 논문에서 쓰는 뜻, 관련 연구…"},selfhelp:{what:"개념·사례·인물",ex:"작은 습관, 환경 설계",alias:"예: 미니 습관",note:"정의, 쓴 사례, 출처…"},poem:{what:"이미지·낱말",ex:"우물, 새벽, 두레박",alias:"예: 샘",note:"이 이미지가 나온 시, 겹치는 뜻…"}};
 const CX_BIBLE={what:"성경 인물·지명·용어",ex:"모세, 광야, 언약",alias:"예: 시몬, 게바",note:"이 인물·지명·용어를 읽으며 붙잡은 것, 설교에서 말한 것, 더 공부할 것…"};
-const cxW=c=>c&&cxOrphan(c)?CX_BIBLE:(CX_WORD[S.manuscripts.find(x=>x.id===ROOM_MS)?.genre]||CX_BIBLE);   // 말씀 노트(공통)는 늘 성경 낱말
+const cxW=c=>c&&cxOrphan(c)?CX_BIBLE:(CX_WORD[S.manuscripts.find(x=>x.id===(c?.ms||ROOM_MS))?.genre]||CX_BIBLE);   // 말씀 노트(공통)는 늘 성경 낱말
 const SERMON_NEW_BTN=`<button class="btn small ghost" onclick="go('write',{new:true,track:'bible',type:'설교초안'})" title="묵상에서 나오지 않는 설교(절기·성구집·예식)를 설교초안으로 바로 시작합니다">＋ 새 설교초안</button>`;
 const SCENE_F=[["pov","시점 인물"],["loc","장소"],["when","때"],["goal","이 장면의 목표"],["conf","갈등·장애"],["turn","결과 — 무엇이 바뀌나"]];   // 소설 장면 정보 (w.meta 칸, 칸마다 시각으로 합침)
 const wMeta=(w,k)=>w?.meta?.[k]??w?.scene?.[k]??"";
@@ -1620,7 +1634,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="d723ccbbbf";
+const APP_BUILD="cc55185a8f";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4963,7 +4977,7 @@ function sideTabs(w){ const m=wMs(w), g=G(m), cx=w?codexIn(w.body+" "+(w.title||
     ${m&&w?`<label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>`:""}
     ${jotBox()}`;
   const res=m?((m.research||[]).length?(m.research||[]).map(r=>`<div class="rsrc"><b>${esc(r.t||"자료")}</b><span class="muted">${esc((r.body||"").slice(0,120))}${(r.body||"").length>120?"…":""}</span><button class="btn small" onclick="resInsert('${m.id}','${r.id}')">넣기</button></div>`).join(""):`<p class="hint">원고 자료는 글방 → 「자료」에서 모아 두면 여기서 「넣기」로 꺼내 씁니다.</p>`):`<p class="hint">이 글이 원고에 들어 있으면 그 원고의 자료가 여기에 보입니다.</p>`;
-  const notes=cx.length?cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="pen" style="font-size:18px;white-space:pre-wrap">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join(""):`<p class="hint">이 글에 나온 ${esc(g.codex)}가 여기에 모입니다. 노트는 글방 왼쪽에서 만듭니다.</p>`;
+  const notes=cx.length?cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="cxsidebody">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join(""):`<p class="hint">이 글에 나온 ${esc(g.codex)}가 여기에 모입니다. 노트는 글방 왼쪽에서 만듭니다.</p>`;
   const ai=rv?`<div class="revside">${revNotesHtml(w,true)}<button class="btn small" onclick="reviewOne('${w.id}')">${ICO.search}${w.review?"다시 검토 받기":"이 글 검토 받기"}</button><p class="hint">AI는 본문을 바꾸지 않고 짚을 점만 메모로 남깁니다.</p></div>`:`<p class="hint">원고에 넣은 글과 설교초안은 AI 검토를 받을 수 있습니다. 묻기·막힐 때 질문은 곧 더해집니다.</p>`;
   const sl=!!(w&&(w.slides||/설교/.test(w.type||"")||g.item==="설교"||/^\s*(🎬|▣\s*슬라이드)/m.test(w.body||"")));
   const tabs=[["memo","메모"],...(sl?[["slides","슬라이드"+(w.slides?" "+w.slides.n:"")]]:[]),["res","자료"+(m&&(m.research||[]).length?" "+m.research.length:"")],["notes","노트"+(cx.length?" "+cx.length:"")],["ai","AI"+(w?.review?.notes?.length?" "+w.review.notes.length:"")]];
@@ -4977,7 +4991,7 @@ function wSideRoom(w){ const m=wMs(w), cx=w?codexIn(w.body+" "+(w.title||"")):[]
       ${G(m).scene?`<div class="sceneform"><p class="hint" style="margin:0 0 4px">장면 정보 — 코르크보드 카드에 보입니다</p>${SCENE_F.map(([k,n])=>`<label class="field"><span>${n}</span><input value="${esc(wMeta(w,k))}" onchange="saveScene('${w.id}','${k}',this.value)"></label>`).join("")}</div>`:""}
       <label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>
       ${(m.research||[]).length?`<details class="more" open><summary>원고 자료 ${(m.research||[]).length}</summary>${(m.research||[]).map(r=>`<div class="rsrc"><b>${esc(r.t||"자료")}</b><span class="muted">${esc((r.body||"").slice(0,120))}${(r.body||"").length>120?"…":""}</span><button class="btn small" onclick="resInsert('${m.id}','${r.id}')">넣기</button></div>`).join("")}</details>`:`<p class="hint">원고 자료는 글방 → 「자료」에서 모아 둡니다.</p>`}`:""}
-    ${cx.length?`<details class="more" ${m?"":"open"}><summary>이 글에 나온 인물·주제 ${cx.length}</summary>${cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="pen" style="font-size:18px;white-space:pre-wrap">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join("")}</details>`:""}
+    ${cx.length?`<details class="more" ${m?"":"open"}><summary>이 글에 나온 인물·주제 ${cx.length}</summary>${cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="cxsidebody">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join("")}</details>`:""}
   </div>`; }
 function saveMemo(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w||(w.memo||"")===v) return; w.memo=v; w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); toast("꼭지 메모를 남겼습니다"); }
 function resInsert(mid,rid){ const m=S.manuscripts.find(x=>x.id===mid), r=m?.research?.find(x=>x.id===rid), b=$("#wbody"); if(!r||!b) return; tInsert(b,(r.body||"")+(r.src?` (${r.src})`:"")+"\n"); toast("자료를 글에 넣었습니다"); }
@@ -5030,10 +5044,38 @@ function codexDel(id){ if(!confirm("이 노트를 지울까요? 글은 그대로
 // ───────── 설정집(월드) · 표 · 관계도 · 플롯 보드 · 설정집 내보내기 (타입탁 월드 · 펜시브 시트·백링크·그래프 · 노벨라 파트·블록 참고) ─────────
 // 노트 하나(S.codex[])에 kind 종류 · props[{k,v}] 속성 · secret 작가만 보는 비밀 · rel[{to,label}] 이름 붙은 관계를 더함 — 노트를 통째로 updated 로 합치는 방식은 그대로.
 // 장면의 플롯 단계는 글의 w.meta.beat, 원고의 단계 이름은 m.plot.stages (없으면 기본 5단). 연결(백링크)은 저장하지 않고 이름·관계로 그때그때 찾음.
-const CX_KINDS=["인물","장소","조직","사물","사건","개념","기타"];
-const CX_ICON={인물:"☺",장소:"⌂",조직:"⚑",사물:"◆",사건:"✦",개념:"◇",기타:"◎"};
-const CX_TPL={인물:["나이","직업","외모","성격","말버릇","원하는 것","두려워하는 것","첫 등장"],장소:["위치","분위기","특징"],조직:["우두머리","목적","구성원"],사물:["주인","쓰임·능력"],사건:["때","곳","관련 인물","결과"],개념:["뜻","규칙·한계"],기타:[]};
+// 노트 형식은 원고 성격마다 (2026-10-29 팀장님: 「모든 원고가 소설 형식으로 자료를 받음」) — 그 분야 사람이 실제로 모으는 자료의 갈래·칸
+// kinds 종류 · tpl 종류별 기본 칸("" = 종류 없을 때) · propH/noteH 칸 묶음 이름 · secret 작가만 칸 · rel 관계 이름(없으면 관계 없음) · views 보기 · export 내보내기 이름
+const CX_PROF={
+  novel:{kinds:["인물","장소","조직","사물","사건","개념","기타"],tpl:{인물:["나이","직업","외모","성격","말버릇","원하는 것","두려워하는 것","첫 등장"],장소:["위치","분위기","특징"],조직:["우두머리","목적","구성원"],사물:["주인","쓰임·능력"],사건:["때","곳","관련 인물","결과"],개념:["뜻","규칙·한계"],기타:[],"":[]},
+    propH:"속성",propSub:"같은 종류끼리 「표」로 나란히 비교됩니다",noteH:"노트",noteSub:"설정집에 실리는 내용",secret:true,rel:"관계",relSub:"이름 붙은 관계 — 관계도에 선으로 그려집니다",relEx:"아버지, 옛 연인, 소속",views:[["list","카드"],["table","표"],["graph","관계도"]],export:"설정집",
+    intro:"등장인물·장소마다 항목을 두면 그 이름이 나온 장면이 저절로 모입니다. 종류·속성·관계를 정하면 표와 관계도로 봅니다."},
+  paper:{kinds:["용어","학자","문헌","이론","자료","기타"],tpl:{용어:["정의","정의 출처","이 논문에서의 뜻","영문·원어","관련 용어"],학자:["소속·시대","대표 저작","핵심 주장","이 논문에서 쓸 곳"],문헌:["저자","연도","제목","출판·학술지","쪽","핵심 내용","인용할 문장"],이론:["주창자","핵심 개념","적용 범위·한계","관련 문헌"],자료:["출처","수치·내용","확인 여부"],기타:["출처"],"":["정의","출처"]},
+    propH:"정의·서지",propSub:"출처를 함께 적습니다 — 「표」로 문헌·용어를 나란히 비교",noteH:"요약과 내 생각",noteSub:"요약(남의 말)과 해석(내 말)을 줄을 나눠 적으면 표절을 막습니다",secret:false,rel:"연결",relSub:"계승·비판·인용·반박 — 개념 지도에 선으로",relEx:"계승, 비판, 인용, 반박",views:[["list","카드"],["table","표"],["graph","개념 지도"]],export:"용어집·문헌표",
+    intro:"용어·학자·문헌마다 항목을 두면 그 이름이 나온 절이 저절로 모입니다. 「표」로 문헌을 나란히 비교하고, 「개념 지도」로 이론의 흐름을 봅니다."},
+  sermon:{kinds:["인물","지명","용어","예화","주제","기타"],tpl:{인물:["이름의 뜻","원어","주요 본문","시대·배경"],지명:["원어","위치","주요 본문"],용어:["원어","뜻","주요 본문"],예화:["출처","사실 여부 (확인함·추론·확인 못 함)","핵심 한 줄","쓴 설교"],주제:["관련 본문","쓴 설교","아직 다루지 않은 것"],기타:[],"":["주요 본문"]},
+    propH:"정보",propSub:"예화는 출처와 사실 여부를 꼭 — 같은 예화를 두 번 쓰지 않게 「쓴 설교」도",noteH:"묵상·설교 노트",noteSub:"붙잡은 것 · 설교에서 말한 것 · 더 공부할 것",secret:false,rel:null,views:[["list","카드"],["table","표"]],export:null,
+    intro:"성경 인물·지명·용어와 예화·주제마다 노트를 두면 그 이름이 나온 설교가 저절로 모입니다. 예화는 「표」에서 출처·사실 여부·쓴 설교를 한눈에."},
+  essay:{kinds:["사람","장소","장면·기억","주제","인용","기타"],tpl:{사람:["나와의 관계","기억나는 장면","말투·버릇"],장소:["때","감각 (소리·냄새·빛)","그곳에서 있었던 일"],"장면·기억":["때","곳","감각","그때 마음","지금 다시 보니"],주제:["붙잡은 질문","관련 성경 구절","쓴 꼭지"],인용:["출처","원문","쪽"],기타:[],"":[]},
+    propH:"기억의 결",propSub:"감각을 적어 두면 장면이 살아납니다",noteH:"노트",noteSub:"떠오른 것을 그대로",secret:false,rel:null,views:[["list","카드"]],export:null,
+    intro:"사람·장소·장면마다 노트를 두면 그 이름이 나온 꼭지가 저절로 모입니다. 감각(소리·냄새·빛)과 「그때 마음 / 지금 다시 보니」를 나눠 적어 보세요."},
+  selfhelp:{kinds:["개념","사례","인물","연구·통계","실천","기타"],tpl:{개념:["한 문장 정의","예시","흔한 오해"],사례:["출처","사실 여부","교훈"],인물:["누구","한 일","출처"],"연구·통계":["출처 (저자·연도)","수치","확인 여부"],실천:["단계","독자가 할 일","걸리는 시간"],기타:[],"":[]},
+    propH:"핵심 정보",propSub:"사례·통계는 출처와 확인 여부를 함께",noteH:"노트",noteSub:"책에서 어떻게 쓸지",secret:false,rel:null,views:[["list","카드"],["table","표"]],export:null,
+    intro:"개념·사례·연구마다 노트를 두면 그 이름이 나온 꼭지가 저절로 모입니다. 「표」로 사례와 통계의 출처를 한눈에 점검합니다."},
+  poem:{kinds:["이미지","낱말","장소","계절","기타"],tpl:{이미지:["감각","처음 나온 시","겹치는 뜻"],낱말:["뜻","소리","쓴 시"],장소:["기억","쓴 시"],계절:["빛·소리","쓴 시"],기타:[],"":[]},
+    propH:"결",propSub:"",noteH:"노트",noteSub:"이 이미지·낱말이 데려오는 것",secret:false,rel:null,views:[["list","카드"]],export:null,
+    intro:"이미지·낱말마다 노트를 두면 그 낱말이 나온 시가 저절로 모입니다. 같은 이미지를 너무 자주 쓰는지도 보입니다."},
+  free:{kinds:["인물","장소","주제","자료","기타"],tpl:{인물:["누구","나와의 관계"],장소:["위치"],주제:["붙잡은 질문"],자료:["출처","내용"],기타:[],"":[]},
+    propH:"정보",propSub:"",noteH:"노트",noteSub:"",secret:false,rel:null,views:[["list","카드"],["table","표"]],export:null,
+    intro:"인물·주제마다 노트를 두면 그 이름이 나온 글이 저절로 모입니다."},
+  common:{kinds:["인물","지명","용어","사건","기타"],tpl:{인물:["이름의 뜻","원어","주요 본문","시대·배경"],지명:["원어","위치","주요 본문","오늘의 이름"],장소:["원어","위치","주요 본문","오늘의 이름"],용어:["원어","뜻","주요 본문"],개념:["원어","뜻","주요 본문"],사건:["때","곳","주요 본문"],기타:["원어","주요 본문"],"":["원어","주요 본문","뜻·배경"]},
+    propH:"성경 정보",propSub:"원어·주요 본문처럼 노트마다 갖출 칸 — 비워 두어도 됩니다",noteH:"묵상 노트",noteSub:"읽으며 붙잡은 것 · 설교에서 말한 것 · 더 공부할 것",secret:false,rel:null,views:[],export:null,intro:""}};
+const CX_ICON={인물:"☺",장소:"⌂",지명:"⌂",조직:"⚑",사물:"◆",사건:"✦",개념:"◇",용어:"◇",기타:"◎",학자:"☺",문헌:"▤",이론:"△",자료:"▦",예화:"❝",주제:"◈",사람:"☺","장면·기억":"❀",인용:"❞",사례:"❝","연구·통계":"▦",실천:"➜",이미지:"✧",낱말:"ㄱ",계절:"❄"};
 const cxIc=c=>CX_ICON[c.kind]||"◎";
+// 이 노트(또는 지금 원고)의 형식
+function cxPK(c){ if(c&&cxOrphan(c)) return "common"; const m=S.manuscripts.find(x=>x.id===(c?.ms||ROOM_MS)); return m&&CX_PROF[m.genre]?m.genre:"free"; }
+const cxP=k=>CX_PROF[k]||CX_PROF.free;
+let CX_PAGE_K="free";   // 지금 열린 노트 화면의 형식 (기본 칸 채우기에 씀)
 let CX_VIEW=(()=>{ try{ return localStorage.getItem("seojae.cxView")||"list"; }catch(_){ return "list"; } })(), CX_KIND="";
 function cxView(v){ CX_VIEW=v; try{ localStorage.setItem("seojae.cxView",v); }catch(_){} render(); }
 const cxText=c=>[c.body,...(c.props||[]).map(p=>p.v)].join("\n");
@@ -5041,35 +5083,42 @@ const cxText=c=>[c.body,...(c.props||[]).map(p=>p.v)].join("\n");
 function cxBack(c){ const ns=cxNames(c), L=cxScope(cxHome(c)).filter(x=>x.id!==c.id);
   return {rels:L.flatMap(x=>(x.rel||[]).filter(r=>r.to===c.id).map(r=>({from:x,label:r.label}))), ment:L.filter(x=>ns.some(n=>cxText(x).includes(n)))}; }
 const cxOut=c=>codexIn(cxText(c),cxHome(c)).filter(x=>x.id!==c.id);   // 이 항목 노트에 나온 다른 설정
-function cxPropRow(k,v){ return `<div class="cxprop"><input data-pk value="${esc(k||"")}" placeholder="속성 (예: 나이)"><input data-pv value="${esc(v||"")}" placeholder="내용"><button type="button" class="btn small ghost" onclick="this.parentElement.remove()" title="이 속성 빼기">✕</button></div>`; }
+function cxPropRow(k,v){ return `<div class="cxprop"><input data-pk value="${esc(k||"")}" placeholder="칸 이름"><input data-pv value="${esc(v||"")}" placeholder="내용"><button type="button" class="btn small ghost" onclick="this.parentElement.remove()" title="이 속성 빼기">✕</button></div>`; }
 function cxRelRow(c,r){ const opts=cxScope(cxHome(c)).filter(x=>x.id!==c.id).sort((a,b)=>a.name.localeCompare(b.name,"ko"));
-  return `<div class="cxrel"><select data-rt><option value="">누구와(무엇과)…</option>${opts.map(x=>`<option value="${x.id}" ${r?.to===x.id?"selected":""}>${cxIc(x)} ${esc(x.name)}</option>`).join("")}</select><input data-rl value="${esc(r?.label||"")}" placeholder="관계 이름 (예: 아버지, 옛 연인, 소속)"><button type="button" class="btn small ghost" onclick="this.parentElement.remove()" title="이 관계 빼기">✕</button></div>`; }
+  return `<div class="cxrel"><select data-rt><option value="">누구와(무엇과)…</option>${opts.map(x=>`<option value="${x.id}" ${r?.to===x.id?"selected":""}>${cxIc(x)} ${esc(x.name)}</option>`).join("")}</select><input data-rl value="${esc(r?.label||"")}" placeholder="관계 이름 (예: ${esc(cxP(cxPK(c)).relEx||"관련")})"><button type="button" class="btn small ghost" onclick="this.parentElement.remove()" title="이 관계 빼기">✕</button></div>`; }
 function cxAddProp(){ $("#cxprops")?.insertAdjacentHTML("beforeend",cxPropRow("","")); $("#cxprops .cxprop:last-child input")?.focus(); }
-function cxFillTpl(){ const k=$("#cxkind")?.value, box=$("#cxprops"); if(!box) return; const have=new Set([...box.querySelectorAll("[data-pk]")].map(x=>x.value.trim())); const add=(CX_TPL[k]||[]).filter(x=>!have.has(x));
-  if(!add.length) return toast(k?`「${k}」 기본 속성이 이미 다 있습니다`:"먼저 종류를 고르세요"); add.forEach(x=>box.insertAdjacentHTML("beforeend",cxPropRow(x,""))); }
+function cxFillTpl(){ const k=$("#cxkind")?.value, box=$("#cxprops"); if(!box) return; const com=!!$(".codexpage.common"), have=new Set([...box.querySelectorAll("[data-pk]")].map(x=>x.value.trim())); const add=(cxP(CX_PAGE_K).tpl[k||""]||[]).filter(x=>!have.has(x));
+  if(!add.length) return toast(k||com?"기본 칸이 이미 다 있습니다":"먼저 종류를 고르세요"); add.forEach(x=>box.insertAdjacentHTML("beforeend",cxPropRow(x,""))); }
 function cxAddRel(id){ const c=codexLive().find(x=>x.id===id); if(!c) return; if(cxScope(cxHome(c)).length<2) return toast("관계를 이으려면 다른 항목이 하나 더 있어야 합니다"); $("#cxrels")?.insertAdjacentHTML("beforeend",cxRelRow(c,null)); }
-function codexPage(c){ const ns=cxNames(c), {ws,notes}=codexHits(c), yrs=[...new Set(ws.map(w=>(w.date||"").slice(0,4)))].filter(Boolean), bk=cxBack(c), out=cxOut(c);
+// 노트 한 장: 말씀 노트(공통)는 성경 낱말에 맞는 칸(원어·주요 본문·뜻·배경 → 묵상 노트), 원고 노트는 설정 칸(속성·노트·비밀·관계)
+// 디자인: 필기체 없이 — 제목은 명조, 칸 이름은 작은 고딕, 칸마다 묶음 상자 (2026-10-29 팀장님: 「지저분해 보임」)
+function codexPage(c){ const com=cxOrphan(c), W=cxW(c), PK=cxPK(c), P=cxP(PK); CX_PAGE_K=PK; const ns=cxNames(c), {ws,notes}=codexHits(c), yrs=[...new Set(ws.map(w=>(w.date||"").slice(0,4)))].filter(Boolean), bk=cxBack(c), out=cxOut(c);
   const chip=x=>`<a href="#" class="cxchip" onclick="stOpen('cx:${x.id}');return false">${cxIc(x)} ${esc(x.name)}</a>`;
-  const com=cxOrphan(c);
+  const props=(c.props||[]).length?c.props:(P.tpl[c.kind||""]||[]).map(k=>({k,v:""}));   // 새 말씀 노트는 기본 칸을 미리 펼쳐 둠
+  const sec=(h,sub,inner)=>`<section class="cxp-sec"><h4>${h}${sub?`<small>${sub}</small>`:""}</h4>${inner}</section>`;
   return `<section class="sheet roommain codexpage ${com?"common":""}">${com?`<div class="comband"><span class="combadge">공통</span> 「${CX_COMMON}」 — 모든 말씀 글이 함께 씁니다 <button class="btn small ghost" onclick="cxCopyMenu('${c.id}',event)">⧉ 내 원고로 복사</button></div>`:""}
-    <div class="row" style="gap:8px"><button class="btn small ghost" onclick="ROOM_CODEX=null;stOpen('${com?"common":"codex"}')">‹ ${com?CX_COMMON:"설정 목록"}</button><span class="spacer"></span><button class="btn small danger" onclick="codexDel('${c.id}')">지우기</button></div>
-    <div class="row" style="gap:8px;align-items:flex-end;margin-top:8px"><input id="cxname" class="title-in" value="${esc(c.name)}" style="flex:1;min-width:0"><label class="field" style="margin:0"><span>종류</span><select id="cxkind" style="width:auto"><option value="">—</option>${CX_KINDS.map(k=>`<option value="${k}" ${c.kind===k?"selected":""}>${com&&CW_NAME[k]?CW_NAME[k]:k}</option>`).join("")}</select></label></div>
-    <div class="row" style="gap:8px;flex-wrap:wrap;align-items:flex-end"><label class="field" style="flex:1;min-width:200px;margin:0"><span>다른 이름 (쉼표로 · 이 이름들이 나온 글도 함께 모읍니다)</span><input id="cxalias" value="${esc((c.aliases||[]).join(", "))}" placeholder="${esc(cxW(c).alias)}"></label>
-      <label class="field" style="margin:0"><span>속한 곳</span><select id="cxms" style="width:auto" title="노트는 속한 원고를 열었을 때만 보입니다"><option value="">공통 · ${CX_COMMON}</option>${liveMs().filter(x=>!x.rule).map(x=>`<option value="${x.id}" ${c.ms===x.id?"selected":""}>『${esc(x.title)}』</option>`).join("")}</select></label></div>
-    <div class="field"><span>속성 <small class="muted">— 같은 종류끼리 「표」로 나란히 비교됩니다</small></span><div id="cxprops" class="cxprops">${(c.props||[]).map(p=>cxPropRow(p.k,p.v)).join("")}</div>
-      <div class="row" style="gap:6px"><button type="button" class="btn small" onclick="cxAddProp()">＋ 속성</button><button type="button" class="btn small ghost" onclick="cxFillTpl()" title="종류에 맞는 기본 속성(인물: 나이·직업·외모·성격·말버릇·원하는 것…)을 채웁니다">기본 속성 채우기</button></div></div>
-    <label class="field"><span>노트 <small class="muted">— 설정집에 실리는 내용</small></span><textarea id="cxbody" class="pen" style="font-size:20px;min-height:140px" placeholder="${esc(cxW(c).note)}">${esc(c.body||"")}</textarea></label>
-    <label class="field"><span>🔒 비밀 <small class="muted">— 작가만 봅니다 (설정집을 공개용으로 내보낼 때 빠짐)</small></span><textarea id="cxsecret" style="min-height:70px" placeholder="반전, 숨긴 과거, 아직 독자에게 밝히지 않은 것…">${esc(c.secret||"")}</textarea></label>
-    <div class="field"><span>관계 <small class="muted">— 이름 붙은 관계. 관계도에 선으로 그려집니다</small></span><div id="cxrels" class="cxprops">${(c.rel||[]).map(r=>cxRelRow(c,r)).join("")}</div><div><button type="button" class="btn small" onclick="cxAddRel('${c.id}')">＋ 관계</button></div></div>
-    <div class="row"><button class="btn ink small" onclick="codexSave('${c.id}')">간직</button></div>
-    ${bk.rels.length||bk.ment.length||out.length?`<div class="cxback"><p class="label" style="margin:0 0 6px">연결</p>
+    <div class="cxp-top"><button class="cxp-back" onclick="ROOM_CODEX=null;stOpen('${com?"common":"codex"}')">‹ ${com?CX_COMMON:"설정 목록"}</button><span class="spacer"></span><button class="btn small ink" onclick="codexSave('${c.id}')">간직</button><button class="btn small ghost danger" onclick="codexDel('${c.id}')">지우기</button></div>
+    <input id="cxname" class="cxp-title" value="${esc(c.name)}" placeholder="이름" aria-label="이름">
+    <div class="cxp-grid">
+      <label class="cxf"><span>종류</span><select id="cxkind" onchange="cxKindTpl()"><option value="">—</option>${[...P.kinds,...(c.kind&&!P.kinds.includes(c.kind)?[c.kind]:[])].map(k=>`<option value="${k}" ${c.kind===k?"selected":""}>${k}</option>`).join("")}</select></label>
+      <label class="cxf"><span>다른 이름</span><input id="cxalias" value="${esc((c.aliases||[]).join(", "))}" placeholder="${esc(W.alias)}"><small>쉼표로 — 이 이름들이 나온 글도 함께 모읍니다</small></label>
+      <label class="cxf"><span>속한 곳</span><select id="cxms" title="노트는 속한 원고를 열었을 때만 보입니다"><option value="">공통 · ${CX_COMMON}</option>${liveMs().filter(x=>!x.rule).map(x=>`<option value="${x.id}" ${c.ms===x.id?"selected":""}>『${esc(x.title)}』</option>`).join("")}</select></label>
+    </div>
+    ${sec(P.propH,P.propSub,`<div id="cxprops" class="cxprops">${props.map(p=>cxPropRow(p.k,p.v)).join("")}</div>
+      <div class="row" style="gap:6px"><button type="button" class="btn small ghost" onclick="cxAddProp()">＋ 칸</button><button type="button" class="btn small ghost" onclick="cxFillTpl()">기본 칸 채우기</button></div>`)}
+    ${sec(P.noteH,P.noteSub,`<textarea id="cxbody" class="cxp-text" placeholder="${esc(W.note)}">${esc(c.body||"")}</textarea>`)}
+    ${!P.secret?"":sec("🔒 비밀","작가만 봅니다 — 설정집을 공개용으로 내보낼 때 빠집니다",`<textarea id="cxsecret" class="cxp-text small" placeholder="반전, 숨긴 과거, 아직 독자에게 밝히지 않은 것…">${esc(c.secret||"")}</textarea>`)}${!P.rel?"":sec(P.rel,P.relSub,`<div id="cxrels" class="cxprops">${(c.rel||[]).map(r=>cxRelRow(c,r)).join("")}</div><div><button type="button" class="btn small ghost" onclick="cxAddRel('${c.id}')">＋ 관계</button></div>`)}
+    <div class="cxp-save"><button class="btn ink" onclick="codexSave('${c.id}')">간직</button></div>
+    ${bk.rels.length||bk.ment.length||out.length?sec("연결","",`<div class="cxback">
       ${bk.rels.length?`<div><small class="muted">이 항목을 가리키는 관계</small> ${bk.rels.map(x=>`${chip(x.from)}<small class="muted">${x.label?" → "+esc(x.label):""}</small>`).join(" ")}</div>`:""}
-      ${bk.ment.length?`<div><small class="muted">이 이름이 나온 다른 설정</small> ${bk.ment.map(chip).join(" ")}</div>`:""}
-      ${out.length?`<div><small class="muted">이 노트에 나온 설정</small> ${out.map(chip).join(" ")}</div>`:""}</div>`:""}
-    <p class="label" style="margin-top:18px">나온 글 ${ws.length}편 · 밑줄 ${notes.length}개${yrs.length>1?` <small class="hint" style="display:inline">· ${yrs.sort().join("·")}년</small>`:""}</p>
-    ${ws.map(w=>`<div class="cxhit"><a href="#" onclick="go('write',{edit:'${w.id}'});return false"><span class="label ${w.track}" style="font-size:16px;margin:0">[${esc(wTag(w))}]</span> <b>${esc(w.title||"(제목 없음)")}</b></a><span class="muted"> · ${esc(w.date||"")}${w.passage?" · "+esc(w.passage):""}${wMeta(w,"beat")?" · 플롯 "+esc(wMeta(w,"beat")):""}</span><div class="sub">${cxSnip(w.body,ns)}</div></div>`).join("")||`<p class="muted">아직 이 이름이 나온 글이 없습니다.</p>`}
-    ${notes.length?`<details class="more"><summary>밑줄 ${notes.length}개</summary>${notes.map(n=>`<div class="dquote">${cxSnip(n.text,ns)}<div class="muted">${esc(noteSrc(n))} · ${esc(n.date||"")}</div></div>`).join("")}</details>`:""}
+      ${bk.ment.length?`<div><small class="muted">이 이름이 나온 다른 노트</small> ${bk.ment.map(chip).join(" ")}</div>`:""}
+      ${out.length?`<div><small class="muted">이 노트에 나온 다른 노트</small> ${out.map(chip).join(" ")}</div>`:""}</div>`):""}
+    ${sec(`나온 글 ${ws.length}편 · 밑줄 ${notes.length}개`,yrs.length>1?yrs.sort().join("·")+"년":"",
+      (ws.map(w=>`<div class="cxhit"><a href="#" onclick="go('write',{edit:'${w.id}'});return false"><b>${esc(w.title||"(제목 없음)")}</b></a><span class="muted"> · ${esc(wTag(w))} · ${esc(w.date||"")}${w.passage?" · "+esc(w.passage):""}${wMeta(w,"beat")?" · 플롯 "+esc(wMeta(w,"beat")):""}</span><div class="sub">${cxSnip(w.body,ns)}</div></div>`).join("")||`<p class="muted" style="margin:0">아직 이 이름이 나온 글이 없습니다.</p>`)
+      +(notes.length?`<details class="more"><summary>밑줄 ${notes.length}개</summary>${notes.map(n=>`<div class="dquote">${cxSnip(n.text,ns)}<div class="muted">${esc(noteSrc(n))} · ${esc(n.date||"")}</div></div>`).join("")}</details>`:""))}
   </section>`; }
+// 말씀 노트: 종류를 바꿨을 때 아직 아무것도 안 적은 칸이면 그 종류의 기본 칸으로
+function cxKindTpl(){ const box=$("#cxprops"); if(!box) return; const vals=[...box.querySelectorAll("[data-pv]")].some(x=>x.value.trim()); if(vals) return; const T=cxP(CX_PAGE_K).tpl; box.innerHTML=(T[$("#cxkind").value]||T[""]||[]).map(k=>cxPropRow(k,"")).join(""); }
 function codexSave(id){ const c=(S.codex||[]).find(x=>x.id===id); if(!c) return; const name=$("#cxname").value.trim(); if(!name) return toast("이름을 적어 주세요");
   c.name=name; c.aliases=$("#cxalias").value.split(/[,，、]/).map(x=>x.trim()).filter(Boolean); c.body=$("#cxbody").value;
   const kind=$("#cxkind")?.value||""; if(kind) c.kind=kind; else delete c.kind;
@@ -5079,9 +5128,9 @@ function codexSave(id){ const c=(S.codex||[]).find(x=>x.id===id); if(!c) return;
   const rel=[...document.querySelectorAll("#cxrels .cxrel")].map(r=>({to:r.querySelector("[data-rt]").value,label:r.querySelector("[data-rl]").value.trim()})).filter(r=>r.to); if(rel.length) c.rel=rel; else delete c.rel;
   c.updated=new Date().toISOString(); save(); toast("간직했습니다"); render(); }
 // 설정 목록: 카드 · 표(같은 종류 비교) · 관계도
-let CW_VIEW="abc"; const CW_NAME={장소:"지명",개념:"용어"};
+let CW_VIEW="abc";
 const cxCopyBtn=c=>`<button class="btn small ghost cxclaim" onclick="cxCopyMenu('${c.id}',event)" title="원고의 노트로 복사합니다 (원본은 공통에 그대로)">⧉ 원고로</button>`;
-function stCodexList(common){ const all=cxScope(common?null:ROOM_MS).slice().sort((a,b)=>a.name.localeCompare(b.name,"ko")), kinds=CX_KINDS.filter(k=>all.some(c=>c.kind===k)), cs=all.filter(c=>!CX_KIND||c.kind===CX_KIND||(CX_KIND==="-"&&!c.kind));
+function stCodexList(common){ const P=cxP(common?"common":cxPK()), V=P.views.some(([k])=>k===CX_VIEW)?CX_VIEW:"list", all=cxScope(common?null:ROOM_MS).slice().sort((a,b)=>a.name.localeCompare(b.name,"ko")), kinds=[...new Set([...P.kinds,...all.map(c=>c.kind).filter(Boolean)])].filter(k=>all.some(c=>c.kind===k)), cs=all.filter(c=>!CX_KIND||c.kind===CX_KIND||(CX_KIND==="-"&&!c.kind));
   const tab=(k,n)=>`<button class="${CX_VIEW===k?"on":""}" onclick="cxView('${k}')">${n}</button>`;
   const pill=(k,n)=>`<button class="pill ${CX_KIND===k?"on":""}" onclick="CX_KIND='${k}';render()">${n}</button>`;
   let body="";
@@ -5093,27 +5142,27 @@ function stCodexList(common){ const all=cxScope(common?null:ROOM_MS).slice().sor
         :`<p class="muted">아직 성경 본문이 있는 묵상·설교에 나온 노트가 없습니다.</p>`; }
     else if(CW_VIEW==="freq"){ const L=all.slice().sort((a,b)=>hits.get(b.id).length-hits.get(a.id).length);
       inner=`<ol class="cwfreq">${L.map(c=>{ const ws=hits.get(c.id), last=ws[0]; return `<li><button onclick="stOpen('cx:${c.id}')"><b>${cxIc(c)} ${esc(c.name)}</b><span class="cwbar"><i style="width:${Math.min(100,ws.length*10)}%"></i></span><small>${ws.length}편${last?` · 마지막 ${esc(last.date||"")}${last.passage?" "+esc(last.passage):""}`:""}</small></button>${cxCopyBtn(c)}</li>`; }).join("")}</ol>`; }
-    else { const groups=[...CX_KINDS,""].map(k=>[k,all.filter(c=>(c.kind||"")===k)]).filter(([,l])=>l.length);
-      inner=groups.map(([k,l])=>`<p class="cxgh">${k?`${CX_ICON[k]} ${CW_NAME[k]||k}`:"종류 없음"} <span class="muted">${l.length}</span></p><div class="cwwrap">${l.map(c=>`<span class="cwitem">${chip(c)}${cxCopyBtn(c)}</span>`).join("")}</div>`).join(""); }
+    else { const groups=[...kinds,""].map(k=>[k,all.filter(c=>(c.kind||"")===k)]).filter(([,l])=>l.length);
+      inner=groups.map(([k,l])=>`<p class="cxgh">${k?`${CX_ICON[k]||"◎"} ${k}`:"종류 없음"} <span class="muted">${l.length}</span></p><div class="cwwrap">${l.map(c=>`<span class="cwitem">${chip(c)}${cxCopyBtn(c)}</span>`).join("")}</div>`).join(""); }
     body=`<div class="stviews cwtabs">${tabC("abc","가나다")}${tabC("book","성경 책별")}${tabC("freq","자주 만난 순")}</div>${all.length?inner:`<p class="muted">아직 말씀 노트가 없습니다. 성경 인물·지명·용어처럼 여러 묵상에서 함께 쓰는 노트를 두세요.</p>`}`; }
-  else if(CX_VIEW==="table"){ const k=CX_KIND&&CX_KIND!=="-"?CX_KIND:(kinds[0]||""), rows=all.filter(c=>c.kind===k), cols=[...new Set([...(CX_TPL[k]||[]),...rows.flatMap(c=>(c.props||[]).map(p=>p.k))])].filter(x=>rows.some(c=>(c.props||[]).some(p=>p.k===x&&p.v)));
-    body=!k?`<p class="muted">항목에 종류(인물·장소…)를 정하면 같은 종류끼리 표로 나란히 봅니다.</p>`:`<div class="cxtablewrap"><table class="cxtable"><thead><tr><th>${CX_ICON[k]} ${esc(k)}</th>${cols.map(x=>`<th>${esc(x)}</th>`).join("")}<th>관계</th><th>나온 글</th></tr></thead><tbody>
+  else if(V==="table"){ const k=CX_KIND&&CX_KIND!=="-"?CX_KIND:(kinds[0]||""), rows=all.filter(c=>c.kind===k), cols=[...new Set([...(P.tpl[k]||[]),...rows.flatMap(c=>(c.props||[]).map(p=>p.k))])].filter(x=>rows.some(c=>(c.props||[]).some(p=>p.k===x&&p.v)));
+    body=!k?`<p class="muted">항목에 종류를 정하면 같은 종류끼리 표로 나란히 봅니다.</p>`:`<div class="cxtablewrap"><table class="cxtable"><thead><tr><th>${CX_ICON[k]||"◎"} ${esc(k)}</th>${cols.map(x=>`<th>${esc(x)}</th>`).join("")}<th>관계</th><th>나온 글</th></tr></thead><tbody>
       ${rows.map(c=>`<tr><td><a href="#" onclick="stOpen('cx:${c.id}');return false"><b>${esc(c.name)}</b></a></td>${cols.map(x=>`<td>${esc((c.props||[]).find(p=>p.k===x)?.v||"")}</td>`).join("")}<td>${(c.rel||[]).map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`${esc(r.label||"—")}: ${esc(t.name)}`:""; }).filter(Boolean).join("<br>")}</td><td>${codexHits(c).ws.length}</td></tr>`).join("")||`<tr><td colspan="9" class="muted">이 종류의 항목이 없습니다.</td></tr>`}</tbody></table></div>
       ${cols.length?"":`<p class="hint">속성을 채우면 열이 생깁니다 (항목 → 「기본 속성 채우기」).</p>`}`;
-  } else if(CX_VIEW==="graph") body=cxGraph(cs);
+  } else if(V==="graph") body=cxGraph(cs);
   else { const cardC=c=>{ const p=(c.props||[]).find(x=>x.v); return `<div class="strc cxcard" onclick="stOpen('cx:${c.id}')" role="button" tabindex="0"><b>${cxIc(c)} ${esc(c.name)}</b><span>${esc(p?`${p.k}: ${p.v}`:(c.body||"").slice(0,60))}</span><small>${c.kind?esc(c.kind)+" · ":""}나온 글 ${codexHits(c).ws.length}편${(c.rel||[]).length?` · 관계 ${c.rel.length}`:""}</small>${common?`<button class="btn small ghost cxclaim" onclick="cxCopyMenu('${c.id}',event)" title="원고의 노트로 복사합니다 (원본은 공통에 그대로)">⧉ 내 원고로 복사</button>`:""}</div>`; };
     const mine=cs, nCom=codexLive().filter(cxOrphan).length, mt=S.manuscripts.find(x=>x.id===ROOM_MS)?.title||"이 원고";
     body=common?`<div class="strec comgrid">${mine.map(cardC).join("")||`<p class="muted" style="margin:0">아직 말씀 노트가 없습니다. 성경 인물·지명·용어처럼 여러 묵상에서 함께 쓰는 노트를 두세요.</p>`}</div>`
       :`<p class="cxgh">『${esc(mt)}』의 노트 <span class="muted">${mine.length}</span></p><div class="strec">${mine.map(cardC).join("")||`<p class="muted" style="margin:0">이 원고에만 쓰는 노트가 아직 없습니다. 「＋ 항목」으로 만들면 이 원고를 열 때만 보입니다.</p>`}</div>
       ${nCom?`<p class="cxcomlink"><span class="combadge">공통</span> 「${CX_COMMON}」에 ${nCom}개 — 이 원고에도 필요하면 거기서 「내 원고로 복사」 <button class="btn small ghost" onclick="stOpen('common')">말씀 노트 열기</button></p>`:""}`; }
-  return `<section class="sthome cxlist ${common?"common":""}">${common?`<div class="comband"><span class="combadge">공통</span> 모든 말씀 글(묵상·설교초안)이 함께 쓰는 창고 · 원고에는 섞이지 않고, 필요하면 「내 원고로 복사」</div>`:""}<div class="row" style="align-items:center;gap:8px;flex-wrap:wrap"><h2 class="sthello" style="font-size:24px;margin:0">${common?`◎ ${CX_COMMON}`:esc(G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex)}</h2><span class="spacer"></span>${common?"":`<div class="stviews" style="margin:0">${tab("list","카드")}${tab("table","표")}${tab("graph","관계도")}</div>`}</div>
-    <p class="sub">${common?"성경 인물·지명·용어마다 노트를 두면, 그 이름이 나온 묵상·설교 글이 저절로 모입니다.":`${esc(cxW().what)}마다 항목을 두면 그 이름이 나온 글이 저절로 모입니다. 종류·속성·관계를 정하면 표와 관계도로 봅니다.`}</p>
-    ${kinds.length&&!common?`<div class="pills" style="margin-bottom:10px">${CX_VIEW==="table"?"":pill("","모두 "+all.length)}${kinds.map(k=>pill(k,`${CX_ICON[k]} ${k} ${all.filter(c=>c.kind===k).length}`)).join("")}${CX_VIEW!=="table"&&all.some(c=>!c.kind)?pill("-","종류 없음"):""}</div>`:""}
+  return `<section class="sthome cxlist ${common?"common":""}">${common?`<div class="comband"><span class="combadge">공통</span> 모든 말씀 글(묵상·설교초안)이 함께 쓰는 창고 · 원고에는 섞이지 않고, 필요하면 「내 원고로 복사」</div>`:""}<div class="row" style="align-items:center;gap:8px;flex-wrap:wrap"><h2 class="sthello" style="font-size:24px;margin:0">${common?`◎ ${CX_COMMON}`:esc(G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex)}</h2><span class="spacer"></span>${common||P.views.length<2?"":`<div class="stviews" style="margin:0">${P.views.map(([k,n])=>tab(k,n)).join("")}</div>`}</div>
+    <p class="sub">${common?"성경 인물·지명·용어마다 노트를 두면, 그 이름이 나온 묵상·설교 글이 저절로 모입니다.":`${esc(P.intro)}`}</p>
+    ${kinds.length&&!common?`<div class="pills" style="margin-bottom:10px">${V==="table"?"":pill("","모두 "+all.length)}${kinds.map(k=>pill(k,`${CX_ICON[k]||"◎"} ${k} ${all.filter(c=>c.kind===k).length}`)).join("")}${V!=="table"&&all.some(c=>!c.kind)?pill("-","종류 없음"):""}</div>`:""}
     ${body}
-    <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" onclick="codexNew(${common?"true":""})">＋ ${common?"말씀 노트":"항목"}</button><span class="spacer"></span>${all.length&&!common?`<button class="btn small" onclick="cxExport(false)" title="비밀은 빼고, 독자·함께 쓰는 사람에게 보여 줄 설정집 (HTML 한 파일 — 항목마다 바로 가는 링크)">설정집 내보내기 (공개용)</button><button class="btn small ghost" onclick="cxExport(true)" title="비밀까지 담은 작가용 설정집">작가용 (비밀 포함)</button>`:""}</div></section>`; }
+    <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" onclick="codexNew(${common?"true":""})">＋ ${common?"말씀 노트":"항목"}</button><span class="spacer"></span>${all.length&&!common&&P.export?`<button class="btn small" onclick="cxExport(false)" title="HTML 한 파일 — 항목마다 바로 가는 링크">${esc(P.export)} 내보내기${P.secret?" (공개용)":""}</button>${P.secret?`<button class="btn small ghost" onclick="cxExport(true)" title="비밀까지 담은 작가용">작가용 (비밀 포함)</button>`:""}`:""}</div></section>`; }
 // 관계도: 항목을 원에 놓고 이름 붙은 관계를 선으로 (누르면 그 항목으로)
 function cxGraph(cs){ const ids=new Set(cs.map(c=>c.id)), E=cs.flatMap(c=>(c.rel||[]).filter(r=>ids.has(r.to)).map(r=>({a:c.id,b:r.to,l:r.label||""})));
-  if(!cs.length) return `<p class="muted">항목이 없습니다.</p>`; if(!E.length) return `<p class="muted">아직 이어진 관계가 없습니다. 항목에서 「＋ 관계」로 이름 붙은 관계(아버지, 옛 연인, 소속…)를 이으면 여기에 그려집니다.</p>`;
+  if(!cs.length) return `<p class="muted">항목이 없습니다.</p>`; if(!E.length) return `<p class="muted">아직 이어진 것이 없습니다. 항목에서 「＋ ${esc(cxP(cxPK()).rel||"관계")}」로 이름 붙은 관계(${esc(cxP(cxPK()).relEx||"")}…)를 이으면 여기에 그려집니다.</p>`;
   const deg=id=>E.filter(e=>e.a===id||e.b===id).length, N=cs.slice().sort((a,b)=>deg(b.id)-deg(a.id)), W=760, H=Math.max(420,Math.min(700,260+N.length*14)), cx=W/2, cy=H/2, R=Math.min(W,H)/2-70, P={};
   const hub=N.length>=5&&deg(N[0].id)>=3;   // 관계가 많은 항목 하나는 가운데 (다섯 개 넘을 때)
   N.forEach((c,i)=>{ if(hub&&i===0){ P[c.id]=[cx,cy]; return; } const k=hub?i-1:i, n=hub?N.length-1:N.length, t=-Math.PI/2+2*Math.PI*k/n+(n===2?Math.PI/4:0); P[c.id]=[cx+R*Math.cos(t),cy+R*Math.sin(t)]; });
@@ -5126,14 +5175,14 @@ function cxGraph(cs){ const ids=new Set(cs.map(c=>c.id)), E=cs.flatMap(c=>(c.rel
     <p class="hint">화살표는 「누가 → 누구에게」의 관계입니다. 위 종류 단추로 인물만, 조직만 골라 볼 수 있습니다.</p>`; }
 // 설정집 내보내기: HTML 한 파일 (항목마다 #링크 · 관계는 서로 이어짐). 공개용은 비밀을 뺌
 function cxExport(secret){ const m=S.manuscripts.find(x=>x.id===ROOM_MS), all=cxScope(ROOM_MS).slice().sort((a,b)=>a.name.localeCompare(b.name,"ko")), e=esc, nm=id=>all.find(x=>x.id===id);
-  const groups=[...CX_KINDS,""].map(k=>[k,all.filter(c=>(c.kind||"")===k)]).filter(([,l])=>l.length);
+  const P=cxP(cxPK()), groups=[...new Set([...P.kinds,...all.map(c=>c.kind).filter(Boolean)]),""].map(k=>[k,all.filter(c=>(c.kind||"")===k)]).filter(([,l])=>l.length);
   const item=c=>`<section class="it" id="cx-${c.id}"><h3>${e(cxIc(c))} ${e(c.name)}${c.aliases?.length?` <small>(${e(c.aliases.join(", "))})</small>`:""}</h3>
     ${(c.props||[]).filter(p=>p.v).length?`<table>${c.props.filter(p=>p.v).map(p=>`<tr><th>${e(p.k)}</th><td>${e(p.v)}</td></tr>`).join("")}</table>`:""}
     ${c.body?`<div class="bd">${e(c.body).replace(/\n/g,"<br>")}</div>`:""}
     ${(c.rel||[]).filter(r=>nm(r.to)).length?`<p class="rl">관계: ${c.rel.filter(r=>nm(r.to)).map(r=>`${e(r.label||"—")} → <a href="#cx-${r.to}">${e(nm(r.to).name)}</a>`).join(" · ")}</p>`:""}
     ${(()=>{ const b=all.filter(x=>x.id!==c.id&&(x.rel||[]).some(r=>r.to===c.id)); return b.length?`<p class="rl">가리키는 항목: ${b.map(x=>`<a href="#cx-${x.id}">${e(x.name)}</a>`).join(" · ")}</p>`:""; })()}
     ${secret&&c.secret?`<div class="sec">🔒 ${e(c.secret).replace(/\n/g,"<br>")}</div>`:""}</section>`;
-  const title=`${m?.title||"원고"} 설정집${secret?" (작가용)":""}`;
+  const title=`${m?.title||"원고"} ${P.export||"노트"}${secret?" (작가용)":""}`;
   const html=`<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${e(title)}</title><style>
 body{font:16px/1.75 "Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#2a2420;background:#faf7f1;margin:0;padding:24px 16px} main{max-width:760px;margin:0 auto} h1{font-size:28px;margin:0 0 4px} h2{margin:34px 0 8px;border-bottom:2px solid #d8ccb8;padding-bottom:4px} h3{margin:0 0 6px;font-size:19px} h3 small{color:#8a7a66;font-weight:400}
 nav{background:#fff;border:1px solid #e6dccb;border-radius:10px;padding:10px 14px;margin:14px 0} nav a{margin-right:10px;white-space:nowrap} a{color:#8a4b22}
@@ -5143,7 +5192,7 @@ nav{background:#fff;border:1px solid #e6dccb;border-radius:10px;padding:10px 14p
 <nav>${groups.map(([k,l])=>`<b>${e(k||"기타")}</b> ${l.map(c=>`<a href="#cx-${c.id}">${e(c.name)}</a>`).join("")}`).join("<br>")}</nav>
 ${groups.map(([k,l])=>`<h2>${e(CX_ICON[k]||"◎")} ${e(k||"기타")}</h2>${l.map(item).join("")}`).join("")}
 <footer>아침 서재에서 만든 설정집입니다. 항목 이름 옆 주소(#…)로 항목마다 바로 연결할 수 있습니다.</footer></main></body></html>`;
-  download(`${(m?.title||"원고").replace(/[\\/:*?"<>|]/g,"")} 설정집${secret?"(작가용)":""}.html`,html,"text/html"); toast(secret?"작가용 설정집(비밀 포함)을 내려받았습니다":"공개용 설정집을 내려받았습니다 — 비밀은 빠졌습니다. 이 파일을 보내거나 웹에 올리면 됩니다"); }
+  download(`${(m?.title||"원고").replace(/[\\/:*?"<>|]/g,"")} ${(P.export||"노트").replace(/·/g,"_")}${secret?"(작가용)":""}.html`,html,"text/html"); toast(secret?"작가용 설정집(비밀 포함)을 내려받았습니다":"공개용 설정집을 내려받았습니다 — 비밀은 빠졌습니다. 이 파일을 보내거나 웹에 올리면 됩니다"); }
 // 플롯 보드 (노벨라 파트·블록 · 타입탁 플롯 보드): 단계(열) 안에 장면 카드. 카드에는 장면에 나온 인물이 저절로 붙음
 const PLOT_SETS={"5단":["발단","전개","위기","절정","결말"],"3막":["1막 · 설정","2막 · 대립","3막 · 해결"],"기승전결":["기","승","전","결"]};
 const plotStages=m=>Array.isArray(m?.plot?.stages)&&m.plot.stages.length?m.plot.stages:PLOT_SETS["5단"];
