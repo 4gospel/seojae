@@ -288,6 +288,18 @@ sup.enref{font-size:.7em;color:#4f7fa8;font-family:Georgia,serif} .enhead{margin
 @media (max-width:700px){ .fnpane{max-width:none} } .hmirror i.mki{visibility:visible;font-style:normal;color:transparent;text-decoration:underline dotted color-mix(in srgb,var(--sepia) 75%,transparent);text-decoration-thickness:1.5px;text-underline-offset:5px}
 .hmirror i.mkc{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,var(--paper) 70%,transparent)} .hmirror i.mkf{background:color-mix(in srgb,var(--paper) 55%,transparent);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--sepia) 45%,transparent)}
 .hmirror i.mkh{visibility:visible;font-style:normal;color:transparent;border-radius:2px} .hmirror i.mku{visibility:visible;font-style:normal;color:transparent;text-decoration:underline;text-decoration-color:var(--sepia);text-decoration-thickness:1.5px;text-underline-offset:5px}
+.hmirror i.fb{visibility:visible;font-style:normal;color:transparent;background:rgba(214,92,92,.10);box-shadow:inset 0 -2px 0 rgba(200,70,70,.45);border-radius:2px}
+#fbpanel{position:fixed;right:14px;top:84px;bottom:14px;width:min(380px,92vw);z-index:60;overflow:auto;background:var(--paper);border:1px solid var(--edge);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:12px 14px;font:13.5px/1.55 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
+#fbpanel .fbh{display:flex;align-items:center;gap:6px;margin-bottom:8px} #fbpanel .fbh button{border:0;background:none;cursor:pointer;font-size:15px;color:var(--ink-soft);padding:2px 6px;border-radius:6px} #fbpanel .fbh button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.fbscores{display:grid;gap:4px;margin-bottom:8px} .fbs{display:grid;grid-template-columns:78px 1fr 18px;gap:8px;align-items:center;cursor:help} .fbs span{font-size:12.5px;color:var(--ink-soft)} .fbbar{height:7px;border-radius:4px;background:var(--edge);overflow:hidden} .fbbar i{display:block;height:100%;background:#7a5aa8;border-radius:4px}
+.fbt{margin:10px 0 4px;font-weight:600} .fbl{margin:0;padding-left:18px} .fbl li{margin:2px 0} .fbl.ok li::marker{color:#4f8a5a} .fbl.no li::marker{color:#c0533f}
+.fbi{border:1px solid var(--edge);border-radius:10px;padding:8px 10px;margin:6px 0;background:color-mix(in srgb,var(--paper) 60%,#fff)} .fbi.done{opacity:.6} .fbi a{color:var(--ink);text-decoration:none;font-size:13px} .fbi a:hover{text-decoration:underline} .fbn{color:#a33a2c;margin:4px 0;font-size:13px}
+.fbk{flex:none;font-size:11px;border-radius:99px;padding:0 7px;background:var(--edge);color:var(--ink-soft)} .fbk.k-설정\ 어긋남,.fbk.k-개연성{background:#f4d6d0;color:#8a2c1c} .fbk.k-사실\ 확인{background:#f1e6c8;color:#7a5a12}
+.altlist{display:grid;gap:4px;margin:4px 0} .altc{border:0;background:none;text-align:left;padding:8px 10px;border-radius:9px;cursor:pointer;font:inherit;color:var(--ink);line-height:1.6} .altc:hover,.altc:focus{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.altnav{display:flex;justify-content:center;align-items:center;gap:10px} .altnav button{border:0;background:none;font-size:18px;cursor:pointer;color:var(--ink-soft);padding:0 8px} .altnav button:disabled{opacity:.3}
+#fbpanel .rfb{display:flex;gap:6px;margin-top:6px} #fbpanel .rfb button{border:1px solid var(--edge);background:var(--paper);border-radius:8px;padding:3px 12px;cursor:pointer;font:inherit;font-size:12.5px;color:var(--ink)} #fbpanel .rfb button.p{background:var(--ink);color:var(--paper);border-color:var(--ink)} #fbpanel .rfdiff{font-size:13.5px;line-height:1.7;margin:4px 0}
+.cxego .cxgraph{max-width:520px} .cxego .hint{display:none}
+@media (max-width:700px){ #fbpanel{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:70vh} }
 .hmirror i.rf{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,#7a5aa8 20%,transparent);border-radius:3px;box-shadow:0 0 0 1px color-mix(in srgb,#7a5aa8 30%,transparent)}   /* AI 다듬기로 고칠 곳 */
 /* 맞춤법 밑줄: 글자는 투명하게 두고 물결 밑줄만 보입니다. 누르면 제안 상자 */
 .hmirror i.sp{visibility:visible;font-style:normal;color:transparent;text-decoration:underline wavy var(--stamp);text-decoration-skip-ink:none;text-underline-offset:4px;text-decoration-thickness:1.5px;pointer-events:auto;cursor:pointer}
@@ -1643,7 +1655,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="66855532b1";
+const APP_BUILD="fc68e51168";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3131,7 +3143,7 @@ write0(){
     <span class="row touchonly" style="gap:4px"><button class="undobtn" onclick="tUndo()" title="되돌리기">↶</button><button class="undobtn" onclick="tUndo(true)" title="다시 하기">↷</button></span>
     <button class="btn small focusexit" onclick="toggleFocus()">집중 나가기</button>
     <details class="tgrp"><summary class="btn small">쓰기 ▾</summary><div class="tgmenu">
-      ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}${w&&cardKindOf(w)&&!cardKindOf(w).sermon?`<button class="btn small" onclick="tgClose();cardOpen()" title="한 문장·기능·겨냥할 자리… 초안 전에 글을 설계합니다">설계 카드</button>`:""}${w&&wMs(w)&&!wMs(w).rule?`<button class="btn small" onclick="tgClose();pieceSplit()" title="커서가 있는 줄부터 새 글로 (■ 소제목 줄이면 그 이름이 새 글 제목)">✂ 커서에서 나누기</button><button class="btn small" onclick="tgClose();pieceMerge()" title="다음 글을 이 글 끝에 붙입니다">⊕ 다음 글과 합치기</button>`:""}${w&&cardKindOf(w)?`<button class="btn small" onclick="tgClose();vfOpen()" title="사실 주장을 출처와 대조합니다">검증표</button><button class="btn small" onclick="tgClose();ckOpen()" title="완성 전 점검 질문 10개">점검 10문항</button>`:""}
+      ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}${w&&cardKindOf(w)&&!cardKindOf(w).sermon?`<button class="btn small" onclick="tgClose();cardOpen()" title="한 문장·기능·겨냥할 자리… 초안 전에 글을 설계합니다">설계 카드</button>`:""}<button class="btn small aibtn" onclick="tgClose();fbStart()" title="성격에 맞는 기준으로 점수·강점·약점, 고칠 문장마다 코멘트와 대안 (적용은 하나씩 직접)">✦ 피드백·첨삭</button><button class="btn small" onclick="tgClose();altHere()" title="커서가 있는 문장(또는 고른 글)을 바꿔 쓴 후보 4개">✦ 다른 표현</button>${w&&wMs(w)&&!wMs(w).rule?`<button class="btn small" onclick="tgClose();pieceSplit()" title="커서가 있는 줄부터 새 글로 (■ 소제목 줄이면 그 이름이 새 글 제목)">✂ 커서에서 나누기</button><button class="btn small" onclick="tgClose();pieceMerge()" title="다음 글을 이 글 끝에 붙입니다">⊕ 다음 글과 합치기</button>`:""}${w&&cardKindOf(w)?`<button class="btn small" onclick="tgClose();vfOpen()" title="사실 주장을 출처와 대조합니다">검증표</button><button class="btn small" onclick="tgClose();ckOpen()" title="완성 전 점검 질문 10개">점검 10문항</button>`:""}
       <button class="btn small" onclick="toggleFocus();tgClose()" id="focusbtn">집중 모드</button>
       <button class="btn small ${TYPEW?"on":""}" onclick="toggleTypew()" id="twbtn" title="쓰는 줄을 늘 화면 가운데에 둡니다">타자기</button>
       <span class="row" style="gap:4px" title="글자 크기 (이 기기만)"><span class="muted" style="font-size:12.5px">글자</span><button class="fsbtn" onclick="fontStep(-1)">가−</button><button class="fsbtn" onclick="fontStep(1)">가＋</button></span>
@@ -3458,10 +3470,11 @@ function paintHeads(){
   // 소제목 줄 안의 영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보이므로 그 부분만 원래 글자(보이지 않는 자리)로 둡니다
   const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):markLine(l);
-  FN_C={f:0,e:0}; const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null; let off=0;   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
+  FN_C={f:0,e:0}; const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null; let off=0;
+  const RG=[...(rf?[{s:rf.s,e:rf.e,c:"rf"}]:[]),...fbRanges(t.value)].sort((a,b)=>a.s-b.s).filter((r,i,A)=>!A.slice(0,i).some(q=>q.e>r.s));   // AI 다듬기(보라) · 첨삭(분홍 밑줄)   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
   const OZ=ownZones(t.value);
   m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[], st=off; off+=l.length+1;
-    if(rf&&rf.s<st+l.length+1&&rf.e>st){ const a=Math.max(0,rf.s-st), z=Math.min(l.length,rf.e-st); return plain(l.slice(0,a),head)+`<i class="rf">${esc(l.slice(a,z))}</i>`+plain(l.slice(z),head); }
+    const hit=RG.filter(r=>r.s<st+l.length+1&&r.e>st); if(hit.length){ let o="",cur=0; hit.forEach(r=>{ const a=Math.max(cur,r.s-st), z=Math.min(l.length,r.e-st); if(z<=a) return; o+=plain(l.slice(cur,a),head)+`<i class="${r.c}">${esc(l.slice(a,z))}</i>`; cur=z; }); return o+plain(l.slice(cur),head); }
     if(!E.length) return plain(l,head);
     let out="", last=0; E.forEach(x=>{ out+=plain(l.slice(last,x.s),head)+`<i class="sp ${x.src}" data-l="${i}" data-s="${x.s}" data-e="${x.e}" title="${esc(x.to)}${x.why?" — "+esc(x.why):""}">${esc(l.slice(x.s,x.e))}</i>`; last=x.e; }); return out+plain(l.slice(last),head); }).map((h,i)=>OZ.has(i)?`<i class="ownl">${h}</i>`:h).join("\n");
   fnPanePaint(t);
@@ -5186,6 +5199,7 @@ function codexPage(c){ const com=cxOrphan(c), W=cxW(c), PK=cxPK(c), P=cxP(PK); C
       <div class="row" style="gap:6px"><button type="button" class="btn small ghost" onclick="cxAddProp()">＋ 칸</button><button type="button" class="btn small ghost" onclick="cxFillTpl()">기본 칸 채우기</button></div>`)}
     ${sec(P.noteH,P.noteSub,`<textarea id="cxbody" class="cxp-text" placeholder="${esc(W.note)}">${esc(c.body||"")}</textarea>`)}
     ${!P.secret?"":sec("🔒 비밀","작가만 봅니다 — 설정집을 공개용으로 내보낼 때 빠집니다",`<textarea id="cxsecret" class="cxp-text small" placeholder="반전, 숨긴 과거, 아직 독자에게 밝히지 않은 것…">${esc(c.secret||"")}</textarea>`)}${!P.rel?"":sec(P.rel,P.relSub,`<div id="cxrels" class="cxprops">${(c.rel||[]).map(r=>cxRelRow(c,r)).join("")}</div><div><button type="button" class="btn small ghost" onclick="cxAddRel('${c.id}')">＋ 관계</button></div>`)}
+    ${P.rel&&((c.rel||[]).length||bk.rels.length)?sec(`${P.views.find(v=>v[0]==="graph")?.[1]||"관계도"}`,"이 항목을 가운데 두고 — 누르면 그 항목으로",`<div class="cxego">${cxGraph([c,...new Set([...(c.rel||[]).map(r=>codexLive().find(x=>x.id===r.to)),...bk.rels.map(x=>x.from)].filter(Boolean))],c.id)}</div>`):""}
     <div class="cxp-save"><button class="btn ghost" onclick="codexClose('${c.id}')" title="Esc">닫기</button><button class="btn ink" onclick="codexSave('${c.id}')" title="⌘S">간직 <small style="opacity:.6">⌘S</small></button></div>
     ${bk.rels.length||bk.ment.length||out.length?sec("연결","",`<div class="cxback">
       ${bk.rels.length?`<div><small class="muted">이 항목을 가리키는 관계</small> ${bk.rels.map(x=>`${chip(x.from)}<small class="muted">${x.label?" → "+esc(x.label):""}</small>`).join(" ")}</div>`:""}
@@ -5254,10 +5268,11 @@ function stCodexList(common){ const P=cxP(common?"common":cxPK()), V=P.views.som
     ${body}
     <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" onclick="codexNew(${common?"true":""})">＋ ${common?"말씀 노트":"항목"}</button><span class="spacer"></span>${all.length&&!common&&P.export?`<button class="btn small" onclick="cxExport(false)" title="HTML 한 파일 — 항목마다 바로 가는 링크">${esc(P.export)} 내보내기${P.secret?" (공개용)":""}</button>${P.secret?`<button class="btn small ghost" onclick="cxExport(true)" title="비밀까지 담은 작가용">작가용 (비밀 포함)</button>`:""}`:""}</div></section>`; }
 // 관계도: 항목을 원에 놓고 이름 붙은 관계를 선으로 (누르면 그 항목으로)
-function cxGraph(cs){ const ids=new Set(cs.map(c=>c.id)), E=cs.flatMap(c=>(c.rel||[]).filter(r=>ids.has(r.to)).map(r=>({a:c.id,b:r.to,l:r.label||""})));
+function cxGraph(cs,centerId){ const ids=new Set(cs.map(c=>c.id)), E=cs.flatMap(c=>(c.rel||[]).filter(r=>ids.has(r.to)).map(r=>({a:c.id,b:r.to,l:r.label||""})));
   if(!cs.length) return `<p class="muted">항목이 없습니다.</p>`; if(!E.length) return `<p class="muted">아직 이어진 것이 없습니다. 항목에서 「＋ ${esc(cxP(cxPK()).rel||"관계")}」로 이름 붙은 관계(${esc(cxP(cxPK()).relEx||"")}…)를 이으면 여기에 그려집니다.</p>`;
   const deg=id=>E.filter(e=>e.a===id||e.b===id).length, N=cs.slice().sort((a,b)=>deg(b.id)-deg(a.id)), W=760, H=Math.max(420,Math.min(700,260+N.length*14)), cx=W/2, cy=H/2, R=Math.min(W,H)/2-70, P={};
-  const hub=N.length>=5&&deg(N[0].id)>=3;   // 관계가 많은 항목 하나는 가운데 (다섯 개 넘을 때)
+  if(centerId){ const ci=N.findIndex(c=>c.id===centerId); if(ci>0) N.unshift(N.splice(ci,1)[0]); }
+  const hub=centerId?N.length>=3:N.length>=5&&deg(N[0].id)>=3;   // 관계가 많은 항목 하나는 가운데 (다섯 개 넘을 때)
   N.forEach((c,i)=>{ if(hub&&i===0){ P[c.id]=[cx,cy]; return; } const k=hub?i-1:i, n=hub?N.length-1:N.length, t=-Math.PI/2+2*Math.PI*k/n+(n===2?Math.PI/4:0); P[c.id]=[cx+R*Math.cos(t),cy+R*Math.sin(t)]; });
   const pairs={}; E.forEach(e=>{ const key=[e.a,e.b].sort().join(); pairs[key]=(pairs[key]||0)+1; e.n=pairs[key]; e.key=key; });   // 서로 가리키는 관계는 양쪽으로 휘게 (방향이 반대라 저절로 반대편)
   const col={인물:"#b0703f",장소:"#5f8a68",조직:"#7d6aa8",사물:"#a08a3c",사건:"#b0534a",개념:"#4f7fa8"};
@@ -5529,6 +5544,7 @@ function docBar(w){ const d=docStyle(w), m=docOwn(w), z=docZoom(), opt=(v,list,f
     <select title="첫 줄 들여쓰기 — 쪽 미리보기·내보내기에서 보입니다" onchange="docSet('ind',+this.value)">${opt(d.ind,[0,1,2],x=>x?`들여쓰기 ${x}자`:"들여쓰기 없음")}</select>
     <select title="문단 사이 간격 — 쪽 미리보기·내보내기에서 보입니다" onchange="docSet('sp',+this.value)">${opt(d.sp,[0,.5,1],x=>x?`문단 간격 ${x===1?"한":"반"} 줄`:"문단 간격 없음")}</select>
     <span class="dbg"><button type="button" class="dbb" onclick="docWrap('**')" title="굵게 (⌘B)"><b>B</b></button><button type="button" class="dbb" onclick="docWrap('*')" title="기울임 (⌘I)"><i style="font-family:Georgia,serif">I</i></button></span><span class="dbg"><button type="button" class="dbb" onclick="docHead()" title="이 줄을 ■ 소제목으로 (다시 누르면 풀림)"><b>■</b> 소제목</button><button type="button" class="dbb" onclick="docMk('hl','y')" title="고른 글자에 형광펜"><span class="dot" style="background:#f3d36b"></span></button><button type="button" class="dbb" onclick="docMk('ul')" title="고른 글자에 밑줄"><u>밑줄</u></button><button type="button" class="dbb" onclick="fnHere()" title="각주 (⌘⇧F)"><b style="font-family:Georgia,serif">¹</b></button></span>
+    <span class="dbg"><button type="button" class="dbb" onclick="altHere()" title="커서가 있는 문장을 바꿔 쓴 후보 4개">✦ 다른 표현</button><button type="button" class="dbb" onclick="fbStart()" title="점수·강점·약점과 첨삭">✦ 피드백</button></span>
     <span class="spacer"></span><button type="button" class="dbb" onclick="toggleRead()" title="들여쓰기·문단 간격까지 쪽 모양으로 봅니다">쪽 미리보기</button>
     <select title="확대 (이 기기)" onchange="docZoomSet(+this.value)">${opt(z,[75,90,100,110,125,150],x=>x+"%")}</select>
     <small class="muted dbscope" title="${m?"이 원고의 모든 글에 같은 모양 — 워드·PDF로 내보낼 때도":"원고에 들지 않은 글의 기본 모양"}">${m?`『${esc(m.title)}』 전체 · 내보내기도`:"모든 글 기본"}</small></div>`; }
@@ -5555,6 +5571,54 @@ function docMk(kind,color){ const b=$("#wbody"); if(!b) return; if(b.selectionEn
 function docCss(m,o){ const d=docExp(m); if(!d||o.fmt==="pulpit") return ""; const f=docFont(d.font)[2];
   return `html{font-family:${f};font-size:${d.pt}pt!important} p,.chapter p{line-height:${d.lh}!important;text-indent:${d.ind}em;text-align:${d.align};margin:0 0 ${(d.sp*d.lh).toFixed(2)}em}\n`; }
 if(document.body) document.body.classList.toggle("docmode",DOC_MODE); else document.addEventListener("DOMContentLoaded",()=>document.body.classList.toggle("docmode",DOC_MODE));
+// ───────── 다른 표현 · 피드백·첨삭 (2026-10-29, 타입탁 「다른 표현」·「첨삭」을 본뜸 — 모든 글 성격 공통) ─────────
+// 원칙: AI는 후보·코멘트만, 고르는 것과 넣는 것은 글쓴이(카드를 눌러야 들어감). 묵상은 질문만이라 빠지고, 시는 행을 바꾸지 않게 코멘트만, 설교의 「직접 쓸 네 자리」는 적용하지 않음
+// 커서가 있는 문장(고른 글이 있으면 그것)을 다른 표현으로
+function altHere(){ const b=$("#wbody"); if(!b) return; const k=aiGenre(); if(k.meditation||k.poem) return toast(k.meditation?"묵상에서는 AI가 문장을 바꿔 쓰지 않습니다 (질문만)":"시는 행을 바꿔 쓰지 않습니다 — 비문 고치기만");
+  let s=b.selectionStart, e=b.selectionEnd; const v=b.value;
+  if(e<=s){ const L=v.lastIndexOf("\n",s-1)+1, R=(v.indexOf("\n",s)+1||v.length+1)-1, line=v.slice(L,R), p=s-L; let a=0, z=line.length;   // 줄 안에서 문장 하나
+    for(const m of line.matchAll(/[.!?。…]+["'」』”’)]*\s+/g)){ const end=m.index+m[0].length; if(end<=p) a=end; else { z=m.index+m[0].trimEnd().length; break; } }
+    s=L+a; e=L+z; }
+  if(e<=s||!v.slice(s,e).trim()) return toast("바꿔 볼 문장에 커서를 두거나 골라 주세요"); WSEL={s,e}; rfStart("alt"); }
+function rfAlt(i){ if(!RF||RF.dir!=="alt") return; const cur=RF.pages?.[RF.page]; if(!cur?.[i]) return; RF.to=cur[i]; RF.same=false; rfApply(); }
+function rfAltPage(d){ if(!RF) return; const n=RF.page+d; if(n<0) return; if(n>=RF.pages.length) return rfStart("alt",true); RF.page=n; rfDraw(); }
+
+// 피드백: 성격마다 기준
+const FB_CRIT={novel:["구성","인물","개연성","문장","몰입"],paper:["논증","근거·인용","구성","문체","독창성"],sermon:["본문 충실","한 문장","구조","적용","전달"],essay:["장면","진정성","문장","여운"],selfhelp:["메시지","사례","실천","구성"],poem:["이미지","리듬","낱말","여운"],free:["구성","문장","전달"]};
+let FB=null;   // {wid,busy,err,scores,strong,weak,items[{from,to,kind,note,st}],ai,at,crit}
+// 이 원고의 노트(설정) — 피드백이 설정과 어긋난 곳을 찾도록
+function fbSettings(m){ if(!m) return ""; return cxScope(m.id).map(c=>`${c.name}${c.kind?`(${c.kind})`:""}${(c.aliases||[]).length?` [다른 이름: ${c.aliases.join(", ")}]`:""}: ${(c.props||[]).filter(p=>p.v).map(p=>`${p.k}=${p.v}`).join("; ")}${(c.rel||[]).length?` · 관계: ${c.rel.map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`${r.label||"—"}→${t.name}`:""; }).filter(Boolean).join(", ")}`:""}${c.body?` · ${c.body.replace(/\s+/g," ").slice(0,160)}`:""}`).join("\n").slice(0,6000); }
+async function fbStart(){ const b=$("#wbody"); if(!b) return; const k=aiGenre(); if(k.meditation) return toast("묵상에는 점수를 매기지 않습니다 — ✦ AI 창에서 질문으로 함께 보세요");
+  if(chars(b.value)<80) return toast("피드백을 받으려면 조금 더 써 주세요 (80자 넘게)");
+  if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
+  const crit=FB_CRIT[k.kind]||FB_CRIT.free, wid=editId||"new"; FB={wid,busy:true,crit}; fbDraw();
+  try{ const r=await gcall("coWrite",{mode:"feedback",body:aiBodyText(b),title:$("#wtitle")?.value||"",genre:k.name,criteria:crit,settings:fbSettings(k.m),card:k.w?cardForAI(k.w):null,sermon:k.sermon,...vrFor(k.sermon)});
+    if(!FB||FB.wid!==wid) return; Object.assign(FB,{busy:false,...r,at:new Date().toISOString(),items:(r.items||[]).map(x=>({...x,st:"open"}))}); }
+  catch(e){ if(FB&&FB.wid===wid) Object.assign(FB,{busy:false,err:"피드백을 받지 못했습니다: "+e.message}); }
+  fbDraw(); paintHeads(); }
+function fbClose(){ FB=null; $("#fbpanel")?.remove(); paintHeads(); }
+// 거울 층에 칠할 곳 (아직 열려 있는 첨삭)
+function fbRanges(v){ if(!FB||FB.busy||(editId||"new")!==FB.wid) return []; const out=[]; (FB.items||[]).forEach((x,i)=>{ if(x.st!=="open") return; const a=v.indexOf(x.from); if(a>=0) out.push({s:a,e:a+x.from.length,c:"fb",i}); }); return out; }
+function fbGo(i){ const x=FB?.items?.[i], b=$("#wbody"); if(!x||!b) return; const a=b.value.indexOf(x.from); if(a<0) return toast("본문에서 그 구절을 찾지 못했습니다 — 그사이 고쳤나 봅니다"); b.focus(); b.setSelectionRange(a,a+x.from.length); const y=b.getBoundingClientRect().top+scrollY+caretY(b); scrollTo({top:Math.max(0,y-innerHeight*.35),behavior:"smooth"}); }
+function fbApply(i){ const x=FB?.items?.[i], b=$("#wbody"); if(!x||!b||!x.to) return; const k=aiGenre(); if(k.poem) return toast("시는 행을 바꿔 쓰지 않습니다 — 코멘트를 보고 직접 고쳐 주세요");
+  const a=b.value.indexOf(x.from); if(a<0) return toast("본문에서 그 구절을 찾지 못했습니다 — 그사이 고쳤나 봅니다");
+  const oz=ownHit(b.value,a,a+x.from.length); if(oz) return toast(`「${oz}」은 직접 쓰는 자리입니다 (원칙 1-5) — 코멘트를 보고 직접 고쳐 주세요`);
+  tInsert(b,x.to,a,a+x.from.length); x.st="done"; fbDraw(); paintHeads(); toast("적용했습니다 (⌘Z로 되돌리기)"); }
+function fbDismiss(i){ const x=FB?.items?.[i]; if(!x) return; x.st="closed"; fbDraw(); paintHeads(); }
+function fbDraw(){ if(!FB) return $("#fbpanel")?.remove(); let p=$("#fbpanel"); if(!p){ p=document.createElement("aside"); p.id="fbpanel"; document.body.appendChild(p); p.onmousedown=e=>{ if(!e.target.closest("input,textarea,a")) e.preventDefault(); }; }
+  const bar=n=>`<span class="fbbar"><i style="width:${n*20}%"></i></span>`, open=(FB.items||[]).filter(x=>x.st==="open").length;
+  p.innerHTML=`<div class="fbh"><b>✦ 피드백 · 첨삭</b><span class="spacer"></span>${FB.busy?"":`<button onclick="fbStart()" title="다시 받기">↻</button>`}<button onclick="fbClose()" title="닫기">✕</button></div>
+    ${FB.busy?`<p class="muted">원고를 읽고 있습니다… <span class="dots"><i></i><i></i><i></i></span><br><small>기준: ${esc(FB.crit.join(" · "))}${aiGenre().m?" · 이 원고의 노트(설정)와 대조":""}</small></p>`
+    :FB.err?`<p class="warn">${esc(FB.err)}</p>`
+    :`<div class="fbscores">${(FB.scores||[]).map(x=>`<div class="fbs" title="${esc(x.why)}"><span>${esc(x.k)}</span>${bar(x.n)}<b>${x.n}</b></div>`).join("")}</div>
+      ${(FB.strong||[]).length?`<p class="fbt">강점</p><ul class="fbl ok">${FB.strong.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+      ${(FB.weak||[]).length?`<p class="fbt">약점</p><ul class="fbl no">${FB.weak.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+      <p class="fbt">첨삭 <small class="muted">${open}곳 남음 · 본문에 분홍 밑줄</small></p>
+      ${(FB.items||[]).map((x,i)=>x.st==="closed"?"":`<div class="fbi ${x.st}"><div class="row" style="gap:6px;align-items:baseline"><span class="fbk k-${esc(x.kind)}">${esc(x.kind)}</span><a href="#" onclick="fbGo(${i});return false" title="본문의 그 자리로">「${esc(x.from.slice(0,60))}${x.from.length>60?"…":""}」</a></div>
+        <div class="fbn">${esc(x.note)}</div>${x.to&&x.st==="open"?`<div class="rfdiff">${rfDiffHtml(x.from,x.to)}</div>`:""}
+        ${x.st==="done"?`<small class="muted">✓ 적용함</small>`:`<div class="rfb">${x.to&&!aiGenre().poem?`<button class="p" onclick="fbApply(${i})">✓ 적용</button>`:""}<button onclick="fbDismiss(${i})">닫기</button></div>`}</div>`).join("")||`<p class="muted">고칠 곳을 찾지 못했습니다.</p>`}
+      <small class="muted">${esc(FB.ai||"")} · 점수와 코멘트는 참고만 — 고칠지는 글쓴이가 정합니다</small>`}`; }
+document.addEventListener("input",e=>{ if(FB&&e.target?.id==="wbody") paintHeads(); });
 // ───────── 분량 비율 · 검증표 · 점검 10문항 (팀장님 「AI 보조 원칙」 5-9·5-12 · 2·3장 · 8-4) ─────────
 // 검증표 w.meta.vtab={at,ai,rows:[{kind,claim,status,source,note,me}]} · 점검 w.meta.chk10={at,a:[{me,ai,why}]} — 카드처럼 글의 meta 칸(칸마다 시각으로 합침, 저장 형식 그대로). 말 속도 S.settings.spm(1분 음절, 기본 350)
 const SPM=()=>parseInt(S.settings.spm)||350;
@@ -5692,12 +5756,12 @@ function vrSection(){ const R=vrList("rules"), V=vrList("voice");
 // 글자를 고르고 「✦ 다듬기」(고르기 막대·오른쪽 버튼 메뉴) → 방향 → 서버 coWrite_(mode:"refine") → 고를 곳에 옅은 보라 바탕(거울 층) + 비교 상자(지운 곳 취소선·바뀐 곳 굵은 밑줄)
 // ✓ 적용(⌘Z, 알림의 「되돌리기」) · ✗ 취소(Esc) · ↻ 다시. 기다리는 사이 그 부분을 고치면: 글에서 딱 한 번 나오면 그 자리를 따라가고, 아니면 적용하지 않음. 한 번에 4,000자.
 // 갈래마다: 묵상·설교초안·시는 「비문 고치기」만, 설교집·신앙 에세이 원고에는 「귀 → 눈」(설교 말투 → 책 문장)도.
-const RF_DIRS={polish:["다듬기","뜻은 그대로 두고 더 자연스럽고 매끄럽게"],short:["줄이기","뜻은 그대로, 더 짧고 간결하게"],easy:["쉽게","처음 읽는 사람도 바로 알아듣게 쉬운 말로"],breath:["문장 호흡","너무 긴 문장은 나누고, 짧게 끊긴 문장은 이어 읽는 호흡이 고르게"],fix:["비문 고치기","주어·서술어 호응, 조사, 어색한 문장 구조만 바로잡기 — 표현은 최대한 그대로"],
+const RF_DIRS={alt:["다른 표현","뜻은 그대로, 바꿔 쓴 후보 4개 — 누르면 들어감"],polish:["다듬기","뜻은 그대로 두고 더 자연스럽고 매끄럽게"],short:["줄이기","뜻은 그대로, 더 짧고 간결하게"],easy:["쉽게","처음 읽는 사람도 바로 알아듣게 쉬운 말로"],breath:["문장 호흡","너무 긴 문장은 나누고, 짧게 끊긴 문장은 이어 읽는 호흡이 고르게"],fix:["비문 고치기","주어·서술어 호응, 조사, 어색한 문장 구조만 바로잡기 — 표현은 최대한 그대로"],
   speak:["말하는 문장으로","소리 내어 하는 설교에 맞게 — 짧은 문장, 숨이 편하게, 말버릇은 문단마다 한두 번까지. 사실·인용·성경 구절은 그대로"],
   show:["보여 주기로","설명하는 문장을 장면·행동·감각으로 보여 주게 — 사건과 사실은 그대로"],dialog:["대사 다듬기","대사를 인물의 말투에 맞게 자연스럽게 — 내용은 그대로"],sense:["감각 살리기","보고 듣고 만지는 감각이 드러나게 — 없던 사건은 더하지 않음"],formal:["객관적 문체","학술 문체로 — 단정과 감정 표현을 줄이고 주장과 근거를 분명하게"],ear:["귀 → 눈","설교 말투(여러분·되풀이·구어체·청중에게 묻는 말)를 책에서 읽는 문장으로 — 내용과 논지는 그대로"]};
 function rfDirs(){ const k=aiGenre(); if(k.meditation||k.poem) return {dirs:["fix"],free:false,why:k.meditation?"묵상":"시"};
-  if(k.sermon&&k.m?.genre!=="sermon") return {dirs:["speak","short","breath","polish","fix"],free:true};   // 설교초안: 말하는 문장으로(원칙 1-6)·최소 수정(7-1)
-  const G2=k.m?.genre; const d=G2==="novel"?["polish","short","breath","show","dialog","sense","fix"]:G2==="paper"?["polish","short","formal","breath","fix"]:G2==="essay"?["polish","short","breath","fix","ear"]:["polish","short","easy","breath","fix"];
+  if(k.sermon&&k.m?.genre!=="sermon") return {dirs:["alt","speak","short","breath","polish","fix"],free:true};   // 설교초안: 말하는 문장으로(원칙 1-6)·최소 수정(7-1)
+  const G2=k.m?.genre; const d=G2==="novel"?["alt","polish","short","breath","show","dialog","sense","fix"]:G2==="paper"?["alt","polish","short","formal","breath","fix"]:G2==="essay"?["alt","polish","short","breath","fix","ear"]:["alt","polish","short","easy","breath","fix"];
   if(G2==="sermon") d.push("ear","speak"); return {dirs:d,free:true}; }   // 성격마다 맞는 방향 (소설은 「쉽게」 대신 보여 주기·대사·감각, 논문은 객관적 문체)
 const wdTok=t=>String(t).match(/\s+|[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9]+|[^\s가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9]/g)||[];
 function rfDiffHtml(a,b){ const A=wdTok(a), B=wdTok(b); if(A.length*B.length>2500000) return `<del>${esc(a)}</del><br><ins>${esc(b)}</ins>`;
@@ -5718,10 +5782,14 @@ async function rfStart(dir,again){ const b=$("#wbody"); if(!b) return; const ins
   { const oz=ownHit(b.value,s,e); if(oz&&dir!=="fix") return toast(`「${oz}」은 직접 쓰는 자리입니다 (원칙 1-5) — 여기서는 「비문 고치기」만 됩니다`); } if(orig.length>4000) return toast("한 번에 4,000자까지 다듬을 수 있습니다 — 조금 나눠서 골라 주세요");
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
   if(dir!=="custom"&&!rfDirs().dirs.includes(dir)) return toast("이 글에서는 쓸 수 없는 다듬기입니다");
-  const k=aiGenre(), n=(RF?.n||0)+1, body=b.value;
-  RF={s,e,orig,dir,instr,busy:true,wid:editId||"new",n}; paintHeads(); rfDraw();
+  const k=aiGenre(), n=(RF?.n||0)+1, body=b.value, RF0=RF;
+  RF={s,e,orig,dir,instr,busy:true,wid:editId||"new",n,pages:again&&RF0?.dir==="alt"?RF0.pages||[]:[],page:0}; paintHeads(); rfDraw();
   const samples=body.split("\n").filter(l=>l.trim().length>40&&!orig.includes(l)&&!l.includes(orig)).slice(0,3).join("\n");
   const label=dir==="custom"?"글쓴이의 부탁대로":RF_DIRS[dir][0]+" — "+RF_DIRS[dir][1];
+  if(dir==="alt"){ try{ const r=await gcall("coWrite",{mode:"alts",text:orig,before:body.slice(Math.max(0,s-600),s),after:body.slice(e,e+600),title:$("#wtitle")?.value||"",genre:k.name,samples,sermon:k.sermon,avoid:RF.pages.flat(),...vrFor(k.sermon)});
+      if(!RF||RF.n!==n) return; RF.pages.push(r.alts); RF.page=RF.pages.length-1; Object.assign(RF,{busy:false,ai:r.ai}); }
+    catch(err){ if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,err:err.message}); }
+    rfCheck(); paintHeads(); rfDraw(); return; }
   try{ const r=await gcall("coWrite",{mode:"refine",text:orig,before:body.slice(Math.max(0,s-800),s),after:body.slice(e,e+800),dir:label,instr,title:$("#wtitle")?.value||"",genre:k.name,samples,poem:k.poem,sermon:k.sermon,...vrFor(k.sermon)});
     if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,to:r.to,why:r.why,same:r.same,ai:r.ai,shape:!r.same&&lineShape(orig)!==lineShape(r.to),poem:!!k.poem}); }
   catch(err){ if(!RF||RF.n!==n) return; Object.assign(RF,{busy:false,err:err.message}); }
@@ -5735,9 +5803,10 @@ function rfDraw(){ if(!RF) return $("#rfcard")?.remove(); let c=$("#rfcard"); if
     ${RF.busy?`<div class="muted">고친 안을 받는 중… <span class="dots"><i></i><i></i><i></i></span></div>`
       :RF.err?`<div class="warn">${esc(RF.err)}</div>`
       :RF.stale?`<div class="warn">그사이 이 부분이 바뀌어 적용할 수 없습니다. 다시 골라 다듬어 주세요.</div>`
+      :RF.dir==="alt"?`<div class="altlist">${(RF.pages[RF.page]||[]).map((t,i)=>`<button class="altc" onclick="rfAlt(${i})" title="이 표현으로 바꿉니다">${esc(t)}</button>`).join("")}</div><div class="altnav"><button onclick="rfAltPage(-1)" ${RF.page?"":"disabled"} title="앞 후보">‹</button><small>${RF.page+1} / ${RF.pages.length}</small><button onclick="rfAltPage(1)" title="다른 후보 더 보기">›</button></div>`
       :RF.same?`<div class="muted">고칠 곳을 찾지 못했습니다. 지금 문장 그대로 좋습니다.</div>`
       :`<div class="rfdiff">${rfDiffHtml(RF.orig,RF.to)}</div>${RF.why?`<small>${esc(RF.why)}</small>`:""}${RF.shape?`<div class="warn">${RF.poem?"행·연·들여쓰기가 바뀌어 적용하지 않습니다. ↻ 다시 받아 보세요.":"줄바꿈이나 들여쓰기가 바뀌었습니다. 확인한 뒤 적용하세요."}</div>`:""}`}
-    <div class="rfb"><button class="p" onclick="rfApply()" ${ready?"":"disabled"}>✓ 적용</button><button onclick="rfClose()">✗ 취소</button><button onclick="rfStart('${RF.dir}',true)" ${RF.busy||RF.stale?"disabled":""}>↻ 다시</button>${ready?`<button onclick="clip(RF.to,'고친 안을 복사했습니다')">복사</button>`:""}</div>`;
+    ${RF.dir==="alt"?`<div class="rfb"><button onclick="rfClose()">✗ 닫기</button><small class="muted" style="align-self:center">후보를 누르면 그 표현이 들어갑니다</small></div>`:""}<div class="rfb" ${RF.dir==="alt"?"hidden":""}><button class="p" onclick="rfApply()" ${ready?"":"disabled"}>✓ 적용</button><button onclick="rfClose()">✗ 취소</button><button onclick="rfStart('${RF.dir}',true)" ${RF.busy||RF.stale?"disabled":""}>↻ 다시</button>${ready?`<button onclick="clip(RF.to,'고친 안을 복사했습니다')">복사</button>`:""}</div>`;
   rfPlace(); }
 function rfPlace(){ const c=$("#rfcard"); if(!c) return; if(innerWidth<=700){ c.style.left=c.style.top=""; return; }
   const b=$("#wbody"), marks=[...document.querySelectorAll("#hmirror i.rf")], br=b?.getBoundingClientRect(); if(!br) return;
