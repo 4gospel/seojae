@@ -712,9 +712,10 @@ body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-
 .sketch.stk{grid-template-columns:1fr 1fr} .sketch.stk i{height:20px;width:auto;background:#fdf0a6;border-radius:2px} .sketch.stk i:nth-child(2){background:#fbd3dc} .sketch.stk i:nth-child(3){background:#d2efc6}
 .sketch.cork{grid-template-columns:1fr 1fr 1fr} .sketch.cork i{height:20px;width:auto} .sketch.stack i{height:11px} .sketch.doc2 i{height:4px}
 .sthl{font-weight:700;font-size:15px;margin:10px 0 10px;font-family:-apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
-.strec{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:thin}
-.strc{flex:none;width:210px;display:grid;gap:6px;text-align:left;padding:12px 14px;border:1px solid var(--edge);border-radius:12px;background:var(--paper);cursor:pointer;color:var(--ink);font:13.5px/1.4 -apple-system,"Apple SD Gothic Neo",sans-serif}
-.strc:hover{border-color:var(--sepia)} .strc b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .strc span{color:var(--ink-soft);font-size:12.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em} .strc small{color:var(--faint)}
+.strec{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:2px 2px 8px}   /* 가로로 끝없이 늘어나지 않게 격자로 감쌈 */
+@media (max-width:700px){ .strec{grid-template-columns:1fr 1fr;gap:8px} .strc{padding:10px 11px} }
+.strc{min-width:0;display:grid;gap:6px;text-align:left;padding:12px 14px;border:1px solid var(--edge);border-radius:12px;background:var(--paper);cursor:pointer;color:var(--ink);font:13.5px/1.4 -apple-system,"Apple SD Gothic Neo",sans-serif}
+.strc:hover{border-color:var(--sepia)} .strc b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .strc span{color:var(--ink-soft);font-size:12.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em} .strc small{color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stgoals{display:grid;gap:2px;border:1px solid var(--edge);border-radius:12px;padding:6px;background:var(--paper)}
 .stgoal{display:flex;align-items:center;gap:10px;border:0;background:none;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--ink);font:14px -apple-system,"Apple SD Gothic Neo",sans-serif;text-align:left;width:100%} .stgoal:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)} .stgoal .stn{flex:0 1 auto;max-width:220px;font-weight:600}
 .stgoal .bar{width:120px;height:6px;border-radius:3px;background:var(--edge);overflow:hidden;flex:none} .stgoal .bar i{display:block;height:100%;background:var(--book)}
@@ -1569,7 +1570,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="653033dae5";
+const APP_BUILD="e2430b95d4";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4661,13 +4662,15 @@ function stSide(cur){ const ms=liveMs(), m=ms.find(x=>x.id===ROOM_MS)||ms[0]||nu
 function studioWrap(cur,main){ stAdd(cur); return `<div class="studio">${stSide(cur)}<div class="stmain">${stTabs(cur)}${main}</div></div><div class="stback" onclick="document.body.classList.remove('stnav')"></div>`; }
 const stHello=()=>{ const h=Math.floor(kstMinutes()/60); return h<5?"고요한 새벽입니다":h<12?"좋은 아침입니다":h<18?"좋은 오후입니다":"평안한 저녁입니다"; };
 const stAgo=t=>{ const d=(Date.now()-Date.parse(t||0))/6e4; return !t||isNaN(d)?"":d<1?"방금":d<60?Math.round(d)+"분 전":d<1440?Math.round(d/60)+"시간 전":d<10080?Math.round(d/1440)+"일 전":String(t).slice(0,10); };
-function stHome(m){ const g=G(m), rec=live().filter(w=>w.track==="book"||liveMs().some(x=>!x.rule&&(x.items||[]).includes(w.id))).sort((a,b)=>(b.updated||b.date||"").localeCompare(a.updated||a.date||"")).slice(0,8);
+let ST_REC_MORE=false;
+function stHome(m){ const g=G(m), rec=live().filter(w=>w.track==="book"||liveMs().some(x=>!x.rule&&(x.items||[]).includes(w.id))).filter(w=>(w.title||"").trim()||pv(w,1)).sort((a,b)=>(b.updated||b.date||"").localeCompare(a.updated||a.date||"")).slice(0,ST_REC_MORE?12:6);   // 빈 글은 빼고, 처음엔 6개(두 줄쯤) · 더 보기 12개
   const goals=liveMs().filter(x=>x.goal||x.due); const seeds=(m?.seeds||[]).filter(x=>!x.done).slice(0,6);
   const card=(on,ic,t,sk)=>`<button class="stcard" onclick="${on}"><span class="stct">${ic} ${t}</span><span class="sketch ${sk}"><i></i><i></i><i></i><i></i></span></button>`;
   return `<section class="sthome"><h2 class="sthello">${stHello()}</h2>
     <div class="stcards">${m&&!m.rule?card(`roomNewPiece('${m.id}')`,"✎",`새 ${esc(g.item)}`,"doc"):""}${card(`go('write',{track:'book',new:true,type:'자유 글'})`,"✐","자유 글","doc2")}${card(`stOpen('memo');setTimeout(()=>$('#memoin')?.focus(),60)`,"▤","새 메모","stk")}${m?card(`ROOM_VIEW='cork';stOpen('ms:${m.id}')`,"▦","코르크보드","cork"):""}${card(`stOpen('new')`,"＋","새 원고","stack")}</div>
-    <p class="sthl">최근에 연 글</p>
-    <div class="strec">${rec.map(w=>`<button class="strc" onclick="stOpen('w:${w.id}')"><b>✎ ${esc(w.title||"(제목 없음)")}</b><span>${esc(pv(w,60))}</span><small>${stAgo(w.updated||w.date)}</small></button>`).join("")||`<p class="muted">아직 쓴 글이 없습니다.</p>`}</div>
+    <div class="row" style="align-items:baseline"><p class="sthl">최근에 연 글</p><span class="spacer"></span>${rec.length>=6?`<button class="btn small ghost" onclick="ST_REC_MORE=!ST_REC_MORE;render()">${ST_REC_MORE?"줄이기":"더 보기"}</button>`:""}</div>
+    <div class="strec">${rec.map(w=>{ const wm=liveMs().find(x=>!x.rule&&(x.items||[]).includes(w.id)), where=wm?[wm.title,...msPath(wm,w.id)].join(" › "):"";
+      return `<button class="strc" onclick="stOpen('w:${w.id}')"><b>✎ ${esc(w.title||"(제목 없음)")}</b><span>${esc(pv(w,60))}</span><small>${stAgo(w.updated||w.date)}${where?` · ${esc(where)}`:""}</small></button>`; }).join("")||`<p class="muted">아직 쓴 글이 없습니다.</p>`}</div>
     ${goals.length?`<p class="sthl">목표 · 마감</p><div class="stgoals">${goals.map(x=>{ const gg=G(x), am=msAmount(x), pc=x.goal?Math.min(100,Math.round(am/x.goal*100)):null, dd=x.due?Math.round((new Date(x.due+"T00:00")-new Date(today()+"T00:00"))/864e5):null;
       return `<button class="stgoal" onclick="stOpen('ms:${x.id}')"><span class="stn">${esc(x.title)}</span>${pc!=null?`<span class="bar"><i style="width:${pc}%"></i></span><span class="muted">${pc}% · ${unitFmt(am,gg.unit)} / ${unitFmt(x.goal,gg.unit)}</span>`:`<span class="muted">${unitFmt(am,gg.unit)}</span>`}${dd!=null?`<span class="dday ${dd<0?"over":dd<=7?"soon":""}">${dd>0?"D-"+dd:dd===0?"오늘 마감":(-dd)+"일 지남"}</span>`:""}</button>`; }).join("")}</div>`:""}
     <div class="row" style="margin-top:22px"><p class="sthl" style="margin:0">메모${m?` · ${esc(m.title)}`:""}</p><span class="spacer"></span>${m?`<button class="btn small" onclick="stOpen('memo')">모두 보기</button>`:""}</div>
