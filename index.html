@@ -1697,7 +1697,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="d42a8ce006";
+const APP_BUILD="8a780cae52";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4560,7 +4560,7 @@ function exportPdf(id){
 // 원고에 쓰인 책(글의 책, 꼭지에 인용된 밑줄의 책)을 「지은이, 『제목』, 출판사, 연도.」 꼴로
 function msBiblio(m){ const ids=new Set(); msList(m).forEach(w=>{ if(w.bookId) ids.add(w.bookId); if(w.fromNote){ const n=S.notes.find(x=>x.id===w.fromNote); if(n?.bookId) ids.add(n.bookId); }
     S.books.forEach(b=>{ const t=b.title, B=w.body||""; if(t&&t.length>=2&&(B.includes("("+t)||B.includes("『"+t)||B.includes("《"+t))) ids.add(b.id); }); });   // 「(제목」·『제목』·《제목》 인용 (각주 안도)
-  const fromRes=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]&&r.kind!=="AI 조사"&&(r.kind==="문헌"||r.au||r.jn||r.pub||(r.kind==="웹 글"&&r.url))&&r.t&&resUsed(m,r).length).map(r=>({t:resBib(r),f:resFor(r)}));   // 자료 모음 가운데 원고에 쓰인 것 (AI 조사 요약은 빼고)
+  const fromRes=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]&&r.kind!=="AI 조사"&&(/문헌|연구|작품|시집|1차 자료|주석/.test(r.kind||"")||r.au||r.jn||r.pub||(r.kind==="웹 글"&&r.url))&&r.t&&resUsed(m,r).length).map(r=>({t:resBib(r),f:resFor(r)}));   // 자료 모음 가운데 원고에 쓰인 것 (AI 조사 요약은 빼고)
   const P2=k=>c=>((c.props||[]).find(p=>p.k===k)||{}).v||"", bodies=msList(m).map(w=>w.body||"").join("\n");
   const fromNote=cxScope(m.id).filter(c=>c.kind==="문헌").map(c=>({t:P2("제목")(c)||c.name,au:P2("저자")(c),yr:P2("연도")(c),jn:"",pub:P2("출판·학술지")(c)})).filter(r=>r.t&&(bodies.includes(r.t)||(r.au&&bodies.includes(r.au)))).map(r=>({t:resBib(r),f:resFor(r)}));   // 노트의 「문헌」 항목 중 본문에 제목·저자가 나온 것
   const fromBook=[...ids].map(id=>S.books.find(b=>b.id===id)).filter(Boolean).map(b=>{ const r={au:(b.authors||[]).join(", "),t:b.title,pub:b.publisher||"",yr:b.pubDate?String(b.pubDate).slice(0,4):""}; return {t:resBib(r),f:resFor(r)}; });
@@ -5144,7 +5144,19 @@ function saveMemo(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w||(w.memo
 // 메모(포스트잇)는 「내 생각의 씨앗」, 자료 모음은 「바깥에서 가져온 근거」 — 출처와 함께 두고 인용·각주·참고 문헌으로 이어짐.
 // 원고 안 m.research=[{id,kind,t 제목,body 내용·원문,au 저자,yr 연도,pg 쪽,url,src(예전 한 줄 출처),note 내 생각,tags[],ok 확인 상태,at,u}] — 자료마다 u 시각으로 합침(mergeInner)
 const RES_KINDS=["인용","주석·해설","문헌","통계·자료","사례·예화","웹 글","AI 조사","기타"];
-const RES_IC={"인용":"❝","주석·해설":"✎","문헌":"▤","통계·자료":"▦","사례·예화":"❀","웹 글":"⌁","AI 조사":"✦","기타":"◎"};
+const RES_IC={"인용":"❝","주석·해설":"✎","문헌":"▤","통계·자료":"▦","사례·예화":"❀","웹 글":"⌁","AI 조사":"✦","기타":"◎",
+  "취재·현장":"⌖","시대·배경":"◷","전문 지식":"⚙","인터뷰·증언":"✉","참고 작품":"✒","이미지·사진":"▣","용어·말투":"❞",
+  "1차 자료":"▥","선행 연구":"▤","용어·정의":"❞","원어·배경":"א","명언·시구":"❝","찬송·시":"♪","시사·통계":"▦","전문가 견해":"✎","연구·통계":"▦","낱말·어원":"❞","참고 시집":"✒","기억·사실 확인":"◷","성경 배경":"✝"};
+// 자료 종류는 원고 성격마다 (2026-10-29 팀장님 요청) — 소설은 취재, 논문은 문헌, 설교는 주석·예화… 「AI 조사」·「기타」는 늘. 예전 종류로 담긴 자료는 그대로 보임
+const RES_PROF={
+  novel:{kinds:["취재·현장","시대·배경","전문 지식","인터뷰·증언","참고 작품","이미지·사진","용어·말투","AI 조사","기타"],intro:"<b>취재한 것</b>을 출처와 함께 두는 창고 — 시대·장소·직업·말투가 틀리지 않게. (인물·장소 설정은 「월드」에)",tPh:"예: 1970년대 등대지기의 하루",bPh:"취재 메모, 인터뷰 받아 적기, 시대 자료 요약…",dflt:"취재·현장"},
+  paper:{kinds:["1차 자료","문헌","선행 연구","인용","통계·자료","용어·정의","웹 글","AI 조사","기타"],intro:"<b>근거가 되는 문헌·자료</b>를 서지와 함께 두는 창고 — 인용·각주·참고 문헌으로 이어집니다.",tPh:"예: 칼빈 시편 주석 17편",bPh:"인용할 문장은 원문 그대로, 요약은 요약이라고…",dflt:"문헌"},
+  sermon:{kinds:["주석·해설","원어·배경","사례·예화","명언·시구","찬송·시","시사·통계","웹 글","AI 조사","기타"],intro:"<b>본문 바깥에서 가져온 것</b>을 출처와 함께 두는 창고 — 주석·원어·예화는 사실 확인까지. (본문에서 받은 것은 「메모」에)",tPh:"예: 카리스 종합주석 시편 23편",bPh:"주석 요약, 예화 줄거리(출처·사실 여부), 원어 설명…",dflt:"주석·해설"},
+  essay:{kinds:["인용","기억·사실 확인","시사·통계","성경 배경","사례·예화","웹 글","AI 조사","기타"],intro:"<b>글에 기댈 사실</b>을 출처와 함께 두는 창고 — 인용한 책·시, 확인한 날짜와 이름. (장면의 씨앗은 「메모」에)",tPh:"예: 『월든』 2장",bPh:"인용할 문장은 원문 그대로…",dflt:"인용"},
+  selfhelp:{kinds:["연구·통계","사례·예화","인용","전문가 견해","문헌","웹 글","AI 조사","기타"],intro:"<b>주장을 받칠 근거</b>를 출처와 함께 두는 창고 — 연구·통계·사례는 확인 여부까지.",tPh:"예: 하버드 성인 발달 연구",bPh:"수치와 조건, 사례의 줄거리(출처·사실 여부)…",dflt:"연구·통계"},
+  poem:{kinds:["명언·시구","이미지·사진","낱말·어원","참고 시집","웹 글","AI 조사","기타"],intro:"<b>시에 들어올 것</b>을 두는 창고 — 시구·낱말의 어원·이미지. (떠오른 것은 「메모」에)",tPh:"예: 「별 헤는 밤」",bPh:"시구는 원문 그대로, 낱말의 뜻과 어원…",dflt:"명언·시구"}};
+const resP=m=>RES_PROF[m?.genre]||{kinds:RES_KINDS,intro:"<b>바깥에서 가져온 근거</b>를 출처와 함께 두는 창고 — 인용·각주·참고 문헌으로 이어집니다. (내 생각의 씨앗은 「메모」에)",tPh:"예: 칼빈 시편 주석 17편",bPh:"인용문, 주석 요약, 통계, 사례…",dflt:"인용"};
+const resKinds=(m,all)=>[...new Set([...resP(m).kinds,...(all||m?.research||[]).map(r=>r.kind).filter(Boolean)])];   // 성격의 종류 + 예전에 담긴 종류
 let RES_EDIT=null, RES_Q="", RES_KIND="", RES_TAG="", RES_SORT="new", RES_VIEW=(()=>{ try{ return localStorage.getItem("seojae.resView")||"card"; }catch(_){ return "card"; } })();
 // 인용 표기: 저자, 『제목』, 연도, 쪽 (서지 칸이 없으면 예전 출처 한 줄)
 const resFor=r=>r.lang?r.lang==="국외":!/[가-힣]/.test((r.au||"")+(r.t||""));   // 국외 문헌인가 (칸이 비면 글자로 짐작)
@@ -5168,10 +5180,10 @@ function resList(m){ const q=RES_Q.trim().toLowerCase(); let L=(m.research||[]).
   if(q) L=L.filter(r=>[r.t,r.body,r.au,r.yr,r.src,r.note,r.url,...(r.tags||[])].join(" ").toLowerCase().includes(q));
   const by={new:(a,b)=>(b.u||b.at||"").localeCompare(a.u||a.at||""),title:(a,b)=>(a.t||"").localeCompare(b.t||"","ko"),author:(a,b)=>(a.au||"힣").localeCompare(b.au||"힣","ko")||(a.yr||"").localeCompare(b.yr||"")}[RES_SORT];
   return L.slice().sort(by); }
-function resForm(m,r){ r=r||{}; const sel=RES_KINDS.map(k=>`<option ${(r.kind||"인용")===k?"selected":""}>${k}</option>`).join("");
+function resForm(m,r){ r=r||{}; const RP=resP(m), sel=resKinds(m).map(k=>`<option value="${esc(k)}" ${(r.kind||RP.dflt)===k?"selected":""}>${RES_IC[k]||"◎"} ${esc(k)}</option>`).join("");
   return `<div class="resed" id="resed"><div class="row" style="gap:8px;align-items:center"><b>${r.id?"자료 고치기":"새 자료"}</b><span class="spacer"></span><small class="muted">⌘S·⌘↩ 간직 · Esc 나오기</small><button class="btn small ghost" onclick="resClose()">✕</button></div>
-    <div class="resgrid"><label class="cxf"><span>종류</span><select id="rs-k">${sel}</select></label><label class="cxf wide"><span>제목 (책·글·자료 이름)</span><input id="rs-t" value="${esc(r.t||"")}" placeholder="예: 칼빈 시편 주석 17편"></label></div>
-    <label class="cxf"><span>내용 · 원문 <small>인용할 문장은 그대로</small></span><textarea id="rs-b" class="cxp-text" placeholder="인용문, 주석 요약, 통계, 사례…">${esc(r.body||"")}</textarea></label>
+    <div class="resgrid"><label class="cxf"><span>종류</span><select id="rs-k">${sel}</select></label><label class="cxf wide"><span>제목 (책·글·자료 이름)</span><input id="rs-t" value="${esc(r.t||"")}" placeholder="${esc(RP.tPh)}"></label></div>
+    <label class="cxf"><span>내용 · 원문 <small>인용할 문장은 그대로</small></span><textarea id="rs-b" class="cxp-text" placeholder="${esc(RP.bPh)}">${esc(r.body||"")}</textarea></label>
     <div class="resgrid four"><label class="cxf"><span>저자</span><input id="rs-au" value="${esc(r.au||"")}" placeholder="칼빈"></label><label class="cxf"><span>연도</span><input id="rs-yr" value="${esc(r.yr||"")}" placeholder="1557"></label><label class="cxf"><span>쪽</span><input id="rs-pg" value="${esc(r.pg||"")}" placeholder="212"></label><label class="cxf"><span>확인</span><select id="rs-ok">${["","확인함","확인 못 함"].map(v=>`<option value="${v}" ${(r.ok||"")===v?"selected":""}>${v||"—"}</option>`).join("")}</select></label></div>
     <div class="resgrid four"><label class="cxf"><span>출판사</span><input id="rs-pub" value="${esc(r.pub||"")}" placeholder="생명의말씀사"></label><label class="cxf"><span>학술지·실린 책 <small>논문이면</small></span><input id="rs-jn" value="${esc(r.jn||"")}" placeholder="신학과 선교"></label><label class="cxf"><span>권·호</span><input id="rs-vol" value="${esc(r.vol||"")}" placeholder="45권 2호"></label><label class="cxf"><span>국내/국외</span><select id="rs-lang">${["","국내","국외"].map(v=>`<option value="${v}" ${(r.lang||"")===v?"selected":""}>${v||"(글자로 짐작)"}</option>`).join("")}</select></label></div>
     <div class="resgrid"><label class="cxf wide"><span>주소 (웹)</span><input id="rs-url" value="${esc(r.url||"")}" placeholder="https://"></label><label class="cxf"><span>태그 <small>쉼표로</small></span><input id="rs-tags" value="${esc((r.tags||[]).join(", "))}" placeholder="2장, 기도"></label></div>
@@ -5188,7 +5200,7 @@ function resSave(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return;
   if(old){ ["kind","t","body","au","yr","pg","pub","jn","vol","lang","url","ok","note","tags","src"].forEach(k=>{ if(k in rec) old[k]=rec[k]; else if(k!=="src"||$("#rs-s")) delete old[k]; }); old.u=now; }
   else m.research.unshift({id:uid(),at:today(),...rec}); m.updated=now; save(); RES_EDIT=null; toast(old?"자료를 고쳤습니다":"자료를 모아 두었습니다"); render(); }
 function resView(v){ RES_VIEW=v; try{ localStorage.setItem("seojae.resView",v); }catch(_){} render(); }
-function resPage(m){ const all=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]), L=resList(m), tags=[...new Set(all.flatMap(r=>r.tags||[]))].sort((a,b)=>a.localeCompare(b,"ko")), kinds=RES_KINDS.filter(k=>all.some(r=>(r.kind||"기타")===k));
+function resPage(m){ const all=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]), L=resList(m), tags=[...new Set(all.flatMap(r=>r.tags||[]))].sort((a,b)=>a.localeCompare(b,"ko")), kinds=resKinds(m,all).filter(k=>all.some(r=>(r.kind||"기타")===k));
   const pill=(on,txt,js)=>`<button class="pill ${on?"on":""}" onclick="${js};render()">${txt}</button>`, used=new Map(L.map(r=>[r.id,resUsed(m,r)]));
   const ed=RES_EDIT?resForm(m,RES_EDIT==="new"?null:all.find(r=>r.id===RES_EDIT)):"";
   const card=r=>`<div class="rescard"><div class="row" style="gap:6px;align-items:baseline;flex-wrap:wrap"><span class="reskind">${RES_IC[r.kind||"기타"]||"◎"} ${esc(r.kind||"기타")}</span><b>${esc(r.t||"(제목 없음)")}</b>${r.ok?`<span class="resok ${r.ok==="확인함"?"y":"n"}">${esc(r.ok)}</span>`:""}<span class="spacer"></span><button class="btn small ghost" onclick="resOpen('${r.id}')">고치기</button><button class="btn small ghost" onclick="resDel('${m.id}','${r.id}')" title="지우기">✕</button></div>
@@ -5196,7 +5208,7 @@ function resPage(m){ const all=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]
       ${r.note?`<div class="resnote">✎ ${esc(r.note)}</div>`:""}<div class="row" style="gap:4px;flex-wrap:wrap">${(r.tags||[]).map(t=>`<button class="restag" onclick="RES_TAG=${jsArg(t)};render()">#${esc(t)}</button>`).join("")}<span class="spacer"></span><small class="muted">${used.get(r.id).length?`쓰인 곳: ${used.get(r.id).map(w=>esc(w.title||"(제목 없음)")).join(", ")}`:"아직 쓰이지 않음"} · ${esc(r.at||"")}</small></div></div>`;
   const table=`<div class="cxtablewrap"><table class="cxtable"><thead><tr><th>종류</th><th>제목</th><th>저자</th><th>연도</th><th>쪽</th><th>확인</th><th>태그</th><th>쓰인 곳</th></tr></thead><tbody>${L.map(r=>`<tr onclick="resOpen('${r.id}')" style="cursor:pointer"><td>${RES_IC[r.kind||"기타"]||""} ${esc(r.kind||"기타")}</td><td><b>${esc(r.t||"(제목 없음)")}</b></td><td>${esc(r.au||"")}</td><td>${esc(r.yr||"")}</td><td>${esc(r.pg||"")}</td><td>${esc(r.ok||"")}</td><td>${esc((r.tags||[]).join(", "))}</td><td>${used.get(r.id).length||""}</td></tr>`).join("")}</tbody></table></div>`;
   return `<section class="sthome respage"><h2 class="sthello" style="font-size:24px">자료 모음 · ${esc(m.title)}</h2>
-    <p class="sub" style="text-align:center;margin:-14px 0 14px"><b>바깥에서 가져온 근거</b>를 출처와 함께 두는 창고 — 인용·각주·참고 문헌으로 이어집니다. (내 생각의 씨앗은 「메모」에)</p>
+    <p class="sub" style="text-align:center;margin:-14px 0 14px">${resP(m).intro}</p>
     <div class="resbar"><input id="resq" placeholder="찾기 — 제목·내용·저자·태그" value="${esc(RES_Q)}" oninput="RES_Q=this.value;clearTimeout(window._rq);window._rq=setTimeout(()=>{ const p=this.selectionStart; render(); const q=document.getElementById('resq'); if(q){ q.focus(); q.setSelectionRange(p,p); } },200)">
       <select onchange="RES_SORT=this.value;render()" title="정렬">${[["new","최근 순"],["title","제목 순"],["author","저자·연도 순"]].map(([k,n])=>`<option value="${k}" ${RES_SORT===k?"selected":""}>${n}</option>`).join("")}</select>
       <span class="vtog"><button class="${RES_VIEW==="card"?"on":""}" onclick="resView('card')">카드</button><button class="${RES_VIEW==="table"?"on":""}" onclick="resView('table')">표</button></span>
