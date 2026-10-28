@@ -276,7 +276,16 @@ textarea.page.lined{background-image:repeating-linear-gradient(to bottom,transpa
 /* 소제목 굵게 보이는 거울 층 (글자 칸 위에 겹침, 누르기는 통과) */
 .hmirror{position:absolute;z-index:2;pointer-events:none;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;box-sizing:border-box;overflow:hidden;background:transparent}
 .hmirror span{visibility:hidden}
-.hmirror b{font-weight:800;color:var(--note-ink,var(--ink))} .hmirror i.mki{visibility:visible;font-style:normal;color:transparent;text-decoration:underline dotted color-mix(in srgb,var(--sepia) 75%,transparent);text-decoration-thickness:1.5px;text-underline-offset:5px}
+.hmirror b{font-weight:800;color:var(--note-ink,var(--ink))}
+.hmirror i.mkfn{visibility:visible;font-style:normal;color:transparent;position:relative;background:var(--note-bg,var(--paper));border-radius:3px;box-shadow:inset 0 -1px 0 color-mix(in srgb,var(--sepia) 35%,transparent)}
+.hmirror i.mkfn .fnsup{position:absolute;left:0;top:-.42em;font:700 .62em/1 Georgia,serif;color:#a0522d} .hmirror i.mkfn.en .fnsup{color:#4f7fa8}
+.hmirror i.mkfn .fntx{visibility:visible;position:absolute;left:.95em;right:0;top:50%;transform:translateY(-50%);font-size:.66em;line-height:1.2;color:var(--ink-soft);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fnpane{margin:14px 0 4px;padding-top:10px;border-top:1px solid color-mix(in srgb,var(--ink) 25%,transparent);max-width:46%;min-width:260px;font:13px/1.55 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft)}
+.fnpane .fnh{margin:4px 0 2px;font-weight:600;color:var(--ink)} .fnpane .fnh small{font-weight:400;color:var(--faint)} .fnpane ol{margin:0;padding:0;list-style:none} .fnpane li{display:flex;align-items:flex-start;gap:2px}
+.fnpane li>button:first-child{flex:1;border:0;background:none;text-align:left;font:inherit;color:inherit;cursor:pointer;padding:2px 4px;border-radius:5px} .fnpane li>button:first-child:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)} .fnpane b{font-family:Georgia,serif;color:#a0522d;margin-right:4px}
+.fnpane .fned{border:0;background:none;color:var(--faint);cursor:pointer;font-size:12px} .fnkind{display:flex;gap:14px;margin-bottom:6px;font-size:13px} .fnkind small{color:var(--faint)}
+sup.enref{font-size:.7em;color:#4f7fa8;font-family:Georgia,serif} .enhead{margin:14px 0 2px;font-weight:600;font-size:13px}
+@media (max-width:700px){ .fnpane{max-width:none} } .hmirror i.mki{visibility:visible;font-style:normal;color:transparent;text-decoration:underline dotted color-mix(in srgb,var(--sepia) 75%,transparent);text-decoration-thickness:1.5px;text-underline-offset:5px}
 .hmirror i.mkc{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,var(--paper) 70%,transparent)} .hmirror i.mkf{background:color-mix(in srgb,var(--paper) 55%,transparent);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--sepia) 45%,transparent)}
 .hmirror i.mkh{visibility:visible;font-style:normal;color:transparent;border-radius:2px} .hmirror i.mku{visibility:visible;font-style:normal;color:transparent;text-decoration:underline;text-decoration-color:var(--sepia);text-decoration-thickness:1.5px;text-underline-offset:5px}
 .hmirror i.rf{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,#7a5aa8 20%,transparent);border-radius:3px;box-shadow:0 0 0 1px color-mix(in srgb,#7a5aa8 30%,transparent)}   /* AI 다듬기로 고칠 곳 */
@@ -1634,7 +1643,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="b1af9b5bf6";
+const APP_BUILD="66855532b1";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1755,20 +1764,24 @@ const biStrip=t=>String(t??"").replace(BI_RE,(m,b,i)=>b??i);
 const biHtml=h=>String(h).replace(BI_RE,(m,b,i)=>b!=null?`<b>${b}</b>`:`<i>${i}</i>`);   // 이스케이프한 글에 씀
 const stripMk=t=>biStrip(String(t||"").replace(MK_RE,(m,c,h,u,f)=>f!=null?"":stripMk(h??u)));   // 형광펜 안의 각주까지 벗깁니다
 const stripWrap=t=>String(t||"").replace(/==(?:[ygpb]:)?([^=\n]+?)==|__([^_\n]+?)__/g,(m,h,u)=>h??u);   // 각주는 남기고 형광펜·밑줄만 벗김
+// 미주: [^^내용] — 원고(글) 끝에 i, ii … 로 모임 (워드·한글의 미주처럼). 각주는 쪽(글) 아래 1, 2 …
+const isEnd=x=>String(x||"").startsWith("^"), fnText=x=>String(x||"").replace(/^\^/,"");
+const romanL=n=>ROMAN(n).toLowerCase();
+function fnRef(x,fn){ if(!fn) return `<sup class="fnref" title="${esc(fnText(x))}">✎</sup>`; if(isEnd(x)){ (fn.end=fn.end||[]).push(fnText(x)); return `<sup class="enref" title="미주: ${esc(fnText(x))}">${romanL(fn.end.length)}</sup>`; } return `<sup class="fnref" title="${esc(x)}">${fn.push(x)}</sup>`; }
 function fnHtmlIn(t,fn){ // 형광펜·밑줄 안의 각주
   let out="", last=0; const str=String(t||"");
-  for(const m of str.matchAll(FN_RE)){ out+=esc(str.slice(last,m.index)); last=m.index+m[0].length; out+=`<sup class="fnref" title="${esc(m[1])}">${fn?fn.push(m[1]):"✎"}</sup>`; }
+  for(const m of str.matchAll(FN_RE)){ out+=esc(str.slice(last,m.index)); last=m.index+m[0].length; out+=fnRef(m[1],fn); }
   return out+esc(str.slice(last));
 }
 function richHtml(t,fn){ // fn: 각주를 모을 배열 (없으면 각주를 ✎ 로만)
   let out="", last=0; const str=String(t||"");
   for(const m of str.matchAll(MK_RE)){ out+=esc(str.slice(last,m.index)); last=m.index+m[0].length;
-    if(m[4]!=null) out+=`<sup class="fnref" title="${esc(m[4])}">${fn?fn.push(m[4]):"✎"}</sup>`;
+    if(m[4]!=null) out+=fnRef(m[4],fn);
     else if(m[3]!=null) out+=`<u class="mku">${fnHtmlIn(m[3],fn)}</u>`;
     else out+=`<mark class="mk hl-${m[1]||"y"}">${fnHtmlIn(m[2],fn)}</mark>`; }
   return biHtml(out+esc(str.slice(last)));
 }
-const fnHtml=fn=>fn.length?`<ol class="fnlist">${fn.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`:"";
+const fnHtml=fn=>(fn.length?`<ol class="fnlist">${fn.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`:"")+(fn.end?.length?`<p class="enhead">미주</p><ol class="fnlist enlist" type="i">${fn.end.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`:"");
 const chars=s=>stripMk(stripMemo(s)).replace(/\s/g,"").length;
 const charsAll=s=>stripMk(stripMemo(s)).replace(/\n/g,"").length;   // 원고지 매수는 관행대로 공백 포함
 const trackName=t=>t==="bible"?"말씀":"책";
@@ -2143,8 +2156,9 @@ function fnBox(at,editIdx,quote){
   if(editIdx!=null){ let k=0; outer: for(const m of b.value.matchAll(MK_RE)){ if(m[4]!=null){ if(k===editIdx){ cur=m[4]; break; } k++; continue; } for(const f of (m[2]??m[3]??"").matchAll(FN_RE)){ if(k===editIdx){ cur=f[1]; break outer; } k++; } } }
   const r=b.getBoundingClientRect();
   hlBar(`<div class="muted" style="font-size:13px;margin-bottom:6px">${editIdx!=null?`각주 ${editIdx+1} 고치기`:`「${esc((quote||"").slice(0,50))}${(quote||"").length>50?"…":""}」에 각주`}</div>
-    <textarea id="wfn" placeholder="각주 내용 (출처, 보충 설명, 번역 이름 등)">${esc(cur)}</textarea>
-    <div class="row" style="margin-top:8px;gap:6px"><span class="spacer"></span>${editIdx!=null?`<button class="btn small danger" style="width:auto;border-radius:999px" onclick="fnApply(${at},${editIdx},'')">지우기</button>`:""}<button class="btn small ghost" style="width:auto;border-radius:999px" onclick="hlClose()">취소</button><button class="btn small ink" style="width:auto;border-radius:999px" onclick="fnApply(${at},${editIdx==null?"null":editIdx},$('#wfn').value)">달기</button></div>`,
+    <div class="fnkind"><label><input type="radio" name="fnk" value="f" ${isEnd(cur)?"":"checked"}> 각주 <small>쪽 아래</small></label><label><input type="radio" name="fnk" value="e" ${isEnd(cur)?"checked":""}> 미주 <small>원고 끝</small></label></div>
+    <textarea id="wfn" placeholder="각주 내용 (출처, 보충 설명, 번역 이름 등)">${esc(fnText(cur))}</textarea>
+    <div class="row" style="margin-top:8px;gap:6px"><span class="spacer"></span>${editIdx!=null?`<button class="btn small danger" style="width:auto;border-radius:999px" onclick="fnApply(${at},${editIdx},'')">지우기</button>`:""}<button class="btn small ghost" style="width:auto;border-radius:999px" onclick="hlClose()">취소</button><button class="btn small ink" style="width:auto;border-radius:999px" onclick="fnApply(${at},${editIdx==null?"null":editIdx},($('input[name=fnk]:checked')?.value==='e'?'^':'')+$('#wfn').value)">달기</button></div>`,
     {left:r.left+r.width/2,top:Math.max(80,r.top)+60,width:0,height:0,bottom:Math.max(80,r.top)+80},true);
   setTimeout(()=>$("#wfn")?.focus(),20);
 }
@@ -2154,11 +2168,12 @@ document.addEventListener("keyup",e=>{ if(e.target?.id==="wbody") e.target.datas
 function fnHere(){ const b=$("#wbody"); if(!b) return; if(READVIEW) toggleRead(); const {s,e}=caretAt(b);   // 상자는 이 클릭이 다 끝난 뒤에 엶 (같은 클릭이 「바깥 클릭」으로 상자를 닫지 않게)
   setTimeout(()=>{ if(e>s){ WSEL={s,e}; return wMark("fn"); } const pre=b.value.slice(Math.max(0,s-24),s).replace(/\s+/g," ").trim(); fnBox(s,null,pre?"…"+pre:"글 맨 앞"); },0); }
 document.addEventListener("keydown",e=>{ if((e.metaKey||e.ctrlKey)&&e.shiftKey&&(e.key==="f"||e.key==="F")&&$("#wbody")&&tab==="write"){ e.preventDefault(); fnHere(); } });
+document.addEventListener("keydown",e=>{ if((e.metaKey||e.ctrlKey)&&e.shiftKey&&(e.key==="e"||e.key==="E")&&$("#wbody")&&tab==="write"){ e.preventDefault(); fnHere(); setTimeout(()=>{ const r=document.querySelector('input[name=fnk][value=e]'); if(r) r.checked=true; },30); } });   // 미주 ⌘⇧E
 document.addEventListener("keydown",e=>{ if(e.key!=="Tab"||e.target?.id!=="wbody"||e.metaKey||e.ctrlKey||e.altKey) return; if(wMsNow(editId&&S.writings.find(x=>x.id===editId))?.genre!=="poem") return;
   e.preventDefault(); const b=e.target, s=b.selectionStart, en=b.selectionEnd, ls=b.value.lastIndexOf("\n",s-1)+1, le=(i=>i<0?b.value.length:i)(b.value.indexOf("\n",Math.max(en-1,s))), seg=b.value.slice(ls,le);
   const out=e.shiftKey?seg.split("\n").map(l=>l.replace(/^( {1,4}|\t)/,"")).join("\n"):seg.split("\n").map(l=>"    "+l).join("\n"); tInsert(b,out,ls,le); b.setSelectionRange(ls,ls+out.length); });   // 시: Tab 들여쓰기·⇧Tab 내어쓰기 (줄 단위)
 function fnApply(at,editIdx,memo){
-  const b=$("#wbody"); if(!b) return; memo=(memo||"").trim().replace(/[\[\]]/g,""); const v=b.value;
+  const b=$("#wbody"); if(!b) return; const en=isEnd(memo); memo=fnText(memo).trim().replace(/[\[\]]/g,""); if(memo&&en) memo="^"+memo; const v=b.value;
   if(editIdx==null){ hlClose(); if(!memo) return; const ins=`[^${memo}]`; b.value=v.slice(0,at)+ins+v.slice(at); b.selectionStart=b.selectionEnd=at+ins.length; }
   else { let k=0, done=false; b.value=v.replace(FN_RE,(m,f)=>{ if(done) return m; if(k++===editIdx){ done=true; return memo?`[^${memo}]`:""; } return m; }); hlClose();
     if(READVIEW){ READVIEW=false; toggleRead(); } }
@@ -3423,13 +3438,19 @@ function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.he
 const HEAD_RE=/^\s*(■|◆|▣|※\s*주석 요약|※\s*요약 끝)/;
 // 거울 층에 형광펜(==…==)·밑줄(__…__)을 실제 모양으로 그리고, 표시 기호(== __ [^…])는 옅게 덮음 — 글자 칸에는 기호가 그대로 있지만 눈에는 표시처럼 보이게
 const MKL_RE=/==(?:([ygpb]):)?([^=\n]+?)==|__([^_\n]+?)__|\[\^[^\]\n]*\]/g;
+let FN_C={f:0,e:0};
 function markLine(l){ let out="", last=0; const dim=t=>`<i class="mkc">${esc(t)}</i>`, hid0=t=>t?`<span>${esc(t)}</span>`:"", han=t=>t.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s]+)/).map((p,i)=>i%2?hid0(p):(p?`<b>${esc(p)}</b>`:"")).join("");
   const hid=t=>{ if(!t) return ""; let o="",k=0; for(const m of t.matchAll(BI_RE)){ o+=hid0(t.slice(k,m.index)); k=m.index+m[0].length; const mk=m[1]!=null?"**":"*"; o+=dim(mk)+(m[1]!=null?han(m[1]):`<i class="mki">${esc(m[2])}</i>`)+dim(mk); } return o+hid0(t.slice(k)); };
   for(const m of l.matchAll(MKL_RE)){ out+=hid(l.slice(last,m.index)); last=m.index+m[0].length;
     if(m[2]!=null){ const pre="=="+(m[1]?m[1]+":":""), c=(HLC.find(([k])=>k===(m[1]||"y"))||HLC[0])[1]; out+=dim(pre)+`<i class="mkh" style="background:${c}66">${esc(m[2])}</i>`+dim("=="); }
     else if(m[3]!=null) out+=dim("__")+`<i class="mku">${esc(m[3])}</i>`+dim("__");
-    else out+=`<i class="mkc mkf">${esc(m[0])}</i>`; }
+    else { const raw=m[0].slice(2,-1), en=isEnd(raw), n=en?++FN_C.e:++FN_C.f; out+=`<i class="mkfn ${en?"en":""}">${esc(m[0])}<b class="fnsup">${en?romanL(n):n}</b><small class="fntx">${esc(fnText(raw))}</small></i>`; } }
   return out+hid(l.slice(last)); }
+function fnPanePaint(t){ let p=$("#fnpane"); const L=[...t.value.matchAll(FN_RE)].map(x=>({i:x.index,raw:x[1]})), F=L.filter(x=>!isEnd(x.raw)), E=L.filter(x=>isEnd(x.raw));
+  if(!L.length||t.style.display==="none"){ p?.remove(); return; } if(!p){ p=document.createElement("div"); p.id="fnpane"; p.className="fnpane"; const mir=$("#hmirror"); (mir||t).after(p); }
+  const row=(x,lab,k)=>`<li><button onclick="fnGo(${x.i})" title="본문의 그 자리로"><b>${lab}</b> ${esc(fnText(x.raw))}</button><button class="fned" onclick="fnBox(${x.i},${k})" title="고치기">✎</button></li>`, idx=x=>L.indexOf(x);
+  p.innerHTML=(F.length?`<p class="fnh">각주</p><ol>${F.map((x,k)=>row(x,k+1,idx(x))).join("")}</ol>`:"")+(E.length?`<p class="fnh">미주 <small>원고 끝에 모입니다</small></p><ol>${E.map((x,k)=>row(x,romanL(k+1),idx(x))).join("")}</ol>`:""); }
+function fnGo(i){ const b=$("#wbody"); if(!b) return; const m=b.value.slice(i).match(/^\[\^[^\]\n]*\]/); b.focus(); b.setSelectionRange(i,i+(m?m[0].length:0)); const y=b.getBoundingClientRect().top+scrollY+caretY(b); scrollTo({top:Math.max(0,y-innerHeight*.4),behavior:"smooth"}); }
 function paintHeads(){
   const t=$("#wbody"); if(!t) return; let m=$("#hmirror"); if(!m){ m=document.createElement("div"); m.id="hmirror"; m.className="hmirror"; m.setAttribute("aria-hidden","true"); t.after(m); }
   if(t.style.display==="none"){ m.style.display="none"; return; } m.style.display="";
@@ -3437,12 +3458,13 @@ function paintHeads(){
   // 소제목 줄 안의 영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보이므로 그 부분만 원래 글자(보이지 않는 자리)로 둡니다
   const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):markLine(l);
-  const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null; let off=0;   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
+  FN_C={f:0,e:0}; const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null; let off=0;   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
   const OZ=ownZones(t.value);
   m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[], st=off; off+=l.length+1;
     if(rf&&rf.s<st+l.length+1&&rf.e>st){ const a=Math.max(0,rf.s-st), z=Math.min(l.length,rf.e-st); return plain(l.slice(0,a),head)+`<i class="rf">${esc(l.slice(a,z))}</i>`+plain(l.slice(z),head); }
     if(!E.length) return plain(l,head);
     let out="", last=0; E.forEach(x=>{ out+=plain(l.slice(last,x.s),head)+`<i class="sp ${x.src}" data-l="${i}" data-s="${x.s}" data-e="${x.e}" title="${esc(x.to)}${x.why?" — "+esc(x.why):""}">${esc(l.slice(x.s,x.e))}</i>`; last=x.e; }); return out+plain(l.slice(last),head); }).map((h,i)=>OZ.has(i)?`<i class="ownl">${h}</i>`:h).join("\n");
+  fnPanePaint(t);
   const n=errs.reduce((a,x)=>a+x.length,0), st=$("#spellstate"); if(st&&!SPELL_AI_BUSY) st.textContent=n?`밑줄 ${n}`:"";
 }
 // 글자 칸에 프로그램이 글을 넣을 때는 브라우저의 '입력' 명령으로 넣어, ⌘Z(되돌리기)·⇧⌘Z(다시 하기)가 그대로 듣게 합니다
@@ -4143,13 +4165,14 @@ function exportMs(id){ // 성경 순서로 모은 원고는 성경책마다 장(
 function bookHtml(m,ch,author,o={}){
   const e=x=>esc(x);
   // 틀의 소제목 가운데 내용이 없는 것은 빼고, 「 — 안내말」은 지워서 책에는 소제목만 남깁니다
-  const P=o.P||expPrefs(m); let FNB=0; const bookNotes=[];
+  const P=o.P||expPrefs(m); let FNB=0, ENB=0; const bookNotes=[], endNotes=[];
   const para=(body0,title)=>{ const body=expBody(body0,P), L=body.split("\n").map(l=>l.trim()).filter(l=>l&&!SLIDE_RE.test(l)), fn=[], hn=headNumFn(m);
     const html=L.filter((l,k)=>!l.startsWith("■")||(k+1<L.length&&!L[k+1].startsWith("■"))).map(l=>
     l.startsWith("■")?`<h4>${richHtml(hn(expHead(l)),fn)}</h4>`
       :/^(==(?:[ygpb]:)?|__)?「/.test(l)?(()=>{ const m=l.match(/^(.*」)\s*\(([^()]{1,80})\)\s*$/); return m?`<blockquote>${richHtml(m[1],fn)}<cite>${e(m[2])}</cite></blockquote>`:`<blockquote>${richHtml(l,fn)}</blockquote>`; })()
       :`<p>${richHtml(l,fn)}</p>`).join("");
-    const off=FNB; FNB+=fn.length; const out=html.replace(/(<sup class="fnref"[^>]*>)(\d+)(<\/sup>)/g,(a,b,n,c)=>b+(+n+off)+c);   // 각주 번호를 책 전체에서 이어 매김
+    const off=FNB; FNB+=fn.length; const eo=ENB; ENB+=(fn.end||[]).length; (fn.end||[]).forEach((x,k)=>endNotes.push({n:eo+k+1,t:x,w:title}));
+    const out=html.replace(/(<sup class="fnref"[^>]*>)(\d+)(<\/sup>)/g,(a,b,n,c)=>b+(+n+off)+c).replace(/(<sup class="enref"[^>]*>)([ivxlcdm]+)(<\/sup>)/g,(a,b,n,c,i)=>b+romanL(eo+1+((html.slice(0,i).match(/class="enref"/g)||[]).length))+c);   // 각주·미주 번호를 책 전체에서 이어 매김
     if(P.notes==="book"){ fn.forEach((x,k)=>bookNotes.push({n:off+k+1,t:x,w:title})); return out; }
     return out+(fn.length?`<ol class="fn" start="${off+1}">${fn.map(x=>`<li>${e(x)}</li>`).join("")}</ol>`:""); };
   // 시: 행·연·들여쓰기를 그대로, 넘친 행은 내어쓰기(진짜 행갈이와 구별), 낱말 가운데서 끊지 않음. 첫 행이 「…」 (출처) 면 제사
@@ -4231,6 +4254,7 @@ ${o.fmt==="pulpit"?"":`<section class="cover"><h1>${e(m.title)}</h1><div class="
 <section class="front"><h2>차례</h2><ol class="toc">${o.preface&&(m.preface||"").trim()?`<li><a href="#preface">머리말<span class="dots"></span></a></li>`:""}${toc}${o.biblio&&msBiblio(m).length?`<li><a href="#biblio">참고 문헌<span class="dots"></span></a></li>`:""}</ol></section>`}
 ${o.preface&&(m.preface||"").trim()?`<section class="chapter" id="preface"><h3>머리말</h3>${para(m.preface,"머리말")}</section>`:""}
 ${parts}
+${endNotes.length?`<section class="chapter notes" id="endnotes"><h3>미주</h3><ol class="fn bookfn" type="i">${endNotes.map(x=>`<li value="${x.n}">${e(x.t)}${x.w?` <span class="fw">— ${e(x.w)}</span>`:""}</li>`).join("")}</ol></section>`:""}
 ${bookNotes.length?`<section class="chapter notes" id="notes"><h3>주</h3><ol class="fn bookfn">${bookNotes.map(x=>`<li value="${x.n}">${e(x.t)}${x.w?` <span class="fw">— ${e(x.w)}</span>`:""}</li>`).join("")}</ol></section>`:""}
 ${o.biblio&&msBiblio(m).length?`<section class="chapter biblio" id="biblio"><h3>참고 문헌</h3><ul style="list-style:none;padding:0">${msBiblio(m).map(x=>`<li style="margin:0 0 2.5mm;padding-left:6mm;text-indent:-6mm">${e(x)}</li>`).join("")}</ul></section>`:""}
 ${o.fmt==="pulpit"?"":`<section class="colophon">${e(m.title)}<br>${e(author||"")}${author?" 지음":""}<br>${today()} · ${ch.length}${G(m).item==="꼭지"?"꼭지":"편"} · ${total.toLocaleString()}자</section>`}
@@ -4383,8 +4407,8 @@ function expRowHtml(P){ return `<div class="setrow exprow"><span class="k">모�
 function expRowWire(root,m,P){ root.querySelectorAll("[data-pf]").forEach(x=>x.onchange=()=>{ P[x.dataset.pf]=x.type==="checkbox"?x.checked:x.value; expPrefsSave(m,P); });
   const a=root.querySelector("[data-author]"); if(a) a.onchange=()=>{ S.settings.author=a.value.trim(); save(); }; }
 function sendText(name,list,m,scope,md,P){ P=P||expPrefs(m); const gn=m?.genre||"free", whole=m&&scope!=="one", pb=whole?partsBefore(m):new Map(), depth=whole?Math.max(0,...msSeq(m).filter(x=>x.p).map(x=>x.p.lv)):0, author=(S.settings.author||"").trim();
-  const hx=n=>"#".repeat(Math.min(6,n)); let N=0; const endN=[];   // 각주 번호는 원고 전체에서 이어 매김
-  const conv=(t,title)=>{ const loc=[], ref=x=>{ N++; (P.notes==="book"?endN:loc).push({n:N,t:x,w:title}); return md?`[^${N}]`:`[${N}]`; }, inF=x=>String(x).replace(FN_RE,(m2,f2)=>ref(f2));
+  const hx=n=>"#".repeat(Math.min(6,n)); let N=0; const endN=[], ENX=[];   // 각주 번호는 원고 전체에서 이어 매김 · ENX 미주
+  const conv=(t,title)=>{ const loc=[], ref=x=>{ if(isEnd(x)){ ENX.push({n:ENX.length+1,t:fnText(x),w:title}); return md?`[^e${ENX.length}]`:`[미주 ${romanL(ENX.length)}]`; } N++; (P.notes==="book"?endN:loc).push({n:N,t:x,w:title}); return md?`[^${N}]`:`[${N}]`; }, inF=x=>String(x).replace(FN_RE,(m2,f2)=>ref(f2));
     const r=String(t).replace(MK_RE,(mm,c,h,u,f)=>f!=null?ref(f):h!=null?(md?`<mark>${inF(h)}</mark>`:inF(h)):(md?`<u>${inF(u)}</u>`:inF(u))); return {r:md?r:biStrip(r),loc}; };
   const defs=L=>L.length?(md?L.map(x=>`[^${x.n}]: ${x.t}`).join("\n")+"\n\n":"각주\n"+L.map(x=>`[${x.n}] ${x.t}`).join("\n")+"\n\n"):"";
   const prose=(body,title,hl)=>{ let o2=""; const loc=[], hn=headNumFn(m);   // 문단 사이 빈 줄, ■ 소제목은 마크다운 제목 / 텍스트는 앞뒤 빈 줄
@@ -4401,15 +4425,16 @@ function sendText(name,list,m,scope,md,P){ P=P||expPrefs(m); const gn=m?.genre||
     if(gn==="novel"){ if(i>0&&!ps.length) out+="＊\n\n"; }   // 소설: 장면 제목 대신 ＊
     else { const t=(gn==="poem"?(w.title||"＊"):gn==="paper"?numT(pieceNum(m,w.id),w.title||"(제목 없음)"):(w.title||"(제목 없음)"))+(w.passage?" — "+w.passage:""); out+=md?`${hx(tl)} ${t}\n\n`:`${t}\n\n`; }
     out+=gn==="poem"?poemT(w.body,w.title):prose(expBody(w.body,P),w.title,tl+1); });
+  if(ENX.length) out+=md?`${hx(2)} 미주\n\n`+ENX.map(x=>`[^e${x.n}]: ${x.t}${x.w?` — ${x.w}`:""}`).join("\n")+"\n\n":`[미주]\n`+ENX.map(x=>`[${romanL(x.n)}] ${x.t}${x.w?` — ${x.w}`:""}`).join("\n")+"\n\n";
   if(endN.length) out+=md?`${hx(2)} 주\n\n`+endN.map(x=>`[^${x.n}]: ${x.t}${x.w?` — ${x.w}`:""}`).join("\n")+"\n\n":`[주]\n`+endN.map(x=>`[${x.n}] ${x.t}${x.w?` — ${x.w}`:""}`).join("\n")+"\n\n";
   const bib=whole&&(m.exportOpts?.biblio??G(m).exp.biblio)?msBiblio(m):[]; if(bib.length) out+=(md?`${hx(2)} 참고 문헌\n\n`:`[참고 문헌]\n`)+bib.map(x=>md?`- ${x}`:x).join("\n")+"\n";
   return out.replace(/\n{3,}/g,"\n\n"); }
 // 워드(.docx): 진짜 각주, 소제목·인용·형광펜·밑줄, 부·장 제목, 쪽 번호. 시집은 행 그대로, 소설은 장면 사이 ＊
 const HL_FILL={y:"F6E3A1",g:"CDEBC6",p:"F3CCE0",b:"CFE2F5"};
 async function makeDocx(name,list,m,scope,P){ const D=await loadLib("https://unpkg.com/docx@9.8.1/dist/index.iife.js","sha384-VG7nNHhMlezbK+XRucsDQymGisKRncnWqwFcAe+MAHxdR+d/6Brmvux2OlSb8je3","docx");
-  const {Document,Paragraph,TextRun,HeadingLevel,FootnoteReferenceRun,AlignmentType,Footer,PageNumber}=D; P=P||expPrefs(m); const FN={}; let fnN=0; const endN=[];
+  const {Document,Paragraph,TextRun,HeadingLevel,FootnoteReferenceRun,AlignmentType,Footer,PageNumber}=D; P=P||expPrefs(m); const FN={}; let fnN=0; const endN=[], ENX=[];
   const gn=m?.genre||"free", poem=gn==="poem", novel=gn==="novel", paper=gn==="paper", whole=m&&scope!=="one";
-  const note=(t,title)=>{ fnN++; if(P.notes==="book"){ endN.push({n:fnN,t,w:title}); return new TextRun({text:String(fnN),superScript:true}); } FN[fnN]={children:[new Paragraph({children:[new TextRun({text:t,size:18})]})]}; return new FootnoteReferenceRun(fnN); };   // 각주는 9pt, 「책 끝 미주」면 번호만 달고 끝에 모음
+  const note=(t,title)=>{ if(isEnd(t)){ ENX.push({n:ENX.length+1,t:fnText(t),w:title}); return new TextRun({text:romanL(ENX.length),superScript:true}); } fnN++; if(P.notes==="book"){ endN.push({n:fnN,t,w:title}); return new TextRun({text:String(fnN),superScript:true}); } FN[fnN]={children:[new Paragraph({children:[new TextRun({text:t,size:18})]})]}; return new FootnoteReferenceRun(fnN); };   // 각주는 9pt, 「책 끝 미주」면 번호만 달고 끝에 모음
   let curT="";
   const biRuns=(t,opt={})=>{ const r=[]; let l=0; t.replace(BI_RE,(mm,b,i,off)=>{ if(off>l) r.push(new TextRun({text:t.slice(l,off),...opt})); r.push(new TextRun({text:b??i,...opt,...(b!=null?{bold:true}:{italics:true})})); l=off+mm.length; return mm; }); if(l<t.length) r.push(new TextRun({text:t.slice(l),...opt})); return r; };   // 굵게·기울임
   const runs=(text)=>{ const out=[]; let last=0; text.replace(MK_RE,(mm,c,h,u,f,off)=>{ if(off>last) out.push(...biRuns(text.slice(last,off)));
@@ -4433,6 +4458,7 @@ async function makeDocx(name,list,m,scope,P){ const D=await loadLib("https://unp
     if(poem){ expBody(w.body,P).replace(/\s+$/,"").split("\n").forEach(l=>kids.push(new Paragraph({children:runs(l),spacing:{after:0,line:360}}))); return; }
     const hn=headNumFn(m); sendBlocks(expBody(w.body,P)).forEach(b=>{ if(b.k==="gap") return; if(b.k==="h") kids.push(new Paragraph({text:hn(b.t),heading:H[Math.min(4,depth+1)]}));
       else kids.push(body(b.t,{indent:b.k==="q"?{left:567,right:567}:(novel?{firstLine:400}:undefined)})); }); });
+  if(ENX.length){ kids.push(new Paragraph({text:"미주",heading:H[0],pageBreakBefore:true})); ENX.forEach(x=>kids.push(new Paragraph({children:[new TextRun({text:romanL(x.n)+". ",bold:true}),new TextRun(x.t),...(x.w?[new TextRun({text:"  — "+x.w,color:"999999",size:18})]:[])],spacing:{after:80}}))); }
   if(endN.length){ kids.push(new Paragraph({text:"주",heading:H[0],pageBreakBefore:true})); endN.forEach(x=>kids.push(new Paragraph({children:[new TextRun({text:x.n+". ",bold:true}),new TextRun(x.t),...(x.w?[new TextRun({text:"  — "+x.w,color:"999999",size:18})]:[])],spacing:{after:80}}))); }
   const bib=whole&&(m.exportOpts?.biblio??G(m).exp.biblio)?msBiblio(m):[];   // 참고 문헌 (PDF와 같은 목록)
   if(bib.length){ kids.push(new Paragraph({text:"참고 문헌",heading:H[0],pageBreakBefore:true})); bib.forEach(x=>kids.push(new Paragraph({children:[new TextRun(x)],indent:{left:567,hanging:567},spacing:{after:100}}))); }
