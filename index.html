@@ -288,6 +288,7 @@ sup.enref{font-size:.7em;color:#4f7fa8;font-family:Georgia,serif} .enhead{margin
 @media (max-width:700px){ .fnpane{max-width:none} } .hmirror i.mki{visibility:visible;font-style:normal;color:transparent;text-decoration:underline dotted color-mix(in srgb,var(--sepia) 75%,transparent);text-decoration-thickness:1.5px;text-underline-offset:5px}
 .hmirror i.mkc{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,var(--paper) 70%,transparent)} .hmirror i.mkf{background:color-mix(in srgb,var(--paper) 55%,transparent);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--sepia) 45%,transparent)}
 .hmirror i.mkh{visibility:visible;font-style:normal;color:transparent;border-radius:2px} .hmirror i.mku{visibility:visible;font-style:normal;color:transparent;text-decoration:underline;text-decoration-color:var(--sepia);text-decoration-thickness:1.5px;text-underline-offset:5px}
+body.aiopen #aitog{background:#7a5aa8;color:#fff;border-color:#7a5aa8}
 .hmirror i.fb{visibility:visible;font-style:normal;color:transparent;background:rgba(214,92,92,.10);box-shadow:inset 0 -2px 0 rgba(200,70,70,.45);border-radius:2px}
 #fbpanel{position:fixed;right:14px;top:84px;bottom:14px;width:min(380px,92vw);z-index:60;overflow:auto;background:var(--paper);border:1px solid var(--edge);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:12px 14px;font:13.5px/1.55 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
 #fbpanel .fbh{display:flex;align-items:center;gap:6px;margin-bottom:8px} #fbpanel .fbh button{border:0;background:none;cursor:pointer;font-size:15px;color:var(--ink-soft);padding:2px 6px;border-radius:6px} #fbpanel .fbh button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
@@ -298,6 +299,16 @@ sup.enref{font-size:.7em;color:#4f7fa8;font-family:Georgia,serif} .enhead{margin
 .altlist{display:grid;gap:4px;margin:4px 0} .altc{border:0;background:none;text-align:left;padding:8px 10px;border-radius:9px;cursor:pointer;font:inherit;color:var(--ink);line-height:1.6} .altc:hover,.altc:focus{background:color-mix(in srgb,var(--ink) 7%,transparent)}
 .altnav{display:flex;justify-content:center;align-items:center;gap:10px} .altnav button{border:0;background:none;font-size:18px;cursor:pointer;color:var(--ink-soft);padding:0 8px} .altnav button:disabled{opacity:.3}
 #fbpanel .rfb{display:flex;gap:6px;margin-top:6px} #fbpanel .rfb button{border:1px solid var(--edge);background:var(--paper);border-radius:8px;padding:3px 12px;cursor:pointer;font:inherit;font-size:12.5px;color:var(--ink)} #fbpanel .rfb button.p{background:var(--ink);color:var(--paper);border-color:var(--ink)} #fbpanel .rfdiff{font-size:13.5px;line-height:1.7;margin:4px 0}
+.respage{max-width:900px} .resbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap} .resbar #resq{flex:1;min-width:180px} .resbar select{width:auto}
+.resed{border:1px solid var(--edge);border-radius:12px;background:color-mix(in srgb,var(--paper) 70%,#fff);padding:12px 14px;margin:10px 0;display:grid;gap:10px;font-family:-apple-system,"Apple SD Gothic Neo",sans-serif}
+.resed .cxf input,.resed .cxf select{width:100%;border:1px solid var(--edge);border-radius:8px;background:color-mix(in srgb,var(--paper) 50%,#fff);padding:7px 9px;font:14px -apple-system,sans-serif;color:var(--ink)}
+.resgrid{display:grid;grid-template-columns:150px 1fr;gap:10px} .resgrid.four{grid-template-columns:1.4fr .7fr .6fr .9fr} .resgrid .wide{min-width:0}
+.reslist{display:grid;gap:10px;margin-top:6px} .rescard{border:1px solid var(--edge);border-radius:12px;background:var(--paper);padding:10px 14px;display:grid;gap:6px;font:14px/1.6 -apple-system,"Apple SD Gothic Neo",sans-serif}
+.reskind{font-size:11.5px;border-radius:99px;padding:0 8px;background:var(--edge);color:var(--ink-soft)} .resok{font-size:11px;border-radius:99px;padding:0 7px} .resok.y{background:#d9ead9;color:#245c2f} .resok.n{background:#f4d6d0;color:#8a2c1c}
+.resbody{font:15px/1.75 "Gowun Batang",serif;color:var(--ink);white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;border-left:3px solid var(--edge);padding-left:10px}
+.rescite{font-size:13px;color:var(--ink-soft)} .resnote{font-size:13px;color:#7a5aa8} .restag{border:0;background:none;color:var(--sepia);font-size:12.5px;cursor:pointer;padding:0 2px}
+.rsrc .row .btn{font-size:12px;padding:2px 8px}
+@media (max-width:700px){ .resgrid,.resgrid.four{grid-template-columns:1fr 1fr} }
 .cxego .cxgraph{max-width:520px} .cxego .hint{display:none}
 @media (max-width:700px){ #fbpanel{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:70vh} }
 .hmirror i.rf{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,#7a5aa8 20%,transparent);border-radius:3px;box-shadow:0 0 0 1px color-mix(in srgb,#7a5aa8 30%,transparent)}   /* AI 다듬기로 고칠 곳 */
@@ -1655,7 +1666,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="fc68e51168";
+const APP_BUILD="763761db61";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3160,7 +3171,7 @@ write0(){
     <button class="btn small nofocus ${DOC_MODE?"on":""}" onclick="docToggle()" id="docbtn" title="워드처럼: 흰 쪽에 글꼴·크기·줄 간격·정렬·들여쓰기 (글은 그대로)">${DOC_MODE?"✎ 노트로":"📄 문서 모드"}</button>
     <button class="btn small" onclick="toggleRead()" id="readbtn" title="글을 건드리지 않고 보기만 합니다. 설교문은 슬라이드·전달 큐가 강단용 모양으로 보입니다">${ICO.eye}읽기 모드</button>
     ${track!=="bible"||(dtype&&dtype!=="묵상")?`<button class="btn small nofocus" onclick="sendOpen('w')" title="노션·PDF·워드로 보냅니다 (묵상 말고는 구글에만 간직되어 있습니다)">보내기</button>`:""}
-    <button class="btn small aibtn nofocus" onclick="aiOpen()" title="AI 글쓰기 도우미 — 지금 글을 함께 보며 묻고 답합니다 (글은 바꾸지 않고 제안만)">✦ AI</button>
+    <button class="btn small aibtn nofocus" id="aitog" onclick="aiToggle()" title="AI 글쓰기 도우미 — 누르면 열고, 다시 누르면 닫습니다 (글은 바꾸지 않고 제안만)">✦ AI</button>
     <button class="btn small ghost nofocus discardbtn" onclick="discardPage()" title="${w?"이 글을 휴지통에 넣습니다 (30일 안에 서랍 → 휴지통에서 되살림)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"휴지통에":"버리기"}</button>
     <button class="btn small ink" onclick="saveWriting()" title="⌘S">간직하기</button>
   </div>
@@ -4509,7 +4520,8 @@ function exportPdf(id){
 // 원고에 쓰인 책(글의 책, 꼭지에 인용된 밑줄의 책)을 「지은이, 『제목』, 출판사, 연도.」 꼴로
 function msBiblio(m){ const ids=new Set(); msList(m).forEach(w=>{ if(w.bookId) ids.add(w.bookId); if(w.fromNote){ const n=S.notes.find(x=>x.id===w.fromNote); if(n?.bookId) ids.add(n.bookId); }
     S.books.forEach(b=>{ const t=b.title, B=w.body||""; if(t&&t.length>=2&&(B.includes("("+t)||B.includes("『"+t)||B.includes("《"+t))) ids.add(b.id); }); });   // 「(제목」·『제목』·《제목》 인용 (각주 안도)
-  return [...ids].map(id=>S.books.find(b=>b.id===id)).filter(Boolean).map(b=>`${(b.authors||[]).join(", ")||"지은이 미상"}, 『${b.title}』${b.publisher?", "+b.publisher:""}${b.pubDate?", "+String(b.pubDate).slice(0,4):""}.`).sort((a,b)=>a.localeCompare(b,"ko")); }
+  const fromRes=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]&&(r.kind==="문헌"||r.au)&&r.t&&resUsed(m,r).length).map(r=>`${r.au||"지은이 미상"}, 『${r.t}』${r.yr?", "+r.yr:""}.`);   // 자료 모음의 문헌 가운데 원고에 쓰인 것
+  return [...new Set([...[...ids].map(id=>S.books.find(b=>b.id===id)).filter(Boolean).map(b=>`${(b.authors||[]).join(", ")||"지은이 미상"}, 『${b.title}』${b.publisher?", "+b.publisher:""}${b.pubDate?", "+String(b.pubDate).slice(0,4):""}.`),...fromRes])].sort((a,b)=>a.localeCompare(b,"ko")); }
 function bookPreview(id,o){
   const m=id==="__one"?TMP_MS:S.manuscripts.find(x=>x.id===id); let ch=msList(m); if(o.done) ch=ch.filter(w=>w.status==="완성"); if(o.ids) ch=ch.filter(w=>o.ids.includes(w.id));
   if(!ch.length) return toast("넣을 꼭지가 없습니다 (「완성」 꼭지만을 골랐다면 상태를 확인해 주세요)");
@@ -4948,8 +4960,6 @@ function msBodyHtml(m,V){ V=V||ROOM_VIEW; const g=G(m), seq=msSeq(m), ws=seq.fil
   const steps=k=>m.rule?"":`<span class="rstep"><button class="btn small ghost" onclick="event.stopPropagation();roomStep('${m.id}','${k}',-1)" title="위로">↑</button><button class="btn small ghost" onclick="event.stopPropagation();roomStep('${m.id}','${k}',1)" title="아래로">↓</button></span>`;
   let body="";
   if(V==="scriv") body=scrivHtml(m)+`<p class="hint" style="margin-top:8px">꼭지들을 한 장처럼 이어 읽습니다. 「고치기」로 그 자리에서 고치고 간직하면 그 꼭지에 저장됩니다(이전 판도 남음).</p>`;
-  else if(V==="research") body=`<div class="resform"><input id="rs-t" placeholder="제목 (예: 칼빈 시편 주석 17편)"><textarea id="rs-b" placeholder="인용·메모·주석 요약을 붙여 넣으세요" style="min-height:90px"></textarea><div class="row" style="gap:6px"><input id="rs-s" placeholder="출처 (선택)" style="flex:1"><button class="btn small ink" onclick="resAdd('${m.id}')">자료 모으기</button></div></div>
-    ${(m.research||[]).map(r=>`<div class="rsrc big"><div class="row"><b>${esc(r.t||"자료")}</b><span class="muted">${esc(r.at||"")}${r.src?" · "+esc(r.src):""}</span><span class="spacer"></span><button class="btn small ghost" onclick="resDel('${m.id}','${r.id}')">지우기</button></div><div class="sub" style="white-space:pre-wrap">${esc(r.body||"")}</div></div>`).join("")||`<p class="muted">아직 모은 자료가 없습니다. 쓰기 화면 곁 칸에서 이 자료를 「넣기」로 꺼내 씁니다.</p>`}`;
   else if(V==="cork"){
     body=`<div class="cork" id="roomlist">${seq.map(x=>x.p
       ?`<div class="corkpart lv${x.p.lv}" ${dragA("part:"+x.p.id)}>${esc(x.p.t)}</div>`
@@ -4981,7 +4991,7 @@ function roomPage(){
   else if(cur==="memo") main=stMemo(m);
   else if(cur==="codex") main=stCodexList();
   else if(cur==="common") main=stCodexList(true);
-  else if(cur==="res") main=m?`<section class="sthome"><h2 class="sthello" style="font-size:24px">자료 모음 · ${esc(m.title)}</h2><p class="sub" style="text-align:center;margin:-14px 0 16px">이 원고에 쓸 인용·주석·참고 글을 모아 두는 곳. 쓰는 중에 옆 칸 「자료」 탭에서 「넣기」로 꺼내 씁니다.</p>${msBodyHtml(m,"research")}</section>`:stHome(m);
+  else if(cur==="res") main=m?resPage(m):stHome(m);
   else if(cur.startsWith("ms:")&&m) main=msPageHtml(m);
   else main=stHome(m);
   return studioWrap(cur,main); }
@@ -5065,7 +5075,7 @@ function sideTabs(w){ const m=wMs(w), g=G(m), cx=w?codexIn(w.body+" "+(w.title||
   const memo=`${m&&w&&g.scene?`<div class="sceneform"><p class="hint" style="margin:0 0 4px">장면 정보 — 코르크보드 카드에 보입니다</p>${SCENE_F.map(([k,n])=>`<label class="field"><span>${n}</span><input value="${esc(wMeta(w,k))}" onchange="saveScene('${w.id}','${k}',this.value)"></label>`).join("")}</div>`:""}
     ${m&&w?`<label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>`:""}
     ${jotBox()}`;
-  const res=m?((m.research||[]).length?(m.research||[]).map(r=>`<div class="rsrc"><b>${esc(r.t||"자료")}</b><span class="muted">${esc((r.body||"").slice(0,120))}${(r.body||"").length>120?"…":""}</span><button class="btn small" onclick="resInsert('${m.id}','${r.id}')">넣기</button></div>`).join(""):`<p class="hint">원고 자료는 글방 → 「자료」에서 모아 두면 여기서 「넣기」로 꺼내 씁니다.</p>`):`<p class="hint">이 글이 원고에 들어 있으면 그 원고의 자료가 여기에 보입니다.</p>`;
+  const res=m?resSideHtml(m):`<p class="hint">이 글이 원고에 들어 있으면 그 원고의 자료가 여기에 보입니다.</p>`;
   const notes=cx.length?cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="cxsidebody">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join(""):`<p class="hint">이 글에 나온 ${esc(g.codex)}가 여기에 모입니다. 노트는 글방 왼쪽에서 만듭니다.</p>`;
   const ai=rv?`<div class="revside">${revNotesHtml(w,true)}<button class="btn small" onclick="reviewOne('${w.id}')">${ICO.search}${w.review?"다시 검토 받기":"이 글 검토 받기"}</button><p class="hint">AI는 본문을 바꾸지 않고 짚을 점만 메모로 남깁니다.</p></div>`:`<p class="hint">원고에 넣은 글과 설교초안은 AI 검토를 받을 수 있습니다. 묻기·막힐 때 질문은 곧 더해집니다.</p>`;
   const sl=!!(w&&(w.slides||/설교/.test(w.type||"")||g.item==="설교"||/^\s*(🎬|▣\s*슬라이드)/m.test(w.body||"")));
@@ -5079,14 +5089,73 @@ function wSideRoom(w){ const m=wMs(w), cx=w?codexIn(w.body+" "+(w.title||"")):[]
     ${m?`<p class="step" style="margin-top:0"><span class="num">${ICO.closed}</span>원고 곁 칸 <small class="hint" style="display:inline">· ${esc(G(m).n)}</small></p>
       ${G(m).scene?`<div class="sceneform"><p class="hint" style="margin:0 0 4px">장면 정보 — 코르크보드 카드에 보입니다</p>${SCENE_F.map(([k,n])=>`<label class="field"><span>${n}</span><input value="${esc(wMeta(w,k))}" onchange="saveScene('${w.id}','${k}',this.value)"></label>`).join("")}</div>`:""}
       <label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>
-      ${(m.research||[]).length?`<details class="more" open><summary>원고 자료 ${(m.research||[]).length}</summary>${(m.research||[]).map(r=>`<div class="rsrc"><b>${esc(r.t||"자료")}</b><span class="muted">${esc((r.body||"").slice(0,120))}${(r.body||"").length>120?"…":""}</span><button class="btn small" onclick="resInsert('${m.id}','${r.id}')">넣기</button></div>`).join("")}</details>`:`<p class="hint">원고 자료는 글방 → 「자료」에서 모아 둡니다.</p>`}`:""}
+      ${(m.research||[]).length?`<details class="more" open><summary>원고 자료 ${(m.research||[]).length}</summary>${resSideHtml(m)}</details>`:`<p class="hint">원고 자료는 글방 → 「자료 모음」에서 모아 둡니다.</p>`}`:""}
     ${cx.length?`<details class="more" ${m?"":"open"}><summary>이 글에 나온 인물·주제 ${cx.length}</summary>${cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="cxsidebody">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join("")}</details>`:""}
   </div>`; }
 function saveMemo(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w||(w.memo||"")===v) return; w.memo=v; w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); toast("꼭지 메모를 남겼습니다"); }
-function resInsert(mid,rid){ const m=S.manuscripts.find(x=>x.id===mid), r=m?.research?.find(x=>x.id===rid), b=$("#wbody"); if(!r||!b) return; tInsert(b,(r.body||"")+(r.src?` (${r.src})`:"")+"\n"); toast("자료를 글에 넣었습니다"); }
+// ───────── 자료 모음 = 원고의 자료 창고 (2026-10-29 다시 만듦) ─────────
+// 메모(포스트잇)는 「내 생각의 씨앗」, 자료 모음은 「바깥에서 가져온 근거」 — 출처와 함께 두고 인용·각주·참고 문헌으로 이어짐.
+// 원고 안 m.research=[{id,kind,t 제목,body 내용·원문,au 저자,yr 연도,pg 쪽,url,src(예전 한 줄 출처),note 내 생각,tags[],ok 확인 상태,at,u}] — 자료마다 u 시각으로 합침(mergeInner)
+const RES_KINDS=["인용","주석·해설","문헌","통계·자료","사례·예화","웹 글","기타"];
+const RES_IC={"인용":"❝","주석·해설":"✎","문헌":"▤","통계·자료":"▦","사례·예화":"❀","웹 글":"⌁","기타":"◎"};
+let RES_EDIT=null, RES_Q="", RES_KIND="", RES_TAG="", RES_SORT="new", RES_VIEW=(()=>{ try{ return localStorage.getItem("seojae.resView")||"card"; }catch(_){ return "card"; } })();
+// 인용 표기: 저자, 『제목』, 연도, 쪽 (서지 칸이 없으면 예전 출처 한 줄)
+function resCite(r){ if(r.au||r.yr||r.pg) return [r.au,r.t?`『${r.t}』`:"",r.yr,r.pg?`${r.pg}쪽`:""].filter(Boolean).join(", "); return r.src||r.t||""; }
+// 이 원고에서 쓰인 곳: 인용 표기나 원문 앞부분이 들어간 글
+function resUsed(m,r){ const keys=[resCite(r),(r.body||"").replace(/\s+/g," ").trim().slice(0,18)].filter(k=>k&&k.length>=6); if(!keys.length) return []; return msList(m).filter(w=>{ const B=(w.body||"").replace(/\s+/g," "); return keys.some(k=>B.includes(k)); }); }
+function resList(m){ const q=RES_Q.trim().toLowerCase(); let L=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]);
+  if(RES_KIND) L=L.filter(r=>(r.kind||"기타")===RES_KIND); if(RES_TAG) L=L.filter(r=>(r.tags||[]).includes(RES_TAG));
+  if(q) L=L.filter(r=>[r.t,r.body,r.au,r.yr,r.src,r.note,r.url,...(r.tags||[])].join(" ").toLowerCase().includes(q));
+  const by={new:(a,b)=>(b.u||b.at||"").localeCompare(a.u||a.at||""),title:(a,b)=>(a.t||"").localeCompare(b.t||"","ko"),author:(a,b)=>(a.au||"힣").localeCompare(b.au||"힣","ko")||(a.yr||"").localeCompare(b.yr||"")}[RES_SORT];
+  return L.slice().sort(by); }
+function resForm(m,r){ r=r||{}; const sel=RES_KINDS.map(k=>`<option ${(r.kind||"인용")===k?"selected":""}>${k}</option>`).join("");
+  return `<div class="resed" id="resed"><div class="row" style="gap:8px;align-items:center"><b>${r.id?"자료 고치기":"새 자료"}</b><span class="spacer"></span><small class="muted">⌘S·⌘↩ 간직 · Esc 나오기</small><button class="btn small ghost" onclick="resClose()">✕</button></div>
+    <div class="resgrid"><label class="cxf"><span>종류</span><select id="rs-k">${sel}</select></label><label class="cxf wide"><span>제목 (책·글·자료 이름)</span><input id="rs-t" value="${esc(r.t||"")}" placeholder="예: 칼빈 시편 주석 17편"></label></div>
+    <label class="cxf"><span>내용 · 원문 <small>인용할 문장은 그대로</small></span><textarea id="rs-b" class="cxp-text" placeholder="인용문, 주석 요약, 통계, 사례…">${esc(r.body||"")}</textarea></label>
+    <div class="resgrid four"><label class="cxf"><span>저자</span><input id="rs-au" value="${esc(r.au||"")}" placeholder="칼빈"></label><label class="cxf"><span>연도</span><input id="rs-yr" value="${esc(r.yr||"")}" placeholder="1557"></label><label class="cxf"><span>쪽</span><input id="rs-pg" value="${esc(r.pg||"")}" placeholder="212"></label><label class="cxf"><span>확인</span><select id="rs-ok">${["","확인함","확인 못 함"].map(v=>`<option value="${v}" ${(r.ok||"")===v?"selected":""}>${v||"—"}</option>`).join("")}</select></label></div>
+    <div class="resgrid"><label class="cxf wide"><span>주소 (웹)</span><input id="rs-url" value="${esc(r.url||"")}" placeholder="https://"></label><label class="cxf"><span>태그 <small>쉼표로</small></span><input id="rs-tags" value="${esc((r.tags||[]).join(", "))}" placeholder="2장, 기도"></label></div>
+    ${r.src&&!(r.au||r.yr)?`<label class="cxf"><span>예전 출처 한 줄</span><input id="rs-s" value="${esc(r.src)}"></label>`:""}
+    <label class="cxf"><span>내 생각 <small>이 자료를 어디에 어떻게 쓸지</small></span><textarea id="rs-n" class="cxp-text small">${esc(r.note||"")}</textarea></label>
+    <div class="cxp-save"><button class="btn ghost" onclick="resClose()">나오기</button><button class="btn ink" onclick="resSave('${m.id}')">간직 <small style="opacity:.6">⌘S</small></button></div></div>`; }
+function resOpen(rid){ RES_EDIT=rid||"new"; render(); setTimeout(()=>{ (rid?$("#rs-b"):$("#rs-t"))?.focus(); $("#resed")?.scrollIntoView({block:"nearest"}); },40); }
+function resClose(){ RES_EDIT=null; render(); }
+function resSave(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const v=id=>($("#"+id)?.value||"").trim(), body=v("rs-b"), t=v("rs-t");
+  if(!body&&!t) return toast("제목이나 내용을 적어 주세요"); const now=new Date().toISOString(), tags=v("rs-tags").split(/[,，、]/).map(x=>x.trim()).filter(Boolean);
+  const rec={kind:v("rs-k")||"기타",t,body,au:v("rs-au"),yr:v("rs-yr"),pg:v("rs-pg"),url:v("rs-url"),ok:v("rs-ok"),note:v("rs-n"),tags,u:now}; if($("#rs-s")) rec.src=v("rs-s");
+  Object.keys(rec).forEach(k=>{ if(rec[k]===""||(Array.isArray(rec[k])&&!rec[k].length)) delete rec[k]; }); rec.u=now; rec.kind=rec.kind||"기타";
+  m.research=m.research||[]; const old=RES_EDIT&&RES_EDIT!=="new"?m.research.find(x=>x.id===RES_EDIT):null;
+  if(old){ ["kind","t","body","au","yr","pg","url","ok","note","tags","src"].forEach(k=>{ if(k in rec) old[k]=rec[k]; else if(k!=="src"||$("#rs-s")) delete old[k]; }); old.u=now; }
+  else m.research.unshift({id:uid(),at:today(),...rec}); m.updated=now; save(); RES_EDIT=null; toast(old?"자료를 고쳤습니다":"자료를 모아 두었습니다"); render(); }
+function resView(v){ RES_VIEW=v; try{ localStorage.setItem("seojae.resView",v); }catch(_){} render(); }
+function resPage(m){ const all=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]), L=resList(m), tags=[...new Set(all.flatMap(r=>r.tags||[]))].sort((a,b)=>a.localeCompare(b,"ko")), kinds=RES_KINDS.filter(k=>all.some(r=>(r.kind||"기타")===k));
+  const pill=(on,txt,js)=>`<button class="pill ${on?"on":""}" onclick="${js};render()">${txt}</button>`, used=new Map(L.map(r=>[r.id,resUsed(m,r)]));
+  const ed=RES_EDIT?resForm(m,RES_EDIT==="new"?null:all.find(r=>r.id===RES_EDIT)):"";
+  const card=r=>`<div class="rescard"><div class="row" style="gap:6px;align-items:baseline;flex-wrap:wrap"><span class="reskind">${RES_IC[r.kind||"기타"]||"◎"} ${esc(r.kind||"기타")}</span><b>${esc(r.t||"(제목 없음)")}</b>${r.ok?`<span class="resok ${r.ok==="확인함"?"y":"n"}">${esc(r.ok)}</span>`:""}<span class="spacer"></span><button class="btn small ghost" onclick="resOpen('${r.id}')">고치기</button><button class="btn small ghost" onclick="resDel('${m.id}','${r.id}')" title="지우기">✕</button></div>
+      ${r.body?`<div class="resbody">${esc(r.body)}</div>`:""}<div class="rescite">${esc(resCite(r))}${r.url?` · <a href="${esc(safeUrl?safeUrl(r.url):r.url)}" target="_blank" rel="noopener">링크</a>`:""}</div>
+      ${r.note?`<div class="resnote">✎ ${esc(r.note)}</div>`:""}<div class="row" style="gap:4px;flex-wrap:wrap">${(r.tags||[]).map(t=>`<button class="restag" onclick="RES_TAG=${jsArg(t)};render()">#${esc(t)}</button>`).join("")}<span class="spacer"></span><small class="muted">${used.get(r.id).length?`쓰인 곳: ${used.get(r.id).map(w=>esc(w.title||"(제목 없음)")).join(", ")}`:"아직 쓰이지 않음"} · ${esc(r.at||"")}</small></div></div>`;
+  const table=`<div class="cxtablewrap"><table class="cxtable"><thead><tr><th>종류</th><th>제목</th><th>저자</th><th>연도</th><th>쪽</th><th>확인</th><th>태그</th><th>쓰인 곳</th></tr></thead><tbody>${L.map(r=>`<tr onclick="resOpen('${r.id}')" style="cursor:pointer"><td>${RES_IC[r.kind||"기타"]||""} ${esc(r.kind||"기타")}</td><td><b>${esc(r.t||"(제목 없음)")}</b></td><td>${esc(r.au||"")}</td><td>${esc(r.yr||"")}</td><td>${esc(r.pg||"")}</td><td>${esc(r.ok||"")}</td><td>${esc((r.tags||[]).join(", "))}</td><td>${used.get(r.id).length||""}</td></tr>`).join("")}</tbody></table></div>`;
+  return `<section class="sthome respage"><h2 class="sthello" style="font-size:24px">자료 모음 · ${esc(m.title)}</h2>
+    <p class="sub" style="text-align:center;margin:-14px 0 14px"><b>바깥에서 가져온 근거</b>를 출처와 함께 두는 창고 — 인용·각주·참고 문헌으로 이어집니다. (내 생각의 씨앗은 「메모」에)</p>
+    <div class="resbar"><input id="resq" placeholder="찾기 — 제목·내용·저자·태그" value="${esc(RES_Q)}" oninput="RES_Q=this.value;clearTimeout(window._rq);window._rq=setTimeout(()=>{ const p=this.selectionStart; render(); const q=document.getElementById('resq'); if(q){ q.focus(); q.setSelectionRange(p,p); } },200)">
+      <select onchange="RES_SORT=this.value;render()" title="정렬">${[["new","최근 순"],["title","제목 순"],["author","저자·연도 순"]].map(([k,n])=>`<option value="${k}" ${RES_SORT===k?"selected":""}>${n}</option>`).join("")}</select>
+      <span class="vtog"><button class="${RES_VIEW==="card"?"on":""}" onclick="resView('card')">카드</button><button class="${RES_VIEW==="table"?"on":""}" onclick="resView('table')">표</button></span>
+      <button class="btn small ink" onclick="resOpen()" title="새 자료 (N)">＋ 자료</button></div>
+    ${kinds.length?`<div class="pills" style="margin:8px 0">${pill(!RES_KIND,"모두 "+all.length,"RES_KIND=''")}${kinds.map(k=>pill(RES_KIND===k,`${RES_IC[k]} ${k} ${all.filter(r=>(r.kind||"기타")===k).length}`,`RES_KIND=${jsArg(k).replace(/"/g,"&quot;")}`)).join("")}</div>`:""}
+    ${tags.length?`<div class="pills" style="margin:0 0 8px">${tags.map(t=>pill(RES_TAG===t,"#"+esc(t),`RES_TAG=RES_TAG===${jsArg(t).replace(/"/g,"&quot;")}?'':${jsArg(t).replace(/"/g,"&quot;")}`)).join("")}</div>`:""}
+    ${ed}
+    ${L.length?(RES_VIEW==="table"?table:`<div class="reslist">${L.map(card).join("")}</div>`):`<p class="muted">${all.length?"찾는 자료가 없습니다.":"아직 모은 자료가 없습니다. 「＋ 자료」나 ✦ AI 조사 창의 「자료 모음에 담기」로 모읍니다."}</p>`}
+    <p class="hint">쓰는 화면 옆 칸 「자료」에서 「인용+각주」로 꺼내 쓰면, 「쓰인 곳」이 저절로 이어지고 문헌은 참고 문헌에 들어갑니다.</p></section>`; }
+// 쓰는 화면에서 꺼내 쓰기: 인용+각주 / 각주만 / 내용만
+function resInsert(mid,rid,how){ const m=S.manuscripts.find(x=>x.id===mid), r=m?.research?.find(x=>x.id===rid), b=$("#wbody"); if(!r||!b) return; const c=resCite(r);
+  const txt=how==="fn"?(c?`[^${c.replace(/[\[\]]/g,"")}]`:""):how==="body"?(r.body||"")+"\n":`「${(r.body||"").replace(/\s*\n\s*/g," ")}」${c?`[^${c.replace(/[\[\]]/g,"")}]`:""}`;
+  if(!txt) return toast("출처가 없어 각주를 만들 수 없습니다 — 자료에 저자·제목을 적어 주세요"); tInsert(b,txt); toast(how==="fn"?"각주를 넣었습니다":"자료를 넣었습니다"); }
+function resSideHtml(m){ const L=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]); if(!L.length) return `<p class="hint">원고 자료는 글방 → 「자료 모음」에서 모아 두면 여기서 꺼내 씁니다.</p>`;
+  return L.map(r=>`<div class="rsrc"><b>${RES_IC[r.kind||"기타"]||""} ${esc(r.t||"자료")}</b><span class="muted">${esc((r.body||"").slice(0,100))}${(r.body||"").length>100?"…":""}</span><small class="muted">${esc(resCite(r))}</small><div class="row" style="gap:4px;flex-wrap:wrap"><button class="btn small" onclick="resInsert('${m.id}','${r.id}','quote')" title="「원문」 + 각주(출처)">인용+각주</button><button class="btn small ghost" onclick="resInsert('${m.id}','${r.id}','fn')" title="커서 자리에 출처 각주만">각주만</button><button class="btn small ghost" onclick="resInsert('${m.id}','${r.id}','body')">내용만</button></div></div>`).join(""); }
+// 단축키: 자료 고치는 중 ⌘S·⌘↩ 간직, Esc 나오기 · 자료 모음에서 N 새 자료
+document.addEventListener("keydown",e=>{ if(tab!=="room"||!$(".respage")) return; const m=S.manuscripts.find(x=>x.id===ROOM_MS);
+  if(RES_EDIT&&$("#resed")){ if((e.metaKey||e.ctrlKey)&&(e.key.toLowerCase()==="s"||e.key==="Enter")){ e.preventDefault(); resSave(m.id); } else if(e.key==="Escape"&&!e.isComposing){ e.preventDefault(); resClose(); } return; }
+  if(e.key.toLowerCase()==="n"&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||"")){ e.preventDefault(); resOpen(); } });
 // 원고 자료 (원고 안 m.research=[{id,t,body,src,at}])
-function resAdd(mid){ const m=S.manuscripts.find(x=>x.id===mid); const t=$("#rs-t").value.trim(), body=$("#rs-b").value.trim(), src=$("#rs-s").value.trim(); if(!body) return toast("자료 내용을 적어 주세요");
-  (m.research=m.research||[]).unshift({id:uid(),t,body,src,at:today(),u:new Date().toISOString()}); save(); toast("자료를 모아 두었습니다"); render(); }
 function resDel(mid,rid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const r=(m.research||[]).find(x=>x.id===rid); tomb(rid); m.research=(m.research||[]).filter(x=>x.id!==rid); save(); render();
   toast("자료를 지웠습니다"); }
 // 이어 보기: 꼭지들을 한 장처럼. 「고치기」로 그 자리에서 고치고 간직
@@ -5394,6 +5463,7 @@ function aiQuick(sel){ const k=aiGenre(); const q=[];
 function aiOpen(prefill){ if(tab!=="write"||!$("#wbody")) return toast("글 쓰는 화면에서 열 수 있습니다");
   AI_MODE="write"; if(AI_KEY!==aiKeyNow()) aiLoad(); let el=$("#aipanel"); if(!el){ el=document.createElement("div"); el.id="aipanel"; document.body.appendChild(el); }
   document.body.classList.add("aiopen"); aiDraw(); paintNavAi(); const t=$("#aiin"); if(t){ if(prefill){ t.value=prefill; } if(!isTouch()||prefill) t.focus(); } }   // 휴대폰은 열자마자 키보드가 올라와 칩을 가리지 않게
+function aiToggle(){ if($("#aipanel")&&AI_MODE!=="research") return aiClose(); aiOpen(); }   // 쓰기 화면의 ✦ AI 단추: 열고 닫기
 function aiClose(){ $("#aipanel")?.remove(); document.body.classList.remove("aiopen"); AI_MODE="write"; paintNavAi(); }
 const paintNavAi=()=>$("#nav .navai")?.classList.toggle("on",AI_MODE==="research"&&!!$("#aipanel"));
 function aiSelNow(){ const b=$("#wbody"); if(!b) return null; const s=b.selectionStart, e=b.selectionEnd; return e>s?{s,e,t:b.value.slice(s,e)}:null; }
@@ -5880,7 +5950,7 @@ function rsKeep(i,mid){ const x=RS_MSGS[i]; if(!x) return; const m=mid?S.manuscr
     if(!L.length){ (S.jots=S.jots||[]).push({id:uid(),t:(rsBody(x)+((x.src||[]).length?"\n\n출처\n"+rsSrcLine(x):"")).slice(0,2000),updated:new Date().toISOString()}); save(); return toast("원고가 없어 끄적이기에 담았습니다"); }
     return ctxOpen(innerWidth/2,innerHeight/3,"어느 원고의 자료 모음에 담을까요?",L.map(y=>({t:y.title||"(이름 없음)",ic:"📚",fn:()=>rsKeep(i,y.id)})),isTouch()); }
   const t=(x.q||"AI 조사").replace(/\s+/g," ").slice(0,60), src=(x.src||[]).length?x.src.map(u=>`${u.title} ${u.url}`).join(" · ").slice(0,600):"AI 조사 · 출처 없음(확인 필요)";
-  (m.research=m.research||[]).unshift({id:uid(),t,body:rsBody(x),src,at:today(),u:new Date().toISOString()}); m.updated=new Date().toISOString(); save();
+  (m.research=m.research||[]).unshift({id:uid(),kind:"웹 글",t,body:rsBody(x),src,...((x.src||[])[0]?.url?{url:x.src[0].url}:{}),ok:(x.src||[]).length?"":"확인 못 함",at:today(),u:new Date().toISOString()}); m.updated=new Date().toISOString(); save();
   toast(`「${m.title}」 자료 모음에 담았습니다`); if(tab==="room"||tab==="write") render(); }
 // ───────── 오른쪽 버튼 메뉴 ─────────
 // 컴퓨터: 오른쪽 클릭 → 누른 자리에 메뉴 (⇧를 누른 채 오른쪽 클릭이면 브라우저 원래 메뉴).
