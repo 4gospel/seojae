@@ -497,6 +497,12 @@ body.focus .notice{display:none}
 .setgroup{font-family:"Nanum Myeongjo";font-weight:800;font-size:15px;letter-spacing:.3em;color:var(--faint);margin:34px 0 12px;display:flex;align-items:center;gap:12px}
 .setgroup::after{content:"";flex:1;border-top:1px dashed var(--deco)}
 .setgroup.first{margin-top:6px}
+/* 설정 칸 배치 (2026-10-28 정리): 넓은 화면은 두 단으로 위에서부터 빈틈없이 쌓고, 좁으면 한 단. 칸이 단 사이에서 쪼개지지 않게 */
+.grid.setgrid{display:block;columns:2 440px;column-gap:26px}
+.grid.setgrid>section{break-inside:avoid;margin:0 0 34px;display:block;width:100%;box-sizing:border-box}   /* 34px: 위 테이프 장식이 윗칸을 덮지 않게 */
+.grid.setgrid>section.wide{column-span:all}
+.grid.setgrid>section:last-child{margin-bottom:0}
+label.chk{display:inline-flex;gap:6px;align-items:center;line-height:1.35} label.chk>input[type=checkbox],label.chk>input[type=radio],.sheet label.row>input[type=checkbox]{width:auto;flex:none;margin:0}
 /* 작은 단추 묶음 (통독 방법·넘어가기·요일·밝기) */
 .pills{display:flex;flex-wrap:wrap;gap:8px}
 .pill{position:relative;font:inherit;font-size:14.5px;color:var(--ink-soft);background:var(--paper-2);border:1px solid var(--edge);border-radius:999px;padding:6px 14px;cursor:pointer;line-height:1.3}
@@ -513,7 +519,7 @@ body.focus .notice{display:none}
 details.keybox{margin-top:8px}
 details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .restcard .big{font-family:"Nanum Pen Script";font-size:30px}
-@media (max-width:700px){ .gearbtn{width:40px;height:40px} .setrow>.k{min-width:0;width:100%} }
+@media (max-width:700px){ .gearbtn{width:40px;height:40px} .setrow>.k{min-width:0;width:100%} .setrow{margin-top:12px;gap:8px} .sheet .setrow .pills{gap:6px} .sheet .setrow .pill{padding:4px 11px;font-size:13.5px} }   /* 휴대폰 설정: 단추를 조금 작게 해 칸이 덜 길게 */
 .secret{-webkit-text-security:disc}
 
 /* 독서 일기 */
@@ -588,12 +594,12 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .suplayer button{font:inherit;font-size:12.5px;border:1px solid var(--edge);background:none;color:inherit;border-radius:999px;padding:2px 9px;cursor:pointer} .suplayer button.on{background:var(--ink);color:var(--paper)} .suplayer .spl-t button{border:0;font-size:15px;padding:2px 6px}
 .suplayer[hidden]{display:none!important}   /* ✕ 닫기: display:grid 가 hidden 을 덮지 않게 */
 .suplayer .spl-t{cursor:grab;touch-action:none;user-select:none} .suplayer.drag,.suplayer.drag .spl-t{cursor:grabbing} .suplayer .spl-pp{display:none}
-.suplayer.min{width:84px;height:84px;max-width:none;padding:0;border-radius:20px;display:block;cursor:grab;touch-action:none;user-select:none;background:conic-gradient(color-mix(in srgb,var(--sepia) 38%,transparent) calc(var(--p,0)*1%),transparent 0) padding-box,var(--paper) var(--grain);border:3px solid var(--edge)}
-.suplayer.min .spl-b,.suplayer.min audio,.suplayer.min .spl-t div,.suplayer.min .spl-t .spacer{display:none} .suplayer.min .spl-t{position:static;display:block}
-.suplayer.min .spl-ic{position:absolute;left:0;right:0;top:9px;text-align:center;font-size:15px;pointer-events:none}
-.suplayer.min .spl-pp{display:grid;place-items:center;position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);font-size:17px;padding:0}
-.suplayer.min [data-min],.suplayer.min [data-x]{position:absolute;top:2px;width:24px;height:24px;padding:0;font-size:12px;border:0;background:none;color:var(--faint)} .suplayer.min [data-min]{left:2px;transform:rotate(180deg)} .suplayer.min [data-x]{right:2px} .suplayer.playing .spl-ic{animation:splp 1.6s ease-in-out infinite} @keyframes splp{50%{opacity:.4}}
-@media (max-width:700px){ .suplayer{right:12px;bottom:calc(70px + env(safe-area-inset-bottom));width:calc(100vw - 24px)} .suplayer.min{width:84px} }
+.suplayer:not(.mplayer).min{width:84px;height:84px;max-width:none;padding:0;border-radius:20px;display:block;cursor:grab;touch-action:none;user-select:none;background:conic-gradient(color-mix(in srgb,var(--sepia) 38%,transparent) calc(var(--p,0)*1%),transparent 0) padding-box,var(--paper) var(--grain);border:3px solid var(--edge)}
+.suplayer:not(.mplayer).min .spl-b,.suplayer:not(.mplayer).min audio,.suplayer:not(.mplayer).min .spl-t div,.suplayer:not(.mplayer).min .spl-t .spacer{display:none} .suplayer:not(.mplayer).min .spl-t{position:static;display:block}
+.suplayer:not(.mplayer).min .spl-ic{position:absolute;left:0;right:0;top:9px;text-align:center;font-size:15px;pointer-events:none}
+.suplayer:not(.mplayer).min .spl-pp{display:grid;place-items:center;position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);font-size:17px;padding:0}
+.suplayer:not(.mplayer).min [data-min],.suplayer:not(.mplayer).min [data-x]{position:absolute;top:2px;width:24px;height:24px;padding:0;font-size:12px;border:0;background:none;color:var(--faint)} .suplayer:not(.mplayer).min [data-min]{left:2px;transform:rotate(180deg)} .suplayer:not(.mplayer).min [data-x]{right:2px} .suplayer.playing .spl-ic{animation:splp 1.6s ease-in-out infinite} @keyframes splp{50%{opacity:.4}}
+@media (max-width:700px){ .suplayer{right:12px;bottom:calc(70px + env(safe-area-inset-bottom));width:calc(100vw - 24px)} .suplayer:not(.mplayer).min{width:84px} }
 @media print{ .suplayer{display:none} }
 /* 찬송가·CCM 듣기: 찬송가 자리의 은은한 조작 단추 + 작은 유튜브 창(유튜브 규칙상 영상은 보이게, 200×200 이상) */
 .hymnbox{white-space:nowrap} .hb{border:0;background:none;color:var(--faint);font:inherit;font-size:12.5px;line-height:1;padding:3px 6px;border-radius:999px;cursor:pointer;opacity:.7;vertical-align:baseline;text-decoration:none}
@@ -603,7 +609,12 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .mplayer .mp-vid iframe{width:224px;height:200px;border:0;display:block} .mplayer .mp-ccm{display:grid;gap:4px;max-height:200px;overflow:auto}
 .mplayer .mp-ccm .ci{display:flex;gap:6px;align-items:flex-start;padding:4px 2px;border-top:1px dashed var(--edge)} .mplayer .mp-ccm .ci div{display:grid;min-width:0;flex:1}
 .mplayer .mp-ccm .ci b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .mplayer .mp-ccm .ci.on b{color:var(--sepia)} .mplayer .mp-note{font-size:11px}
-@media (max-width:700px){ .mplayer{left:12px;right:auto;width:250px} }
+/* 음악 창 「작게」: 목록·제목·안내를 접고 영상만 200×200 (유튜브 규칙상 이보다 작게 하거나 가릴 수 없음) + 위에 가는 줄(끌기·▴·✕) */
+.mplayer.min{width:auto;padding:4px 4px 4px;gap:2px;border-radius:12px}
+.mplayer.min .spl-t{gap:2px;min-height:22px} .mplayer.min .spl-t div,.mplayer.min .mp-ccm,.mplayer.min .mp-note{display:none} .mplayer.min .spl-ic{font-size:13px;padding-left:4px}
+.mplayer.min .spl-t button{font-size:13px;padding:0 6px} .mplayer.min [data-min]{transform:rotate(180deg)}
+.mplayer.min .mp-vid,.mplayer.min .mp-vid iframe{width:200px!important;height:200px!important}
+@media (max-width:700px){ .mplayer{left:12px;right:auto;width:250px} .mplayer.min{width:auto} }
 .kbt{border-collapse:collapse;font-size:14.5px} .kbt td{padding:5px 8px;border-bottom:1px dashed var(--edge);vertical-align:top} .kbt td:first-child{white-space:nowrap} kbd{font:600 12.5px/1.6 -apple-system,sans-serif;background:var(--paper-2,#efe7da);border:1px solid var(--edge);border-bottom-width:2px;border-radius:5px;padding:1px 7px;color:var(--ink)}
 /* ───── 글방 = 작업실 (펜시브식) ───── */
 .studio{display:grid;grid-template-columns:236px minmax(0,1fr);gap:22px;align-items:start}
@@ -1454,7 +1465,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="f63869bbfd";
+const APP_BUILD="38e1ce37a6";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1706,14 +1717,17 @@ function ytLoad(){ if(window.YT?.Player) return Promise.resolve(); return YT_P||
   const sc=document.createElement("script"); sc.src="https://www.youtube.com/iframe_api"; sc.onerror=()=>{ YT_P=null; no(new Error("유튜브를 불러오지 못했습니다 — 인터넷 연결을 확인해 주세요")); }; document.head.appendChild(sc); })); }
 function mpCard(){ let el=$("#mplayer");
   if(!el){ el=document.createElement("div"); el.id="mplayer"; el.className="suplayer mplayer"; el.hidden=true;
-    el.innerHTML=`<div class="spl-t"><span class="spl-ic">♪</span><div><b id="mp-t">찬송가·CCM</b><small id="mp-s">유튜브</small></div><span class="spacer"></span><button data-x title="닫기 (멈춤)">✕</button></div>
+    el.innerHTML=`<div class="spl-t"><span class="spl-ic">♪</span><div><b id="mp-t">찬송가·CCM</b><small id="mp-s">유튜브</small></div><span class="spacer"></span><button data-ym title="유튜브뮤직에서 이어 듣기 (앱 안 재생은 멈춤)">♫↗</button><button data-min title="작게 / 크게">▾</button><button data-x title="닫기 (멈춤)">✕</button></div>
       <div class="mp-vid" id="mpbox"><span>▶를 누르면 여기서 재생됩니다</span></div><div class="mp-ccm" id="mpccm"></div><small class="mp-note">유튜브 영상 · 위 줄을 잡고 옮길 수 있습니다</small>`;
-    document.body.appendChild(el); el.querySelector("[data-x]").onclick=mpClose; suDrag(el,"seojae.mpPos"); }
+    document.body.appendChild(el); el.querySelector("[data-x]").onclick=mpClose; suDrag(el,"seojae.mpPos");
+    el.querySelector("[data-ym]").onclick=()=>{ const q=MUSIC.q||(hymnNo()?"새찬송가 "+hymnNo()+"장":""); if(!q) return; try{ MP?.pauseVideo(); }catch(_){} window.open("https://music.youtube.com/search?q="+encodeURIComponent(q),"_blank","noopener"); };
+    el.querySelector("[data-min]").onclick=()=>{ el.classList.toggle("min"); try{ localStorage.setItem("seojae.mpMin",el.classList.contains("min")?"1":"0"); }catch(_){} suPlace(el,"seojae.mpPos"); };
+    try{ if(localStorage.getItem("seojae.mpMin")==="1") el.classList.add("min"); }catch(_){} }   // 작게 상태는 이 기기에 기억
   el.hidden=false; suPlace(el,"seojae.mpPos"); return el; }
 function mpClose(){ try{ MP?.stopVideo(); }catch(_){} const el=$("#mplayer"); if(el) el.hidden=true; MUSIC.playing=false; MUSIC.cur=null; MUSIC.slot=""; paintHymnCtl(); paintCcm(); }
 async function mpPlay(id,title,sub,slot){ mpCard(); $("#mp-t").textContent=title||"찬송가"; $("#mp-s").textContent=sub||"유튜브";
   try{ await ytLoad(); }catch(e){ return toast(e.message); }
-  MUSIC.cur=id; MUSIC.slot=slot||""; MUSIC.playing=false;
+  MUSIC.cur=id; MUSIC.slot=slot||""; MUSIC.playing=false; MUSIC.q=slot==="hymn"?`새찬송가 ${hymnNo()}장`:[title,sub].filter(Boolean).join(" ");   // 유튜브뮤직으로 넘길 때 찾을 말
   if(MP&&MP.loadVideoById){ MP.loadVideoById(id); MP.setVolume(mpVol()); }
   else { $("#mpbox").innerHTML=`<div id="mpvid"></div>`; MP=new YT.Player("mpvid",{width:224,height:200,videoId:id,playerVars:{autoplay:1,playsinline:1,rel:0,modestbranding:1},
     events:{onReady:e=>{ try{ e.target.setVolume(mpVol()); e.target.playVideo(); }catch(_){} }, onStateChange:e=>{ MUSIC.playing=e.data===1; if(e.data===0) MUSIC.playing=false; paintHymnCtl(); paintCcm(); }, onError:mpErr}}); }
@@ -2973,7 +2987,7 @@ settings(){
   <div class="setgroup first">읽기</div>
   ${planSettings()}
   <div class="setgroup">아침 알림 · 화면 · 앱</div>
-  <div class="grid">
+  <div class="grid setgrid">
   ${reminderSection()}
   ${appSection()}
   ${musicSection()}
@@ -2981,7 +2995,7 @@ settings(){
   ${lookSection()}
   </div>
   <div class="setgroup">연결</div>
-  <div class="grid">
+  <div class="grid setgrid">
   ${CONF.phoneUrl?`<section class="sheet tape c ${GAS?"compact":""}">
     <p class="label">${GAS?"다른 기기 연결":"휴대폰에서 쓰기"}</p>
     ${GAS?`<div class="okline"><span class="stamp ok">이 기기 연결됨</span><span class="muted">구글 드라이브와 같은 기록을 씁니다</span></div><details class="keybox"><summary>다른 기기 연결하기 (QR 보기) · 연결 끊기</summary>`:""}
@@ -3023,7 +3037,7 @@ settings(){
   </section>`}
   </div>
   <div class="setgroup">기록 보관</div>
-  <div class="grid">
+  <div class="grid setgrid">
   <section class="sheet">
     <p class="label">이어지는 아침</p>
     <p class="sub">지금 <b>${streakShown()}일째</b> 이어지고 있습니다${S.settings.streakFrom?` · ${S.settings.streakFrom}부터 센 것`:""}.</p>
@@ -3212,7 +3226,7 @@ function pomoSettingsHtml(){ const c=pomoSet(), num=(k,v,min,max)=>`<input type=
       <label class="chk"><input type="checkbox" ${c.sound?"checked":""} onchange="pomoSetSave('sound',this.checked)"> 끝날 때 작은 종소리</label>
       <label class="chk"><input type="checkbox" ${c.autoBreak?"checked":""} onchange="pomoSetSave('autoBreak',this.checked)"> 집중이 끝나면 쉼을 저절로 시작</label>
       <label class="chk"><input type="checkbox" ${c.dnd?"checked":""} onchange="pomoSetSave('dnd',this.checked)"> <b>집중하는 동안 방해금지 켜기</b> (맥·아이폰 단축어)</label></div>
-    <details class="keybox" ${c.dnd?"":"open"} style="margin-top:8px"><summary>맥에서 방해금지를 켜는 단축어 만들기 (처음 한 번)</summary>
+    <details class="keybox" style="margin-top:8px"><summary>맥에서 방해금지를 켜는 단축어 만들기 (처음 한 번)</summary>
       <p class="sub">웹앱은 맥의 방해금지를 직접 켤 수 없어서, 아침 서재가 맥의 「단축어」 앱을 불러 켭니다. 아래 두 단축어를 이름 그대로 만들어 두세요.</p>
       <ol class="sub" style="padding-left:1.2em">
         <li>「단축어」 앱 → ＋ (새 단축어) → 이름을 <b>${esc(c.sOn)}</b> 로.</li>
