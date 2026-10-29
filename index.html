@@ -1659,7 +1659,9 @@ const SITUATIONS=["개업·창업","이사·입주","결혼·약혼","출산·�
 const WSTATUS=["씨앗","초고","다듬는 중","완성"];
 // 제목 앞 꼬리표: 노션 「새 노트 정리법」과 같은 이름 ([묵상] 요한복음 15:5 / 머무는 삶)
 const KTAG={"묵상":"묵상","설교초안":"설교초안","설교 초안":"설교메모","주일설교":"주일설교","새벽설교":"새벽설교","예식설교":"설교","자유 글":"메모","묵상을설교로":"묵상을설교로"};
-const wTag=w=>w.track==="bible"?(KTAG[w.type]||w.type):w.type;
+// 소설·시집·논문 원고의 글은 종류가 「자유 글」로 간직되므로(GENRES.*.type), 보이는 꼬리표·서랍 거르기는 든 원고의 성격을 따름 (저장값은 그대로)
+const GKIND={novel:"소설",poem:"시",paper:"논문"};
+const wTag=w=>w.track==="bible"?(KTAG[w.type]||w.type):(w.type==="자유 글"&&GKIND[wMs(w)?.genre])||w.type;
 const SLEN=[["긴설교","주일·특별 예배처럼 30분 안팎"],["짧은설교","새벽·수요·소그룹처럼 10~15분"]];
 const TOPICS=["믿음","순종","소명·부르심","두려움·용기","시험·고난","위로·회복","은혜","회개","용서·화해","기도","예배","말씀","우상·세속","정체성·자존감","교회·공동체","가정·관계","지도자·리더십","다음세대","정의·공의","물질·돈","섬김·사랑","부활·소망","성령","십자가·복음","감사·찬양","언약","하나님의 동행","인도하심","겸손·교만","분열·연합","헌신","거룩·성결","죄·심판","하나님 나라","재림·종말","선교·전도","성찬·세례"];
 const QUESTIONS={
@@ -1966,7 +1968,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="838eaa9326";
+const APP_BUILD="d36d9c87bb";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4693,7 +4695,7 @@ const usedTopics=()=>[...new Set([...live().flatMap(w=>[...(w.topics||[]),...(w.
 const usedBooks=()=>[...new Set([...live().map(wRef),...S.notes.map(nRef)].filter(Boolean).map(x=>x.book))].sort((a,b)=>a-b);
 const years=()=>[...new Set(live().map(w=>w.date.slice(0,4)))].sort().reverse();
 function matches(w,r){
-  if(r.types?.length&&!r.types.includes(w.type)) return false;
+  if(r.types?.length&&!r.types.includes(w.type)&&!r.types.includes(wTag(w))) return false;
   if(r.books?.length){ const x=wRef(w); if(!x||!r.books.includes(x.book)) return false; }
   if(r.topics?.length&&![...(w.topics||[]),...(w.tags||[])].some(t=>r.topics.includes(t))) return false;
   if(r.readBooks?.length&&!r.readBooks.includes(w.bookId)) return false;
@@ -7747,7 +7749,7 @@ function filterBar(){
   return `<div class="row filterbar">
     ${sel("track","말씀+책",[["bible","말씀"],["book","책"]])}
 
-    ${(()=>{ const used=new Set(live().map(w=>w.type)); return sel("type","모든 글 종류",[...new Set(ALL_TYPES)].filter(t=>TYPES.bible[t]||TYPES.book[t]||used.has(t)).map(t=>[t,t])); })()}
+    ${(()=>{ const used=new Set(live().flatMap(w=>[w.type,wTag(w)])); return sel("type","모든 글 종류",[...new Set([...ALL_TYPES,...Object.values(GKIND)])].filter(t=>TYPES.bible[t]||TYPES.book[t]||used.has(t)).map(t=>[t,t])); })()}
     ${sel("book","모든 성경책",usedBooks().map(i=>[i,BIBLE[i][0]]))}
     ${sel("topic","모든 주제",usedTopics().map(t=>[t,t]))}
   </div>${savedFiltersHtml()}`;
@@ -7759,7 +7761,7 @@ function renderArchive(){
   const bookOk=x=>f.book===""||(x&&x.book===+f.book);
   live().forEach(w=>{   // 서랍에는 실제로 쓴 글만 (밑줄은 오늘 화면·일기에서 봅니다)
 
-    if(f.track&&w.track!==f.track) return; if(f.type&&w.type!==f.type) return; if(!bookOk(wRef(w))) return;
+    if(f.track&&w.track!==f.track) return; if(f.type&&w.type!==f.type&&wTag(w)!==f.type) return; if(f.type==="자유 글"&&wTag(w)!=="자유 글") return; if(!bookOk(wRef(w))) return;
     if(f.topic&&![...(w.topics||[]),...(w.tags||[])].includes(f.topic)) return;
     if(q&&!(w.title+w.body+(w.passage||"")+[...(w.topics||[]),...(w.tags||[])].join(" ")).toLowerCase().includes(q)) return;
     const ms=msOfFast(w), tp=[...(w.topics||[]),...(w.tags||[])], own=ms.find(m=>!m.rule);
