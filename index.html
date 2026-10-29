@@ -768,12 +768,22 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .dturn:not(:disabled):hover::after{width:26px;height:26px}
 /* 휴대폰 한 쪽 넘김 */
 /* 일기책만 화면 가득 */
-body.dfull header,body.dfull .dnav{display:none!important} body.dfull #main{max-width:none;width:auto;padding:14px 18px 18px;margin:0}
-body.dfull .dbook{max-width:1500px;margin:0 auto} body.dfull .dbook>.diary{min-height:calc(100vh - 70px)}
-.dfullx{position:fixed;z-index:70;top:max(12px,env(safe-area-inset-top));right:16px;display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px}
+/* 책은 늘 화면(가로·세로) 안: 책 크기를 창에 맞추고, 일기가 길면 책 안에서만 넘겨 봄(스티커·책등 그늘도 함께 움직임) */
+body.dfull{overflow:hidden;height:100vh;height:100dvh}
+body.dfull header,body.dfull .dnav{display:none!important}
+body.dfull #main{max-width:none;width:100%;box-sizing:border-box;margin:0;padding:14px 18px 18px;height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+body.dfull .dbook{flex:1 1 auto;min-height:0;width:100%;max-width:1500px;margin:0 auto;box-sizing:border-box;display:flex}
+body.dfull .dbook>.diary{flex:1 1 auto;min-width:0;min-height:0!important;height:auto;max-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+  background-image:linear-gradient(90deg,transparent calc(50% - 40px),rgba(60,40,20,.07) calc(50% - 15px),rgba(60,40,20,.2) 50%,rgba(60,40,20,.07) calc(50% + 15px),transparent calc(50% + 40px)),var(--grain);background-attachment:local,local}
+body.dfull .dbook>.diary::after{display:none}
+body.dfull .dbook>.diary{display:flex;flex-wrap:wrap;align-content:flex-start;align-items:stretch}   /* 여러 줄 flex: 줄 높이가 글 길이를 따라감(한 줄·격자면 창 높이에 묶여 글이 쪽 밖으로 넘침) */
+body.dfull .dbook>.diary>.pg{flex:1 1 50%;max-width:50%}
+body.dfull .dbook>.diary>.pg{min-height:calc(100vh - 68px);min-height:calc(100dvh - 68px);box-sizing:border-box;display:flex;flex-direction:column}
+body.dfull .dbook>.diary>.pg>.dfolio{position:static;order:99;margin-top:auto;padding-top:18px}
+.dfullx{position:fixed;z-index:70;top:max(4px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px}
 .dfullx button{width:36px;height:36px;border-radius:50%;border:0;background:transparent;color:var(--ink);cursor:pointer;font-size:20px;display:inline-flex;align-items:center;justify-content:center}
 .dfullx button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)} .dfullx button .ico{margin:0;width:17px;height:17px} .dfullx i{width:1px;height:20px;background:var(--edge);margin:0 2px}
-@media (max-width:700px){ body.dfull #main{padding:8px 6px 10px} body.dfull .dbook>.diary{min-height:calc(100vh - 40px)} .dfullx{top:auto;bottom:max(14px,env(safe-area-inset-bottom));right:50%;transform:translateX(50%)} }
+@media (max-width:700px){ body.dfull #main{padding:max(6px,env(safe-area-inset-top)) 6px max(8px,env(safe-area-inset-bottom))} body.dfull .dbook>.diary{background-image:var(--grain)} body.dfull .dbook>.diary>.pg{min-height:0;flex-basis:100%;max-width:100%} body.dfull .dbook>.diary>.pg.r{padding-bottom:84px} .dfullx{top:auto;bottom:max(14px,env(safe-area-inset-bottom))} }
 .mflip{position:absolute;inset:0;z-index:20;pointer-events:none;perspective:1800px;perspective-origin:35% 35%}
 .mflip .mpage{position:absolute;left:0;right:0;top:0;margin:0;overflow:hidden;background:var(--paper) var(--grain);box-shadow:none!important;border-radius:3px;display:grid;grid-template-columns:1fr}
 .mflip .mpage .mflip{display:none}
@@ -1929,7 +1939,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="5db766afac";
+const APP_BUILD="7ba6e9274a";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
