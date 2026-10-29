@@ -385,6 +385,19 @@ textarea.page.blank{background-image:none}
 /* 집중 모드 */
 body.focus header,body.focus .writegrid>aside,body.focus .toolbar .nofocus{display:none}
 body.focus .writegrid{grid-template-columns:1fr;max-width:820px;margin:0 auto}
+/* 집중 모드 = 종이만: 도구 막대·위 표시 줄·탭·목차·옆 칸·아래 탭을 모두 숨기고 종이 한 장만 가운데 */
+body.focus .toolbar,body.focus .tlabel,body.focus #draftpick,body.focus .srccard,body.focus .docbar,body.focus nav,body.focus .stnav,body.focus #nav{display:none!important}
+body.focus #main *:not(:has(.notebook)):not(.notebook):not(.notebook *):not(.hmirror):not(.hmirror *):not(#sugcard):not(#sugcard *):not(#fbpanel):not(#fbpanel *):not(.stk-layer):not(.stk-layer *){display:none!important}
+body.focus #main,body.focus .studio,body.focus .stmain,body.focus .writegrid,body.focus .writegrid>div{display:block!important;max-width:none!important;margin:0!important;padding:0!important;grid-template-columns:none!important}
+body.focus main.wrap,body.focus #main{padding:clamp(18px,5vh,56px) 16px 80px!important}
+body.focus .notebook{margin:0 auto!important;max-width:min(860px,100%)} body.docmode.focus .notebook{max-width:var(--doc-w,794px)}
+.focusx{position:fixed;z-index:90;top:max(12px,env(safe-area-inset-top));right:14px;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--edge);background:color-mix(in srgb,var(--paper) 85%,transparent);backdrop-filter:blur(6px);color:var(--ink-soft);border-radius:999px;padding:6px 12px;font:13px -apple-system,"Apple SD Gothic Neo",sans-serif;cursor:pointer;opacity:.75;transition:opacity .4s}
+.focusx:hover{opacity:1;color:var(--ink)} body.ftyping .focusx{opacity:.12} .focusx{width:auto;min-width:34px;height:34px;justify-content:center;padding:0 10px;opacity:.45} .focusx span{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .25s} .focusx:hover span,.focusx:focus-visible span{max-width:90px}
+/* 타자기 스위치 (쓰기 메뉴) */
+.twsw{display:flex;align-items:center;gap:10px;width:100%;min-width:236px;box-sizing:border-box;border:1px solid var(--edge);border-radius:12px;background:color-mix(in srgb,var(--paper) 70%,#fff);padding:8px 12px;cursor:pointer;font:inherit;color:var(--ink);text-align:left}
+.twsw .sw{flex:0 0 34px;height:20px;border-radius:999px;background:color-mix(in srgb,var(--ink) 18%,transparent);position:relative;transition:background .2s} .twsw .sw i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
+.twsw.on .sw{background:#4f7a5a} .twsw.on .sw i{left:16px} .twsw .twt{display:grid;flex:1;line-height:1.25} .twsw .twt b{font-size:14px} .twsw .twt small{font-size:11.5px;color:var(--faint);white-space:nowrap} .twsw em{font-style:normal;font-size:12px;color:var(--faint)} .twsw.on em{color:#4f7a5a;font-weight:600}
+@media (max-width:700px){ .focusx span{display:none} .focusx{padding:8px 11px} }
 /* 쓰기 화면: 넓은 화면에서는 본문 칸을 더 넓게, 옆 칸(달력·본문·간직하기)은 접을 수 있음 — 이 기기에 기억(seojae.sidefold) */
 @media (min-width:1200px){ #main:has(.writegrid) .writegrid{grid-template-columns:1fr 320px} }
 @media (min-width:881px){
@@ -987,12 +1000,12 @@ body.docmode[data-dpaper="wongo"] textarea.page[data-wg]{background-image:
   repeating-linear-gradient(to bottom,transparent 0 var(--wg-t),var(--wg-line) var(--wg-t) calc(var(--wg-t) + 1px),transparent calc(var(--wg-t) + 1px) calc(var(--wg-t) + var(--wg-c) - 1px),var(--wg-line) calc(var(--wg-t) + var(--wg-c) - 1px) calc(var(--wg-t) + var(--wg-c)),transparent calc(var(--wg-t) + var(--wg-c)) var(--wg-l)),
   repeating-linear-gradient(to bottom,var(--dp-bg) 0 var(--wg-t),transparent var(--wg-t) calc(var(--wg-t) + var(--wg-c)),var(--dp-bg) calc(var(--wg-t) + var(--wg-c)) var(--wg-l)),
   repeating-linear-gradient(to right,var(--wg-line) 0 1px,transparent 1px var(--wg-c))!important;
-  background-position:0 4px,0 4px,var(--wg-x) 0!important;background-size:100% var(--wg-l),100% var(--wg-l),calc(var(--wg-c) * var(--wg-n,1000) + 1px) 100%;background-repeat:repeat-y,repeat-y,no-repeat}
+  background-position:0 var(--wg-y,4px),0 var(--wg-y,4px),var(--wg-x) 0!important;background-size:100% var(--wg-l),100% var(--wg-l),calc(var(--wg-c) * var(--wg-n,1000) + 1px) 100%;background-repeat:repeat-y,repeat-y,no-repeat}
 body.docmode .writegrid>div,body.docmode .notebook{min-width:0}
 /* 쪽 폭을 넓히면 글쓰기 화면 전체 폭도 함께 (곁 칸은 그대로 오른쪽) */
 body.docmode[data-dwidth="wide"] #main:has(.writegrid){max-width:1400px} body.docmode[data-dwidth="land"] #main:has(.writegrid){max-width:1520px} body.docmode[data-dwidth="full"] #main:has(.writegrid){max-width:none}   /* 위 막대(한 줄로 옆으로 넘김)가 쪽 폭을 밀어 휴대폰 화면이 옆으로 넓어지던 것 막음 */
 @media (max-width:700px){ body.docmode[data-dpaper="note"] .notebook{background-image:none} }
-body.docmode[data-dpaper="wongo"] textarea.page[data-wg]{color:transparent!important;caret-color:transparent;-webkit-text-fill-color:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::selection{background:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::placeholder{-webkit-text-fill-color:var(--faint);color:var(--faint)}
+body.docmode[data-dpaper="wongo"] textarea.page[data-wg]{min-height:0!important;color:transparent!important;caret-color:transparent;-webkit-text-fill-color:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::selection{background:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::placeholder{-webkit-text-fill-color:var(--faint);color:var(--faint)}
 .hmirror.wgm{white-space:normal;letter-spacing:0!important;word-spacing:0!important;overflow:visible} .hmirror.wgm .wgr{display:flex;height:var(--wg-l,30px);align-items:center} .hmirror.wgm .wgr i{flex:0 0 var(--wg-c);width:var(--wg-c);text-align:center;font-style:normal;line-height:1} .hmirror.wgm .wgr.hd i{font-weight:700} .hmirror.wgm .wgr i.sel{background:color-mix(in srgb,#7aa7e0 38%,transparent)}
 .hmirror.wgm .wgcar{position:absolute;width:2px;background:var(--ink);animation:wgblink 1.05s steps(1) infinite} @keyframes wgblink{50%{opacity:0}}
 body.docmode textarea.page{background-image:none!important;font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);min-height:70vh}
@@ -1985,7 +1998,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="fdf66c2378";
+const APP_BUILD="218f8d8273";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3754,8 +3767,7 @@ write0(){
     <button class="btn small focusexit" onclick="toggleFocus()">집중 나가기</button>
     <details class="tgrp"><summary class="btn small">쓰기 ▾</summary><div class="tgmenu">
       ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}${w&&cardKindOf(w)&&!cardKindOf(w).sermon?`<button class="btn small" onclick="tgClose();cardOpen()" title="한 문장·기능·겨냥할 자리… 초안 전에 글을 설계합니다">설계 카드</button>`:""}<button class="btn small aibtn" onclick="tgClose();fbStart()" title="성격에 맞는 기준으로 점수·강점·약점, 고칠 문장마다 코멘트와 대안 (적용은 하나씩 직접)">✦ 피드백·첨삭</button><button class="btn small" onclick="tgClose();altHere()" title="커서가 있는 문장(또는 고른 글)을 바꿔 쓴 후보 4개">✦ 다른 표현</button>${w&&wMs(w)&&!wMs(w).rule?`<button class="btn small" onclick="tgClose();pieceSplit()" title="커서가 있는 줄부터 새 글로 (■ 소제목 줄이면 그 이름이 새 글 제목)">✂ 커서에서 나누기</button><button class="btn small" onclick="tgClose();pieceMerge()" title="다음 글을 이 글 끝에 붙입니다">⊕ 다음 글과 합치기</button>`:""}${w&&cardKindOf(w)?`<button class="btn small" onclick="tgClose();vfOpen()" title="사실 주장을 출처와 대조합니다">검증표</button><button class="btn small" onclick="tgClose();ckOpen()" title="완성 전 점검 질문 10개">점검 10문항</button>`:""}
-      <button class="btn small" onclick="toggleFocus();tgClose()" id="focusbtn">집중 모드</button>
-      <button class="btn small ${TYPEW?"on":""}" onclick="toggleTypew()" id="twbtn" title="쓰는 줄을 늘 화면 가운데에 둡니다">타자기</button>
+      <button type="button" class="twsw ${TYPEW?"on":""}" onclick="toggleTypew()" id="twbtn" role="switch" aria-checked="${TYPEW}" title="쓰는 줄을 늘 화면 가운데에 둡니다 — 글이 길어져도 눈높이가 그대로"><span class="sw"><i></i></span><span class="twt"><b>타자기</b><small>쓰는 줄을 화면 가운데에</small></span><em>${TYPEW?"켬":"끔"}</em></button>
       <span class="row" style="gap:4px" title="글자 크기 (이 기기만)"><span class="muted" style="font-size:12.5px">글자</span><button class="fsbtn" onclick="fontStep(-1)">가−</button><button class="fsbtn" onclick="fontStep(1)">가＋</button></span>
       <div class="pp"><span class="muted" style="font-size:12.5px">펜</span>${INKS.map(([n,c])=>`<span class="inkdot ${ink===c?"on":""}" title="${n} 잉크" style="background:${c}" onclick="setInk('${c}')"></span>`).join("")}
         <select id="paper" style="width:auto" onchange="setPaper(this.value)"><option value="lined" ${paper==="lined"?"selected":""}>줄 노트</option><option value="grid" ${paper==="grid"?"selected":""}>모눈</option><option value="blank" ${paper==="blank"?"selected":""}>무지</option></select></div>
@@ -3769,6 +3781,7 @@ write0(){
     </div></details>
     <button class="btn small nofocus fnbtn" onmousedown="event.preventDefault()" onclick="fnHere()" title="각주 달기 — 고른 글 뒤에, 고르지 않았으면 커서 자리에 (⌘⇧F)"><b style="font-family:Georgia,serif">¹</b> 각주</button>
     <button class="btn small nofocus ${DOC_MODE?"on":""}" onclick="docToggle()" id="docbtn" title="워드처럼: 흰 쪽에 글꼴·크기·줄 간격·정렬·들여쓰기 (글은 그대로)">${DOC_MODE?"✎ 노트로":"📄 문서 모드"}</button>
+    <button class="btn small nofocus" onclick="toggleFocus()" title="종이만 남기고 모두 숨깁니다 (나가기: Esc 또는 오른쪽 위 ✕)">⛶ 집중</button>
     <button class="btn small" onclick="toggleRead()" id="readbtn" title="글을 건드리지 않고 보기만 합니다. 설교문은 슬라이드·전달 큐가 강단용 모양으로 보입니다">${ICO.eye}읽기 모드</button>
     ${track!=="bible"||(dtype&&dtype!=="묵상")?`<button class="btn small nofocus" onclick="sendOpen('w')" title="노션·PDF·워드로 보냅니다 (묵상 말고는 구글에만 간직되어 있습니다)">보내기</button>`:""}${serBtns()}
     <button class="btn small aibtn nofocus" id="aitog" onclick="aiToggle()" title="AI 글쓰기 도우미 — 누르면 열고, 다시 누르면 닫습니다 (글은 바꾸지 않고 제안만)">✦ AI</button>
@@ -3991,7 +4004,7 @@ function updatePage(){ let p=+$("#pg").value; const b=curBook(); if(!b) return; 
 
 // ───────── 동작: 글쓰기 ─────────
 let HEADS_RAF=0;
-function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.height="auto"; t.style.height=Math.max(wgOn(t)?wgModel(t).length*t._wg.L+t._wg.pt+t._wg.L:t.scrollHeight,innerHeight*.62)+"px"; if(scrollY!==y) scrollTo(0,y); if(!HEADS_RAF){ HEADS_RAF=requestAnimationFrame(()=>{ HEADS_RAF=0; paintHeads(); }); setTimeout(()=>{ if(HEADS_RAF){ cancelAnimationFrame(HEADS_RAF); HEADS_RAF=0; paintHeads(); } },200); } }   // 화면 그리기가 늦어도(가려진 창·느린 기기) 0.2초 안에는 거울 층을 그림
+function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.height="auto"; { const h=Math.max(wgOn(t)?wgModel(t).length*t._wg.L+t._wg.pt+t._wg.L:t.scrollHeight,innerHeight*.62); t.style.height=(wgOn(t)?t._wg.pt+Math.ceil((h-t._wg.pt)/t._wg.L)*t._wg.L+2:h)+"px"; } if(scrollY!==y) scrollTo(0,y); if(!HEADS_RAF){ HEADS_RAF=requestAnimationFrame(()=>{ HEADS_RAF=0; paintHeads(); }); setTimeout(()=>{ if(HEADS_RAF){ cancelAnimationFrame(HEADS_RAF); HEADS_RAF=0; paintHeads(); } },200); } }   // 화면 그리기가 늦어도(가려진 창·느린 기기) 0.2초 안에는 거울 층을 그림
 // 소제목(■ 줄)과 주석 요약의 ◆ 줄을 굵게: 글자 칸(textarea)은 줄마다 모양을 바꿀 수 없어, 같은 자리에 투명한 거울 층을 겹쳐 그 줄만 굵은 글자로 한 번 더 그립니다
 // (한글은 굵게 해도 글자 폭이 같아 정확히 겹칩니다. 다른 줄은 보이지 않게 두되 자리는 차지해 줄바꿈이 같습니다)
 const HEAD_RE=/^\s*(■|◆|▣|※\s*주석 요약|※\s*요약 끝)/;
@@ -4106,8 +4119,15 @@ function setPaper(p){ S.settings.paper=p; save(); const t=$("#wbody"); t.classNa
 function toggleSide(){ if(document.querySelector(".studio .writegrid")){ const o=document.body.classList.toggle("staside"); try{ localStorage.setItem("seojae.staside",o?"1":"0"); }catch(_){} const b=$("#sidebtn"); if(b) b.textContent=o?"옆 칸 접기 ›":"옆 칸 펴기 ‹"; grow(); try{ paintHeads(); }catch(_){} return; }
   const on=document.body.classList.toggle("sidefold"); try{ localStorage.setItem("seojae.sidefold",on?"1":"0"); }catch(_){} const b=$("#sidebtn"); if(b) b.textContent=on?"옆 칸 펴기 ‹":($(".writegrid.hasbinder")?"옆 칸 접기 › 목차 보기":"옆 칸 접기 ›"); grow(); try{ paintHeads(); }catch(_){} }
 try{ if(localStorage.getItem("seojae.sidefold")==="1") document.body.classList.add("sidefold"); if(localStorage.getItem("seojae.staside")==="1") document.body.classList.add("staside"); }catch(_){}
-function toggleFocus(){ const on=document.body.classList.toggle("focus"); $("#focusbtn").textContent=on?"나가기":"집중 모드"; grow();
-  const de=document.documentElement; try{ if(on&&isTouch()&&!isApp()&&de.requestFullscreen&&!document.fullscreenElement) de.requestFullscreen({navigationUI:"hide"}).catch(()=>{}); else if(!on&&document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(_){} }
+function toggleFocus(){ const on=document.body.classList.toggle("focus"); const fb=$("#focusbtn"); if(fb) fb.textContent=on?"나가기":"집중 모드";
+  let x=$("#focusx"); if(on){ if(!x){ x=document.createElement("button"); x.id="focusx"; x.className="focusx"; x.title="집중 모드 나가기 (Esc)"; x.innerHTML="✕<span>집중 나가기</span>"; x.onclick=()=>toggleFocus(); document.body.appendChild(x); } } else x?.remove();
+  grow(); setTimeout(()=>{ try{ paintHeads(); }catch(_){} if(on) $("#wbody")?.focus({preventScroll:true}); },60); if(on) scrollTo(0,0);
+  const de=document.documentElement; try{ if(on&&!isApp()&&de.requestFullscreen&&!document.fullscreenElement) de.requestFullscreen({navigationUI:"hide"}).then(()=>{ FOCUS_FS=true; }).catch(()=>{}); else if(!on){ FOCUS_FS=false; if(document.fullscreenElement&&!document.body.classList.contains("dfull")) document.exitFullscreen().catch(()=>{}); } }catch(_){} }
+let FOCUS_FS=false;   // 집중 모드가 연 전체 화면일 때만, 그 전체 화면이 풀리면 집중 모드도 나감
+// 집중 모드: Esc로 나가기(떠 있는 창이 없을 때) · 브라우저 전체 화면을 Esc로 풀면 함께 나가기 · 쓰는 동안 나가기 단추는 옅게
+document.addEventListener("keydown",e=>{ if(e.key!=="Escape"||e.isComposing||!document.body.classList.contains("focus")||document.querySelector(".askview,.bookview,.sendview,#aipanel,#sugcard:not([hidden]),.ctxmenu")) return; e.preventDefault(); toggleFocus(); });
+document.addEventListener("fullscreenchange",()=>{ if(document.fullscreenElement||!FOCUS_FS) return; FOCUS_FS=false; if(document.body.classList.contains("focus")&&!isTouch()) toggleFocus(); });
+document.addEventListener("input",e=>{ if(e.target?.id==="wbody"&&document.body.classList.contains("focus")){ document.body.classList.add("ftyping"); clearTimeout(window.__ftT); window.__ftT=setTimeout(()=>document.body.classList.remove("ftyping"),1600); } });
 const isTouch=()=>matchMedia("(pointer:coarse)").matches;
 // 쓰는 동안 화면이 꺼지지 않게 (휴대폰·태블릿). 쓰기 화면을 떠나거나 앱을 내리면 풀립니다 — 방해금지(알림 차단)는 웹앱이 직접 켤 수 없어 설정에 방법을 적어 두었습니다
 let WAKE=null;
@@ -6250,7 +6270,7 @@ function plotHtml(m,ws0){ const lines=m.plot?.lines||[], lc=n=>PL_COL[lines.inde
 // 타자기 모드: 쓰는 줄을 화면 가운데에 (이 기기에 기억)
 let TYPEW=false; try{ TYPEW=localStorage.getItem("seojae.typew")==="1"; }catch(_){}
 if(TYPEW) document.body.classList.add("typew");
-function toggleTypew(){ TYPEW=!TYPEW; document.body.classList.toggle("typew",TYPEW); try{ localStorage.setItem("seojae.typew",TYPEW?"1":"0"); }catch(_){} $("#twbtn")?.classList.toggle("on",TYPEW); grow(); toast(TYPEW?"타자기 모드: 쓰는 줄이 화면 가운데에 옵니다":"타자기 모드를 껐습니다"); if(TYPEW) typeCenter(); }
+function toggleTypew(){ TYPEW=!TYPEW; document.body.classList.toggle("typew",TYPEW); try{ localStorage.setItem("seojae.typew",TYPEW?"1":"0"); }catch(_){} const tb=$("#twbtn"); if(tb){ tb.classList.toggle("on",TYPEW); tb.setAttribute("aria-checked",TYPEW); const em=tb.querySelector("em"); if(em) em.textContent=TYPEW?"켬":"끔"; } grow(); toast(TYPEW?"타자기 모드: 쓰는 줄이 화면 가운데에 옵니다":"타자기 모드를 껐습니다"); if(TYPEW) typeCenter(); }
 function caretY(ta){ const cs=getComputedStyle(ta), d=document.createElement("div");
   ["fontFamily","fontSize","fontWeight","lineHeight","letterSpacing","wordSpacing","paddingTop","paddingLeft","paddingRight","borderTopWidth","borderLeftWidth","borderRightWidth","boxSizing","wordBreak","overflowWrap","tabSize","textIndent"].forEach(k=>d.style[k]=cs[k]);
   Object.assign(d.style,{position:"absolute",visibility:"hidden",whiteSpace:"pre-wrap",top:"0",left:"-9999px",width:ta.offsetWidth+"px"});
@@ -6529,13 +6549,13 @@ function docPaperMark(){ document.body.dataset.dpaper=DOC_MODE?docPaper():""; do
 let WG_KEY="";
 const wgOn=t=>!!(t&&t.dataset.wg&&t._wg);
 function wongoFit(t){ const on=DOC_MODE&&docPaper()==="wongo"&&t&&t.id==="wbody";
-  if(!on){ if(t?.dataset.wg){ ["lineHeight","textAlign"].forEach(k=>t.style[k]=""); ["--wg-c","--wg-l","--wg-t","--wg-x","--wg-n"].forEach(k=>t.style.removeProperty(k)); delete t.dataset.wg; t._wg=null; WG_KEY=""; wgStop(); } return; }
+  if(!on){ if(t?.dataset.wg){ ["lineHeight","textAlign"].forEach(k=>t.style[k]=""); ["--wg-c","--wg-l","--wg-t","--wg-x","--wg-n","--wg-y"].forEach(k=>t.style.removeProperty(k)); delete t.dataset.wg; t._wg=null; WG_KEY=""; wgStop(); } return; }
   const cs=getComputedStyle(t), k=t.clientWidth+"|"+cs.fontSize+"|"+cs.fontFamily; if(k===WG_KEY&&t.dataset.wg&&t._wg) return; WG_KEY=k;
   const fs=parseFloat(cs.fontSize), pl=parseFloat(cs.paddingLeft), pt=parseFloat(cs.paddingTop), cw=t.clientWidth-pl-parseFloat(cs.paddingRight);
   const cols=Math.max(8,Math.floor(cw/(fs*1.5))), C=cw/cols, L=Math.round(C*1.38*100)/100;
   Object.assign(t.style,{lineHeight:L+"px",textAlign:"left"});
   t.style.setProperty("--wg-c",C.toFixed(3)+"px"); t.style.setProperty("--wg-l",L+"px"); t.style.setProperty("--wg-t",((L-C)/2).toFixed(3)+"px"); t.style.setProperty("--wg-x",pl.toFixed(3)+"px"); t.style.setProperty("--wg-n",cols);
-  t._wg={cols,C,L,pl,pt}; t.dataset.wg=cols; wgBind(t); }
+  t.style.setProperty("--wg-y",pt.toFixed(3)+"px"); t._wg={cols,C,L,pl,pt}; t.dataset.wg=cols; wgBind(t); }
 // 칸 배치: 문단마다 cols 칸씩 끊어 줄을 만듦 → 글자 i의 (줄 r, 칸 c), 줄마다 시작 글자
 function wgModel(t){ const g=t._wg, v=t.value, rows=[]; let off=0;
   v.split("\n").forEach(l=>{ const n=Math.max(1,Math.ceil(l.length/g.cols)); for(let k=0;k<n;k++) rows.push({s:off+k*g.cols,e:off+Math.min(l.length,(k+1)*g.cols),end:off+l.length,last:k===n-1}); off+=l.length+1; });
@@ -6549,7 +6569,7 @@ function wgPaint(t,m){ const g=t._wg, rows=wgModel(t), v=t.value, a=t.selectionS
     h+=`<div class="wgr${head?" hd":""}">${r}</div>`; });
   const p=wgPos(rows,t.selectionDirection==="backward"?a:z,g);
   m.innerHTML=h+(foc&&a===z?`<span class="wgcar" style="left:${(g.pl+p.c*g.C).toFixed(2)}px;top:${(g.pt+p.r*g.L+(g.L-g.C)/2+2).toFixed(2)}px;height:${(g.C-4).toFixed(2)}px"></span>`:"");
-  m.style.setProperty("--wg-c",g.C.toFixed(3)+"px"); m.style.lineHeight=g.L+"px"; m.classList.add("wgm");
+  m.style.setProperty("--wg-c",g.C.toFixed(3)+"px"); m.style.setProperty("--wg-l",g.L+"px"); m.style.lineHeight=g.L+"px"; m.classList.add("wgm");
   WG_LAST=`${v.length}|${a}|${z}|${foc}`; return rows.length; }
 let WG_LAST="", WG_RAF=0;
 function wgLoop(){ WG_RAF=0; const t=$("#wbody"), m=$("#hmirror"); if(!wgOn(t)||!m) return; const k=`${t.value.length}|${t.selectionStart}|${t.selectionEnd}|${document.activeElement===t}`; if(k!==WG_LAST) wgPaint(t,m); if(document.activeElement===t) WG_RAF=requestAnimationFrame(wgLoop); }
