@@ -561,6 +561,55 @@ body.focus .notice{display:none}
 .gearbtn.on{transform:rotate(22deg)}
 .top .streak{margin-right:58px}
 /* 설정 화면 묶음 */
+/* ───────── 설정 화면 전용 (2026-10-29 디자인 검토): 종이·테이프·손글씨 대신 차분한 묶음 목록 ───────── */
+:root{--set-line:rgba(80,60,40,.12);--warn:#a8650f;--warn-wash:rgba(168,101,15,.10)}
+:root[data-theme="dark"]{--set-line:rgba(236,226,210,.10);--warn:#e3b264;--warn-wash:rgba(227,178,100,.12)}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){--set-line:rgba(236,226,210,.10);--warn:#e3b264;--warn-wash:rgba(227,178,100,.12)} }
+.setpage{max-width:1000px;margin:0 auto}
+.sethead{display:flex;align-items:center;gap:14px;margin:0 0 18px} .sethead h2{margin:0}
+.setneed{font-size:14px;color:var(--warn);text-decoration:none;font-weight:700} .setneed:hover{text-decoration:underline}
+.setall{border:0;background:none;color:var(--ink-soft);font:inherit;font-size:14px;cursor:pointer;padding:4px 2px} .setall:hover{color:var(--ink)}
+.setlay{display:grid;grid-template-columns:190px minmax(0,760px);gap:34px;align-items:start}
+.setnav{position:sticky;top:24px;display:flex;flex-direction:column;gap:2px}
+.setnav a{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;color:var(--ink-soft);text-decoration:none;font-size:15px;border-left:2px solid transparent}
+.setnav a span{width:18px;text-align:center;color:var(--acc);font-size:14px} .setnav a:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.setnav a.on{color:var(--ink);font-weight:700;border-left-color:var(--acc);border-radius:0 8px 8px 0}
+.setgrp{scroll-margin-top:16px;margin-bottom:28px} .setgrp>h3{font-family:"Nanum Myeongjo",serif;font-weight:800;font-size:13px;letter-spacing:.2em;color:var(--faint);margin:0 4px 8px}
+.setpanel{background:var(--paper);border:1px solid var(--set-line);border-radius:12px;box-shadow:0 1px 2px rgba(60,40,20,.06);overflow:hidden}
+.setitem+.setitem{border-top:1px solid var(--set-line)}
+.setitem>summary{list-style:none;display:grid;grid-template-columns:32px 1fr auto 16px;gap:12px;align-items:center;padding:14px 18px;min-height:60px;cursor:pointer;box-sizing:border-box}
+.setitem>summary::-webkit-details-marker{display:none}
+.setitem>summary:hover{background:color-mix(in srgb,var(--ink) 3%,var(--paper))}
+.setitem>summary:focus-visible{outline:2px solid var(--sepia);outline-offset:-2px}
+.setitem .sic{width:32px;height:32px;border-radius:50%;background:var(--paper-2);color:var(--acc);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;font-family:"Gowun Batang",serif}
+.setitem .stx{min-width:0;display:flex;flex-direction:column} .setitem .stx b{font-family:"Gowun Batang",serif;font-size:16px;line-height:1.35;color:var(--ink)}
+.setitem .ssum{font-size:13.5px;line-height:1.45;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.setitem .schev{color:var(--faint);font-size:18px;transition:transform .15s;text-align:center} .setitem[open] .schev{transform:rotate(90deg)}
+.spill{font:700 12px/1 "Gowun Batang",serif;padding:4px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.spill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.spill.s-ok{color:var(--book);background:var(--book-wash);border:1px solid color-mix(in srgb,var(--book) 30%,transparent)}
+.spill.s-need{color:var(--warn);background:var(--warn-wash);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent)}
+.spill.s-off{color:var(--faint);background:transparent;border:1px solid var(--set-line)}
+.setbody{padding:2px 18px 20px 62px}
+.setpage .setbody>.okline{display:none}
+.setpage .label{font-family:"Gowun Batang",serif;font-size:14px;font-weight:700;color:var(--ink-soft);letter-spacing:0}
+.setpage .setrow>.k{font-family:"Gowun Batang",serif;font-size:14px;font-weight:700;color:var(--ink-soft);min-width:96px;width:96px}
+.setpage .k2{font-family:"Gowun Batang",serif;font-size:14px;font-weight:700;color:var(--ink-soft);margin:16px 0 6px}
+.setpage .stamp{transform:none!important;filter:none!important;box-shadow:none!important;background:transparent!important;border:1px solid currentColor!important;border-radius:999px!important;padding:3px 10px!important;font:700 12px/1.2 "Gowun Batang",serif!important;letter-spacing:0!important;opacity:.9}
+.setpage .sub{font-size:14.5px}
+.setpage .sethand{margin-top:16px;padding-top:4px;border-top:1px solid var(--set-line)}
+.setpage .btn.danger-o{color:var(--stamp,#b3261e);border-color:color-mix(in srgb,var(--stamp,#b3261e) 45%,transparent);background:transparent}
+.setpage .setbody .sheet{background:none;border:0;box-shadow:none;padding:0}
+.setpage .setbody .lookgrid{margin-top:4px}
+@media (max-width:899px){
+  .setlay{display:block} .setnav{position:sticky;top:0;z-index:6;flex-direction:row;overflow-x:auto;gap:6px;padding:8px 0;margin:0 0 14px;background:var(--desk);scrollbar-width:none}
+  .setnav::-webkit-scrollbar{display:none}
+  .setnav a{flex:none;height:32px;padding:0 13px;border:1px solid var(--set-line);border-radius:999px;font-size:13.5px;white-space:nowrap}
+  .setnav a.on{background:var(--paper);border-color:var(--set-line);border-radius:999px} }
+@media (max-width:600px){
+  .setitem>summary{grid-template-columns:28px 1fr auto 12px;padding:12px 14px;gap:10px;align-items:start}
+  .setitem .sic{width:28px;height:28px;font-size:13px;margin-top:2px} .setitem .spill{margin-top:2px} .setitem .schev{margin-top:3px}
+  .setitem .ssum{white-space:normal} .setbody{padding:2px 14px 16px} .setpage .setrow>.k{width:100%;min-width:0} .sethead{flex-wrap:wrap;gap:8px 14px} }
 .setgroup{font-family:"Nanum Myeongjo";font-weight:800;font-size:15px;letter-spacing:.3em;color:var(--faint);margin:34px 0 12px;display:flex;align-items:center;gap:12px}
 .setgroup::after{content:"";flex:1;border-top:1px dashed var(--deco)}
 .setgroup.first{margin-top:6px}
@@ -1797,7 +1846,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="bcf66bd735";
+const APP_BUILD="8a9b5b7b32";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2142,6 +2191,89 @@ function paintCcm(){ paintMpCtl(); const box=$("#mpccm"); if(!box||!MUSIC.ccm) r
     :`<span class="muted" style="font-size:12.5px">유튜브에서 확인된 곡이 없습니다.</span>`)
     +`<div class="row" style="gap:6px;justify-content:space-between"><small class="muted" style="font-size:11px">AI가 고르고 유튜브에서 찾은 곡만</small><button class="hb" onclick="ccmOpen(true)" title="다른 곡으로 다시 고르기">다시 고르기</button></div>`; }
 function ccmPlay(i){ const c=MUSIC.ccm?.[i]; if(!c) return; if(MP&&MUSIC.slot==="ccm:"+i){ try{ MUSIC.playing?MP.pauseVideo():MP.playVideo(); }catch(_){} return; } mpPlay(c.id,c.song,c.artist,"ccm:"+i,c.ym); }
+// ───────── 설정 화면 (2026-10-29 디자인 검토 반영): 갈래마다 한 판, 칸마다 한 줄 — 다 정한 칸은 접히고 줄에 무엇이 정해졌는지만 ─────────
+// st: ok 설정됨 · need 설정 필요 · off 꺼짐/선택 · "" 상태 없음. 사람이 펼치고 접은 것은 이 기기에 기억(seojae.setOpen) — 기억이 기본값보다 앞섬
+const SET_OPEN=(()=>{ try{ return JSON.parse(localStorage.getItem("seojae.setOpen")||"{}")||{}; }catch(_){ return {}; } })();
+function setOpenT(k,el){ SET_OPEN[k]=el.open; try{ localStorage.setItem("seojae.setOpen",JSON.stringify(SET_OPEN)); }catch(_){} const b=$(".setall"); if(b) b.textContent=document.querySelector(".setitem:not([open])")?"모두 펼치기":"모두 접기"; }
+function setAll(){ const open=!!document.querySelector(".setitem:not([open])"); document.querySelectorAll(".setitem").forEach(d=>{ d.open=open; SET_OPEN[d.dataset.k]=open; }); try{ localStorage.setItem("seojae.setOpen",JSON.stringify(SET_OPEN)); }catch(_){} }
+function setJump(k){ const d=$(`.setitem[data-k="${k}"]`); if(!d) return; d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); }
+function setGo(id){ $("#setg-"+id)?.scrollIntoView({behavior:"smooth",block:"start"}); }
+function setItem(r){ if(!r.body) return ""; const open=r.k in SET_OPEN?SET_OPEN[r.k]:r.st==="need";
+  let body=r.body.replace(/^\s*<section[^>]*>/,"").replace(/<\/section>\s*$/,"").replace(/<p class="label[^"]*"[^>]*>[\s\S]*?<\/p>/,"");
+  const pill={ok:r.pill||"설정됨",need:"설정 필요",off:r.pill||"꺼짐"}[r.st];
+  return `<details class="setitem" data-k="${r.k}" ${open?"open":""} ontoggle="setOpenT('${r.k}',this)"><summary><span class="sic" aria-hidden="true">${r.ic}</span><span class="stx"><b>${r.t}</b><span class="ssum" id="ssum-${r.k}">${r.sum}</span></span>${pill?`<span class="spill s-${r.st}">${pill}</span>`:"<span></span>"}<span class="schev" aria-hidden="true">›</span></summary><div class="setbody">${body}</div></details>`; }
+function phoneSection(){ return `${CONF.phoneUrl?`<section class="sheet tape c ${GAS?"compact":""}">
+    <p class="label">${GAS?"다른 기기 연결":"휴대폰에서 쓰기"}</p>
+    ${GAS?`<div class="okline"><span class="stamp ok">이 기기 연결됨</span><span class="muted">구글 드라이브와 같은 기록을 씁니다</span></div><details class="keybox"><summary>다른 기기 연결하기 (QR 보기) · 연결 끊기</summary>`:""}
+    <p class="sub">${GAS?"휴대폰(또는 다른 컴퓨터) 카메라로 아래 QR을 찍으면 그 기기가 연결됩니다. 열린 화면에서 <b>공유 → 홈 화면에 추가</b>를 누르면 아침 서재 아이콘으로 앱처럼 쓸 수 있습니다. <b>컴퓨터가 꺼져 있어도 열립니다.</b>"
+      :"휴대폰이 이 컴퓨터와 <b>같은 와이파이</b>에 있으면, 카메라로 아래 QR을 찍어 열어 주세요. 열린 화면에서 <b>공유 → 홈 화면에 추가</b>를 누르면 앱처럼 쓸 수 있습니다."}</p>
+    <div id="qr"></div>
+    ${GAS?"":`<p class="muted" style="word-break:break-all;margin-top:8px">${esc(CONF.phoneUrl)}</p>`}
+    <p class="muted">${GAS?"이 QR에는 비밀 열쇠가 들어 있습니다. 다른 사람에게 보여 주거나 사진으로 보내지 마세요.":"이 주소에는 비밀 열쇠가 들어 있어 다른 사람에게는 보내지 마세요. 컴퓨터가 켜져 있고 아침 서재가 열려 있어야 휴대폰에서도 열립니다."}</p>
+    ${GAS?`<div class="row"><button class="btn small" onclick="navigator.clipboard?.writeText(connectLink()).then(()=>toast('연결 링크를 복사했습니다'))">연결 링크 복사</button><button class="btn small danger" onclick="disconnect()">이 기기 연결 끊기</button></div></details>`:""}
+  </section>`:""}`; }
+function notionSection(){ if(CONF.local===false) return ""; return `<section class="sheet tape ${CONF.notion?"compact":""}">
+    <p class="label">노션 연결</p>
+    <div id="nstatus" class="sub">${CONF.notion?"연결 키가 들어 있습니다. 확인 중…":"아직 연결되지 않았습니다."}</div>
+    ${CONF.notion?`<label class="row" style="margin-top:6px;gap:8px;font-size:14px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 묵상은 간직할 때 노션에 자동으로 싣기 <small class="hint" style="display:inline">(설교초안·글방 글은 「보내기」로 원할 때만)</small></label>`:""}
+    <details class="keybox" ${CONF.notion?"":"open"}><summary>${CONF.notion?"키 바꾸기 · 연결 방법":"연결 방법"}</summary>
+    <ol class="steps sub">
+      <li><a href="https://www.notion.so/profile/integrations" target="_blank">노션 통합 만들기</a> 페이지에서 <b>새 통합</b>을 만들고(이름: 아침 서재), <b>내부 통합 시크릿</b>을 복사합니다.</li>
+      <li>노션의 <b>설교&강의</b> 페이지와 <b>자기계발</b> 페이지에서 각각 오른쪽 위 <b>···</b> → <b>연결</b> → <b>아침 서재</b>를 추가합니다.</li>
+      <li>복사한 시크릿을 아래 칸에 붙여 넣고 저장합니다. (${GAS?"구글 계정의 비공개 저장소":"이 컴퓨터의 config.json"}에만 보관됩니다)</li>
+    </ol>
+    <div class="row"><input id="ntoken" type="text" class="secret" spellcheck="false" placeholder="ntn_ 로 시작하는 시크릿" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('notionToken','ntoken')">저장</button></div>
+    ${CONF.notion?"":`<label class="row" style="margin-top:14px;gap:8px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 묵상은 간직할 때 노션에 자동으로 싣기 <small class="hint" style="display:inline">(설교초안·글방 글은 「보내기」로 원할 때만)</small></label>`}
+    <p class="muted" style="margin-top:10px">말씀 글 → 설교&강의의 책별 노트(예: 신약04_요한복음)와 설교·묵상 색인<br>책 글·밑줄 → 자기계발 / 아침 독서 글, 책 → 독서 목록</p></details>
+  </section>`; }
+function kakaoSection(){ if(CONF.local===false) return ""; return `<section class="sheet tape b ${CONF.kakao?"compact":""}">
+    <p class="label book">책 표지 찾기 (카카오)</p>
+    <p class="sub">${CONF.kakao?"✓ 카카오 검색 키가 들어 있습니다.":"한국 책 표지를 정확하게 찾으려면 무료 키가 필요합니다."}</p>
+    <details class="keybox" ${CONF.kakao?"":"open"}><summary>${CONF.kakao?"키 바꾸기":"키 넣는 방법"}</summary>
+    <ol class="steps sub"><li><a href="https://developers.kakao.com" target="_blank">카카오 개발자</a>에 로그인 → 내 애플리케이션 → 애플리케이션 추가</li><li>앱 키 중 <b>REST API 키</b>를 복사해 아래에 넣습니다.</li></ol>
+    <div class="row"><input id="kkey" type="text" class="secret" spellcheck="false" placeholder="REST API 키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('kakaoKey','kkey')">저장</button></div></details>
+  </section>`; }
+function nlSection(){ if(CONF.local===false) return ""; return `<section class="sheet tape ${CONF.nl?"compact":""}">
+    <p class="label book">목차 · 책 소개 · 쪽수 (국립중앙도서관)</p>
+    <p class="sub">${CONF.nl?"✓ 국립중앙도서관 인증키가 들어 있습니다. 책을 꽂으면 목차·소개·쪽수·분류를 저절로 채웁니다.":"짧은 책 소개는 카카오에서 이미 채워집니다. <b>목차·쪽수·긴 소개</b>까지 채우려면 국립중앙도서관 무료 인증키가 필요합니다."}</p>
+    <details class="keybox" ${CONF.nl?"":"open"}><summary>${CONF.nl?"키 바꾸기":"키 넣는 방법"}</summary>
+    <ol class="steps sub"><li>국립중앙도서관 홈페이지에 회원가입·로그인합니다.</li><li><a href="https://www.nl.go.kr/NL/contents/N31101020000.do" target="_blank">Open API → 인증키 신청/관리</a>에서 키를 신청합니다.</li><li>받은 인증키를 아래에 넣습니다.</li></ol>
+    <div class="row"><input id="nlkey" type="text" class="secret" spellcheck="false" placeholder="국립중앙도서관 인증키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('nlKey','nlkey')">저장</button></div></details>
+  </section>`; }
+function streakSection(){ return `<section class="sheet">
+    <p class="label">이어지는 아침</p>
+    <p class="sub">지금 <b>${streakShown()}일째</b> 이어지고 있습니다${S.settings.streakFrom?` · ${S.settings.streakFrom}부터 센 것`:""}.</p>
+    <div class="row" style="margin-top:8px"><button class="btn" onclick="resetStreak()">오늘부터 다시 세기</button>${S.settings.streakFrom?`<button class="btn ghost" onclick="S.settings.streakFrom=null;save();render();toast('처음 기록부터 다시 셉니다')">처음 기록부터 세기</button>`:""}</div>
+    <p class="hint">날 수만 새로 셉니다. 읽은 기록·글·일기는 하나도 지워지지 않습니다.</p>
+  </section>`; }
+function storeLine(){ return `<p class="sub">${GAS?`모든 기록은 <a href="${esc(CONF.driveUrl)}" target="_blank">구글 드라이브 「아침 서재」 폴더</a>의 <code>data.json</code>에 저장되고, 휴대폰과 컴퓨터가 같은 기록을 씁니다.`
+      :SERVER?"모든 기록은 이 폴더의 <code>data.json</code>에 저장되고, ":"지금은 브라우저에만 저장되고 있습니다."}</p>`; }
+function recSizeHtml(){ const b=dataBytes(), pct=Math.min(100,b/1e7*100); return `<div class="pomoset"><p class="k2">기록 크기</p><div class="progress"><i style="width:${pct}%;${b>6e6?"background:var(--stamp)":""}"></i></div><p class="hint" style="margin:4px 0 0">기록 파일 ${(b/1e6).toFixed(2)}MB / 한도 10MB${b>6e6?" — 곧 정리가 필요합니다":""}. 그림·AI 대화는 이 파일 밖(드라이브)에 둡니다.</p></div>`; }
+function bkSum(){ const c=lbCfg(), I=BK_INFO; if(!GAS) return SERVER?"이 컴퓨터 폴더에 저장 · 백업 파일로 보관":"브라우저에만 저장 중 — 연결이 필요합니다";
+  return [I?.ok?(I.clock?"구글 날마다 자동":"구글 · 저장할 때"):"구글 드라이브",I?.lastAt?"마지막 "+bkWhen(I.lastAt):"",lbCan()?(c.on?"이 PC에도":""):""].filter(Boolean).join(" · "); }
+function setGroups(){ const R=S.reminder||{}, rOn=!!(R.on&&R.clock!==false), p=S.settings.plan||{}, cur=planObj(), ps=pomoSet(), rules=vrList("rules").filter(x=>x.on!==false).length, voice=vrList("voice").length;
+  let theme="light"; try{ theme=localStorage.getItem("seojae.theme")||"light"; }catch(_){} const fs=+(()=>{ try{ return JSON.parse(localStorage.getItem("seojae.look")||"{}").fs; }catch(_){ return 0; } })()||0;
+  const cm=(cmtLoad()?.files||[]).filter(f=>!f.hidden).length, sf=S.settings.streakFrom;
+  return [
+   {id:"morning",t:"아침",ic:"☀︎",acc:"var(--bible)",rows:[
+     {k:"plan",ic:"✚",t:"성경 통독",st:"",sum:`${esc(cur.name)} · ${p.mode==="date"?"달력대로":"이어 읽기"} · ${(p.day||0)+1}일째`,body:planSettings()},
+     {k:"remind",ic:"✉",t:"아침 알림",st:GAS?(rOn?"ok":"off"):"",pill:rOn?"켜짐":"꺼짐",sum:rOn?`날마다 오전 ${R.hour||6}시 · 메일`:R.on&&R.clock===false?"알림 시계 설치가 필요합니다":"꺼짐 — 켜면 오늘 분량을 메일로",body:reminderSection()},
+     {k:"music",ic:"♪",t:"찬송가·CCM 듣기",st:CONF.yt?"ok":"off",pill:CONF.yt?"설정됨":"선택",sum:CONF.yt?"유튜브 열쇠 들어 있음 · 앱 안에서 재생":"열쇠 없음 · 유튜브뮤직 검색으로 열림",body:musicSection()},
+     {k:"streak",ic:"❋",t:"이어지는 아침",st:"",sum:`${streakShown()}일째${sf?` · ${+sf.slice(5,7)}월 ${+sf.slice(8,10)}일부터`:""}`,body:streakSection()}]},
+   {id:"write",t:"쓰기",ic:"✎",acc:"var(--sepia)",rows:[
+     {k:"quiet",ic:"◷",t:"쓰는 동안 조용히",st:"",sum:`집중 ${ps.focus}분 · 쉼 ${ps.short}분 · 긴 쉼 ${ps.long}분(${ps.rounds}번마다)`,body:quietSection()},
+     {k:"vr",ic:"✎",t:"AI가 따를 것 — 규칙·말투",st:"",sum:rules||voice?`규칙 ${rules}개 · 말투 기준 ${voice}문장`:"아직 규칙 없음",body:vrSection()}]},
+   {id:"device",t:"화면·기기",ic:"◐",acc:"var(--ink-soft)",rows:[
+     {k:"look",ic:"◐",t:"화면 꾸미기",st:"",sum:`${theme==="dark"?"어두운 화면":theme==="auto"?"기기 설정 따라":"밝은 종이"} · 글자 ${fs?fs+"px":"보통"} · 이 기기만`,body:lookSection()},
+     {k:"app",ic:"▢",t:"앱으로 쓰기",st:isApp()?"ok":"off",pill:isApp()?"설치됨":"선택",sum:isApp()?"앱 창으로 열려 있음":"아직 설치 안 함 — 주소창 없는 창으로 쓸 수 있어요",body:appSection()},
+     {k:"conn",ic:"⇄",t:GAS?"다른 기기 연결":"휴대폰에서 쓰기",st:GAS?"ok":CONF.phoneUrl?"":"need",pill:"연결됨",sum:GAS?"이 기기 연결됨 · 구글 드라이브의 같은 기록":"같은 와이파이에서 QR로 열기",body:phoneSection()}]},
+   {id:"link",t:"바깥 연결",ic:"⛓",acc:"var(--book)",rows:[
+     {k:"notion",ic:"N",t:"노션",st:CONF.notion?"ok":"off",pill:CONF.notion?"연결됨":"선택",sum:CONF.notion?`연결됨 · 묵상 자동 싣기 ${S.settings.autoSync?"켜짐":"꺼짐"}`:"연결 안 됨",body:notionSection()},
+     {k:"cmt",ic:"❡",t:"주석 서재",st:cm?"ok":"off",pill:cm?"설정됨":"선택",sum:cm?`${esc(CONF.cmtFolder||"성경공부")} 폴더 · 주석 ${cm}개`:"폴더를 정하고 색인을 만들어 주세요",body:cmtSection()},
+     {k:"kakao",ic:"◫",t:"책 표지 찾기 (카카오)",st:CONF.kakao?"ok":"off",pill:CONF.kakao?"설정됨":"선택",sum:CONF.kakao?"열쇠 들어 있음":"열쇠 없음 — 해외 도서 검색만",body:kakaoSection()},
+     {k:"nl",ic:"☰",t:"목차·쪽수 (국립중앙도서관)",st:CONF.nl?"ok":"off",pill:CONF.nl?"설정됨":"선택",sum:CONF.nl?"인증키 들어 있음 · 목차·쪽수 자동":"인증키 없음",body:nlSection()}]},
+   {id:"keep",t:"기록 지키기",ic:"☁︎",acc:"var(--book)",rows:[
+     {k:"backup",ic:"☁",t:"자동 백업 · 간직된 곳",st:GAS||SERVER?"ok":"need",pill:"켜짐",sum:bkSum(),body:backupSection()}]}]; }
 // ───────── 자동 백업: 구글 드라이브 「아침 서재/백업」(모든 기기, 서버가 날마다) + 이 PC 폴더(설정한 PC만, 휴대폰은 구글만) ─────────
 // PC 백업은 크롬·엣지의 「폴더 고르기」로 고른 폴더에 아침서재-백업-날짜.json 을 씁니다. 같은 날은 30분마다 그날 파일을 새로 고치고, 최근 30일 + 달마다 첫 파일을 남깁니다.
 // 고른 폴더(손잡이)는 이 기기 큰 저장소(IndexedDB lbDir)에만, 켜기·마지막 시각은 seojae.localBackup 에만 — 기록 파일(구글)에는 넣지 않음
@@ -2187,9 +2319,12 @@ function bkInner(){ const c=lbCfg(), I=BK_INFO;
   return `${g}<div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap">${GAS&&SERVER?`<button class="btn small" onclick="bkNow()">지금 구글에 백업</button>${I?.folderUrl?`<a class="btn small ghost" href="${esc(I.folderUrl)}" target="_blank" rel="noopener">백업 폴더 열기 ↗</a>`:""}`:""}</div>
     ${pc}<div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap">${lbCan()?(c.on?`${LB_NEED?`<button class="btn small ink" onclick="lbRun(true,true)">허락하기</button>`:`<button class="btn small" onclick="lbRun(true,true)">지금 PC에 백업</button>`}<button class="btn small ghost" onclick="lbPick()">폴더 바꾸기</button><button class="btn small ghost" onclick="lbOff()">끄기</button>`:`<button class="btn small ink" onclick="lbPick()">PC 백업 폴더 고르기</button>`):""}${matchMedia("(pointer:coarse)").matches?"":`<button class="btn small ghost" onclick="lbDownload()">지금 내려받기</button>`}</div>
     <p class="hint" style="margin-top:8px">되살리기: 서랍 → 휴지통 아래 「백업에서 찾기」에서 날짜별 사본의 글을 골라 되살립니다.</p>`; }
-function bkPaint(){ const el=$("#bkbox"); if(el) el.innerHTML=bkInner(); }
+function bkPaint(){ const el=$("#bkbox"); if(el) el.innerHTML=bkInner(); const sm=$("#ssum-backup"); if(sm) sm.textContent=bkSum(); }
 function backupSection(){ if(!BK_ASKED&&GAS&&SERVER){ BK_ASKED=true; setTimeout(()=>bkInfo(true),50); } if(lbCfg().on&&lbCan()) setTimeout(()=>lbDir(false).then(()=>bkPaint()),60);
-  return `<section class="sheet"><p class="label">자동 백업</p><p class="sub">기록 전체를 구글 드라이브 「아침 서재/백업」 폴더에 날마다 남깁니다. PC에서는 원하면 이 PC 폴더에도 한 벌 더 남깁니다.</p><div id="bkbox">${bkInner()}</div></section>`; }
+  return `<section class="sheet"><p class="label">자동 백업 · 간직된 곳</p>${storeLine()}<p class="sub">기록 전체를 구글 드라이브 「아침 서재/백업」 폴더에 날마다 남깁니다. PC에서는 원하면 이 PC 폴더에도 한 벌 더 남깁니다.</p><div id="bkbox">${bkInner()}</div>
+    ${recSizeHtml()}
+    <div class="sethand"><p class="k2">손으로 하기</p><div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn small" onclick="download('아침서재_백업_'+today()+'.json',JSON.stringify(S,null,1),'application/json')">백업 파일 내려받기</button><label class="btn small danger-o" style="margin:0">파일로 복원하기<input type="file" accept=".json" onchange="restore(this)" hidden></label><button class="btn small ghost" onclick="go('drawer',{sub:'trash'})">백업에서 글 찾기 →</button></div>
+    <p class="hint">복원은 파일의 기록을 지금 기록과 합칩니다(지금 기록은 사라지지 않음, 노션에는 보내지 않음).</p></div></section>`; }
 setInterval(()=>{ lbRun(false,false); },10*60e3);
 document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") lbRun(false,false); });
 setTimeout(()=>lbRun(false,false),20000);   // 열고 조금 뒤 (최신 기록을 받은 다음)
@@ -3564,77 +3699,10 @@ drawer(){
   </section>
   <section class="sheet" id="results"></section>`;
 },
-settings(){
-  return `<div class="row" style="margin-bottom:6px"><h2>설정</h2></div>
-  <div class="setgroup first">읽기</div>
-  ${planSettings()}
-  <div class="setgroup">아침 알림 · 화면 · 앱</div>
-  <div class="grid setgrid">
-  ${reminderSection()}
-  ${appSection()}
-  ${backupSection()}
-  ${musicSection()}
-  ${vrSection()}
-  ${quietSection()}
-  ${lookSection()}
-  </div>
-  <div class="setgroup">연결</div>
-  <div class="grid setgrid">
-  ${CONF.phoneUrl?`<section class="sheet tape c ${GAS?"compact":""}">
-    <p class="label">${GAS?"다른 기기 연결":"휴대폰에서 쓰기"}</p>
-    ${GAS?`<div class="okline"><span class="stamp ok">이 기기 연결됨</span><span class="muted">구글 드라이브와 같은 기록을 씁니다</span></div><details class="keybox"><summary>다른 기기 연결하기 (QR 보기) · 연결 끊기</summary>`:""}
-    <p class="sub">${GAS?"휴대폰(또는 다른 컴퓨터) 카메라로 아래 QR을 찍으면 그 기기가 연결됩니다. 열린 화면에서 <b>공유 → 홈 화면에 추가</b>를 누르면 아침 서재 아이콘으로 앱처럼 쓸 수 있습니다. <b>컴퓨터가 꺼져 있어도 열립니다.</b>"
-      :"휴대폰이 이 컴퓨터와 <b>같은 와이파이</b>에 있으면, 카메라로 아래 QR을 찍어 열어 주세요. 열린 화면에서 <b>공유 → 홈 화면에 추가</b>를 누르면 앱처럼 쓸 수 있습니다."}</p>
-    <div id="qr"></div>
-    ${GAS?"":`<p class="muted" style="word-break:break-all;margin-top:8px">${esc(CONF.phoneUrl)}</p>`}
-    <p class="muted">${GAS?"이 QR에는 비밀 열쇠가 들어 있습니다. 다른 사람에게 보여 주거나 사진으로 보내지 마세요.":"이 주소에는 비밀 열쇠가 들어 있어 다른 사람에게는 보내지 마세요. 컴퓨터가 켜져 있고 아침 서재가 열려 있어야 휴대폰에서도 열립니다."}</p>
-    ${GAS?`<div class="row"><button class="btn small" onclick="navigator.clipboard?.writeText(connectLink()).then(()=>toast('연결 링크를 복사했습니다'))">연결 링크 복사</button><button class="btn small danger" onclick="disconnect()">이 기기 연결 끊기</button></div></details>`:""}
-  </section>`:""}
-  ${CONF.local===false?"":`<section class="sheet tape ${CONF.notion?"compact":""}">
-    <p class="label">노션 연결</p>
-    <div id="nstatus" class="sub">${CONF.notion?"연결 키가 들어 있습니다. 확인 중…":"아직 연결되지 않았습니다."}</div>
-    ${CONF.notion?`<label class="row" style="margin-top:6px;gap:8px;font-size:14px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 묵상은 간직할 때 노션에 자동으로 싣기 <small class="hint" style="display:inline">(설교초안·글방 글은 「보내기」로 원할 때만)</small></label>`:""}
-    <details class="keybox" ${CONF.notion?"":"open"}><summary>${CONF.notion?"키 바꾸기 · 연결 방법":"연결 방법"}</summary>
-    <ol class="steps sub">
-      <li><a href="https://www.notion.so/profile/integrations" target="_blank">노션 통합 만들기</a> 페이지에서 <b>새 통합</b>을 만들고(이름: 아침 서재), <b>내부 통합 시크릿</b>을 복사합니다.</li>
-      <li>노션의 <b>설교&강의</b> 페이지와 <b>자기계발</b> 페이지에서 각각 오른쪽 위 <b>···</b> → <b>연결</b> → <b>아침 서재</b>를 추가합니다.</li>
-      <li>복사한 시크릿을 아래 칸에 붙여 넣고 저장합니다. (${GAS?"구글 계정의 비공개 저장소":"이 컴퓨터의 config.json"}에만 보관됩니다)</li>
-    </ol>
-    <div class="row"><input id="ntoken" type="text" class="secret" spellcheck="false" placeholder="ntn_ 로 시작하는 시크릿" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('notionToken','ntoken')">저장</button></div>
-    ${CONF.notion?"":`<label class="row" style="margin-top:14px;gap:8px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 묵상은 간직할 때 노션에 자동으로 싣기 <small class="hint" style="display:inline">(설교초안·글방 글은 「보내기」로 원할 때만)</small></label>`}
-    <p class="muted" style="margin-top:10px">말씀 글 → 설교&강의의 책별 노트(예: 신약04_요한복음)와 설교·묵상 색인<br>책 글·밑줄 → 자기계발 / 아침 독서 글, 책 → 독서 목록</p></details>
-  </section>
-  ${cmtSection()}
-  <section class="sheet tape b ${CONF.kakao?"compact":""}">
-    <p class="label book">책 표지 찾기 (카카오)</p>
-    <p class="sub">${CONF.kakao?"✓ 카카오 검색 키가 들어 있습니다.":"한국 책 표지를 정확하게 찾으려면 무료 키가 필요합니다."}</p>
-    <details class="keybox" ${CONF.kakao?"":"open"}><summary>${CONF.kakao?"키 바꾸기":"키 넣는 방법"}</summary>
-    <ol class="steps sub"><li><a href="https://developers.kakao.com" target="_blank">카카오 개발자</a>에 로그인 → 내 애플리케이션 → 애플리케이션 추가</li><li>앱 키 중 <b>REST API 키</b>를 복사해 아래에 넣습니다.</li></ol>
-    <div class="row"><input id="kkey" type="text" class="secret" spellcheck="false" placeholder="REST API 키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('kakaoKey','kkey')">저장</button></div></details>
-  </section>
-  <section class="sheet tape ${CONF.nl?"compact":""}">
-    <p class="label book">목차 · 책 소개 · 쪽수 (국립중앙도서관)</p>
-    <p class="sub">${CONF.nl?"✓ 국립중앙도서관 인증키가 들어 있습니다. 책을 꽂으면 목차·소개·쪽수·분류를 저절로 채웁니다.":"짧은 책 소개는 카카오에서 이미 채워집니다. <b>목차·쪽수·긴 소개</b>까지 채우려면 국립중앙도서관 무료 인증키가 필요합니다."}</p>
-    <details class="keybox" ${CONF.nl?"":"open"}><summary>${CONF.nl?"키 바꾸기":"키 넣는 방법"}</summary>
-    <ol class="steps sub"><li>국립중앙도서관 홈페이지에 회원가입·로그인합니다.</li><li><a href="https://www.nl.go.kr/NL/contents/N31101020000.do" target="_blank">Open API → 인증키 신청/관리</a>에서 키를 신청합니다.</li><li>받은 인증키를 아래에 넣습니다.</li></ol>
-    <div class="row"><input id="nlkey" type="text" class="secret" spellcheck="false" placeholder="국립중앙도서관 인증키" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('nlKey','nlkey')">저장</button></div></details>
-  </section>`}
-  </div>
-  <div class="setgroup">기록 보관</div>
-  <div class="grid setgrid">
-  <section class="sheet">
-    <p class="label">이어지는 아침</p>
-    <p class="sub">지금 <b>${streakShown()}일째</b> 이어지고 있습니다${S.settings.streakFrom?` · ${S.settings.streakFrom}부터 센 것`:""}.</p>
-    <div class="row" style="margin-top:8px"><button class="btn" onclick="resetStreak()">오늘부터 다시 세기</button>${S.settings.streakFrom?`<button class="btn ghost" onclick="S.settings.streakFrom=null;save();render();toast('처음 기록부터 다시 셉니다')">처음 기록부터 세기</button>`:""}</div>
-    <p class="hint">날 수만 새로 셉니다. 읽은 기록·글·일기는 하나도 지워지지 않습니다.</p>
-  </section>
-  <section class="sheet">
-    <p class="label">간직된 곳</p>
-    <p class="sub">${GAS?`모든 기록은 <a href="${esc(CONF.driveUrl)}" target="_blank">구글 드라이브 「아침 서재」 폴더</a>의 <code>data.json</code>에 저장되고, 날마다 「백업」 폴더에 사본이 하나씩 남습니다(최근 60일). 휴대폰과 컴퓨터가 같은 기록을 씁니다.`
-      :SERVER?"모든 기록은 이 폴더의 <code>data.json</code>에 저장되고, 날마다 <code>backups</code> 폴더에 사본이 하나씩 남습니다(최근 60일).":"지금은 브라우저에만 저장되고 있습니다."}</p>
-    <div class="row" style="margin-top:12px"><button class="btn" onclick="download('아침서재_백업_'+today()+'.json',JSON.stringify(S,null,1),'application/json')">백업 파일 내려받기</button><label class="btn" style="margin:0">복원하기<input type="file" accept=".json" onchange="restore(this)" hidden></label></div>
-  </section>
-  </div>`;
+settings(){ const g=setGroups(), need=g.flatMap(x=>x.rows).filter(r=>r.st==="need"&&r.body);
+  return `<div class="setpage"><div class="sethead"><h2>설정</h2><span class="spacer"></span>${need.length?`<a href="#" class="setneed" onclick="setJump('${need[0].k}');return false">설정 필요 ${need.length}곳 →</a>`:""}<button class="setall" onclick="setAll()">${g.flatMap(x=>x.rows).filter(r=>r.body).some(r=>!(r.k in SET_OPEN?SET_OPEN[r.k]:r.st==="need"))?"모두 펼치기":"모두 접기"}</button></div>
+  <div class="setlay"><nav class="setnav" aria-label="설정 갈래">${g.map(x=>`<a href="#setg-${x.id}" data-g="${x.id}" style="--acc:${x.acc}" onclick="setGo('${x.id}');return false"><span>${x.ic}</span>${x.t}</a>`).join("")}</nav>
+  <div class="setlist">${g.map(x=>{ const rows=x.rows.map(r=>setItem(r)).join(""); return rows?`<section class="setgrp" id="setg-${x.id}" style="--acc:${x.acc}"><h3>${x.t}</h3><div class="setpanel">${rows}</div></section>`:""; }).join("")}</div></div></div>`;
 }
 };
 const AFTER={
@@ -3645,6 +3713,7 @@ const AFTER={
   today(){ pomoPaint(); },
   settings(){
     if(CONF.notion&&CONF.local!==false) checkNotion();
+    try{ const nav=document.querySelectorAll(".setnav a"); const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting) nav.forEach(a=>a.classList.toggle("on",a.dataset.g===e.target.id.slice(5))); }); },{rootMargin:"-20% 0px -70% 0px"}); document.querySelectorAll(".setgrp").forEach(g=>io.observe(g)); }catch(_){}
     const el=$("#qr"); if(el&&CONF.phoneUrl){ let n=0; const draw=()=>window.QRCode?new QRCode(el,{text:CONF.phoneUrl,width:168,height:168,correctLevel:QRCode.CorrectLevel.M}):(++n<20?setTimeout(draw,300):(el.innerHTML='<p class="muted">QR 그림을 못 받았습니다 — 아래 「연결 링크 복사」를 쓰세요.</p>')); draw(); }
   }
 };
@@ -3904,7 +3973,7 @@ function quietSection(){
   return `<section class="sheet tape c compact">
     <p class="label">쓰는 동안 조용히</p>
     ${pomoSettingsHtml()}
-    ${(()=>{ const b=dataBytes(), pct=Math.min(100,b/1e7*100); return `<div class="pomoset"><p class="label" style="margin:0 0 4px">기록 크기</p><div class="progress"><i style="width:${pct}%;${b>6e6?"background:var(--stamp)":""}"></i></div><p class="hint" style="margin:4px 0 0">기록 파일 ${(b/1e6).toFixed(2)}MB / 한도 10MB${b>6e6?" — 곧 정리가 필요합니다":""}. 그림·AI 대화는 이 파일 밖(드라이브)에 둡니다.</p></div>`; })()}
+    
     <div class="okline"><span class="stamp ok">쓰기 화면</span><span class="muted">휴대폰에서는 쓰는 동안 화면이 꺼지지 않고, 「집중 모드」는 전체 화면으로 열립니다.</span></div>
     <details class="keybox"><summary>휴대폰 방해금지(알림 끄기)를 아침 서재가 열릴 때 저절로 켜는 방법</summary>
       <p class="sub">웹앱은 휴대폰의 방해금지를 직접 켤 수 없어, 휴대폰의 자동화 기능으로 한 번만 설정해 두면 됩니다.</p>
