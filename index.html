@@ -812,7 +812,14 @@ body.dfull .dbook>.diary>.pg>.dfolio{position:static;order:99;margin-top:auto;pa
 
 .dbook{perspective:1600px}
 /* 보내기 */
-.sendview{background:rgba(40,28,16,.35);overflow:auto} .sendpick{display:grid;gap:4px;max-height:220px;overflow:auto;border:1px dashed var(--edge);padding:8px;border-radius:6px} .sendpick .chk{display:flex;gap:6px;align-items:center;font-size:14px}
+.sendview{background:rgba(40,28,16,.35);overflow:auto}
+.sendto-wrap{display:grid;gap:8px;margin-top:6px} .sendto-wrap>.k{font-family:"Nanum Pen Script";font-size:21px;color:var(--sepia)} .sendto-wrap>.hint{margin:0}
+.sendto{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.sendto button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 6px 10px;border:1px solid var(--edge);border-radius:12px;background:color-mix(in srgb,var(--paper) 70%,#fff);color:var(--ink);cursor:pointer;font:inherit;text-align:center;min-width:0;transition:border-color .15s,background .15s}
+.sendto button i{font-style:normal;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font:600 15px Georgia,"Gowun Batang",serif;background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink-soft)}
+.sendto button b{font-size:14.5px;font-weight:600} .sendto button small{font-size:11.5px;color:var(--faint);line-height:1.35;word-break:keep-all}
+.sendto button:hover{border-color:var(--ink-soft)} .sendto button.on{border-color:var(--accent,#7a2a2a);background:color-mix(in srgb,var(--accent,#7a2a2a) 8%,var(--paper));box-shadow:0 0 0 1px var(--accent,#7a2a2a) inset} .sendto button.on i{background:var(--accent,#7a2a2a);color:#fff}
+@media (max-width:560px){ .sendto{grid-template-columns:repeat(3,minmax(0,1fr))} } .sendpick{display:grid;gap:4px;max-height:220px;overflow:auto;border:1px dashed var(--edge);padding:8px;border-radius:6px} .sendpick .chk{display:flex;gap:6px;align-items:center;font-size:14px}
 /* 쓰기 도구 줄 묶음·모드 띠·곁 칸 탭 */
 .tgrp{position:relative} .tgrp>summary{list-style:none;cursor:pointer} .tgrp>summary::-webkit-details-marker{display:none}
 .tgrp[open]>summary{background:var(--paper-2);border-color:var(--sepia)}
@@ -976,8 +983,13 @@ body.docmode[data-dpaper="wongo"] textarea.page[data-wg]{background-image:
   repeating-linear-gradient(to bottom,var(--dp-bg) 0 var(--wg-t),transparent var(--wg-t) calc(var(--wg-t) + var(--wg-c)),var(--dp-bg) calc(var(--wg-t) + var(--wg-c)) var(--wg-l)),
   repeating-linear-gradient(to right,var(--wg-line) 0 1px,transparent 1px var(--wg-c))!important;
   background-position:0 4px,0 4px,var(--wg-x) 0!important;background-size:100% var(--wg-l),100% var(--wg-l),calc(var(--wg-c) * var(--wg-n,1000) + 1px) 100%;background-repeat:repeat-y,repeat-y,no-repeat}
-body.docmode .writegrid>div,body.docmode .notebook{min-width:0}   /* 위 막대(한 줄로 옆으로 넘김)가 쪽 폭을 밀어 휴대폰 화면이 옆으로 넓어지던 것 막음 */
+body.docmode .writegrid>div,body.docmode .notebook{min-width:0}
+/* 쪽 폭을 넓히면 글쓰기 화면 전체 폭도 함께 (곁 칸은 그대로 오른쪽) */
+body.docmode[data-dwidth="wide"] #main:has(.writegrid){max-width:1400px} body.docmode[data-dwidth="land"] #main:has(.writegrid){max-width:1520px} body.docmode[data-dwidth="full"] #main:has(.writegrid){max-width:none}   /* 위 막대(한 줄로 옆으로 넘김)가 쪽 폭을 밀어 휴대폰 화면이 옆으로 넓어지던 것 막음 */
 @media (max-width:700px){ body.docmode[data-dpaper="note"] .notebook{background-image:none} }
+body.docmode[data-dpaper="wongo"] textarea.page[data-wg]{color:transparent!important;caret-color:transparent;-webkit-text-fill-color:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::selection{background:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::placeholder{-webkit-text-fill-color:var(--faint);color:var(--faint)}
+.hmirror.wgm{white-space:normal;letter-spacing:0!important;word-spacing:0!important;overflow:visible} .hmirror.wgm .wgr{display:flex;height:var(--wg-l,30px);align-items:center} .hmirror.wgm .wgr i{flex:0 0 var(--wg-c);width:var(--wg-c);text-align:center;font-style:normal;line-height:1} .hmirror.wgm .wgr.hd i{font-weight:700} .hmirror.wgm .wgr i.sel{background:color-mix(in srgb,#7aa7e0 38%,transparent)}
+.hmirror.wgm .wgcar{position:absolute;width:2px;background:var(--ink);animation:wgblink 1.05s steps(1) infinite} @keyframes wgblink{50%{opacity:0}}
 body.docmode textarea.page{background-image:none!important;font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);min-height:70vh}
 body.docmode .notebook .title-in{font-family:var(--doc-font);font-size:calc(var(--doc-fs) * 1.9);border-bottom:0;margin-top:26px}
 body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);white-space:normal} body.docmode .readview p.dp{margin:0 0 var(--doc-sp);text-indent:var(--doc-ind);white-space:pre-wrap} body.docmode .readview h4{font-family:var(--doc-font);font-size:calc(var(--doc-fs) * 1.12)}
@@ -1968,7 +1980,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="d36d9c87bb";
+const APP_BUILD="5b401bf6a8";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3974,7 +3986,7 @@ function updatePage(){ let p=+$("#pg").value; const b=curBook(); if(!b) return; 
 
 // ───────── 동작: 글쓰기 ─────────
 let HEADS_RAF=0;
-function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.height="auto"; t.style.height=Math.max(t.scrollHeight,innerHeight*.62)+"px"; if(scrollY!==y) scrollTo(0,y); if(!HEADS_RAF){ HEADS_RAF=requestAnimationFrame(()=>{ HEADS_RAF=0; paintHeads(); }); setTimeout(()=>{ if(HEADS_RAF){ cancelAnimationFrame(HEADS_RAF); HEADS_RAF=0; paintHeads(); } },200); } }   // 화면 그리기가 늦어도(가려진 창·느린 기기) 0.2초 안에는 거울 층을 그림
+function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.height="auto"; t.style.height=Math.max(wgOn(t)?wgModel(t).length*t._wg.L+t._wg.pt+t._wg.L:t.scrollHeight,innerHeight*.62)+"px"; if(scrollY!==y) scrollTo(0,y); if(!HEADS_RAF){ HEADS_RAF=requestAnimationFrame(()=>{ HEADS_RAF=0; paintHeads(); }); setTimeout(()=>{ if(HEADS_RAF){ cancelAnimationFrame(HEADS_RAF); HEADS_RAF=0; paintHeads(); } },200); } }   // 화면 그리기가 늦어도(가려진 창·느린 기기) 0.2초 안에는 거울 층을 그림
 // 소제목(■ 줄)과 주석 요약의 ◆ 줄을 굵게: 글자 칸(textarea)은 줄마다 모양을 바꿀 수 없어, 같은 자리에 투명한 거울 층을 겹쳐 그 줄만 굵은 글자로 한 번 더 그립니다
 // (한글은 굵게 해도 글자 폭이 같아 정확히 겹칩니다. 다른 줄은 보이지 않게 두되 자리는 차지해 줄바꿈이 같습니다)
 const HEAD_RE=/^\s*(■|◆|▣|※\s*주석 요약|※\s*요약 끝)/;
@@ -3997,6 +4009,7 @@ function paintHeads(){
   const t=$("#wbody"); if(!t) return; let m=$("#hmirror"); if(!m){ m=document.createElement("div"); m.id="hmirror"; m.className="hmirror"; m.setAttribute("aria-hidden","true"); t.after(m); }
   if(t.style.display==="none"){ m.style.display="none"; return; } m.style.display="";
   wongoFit(t); const cs=getComputedStyle(t); m.style.cssText=`top:${t.offsetTop}px;left:${t.offsetLeft}px;width:${t.clientWidth}px;padding:${cs.padding};font:${cs.font};letter-spacing:${cs.letterSpacing};word-spacing:${cs.wordSpacing};color:${cs.color};text-align:${cs.textAlign}`;
+  if(wgOn(t)){ m.style.color="var(--penink,var(--ink))"; wgPaint(t,m); fnPanePaint(t); sugDraw(); histPaint(); return; } m.classList.remove("wgm");
   // 소제목 줄 안의 영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보이므로 그 부분만 원래 글자(보이지 않는 자리)로 둡니다
   const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):markLine(l);
@@ -4757,6 +4770,7 @@ function delMs(id){ const m=S.manuscripts.find(x=>x.id===id); if(!m) return; con
   ov.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{ const now=new Date().toISOString(), pages=[]; m.trashed=now; m.updated=now;
     if(b.dataset.k==="all") mine.forEach(w=>{ w.trashed=now; w.updated=now; w.trashedWith=m.id; pages.push(w.notion?.page,w.notion?.index); });
     if(ROOM_MS===id){ ROOM_MS=null; try{ localStorage.removeItem("seojae.roomMs"); }catch(_){} }
+    stDropMs(id,ws.map(w=>w.id));
     save(); if(pages.filter(Boolean).length) trashInNotion(pages.filter(Boolean)); ov.remove(); render();
     toast(`「${m.title}」${jp(m.title,"을","를")} 휴지통에 넣었습니다 (${TRASH_DAYS}일 안에 서랍 → 휴지통에서 되살림)`); }); }
 async function restoreMs(id){ const m=S.manuscripts.find(x=>x.id===id); if(!m?.trashed) return; const now=new Date().toISOString();
@@ -4947,6 +4961,7 @@ function pulpitPara(w){ const d=w.slides&&SLIDES[w.slides.deck], imgs=d?.imgs||[
 // 보낸 기록 S.sends=[{id,at,to,scope,ms,ids,name,n,chars,u}] (목록 병합·묘비 대상)
 let TMP_MS=null;
 const SEND_TO=[["notion","노션"],["pdf","PDF"],["docx","워드 (.docx)"],["md","마크다운"],["txt","텍스트"]];
+const SEND_IC={notion:["N","노션 페이지로"],pdf:["▤","책·원고지·노트 모양"],docx:["W",".docx · 각주·쪽 번호"],md:["#",".md 파일"],txt:["¶",".txt 글자만"]};
 function sendList(kind,mid,o){ if(kind==="w"){ const w=S.writings.find(x=>x.id===editId); return w?[w]:[]; }
   const m=S.manuscripts.find(x=>x.id===mid); let ws=m?msList(m):[]; if(o?.done) ws=ws.filter(w=>w.status==="완성"); if(o?.ids) ws=ws.filter(w=>o.ids.includes(w.id)); return ws; }
 function sendOpen(kind,mid){
@@ -4959,7 +4974,7 @@ function sendOpen(kind,mid){
     ov.innerHTML=`<section class="sheet" style="max-width:640px;margin:36px auto;display:grid;gap:14px">
       <div class="row"><p class="label" style="margin:0">보내기 · 가져오기</p><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div>
       <p class="hint" style="margin:-6px 0 0">${kind==="w"?"이 글은":"이 원고의 글은"} 구글에만 간직되어 있습니다(노션에 저절로 가는 것은 묵상뿐). 여기서 고른 곳으로 보냅니다.</p>
-      <div class="setrow"><span class="k">어디로</span><div class="pills">${SEND_TO.slice(0,3).map(([k,n])=>`<button class="pill ${to===k?"on":""}" data-to="${k}">${n}</button>`).join("")}<details class="more" style="display:inline-block" ${["md","txt"].includes(to)?"open":""}><summary>더 보기</summary>${SEND_TO.slice(3).map(([k,n])=>`<button class="pill ${to===k?"on":""}" data-to="${k}">${n}</button>`).join("")}<span class="hint" style="display:block">전자책(EPUB)·구글 문서는 다음에 더해집니다.</span></details></div></div>
+      <div class="sendto-wrap"><span class="k">어디로</span><div class="sendto">${SEND_TO.map(([k,n])=>{ const [ic,d]=SEND_IC[k]||["",""]; return `<button type="button" class="${to===k?"on":""}" data-to="${k}"><i>${ic}</i><b>${esc(n.replace(/\s*\(.*\)/,""))}</b><small>${d}</small></button>`; }).join("")}</div><small class="hint">전자책(EPUB)·구글 문서는 다음에 더해집니다.</small></div>
       <div class="setrow"><span class="k">무엇을</span><div class="pills">${kind==="w"?`<button class="pill ${scope==="one"?"on":""}" data-scope="one">이 글</button>`:""}${m?`<button class="pill ${scope==="all"?"on":""}" data-scope="all">원고 전체 (${msList(m).length})</button><button class="pill ${scope==="done"?"on":""}" data-scope="done">완성만 (${msList(m).filter(x=>x.status==="완성").length})</button><button class="pill ${scope==="pick"?"on":""}" data-scope="pick">고르기</button>`:""}</div></div>
       ${scope==="pick"&&m?`<div class="sendpick">${msList(m).map(x=>`<label class="chk"><input type="checkbox" data-pick="${x.id}" ${!sel||sel.includes(x.id)?"checked":""}> ${esc(x.title||"(제목 없음)")} <span class="muted">${esc(x.status||"")}</span></label>`).join("")}</div>`:""}
       ${to!=="notion"?expRowHtml(P):""}
@@ -5096,10 +5111,12 @@ function exportPdf(id){
   const one=id==="__one"&&msList(m)[0], sermonOne=one&&(m.genre==="sermon"||/설교/.test(one.type||""));
   let oneFmt=null; try{ oneFmt=JSON.parse(localStorage.getItem("seojae.oneFmt")||"null"); }catch(_){}
   const o=Object.assign({fmt:"a5",preface:true,biblio:true,done:false,pfs:"xl"},G(m).exp.fmt?{fmt:G(m).exp.fmt}:{},m.exportOpts||{},id==="__one"?(oneFmt?.[sermonOne?"s":"o"]||(sermonOne?{fmt:"pulpit"}:{})):{}), bib=msBiblio(m); o.genre=m.genre||"free";
+  if(DOC_MODE&&docPaper()!=="white"&&!PAPER_FMTS.some(x=>x[0]===o.fmt)) o.fmt=docPaper()==="note"?"note":docWidth()[0]==="land"?"wongoL":"wongo";
   const ov=document.createElement("div"); ov.className="bookview expopts"; const P=expPrefs(m);
   ov.innerHTML=`<section class="sheet" style="max-width:620px;margin:40px auto;display:grid;gap:12px">
     <p class="label" style="margin:0">${ICO.closed}「${esc(m.title)}」 책으로 묶기</p>
     <div class="setrow"><span class="k">판형</span><div class="pills"><button class="pill ${o.fmt==="a5"?"on":""}" data-fmt="a5">A5 책 (표지·차례·쪽 번호)</button><button class="pill ${o.fmt==="a4"?"on":""}" data-fmt="a4">A4 투고 원고 (넓은 줄 간격)</button><button class="pill ${o.fmt==="pulpit"?"on":""}" data-fmt="pulpit" title="강단에서 12인치 태블릿(세로)으로 보기 좋게: 표지·차례 없이 A4 세로, 슬라이드 그림·전달 큐 상자">강단용 태블릿 (A4 세로·슬라이드)</button></div></div>
+    <div class="setrow"><span class="k">종이 모양</span><div class="pills">${PAPER_FMTS.map(([k,n,d])=>`<button class="pill ${o.fmt===k?"on":""}" data-fmt="${k}" title="${d}">${n}</button>`).join("")}</div><small class="hint" style="display:block;width:100%">문서 모드에서 보던 종이 그대로 — 원고지는 한 자 한 칸(띄어쓰기·문장부호도 한 칸), 노트는 줄 위에. 꾸밈(형광펜·밑줄)은 빼고 글자만, 각주는 글 끝에.</small></div>
     <div class="setrow" id="eo-pfsrow" ${o.fmt==="pulpit"?"":"hidden"}><span class="k">글씨 크기</span><div class="pills">${[["l","보통"],["xl","조금 크게"],["xxl","크게"]].map(([k,n])=>`<button class="pill ${o.pfs===k?"on":""}" data-pfs="${k}">${n} <small>${PULPIT_FS[k]}pt</small></button>`).join("")}</div><label class="chk" style="width:100%"><input type="checkbox" ${pulpitTags()?"checked":""} onchange="try{localStorage.setItem('seojae.pulpitTags',this.checked?'1':'')}catch(_){}"> 확인 꼬리표 (확인함)·(확인 못 함)와 「■ 부록 — 검증표」도 싣기 <small class="muted">(기본: 빼고 — 작성자용 표시)</small></label><small class="hint" style="display:block;width:100%">표지·차례 없이 첫 쪽부터 본문(A4 세로 = 12인치 태블릿 세로 화면). 🎬 슬라이드 줄 옆 오른쪽에 그 슬라이드 그림, 🎙️ 전달 큐는 노란 작은 상자, 성경 낭독은 파란 굵은 글씨, 【설교자의 자리】는 주황. 쪽 번호는 「3 / 12」.</small></div>
     ${o.fmt==="pulpit"?"":expRowHtml(P)}
     <label class="chk"><input type="checkbox" id="eo-done" ${o.done?"checked":""}> 「완성」 ${esc(G(m).item)}만 넣기 (${msList(m).filter(w=>w.status==="완성").length}${esc(G(m).item==="꼭지"?"꼭지":"편")})</label>
@@ -5109,7 +5126,7 @@ function exportPdf(id){
     ${bib.length?`<p class="hint" style="margin:0">${bib.slice(0,4).map(b=>esc(b)).join(" / ")}${bib.length>4?" …":""}</p>`:""}
     <div class="row" style="gap:6px"><button class="btn ink" id="eo-go">미리보기</button><button class="btn" id="eo-x">닫기</button></div></section>`;
   document.body.appendChild(ov);
-  ov.querySelectorAll("[data-fmt]").forEach(b=>b.onclick=()=>{ o.fmt=b.dataset.fmt; ov.querySelectorAll("[data-fmt]").forEach(x=>x.classList.toggle("on",x===b)); ov.querySelector("#eo-pfsrow").hidden=o.fmt!=="pulpit"; });
+  ov.querySelectorAll("[data-fmt]").forEach(b=>b.onclick=()=>{ o.fmt=b.dataset.fmt; ov.querySelectorAll("[data-fmt]").forEach(x=>x.classList.toggle("on",x===b)); ov.querySelector("#eo-pfsrow").hidden=o.fmt!=="pulpit"; ov.querySelector(".exprow")?.toggleAttribute("hidden",PAPER_FMTS.some(x=>x[0]===o.fmt)); });
   ov.querySelectorAll("[data-pfs]").forEach(b=>b.onclick=()=>{ o.pfs=b.dataset.pfs; ov.querySelectorAll("[data-pfs]").forEach(x=>x.classList.toggle("on",x===b)); });
   ov.querySelector("#eo-x").onclick=()=>ov.remove(); expRowWire(ov,m,P);
   ov.querySelector("#eo-go").onclick=()=>{ o.done=ov.querySelector("#eo-done").checked; o.preface=ov.querySelector("#eo-pre").checked; o.biblio=ov.querySelector("#eo-bib").checked;
@@ -5142,11 +5159,37 @@ function bookPreview(id,o){
   ov.querySelector("#bvclose").onclick=()=>{ window.removeEventListener("message",onReady); ov.remove(); };
   ov.querySelector("#bvback").onclick=()=>{ window.removeEventListener("message",onReady); ov.remove(); exportPdf(id); };
   const onReady=ev=>{ if(ev.source!==frame.contentWindow||ev.data?.bookReady==null) return; window.removeEventListener("message",onReady);
-    ov.querySelector("#bvstate").textContent=`${ev.data.bookReady}쪽 · ${o.fmt==="a4"?"A4 투고 원고":o.fmt==="pulpit"?"강단용 태블릿":"A5 판형"}`; ov.querySelector("#bvprint").disabled=false; };
+    ov.querySelector("#bvstate").textContent=`${ev.data.bookReady}쪽 · ${o.fmt==="a4"?"A4 투고 원고":o.fmt==="pulpit"?"강단용 태블릿":PAPER_FMTS.find(x=>x[0]===o.fmt)?.[1]||"A5 판형"}`; ov.querySelector("#bvprint").disabled=false; };
   window.addEventListener("message",onReady);
   setTimeout(()=>{ const st=ov.querySelector("#bvstate"); if(st&&/나누는 중/.test(st.textContent)) st.textContent="쪽 나누기 라이브러리를 받지 못했습니다 — 인터넷을 확인하거나 「원고 내려받기(.md)」를 써 주세요"; },25000);
-  frame.srcdoc=bookHtml(m,ch,author,o);
+  frame.srcdoc=PAPER_FMTS.some(x=>x[0]===o.fmt)?paperHtml(m,ch,author,o,id):bookHtml(m,ch,author,o);
 }
+// ───── 종이 모양 PDF: 노트(A4 세로, 줄 위에) · 원고지(한 자 한 칸 — 세로 A4 400자 20×20 / 가로 A4 200자 20×10) ─────
+const PAPER_FMTS=[["note","노트 (A4 · 줄 종이)","옅은 파란 줄과 왼쪽 빨간 여백선 — 한 쪽 30줄"],["wongo","원고지 세로 (A4 · 400자)","20칸 × 20줄, 한 자 한 칸"],["wongoL","원고지 가로 (A4 가로 · 200자)","20칸 × 10줄, 한 자 한 칸 — 원고지를 가로로 놓고 쓴 모양"]];
+function paperHtml(m,ch,author,o,id){ const txt=sendText(m.title||"",ch,id==="__one"?m:m,id==="__one"?"one":"all",false,o.P||expPrefs(m)).replace(/\n{3,}/g,"\n\n").replace(/^\s+|\s+$/g,"").replace(/^([^\n]+)\n+\1(\n|$)/,"$1$2"), font=docFont(docStyle(ch[0]).font)[2];
+  const head=`<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Nanum+Myeongjo&display=swap">`;
+  const tail=`<script>addEventListener("message",e=>{ if(e.data==="print") print(); }); (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(()=>parent.postMessage({bookReady:document.querySelectorAll(".pg").length||Math.max(1,Math.ceil(document.querySelector(".note").scrollHeight/document.querySelector(".note").dataset.ph))},"*"),150));<\/script></body></html>`;
+  const screen=`@media screen{body{background:#d9cfc0;margin:0;padding:14px 0}.pg,.note{margin:0 auto 14px;box-shadow:0 4px 18px rgba(0,0,0,.25)}}`;
+  if(o.fmt==="note"){   // 쪽 안쪽 높이 261mm = 줄 8.7mm × 30 → 쪽이 바뀌어도 줄이 어긋나지 않음
+    return head+`<style>@page{size:A4;margin:18mm 16mm 18mm 16mm}*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:${font};color:#222}
+.note{width:178mm;padding:0 4mm 0 16mm;font-size:11.5pt;line-height:8.7mm;white-space:pre-wrap;word-break:keep-all;overflow-wrap:break-word;background-color:#fffef8;background-image:linear-gradient(to right,transparent 10mm,#efb3a9 10mm,#efb3a9 calc(10mm + 1px),transparent calc(10mm + 1px)),repeating-linear-gradient(to bottom,transparent 0,transparent calc(8.7mm - 1px),#c3d4ea calc(8.7mm - 1px),#c3d4ea 8.7mm)}
+@media screen{.note{min-height:261mm;padding-top:0;outline:18mm solid #fffef8}} ${screen}</style></head><body><div class="note" data-ph="${(261*96/25.4).toFixed(1)}">${esc(txt)}</div>`+tail; }
+  const L=o.fmt==="wongoL", cols=20, rowsPP=L?10:20, rows=[];
+  txt.split("\n").forEach(l=>{ const a=[...l]; if(!a.length){ rows.push([]); return; } for(let i=0;i<a.length;i+=cols) rows.push(a.slice(i,i+cols)); });
+  const pages=[]; for(let i=0;i<rows.length;i+=rowsPP) pages.push(rows.slice(i,i+rowsPP)); if(!pages.length) pages.push([]);
+  const cw=L?13:8.8, rh=L?16.8:12.6, line="#d9785a";
+  const pageHtml=(P,n)=>`<section class="pg"><div class="grid">${Array.from({length:rowsPP},(_,r)=>`<div class="row">${Array.from({length:cols},(_,c)=>`<i>${esc(((P[r]||[])[c]||"").replace(/^ $/,""))}</i>`).join("")}</div>`).join("")}</div><div class="foot"><span>${esc(m.title||"")}</span><span>${cols}×${rowsPP} · ${n} / ${pages.length}</span></div></section>`;
+  return head+`<style>@page{size:A4${L?" landscape":""};margin:0}*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:${font};color:#222}
+.pg{width:${L?297:210}mm;height:${L?210:297}mm;padding:${L?"12mm 18mm":"14mm 16.5mm"};background:#fffcf5;break-after:page;display:flex;flex-direction:column;justify-content:center;gap:4mm;overflow:hidden}
+.pg:last-child{break-after:auto}
+.grid{border:1.4px solid ${line};padding:0 0 ${((rh-cw)/2).toFixed(2)}mm}
+.row{display:flex;height:${rh}mm;align-items:flex-end}
+.row i{flex:0 0 ${cw}mm;width:${cw}mm;height:${cw}mm;border:1px solid ${line};border-right:0;font-style:normal;text-align:center;line-height:${cw}mm;font-size:${L?15:11}pt}
+.row i:first-child{border-left:0}
+.foot{display:flex;justify-content:space-between;font:9pt -apple-system,"Apple SD Gothic Neo",sans-serif;color:#b0806e;padding:0 1mm}
+${screen}</style></head><body>${pages.map((P,i)=>pageHtml(P,i+1)).join("")}`+tail; }
 function msDraftHtml(){
   const d=msDraft, r=d.rule;
   if(d.kind==="manual") return `<div class="row"><input id="mtitle" value="${esc(d.title)}" placeholder="새 책의 가제 (예: 아침의 문장들)" style="flex:1" onkeydown="if(event.key==='Enter'&&!event.isComposing)addMs()"><button class="btn ink" onclick="addMs()">원고 만들기</button><button class="btn ghost" onclick="msDraft=null;render()">취소</button></div>
@@ -5419,8 +5462,14 @@ const ST_MAX=5; let ST_USED=(()=>{ try{ return JSON.parse(localStorage.getItem("
 function stTrim(keep){ let rest=STUDIO_TABS.filter(x=>x!=="home");
   while(rest.length>ST_MAX){ const old=rest.filter(x=>x!==keep).sort((a,b)=>(ST_USED[a]||0)-(ST_USED[b]||0))[0]; if(!old) break; STUDIO_TABS.splice(STUDIO_TABS.indexOf(old),1); delete ST_USED[old]; rest=STUDIO_TABS.filter(x=>x!=="home"); } }
 function stAdd(k){ if(!k||k==="draft") return; if(!STUDIO_TABS.includes("home")) STUDIO_TABS.unshift("home"); ST_USED[k]=Date.now(); if(!STUDIO_TABS.includes(k)) STUDIO_TABS.push(k); stTrim(k); stSave(); }
-function stValid(k){ if(["home","map","memo","res","codex","new","common","jots"].includes(k)||/^cx(k|sys):/.test(k)) return true; const [t,id]=[k.slice(0,k.indexOf(":")),k.slice(k.indexOf(":")+1)];
-  if(t==="w") return live().some(w=>w.id===id); if(t==="ms") return liveMs().some(m=>m.id===id); if(t==="cx") return codexLive().some(c=>c.id===id); return false; }
+// 원고를 휴지통에 넣으면 그 원고에 딸린 탭(원고·꼭지 글·메모·자료·월드·노트)을 이 기기 탭 줄에서 닫음
+function stDropMs(id,wids){ const W=new Set(wids.map(x=>"w:"+x)), mine=k=>k==="ms:"+id||W.has(k)||(k.startsWith("cx:")&&S.codex?.find(c=>c.id===k.slice(3))?.ms===id);
+  const scoped=k=>["memo","res","codex"].includes(k)||/^cx(k|sys):/.test(k);
+  STUDIO_TABS=STUDIO_TABS.filter(k=>!mine(k)&&!(ROOM_MS==null&&scoped(k))); if(!STUDIO_TABS.includes("home")) STUDIO_TABS.unshift("home");
+  if(!liveMs().length||ROOM_MS==null){ ST_ACT="home"; ROOM_CODEX=null; }
+  try{ localStorage.removeItem("seojae.stTabs."+id); }catch(_){} stSave(); }
+function stValid(k){ if(["home","map","new","common","jots"].includes(k)) return true; if(["memo","res","codex"].includes(k)||/^cx(k|sys):/.test(k)) return liveMs().some(m=>m.id===ROOM_MS); const [t,id]=[k.slice(0,k.indexOf(":")),k.slice(k.indexOf(":")+1)];
+  if(t==="w") return live().some(w=>w.id===id); if(t==="ms") return liveMs().some(m=>m.id===id); if(t==="cx") return codexLive().some(c=>c.id===id&&(!c.ms||liveMs().some(m=>m.id===c.ms))); return false; }
 function stLabel(k){ if(k==="home") return [ICO.closed.replace('class="ico"','class="ico" style="display:none"')+"⌂","글방 홈"]; if(k==="map") return ["✺","생각 지도"]; if(k==="common") return ["◎",CX_COMMON]; if(k==="jots") return ["✐","끄적이기"]; if(k==="cxk:~minor") return ["∘","스쳐 간 것"]; if(k.startsWith("cxk:")) return ["⋰",k==="cxk:*"?"월드 전체":k.slice(4)+" 전체"]; if(k==="cxsys:bg") return ["▣","월드 배경"]; if(k==="cxsys:premise") return ["◆","전제"]; if(k==="cxsys:rules") return ["⚙","정리 규칙"]; if(k==="memo") return ["▤","메모"]; if(k==="res") return ["⧉","자료 모음"]; if(k==="codex") return ["◎",G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex||"인물·주제 노트"]; if(k==="new") return ["＋","새 원고"]; if(k==="draft"){ if(stCur()==="draft") return ["✎","새 글"]; const d=bookDraft(); return ["✎",d?.title?d.title+" (쓰던 글)":"쓰던 새 글"]; }
   const id=k.slice(k.indexOf(":")+1); if(k.startsWith("w:")){ const w=S.writings.find(x=>x.id===id); return ["✎",w?.title||"(제목 없음)"]; } if(k.startsWith("ms:")) return ["▦",S.manuscripts.find(x=>x.id===id)?.title||"원고"]; if(k.startsWith("cx:")) return ["◎",codexLive().find(c=>c.id===id)?.name||"노트"]; return ["",k]; }
 function stOpen(k){ document.body.classList.remove("stnav"); if(k!=="new") nmAuto(); if((k==="codex"||/^cx(k|sys)?:/.test(k))&&ST_LTAB!=="world"){ ST_LTAB="world"; try{ localStorage.setItem("seojae.stLtab","world"); }catch(_){} } if(k==="draft"){ if(tab==="write"&&!editId) return; const d=bookDraft(); return go('write',{new:true,track:"book",ms:d?.ms||null}); } if(k.startsWith("ms:")) stMsSwitch(k.slice(3)); stAdd(k);
@@ -6457,18 +6506,58 @@ let DOC_MODE=(()=>{ try{ return localStorage.getItem("seojae.docMode")==="1"; }c
 const DOC_PAPERS=[["white","흰 쪽"],["note","노트"],["wongo","원고지"]];
 const docPaper=()=>{ try{ const v=localStorage.getItem("seojae.docPaper"); return DOC_PAPERS.some(p=>p[0]===v)?v:"white"; }catch(_){ return "white"; } };
 function docPaperSet(v){ try{ localStorage.setItem("seojae.docPaper",v); }catch(_){} docPaperMark(); WG_KEY=""; docPaint(); toast(v==="wongo"?"원고지 — 한 글자가 한 칸에 들어갑니다 (화면에서만, 내보내기는 그대로)":v==="note"?"노트 — 줄 간격에 맞춘 줄 종이":"흰 쪽"); }
-function docPaperMark(){ document.body.dataset.dpaper=DOC_MODE?docPaper():""; }
+function docPaperMark(){ document.body.dataset.dpaper=DOC_MODE?docPaper():""; document.body.dataset.dwidth=DOC_MODE?docWidth()[0]:""; }
 // 원고지: 칸 크기를 글자 크기에 맞춰 정하고, 쓰는 칸 폭이 칸의 정수배가 되게 · 한글 한 자(와 띄어쓰기 한 칸)가 한 칸이 되도록 글자·낱말 간격을 잼
-let WG_KEY="", WG_CV=null;
+// 원고지: 글자 칸(textarea)은 글꼴 폭대로 놓아 ■·문장부호·숫자에서 칸이 밀리므로, 원고지에서는 글자를 거울 층에 「한 자 한 칸」으로 직접 그림.
+// 글자 칸은 투명하게 두고 입력만 받음 · 커서·고른 곳·누른 자리·위아래 이동은 칸 배치(wgModel)로 계산 · 줄 끝에서는 낱말과 상관없이 다음 줄로(원고지 방식)
+let WG_KEY="";
+const wgOn=t=>!!(t&&t.dataset.wg&&t._wg);
 function wongoFit(t){ const on=DOC_MODE&&docPaper()==="wongo"&&t&&t.id==="wbody";
-  if(!on){ if(t?.dataset.wg){ ["letterSpacing","wordSpacing","lineHeight","textAlign"].forEach(k=>t.style[k]=""); ["--wg-c","--wg-l","--wg-t","--wg-x","--wg-n"].forEach(k=>t.style.removeProperty(k)); delete t.dataset.wg; WG_KEY=""; } return; }
-  const cs=getComputedStyle(t), k=t.clientWidth+"|"+cs.fontSize+"|"+cs.fontFamily; if(k===WG_KEY&&t.dataset.wg) return; WG_KEY=k;
-  const fs=parseFloat(cs.fontSize), cw=t.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
-  WG_CV=WG_CV||document.createElement("canvas"); const x=WG_CV.getContext("2d"); x.font=`${cs.fontSize} ${cs.fontFamily}`; const wg=x.measureText("가").width||fs, ws=x.measureText(" ").width||fs*.3;
-  const cols=Math.max(8,Math.floor(cw/(fs*1.5))), C=cw/cols, L=Math.round(C*1.38*100)/100, ls=C-wg;
-  Object.assign(t.style,{letterSpacing:ls.toFixed(3)+"px",wordSpacing:(wg-ws).toFixed(3)+"px",lineHeight:L+"px",textAlign:"left"});
-  t.style.setProperty("--wg-c",C.toFixed(3)+"px"); t.style.setProperty("--wg-l",L+"px"); t.style.setProperty("--wg-t",((L-C)/2).toFixed(3)+"px"); t.style.setProperty("--wg-x",(parseFloat(cs.paddingLeft)-ls/2).toFixed(3)+"px"); t.style.setProperty("--wg-n",cols); t.dataset.wg=cols; }
+  if(!on){ if(t?.dataset.wg){ ["lineHeight","textAlign"].forEach(k=>t.style[k]=""); ["--wg-c","--wg-l","--wg-t","--wg-x","--wg-n"].forEach(k=>t.style.removeProperty(k)); delete t.dataset.wg; t._wg=null; WG_KEY=""; wgStop(); } return; }
+  const cs=getComputedStyle(t), k=t.clientWidth+"|"+cs.fontSize+"|"+cs.fontFamily; if(k===WG_KEY&&t.dataset.wg&&t._wg) return; WG_KEY=k;
+  const fs=parseFloat(cs.fontSize), pl=parseFloat(cs.paddingLeft), pt=parseFloat(cs.paddingTop), cw=t.clientWidth-pl-parseFloat(cs.paddingRight);
+  const cols=Math.max(8,Math.floor(cw/(fs*1.5))), C=cw/cols, L=Math.round(C*1.38*100)/100;
+  Object.assign(t.style,{lineHeight:L+"px",textAlign:"left"});
+  t.style.setProperty("--wg-c",C.toFixed(3)+"px"); t.style.setProperty("--wg-l",L+"px"); t.style.setProperty("--wg-t",((L-C)/2).toFixed(3)+"px"); t.style.setProperty("--wg-x",pl.toFixed(3)+"px"); t.style.setProperty("--wg-n",cols);
+  t._wg={cols,C,L,pl,pt}; t.dataset.wg=cols; wgBind(t); }
+// 칸 배치: 문단마다 cols 칸씩 끊어 줄을 만듦 → 글자 i의 (줄 r, 칸 c), 줄마다 시작 글자
+function wgModel(t){ const g=t._wg, v=t.value, rows=[]; let off=0;
+  v.split("\n").forEach(l=>{ const n=Math.max(1,Math.ceil(l.length/g.cols)); for(let k=0;k<n;k++) rows.push({s:off+k*g.cols,e:off+Math.min(l.length,(k+1)*g.cols),end:off+l.length,last:k===n-1}); off+=l.length+1; });
+  return rows; }
+function wgPos(rows,i,g){ for(let r=0;r<rows.length;r++){ const R=rows[r]; if(i>=R.s&&(i<R.e||(i===R.e&&(R.last||R.e-R.s<g.cols)))) return {r,c:i-R.s}; if(i===R.e&&!R.last&&i<R.end) return {r:r+1,c:0}; } const R=rows[rows.length-1]; return {r:rows.length-1,c:R.e-R.s}; }
+function wgIdx(rows,r,c,g){ r=Math.max(0,Math.min(rows.length-1,r)); const R=rows[r]; return R.s+Math.max(0,Math.min(R.e-R.s,c)); }
+function wgHit(t,x,y){ const g=t._wg, b=t.getBoundingClientRect(), rows=wgModel(t); return wgIdx(rows,Math.floor((y-b.top-g.pt+t.scrollTop)/g.L),Math.round((x-b.left-g.pl)/g.C),g); }
+function wgPaint(t,m){ const g=t._wg, rows=wgModel(t), v=t.value, a=t.selectionStart, z=t.selectionEnd, foc=document.activeElement===t;
+  let h=""; rows.forEach(R=>{ const head=HEAD_RE.test(v.slice(v.lastIndexOf("\n",R.s-1)+1,R.end));
+    let r=""; for(let i=R.s;i<R.e;i++){ const ch=v[i]; r+=`<i class="${i>=a&&i<z?"sel":""}">${ch===" "?"":esc(ch)}</i>`; }
+    h+=`<div class="wgr${head?" hd":""}">${r}</div>`; });
+  const p=wgPos(rows,t.selectionDirection==="backward"?a:z,g);
+  m.innerHTML=h+(foc&&a===z?`<span class="wgcar" style="left:${(g.pl+p.c*g.C).toFixed(2)}px;top:${(g.pt+p.r*g.L+(g.L-g.C)/2+2).toFixed(2)}px;height:${(g.C-4).toFixed(2)}px"></span>`:"");
+  m.style.setProperty("--wg-c",g.C.toFixed(3)+"px"); m.style.lineHeight=g.L+"px"; m.classList.add("wgm");
+  WG_LAST=`${v.length}|${a}|${z}|${foc}`; return rows.length; }
+let WG_LAST="", WG_RAF=0;
+function wgLoop(){ WG_RAF=0; const t=$("#wbody"), m=$("#hmirror"); if(!wgOn(t)||!m) return; const k=`${t.value.length}|${t.selectionStart}|${t.selectionEnd}|${document.activeElement===t}`; if(k!==WG_LAST) wgPaint(t,m); if(document.activeElement===t) WG_RAF=requestAnimationFrame(wgLoop); }
+function wgKick(){ if(!WG_RAF) WG_RAF=requestAnimationFrame(wgLoop); }
+function wgStop(){ if(WG_RAF) cancelAnimationFrame(WG_RAF); WG_RAF=0; const m=$("#hmirror"); m?.classList.remove("wgm"); }
+function wgBind(t){ if(t._wgb) return; t._wgb=1;
+  t.addEventListener("focus",wgKick); t.addEventListener("blur",()=>{ const m=$("#hmirror"); if(wgOn(t)&&m) wgPaint(t,m); });
+  // 누르기·끌어 고르기: 칸 자리로 (글자 칸의 제 배치는 칸과 달라서)
+  t.addEventListener("mousedown",e=>{ if(!wgOn(t)||e.button!==0) return; e.preventDefault(); t.focus({preventScroll:true}); const i0=wgHit(t,e.clientX,e.clientY), anc=e.shiftKey?(t.selectionDirection==="backward"?t.selectionEnd:t.selectionStart):i0;
+    const set=i=>i>=anc?t.setSelectionRange(anc,i,"forward"):t.setSelectionRange(i,anc,"backward"); set(i0); wgKick();
+    const mv=ev=>{ set(wgHit(t,ev.clientX,ev.clientY)); wgKick(); }, up=()=>{ removeEventListener("mousemove",mv); removeEventListener("mouseup",up); }; addEventListener("mousemove",mv); addEventListener("mouseup",up); });
+  t.addEventListener("touchend",()=>{ if(!wgOn(t)) return; const T=WG_TOUCH; if(!T) return; setTimeout(()=>{ if(t.selectionStart===t.selectionEnd){ const i=wgHit(t,T.x,T.y); t.setSelectionRange(i,i); wgKick(); } },0); });
+  t.addEventListener("touchstart",e=>{ const p=e.touches[0]; WG_TOUCH=p?{x:p.clientX,y:p.clientY}:null; },{passive:true});
+  // 위아래·줄 처음/끝: 칸 줄 따라
+  t.addEventListener("keydown",e=>{ if(!wgOn(t)||e.isComposing||e.metaKey||e.ctrlKey||e.altKey||!["ArrowUp","ArrowDown","Home","End"].includes(e.key)) return;
+    const g=t._wg, rows=wgModel(t), back=t.selectionDirection==="backward", foc=back?t.selectionStart:t.selectionEnd, anc=back?t.selectionEnd:t.selectionStart, p=wgPos(rows,foc,g);
+    const i=e.key==="ArrowUp"?(p.r===0?0:wgIdx(rows,p.r-1,p.c,g)):e.key==="ArrowDown"?(p.r===rows.length-1?t.value.length:wgIdx(rows,p.r+1,p.c,g)):e.key==="Home"?rows[p.r].s:rows[p.r].e;
+    e.preventDefault(); if(e.shiftKey){ i>=anc?t.setSelectionRange(anc,i,"forward"):t.setSelectionRange(i,anc,"backward"); } else t.setSelectionRange(i,i); wgKick(); }); }
+let WG_TOUCH=null;
 addEventListener("resize",()=>{ if(DOC_MODE&&docPaper()==="wongo"){ WG_KEY=""; const t=$("#wbody"); if(t){ wongoFit(t); grow(); } } });
+// 쪽 폭(이 기기 seojae.docWidth): A4 세로(794) · 넓게(1000) · A4 가로(1123 — 원고지를 가로로 놓고 쓰기) · 화면 가득
+const DOC_WIDTHS=[["a4","A4 세로",794],["wide","넓게",1000],["land","A4 가로",1123],["full","화면 가득",0]];
+const docWidth=()=>{ try{ const v=localStorage.getItem("seojae.docWidth"); return DOC_WIDTHS.find(x=>x[0]===v)||DOC_WIDTHS[0]; }catch(_){ return DOC_WIDTHS[0]; } };
+function docWidthSet(v){ try{ localStorage.setItem("seojae.docWidth",v); }catch(_){} docPaperMark(); WG_KEY=""; docPaint(); requestAnimationFrame(()=>{ WG_KEY=""; wongoFit($("#wbody")); grow(); }); }
 const docZoom=()=>{ try{ return +localStorage.getItem("seojae.docZoom")||100; }catch(_){ return 100; } };
 const docFont=k=>DOC_FONTS.find(f=>f[0]===k)||DOC_FONTS[0];
 function docOwn(w){ const m=w?wMs(w):null; return m&&!m.rule?m:null; }
@@ -6476,7 +6565,7 @@ function docStyle(w){ const m=docOwn(w); return {...DOC_DEF,...(m?.genre==="pape
 // 내보내기: 문서 모양을 직접 정한 원고만 그 모양으로 (안 정했으면 지금까지의 책 모양 그대로)
 const docExp=m=>m&&m.id!=="__one"?(m.exportOpts?.doc?{...DOC_DEF,...m.exportOpts.doc}:null):(S.settings.docStyle?{...DOC_DEF,...S.settings.docStyle}:null);
 function docVars(w){ const d=docStyle(w), z=docZoom()/100, px=d.pt*4/3*z;
-  return `--doc-font:${docFont(d.font)[2].replace(/"/g,"'")};--doc-fs:${px.toFixed(2)}px;--doc-lh:${(px*d.lh).toFixed(2)}px;--doc-align:${d.align};--doc-ind:${d.ind}em;--doc-sp:${(d.sp*d.lh).toFixed(2)}em;--doc-w:${Math.round(794*z)}px`; }
+  return `--doc-font:${docFont(d.font)[2].replace(/"/g,"'")};--doc-fs:${px.toFixed(2)}px;--doc-lh:${(px*d.lh).toFixed(2)}px;--doc-align:${d.align};--doc-ind:${d.ind}em;--doc-sp:${(d.sp*d.lh).toFixed(2)}em;--doc-w:${docWidth()[2]?Math.round(docWidth()[2]*z)+"px":"none"}`; }
 function docBar(w){ const d=docStyle(w), m=docOwn(w), z=docZoom(), opt=(v,list,fmt)=>list.map(x=>`<option value="${x}" ${String(v)===String(x)?"selected":""}>${fmt?fmt(x):x}</option>`).join(""), al=(k,ic,t)=>`<button type="button" class="dbb ${d.align===k?"on":""}" onclick="docSet('align','${k}')" title="${t}">${ic}</button>`;
   return `<div class="docbar nofocus" onmousedown="if(!event.target.closest('select'))event.preventDefault()">${histBtns()}
     <select title="글꼴" onchange="docSet('font',this.value)">${DOC_FONTS.map(f=>`<option value="${f[0]}" ${d.font===f[0]?"selected":""}>${f[1]}</option>`).join("")}</select>
@@ -6488,6 +6577,7 @@ function docBar(w){ const d=docStyle(w), m=docOwn(w), z=docZoom(), opt=(v,list,f
     <span class="dbg"><button type="button" class="dbb" onclick="docWrap('**')" title="굵게 (⌘B)"><b>B</b></button><button type="button" class="dbb" onclick="docWrap('*')" title="기울임 (⌘I)"><i style="font-family:Georgia,serif">I</i></button></span><span class="dbg"><button type="button" class="dbb" onclick="docHead()" title="이 줄을 ■ 소제목으로 (다시 누르면 풀림)"><b>■</b> 소제목</button><button type="button" class="dbb" onclick="docMk('hl','y')" title="고른 글자에 형광펜"><span class="dot" style="background:#f3d36b"></span></button><button type="button" class="dbb" onclick="docMk('ul')" title="고른 글자에 밑줄"><u>밑줄</u></button><button type="button" class="dbb" onclick="fnHere()" title="각주 (⌘⇧F)"><b style="font-family:Georgia,serif">¹</b></button></span>
     <span class="dbg"><button type="button" class="dbb" onclick="altHere()" title="커서가 있는 문장을 바꿔 쓴 후보 4개">✦ 다른 표현</button><button type="button" class="dbb" onclick="fbStart()" title="점수·강점·약점과 첨삭">✦ 피드백</button><button type="button" class="dbb" onclick="styOpen()" title="문체 점검 (기계로 셈)">✎ 문체</button></span>
     <span class="spacer"></span><button type="button" class="dbb" onclick="toggleRead()" title="들여쓰기·문단 간격까지 쪽 모양으로 봅니다">쪽 미리보기</button>
+    <select title="쪽 폭 — 좌우로 더 넓게 (이 기기, 화면에서만 · 내보내기 쪽 크기는 그대로)" onchange="docWidthSet(this.value)">${DOC_WIDTHS.map(x=>`<option value="${x[0]}" ${docWidth()[0]===x[0]?"selected":""}>쪽: ${x[1]}</option>`).join("")}</select>
     <select title="종이 — 흰 쪽·노트·원고지 (이 기기, 화면에서만)" onchange="docPaperSet(this.value)">${DOC_PAPERS.map(p=>`<option value="${p[0]}" ${docPaper()===p[0]?"selected":""}>종이: ${p[1]}</option>`).join("")}</select>
     <select title="확대 (이 기기)" onchange="docZoomSet(+this.value)">${opt(z,[75,90,100,110,125,150],x=>x+"%")}</select>
     <small class="muted dbscope" title="${m?"이 원고의 모든 글에 같은 모양 — 워드·PDF로 내보낼 때도":"원고에 들지 않은 글의 기본 모양"}">${m?`『${esc(m.title)}』 전체 · 내보내기도`:"모든 글 기본"}</small></div>`; }
