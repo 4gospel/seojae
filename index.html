@@ -289,6 +289,16 @@ sup.enref{font-size:.7em;color:#4f7fa8;font-family:Georgia,serif} .enhead{margin
 .hmirror i.mkc{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,var(--paper) 70%,transparent)} .hmirror i.mkf{background:color-mix(in srgb,var(--paper) 55%,transparent);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--sepia) 45%,transparent)}
 .hmirror i.mkh{visibility:visible;font-style:normal;color:transparent;border-radius:2px} .hmirror i.mku{visibility:visible;font-style:normal;color:transparent;text-decoration:underline;text-decoration-color:var(--sepia);text-decoration-thickness:1.5px;text-underline-offset:5px}
 body.aiopen #aitog{background:#7a5aa8;color:#fff;border-color:#7a5aa8}
+.hmirror i.sug{visibility:visible;font-style:normal;color:transparent;position:relative;background:rgba(59,130,246,.13);box-shadow:inset 0 -2px 0 rgba(37,99,235,.55);border-radius:2px}
+.hmirror i.sug::before{content:"AI 제안";position:absolute;left:0;top:-1.05em;font:600 10.5px/1.3 -apple-system,"Apple SD Gothic Neo",sans-serif;color:#1d4ed8;background:#e8f0fe;border:1px solid #9bb8f5;border-radius:6px;padding:0 5px;white-space:nowrap;pointer-events:none}
+.hmirror i.sug.on{background:rgba(59,130,246,.24);box-shadow:inset 0 -2px 0 #2563eb}
+#fbpanel.away{display:none}
+#sugcard{position:absolute;z-index:60;box-sizing:border-box;background:#f6f8fc;border:1px solid #c9d7f2;border-left:4px solid #2563eb;border-radius:12px;box-shadow:0 12px 28px -14px rgba(0,0,0,.35);padding:12px 16px 12px;font:14.5px/1.65 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
+#sugcard .sgh{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--faint)} #sugcard .sgh .spacer{flex:1} #sugcard .sgtag{color:#1d4ed8;font-weight:700}
+#sugcard .sgnav{border:1px solid var(--edge);background:var(--paper);border-radius:6px;width:24px;height:22px;cursor:pointer;color:var(--ink-soft)}
+#sugcard .sgwhy{color:#c0392b;margin:8px 0 6px} #sugcard .sgto{font-family:"Gowun Batang",serif;font-size:16px;line-height:1.8;margin:6px 0 10px;color:var(--ink)}
+#sugcard .sgb{display:flex;justify-content:flex-end;gap:8px} #sugcard .sgb button{font:13.5px -apple-system,"Apple SD Gothic Neo",sans-serif;border:1px solid var(--edge);background:var(--paper);border-radius:10px;padding:6px 14px;cursor:pointer;color:var(--ink)} #sugcard .sgb button.p{border-color:#2563eb;color:#1d4ed8;font-weight:600}
+@media (max-width:700px){ #sugcard{padding:10px 12px} #sugcard .sgb button{min-height:40px;padding:8px 16px} }
 .hmirror i.fb{visibility:visible;font-style:normal;color:transparent;background:rgba(214,92,92,.10);box-shadow:inset 0 -2px 0 rgba(200,70,70,.45);border-radius:2px}
 .fbpanel{position:fixed;right:14px;top:84px;bottom:14px;width:min(380px,92vw);z-index:60;overflow:auto;background:var(--paper);border:1px solid var(--edge);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:12px 14px;font:13.5px/1.55 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
 .fbpanel .fbh{display:flex;align-items:center;gap:6px;margin-bottom:8px} .fbpanel .fbh button{border:0;background:none;cursor:pointer;font-size:15px;color:var(--ink-soft);padding:2px 6px;border-radius:6px} .fbpanel .fbh button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
@@ -1724,7 +1734,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="2303aa04a0";
+const APP_BUILD="95cb1f17f5";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3542,13 +3552,13 @@ function paintHeads(){
   const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):markLine(l);
   FN_C={f:0,e:0}; const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null; let off=0;
-  const RG=[...(rf?[{s:rf.s,e:rf.e,c:"rf"}]:[]),...fbRanges(t.value),...styRanges(t.value)].sort((a,b)=>a.s-b.s).filter((r,i,A)=>!A.slice(0,i).some(q=>q.e>r.s));   // AI 다듬기(보라) · 첨삭(분홍 밑줄)   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
+  const RG=[...(rf?[{s:rf.s,e:rf.e,c:"rf"}]:[]),...sugRanges(t.value),...styRanges(t.value)].sort((a,b)=>a.s-b.s).filter((r,i,A)=>!A.slice(0,i).some(q=>q.e>r.s));   // AI 다듬기(보라) · 첨삭(분홍 밑줄)   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
   const OZ=ownZones(t.value);
   m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[], st=off; off+=l.length+1;
     const hit=RG.filter(r=>r.s<st+l.length+1&&r.e>st); if(hit.length){ let o="",cur=0; hit.forEach(r=>{ const a=Math.max(cur,r.s-st), z=Math.min(l.length,r.e-st); if(z<=a) return; o+=plain(l.slice(cur,a),head)+`<i class="${r.c}">${esc(l.slice(a,z))}</i>`; cur=z; }); return o+plain(l.slice(cur),head); }
     if(!E.length) return plain(l,head);
     let out="", last=0; E.forEach(x=>{ out+=plain(l.slice(last,x.s),head)+`<i class="sp ${x.src}" data-l="${i}" data-s="${x.s}" data-e="${x.e}" title="${esc(x.to)}${x.why?" — "+esc(x.why):""}">${esc(l.slice(x.s,x.e))}</i>`; last=x.e; }); return out+plain(l.slice(last),head); }).map((h,i)=>OZ.has(i)?`<i class="ownl">${h}</i>`:h).join("\n");
-  fnPanePaint(t);
+  fnPanePaint(t); sugDraw();
   const n=errs.reduce((a,x)=>a+x.length,0), st=$("#spellstate"); if(st&&!SPELL_AI_BUSY) st.textContent=n?`밑줄 ${n}`:"";
 }
 // 글자 칸에 프로그램이 글을 넣을 때는 브라우저의 '입력' 명령으로 넣어, ⌘Z(되돌리기)·⇧⌘Z(다시 하기)가 그대로 듣게 합니다
@@ -5769,7 +5779,7 @@ function aiSugApply(i,j,quiet){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); 
   tInsert(b,it.to,at,at+it.from.length); it.st="done"; aiStore(); if(!quiet){ aiDraw(); toast("넣었습니다 ("+undoHint()+")"); } return true; }
 function aiSugDrop(i,j){ const it=AI_MSGS[i]?.items?.[j]; if(!it) return; it.st="drop"; aiStore(); aiDraw(); }
 function aiSugAll(i){ const L=AI_MSGS[i]?.items||[]; let n=0, skip=0; L.forEach((it,j)=>{ if(it.st) return; aiSugApply(i,j,true)?n++:skip++; }); aiDraw(); toast(`${n}곳을 넣었습니다${skip?` · ${skip}곳은 글에서 찾지 못해 남겨 둠`:""} (⌘Z로 하나씩 되돌리기)`); }
-function aiSugShow(i,j){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); if(!it||!b) return; const at=b.value.indexOf(it.from); if(at<0) return toast("글에서 이 구절을 찾지 못했습니다");
+function aiSugShow(i,j){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); if(!it||!b) return; if(!it.st) return sugOpen("ai",i,j); const at=b.value.indexOf(it.from); if(at<0) return toast("글에서 이 구절을 찾지 못했습니다");
   if(READVIEW) toggleRead(); b.focus({preventScroll:true}); b.setSelectionRange(at,at+it.from.length);
   const lh=parseFloat(getComputedStyle(b).lineHeight)||30, line=b.value.slice(0,at).split("\n").length; scrollTo({top:b.getBoundingClientRect().top+scrollY+line*lh-innerHeight/3,behavior:"smooth"}); }
 // ───────── 설계 카드 · 네 자리 (팀장님 「AI 보조 원칙」 1-3·1-4·1-5 — 참고/AI_글쓰기보조_원칙.md) ─────────
@@ -5938,9 +5948,38 @@ async function fbStart(){ const b=$("#wbody"); if(!b) return; const k=aiGenre();
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
   const crit=[...(FB_CRIT[k.kind]||FB_CRIT.free),...(SERIAL(k.m)?["첫머리 훅·끝 당김"]:[])].slice(0,6), wid=editId||"new"; FB={wid,busy:true,crit}; fbDraw();
   try{ const r=await gcall("coWrite",{mode:"feedback",around:aiAround(k.w),poem:k.poem,body:aiBodyText(b),title:$("#wtitle")?.value||"",genre:k.name,criteria:crit,settings:fbSettings(k.m),card:k.w?cardForAI(k.w):null,sermon:k.sermon,...vrFor(k.sermon)});
-    if(!FB||FB.wid!==wid) return; Object.assign(FB,{busy:false,...r,at:new Date().toISOString(),items:(r.items||[]).map(x=>({...x,st:"open"}))}); }
+    if(!FB||FB.wid!==wid) return; Object.assign(FB,{busy:false,...r,at:new Date().toISOString(),items:(r.items||[]).map(x=>({...x,st:"open"}))}); if(FB.items.length&&$("#wbody")?.value.includes(FB.items[0].from)) setTimeout(()=>sugOpen("fb",0),60); }
   catch(e){ if(FB&&FB.wid===wid) Object.assign(FB,{busy:false,err:"피드백을 받지 못했습니다: "+e.message}); }
   fbDraw(); paintHeads(); }
+// ───────── AI 수정 제안을 글 안에서: 고칠 곳에 파란 표시(「AI 제안」) → 누르면 바로 아래 카드(왜 · 제안 문장 · 닫기 / 적용). 「적용」을 눌러야만 글이 바뀜 ─────────
+// 제안의 출처는 둘: 피드백·첨삭(FB.items) · 도우미 「제안」(AI_MSGS[i].items). 어느 쪽이든 원문 구절이 지금 글에 있을 때만 보임
+let SUG_ON=null;   // 지금 카드를 연 제안 {src:"fb"|"ai", i, j}
+function sugList(v){ const out=[], wid=editId||"new";
+  if(FB&&!FB.busy&&FB.wid===wid) (FB.items||[]).forEach((x,i)=>{ if(x.st==="open"&&x.from) out.push({src:"fb",i,from:x.from,to:x.to||"",note:x.note||"",kind:x.kind||""}); });
+  (typeof AI_MSGS!=="undefined"?AI_MSGS:[]).forEach((m,i)=>(m?.items||[]).forEach((x,j)=>{ if(!x.st&&x.from) out.push({src:"ai",i,j,from:x.from,to:x.to||"",note:x.why||"",kind:"도우미 제안"}); }));
+  return out.map(x=>({...x,at:v.indexOf(x.from)})).filter(x=>x.at>=0); }
+const sugSame=(a,b)=>a&&b&&a.src===b.src&&a.i===b.i&&a.j===b.j;
+function sugRanges(v){ return sugList(v).map(x=>({s:x.at,e:x.at+x.from.length,c:"sug"+(sugSame(x,SUG_ON)?" on":"")})); }
+function sugOpen(src,i,j){ SUG_ON={src,i,j}; if(innerWidth<=700){ $("#fbpanel")?.classList.add("away"); if(src==="ai") aiClose?.(); } paintHeads(); const b=$("#wbody"), x=sugList(b?.value||"").find(y=>sugSame(y,SUG_ON)); if(!x){ SUG_ON=null; paintHeads(); return toast("본문에서 그 구절을 찾지 못했습니다 — 그사이 고쳤나 봅니다"); }
+  setTimeout(()=>{ const c=$("#sugcard"); if(c){ const r=c.getBoundingClientRect(); if(r.bottom>innerHeight-20||r.top<60) scrollTo({top:scrollY+r.top-innerHeight*.3,behavior:"smooth"}); } },30); }
+function sugHide(){ if(!SUG_ON) return; SUG_ON=null; paintHeads(); }
+function sugDraw(){ const b=$("#wbody"), x=SUG_ON&&b&&b.style.display!=="none"?sugList(b.value).find(y=>sugSame(y,SUG_ON)):null; let c=$("#sugcard");
+  if(!x){ if(SUG_ON&&b) SUG_ON=null; c?.remove(); $("#fbpanel")?.classList.remove("away"); return; }   // 휴대폰: 카드를 닫으면 내려 두었던 첨삭 창을 다시
+  const mk=[...document.querySelectorAll("#hmirror i.sug.on")]; if(!mk.length){ c?.remove(); return; }
+  if(!c){ c=document.createElement("div"); c.id="sugcard"; document.body.appendChild(c); c.onmousedown=e=>e.preventDefault(); }
+  const k=aiGenre(), L=sugList(b.value), n=L.findIndex(y=>sugSame(y,x)), canApply=x.to&&!k.poem;
+  c.innerHTML=`<div class="sgh"><span class="sgtag">✦ AI 수정 제안</span>${x.kind?`<small>${esc(x.kind)}</small>`:""}<span class="spacer"></span>${L.length>1?`<button class="sgnav" onclick="sugStep(-1)" title="앞 제안">‹</button><small>${n+1} / ${L.length}</small><button class="sgnav" onclick="sugStep(1)" title="다음 제안">›</button>`:""}</div>
+    ${x.note?`<p class="sgwhy">${esc(x.note)}</p>`:""}${x.to?`<p class="sgto">${esc(x.to)}</p>`:`<p class="sgto muted"><small>고칠 문장 없이 짚기만 한 곳입니다 — 직접 고쳐 주세요</small></p>`}
+    <div class="sgb"><button onclick="sugDrop()" title="이 제안을 버립니다 (글은 그대로)">✕ 닫기</button>${canApply?`<button class="p" onclick="sugApply()" title="제안 문장으로 바꿉니다 (⌘Z로 되돌리기)">✓ 적용</button>`:""}</div>`;
+  const br=b.getBoundingClientRect(), last=mk.at(-1).getClientRects(), lr=last[last.length-1]||mk.at(-1).getBoundingClientRect();
+  c.style.left=(br.left+scrollX)+"px"; c.style.width=b.clientWidth+"px"; c.style.top=(lr.bottom+scrollY+6)+"px"; }
+function sugStep(d){ const b=$("#wbody"); if(!b) return; const L=sugList(b.value); if(!L.length) return; const n=L.findIndex(y=>sugSame(y,SUG_ON)), x=L[(n+d+L.length)%L.length]; sugOpen(x.src,x.i,x.j); }
+function sugApply(){ const x=SUG_ON; if(!x) return; SUG_ON=null; const ok=x.src==="fb"?(fbApply(x.i),FB?.items?.[x.i]?.st==="done"):aiSugApply(x.i,x.j); if(x.src==="ai"&&ok) aiDraw?.(); paintHeads(); const left=sugList($("#wbody")?.value||"").length; if(ok&&left) setTimeout(()=>toast(`적용했습니다 (⌘Z로 되돌리기) · 제안 ${left}곳 남음 — 파란 곳을 누르면 봅니다`),50); }
+function sugDrop(){ const x=SUG_ON; if(!x) return; SUG_ON=null; if(x.src==="fb") fbDismiss(x.i); else aiSugDrop(x.i,x.j); paintHeads(); }
+// 본문을 누르면: 파란 곳 안이면 그 제안 카드, 밖이면 카드 접기
+document.addEventListener("click",e=>{ const b=e.target; if(b?.id!=="wbody"){ return; } const at=b.selectionStart, x=sugList(b.value).find(y=>at>=y.at&&at<=y.at+y.from.length); if(x){ if(!sugSame(x,SUG_ON)) sugOpen(x.src,x.i,x.j); } else sugHide(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&SUG_ON&&$("#sugcard")){ e.stopPropagation(); sugHide(); } },true);
+addEventListener("resize",()=>{ if(SUG_ON) sugDraw(); });
 function fbClose(){ FB=null; $("#fbpanel")?.remove(); paintHeads(); }
 // 거울 층에 칠할 곳 (아직 열려 있는 첨삭)
 function fbRanges(v){ if(!FB||FB.busy||(editId||"new")!==FB.wid) return []; const out=[]; (FB.items||[]).forEach((x,i)=>{ if(x.st!=="open") return; const a=v.indexOf(x.from); if(a>=0) out.push({s:a,e:a+x.from.length,c:"fb",i}); }); return out; }
@@ -5958,10 +5997,10 @@ function fbDraw(){ if(!FB) return $("#fbpanel")?.remove(); let p=$("#fbpanel"); 
     :`<div class="fbscores">${(FB.scores||[]).map(x=>`<div class="fbs" title="${esc(x.why)}"><span>${esc(x.k)}</span>${bar(x.n)}<b>${x.n}</b></div>`).join("")}</div>
       ${(FB.strong||[]).length?`<p class="fbt">강점</p><ul class="fbl ok">${FB.strong.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
       ${(FB.weak||[]).length?`<p class="fbt">약점</p><ul class="fbl no">${FB.weak.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
-      <p class="fbt" style="display:flex;align-items:center;gap:6px">첨삭 <small class="muted">${open}곳 남음 · 본문에 분홍 밑줄</small><span class="spacer"></span>${(FB.items||[]).filter(x=>x.st==="open"&&x.to).length>1&&!aiGenre().poem&&!aiGenre().sermon?`<button class="btn small" onclick="fbApplyAll()" title="대안이 있는 첨삭을 한꺼번에 (⌘Z로 되돌리기)">일괄 반영</button>`:""}</p>
-      ${(FB.items||[]).map((x,i)=>x.st==="closed"?"":`<div class="fbi ${x.st}"><div class="row" style="gap:6px;align-items:baseline"><span class="fbk k-${esc(x.kind)}">${esc(x.kind)}</span><a href="#" onclick="fbGo(${i});return false" title="본문의 그 자리로">「${esc(x.from.slice(0,60))}${x.from.length>60?"…":""}」</a></div>
+      <p class="fbt" style="display:flex;align-items:center;gap:6px">첨삭 <small class="muted">${open}곳 남음 · 본문에 파란 표시 — 누르면 그 자리에서 적용</small><span class="spacer"></span>${(FB.items||[]).filter(x=>x.st==="open"&&x.to).length>1&&!aiGenre().poem&&!aiGenre().sermon?`<button class="btn small" onclick="fbApplyAll()" title="대안이 있는 첨삭을 한꺼번에 (⌘Z로 되돌리기)">일괄 반영</button>`:""}</p>
+      ${(FB.items||[]).map((x,i)=>x.st==="closed"?"":`<div class="fbi ${x.st}"><div class="row" style="gap:6px;align-items:baseline"><span class="fbk k-${esc(x.kind)}">${esc(x.kind)}</span><a href="#" onclick="sugOpen('fb',${i});return false" title="본문의 그 자리로 — 제안 카드가 열립니다">「${esc(x.from.slice(0,60))}${x.from.length>60?"…":""}」</a></div>
         <div class="fbn">${esc(x.note)}</div>${x.to&&x.st==="open"?`<div class="rfdiff">${rfDiffHtml(x.from,x.to)}</div>`:""}
-        ${x.st==="done"?`<small class="muted">✓ 적용함</small>`:`<div class="rfb">${x.to&&!aiGenre().poem?`<button class="p" onclick="fbApply(${i})">✓ 적용</button>`:""}<button onclick="fbDismiss(${i})">닫기</button></div>`}</div>`).join("")||`<p class="muted">고칠 곳을 찾지 못했습니다.</p>`}
+        ${x.st==="done"?`<small class="muted">✓ 적용함</small>`:`<div class="rfb"><button class="p" onclick="sugOpen('fb',${i})" title="본문 그 자리 아래에 제안 카드를 엽니다 — 거기서 「적용」">글에서 보기</button><button onclick="fbDismiss(${i})">닫기</button></div>`}</div>`).join("")||`<p class="muted">고칠 곳을 찾지 못했습니다.</p>`}
       <small class="muted">${esc(FB.ai||"")} · 점수와 코멘트는 참고만 — 고칠지는 글쓴이가 정합니다</small>`}`; }
 document.addEventListener("input",e=>{ if(FB&&e.target?.id==="wbody") paintHeads(); });
 // ───────── 문체 점검 · 장 넘기기 · 설정 정리 (2026-10-29, 타입탁 소설 화면을 본뜸) ─────────
