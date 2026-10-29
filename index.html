@@ -139,7 +139,7 @@ h2{font-family:"Nanum Myeongjo";font-weight:800;font-size:24px;margin:0 0 4px;le
 @media (max-width:700px){ .routine{margin-left:0;width:100%} .routine button{padding:4px 10px 4px 5px;font-size:13px} }
 
 /* 입력 */
-input,select,textarea{font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1px dashed var(--deco);padding:6px 2px;width:100%;border-radius:0}
+input,select,textarea,w-ed{font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1px dashed var(--deco);padding:6px 2px;width:100%;border-radius:0}
 select{border:1px solid var(--edge);border-radius:6px;padding:6px 8px;background:var(--paper)}
 textarea{border:1px dashed var(--deco);border-radius:4px;padding:10px;resize:vertical;min-height:90px;line-height:1.8}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--sepia)}
@@ -270,10 +270,10 @@ body.readmode .notebook::after,body.focus .notebook::after{display:none}
 .notebook::before{content:"";position:absolute;left:22px;top:30px;bottom:30px;width:16px;background:radial-gradient(circle,var(--desk) 6px,rgba(0,0,0,.12) 7px,transparent 8px) 0 0/16px 72px repeat-y}
 .notebook .title-in{font-family:"Nanum Myeongjo";font-weight:800;font-size:26px;border:0;border-bottom:2px solid var(--ink);padding:4px 0;margin-bottom:6px}
 .notebook .meta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;color:var(--faint);font-size:14px;margin-bottom:10px}
-textarea.page{display:block;width:100%;min-height:62vh;border:0;border-radius:0;padding:4px 4px 0;resize:none;overflow:hidden;
+:is(textarea,w-ed).page{display:block;width:100%;min-height:62vh;border:0;border-radius:0;padding:4px 4px 0;resize:none;overflow:hidden;
   font-family:"Gowun Batang",serif;font-size:var(--note-fs,18px);line-height:var(--note-lh,36px);color:var(--penink,var(--ink));
   background-color:transparent;background-attachment:local;background-position:0 3px}
-textarea.page.lined{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--note-lh,36px) - 1px),var(--rule) calc(var(--note-lh,36px) - 1px) var(--note-lh,36px))}
+:is(textarea,w-ed).page.lined{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--note-lh,36px) - 1px),var(--rule) calc(var(--note-lh,36px) - 1px) var(--note-lh,36px))}
 /* 이 기기만의 노트 꾸미기 (설정 → 화면 꾸미기): 종이 색·글자 색·글자 크기 */
 .notebook{background-color:var(--note-bg,var(--paper))}
 .notebook .title-in,.notebook .meta,#readview{color:var(--note-ink,var(--ink))}
@@ -282,6 +282,17 @@ textarea.page.lined{background-image:repeating-linear-gradient(to bottom,transpa
 .hmirror{position:absolute;z-index:2;pointer-events:none;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;box-sizing:border-box;overflow:hidden;background:transparent}
 .hmirror span{visibility:hidden}
 .hmirror b{font-weight:800;color:var(--note-ink,var(--ink))}
+/* 모양째 쓰는 글 칸 <w-ed> (2026-10-30): 꾸밈은 글 칸이 직접 보이고, 거울 층은 같은 모양으로 겹쳐 맞춤법·AI 표시만 */
+w-ed{display:block;position:relative;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;outline:none;cursor:text;tab-size:4;-webkit-user-select:text;user-select:text}
+w-ed.isempty::before{content:attr(data-ph);position:absolute;top:0;left:0;right:0;padding:inherit;box-sizing:border-box;color:var(--faint);-webkit-text-fill-color:var(--faint);pointer-events:none;white-space:pre-wrap}
+w-ed mark.wk{color:inherit;padding:0;border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+w-ed u.wku{text-decoration:underline;text-decoration-color:var(--sepia);text-decoration-thickness:1.5px;text-underline-offset:4px}
+w-ed b.wb,.hmirror b.wb{font-weight:700} w-ed i.wi,.hmirror i.wi{font-style:italic}
+w-ed sup.wfn,.hmirror sup.wfn{font:700 .62em/1 Georgia,serif;vertical-align:super;padding:0 1px;color:#a0522d;cursor:pointer} w-ed sup.wfn.en{color:#4f7fa8}
+w-ed sup.wfn:hover{background:color-mix(in srgb,var(--sepia) 14%,transparent);border-radius:3px}
+.hmirror mark.wk,.hmirror u.wku,.hmirror b.wb,.hmirror i.wi,.hmirror sup.wfn{visibility:hidden;background:none!important;text-decoration:none} .hmirror b:not(.wb){visibility:visible}
+body.docmode[data-dpaper="wongo"] w-ed.page[data-wg] *{background:none!important;text-decoration:none!important;color:transparent!important;-webkit-text-fill-color:transparent!important}
+body.docmode[data-dpaper="wongo"] w-ed.page[data-wg] *::selection{background:transparent} body.docmode[data-dpaper="wongo"] w-ed.page[data-wg].isempty::before{-webkit-text-fill-color:var(--faint);color:var(--faint)}
 .hmirror i.mkfn{visibility:visible;font-style:normal;color:transparent;position:relative;background:var(--note-bg,var(--paper));border-radius:3px;box-shadow:inset 0 -1px 0 color-mix(in srgb,var(--sepia) 35%,transparent)}
 .hmirror i.mkfn .fnsup{position:absolute;left:0;top:-.42em;font:700 .62em/1 Georgia,serif;color:#a0522d} .hmirror i.mkfn.en .fnsup{color:#4f7fa8}
 .hmirror i.mkfn .fntx{visibility:visible;position:absolute;left:.95em;right:0;top:50%;transform:translateY(-50%);font-size:.66em;line-height:1.2;color:var(--ink-soft);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -334,7 +345,7 @@ body.aiopen #aitog{background:#7a5aa8;color:#fff;border-color:#7a5aa8}
 #fbpanel .rfb{display:flex;gap:6px;margin-top:6px} #fbpanel .rfb button{border:1px solid var(--edge);background:var(--paper);border-radius:8px;padding:3px 12px;cursor:pointer;font:inherit;font-size:12.5px;color:var(--ink)} #fbpanel .rfb button.p{background:var(--ink);color:var(--paper);border-color:var(--ink)} #fbpanel .rfdiff{font-size:13.5px;line-height:1.7;margin:4px 0}
 .respage{max-width:900px} .resbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap} .resbar #resq{flex:1;min-width:180px} .resbar select{width:auto}
 .resed{border:1px solid var(--edge);border-radius:12px;background:color-mix(in srgb,var(--paper) 70%,#fff);padding:12px 14px;margin:10px 0;display:grid;gap:10px;font-family:-apple-system,"Apple SD Gothic Neo",sans-serif}
-.resed .cxf input,.resed .cxf select{width:100%;border:1px solid var(--edge);border-radius:8px;background:color-mix(in srgb,var(--paper) 50%,#fff);padding:7px 9px;font:14px -apple-system,sans-serif;color:var(--ink)}
+.resed .cxf input,.resed .cxf select{width:100%;border:1px solid var(--edge);border-radius:8px;background:var(--field-bg);padding:7px 9px;font:14px -apple-system,sans-serif;color:var(--ink)}
 .resgrid{display:grid;grid-template-columns:150px 1fr;gap:10px} .resgrid.four{grid-template-columns:1.4fr .7fr .6fr .9fr} .resgrid .wide{min-width:0}
 .reslist{display:grid;gap:10px;margin-top:6px} .rescard{border:1px solid var(--edge);border-radius:12px;background:var(--paper);padding:10px 14px;display:grid;gap:6px;font:14px/1.6 -apple-system,"Apple SD Gothic Neo",sans-serif}
 .reskind{font-size:11.5px;border-radius:99px;padding:0 8px;background:var(--edge);color:var(--ink-soft)} .resok{font-size:11px;border-radius:99px;padding:0 7px} .resok.y{background:#d9ead9;color:#245c2f} .resok.n{background:#f4d6d0;color:#8a2c1c}
@@ -354,8 +365,8 @@ body.aiopen #aitog{background:#7a5aa8;color:#fff;border-color:#7a5aa8}
 body.readmode .writegrid{grid-template-columns:1fr} body.readmode .writegrid>aside,body.readmode .sucard{display:none}
 body.readmode .notebook{padding:40px 64px 48px 96px} body.readmode .readview{font-size:calc(var(--note-fs,17px) + 1px);line-height:calc(var(--note-lh,34px) + 2px)}
 @media (max-width:700px){ body.readmode .notebook{padding:24px 18px 30px 40px} }
-textarea.page.grid{background-image:repeating-linear-gradient(to bottom,transparent 0 17px,var(--rule) 17px 18px),repeating-linear-gradient(to right,transparent 0 17px,var(--rule) 17px 18px)}
-textarea.page.blank{background-image:none}
+:is(textarea,w-ed).page.grid{background-image:repeating-linear-gradient(to bottom,transparent 0 17px,var(--rule) 17px 18px),repeating-linear-gradient(to right,transparent 0 17px,var(--rule) 17px 18px)}
+:is(textarea,w-ed).page.blank{background-image:none}
 .notebook .margin{position:absolute;top:0;bottom:0;left:70px;width:1px;background:var(--margin)}
 .notebook.blank .margin{display:none}
 .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
@@ -609,8 +620,8 @@ hr.dash{border:0;border-top:1px dashed var(--edge);margin:18px 0}
   .notebook::before{left:8px;width:12px;background-size:12px 60px}
   .notebook .margin{left:32px}
   .notebook .title-in{font-size:22px}
-  textarea.page{font-size:var(--note-fs,17px);line-height:var(--note-lh,34px);min-height:55vh}
-  textarea.page.lined{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--note-lh,34px) - 1px),var(--rule) calc(var(--note-lh,34px) - 1px) var(--note-lh,34px))}
+  :is(textarea,w-ed).page{font-size:var(--note-fs,17px);line-height:var(--note-lh,34px);min-height:55vh}
+  :is(textarea,w-ed).page.lined{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--note-lh,34px) - 1px),var(--rule) calc(var(--note-lh,34px) - 1px) var(--note-lh,34px))}
   .readview{font-size:var(--note-fs,17px);line-height:var(--note-lh,34px)}
   .seal{width:100px;height:100px}
   .plancards{grid-template-columns:1fr}
@@ -1028,9 +1039,9 @@ body.docmode{--dp-bg:#fff} body.docmode[data-dpaper="note"]{--dp-bg:#fffef8} bod
 html[data-theme="dark"] body.docmode{--dp-bg:var(--paper);--wg-line:color-mix(in srgb,#df9a86 55%,var(--paper))}
 body.docmode[data-dpaper="note"] .notebook,body.docmode[data-dpaper="wongo"] .notebook{background-color:var(--dp-bg)}
 body.docmode[data-dpaper="note"] .notebook{background-image:linear-gradient(to right,transparent 62px,#f0b3aa 62px 63px,transparent 63px)}
-body.docmode[data-dpaper="note"] textarea.page{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--doc-lh) - 1px),#c6d6ea calc(var(--doc-lh) - 1px) var(--doc-lh))!important;background-position:0 4px}
-html[data-theme="dark"] body.docmode[data-dpaper="note"] textarea.page{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--doc-lh) - 1px),var(--rule) calc(var(--doc-lh) - 1px) var(--doc-lh))!important}
-body.docmode[data-dpaper="wongo"] textarea.page[data-wg]{background-image:
+body.docmode[data-dpaper="note"] :is(textarea,w-ed).page{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--doc-lh) - 1px),#c6d6ea calc(var(--doc-lh) - 1px) var(--doc-lh))!important;background-position:0 4px}
+html[data-theme="dark"] body.docmode[data-dpaper="note"] :is(textarea,w-ed).page{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--doc-lh) - 1px),var(--rule) calc(var(--doc-lh) - 1px) var(--doc-lh))!important}
+body.docmode[data-dpaper="wongo"] :is(textarea,w-ed).page[data-wg]{background-image:
   repeating-linear-gradient(to bottom,transparent 0 var(--wg-t),var(--wg-line) var(--wg-t) calc(var(--wg-t) + 1px),transparent calc(var(--wg-t) + 1px) calc(var(--wg-t) + var(--wg-c) - 1px),var(--wg-line) calc(var(--wg-t) + var(--wg-c) - 1px) calc(var(--wg-t) + var(--wg-c)),transparent calc(var(--wg-t) + var(--wg-c)) var(--wg-l)),
   repeating-linear-gradient(to bottom,var(--dp-bg) 0 var(--wg-t),transparent var(--wg-t) calc(var(--wg-t) + var(--wg-c)),var(--dp-bg) calc(var(--wg-t) + var(--wg-c)) var(--wg-l)),
   repeating-linear-gradient(to right,var(--wg-line) 0 1px,transparent 1px var(--wg-c))!important;
@@ -1039,11 +1050,11 @@ body.docmode .writegrid>div,body.docmode .notebook{min-width:0}
 /* 쪽 폭을 넓히면 글쓰기 화면 전체 폭도 함께 (곁 칸은 그대로 오른쪽) */
 body.docmode[data-dwidth="wide"] #main:has(.writegrid){max-width:1400px} body.docmode[data-dwidth="land"] #main:has(.writegrid){max-width:1520px} body.docmode[data-dwidth="full"] #main:has(.writegrid){max-width:none}   /* 위 막대(한 줄로 옆으로 넘김)가 쪽 폭을 밀어 휴대폰 화면이 옆으로 넓어지던 것 막음 */
 @media (max-width:700px){ body.docmode[data-dpaper="note"] .notebook{background-image:none} }
-body.docmode[data-dpaper="wongo"] textarea.page[data-wg]{min-height:0!important;color:transparent!important;caret-color:transparent;-webkit-text-fill-color:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::selection{background:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::placeholder{-webkit-text-fill-color:var(--faint);color:var(--faint)}
+body.docmode[data-dpaper="wongo"] :is(textarea,w-ed).page[data-wg]{min-height:0!important;color:transparent!important;caret-color:transparent;-webkit-text-fill-color:transparent} body.docmode[data-dpaper="wongo"] :is(textarea,w-ed).page[data-wg]::selection{background:transparent} body.docmode[data-dpaper="wongo"] :is(textarea,w-ed).page[data-wg]::placeholder{-webkit-text-fill-color:var(--faint);color:var(--faint)}
 .hmirror.wgm{white-space:normal;letter-spacing:0!important;word-spacing:0!important;overflow:visible} .hmirror.wgm .wgr{display:flex;height:var(--wg-l,30px);align-items:center} .hmirror.wgm .wgr i{flex:0 0 var(--wg-c);width:var(--wg-c);text-align:center;font-style:normal;line-height:1} .hmirror.wgm .wgr.hd i{font-weight:700} .hmirror.wgm .wgr i,.hmirror.wgm .wgcar{visibility:visible} .hmirror.wgm .wgr i.hl{background:color-mix(in srgb,var(--hl) 55%,transparent)} .hmirror.wgm .wgr i.ul{text-decoration:underline;text-decoration-color:var(--sepia);text-underline-offset:4px} .hmirror.wgm .wgr i.bd{font-weight:800} .hmirror.wgm .wgr i.it{font-style:italic} .hmirror.wgm .wgr i.fn{font-size:.7em;color:var(--sepia)}
 .hmirror.wgm .wgr i.sel{background:color-mix(in srgb,#7aa7e0 38%,transparent)}
 .hmirror.wgm .wgcar{position:absolute;width:2px;background:var(--ink);animation:wgblink 1.05s steps(1) infinite} @keyframes wgblink{50%{opacity:0}}
-body.docmode textarea.page{background-image:none!important;font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);min-height:70vh}
+body.docmode :is(textarea,w-ed).page{background-image:none!important;font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);min-height:70vh}
 body.docmode .notebook .title-in{font-family:var(--doc-font);font-size:calc(var(--doc-fs) * 1.9);border-bottom:0;margin-top:26px}
 body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);white-space:normal} body.docmode .readview p.dp{margin:0 0 var(--doc-sp);text-indent:var(--doc-ind);white-space:pre-wrap} body.docmode .readview h4{font-family:var(--doc-font);font-size:calc(var(--doc-fs) * 1.12)}
 .docbar{position:sticky;top:0;z-index:6;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;margin:0 -60px 8px;padding:8px 10px;background:color-mix(in srgb,var(--paper) 92%,#fff);border-bottom:1px solid var(--edge);border-radius:6px 6px 0 0;font-size:13px}
@@ -1092,6 +1103,11 @@ body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-
 .strc:hover{border-color:var(--sepia)} .strc b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .strc span{color:var(--ink-soft);font-size:12.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em} .strc small{color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* 공통 창고 「말씀 노트」: 남색 띠 · 「공통」 배지 · 점선 카드 — 원고 창고와 한눈에 구분 */
 :root{--common:#2f4a7a} :root[data-theme="dark"]{--common:#8fa9d6}
+/* 편집 칸 공통 (2026-10-30 편집·디자인 점검): 칸 바탕은 종이 색 토큰(어두운 화면에서 흰색을 섞지 않음) · 자리 표시 글은 --faint 하나 */
+:root{--field-bg:color-mix(in srgb,var(--paper) 50%,#fff)} :root[data-theme="dark"]{--field-bg:color-mix(in srgb,var(--paper) 82%,#000)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--field-bg:color-mix(in srgb,var(--paper) 82%,#000)} }
+input::placeholder,textarea::placeholder{color:var(--faint);opacity:1}
+@media (max-width:700px){ .resed .cxf input,.resed .cxf select,.codexpage .cxf input,.codexpage .cxf select,.codexpage .cxprop input,.codexpage .cxrel input,.codexpage .cxrel select,#aipanel textarea,.jbq,#jbq,.dcard input,.dcard textarea,.vrrow textarea,.vrrow input,.hlbar textarea,.hlbar input,.reviewbox textarea,.noteform textarea,.pstage .ps-note textarea{font-size:16px!important} }   /* 휴대폰: 16px 아래면 iOS가 누를 때 화면을 확대함 */
 .combadge{display:inline-block;background:var(--common);color:#fff;border-radius:99px;font:600 11px/1.6 -apple-system,"Apple SD Gothic Neo",sans-serif;padding:0 8px;vertical-align:middle} :root[data-theme="dark"] .combadge{color:#16202f}
 .comband{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-left:4px solid var(--common);background:color-mix(in srgb,var(--common) 8%,transparent);border-radius:0 8px 8px 0;padding:8px 12px;margin:0 0 12px;font-size:13.5px;color:var(--ink)}
 .cxlist.common .sthello,.codexpage.common .title-in{color:var(--common)} .codexpage.common{border-top:4px solid var(--common)}
@@ -1109,10 +1125,10 @@ body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-
 .cxp-title{display:block;width:100%;border:0;border-bottom:1px solid var(--edge);border-radius:0;background:none;font:800 28px/1.3 "Nanum Myeongjo",serif;color:var(--ink);padding:8px 0;margin:4px 0 16px} .cxp-title:focus{outline:none;border-bottom-color:var(--ink)} .codexpage.common .cxp-title{color:var(--common)}
 .cxp-grid{display:grid;grid-template-columns:150px 1fr 220px;gap:12px;align-items:start}
 .cxf{display:grid;gap:5px;margin:0} .cxf>span,.cxp-sec h4{font:600 12.5px/1.4 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft);letter-spacing:.01em} .cxf small{font-size:11.5px;color:var(--faint)}
-.codexpage .cxf input,.codexpage .cxf select,.codexpage .cxprop input,.codexpage .cxrel input,.codexpage .cxrel select{width:100%;border:1px solid var(--edge);border-radius:8px;background:color-mix(in srgb,var(--paper) 50%,#fff);padding:8px 10px;font:14.5px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
+.codexpage .cxf input,.codexpage .cxf select,.codexpage .cxprop input,.codexpage .cxrel input,.codexpage .cxrel select{width:100%;border:1px solid var(--edge);border-radius:8px;background:var(--field-bg);padding:8px 10px;font:14.5px -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
 .cxp-sec{border:1px solid var(--edge);border-radius:12px;padding:12px 14px;margin-top:14px;background:color-mix(in srgb,var(--paper) 70%,#fff)} :root[data-theme="dark"] .cxp-sec{background:var(--paper)}
 .cxp-sec h4{margin:0 0 10px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:13.5px;color:var(--ink)} .cxp-sec h4 small{font-weight:400;font-size:12px;color:var(--faint)}
-.cxp-text{display:block;width:100%;min-height:150px;resize:vertical;border:1px solid var(--edge);border-radius:8px;background:color-mix(in srgb,var(--paper) 50%,#fff);padding:10px 12px;font:16px/1.85 "Gowun Batang",serif;color:var(--ink)} .cxp-text.small{min-height:80px}
+.cxp-text{display:block;width:100%;min-height:150px;resize:vertical;border:1px solid var(--edge);border-radius:8px;background:var(--field-bg);padding:10px 12px;font:16px/1.85 "Gowun Batang",serif;color:var(--ink)} .cxp-text.small{min-height:80px}
 .cxp-save{display:flex;justify-content:flex-end;gap:6px;margin-top:12px} .cxp-x{border:1px solid var(--edge)!important} .cxp-stamp{font-size:12px;color:var(--faint);margin-right:4px} .codexpage .cxback{border:0;padding:0;margin:0}
 .codexpage .cxhit{padding:8px 0;border-top:1px dashed var(--edge)} .codexpage .cxhit:first-child{border-top:0;padding-top:0}
 .cxsidebody{white-space:pre-wrap;font:14.5px/1.7 "Gowun Batang",serif;color:var(--ink);margin:4px 0}
@@ -1284,7 +1300,7 @@ body.staside #main .studio .writegrid,body.staside.sidefold #main .studio .write
 .scw{padding:14px 0 18px;border-bottom:1px dashed var(--edge)}
 .scw header{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px} .scw header b{font-family:"Nanum Myeongjo";font-size:18px} .scw .scn{font-size:22px;color:var(--sepia)}
 .scbody{white-space:pre-wrap;line-height:1.95;font-size:16px}
-.scta{width:100%;min-height:200px;line-height:1.95;font-size:16px}
+.page.scta{width:100%;min-height:160px;padding:6px 4px}
 .scp{font-family:"Nanum Myeongjo";font-weight:800;font-size:21px;margin:22px 0 4px;text-align:center;letter-spacing:.08em} .scp.lv2{font-size:17px;text-align:left;letter-spacing:0;color:var(--ink-soft)}
 .resform{display:grid;gap:6px;margin-bottom:14px}
 .rsrc.big{padding:10px 0;border-bottom:1px dotted var(--edge);display:grid;gap:4px}
@@ -1828,6 +1844,7 @@ const IS_LOCAL=/^(localhost|127\.0\.0\.1|\[::1\]|192\.168\.|10\.)/.test(location
 const GAS=!!CONN;                        // 구글 서버를 쓰는지
 let NEED_CONNECT=!CONN&&!IS_LOCAL, AUTH_FAIL=false;
 async function gcall(fn,...args){
+  if(fn==="coWrite"&&args[0]&&typeof args[0]==="object"&&!Array.isArray(args[0])) args[0]={...args[0],callName:callName()};   // AI가 나를 부를 때 쓸 호칭
   // 본문을 글자(text/plain)로 보내면 브라우저가 따로 허락을 묻지 않아 구글 서버에 바로 닿습니다
   const r=await fetch(CONN.u,{method:"POST",body:JSON.stringify({key:CONN.k,fn,args}),signal:AbortSignal.timeout?AbortSignal.timeout(fn==="saveData"?120000:fn==="cmtIndex"?300000:180000):undefined});
   let j; try{ j=await r.json(); }catch(_){ throw new Error(`구글 서버가 알아볼 수 없는 답을 보냈습니다 (${r.status}) — 잠시 뒤 다시 해 보세요`); }
@@ -2093,7 +2110,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="403cb46818";
+const APP_BUILD="ca55695b38";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2198,6 +2215,8 @@ const $=s=>document.querySelector(s);
 // 받침에 맞춘 조사: jo("꼭지","을","를") → "꼭지를". 끝이 한글이 아니면(괄호·숫자 등) 앞쪽 마지막 한글로 판단
 const jo=(w,a,b)=>{ const t=String(w??""); for(let i=t.length-1;i>=0;i--){ const c=t.charCodeAt(i); if(c>=0xAC00&&c<=0xD7A3) return t+((c-0xAC00)%28?a:b); } return t+a+"("+b+")"; };
 const jp=(w,a,b)=>jo(w,a,b).slice(String(w??"").length);   // 조사만
+// 나를 부르는 호칭 (설정 → 쓰기, S.settings.callName — 기기 사이에 따라감). 앱이 사용자를 부르는 문구는 모두 이것으로
+const callName=()=>String(S?.settings?.callName||"").trim().slice(0,20)||"팀장님";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const dkey=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
@@ -2508,6 +2527,7 @@ function setGroups(){ const R=S.reminder||{}, rOn=!!(R.on&&R.clock!==false), p=S
      {k:"music",ic:"♪",t:"찬송가·CCM 듣기",st:CONF.yt?"ok":"off",pill:CONF.yt?"설정됨":"선택",sum:CONF.yt?"유튜브 열쇠 들어 있음 · 앱 안에서 재생":"열쇠 없음 · 유튜브뮤직 검색으로 열림",body:musicSection()},
      {k:"streak",ic:"❋",t:"이어지는 아침",st:"",sum:`${streakShown()}일째${sf?` · ${+sf.slice(5,7)}월 ${+sf.slice(8,10)}일부터`:""}`,body:streakSection()}]},
    {id:"write",t:"쓰기",ic:"✎",acc:"var(--sepia)",rows:[
+     {k:"callname",ic:"☺",t:"나를 부르는 호칭",st:"",sum:`「${esc(callName())}」${S.settings.callName?"":" (기본)"}`,body:callNameSection()},
      {k:"quiet",ic:"◷",t:"쓰는 동안 조용히",st:"",sum:`집중 ${ps.focus}분 · 쉼 ${ps.short}분 · 긴 쉼 ${ps.long}분(${ps.rounds}번마다)`,body:quietSection()},
      {k:"vr",ic:"✎",t:"AI가 따를 것 — 규칙·말투",st:"",sum:rules||voice?`규칙 ${rules}개 · 말투 기준 ${voice}문장`:"아직 규칙 없음",body:vrSection()}]},
    {id:"device",t:"화면·기기",ic:"◐",acc:"var(--ink-soft)",rows:[
@@ -2720,12 +2740,13 @@ function hlBar(html,rect,memo){
 const hlClose=()=>{ $("#hlbar")?.remove(); HLSEL=null; };
 // 글쓰기 칸에서 글자를 고르면: 형광펜·밑줄·각주 표시를 글 속에 넣습니다
 let WSEL=null;
-function wTools(){
+function wTools(el){
+  if(el&&el.id!=="wbody") return HLC.map(([k,c])=>`<button title="형광펜 — 같은 색을 한 번 더 누르면 지워집니다" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")+`<button title="굵게 (⌘B)" onclick="docWrap('**',true)" style="font-weight:800">B</button><button title="기울임 (⌘I)" onclick="docWrap('*',true)" style="font-style:italic;font-family:Georgia,serif">I</button><button title="밑줄 (⌘U)" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button class="hlerase" title="꾸밈 지우기" onclick="wMark('clear')">지우개</button><button title="닫기" onclick="hlClose()">✕</button>`;   // 이어 읽기 고치기 칸: 꾸밈만 (AI·각주는 글쓰기 화면에서)
   return `<button class="rfd rfgo" title="AI로 다듬기 — 고친 안을 비교해 보고 넣습니다" onclick="rfMenu()">✦ 다듬기</button>`+HLC.map(([k,c])=>`<button title="형광펜 — 이미 칠한 곳에 같은 색을 한 번 더 누르면 지워집니다" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")
-    +`<button title="굵게 (⌘B)" onclick="docWrap('**',true)" style="font-weight:800">B</button><button title="기울임 (⌘I)" onclick="docWrap('*',true)" style="font-style:italic;font-family:Georgia,serif">I</button><button title="밑줄" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button title="각주 달기 (고른 글 뒤에 번호로 붙습니다)" onclick="wMark('fn')" style="font-weight:700;font-family:Georgia,serif">¹</button><button class="hlerase" title="꾸밈 지우기 — 고른 곳의 형광펜·밑줄을 지웁니다 (글은 그대로)" onclick="wMark('clear')">지우개</button><button class="rfd" title="이 문장을 말투 기준으로 담기 — AI가 이 말투를 따릅니다" onclick="voiceAddSel()">말투</button><button title="닫기" onclick="hlClose()">✕</button>`;
+    +`<button title="굵게 (⌘B)" onclick="docWrap('**',true)" style="font-weight:800">B</button><button title="기울임 (⌘I)" onclick="docWrap('*',true)" style="font-style:italic;font-family:Georgia,serif">I</button><button title="밑줄 (⌘U)" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button title="각주 달기 (고른 글 뒤에 번호로 붙습니다)" onclick="wMark('fn')" style="font-weight:700;font-family:Georgia,serif">¹</button><button class="hlerase" title="꾸밈 지우기 — 고른 곳의 형광펜·밑줄을 지웁니다 (글은 그대로)" onclick="wMark('clear')">지우개</button><button class="rfd" title="이 문장을 말투 기준으로 담기 — AI가 이 말투를 따릅니다" onclick="voiceAddSel()">말투</button><button title="닫기" onclick="hlClose()">✕</button>`;
 }
 function wMark(kind,color){
-  const b=$("#wbody"); if(!b||!WSEL) return hlClose();
+  const b=WSEL?.el?.isConnected?WSEL.el:$("#wbody"); if(!b||!WSEL) return hlClose();
   let {s,e}=WSEL; const v=b.value; let sel=v.slice(s,e);
   if(kind==="fn"){ fnBox(e,null,v.slice(s,e)); return; }
   else { // 고른 구간과 조금이라도 겹치는 표시는 통째로 다룹니다 (반쪽만 바뀌어 깨지지 않게)
@@ -2752,7 +2773,7 @@ function fnBox(at,editIdx,quote){
 }
 // 커서 자리(또는 고른 글 뒤)에 각주 — 모든 글에서 (쓰기 도구 줄 「¹ 각주」, ⌘⇧F, 오른쪽 버튼 메뉴)
 function caretAt(b){ const s=b.selectionStart??0, e=b.selectionEnd??s; return (s===0&&e===0&&b.value&&!b.dataset.caret)?{s:b.value.length,e:b.value.length}:{s,e}; }   // 한 번도 커서를 두지 않았으면 글 끝
-document.addEventListener("keyup",e=>{ if(e.target?.id==="wbody") e.target.dataset.caret="1"; }); document.addEventListener("mouseup",e=>{ if(e.target?.id==="wbody") e.target.dataset.caret="1"; }); document.addEventListener("touchend",e=>{ if(e.target?.id==="wbody") e.target.dataset.caret="1"; });
+["keyup","mouseup","touchend"].forEach(ev=>document.addEventListener(ev,e=>{ const b=e.target.closest?.("#wbody"); if(b) b.dataset.caret="1"; }));
 function fnHere(){ const b=$("#wbody"); if(!b) return; if(READVIEW) toggleRead(); const {s,e}=caretAt(b);   // 상자는 이 클릭이 다 끝난 뒤에 엶 (같은 클릭이 「바깥 클릭」으로 상자를 닫지 않게)
   setTimeout(()=>{ if(e>s){ WSEL={s,e}; return wMark("fn"); } const pre=b.value.slice(Math.max(0,s-24),s).replace(/\s+/g," ").trim(); fnBox(s,null,pre?"…"+pre:"글 맨 앞"); },0); }
 document.addEventListener("keydown",e=>{ if((e.metaKey||e.ctrlKey)&&e.shiftKey&&(e.key==="f"||e.key==="F")&&$("#wbody")&&tab==="write"){ e.preventDefault(); fnHere(); } });
@@ -2772,6 +2793,7 @@ document.addEventListener("click",e=>{ const sup=e.target.closest?.("#readview s
 function selRect(b){ const s=b.selectionStart, e=b.selectionEnd, tb=b.getBoundingClientRect();
   if(wgOn(b)){ const g=b._wg, rows=wgModel(b), p=wgPos(rows,s,g), q=wgPos(rows,Math.max(s,e-1),g); const top=tb.top+g.pt+p.r*g.L-b.scrollTop, x0=p.r===q.r?tb.left+g.pl+p.c*g.C:tb.left+g.pl, x1=p.r===q.r?tb.left+g.pl+(q.c+1)*g.C:tb.left+g.pl+g.cols*g.C;
     return {left:x0,width:x1-x0,top,bottom:tb.top+g.pt+(q.r+1)*g.L-b.scrollTop,height:0}; }
+  if(b.tagName==="W-ED"){ const rs=b.rects(s,Math.max(s,e)); if(!rs.length) return null; const top=Math.min(...rs.map(r=>r.top)), bot=Math.max(...rs.map(r=>r.bottom)), first=rs.filter(r=>r.top-top<2), l=Math.min(...first.map(r=>r.left)), rr=Math.max(...first.map(r=>r.right)); return {left:l,width:rr-l,top,bottom:bot,height:bot-top}; }   // 모양째 쓰는 칸: 화면의 글자 자리 그대로
   const cs=getComputedStyle(b), d=document.createElement("div");
   ["fontFamily","fontSize","fontWeight","lineHeight","letterSpacing","wordSpacing","textAlign","paddingTop","paddingRight","paddingBottom","paddingLeft","borderTopWidth","borderLeftWidth","boxSizing","textIndent","tabSize"].forEach(k=>d.style[k]=cs[k]);
   Object.assign(d.style,{position:"absolute",visibility:"hidden",whiteSpace:"pre-wrap",overflowWrap:"break-word",wordBreak:cs.wordBreak,width:b.offsetWidth+"px",left:"0",top:"0"});
@@ -2779,8 +2801,10 @@ function selRect(b){ const s=b.selectionStart, e=b.selectionEnd, tb=b.getBoundin
   const dr=d.getBoundingClientRect(), rs=[...sp.getClientRects()]; d.remove(); if(!rs.length) return null;
   const top=Math.min(...rs.map(r=>r.top)), bot=Math.max(...rs.map(r=>r.bottom)), first=rs.filter(r=>r.top===top), l=Math.min(...first.map(r=>r.left)), rr=Math.max(...first.map(r=>r.right));
   return {left:tb.left+(l-dr.left),width:rr-l,top:tb.top+(top-dr.top)-b.scrollTop,bottom:tb.top+(bot-dr.top)-b.scrollTop,height:bot-top}; }
-document.addEventListener("mouseup",e=>{ const b=e.target.closest?.("#wbody"); if(!b||e.button===2||CTX) return; setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd}; let r=null; try{ r=selRect(b); }catch(_){} hlBar(wTools(),r||{left:e.clientX,top:e.clientY-8,width:0,height:0,bottom:e.clientY+8}); },10); });
-document.addEventListener("selectionchange",()=>{ const b=$("#wbody"); if(!b||document.activeElement!==b||!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._wsT); window._wsT=setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return; WSEL={s:b.selectionStart,e:b.selectionEnd}; const r=b.getBoundingClientRect(); hlBar(wTools(),{left:r.left+r.width/2,top:Math.max(60,r.top)+40,width:0,height:0,bottom:Math.max(60,r.top)+60}); },400); });
+function wBarShow(b,fb){ if(b.readOnly||b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; let r=null; try{ r=selRect(b); }catch(_){} hlBar(wTools(b),r||fb); }
+document.addEventListener("keyup",e=>{ const b=e.target; if(b?.tagName!=="W-ED"||!e.shiftKey||e.isComposing||!/^(Arrow|Home|End|Page)/.test(e.key)) return; const r=b.getBoundingClientRect(); wBarShow(b,{left:r.left+r.width/2,top:r.top+40,width:0,height:0,bottom:r.top+60}); });   // ⇧+화살표로 골라도 같은 꾸밈 막대
+document.addEventListener("mouseup",e=>{ const b=e.target.closest?.("w-ed"); if(!b||e.button===2||CTX) return; setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; let r=null; try{ r=selRect(b); }catch(_){} hlBar(wTools(b),r||{left:e.clientX,top:e.clientY-8,width:0,height:0,bottom:e.clientY+8}); },10); });
+document.addEventListener("selectionchange",()=>{ const b=document.activeElement; if(b?.tagName!=="W-ED"||!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._wsT); window._wsT=setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return; WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; const r=b.getBoundingClientRect(); hlBar(wTools(b),{left:r.left+r.width/2,top:Math.max(60,r.top)+40,width:0,height:0,bottom:Math.max(60,r.top)+60}); },400); });
 // 성경 구절 넣기: 한 줄에 「창 1:1-3」(약어나 책 이름)만 적고 Enter 를 누르면 그 자리에 본문(개역한글, 공개본)이 들어갑니다
 const BABBR="창 출 레 민 신 수 삿 룻 삼상 삼하 왕상 왕하 대상 대하 스 느 에 욥 시 잠 전 아 사 렘 애 겔 단 호 욜 암 옵 욘 미 나 합 습 학 슥 말 마 막 눅 요 행 롬 고전 고후 갈 엡 빌 골 살전 살후 딤전 딤후 딛 몬 히 약 벧전 벧후 요일 요이 요삼 유 계".split(" ");
 const REF_RE=/^\s*([가-힣]{1,7}(?:[123]서)?)\s*(\d{1,3})[:：장편]\s*(\d{1,3})?(?:\s*[-~]\s*(?:(\d{1,3})[:：])?(\d{1,3}))?\s*(절)?\s*$/;
@@ -3459,7 +3483,7 @@ function jbChips(){ const all=jots(), n=k=>k==="all"?all.length:k==="none"?all.f
 function jotBoard(){ const all=jots(), wk=new Date(Date.now()-7*864e5).toISOString(), nw=all.filter(j=>(j.at||j.updated||"")>=wk).length, used=all.filter(j=>(j.used||[]).length).length;
   return `<section class="sthome jboard"><h2 class="sthello" style="font-size:24px">끄적이기</h2>
     <p class="sub" style="text-align:center;margin:-14px 0 14px">공통 창고 — 모든 기기에서 같이 보이고 노션에는 가지 않습니다 · 모두 ${all.length} · 이번 주 ${nw}${used?` · 꺼내 쓴 것 ${used}`:""}</p>
-    <div class="jbin"><textarea id="jbin" class="pen" rows="2" placeholder="떠오른 한 줄… (엔터로 붙이기 · 줄바꿈은 Shift+엔터)" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();jbAdd()}"></textarea>
+    <div class="jbin"><textarea id="jbin" class="pen" rows="2" placeholder="떠오른 한 줄… (⌘엔터 / Ctrl+엔터로 붙이기)" onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter'&&!event.isComposing){event.preventDefault();jbAdd()}"></textarea>
       <div class="row" style="gap:6px"><select id="jbcat" title="분류 (고르지 않으면 모양을 보고 짐작합니다)"><option value="">분류 — 저절로</option>${JOT_CATS.map(([k,l,ic])=>`<option value="${k}">${ic} ${l}</option>`).join("")}</select><button class="btn ink" onclick="jbAdd()">붙이기</button></div></div>
     <div class="jbbar"><div class="jchips" id="jbchips">${jbChips()}</div>
       <div class="row jbtools"><input id="jbq" placeholder="찾기" value="${esc(JB_Q)}" oninput="JB_Q=this.value;jbPaint()"><select onchange="JB_SORT=this.value;try{localStorage.setItem('seojae.jbSort',this.value)}catch(_){};jbPaint()" title="늘어놓는 순서">${[["new","최근 고친 순"],["old","처음 적은 순"],["long","긴 것부터"],["cat","분류별로 묶기"],["color","색깔별로 묶기"]].map(([k,l])=>`<option value="${k}" ${JB_SORT===k?"selected":""}>${l}</option>`).join("")}</select>
@@ -3665,12 +3689,22 @@ function dSlipBody(w){ const fn=[]; return `<p class="dslipk ${w.track}">[${esc(
 function dSlip(id){ const w=S.writings.find(x=>x.id===id); if(!w) return; const ov=dSlipOpen(dSlipBody(w)); ov.querySelector(".dslipacts").insertAdjacentHTML("afterbegin",`<button class="btn small ink" onclick="document.getElementById('dslipview').remove();go('write',{edit:'${w.id}'})">글 열기 →</button>`); }
 function dSlipList(d){ const ws=live().filter(w=>w.date===d); dSlipOpen(`<p class="dslipk">${esc(d)} · 이날 쓴 글 ${ws.length}편</p>${ws.map(w=>`<button type="button" class="dw-slip ${w.track}" onclick="dSlip('${w.id}')"><span class="k">[${esc(wTag(w))}]${w.passage?" "+esc(w.passage):""}</span><b>${esc(w.title||"(제목 없음)")}</b><span class="ex">${esc(pv(w,160))}</span></button>`).join("")}`); }
 function dSlipNotes(d){ const ns=S.notes.filter(n=>n.date===d); dSlipOpen(`<p class="dslipk">${esc(d)} · 밑줄 ${ns.length}개</p>${ns.map(n=>`<div class="dquote">${esc(n.text)}<div class="muted">${esc(noteSrc(n))}</div></div>`).join("")}`); }
+// 일기 칸 되돌리기 (⌘Z · ⇧⌘Z · ⌘Y): 글 칸과 같은 원칙 — 이어서 친 글자는 한 덩어리, 꾸미기·붙여넣기는 따로. 이 기기 메모리만
+const DH={past:[],fut:[],g:0,gt:"",d:null};
+function dState(ed){ const sel=getSelection(); let s=0,e=0; if(sel.rangeCount&&ed.contains(sel.anchorNode)){ const r=sel.getRangeAt(0); s=dOff(ed,r.startContainer,r.startOffset); e=dOff(ed,r.endContainer,r.endOffset); } return {line:dCur()??"",s,e}; }
+function dSnap(ed,type){ if(DH.d!==diaryDate){ DH.past=[]; DH.fut=[]; DH.d=diaryDate; } const now=Date.now(), t=/^insert(Text|Composition)/.test(type||"")?"t":(type||"x"); if(t==="t"&&DH.gt==="t"&&now-DH.g<1200){ DH.g=now; return; } DH.g=now; DH.gt=t; const st=dState(ed); if(DH.past.at(-1)?.line!==st.line) DH.past.push(st); DH.fut=[]; if(DH.past.length>200) DH.past.shift(); }
+function dUndo(redo){ const ed=dEd(); if(!ed) return; if(DH.d!==diaryDate){ DH.past=[]; DH.fut=[]; DH.d=diaryDate; } const from=redo?DH.fut:DH.past, to=redo?DH.past:DH.fut; if(!from.length) return toast(redo?"다시 실행할 것이 없습니다":"되돌릴 것이 없습니다");
+  to.push(dState(ed)); const st=from.pop(); ed.innerHTML=dHtmlChars(dParse(st.line)); dSetSel(ed,st.s,st.e); DH.g=0; DH.gt=""; dInput(ed); }
+document.addEventListener("beforeinput",e=>{ const ed=e.target; if(!ed?.classList?.contains("dedit")) return; if(/^format/.test(e.inputType)){ e.preventDefault(); return; }
+  if(e.inputType==="historyUndo"||e.inputType==="historyRedo"){ e.preventDefault(); dUndo(e.inputType==="historyRedo"); return; } dSnap(ed,e.inputType); },true);
+document.addEventListener("keydown",e=>{ const ed=e.target; if(!ed?.classList?.contains("dedit")||!(e.metaKey||e.ctrlKey)||e.altKey||e.isComposing) return; const k=e.key.toLowerCase();
+  if(k==="z"||k==="y"){ e.preventDefault(); e.stopPropagation(); dUndo(k==="y"||e.shiftKey); } else if(k==="u"&&!e.shiftKey){ e.preventDefault(); dMark("ul"); } else if((k==="b"||k==="i")&&!e.shiftKey) e.preventDefault(); },true);   // 일기는 굵게·기울임 없음(팀장님 결정) — 브라우저 기본 굵게도 막음
 function dKey(ev){ if(ev.key==="Enter"&&!ev.isComposing&&!ev.shiftKey){ ev.preventDefault(); document.execCommand("insertLineBreak"); } }
-function dPaste(ev){ ev.preventDefault(); const t=(ev.clipboardData||window.clipboardData)?.getData("text")||""; document.execCommand("insertText",false,t.replace(/\r\n?/g,"\n")); }
+function dPaste(ev){ ev.preventDefault(); { const ed=dEd(); if(ed) dSnap(ed,"paste"); } const t=(ev.clipboardData||window.clipboardData)?.getData("text")||""; document.execCommand("insertText",false,t.replace(/\r\n?/g,"\n")); }
 function dDecoBar(){ const b=(k,c,lab,tip)=>`<button type="button" class="dk ${k==="hl"?"hl-"+c:k}" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="dMark('${k}','${c||""}')" title="${tip}">${lab}</button>`;
   return `<div class="ddeco" role="toolbar" aria-label="일기 꾸미기"><span class="ddl">꾸미기</span>${b("hl","y","","노랑 형광펜")}${b("hl","g","","연두 형광펜")}${b("hl","p","","분홍 형광펜")}${b("hl","b","","하늘 형광펜")}<i class="dsep"></i>${b("ul","",`<span class="dpen">펜 밑줄</span>`,"펜으로 밑줄")}${b("x","","지우개","고른 곳의 형광펜·밑줄 지우기")}<i class="dsep"></i><button type="button" class="dk dstk ${STK_OPEN?"on":""}" onpointerdown="event.preventDefault()" onclick="toggleStk()" title="스티커 붙이기">🌼 스티커</button><small class="ddh">글자를 고른 뒤 누르세요 · 같은 색을 한 번 더 누르면 지워집니다</small></div>`; }
 function dMark(kind,color){ const ed=dEd(); if(!ed) return; const sel=getSelection(); if(!sel.rangeCount||!ed.contains(sel.anchorNode)||!ed.contains(sel.focusNode)) return toast("꾸밀 글자를 먼저 고르세요");
-  const r=sel.getRangeAt(0); if(r.collapsed) return toast("꾸밀 글자를 먼저 고르세요");
+  const r=sel.getRangeAt(0); if(r.collapsed) return toast("꾸밀 글자를 먼저 고르세요"); dSnap(ed,"mark");
   let s=dOff(ed,r.startContainer,r.startOffset), e=dOff(ed,r.endContainer,r.endOffset); if(s>e) [s,e]=[e,s];
   const cs=dWalk(ed,{},[]), sel2=cs.slice(s,e).filter(x=>x.ch!=="\n"&&x.ch.trim());
   const off=kind==="hl"?sel2.length&&sel2.every(x=>x.hl===color):kind==="ul"?sel2.length&&sel2.every(x=>x.ul):false;   // 같은 꾸밈을 다시 누르면 지움
@@ -3716,7 +3750,7 @@ function paintStk(){ document.querySelectorAll(".stk-layer").forEach(l=>l.innerH
 function stkTextRects(layer){ const box=layer.parentElement, lr=layer.getBoundingClientRect(), out=[];
   const add=r=>{ if(r.width>0&&r.height>0) out.push({l:r.left-lr.left,t:r.top-lr.top,r:r.right-lr.left,b:r.bottom-lr.top}); };
   box.querySelectorAll("textarea,input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=hidden]):not([type=file]),select").forEach(el=>{ if(!el.closest(".stk-layer")&&el.offsetParent) add(el.getBoundingClientRect()); });
-  const w=document.createTreeWalker(box,NodeFilter.SHOW_TEXT,{acceptNode:n=>!n.nodeValue.trim()||n.parentElement?.closest(".stk-layer,textarea,select,script,style")?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  const w=document.createTreeWalker(box,NodeFilter.SHOW_TEXT,{acceptNode:n=>!n.nodeValue.trim()||n.parentElement?.closest(".stk-layer,.hmirror,textarea,select,script,style")?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
   const rg=document.createRange(); for(let n; (n=w.nextNode());){ rg.selectNodeContents(n); for(const r of rg.getClientRects()) add(r); }
   return out; }
 // (cx,cy)에 둔 스티커가 글자와 겹치면 가장 가까운 빈자리 {x,y}, 겹치지 않거나 빈자리가 없으면 null
@@ -3798,7 +3832,7 @@ function stkFromImage(input){
 function stkKeep(){ if(!STK_NEW) return; const L=S.settings.myStk=S.settings.myStk||[]; if(myStk().length>=40) return toast("내 스티커는 40개까지 보관할 수 있습니다");
   const t={id:uid(),src:STK_NEW.src,shape:STK_NEW.shape,u:new Date().toISOString()}; L.push(t); STK_NEW=null; save(); paintPalette(); addSticker("i:"+t.id); toast("스티커를 보관하고 종이에 붙였습니다"); }
 function stkForget(id){ if(!confirm("이 스티커를 보관함에서 지울까요? 이미 붙인 자리는 그대로 남습니다.")) return; tomb(id); S.settings.myStk=(S.settings.myStk||[]).filter(x=>x.id!==id); save(); paintPalette(); }
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&STK_OPEN&&!e.target.matches?.("input,textarea,select")) toggleStk(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&STK_OPEN&&!e.target.matches?.("input,textarea,select,[contenteditable]")) toggleStk(); });
 document.addEventListener("pointerdown",e=>{
   if(e.target.closest(".stk-tools,.stk-palette")) return;
   const el=e.target.closest(".stk");
@@ -3814,7 +3848,7 @@ document.addEventListener("pointermove",e=>{ const g=STK_DRAG; if(!g) return;
   g.t.x=Math.max(0,Math.min(100,g.x0+dx/g.r.width*100)); g.t.yp=Math.max(0,Math.min(g.r.height,g.y0+dy)); g.t.y=+(g.t.yp/g.r.height*100).toFixed(2); g.el.style.cssText=stkStyle(g.t); });
 document.addEventListener("pointerup",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; g.t.x=+g.t.x.toFixed(2); g.t.yp=Math.round(g.t.yp); if(g.moved){ stkSettle(g.t); stkCommit(g.ctx); } paintStk(); });   // 글자 위에 놓으면 가까운 빈자리로
 document.addEventListener("pointercancel",()=>{ const g=STK_DRAG; if(!g) return; STK_DRAG=null; if(g.moved) stkCommit(g.ctx); paintStk(); });
-document.addEventListener("keydown",e=>{ if(STK_SEL&&(e.key==="Delete"||e.key==="Backspace")&&!e.target.matches?.("input,textarea,select")){ e.preventDefault(); stkAct("x"); } });
+document.addEventListener("keydown",e=>{ if(STK_SEL&&(e.key==="Delete"||e.key==="Backspace")&&!e.target.matches?.("input,textarea,select,[contenteditable]")){ e.preventDefault(); stkAct("x"); } });
 
 const VIEWS={
 diary(){ return diaryPage(); },
@@ -3932,7 +3966,7 @@ write0(){
         ${pieceNav(w)}<input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput();autoKeepKick()">
         <div class="meta"><span class="pen" style="font-size:20px">${esc(w?.date||today())}</span><span id="wcount"></span><span id="draftstamp" class="draftstamp"></span><span id="refhint" class="refhint" style="display:none"></span></div>
         ${cardHtml(w)}
-        <textarea class="page ${paper}" id="wbody" spellcheck="false" oninput="grow();countW();draftInput();refHint();spellAutoKick();autoKeepKick()" onkeyup="refHint()" onclick="refHint();spellPopClose()" style="--penink:${penInk()}" placeholder="${esc(wGuide(w)||(isTouch()?"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다.":"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다."))}">${esc(w?.body??seed)}</textarea>
+        <w-ed class="page ${paper}" id="wbody" contenteditable="true" spellcheck="false" oninput="grow();countW();draftInput();refHint();spellAutoKick();autoKeepKick()" onkeyup="refHint()" onclick="refHint();spellPopClose()" style="--penink:${penInk()}" data-ph="${esc(wGuide(w)||(isTouch()?"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다.":"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다."))}">${esc(w?.body??seed)}</w-ed>
       </div>
     </div>
     <aside>
@@ -4138,19 +4172,9 @@ function updatePage(){ let p=+$("#pg").value; const b=curBook(); if(!b) return; 
 // ───────── 동작: 글쓰기 ─────────
 let HEADS_RAF=0;
 function grow(){ const t=$("#wbody"); if(!t) return; const y=scrollY; t.style.height="auto"; { const h=Math.max(wgOn(t)?wgModel(t).length*t._wg.L+t._wg.pt+t._wg.L:t.scrollHeight,innerHeight*.62); t.style.height=(wgOn(t)?t._wg.pt+Math.ceil((h-t._wg.pt)/t._wg.L)*t._wg.L+2:h)+"px"; } if(scrollY!==y) scrollTo(0,y); if(!HEADS_RAF){ HEADS_RAF=requestAnimationFrame(()=>{ HEADS_RAF=0; paintHeads(); }); setTimeout(()=>{ if(HEADS_RAF){ cancelAnimationFrame(HEADS_RAF); HEADS_RAF=0; paintHeads(); } },200); } }   // 화면 그리기가 늦어도(가려진 창·느린 기기) 0.2초 안에는 거울 층을 그림
-// 소제목(■ 줄)과 주석 요약의 ◆ 줄을 굵게: 글자 칸(textarea)은 줄마다 모양을 바꿀 수 없어, 같은 자리에 투명한 거울 층을 겹쳐 그 줄만 굵은 글자로 한 번 더 그립니다
-// (한글은 굵게 해도 글자 폭이 같아 정확히 겹칩니다. 다른 줄은 보이지 않게 두되 자리는 차지해 줄바꿈이 같습니다)
+// 소제목(■ 줄)과 주석 요약의 ◆ 줄을 굵게: 줄마다 모양을 따로 두지 않고, 같은 자리에 투명한 거울 층을 겹쳐 그 줄의 한글만 굵은 글자로 한 번 더 그립니다
+// (한글은 굵게 해도 글자 폭이 같아 정확히 겹칩니다. 거울 층은 맞춤법·AI 표시·네 자리도 함께 그림 — 꾸밈 자체는 글 칸(<w-ed>)이 모양째 보임)
 const HEAD_RE=/^\s*(■|◆|▣|※\s*주석 요약|※\s*요약 끝)/;
-// 거울 층에 형광펜(==…==)·밑줄(__…__)을 실제 모양으로 그리고, 표시 기호(== __ [^…])는 옅게 덮음 — 글자 칸에는 기호가 그대로 있지만 눈에는 표시처럼 보이게
-const MKL_RE=/==(?:([ygpb]):)?([^=\n]+?)==|__([^_\n]+?)__|\[\^[^\]\n]*\]/g;
-let FN_C={f:0,e:0};
-function markLine(l){ let out="", last=0; const dim=t=>`<i class="mkc">${esc(t)}</i>`, hid0=t=>t?`<span>${esc(t)}</span>`:"", han=t=>t.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s]+)/).map((p,i)=>i%2?hid0(p):(p?`<b>${esc(p)}</b>`:"")).join("");
-  const hid=t=>{ if(!t) return ""; let o="",k=0; for(const m of t.matchAll(BI_RE)){ o+=hid0(t.slice(k,m.index)); k=m.index+m[0].length; const mk=m[1]!=null?"**":"*"; o+=dim(mk)+(m[1]!=null?han(m[1]):`<i class="mki">${esc(m[2])}</i>`)+dim(mk); } return o+hid0(t.slice(k)); };
-  for(const m of l.matchAll(MKL_RE)){ out+=hid(l.slice(last,m.index)); last=m.index+m[0].length;
-    if(m[2]!=null){ const pre="=="+(m[1]?m[1]+":":""), c=(HLC.find(([k])=>k===(m[1]||"y"))||HLC[0])[1]; const edge=t=>`<i class="mkc" style="background:linear-gradient(${c}66,${c}66),var(--pgbg,var(--paper))">${esc(t)}</i>`; out+=edge(pre)+`<i class="mkh" style="background:${c}66">${esc(m[2])}</i>`+edge("=="); }
-    else if(m[3]!=null) out+=dim("__")+`<i class="mku">${esc(m[3])}</i>`+dim("__");
-    else { const raw=m[0].slice(2,-1), en=isEnd(raw), n=en?++FN_C.e:++FN_C.f; out+=`<i class="mkfn ${en?"en":""}">${esc(m[0])}<b class="fnsup">${en?romanL(n):n}</b><small class="fntx">${esc(fnText(raw))}</small></i>`; } }
-  return out+hid(l.slice(last)); }
 function fnPanePaint(t){ let p=$("#fnpane"); const L=[...t.value.matchAll(FN_RE)].map(x=>({i:x.index,raw:x[1]})), F=L.filter(x=>!isEnd(x.raw)), E=L.filter(x=>isEnd(x.raw));
   if(!L.length||t.style.display==="none"){ p?.remove(); return; } if(!p){ p=document.createElement("div"); p.id="fnpane"; p.className="fnpane"; const mir=$("#hmirror"); (mir||t).after(p); }
   const row=(x,lab,k)=>`<li><button onclick="fnGo(${x.i})" title="본문의 그 자리로"><b>${lab}</b> ${esc(fnText(x.raw))}</button><button class="fned" onclick="fnBox(${x.i},${k})" title="고치기">✎</button></li>`, idx=x=>L.indexOf(x);
@@ -4161,24 +4185,156 @@ function paintHeads(){
   if(t.style.display==="none"){ m.style.display="none"; return; } m.style.display="";
   wongoFit(t); const cs=getComputedStyle(t); m.style.cssText=`top:${t.offsetTop}px;left:${t.offsetLeft}px;width:${t.clientWidth}px;padding:${cs.padding};font:${cs.font};letter-spacing:${cs.letterSpacing};word-spacing:${cs.wordSpacing};color:${cs.color};text-align:${cs.textAlign}`;
   if(wgOn(t)){ m.style.color="var(--penink,var(--ink))"; wgPaint(t,m); fnPanePaint(t); sugDraw(); histPaint(); return; } m.classList.remove("wgm");
-  // 소제목 줄 안의 영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보이므로 그 부분만 원래 글자(보이지 않는 자리)로 둡니다
-  const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
-  const plain=(l,head)=>head?boldLine(l):markLine(l);
-  FN_C={f:0,e:0}; const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null; let off=0;
-  const RG=[...(rf?[{s:rf.s,e:rf.e,c:"rf"}]:[]),...sugRanges(t.value),...styRanges(t.value)].sort((a,b)=>a.s-b.s).filter((r,i,A)=>!A.slice(0,i).some(q=>q.e>r.s));   // AI 다듬기(보라) · 첨삭(분홍 밑줄)   // rf: AI 다듬기로 고칠 곳 (옅은 보라 바탕)
-  const OZ=ownZones(t.value);
-  m.innerHTML=t.value.split("\n").map((l,i)=>{ const head=HEAD_RE.test(l), E=errs[i]||[], st=off; off+=l.length+1;
-    const hit=RG.filter(r=>r.s<st+l.length+1&&r.e>st); if(hit.length){ let o="",cur=0; hit.forEach(r=>{ const a=Math.max(cur,r.s-st), z=Math.min(l.length,r.e-st); if(z<=a) return; o+=plain(l.slice(cur,a),head)+`<i class="${r.c}">${esc(l.slice(a,z))}</i>`; cur=z; }); return o+plain(l.slice(cur),head); }
-    if(!E.length) return plain(l,head);
-    let out="", last=0; E.forEach(x=>{ out+=plain(l.slice(last,x.s),head)+`<i class="sp ${x.src}" data-l="${i}" data-s="${x.s}" data-e="${x.e}" title="${esc(x.to)}${x.why?" — "+esc(x.why):""}">${esc(l.slice(x.s,x.e))}</i>`; last=x.e; }); return out+plain(l.slice(last),head); }).map((h,i)=>OZ.has(i)?`<i class="ownl">${h}</i>`:h).join("\n");
+  const errs=spellLines(t.value), rf=RF&&!RF.stale?RF:null;
+  const RG=[...(rf?[{s:rf.s,e:rf.e,c:"rf"}]:[]),...sugRanges(t.value),...styRanges(t.value)].sort((a,b)=>a.s-b.s).filter((r,i,A)=>!A.slice(0,i).some(q=>q.e>r.s));   // AI 다듬기(보라) · AI 제안(파랑) · 문체(노랑 물결)
+  m.innerHTML=edMirrorHtml(t,errs,RG,ownZones(t.value));   // 글 칸과 같은 모양(꾸밈째)으로 그리고 표시만 보이게
   fnPanePaint(t); sugDraw(); histPaint();
   const n=errs.reduce((a,x)=>a+x.length,0), st=$("#spellstate"); if(st&&!SPELL_AI_BUSY) st.textContent=n?`밑줄 ${n}`:"";
 }
+// ───────── 모양째 쓰는 글 칸 <w-ed> (2026-10-30 WYSIWYG): 화면은 워드처럼, 저장은 예전 그대로 기호가 든 글자 ─────────
+// 글자 칸(textarea)과 같은 이름으로 value·selectionStart·selectionEnd·setSelectionRange 를 「기호가 든 원문」 자리로 주고받음 → 글 칸에 기대던 코드가 그대로 돎
+// 화면에는 보이는 글자만: 형광펜 <mark class="wk hl-?"> · 밑줄 <u class="wku"> · 굵게 <b class="wb"> · 기울임 <i class="wi"> · 각주 <sup class="wfn" data-raw="[^…]">(한 덩어리)
+// 보이는 글자마다 원문 시작·끝(s·e)을 들고 다님. 고치지 않은 줄은 원래 원문 그대로 돌려줌(_cache) — 열어 보기만 해도 글이 바뀌는 일이 없게
+const ED_ZW=/[\u200b\ufeff]/;
+function edParseLine(l,base,out){
+  const fnp=(t,o,a)=>{ let k=0; for(const m of t.matchAll(FN_RE)){ for(let j=k;j<m.index;j++) out.push({ch:t[j],...a,s:o+j,e:o+j+1}); out.push({ch:"￼",atom:m[0],...a,s:o+m.index,e:o+m.index+m[0].length}); k=m.index+m[0].length; } for(let j=k;j<t.length;j++) out.push({ch:t[j],...a,s:o+j,e:o+j+1}); };
+  const bi=(t,o,a)=>{ let k=0; for(const m of t.matchAll(BI_RE)){ fnp(t.slice(k,m.index),o+k,a); const w=m[1]!=null?2:1; fnp(m[1]??m[2],o+m.index+w,{...a,b:m[1]!=null,i:m[1]==null}); k=m.index+m[0].length; } fnp(t.slice(k),o+k,a); };
+  let last=0; for(const m of l.matchAll(MK_RE)){ bi(l.slice(last,m.index),base+last,{}); last=m.index+m[0].length; const o=base+m.index;
+    if(m[4]!=null) out.push({ch:"￼",atom:m[0],s:o,e:o+m[0].length}); else if(m[3]!=null) bi(m[3],o+2,{ul:true}); else bi(m[2],o+2+(m[1]?2:0),{hl:m[1]||"y"}); }
+  bi(l.slice(last),base+last,{}); return out; }
+const edKey=xs=>{ let k=""; for(const x of xs) k+=x.atom?"\u0001"+x.atom+"\u0001":(x.hl||x.ul||x.b||x.i)?x.ch+"\u0002"+(x.hl||"")+(x.ul?1:0)+(x.b?1:0)+(x.i?1:0)+"\u0003":x.ch; return k; };   // 줄의 보이는 모양 (같으면 원래 원문을 그대로 씀)
+// 한 줄의 글자 목록 → 원문(기호). 형광펜·밑줄이 바깥, 굵게·기울임이 안쪽. 꾸밈 끝의 빈칸은 기호 바깥으로(꾸밈 막대와 같은 모양)
+function edSerLine(xs){ let t=""; const P=new Array(xs.length);
+  const emit=k=>{ const c=xs[k].atom||xs[k].ch; P[k]=[t.length,t.length+c.length]; t+=c; }, sp=x=>!x.atom&&/\s/.test(x.ch);
+  const wrap=(a,z,open,close,inner)=>{ let p=a,q=z; while(p<q&&sp(xs[p])) p++; while(q>p&&sp(xs[q-1])) q--; for(let k=a;k<p;k++) emit(k); if(p<q){ t+=open; inner(p,q); t+=close; } for(let k=q;k<z;k++) emit(k); };
+  const bm=x=>x.b?"**":x.i?"*":"";
+  const biRun=(a,z)=>{ let k=a; while(k<z){ const m=bm(xs[k]); let j=k+1; while(j<z&&bm(xs[j])===m) j++; if(!m) for(let q=k;q<j;q++) emit(q); else wrap(k,j,m,m,(p,q)=>{ for(let r=p;r<q;r++) emit(r); }); k=j; } };
+  const gk=x=>x.hl?"h"+x.hl:x.ul?"u":"";
+  let k=0; while(k<xs.length){ const g=gk(xs[k]); let j=k+1; while(j<xs.length&&gk(xs[j])===g) j++;
+    if(!g) biRun(k,j); else wrap(k,j,g==="u"?"__":"=="+(g==="hy"?"":g.slice(1)+":"),g==="u"?"__":"==",biRun); k=j; }
+  return {t,P}; }
+// 글자 목록 → 화면 HTML. mir: 거울 층용(글자는 숨기고 맞춤법·AI 표시만 보이게), fc: 각주 번호 세기
+function edLineHtml(xs,fc,mir,head){ let h="", k=0;
+  const ok=x=>x.hl?"h"+x.hl:x.ul?"u":"", ik=x=>(x.b?1:0)+","+(x.i?1:0);
+  const inner=(a,z)=>{ let o="", q=a; while(q<z){ const x=xs[q];
+      if(x.atom){ const raw=x.atom.slice(2,-1), en=isEnd(raw), n=en?++fc.e:++fc.f; let t=`<sup class="wfn${en?" en":""}" contenteditable="false" data-raw="${esc(x.atom)}" title="${esc((en?"미주: ":"각주: ")+fnText(raw))}">${en?romanL(n):n}</sup>`; if(x.b) t=`<b class="wb">${t}</b>`; else if(x.i) t=`<i class="wi">${t}</i>`; o+=t; q++; continue; }
+      let j=q+1; while(j<z&&!xs[j].atom&&ik(xs[j])===ik(x)&&xs[j].ov===x.ov) j++;
+      const t=xs.slice(q,j).map(y=>y.ch).join(""); let r;
+      if(!mir) r=esc(t); else if(x.ov) r=`<i class="${x.ov.c}"${x.ov.a||""}>${esc(t)}</i>`;
+      else if(head&&!x.b) r=t.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 소제목 줄: 한글만 굵게 겹쳐 그림 (영문·숫자는 굵게 하면 폭이 달라짐)
+      else r=`<span>${esc(t)}</span>`;
+      if(x.b) r=`<b class="wb">${r}</b>`; else if(x.i) r=`<i class="wi">${r}</i>`; o+=r; q=j; }
+    return o; };
+  while(k<xs.length){ const g=ok(xs[k]); let j=k+1; while(j<xs.length&&ok(xs[j])===g) j++; const r=inner(k,j);
+    h+=!g?r:g==="u"?`<u class="wku">${r}</u>`:`<mark class="wk hl-${g.slice(1)}">${r}</mark>`; k=j; }
+  return h; }
+const edLines=items=>{ const L=[[]]; for(const x of items){ if(x.ch==="\n"&&!x.atom) L.push([]); else L[L.length-1].push(x); } return L; };
+// 화면(DOM) → 글자 목록. <br>은 줄바꿈(맨 끝의 자리 잡기 <br>은 빼고), <div>·<p>는 새 줄, 보이지 않는 칸(\u200b)은 셈하지 않음
+function edWalk(node,a,out,keepBr,host){ for(const n of node.childNodes){
+    if(n.nodeType===3){ const v=n.nodeValue; for(let j=0;j<v.length;j++){ const c=v[j]; if(c==="\u200b"||c==="\ufeff") continue; out.push(c==="\n"?{ch:"\n"}:{ch:c,hl:a.hl,ul:a.ul,b:a.b,i:a.i}); } continue; }
+    if(n.nodeType!==1) continue; const tg=n.tagName;
+    if(tg==="BR"){ if(keepBr||!edTrailing(n,host)) out.push({ch:"\n"}); continue; }
+    if(n.dataset?.raw){ out.push({ch:"￼",atom:n.dataset.raw,...a}); continue; }
+    let b=a; if(tg==="MARK") b={...a,hl:(String(n.className).match(/hl-([ygpb])/)||[])[1]||"y",ul:false}; else if(tg==="U") b={...a,ul:true,hl:null}; else if(tg==="B"||tg==="STRONG") b={...a,b:true,i:false}; else if(tg==="I"||tg==="EM") b={...a,i:!a.b};
+    if((tg==="DIV"||tg==="P")&&out.length&&out[out.length-1].ch!=="\n") out.push({ch:"\n"});
+    edWalk(n,b,out,keepBr,host); }
+  return out; }
+function edTrailing(n,host){ for(let x=n; x&&x!==host; x=x.parentNode){ let s=x.nextSibling; while(s&&s.nodeType===3&&!s.nodeValue.replace(ED_ZW,"").length) s=s.nextSibling; if(s) return false; } return true; }
+// 화면 자리(노드, 칸) → 보이는 글자 몇 번째
+function edVisAt(ed,node,off){ if(node===ed&&off===0) return 0; const r=document.createRange(); r.setStart(ed,0); try{ r.setEnd(node,off); }catch(_){ return 0; } return edWalk(r.cloneContents(),{},[],true,null).length; }
+// 보이는 글자 p번째 → 화면 자리 (꾸밈 경계에서는 앞 글자 쪽에 붙임)
+function edDomAt(ed,p){ let n=0, res=null;
+  const go=node=>{ for(let ci=0; ci<node.childNodes.length&&!res; ci++){ const c=node.childNodes[ci];
+      if(c.nodeType===3){ const v=c.nodeValue; for(let j=0;j<v.length;j++){ if(v[j]==="\u200b"||v[j]==="\ufeff") continue; if(n===p){ res=[c,j]; return; } n++; } if(n===p){ res=[c,v.length]; return; } continue; }
+      if(c.nodeType!==1) continue;
+      if(c.tagName==="BR"){ if(edTrailing(c,ed)){ res=[node,ci]; return; } if(n===p){ res=[node,ci]; return; } n++; if(n===p){ res=[node,ci+1]; return; } continue; }
+      if(c.dataset?.raw){ if(n===p){ res=[node,ci]; return; } n++; if(n===p){ res=[node,ci+1]; return; } continue; }
+      if((c.tagName==="DIV"||c.tagName==="P")&&n>0){ if(n===p){ res=[node,ci]; return; } n++; }
+      go(c); } };
+  go(ed); if(res) return res; const L=ed.lastChild; return L&&L.nodeName==="BR"?[ed,ed.childNodes.length-1]:[ed,ed.childNodes.length]; }
+class WEd extends HTMLElement{
+  connectedCallback(){ if(this._ok) return; this._ok=1; const v=this.textContent; this._dv=v; this._sel={s:v.length,e:v.length,d:"none"}; this._ver=0;
+    if(!this.hasAttribute("contenteditable")) this.setAttribute("contenteditable","true"); this.setAttribute("role","textbox"); this.setAttribute("aria-multiline","true"); this.setAttribute("translate","no");
+    this._set(v); edBind(this); }
+  // 원문 → 화면
+  _set(v){ this._v=v; this._dirty=false; this._ver++; const items=[], L=v.split("\n"), cache=new Map(); let base=0, fc={f:0,e:0}, h=[];
+    L.forEach((l,i)=>{ const xs=edParseLine(l,base,[]); cache.set(edKey(xs),{src:l,P:xs.map(x=>[x.s-base,x.e-base])}); h.push(edLineHtml(xs,fc)); items.push(...xs); if(i<L.length-1) items.push({ch:"\n",s:base+l.length,e:base+l.length+1}); base+=l.length+1; });
+    this._items=items; this._cache=cache; this._fix=false; this.innerHTML=h.join("\n")+(v.endsWith("\n")||!v?"<br>":""); if(!v) this.innerHTML=""; this.classList.toggle("isempty",!v); this._sk=null; }
+  // 화면 → 원문 (고치지 않은 줄은 원래 원문)
+  _read(){ const xs=edWalk(this,{},[],false,this), lines=edLines(xs); let src="", fix=false; const items=[];
+    lines.forEach((ln,i)=>{ if(i){ items.push({ch:"\n",s:src.length,e:src.length+1}); src+="\n"; } const base=src.length; let t, P; const hit=this._cache.get(edKey(ln));
+      if(hit&&hit.P.length===ln.length){ t=hit.src; P=hit.P; } else { const r=edSerLine(ln); t=r.t; P=r.P; if(!fix&&edKey(edParseLine(t,0,[]))!==edKey(ln)) fix=true; }
+      for(let k=0;k<ln.length;k++){ const x=ln[k]; x.s=base+P[k][0]; x.e=base+P[k][1]; items.push(x); } src+=t; });
+    this._v=src; this._items=items; this._dirty=false; this._fix=fix; this._ver++; this._sk=null; this.classList.toggle("isempty",!src); }
+  get value(){ if(this._dirty) this._read(); return this._v; }
+  set value(v){ v=String(v??""); this._set(v); this._sel={s:v.length,e:v.length,d:"none"}; if(document.activeElement===this) this._apply(); }
+  get defaultValue(){ return this._dv??""; } set defaultValue(v){ this._dv=String(v??""); }
+  get textLength(){ return this.value.length; }
+  get placeholder(){ return this.dataset.ph||""; } set placeholder(v){ this.dataset.ph=v; }
+  get readOnly(){ return this.getAttribute("contenteditable")==="false"; } set readOnly(f){ this.setAttribute("contenteditable",f?"false":"true"); }
+  // 보이는 자리 → 원문 자리. 커서만 있을 때는 꾸밈 기호 바깥(앞 글자의 닫는 기호 뒤, 다음 글자의 여는 기호 앞)
+  _s0(p){ const I=this._items; return p<I.length?I[p].s:this._v.length; }
+  _s1(p){ return p>0?this._items[p-1].e:0; }
+  _caret(p){ const I=this._items; if(p<=0) return 0; if(p>=I.length) return this._v.length; const a=I[p-1], b=I[p]; if(a.ch==="\n") return a.e;
+    if(b.ch==="\n") return b.s; const cl=(a.b&&!b.b?2:0)+(a.i&&!b.i?1:0)+((a.hl||null)!==(b.hl||null)&&a.hl?2:0)+(!!a.ul!==!!b.ul&&a.ul?2:0); return Math.min(a.e+cl,b.s); }
+  _vis(pos){ const I=this._items; let lo=0, hi=I.length; while(lo<hi){ const m=(lo+hi)>>1; if(I[m].s<pos) lo=m+1; else hi=m; } return lo; }   // 원문 자리 앞에 시작하는 보이는 글자 수
+  _getSel(){ const v=this.value, s=getSelection(); if(!s||!s.rangeCount||!this.contains(s.anchorNode)||!this.contains(s.focusNode)) return this._sel;
+    const k=this._ver+"|"+s.anchorOffset+"|"+s.focusOffset; if(this._sk===k&&this._sa===s.anchorNode&&this._sf===s.focusNode) return this._sel;
+    const a=edVisAt(this,s.anchorNode,s.anchorOffset), f=s.isCollapsed?a:edVisAt(this,s.focusNode,s.focusOffset), lo=Math.min(a,f), hi=Math.max(a,f);
+    this._sel=lo===hi?{s:this._caret(lo),e:this._caret(lo),d:"none"}:{s:this._s0(lo),e:Math.max(this._s0(lo),this._s1(hi)),d:f<a?"backward":"forward"};
+    this._sk=k; this._sa=s.anchorNode; this._sf=s.focusNode; return this._sel; }
+  get selectionStart(){ return this._getSel().s; } get selectionEnd(){ return this._getSel().e; } get selectionDirection(){ return this._getSel().d; }
+  set selectionStart(v){ const e=this.selectionEnd; this.setSelectionRange(v,Math.max(v,e)); } set selectionEnd(v){ const s=this.selectionStart; this.setSelectionRange(Math.min(s,v),v); }
+  setSelectionRange(a,b,d){ const n=this.value.length; a=Math.max(0,Math.min(n,+a||0)); b=Math.max(a,Math.min(n,b==null?a:+b||0)); this._sel={s:a,e:b,d:d||"none"}; if(document.activeElement===this) this._apply(); }
+  select(){ this.setSelectionRange(0,this.value.length); }
+  setRangeText(t,a,b){ const v=this.value; a=a??this.selectionStart; b=b??this.selectionEnd; this.value=v.slice(0,a)+t+v.slice(b); this.setSelectionRange(a+t.length,a+t.length); }
+  // 기억해 둔 고르기를 화면에 (커서·고르기 모양)
+  _apply(){ const {s:a,e:b,d}=this._sel, va=this._vis(a), vb=a===b?va:Math.max(va,this._vis(b)), A=edDomAt(this,va), B=va===vb?A:edDomAt(this,vb), sel=getSelection();
+    try{ if(d==="backward") sel.setBaseAndExtent(B[0],B[1],A[0],A[1]); else sel.setBaseAndExtent(A[0],A[1],B[0],B[1]); }catch(_){ return; }
+    this._sk=this._ver+"|"+sel.anchorOffset+"|"+sel.focusOffset; this._sa=sel.anchorNode; this._sf=sel.focusNode; }
+  // 원문 자리 [a,b)의 화면 사각형들 (꾸밈 막대·타자기·스크롤용)
+  rects(a,b){ const va=this._vis(a), vb=Math.max(va,this._vis(b)), A=edDomAt(this,va), B=edDomAt(this,vb), r=document.createRange(); try{ r.setStart(A[0],A[1]); r.setEnd(B[0],B[1]); }catch(_){ return []; }
+    let L=[...r.getClientRects()].filter(x=>x.width||x.height); if(!L.length&&va===vb){ const I=this._items; const q=document.createRange(); const C=edDomAt(this,Math.min(I.length,va+1)); try{ q.setStart(A[0],A[1]); q.setEnd(C[0],C[1]); L=[...q.getClientRects()].filter(x=>x.height).slice(0,1).map(x=>({left:x.left,right:x.left,top:x.top,bottom:x.bottom,width:0,height:x.height})); }catch(_){} }
+    return L; }
+}
+// 원문을 고칠 때(붙여넣기·잘라내기 등): 되돌리기 한 걸음 + 원문에서 바꾸고 + 「입력」 알림(글 칸 oninput·자동 간직이 그대로 돌게)
+function edEdit(ed,txt,s,e,label,type){ histMark(ed,label); const v=ed.value; ed.value=v.slice(0,s)+txt+v.slice(e); ed.setSelectionRange(s+txt.length,s+txt.length); ed.dispatchEvent(new InputEvent("input",{bubbles:true,inputType:type||"insertReplacementText",data:txt})); }
+function edBind(ed){
+  ed.addEventListener("input",e=>{ if(e.isComposing||!ed._fix) return; ed._fix=false; const {s,e:z,d}=ed._getSel(); ed._set(ed.value); ed._sel={s,e:z,d}; if(document.activeElement===ed) ed._apply(); });   // 기호를 직접 쳐서 꾸밈이 생기면 화면을 다시 그림
+  ed.addEventListener("compositionend",()=>setTimeout(()=>{ if(ed._dirty) ed.value; if(ed._fix){ ed._fix=false; const {s,e,d}=ed._getSel(); ed._set(ed.value); ed._sel={s,e,d}; if(document.activeElement===ed) ed._apply(); } },0));
+  ed.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.isComposing&&e.keyCode!==229&&!e.shiftKey&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!e.defaultPrevented){ e.preventDefault(); histMark(ed,"줄 바꿈"); document.execCommand("insertLineBreak"); } });   // 엔터 = 줄 바꿈 (프로그램 입력 명령은 beforeinput 이 없어 되돌리기 한 걸음을 직접 남김) (문단 상자를 만들지 않게)
+  ed.addEventListener("beforeinput",e=>{ if(/^format/.test(e.inputType)){ e.preventDefault(); return; } if(e.inputType==="insertParagraph"){ e.preventDefault(); histMark(ed,"줄 바꿈"); document.execCommand("insertLineBreak"); } });   // 브라우저 기본 굵게·밑줄(⌘B·⌘U 등)은 쓰지 않음 — 앱의 꾸밈으로
+  ed.addEventListener("pointerdown",()=>{ ed._ptr=1; setTimeout(()=>ed._ptr=0,400); },true);
+  ed.addEventListener("focus",()=>{ if(!ed._ptr) ed._apply(); });   // 프로그램이 focus() 하면 전에 고른 자리로 (글자 칸처럼)
+  ed.addEventListener("paste",e=>{ e.preventDefault(); const cd=e.clipboardData||window.clipboardData; let t=cd?.getData("application/x-seojae")||cd?.getData("text/plain")||""; t=t.replace(/\r\n?/g,"\n"); const {s,e:z}=ed._getSel(); edEdit(ed,t,s,z,"붙여넣기","insertFromPaste"); });
+  const cp=(e,cut)=>{ const {s,e:z}=ed._getSel(); if(z<=s) return; e.preventDefault(); const src=ed.value.slice(s,z); try{ e.clipboardData.setData("text/plain",stripMk(src)); e.clipboardData.setData("text/html",richHtml(src).replace(/\n/g,"<br>")); e.clipboardData.setData("application/x-seojae",src); }catch(_){} if(cut) edEdit(ed,"",s,z,"잘라내기","deleteByCut"); };   // 밖으로는 기호 없는 글자·서식, 앱 안에서는 꾸밈째
+  ed.addEventListener("copy",e=>cp(e,false)); ed.addEventListener("cut",e=>cp(e,true));
+  ed.addEventListener("dragstart",e=>e.preventDefault()); ed.addEventListener("drop",e=>e.preventDefault());
+  ed.addEventListener("click",e=>{ const f=e.target.closest?.("sup.wfn"); if(!f||ed.id!=="wbody") return; const n=[...ed.querySelectorAll("sup.wfn")].indexOf(f); if(n>=0) setTimeout(()=>fnBox(0,n,""),0); });   // 각주 번호를 누르면 고치기 (이 클릭이 끝난 뒤에 열어야 「바깥 클릭」으로 닫히지 않음)
+}
+document.addEventListener("input",e=>{ if(e.target?.tagName==="W-ED") e.target._dirty=true; },true);   // 화면이 바뀜 → 원문을 다시 읽어야 함 (글 칸 oninput 보다 먼저)
+document.addEventListener("compositionupdate",e=>{ if(e.target?.tagName==="W-ED") e.target._dirty=true; },true);
+// 꾸밈(형광펜·밑줄) 끝에 커서가 오면 바깥으로: 새로 치는 글자는 칠해지지 않게 (일기 칸과 같은 원칙). 고른 자리도 기억(칸을 떠나도 selectionStart 가 남게)
+document.addEventListener("selectionchange",()=>{ const ed=document.activeElement; if(ed?.tagName!=="W-ED") return; const sel=getSelection(); if(!sel.rangeCount||!ed.contains(sel.anchorNode)) return; ed._getSel();
+  if(!sel.isCollapsed) return; const n=sel.anchorNode, o=sel.anchorOffset, el=(n.nodeType===1?n:n.parentElement)?.closest?.("mark,u"); if(!el||!ed.contains(el)) return;
+  const pre=document.createRange(); pre.setStart(el,0); pre.setEnd(n,o); const post=document.createRange(); post.setStart(n,o); post.setEnd(el,el.childNodes.length);
+  const atS=!pre.toString().replace(ED_ZW,"").length, atE=!post.toString().replace(ED_ZW,"").length; if(!atS&&!atE) return;
+  const z=document.createTextNode("\u200b"); if(atE) el.after(z); else el.before(z); const c=document.createRange(); c.setStart(z,atE?1:0); c.collapse(true); sel.removeAllRanges(); sel.addRange(c); ed._sk=null; });
+customElements.define("w-ed",WEd);
+// 거울 층(맞춤법·AI 표시·소제목 굵게·네 자리)을 글 칸과 같은 모양으로: 글 칸의 글자 목록에 표시를 얹어 같은 HTML 로 그림
+function edMirrorHtml(t,errs,RG,OZ){ const v=t.value, L=v.split("\n"), lines=edLines(t._items), fc={f:0,e:0}, O=new Map(); let off=0;
+  const h=lines.map((xs,i)=>{ const st=off, l=L[i]||""; off+=l.length+1; const head=HEAD_RE.test(l);
+    const hit=RG.filter(r=>r.s<st+l.length+1&&r.e>st), E=hit.length?[]:(errs[i]||[]);
+    const ov=(k,o)=>{ if(!O.has(k)) O.set(k,o); return O.get(k); };
+    const ys=xs.map(x=>{ const r=hit.find(r=>x.s>=r.s&&x.s<r.e); if(r) return {...x,ov:ov(r,{c:r.c})}; const q=E.find(q=>x.s-st>=q.s&&x.s-st<q.e); if(q) return {...x,ov:ov(q,{c:"sp "+q.src,a:` data-l="${i}" data-s="${q.s}" data-e="${q.e}" title="${esc(q.to)}${q.why?" — "+esc(q.why):""}"`})}; return x; });
+    const hh=edLineHtml(ys,fc,true,head); return OZ.has(i)?`<i class="ownl">${hh}</i>`:hh; }).join("\n");
+  return h+(v.endsWith("\n")?"<br>":""); }
 let TINS_LABEL="";   // 다음 tInsert 한 번의 되돌리기 이름 (AI 적용·서식 등)
 // 글자 칸에 프로그램이 글을 넣을 때는 브라우저의 '입력' 명령으로 넣어, ⌘Z(되돌리기)·⇧⌘Z(다시 하기)가 그대로 듣게 합니다
 function tInsert(b,txt,s,e,label){
   if(READVIEW&&b.id==="wbody"){ READVIEW=false; toggleRead(); }
   histMark(b,label||TINS_LABEL||"넣기"); TINS_LABEL="";
+  if(b.tagName==="W-ED"){ s=s??b.selectionStart; e=e??(arguments.length>=3?s:b.selectionEnd); const v=b.value; b.value=v.slice(0,s)+txt+v.slice(e); b.focus(); b.setSelectionRange(s+txt.length,s+txt.length); b.dispatchEvent(new InputEvent("input",{bubbles:true,inputType:"insertReplacementText",data:txt})); grow(); countW(); draftInput(); return; }   // 모양째 쓰는 칸: 원문에서 바꾸고 「입력」 알림
   b.focus(); if(document.activeElement!==b){ s=s??(b.selectionStart??b.value.length); e=e??s; b.value=b.value.slice(0,s)+txt+b.value.slice(e); b.selectionStart=b.selectionEnd=s+txt.length; grow(); countW(); draftInput(); return; } s=s??(b.selectionStart??b.value.length); e=e??(arguments.length>=3?s:(b.selectionEnd??s)); try{ b.setSelectionRange(s,e); }catch(_){}
   let ok=false; try{ ok=document.execCommand("insertText",false,txt); }catch(_){}
   if(!ok||b.value.slice(s,s+txt.length)!==txt){ b.value=b.value.slice(0,s)+txt+b.value.slice(e); }   // 입력 명령을 못 쓰는 브라우저면 그냥 넣음 (이때는 되돌리기 안 됨)
@@ -4188,41 +4344,44 @@ function tInsert(b,txt,s,e,label){
 // 브라우저 기본 되돌리기는 프로그램이 글을 바꾸거나 화면을 다시 그리면 끊겨서, 본문(#wbody)의 바뀜을 글마다 따로 쌓아 둠 (이 기기 메모리만 — 기록 파일에 안 넣음)
 // 묶음: 이어서 치는 글자는 한 덩어리(1.2초 쉬거나·커서를 옮기거나·문장이 끝나면 끊음), 엔터·지우기·붙여넣기·잘라내기·프로그램이 넣은 것(AI 적용·틀·서식…)은 따로
 const HIST=new Map(), HIST_MAX=200;
-function histOf(b){ const id=editId||"new"; let H=HIST.get(id); if(!H){ H={past:[],future:[],last:{v:b.value,s:b.selectionStart,e:b.selectionEnd},g:null}; HIST.set(id,H); } return H; }
+const histKey=b=>b?.id==="wbody"?(editId||"new"):(b?.id||"")+":"+(SCRIV_EDIT||"");   // 글마다 (이어 읽기 고치기 칸도 따로)
+function histOf(b){ const id=histKey(b); let H=HIST.get(id); if(!H){ H={past:[],future:[],last:{v:b.value,s:b.selectionStart,e:b.selectionEnd},g:null}; HIST.set(id,H); } return H; }
 // 프로그램이 기록 없이 글을 바꿨으면(다시 그리기·임시본 되살리기 등) 그 앞 상태를 한 걸음으로 남김
 function histSync(b,H){ if(H.last.v!==b.value){ H.past.push({...H.last,label:"고침"}); H.future=[]; H.g=null; histTrim(H); } H.last={v:b.value,s:b.selectionStart,e:b.selectionEnd}; }
 const histTrim=H=>{ if(H.past.length>HIST_MAX) H.past.splice(0,H.past.length-HIST_MAX); };
 const HIST_TYPE=t=>/^insert(Text|CompositionText|ReplacementText)$/.test(t)?"type":/^delete/.test(t)&&t!=="deleteByCut"?"del":t==="insertParagraph"||t==="insertLineBreak"?"enter":t==="insertFromPaste"||t==="insertFromDrop"?"paste":t==="deleteByCut"?"cut":"edit";
 const HIST_NAME={type:"입력",del:"지우기",enter:"줄 바꿈",paste:"붙여넣기",cut:"잘라내기",edit:"고침"};
 // 한 걸음 남기기 (프로그램이 바꾸기 직전에도 부름 — tInsert 등). label: 메뉴에 보일 이름
-function histMark(b,label){ if(!b||b.id!=="wbody") return; const H=histOf(b); histSync(b,H); H.past.push({...H.last,label:label||"고침"}); H.future=[]; H.g=null; histTrim(H); }
-document.addEventListener("beforeinput",e=>{ const b=e.target; if(b?.id!=="wbody") return;
+function histMark(b,label){ if(!b||(b.id!=="wbody"&&b.tagName!=="W-ED")) return; const H=histOf(b); histSync(b,H); H.past.push({...H.last,label:label||"고침"}); H.future=[]; H.g=null; histTrim(H); }
+document.addEventListener("beforeinput",e=>{ const b=e.target; if(b?.tagName!=="W-ED") return;
   if(e.inputType==="historyUndo"||e.inputType==="historyRedo"){ e.preventDefault(); return e.inputType==="historyUndo"?histUndo():histRedo(); }   // 메뉴 「편집 → 실행 취소」·흔들기도 이 기록으로
   const H=histOf(b), now=Date.now(), type=HIST_TYPE(e.inputType), s=b.selectionStart, en=b.selectionEnd; histSync(b,H);
   const g=H.g, txt=e.data||"", cont=g&&g.type===type&&now-g.t<1200&&s===en&&s===g.at&&!(type==="type"&&/[.?!。…]\s*$/.test(g.tail||""));
   if(!cont||e.isComposing&&!g){ if(!(e.isComposing&&g&&g.type==="type"&&now-g.t<1200)){ H.past.push({...H.last,label:HIST_NAME[type]}); H.future=[]; histTrim(H); } }
   H.g={type,t:now,at:-1,tail:txt}; },true);
-document.addEventListener("input",e=>{ const b=e.target; if(b?.id!=="wbody") return; const H=histOf(b); if(H.g){ H.g.at=b.selectionStart; H.g.t=Date.now(); } H.last={v:b.value,s:b.selectionStart,e:b.selectionEnd}; histPaint(); },true);
-document.addEventListener("keydown",e=>{ const b=e.target; if(b?.id==="wbody"&&(e.key.startsWith("Arrow")||e.key==="Home"||e.key==="End")){ const H=HIST.get(editId||"new"); if(H) H.g=null; } },true);   // 커서를 옮기면 묶음을 끊음
-document.addEventListener("mousedown",e=>{ if(e.target?.id==="wbody"){ const H=HIST.get(editId||"new"); if(H) H.g=null; } },true);
-function histGo(n,redo){ const b=$("#wbody"); if(!b) return; if(READVIEW) return toast("「다시 쓰기」로 돌아간 뒤 되돌릴 수 있습니다"); const H=histOf(b); histSync(b,H);
+document.addEventListener("input",e=>{ const b=e.target; if(b?.tagName!=="W-ED") return; const H=histOf(b); if(H.g){ H.g.at=b.selectionStart; H.g.t=Date.now(); } H.last={v:b.value,s:b.selectionStart,e:b.selectionEnd}; histPaint(); },true);
+document.addEventListener("keydown",e=>{ const b=e.target; if(b?.tagName==="W-ED"&&(e.key.startsWith("Arrow")||e.key==="Home"||e.key==="End")){ const H=HIST.get(histKey(b)); if(H) H.g=null; } },true);   // 커서를 옮기면 묶음을 끊음
+document.addEventListener("mousedown",e=>{ const b=e.target.closest?.("w-ed"); if(b){ const H=HIST.get(histKey(b)); if(H) H.g=null; } },true);
+const histEd=()=>document.activeElement?.tagName==="W-ED"?document.activeElement:($("#wbody")||$("#scta"));
+function histGo(n,redo){ const b=histEd(); if(!b) return; if(READVIEW) return toast("「다시 쓰기」로 돌아간 뒤 되돌릴 수 있습니다"); const H=histOf(b); histSync(b,H);
   const from=redo?H.future:H.past, to=redo?H.past:H.future; if(!from.length) return toast(redo?"다시 실행할 것이 없습니다":"되돌릴 것이 없습니다");
   let st, names=[]; n=Math.min(n||1,from.length); for(let k=0;k<n;k++){ st=from.pop(); names.push(st.label); to.push({...H.last,label:st.label}); H.last={v:st.v,s:st.s,e:st.e}; }
   H.g=null; b.value=st.v; b.focus({preventScroll:true}); try{ b.setSelectionRange(st.s,st.e); }catch(_){}
+  b.dispatchEvent(new InputEvent("input",{bubbles:true,inputType:redo?"historyRedo":"historyUndo"})); H.last={v:st.v,s:st.s,e:st.e};
   grow(); countW(); draftInput(); paintHeads(); histPaint(); histShowCaret(b);
   toast(`${redo?"다시 실행":"되돌림"}: ${n>1?`${n}걸음`:names[0]}`); }
 const histUndo=n=>histGo(n,false), histRedo=n=>histGo(n,true);
-function histShowCaret(b){ const y=b.getBoundingClientRect().top+scrollY+caretY(b); if(y<scrollY+80||y>scrollY+innerHeight-80) scrollTo({top:Math.max(0,y-innerHeight*.35),behavior:"smooth"}); }
+function histShowCaret(b){ if(!b.isConnected) return; const y=b.getBoundingClientRect().top+scrollY+caretY(b); if(y<scrollY+80||y>scrollY+innerHeight-80) scrollTo({top:Math.max(0,y-innerHeight*.35),behavior:"smooth"}); }
 // 메뉴의 한 걸음 이름: 바뀐 글자 미리보기 (앞뒤 같은 부분을 빼고 남은 곳)
 function histPeek(a,b){ let i=0; while(i<a.length&&i<b.length&&a[i]===b[i]) i++; let j=0; while(j<a.length-i&&j<b.length-i&&a[a.length-1-j]===b[b.length-1-j]) j++;
   const del=a.slice(i,a.length-j), ins=b.slice(i,b.length-j), cut=t=>{ t=t.replace(/\s+/g," ").trim(); return t.length>18?t.slice(0,18)+"…":t; };
   return ins&&del?`「${cut(del)}」→「${cut(ins)}」`:ins?`「${cut(ins)}」`:del?`「${cut(del)}」`:""; }
-function histPaint(){ const b=$("#wbody"), H=b&&HIST.get(editId||"new"), u=!!H?.past.length, r=!!H?.future.length, top=H?.past.at(-1), fu=H?.future.at(-1), mac=/Mac|iPhone|iPad/.test(navigator.platform), M=mac?"⌘":"Ctrl+";
+function histPaint(){ const b=$("#wbody"), H=b&&HIST.get(histKey(b)), u=!!H?.past.length, r=!!H?.future.length, top=H?.past.at(-1), fu=H?.future.at(-1), mac=/Mac|iPhone|iPad/.test(navigator.platform), M=mac?"⌘":"Ctrl+";
   document.querySelectorAll("[data-hist=u]").forEach(x=>{ x.disabled=!u; x.title=u?`되돌리기: ${top.label} ${histPeek(top.v,H.last.v)} (${M}Z)`:`되돌리기 (${M}Z)`; });
   document.querySelectorAll("[data-hist=r]").forEach(x=>{ x.disabled=!r; x.title=r?`다시 실행: ${fu.label} (${mac?"⇧⌘Z":"Ctrl+Y"})`:`다시 실행 (${mac?"⇧⌘Z":"Ctrl+Y"})`; });
   document.querySelectorAll("[data-hist=l]").forEach(x=>x.disabled=!u); }
 // ▾ 되돌리기 목록 (워드처럼 여러 걸음을 한 번에): 위에서부터 고른 데까지 되돌림
-function histList(btn){ const b=$("#wbody"); if(!b) return; const H=histOf(b); histSync(b,H); if(!H.past.length) return toast("되돌릴 것이 없습니다");
+function histList(btn){ const b=histEd(); if(!b) return; const H=histOf(b); histSync(b,H); if(!H.past.length) return toast("되돌릴 것이 없습니다");
   document.querySelector(".histpop")?.remove(); const L=H.past.slice(-25).reverse(), states=[H.last,...L];
   const pop=document.createElement("div"); pop.className="histpop"; pop.innerHTML=`<p>되돌릴 곳을 고르세요</p>${L.map((st,k)=>`<button type="button" data-n="${k+1}"><b>${esc(st.label)}</b> <small>${esc(histPeek(st.v,states[k].v))}</small></button>`).join("")}<p class="foot" data-f>1걸음 되돌리기</p>`;
   document.body.appendChild(pop); const r=btn.getBoundingClientRect(); pop.style.left=Math.max(8,Math.min(innerWidth-pop.offsetWidth-8,r.left))+"px"; pop.style.top=(r.bottom+4)+"px";
@@ -4231,7 +4390,7 @@ function histList(btn){ const b=$("#wbody"); if(!b) return; const H=histOf(b); h
   setTimeout(()=>document.addEventListener("mousedown",function cl(e){ if(!e.target.closest(".histpop")){ pop.remove(); document.removeEventListener("mousedown",cl); } }),0); }
 const histBtns=()=>`<span class="histgrp"><button type="button" class="undobtn" data-hist="u" onclick="histUndo()" title="되돌리기">↶</button><button type="button" class="undobtn histl" data-hist="l" onclick="histList(this)" title="되돌리기 목록 — 여러 걸음을 한 번에">▾</button><button type="button" class="undobtn" data-hist="r" onclick="histRedo()" title="다시 실행">↷</button></span>`;
 // 단축키: ⌘Z / Ctrl+Z 되돌리기 · ⇧⌘Z / Ctrl+Y / ⌘Y / Ctrl+Shift+Z 다시 실행 (한글 조합 중에는 조합을 먼저 끝냄)
-document.addEventListener("keydown",e=>{ if(e.target?.id!=="wbody"||!(e.metaKey||e.ctrlKey)||e.altKey) return; const k=e.key.toLowerCase(), code=e.code;
+document.addEventListener("keydown",e=>{ if(e.target?.tagName!=="W-ED"||!(e.metaKey||e.ctrlKey)||e.altKey) return; const k=e.key.toLowerCase(), code=e.code;
   const z=k==="z"||code==="KeyZ", y=k==="y"||code==="KeyY"; if(!z&&!y) return; if(e.isComposing) return; e.preventDefault(); e.stopPropagation();
   if(z&&!e.shiftKey) histUndo(); else histRedo(); },true);
 function tUndo(redo){ return redo?histRedo():histUndo(); }
@@ -4314,6 +4473,11 @@ function pomoSettingsHtml(){ const c=pomoSet(), num=(k,v,min,max)=>`<input type=
       <div class="row" style="gap:6px;margin-top:6px"><button class="btn small" onclick="runShortcut(pomoSet().sOn,'1')">시작 단축어 시험 (1분)</button><button class="btn small" onclick="runShortcut(pomoSet().sOff)">끝 단축어 시험</button></div>
       <p class="hint">아이폰도 같은 이름으로 단축어를 만들면 홈 화면 아침 서재에서 똑같이 켜집니다. 앱이 뒤로 가 있을 때 집중이 끝나면, 시간으로 만든 단축어는 저절로 꺼지고 「끄기 전까지」로 만든 단축어는 아침 서재로 돌아올 때 꺼집니다.</p>
     </details></div>`; }
+function callNameSection(){ return `<section class="sheet tape c compact"><p class="label">나를 부르는 호칭</p>
+    <label class="field"><span>앱과 AI가 나를 부를 때</span><input id="callname" value="${esc(S.settings.callName||"")}" maxlength="20" placeholder="예: 요한님 · 목사님 · 팀장님" onchange="callNameSet(this.value)"></label>
+    <div class="row" style="gap:6px;flex-wrap:wrap">${["요한님","목사님","팀장님"].map(x=>`<button type="button" class="pill" onclick="callNameSet('${x}')">${x}</button>`).join("")}</div>
+    <p class="hint">비워 두면 「팀장님」으로 부릅니다. 안내 문구와 AI 도우미가 이 호칭을 씁니다. 기기 사이에 함께 따라갑니다.</p></section>`; }
+function callNameSet(v){ v=String(v||"").trim().slice(0,20); if(v===(S.settings.callName||"")) return; S.settings.callName=v; save(); toast(`이제 「${callName()}」${jp(callName(),"으로","로")} 부릅니다`); if(tab==="settings") render(); }
 function quietSection(){
   const ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua), and=/Android/.test(ua);
   return `<section class="sheet tape c compact">
@@ -4775,10 +4939,12 @@ function setCat(id,c){ const b=S.books.find(x=>x.id===id); if(!b) return; b.catM
 let REVIEW_OPEN=null;
 function reviewBox(b){
   return `${bookNotesHtml(b.id,true)}<div class="reviewbox" style="margin-top:12px"><p class="label book" style="font-size:19px">독후감 ${b.reviewNotion?.page?`<a class="nstate ok" href="${esc(safeUrl(b.reviewNotion.url)||"#")}" target="_blank" style="text-decoration:none;margin-left:8px"><i></i>노션 독서 노트에 보관됨</a>`:""}</p>
-    <input id="rv-one" class="pen" style="font-size:20px" placeholder="이 책을 한 줄로" value="${esc(b.oneLine||"")}">
-    <textarea id="rv-text" placeholder="읽고 난 뒤 남는 것 — 기억하고 싶은 문장, 내 삶과 설교에 가져올 것, 아쉬운 점…" style="margin-top:8px">${esc(b.review||"")}</textarea>
-    <div class="row" style="margin-top:8px"><button class="btn small ink" onclick="saveReview('${b.id}')">독후감 간직 → 노션 독서 노트</button><button class="btn small ghost" onclick="REVIEW_OPEN=null;openBook('${b.id}')">접기</button></div></div>`;
+    <input id="rv-one" class="pen" style="font-size:20px" placeholder="이 책을 한 줄로" value="${esc(b.oneLine||"")}" oninput="reviewKick('${b.id}')">
+    <textarea id="rv-text" oninput="reviewKick('${b.id}')" placeholder="읽고 난 뒤 남는 것 — 기억하고 싶은 문장, 내 삶과 설교에 가져올 것, 아쉬운 점…" style="margin-top:8px">${esc(b.review||"")}</textarea>
+    <div class="row" style="margin-top:8px"><button class="btn small ink" onclick="saveReview('${b.id}')">독후감 간직 → 노션 독서 노트</button><button class="btn small ghost" onclick="reviewKick('${b.id}',true);REVIEW_OPEN=null;openBook('${b.id}')">접기</button><small class="muted" id="rvstate"></small></div></div>`;
 }
+// 독후감은 치는 대로 이 기기·구글에 저절로 간직 (노션 독서 노트에는 단추를 눌렀을 때만)
+let RV_T=0; function reviewKick(id,now){ clearTimeout(RV_T); const run=()=>{ const b=S.books.find(x=>x.id===id), o=$("#rv-one"), t=$("#rv-text"); if(!b||!o||!t) return; const one=o.value.trim(), rv=t.value.trim(); if(one===(b.oneLine||"")&&rv===(b.review||"")) return; b.oneLine=one; b.review=rv; b.reviewAt=new Date().toISOString(); save(); const st=$("#rvstate"); if(st) st.textContent="✓ 간직됨 "+new Date().toTimeString().slice(0,5); }; if(now) run(); else RV_T=setTimeout(run,1200); }
 function saveReview(id){ const b=S.books.find(x=>x.id===id); if(!b) return; b.oneLine=($("#rv-one")?.value||"").trim(); b.review=($("#rv-text")?.value||"").trim(); b.reviewAt=new Date().toISOString(); save(); toast("독후감을 간직했습니다"); syncReview(b).then(()=>openBook(id)); }
 async function syncReview(b){
   if(!canSync()||!b.review) return;
@@ -6144,7 +6310,7 @@ let SIDE_TAB="memo"; try{ SIDE_TAB=localStorage.getItem("seojae.sidetab")||"memo
 function sideTab(k){ SIDE_TAB=k; try{ localStorage.setItem("seojae.sidetab",k); }catch(_){} document.querySelectorAll(".stabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k)); document.querySelectorAll(".spanel").forEach(p=>p.hidden=p.dataset.k!==k); }
 function sideTabs(w){ const m=wMs(w), g=G(m), cx=w?codexIn(w.body+" "+(w.title||"")):[], rv=w&&(m||w.type==="설교초안");
   const memo=`${m&&w&&g.scene?sceneFormHtml(w):""}
-    ${m&&w?`<label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>`:""}
+    ${m&&w?`<label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" oninput="memoKick('${w.id}',this.value)" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>`:""}
     ${jotBox()}`;
   const res=m?resSideHtml(m):`<p class="hint">이 글이 원고에 들어 있으면 그 원고의 자료가 여기에 보입니다.</p>`;
   const notes=cx.length?cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="cxsidebody">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join(""):`<p class="hint">이 글에 나온 ${esc(g.codex)}가 여기에 모입니다. 노트는 글방 왼쪽에서 만듭니다.</p>`;
@@ -6159,10 +6325,11 @@ function wSideRoom(w){ const m=wMs(w), cx=w?codexIn(w.body+" "+(w.title||"")):[]
     ${rv?`<div class="revside">${revNotesHtml(w,true)}<button class="btn small" onclick="reviewOne('${w.id}')">${ICO.search}${w.review?"다시 검토 받기":"이 글 검토 받기"}</button></div>`:""}
     ${m?`<p class="step" style="margin-top:0"><span class="num">${ICO.closed}</span>원고 곁 칸 <small class="hint" style="display:inline">· ${esc(G(m).n)}</small></p>
       ${G(m).scene?sceneFormHtml(w):""}
-      <label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>
+      <label class="field"><span>꼭지 메모 <small class="hint" style="display:inline">· 본문 밖에 남기는 생각</small></span><textarea id="wmemo" class="pen" rows="3" style="font-size:19px;min-height:72px" placeholder="이 꼭지에서 더 다룰 것, 앞뒤 꼭지와 이을 것…" oninput="memoKick('${w.id}',this.value)" onchange="saveMemo('${w.id}',this.value)">${esc(w.memo||"")}</textarea></label>
       ${(m.research||[]).length?`<details class="more" open><summary>원고 자료 ${(m.research||[]).length}</summary>${resSideHtml(m)}</details>`:`<p class="hint">원고 자료는 글방 → 「자료 모음」에서 모아 둡니다.</p>`}`:""}
     ${cx.length?`<details class="more" ${m?"":"open"}><summary>이 글에 나온 인물·주제 ${cx.length}</summary>${cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="cxsidebody">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join("")}</details>`:""}
   </div>`; }
+let MEMO_T=0; function memoKick(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w) return; w.memo=v; clearTimeout(MEMO_T); MEMO_T=setTimeout(()=>{ w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); },900); }   // 꼭지 메모: 치는 대로 (다시 그려도 그대로)
 function saveMemo(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w||(w.memo||"")===v) return; w.memo=v; w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); toast("꼭지 메모를 남겼습니다"); }
 // ───────── 자료 모음 = 원고의 자료 창고 (2026-10-29 다시 만듦) ─────────
 // 메모(포스트잇)는 「내 생각의 씨앗」, 자료 모음은 「바깥에서 가져온 근거」 — 출처와 함께 두고 인용·각주·참고 문헌으로 이어짐.
@@ -6215,7 +6382,7 @@ function resForm(m,r){ r=r||{}; const RP=resP(m), sel=resKinds(m).map(k=>`<optio
     <label class="cxf"><span>내 생각 <small>이 자료를 어디에 어떻게 쓸지</small></span><textarea id="rs-n" class="cxp-text small">${esc(r.note||"")}</textarea></label>
     <div class="cxp-save"><button class="btn ghost" onclick="resClose()">나오기</button><button class="btn ink" onclick="resSave('${m.id}')">간직 <small style="opacity:.6">⌘S</small></button></div></div>`; }
 function resOpen(rid){ RES_EDIT=rid||"new"; render(); setTimeout(()=>{ (rid?$("#rs-b"):$("#rs-t"))?.focus(); $("#resed")?.scrollIntoView({block:"nearest"}); },40); }
-function resClose(){ RES_EDIT=null; render(); }
+function resClose(){ const ed=$("#resed"); if(ed&&ROOM_MS&&[...ed.querySelectorAll("input:not([type=checkbox]):not([type=radio]),textarea")].some(x=>x.value!==x.defaultValue)&&($("#rs-t")?.value.trim()||$("#rs-b")?.value.trim())){ resSave(ROOM_MS); return; } RES_EDIT=null; render(); }   // 고친 것이 있으면 간직하고 닫기 (Esc·나오기)
 function resSave(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const v=id=>($("#"+id)?.value||"").trim(), body=v("rs-b"), t=v("rs-t");
   if(!body&&!t) return toast("제목이나 내용을 적어 주세요"); const now=new Date().toISOString(), tags=v("rs-tags").split(/[,，、]/).map(x=>x.trim()).filter(Boolean);
   const rec={kind:v("rs-k")||"기타",t,body,au:v("rs-au"),yr:v("rs-yr"),pg:v("rs-pg"),pub:v("rs-pub"),jn:v("rs-jn"),vol:v("rs-vol"),lang:v("rs-lang"),url:v("rs-url"),ok:v("rs-ok"),note:v("rs-n"),tags,u:now}; if($("#rs-s")) rec.src=v("rs-s");
@@ -6262,12 +6429,12 @@ function resDel(mid,rid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) retu
 // 이어 보기: 꼭지들을 한 장처럼. 「고치기」로 그 자리에서 고치고 간직
 // 이어 읽기 「고치기」 칸: 치는 대로 1.2초 뒤 저절로 간직(처음 한 번만 이전 판을 남김). 화면을 다시 그리거나 앱을 내릴 때도 바로 간직 — 글을 잃지 않게
 function scrivAuto(now){ clearTimeout(SCRIV_T); const run=()=>{ const w=SCRIV_EDIT&&S.writings.find(x=>x.id===SCRIV_EDIT), t=$("#scta"); if(!w||!t||t.value===w.body) return;
-    if(!SCRIV_PREV){ w.prev=[{at:w.updated||w.date,body:w.body},...(w.prev||[])].slice(0,3); SCRIV_PREV=true; } w.body=t.value; w.updated=new Date().toISOString(); save(); };
+    if(!SCRIV_PREV){ w.prev=[{at:w.updated||w.date,body:w.body},...(w.prev||[])].slice(0,3); SCRIV_PREV=true; } w.body=t.value; w.updated=new Date().toISOString(); save(); const st=$("#sctastate"); if(st) st.textContent="✓ 간직됨 "+new Date().toTimeString().slice(0,5); };
   if(now) run(); else SCRIV_T=setTimeout(run,1200); }
-function scrivOpen(wid){ scrivAuto(true); SCRIV_EDIT=wid; SCRIV_PREV=false; render(); setTimeout(()=>{ const t=$("#scta"); if(t){ t.style.height=t.scrollHeight+"px"; t.focus(); } $("#sc-"+wid)?.scrollIntoView({block:"start"}); },60); }
+function scrivOpen(wid){ scrivAuto(true); SCRIV_EDIT=wid; SCRIV_PREV=false; render(); setTimeout(()=>{ const t=$("#scta"); if(t){ t.focus(); } $("#sc-"+wid)?.scrollIntoView({block:"start"}); },60); }
 function scrivHtml(m){ const seq=msSeq(m); if(!seq.length) return `<p class="muted">아직 꼭지가 없습니다.</p>`; let n=0;
   return `<div class="scriv">${seq.map(x=>{ if(x.p) return `<h3 class="scp lv${x.p.lv}">${esc(x.p.t)}</h3>`; const w=x.w; n++;
-    const body=SCRIV_EDIT===w.id?`<textarea class="page scta" id="scta" spellcheck="false" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';scrivAuto()">${esc(w.body||"")}</textarea><div class="row" style="gap:6px;margin-top:6px"><button class="btn small ink" onclick="scrivSave('${w.id}')">다 고침</button><small class="muted">치는 대로 저절로 간직됩니다</small></div>`
+    const body=SCRIV_EDIT===w.id?`<w-ed class="page scta" id="scta" contenteditable="true" spellcheck="false" oninput="scrivAuto()">${esc(w.body||"")}</w-ed><div class="row" style="gap:6px;margin-top:6px"><button class="btn small ink" onclick="scrivSave('${w.id}')">다 고침</button><small class="muted" id="sctastate">치는 대로 저절로 간직됩니다</small></div>`
       :`<div class="scbody">${(()=>{ const fn=[]; const h=richHtml(stripMemo(w.body||""),fn); return h+fnHtml(fn); })()}</div>${revNotesHtml(w)}`;
     return `<article class="scw" id="sc-${w.id}"><header><span class="pen scn">${n}</span><b>${esc(w.title||"(제목 없음)")}</b><span class="muted">${esc(w.date||"")} · ${chars(w.body).toLocaleString()}자</span><span class="spacer"></span>${SCRIV_EDIT===w.id?"":`<button class="btn small ghost" onclick="scrivOpen('${w.id}')">고치기</button><button class="btn small ghost" onclick="scrivAuto(true);go('write',{edit:'${w.id}'})">쓰기 화면</button>`}</header>${body}</article>`; }).join("")}</div>`; }
 function scrivSave(wid){ const w=S.writings.find(x=>x.id===wid), t=$("#scta"); if(!w||!t) return; const changed=SCRIV_PREV||t.value!==w.body; scrivAuto(true);
@@ -6620,13 +6787,13 @@ function plotHtml(m,ws0){ const lines=m.plot?.lines||[], lc=n=>PL_COL[lines.inde
 let TYPEW=false; try{ TYPEW=localStorage.getItem("seojae.typew")==="1"; }catch(_){}
 if(TYPEW) document.body.classList.add("typew");
 function toggleTypew(){ TYPEW=!TYPEW; document.body.classList.toggle("typew",TYPEW); try{ localStorage.setItem("seojae.typew",TYPEW?"1":"0"); }catch(_){} const tb=$("#twbtn"); if(tb){ tb.classList.toggle("on",TYPEW); tb.setAttribute("aria-checked",TYPEW); const em=tb.querySelector("em"); if(em) em.textContent=TYPEW?"켬":"끔"; } grow(); toast(TYPEW?"타자기 모드: 쓰는 줄이 화면 가운데에 옵니다":"타자기 모드를 껐습니다"); if(TYPEW) typeCenter(); }
-function caretY(ta){ const cs=getComputedStyle(ta), d=document.createElement("div");
+function caretY(ta){ if(ta.tagName==="W-ED"){ const r=ta.rects(ta.selectionEnd,ta.selectionEnd)[0]; return r?r.top-ta.getBoundingClientRect().top:0; } const cs=getComputedStyle(ta), d=document.createElement("div");
   ["fontFamily","fontSize","fontWeight","lineHeight","letterSpacing","wordSpacing","paddingTop","paddingLeft","paddingRight","borderTopWidth","borderLeftWidth","borderRightWidth","boxSizing","wordBreak","overflowWrap","tabSize","textIndent"].forEach(k=>d.style[k]=cs[k]);
   Object.assign(d.style,{position:"absolute",visibility:"hidden",whiteSpace:"pre-wrap",top:"0",left:"-9999px",width:ta.offsetWidth+"px"});
   d.textContent=ta.value.slice(0,ta.selectionEnd); const sp=document.createElement("span"); sp.textContent="\u200b"; d.appendChild(sp); document.body.appendChild(d); const y=sp.offsetTop; d.remove(); return y; }
 let TW_RAF=0; function typeCenter(){ if(!TYPEW||TW_RAF) return; TW_RAF=requestAnimationFrame(()=>{ TW_RAF=0; const ta=$("#wbody"); if(!ta||document.activeElement!==ta) return;
   const y=ta.getBoundingClientRect().top+scrollY+caretY(ta); const want=y-innerHeight*0.42; if(Math.abs(want-scrollY)>4) scrollTo({top:Math.max(0,want),behavior:"auto"}); }); }
-["input","keyup","click"].forEach(ev=>document.addEventListener(ev,e=>{ if(TYPEW&&e.target?.id==="wbody") typeCenter(); }));
+["input","keyup","click"].forEach(ev=>document.addEventListener(ev,e=>{ if(TYPEW&&e.target?.closest?.("#wbody")) typeCenter(); }));
 // ───────── AI 글쓰기 도우미 (펜시브 「에이전트」처럼) ─────────
 // 오른쪽 창에서 지금 글을 함께 보며 묻고 답함. 서버 coWrite_(클로드 우선). 고치는 것은 늘 카드로 — 사람이 누르는 것만 글에 들어감(⌘Z 되돌리기).
 // 모드: 「질문」 묻고 답하기(넣을 문장은 「<<<넣기」 카드) · 「제안」 고칠 곳 목록 → 하나씩 비교해 보고 ✓ 적용 (mode:"suggest"). 펜시브의 「기본(AI가 바로 고침)」은 두지 않음.
@@ -6726,7 +6893,7 @@ function aiDraw(){ const el=$("#aipanel"); if(!el) return; if(AI_MODE==="researc
   el.innerHTML=`<div class="aih"><div class="aih1"><span class="aistar">✦</span><b>글쓰기 도우미</b><span class="aikind">${esc(k.name)}</span><span class="spacer"></span><button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div><div class="aih2">${k.meditation?`<span class="aimode"><span title="묵상은 글쓴이의 기도라 AI가 문장을 지어 주지 않습니다">질문만</span></span>`:`<span class="aimode"><button class="${ask==="ask"?"on":""}" onclick="aiSetAsk('ask')" title="묻고 답하기 — 넣을 문장은 카드로">질문</button><button class="${ask==="suggest"?"on":""}" onclick="aiSetAsk('suggest')" title="고칠 곳을 찾아 하나씩 비교해 보고 적용">제안</button></span>`}<span class="spacer"></span><button onclick="rsOpen()" title="웹에서 자료를 찾아 원고 자료 모음에 담는 조사 도우미">조사 ↗</button>${AI_MSGS.length?`<button onclick="aiReset()" title="대화를 비웁니다">새 대화</button>`:""}</div></div>
     <div class="aim" id="aimsgs">${AI_MSGS.length?AI_MSGS.map((m,i)=>m.role==="me"?`<div class="msg me">${aiText(m.text)}<button class="mkrule" onclick="ruleFromMsg(${i})" title="이 지적을 규칙으로 남기면 다음 AI 요청마다 함께 갑니다 (원칙 8-1)">규칙으로</button></div>`:m.role==="err"?`<div class="msg err">${esc(m.text)}</div>`:m.items?aiSugHtml(m,i)
       :`<div class="msg ai">${aiFmt(m.text).map((p,j)=>p.k==="t"?(p.v.trim()?aiText(p.v):""):p.k==="r"?rwHtml(m,i,p):`<div class="sug">${esc(p.v)}<div class="row">${k.meditation?"":k.poem?"":`<button class="p" onclick="aiPut(${i},${j},'ins')">커서 자리에 넣기</button>${m.sel?`<button onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""}`}<button onclick="aiPut(${i},${j},'copy')">복사</button></div></div>`).join("")}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`).join("")
-      :k.meditation?`<div class="msg ai">묵상은 팀장님이 말씀 앞에서 쓰는 글이라, 저는 문장을 지어 드리지 않고 <b>질문</b>만 합니다. 본문을 다시 보게 하는 관찰 질문, 확실한 배경 사실(출처와 함께), 맞춤법을 도와 드려요.</div>`
+      :k.meditation?`<div class="msg ai">묵상은 ${esc(jo(callName(),"이","가"))} 말씀 앞에서 쓰는 글이라, 저는 문장을 지어 드리지 않고 <b>질문</b>만 합니다. 본문을 다시 보게 하는 관찰 질문, 확실한 배경 사실(출처와 함께), 맞춤법을 도와 드려요.</div>`
       :ask==="suggest"?`<div class="msg ai"><b>제안 모드</b> — 무엇을 고칠지 말씀하시면(예: 「어색한 문장」) 글에서 고칠 곳을 찾아 「전 → 후」로 보여 드립니다. 하나씩 보고 ✓ 적용을 누른 것만 글에 들어가고 ⌘Z로 되돌릴 수 있어요.${rfDirs().free?"":`<br><span class="muted" style="font-size:12.5px">${esc(k.name)}은 비문(주어·서술어 호응, 조사)만 고칩니다.</span>`}</div>`
       :`<div class="msg ai">지금 쓰는 글을 함께 보고 있어요. 막힌 곳, 다듬고 싶은 문장, 제목, 흐름… 무엇이든 물어보세요.<br><span class="muted" style="font-size:12.5px">글은 바꾸지 않고 제안만 합니다. 넣고 싶은 문장은 「넣기」를 누르면 들어가고 ⌘Z로 되돌릴 수 있어요. 문장을 고르고 「✦ 다듬기」를 누르면 그 자리에서 고친 안을 비교해 볼 수 있어요.${k.noContinue?` ${esc(k.name)}은 대신 이어 쓰지 않고 질문·구조·표현을 함께 봅니다.`:""}</span></div>`}
       ${AI_BUSY?`<div class="msg ai dots"><i></i><i></i><i></i></div>`:""}</div>
@@ -6988,15 +7155,15 @@ function docZoomSet(z){ try{ localStorage.setItem("seojae.docZoom",String(z)); }
 function docHead(){ const b=$("#wbody"); if(!b) return; const v=b.value, s=v.lastIndexOf("\n",Math.max(0,b.selectionStart-1))+1, e0=v.indexOf("\n",b.selectionStart), e=e0<0?v.length:e0, l=v.slice(s,e);
   const nl=/^\s*■/.test(l)?l.replace(/^\s*■\s*/,""):"■ "+l; tInsert(b,nl,s,e); b.setSelectionRange(s+nl.length,s+nl.length); }
 // 굵게·기울임 넣기/풀기: 고른 글을 **…** / *…* 로 감쌈 (이미 감싸 있으면 풂). ⌘B · ⌘I
-function docWrap(mk,bar){ const b=$("#wbody"); if(!b) return; let s=bar&&WSEL?WSEL.s:b.selectionStart, e=bar&&WSEL?WSEL.e:b.selectionEnd; if(bar) hlClose(); const v=b.value, n=mk.length;
+function docWrap(mk,bar){ const b=(bar&&WSEL?.el?.isConnected&&WSEL.el)||(document.activeElement?.tagName==="W-ED"?document.activeElement:$("#wbody")); if(!b) return; let s=bar&&WSEL?WSEL.s:b.selectionStart, e=bar&&WSEL?WSEL.e:b.selectionEnd; if(bar) hlClose(); const v=b.value, n=mk.length;
   if(e<=s) return toast("먼저 글자를 고르세요"); const sel=v.slice(s,e);
   if(v.slice(s-n,s)===mk&&v.slice(e,e+n)===mk&&(n===2||(v[s-2]!=="*"&&v[e+1]!=="*"))){ tInsert(b,sel,s-n,e+n); b.setSelectionRange(s-n,e-n); return; }
   if(sel.length>2*n&&sel.startsWith(mk)&&sel.endsWith(mk)){ const inner=sel.slice(n,-n); tInsert(b,inner,s,e); b.setSelectionRange(s,s+inner.length); return; }
   if(/\n/.test(sel)) return toast("굵게·기울임은 한 줄(한 문단) 안에서만 넣을 수 있습니다");
   s+=sel.match(/^\s*/)[0].length; e-=sel.match(/\s*$/)[0].length; if(e<=s) return; const core=v.slice(s,e); if(/\*/.test(core)) return toast("별표(*)가 든 글에는 넣을 수 없습니다");
   tInsert(b,mk+core+mk,s,e); b.setSelectionRange(s+n,s+n+core.length); }
-document.addEventListener("keydown",e=>{ if(e.target?.id!=="wbody"||!(e.metaKey||e.ctrlKey)||e.shiftKey||e.altKey) return; const k=e.key.toLowerCase(); if(k==="b"||k==="i"){ e.preventDefault(); docWrap(k==="b"?"**":"*"); } });
-function docMk(kind,color){ const b=$("#wbody"); if(!b) return; if(b.selectionEnd<=b.selectionStart) return toast("먼저 글자를 고르세요"); WSEL={s:b.selectionStart,e:b.selectionEnd}; wMark(kind,color); }
+document.addEventListener("keydown",e=>{ if(e.target?.tagName!=="W-ED"||!(e.metaKey||e.ctrlKey)||e.shiftKey||e.altKey||e.isComposing) return; const k=e.key.toLowerCase(); if(k==="b"||k==="i"){ e.preventDefault(); docWrap(k==="b"?"**":"*"); } else if(k==="u"){ e.preventDefault(); docMk("ul"); } });   // ⌘B 굵게 · ⌘I 기울임 · ⌘U 밑줄 (모든 글 칸 같은 키)
+function docMk(kind,color){ const b=document.activeElement?.tagName==="W-ED"?document.activeElement:$("#wbody"); if(!b) return; if(b.selectionEnd<=b.selectionStart) return toast("먼저 글자를 고르세요"); WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; wMark(kind,color); }
 // 내보내기에 쓰는 문서 모양 (PDF)
 function docCss(m,o){ const d=docExp(m); if(!d||o.fmt==="pulpit") return ""; const f=docFont(d.font)[2];
   return `html{font-family:${f};font-size:${d.pt}pt!important} p,.chapter p{line-height:${d.lh}!important;text-indent:${d.ind}em;text-align:${d.align};margin:0 0 ${(d.sp*d.lh).toFixed(2)}em}\n`; }
@@ -7052,7 +7219,7 @@ function sugStep(d){ const b=$("#wbody"); if(!b) return; const L=sugList(b.value
 function sugApply(){ const x=SUG_ON; if(!x) return; SUG_ON=null; const ok=x.src==="fb"?(fbApply(x.i),FB?.items?.[x.i]?.st==="done"):x.src==="rw"?rwApply(x.i,x.j):aiSugApply(x.i,x.j); if(x.src==="ai"&&ok) aiDraw?.(); paintHeads(); const left=sugList($("#wbody")?.value||"").length; if(ok&&left) setTimeout(()=>toast(`적용했습니다 (⌘Z로 되돌리기) · 제안 ${left}곳 남음 — 파란 곳을 누르면 봅니다`),50); }
 function sugDrop(){ const x=SUG_ON; if(!x) return; SUG_ON=null; if(x.src==="fb") fbDismiss(x.i); else if(x.src==="rw") rwDrop(x.i,x.j); else aiSugDrop(x.i,x.j); paintHeads(); }
 // 본문을 누르면: 파란 곳 안이면 그 제안 카드, 밖이면 카드 접기
-document.addEventListener("click",e=>{ const b=e.target; if(b?.id!=="wbody"){ return; } const at=b.selectionStart, x=sugList(b.value).find(y=>at>=y.at&&at<=y.at+y.from.length); if(x){ if(!sugSame(x,SUG_ON)) sugOpen(x.src,x.i,x.j); } else sugHide(); });
+document.addEventListener("click",e=>{ const b=e.target.closest?.("#wbody"); if(!b) return; const at=b.selectionStart, x=sugList(b.value).find(y=>at>=y.at&&at<=y.at+y.from.length); if(x){ if(!sugSame(x,SUG_ON)) sugOpen(x.src,x.i,x.j); } else sugHide(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&SUG_ON&&$("#sugcard")){ e.stopPropagation(); sugHide(); } },true);
 addEventListener("resize",()=>{ if(SUG_ON) sugDraw(); });
 function fbClose(){ FB=null; $("#fbpanel")?.remove(); paintHeads(); }
@@ -7271,8 +7438,8 @@ function cxGlowClear(){ document.querySelectorAll("[data-cxg].lit").forEach(g=>{
 // 글 안의 이름에 마우스를 올리면 작은 설명 카드 — 종류·속성 두 줄·관계 셋·노트 한 줄 (누르면 항목으로). 거울 층(#hmirror)에서 그 자리 글자를 찾아 이름인지 봄
 let CXH={t:0,raf:0,el:null,id:""};
 function cxHoverAt(x,y){ const t=$("#wbody"), m=$("#hmirror"); if(!t||!m||tab!=="write") return null; const L=codexIn(t.value); if(!L.length) return null;
-  m.style.pointerEvents="auto"; let r=null; try{ r=document.caretRangeFromPoint?document.caretRangeFromPoint(x,y):null; }finally{ m.style.pointerEvents=""; }
-  const nd=r?.startContainer; if(!nd||nd.nodeType!==3||!m.contains(nd)) return null; const tx=nd.textContent, off=r.startOffset;
+  if(wgOn(t)) return null; let r=null; try{ r=document.caretRangeFromPoint?document.caretRangeFromPoint(x,y):null; }catch(_){}   // 글 칸이 글자를 그대로 보이므로 글 칸에서 찾음
+  const nd=r?.startContainer; if(!nd||nd.nodeType!==3||!t.contains(nd)) return null; const tx=nd.textContent, off=r.startOffset;
   for(const c of L) for(const n of cxNames(c)){ let i=tx.indexOf(n); while(i>=0){ if(off>=i&&off<=i+n.length){ const rg=document.createRange(); rg.setStart(nd,i); rg.setEnd(nd,i+n.length); const b=rg.getBoundingClientRect(); if(x>=b.left-1&&x<=b.right+1&&y>=b.top-1&&y<=b.bottom+1) return {c,b}; } i=tx.indexOf(n,i+1); } }
   return null; }
 function cxHoverShow(c,b){ if(CXH.id===c.id&&CXH.el) return; cxHoverHide(true); const pv=(c.props||[]).filter(p=>p.v).slice(0,2), rels=[...(c.rel||[]).map(r=>({t:codexLive().find(y=>y.id===r.to),r})),...cxScope(cxHome(c)).filter(x=>x.id!==c.id).flatMap(x=>(x.rel||[]).filter(r=>r.to===c.id).map(r=>({t:x,r,back:true})))].filter((x,i,A)=>x.t&&A.findIndex(y=>y.t?.id===x.t.id)===i).slice(0,3);   // 한 사람은 한 번만
@@ -7545,7 +7712,7 @@ function vrOpen(tab0,pre){ const ov=document.createElement("div"); ov.className=
             ${editing===x.id?`<button class="btn small ink" data-esave="${x.id}">저장</button>`:`<button class="btn small ghost" data-edit="${x.id}">고치기</button>`}<button class="btn small ghost" data-del="${x.id}" title="지우기 (고칠 규칙이면 「고치기」로 — 바뀐 규칙은 지우거나 무엇으로 바뀌었는지 적기)">✕</button></div>`).join("")||`<p class="muted" style="margin:0">아직 규칙이 없습니다. AI 창에서 내가 쓴 말 아래 「규칙으로」를 눌러도 됩니다.</p>`}</div>
         ${R.length>1?`<div class="row" style="gap:8px"><button class="btn small" data-check ${SERVER?"":"disabled"}>✦ 규칙 점검 (부딪히는·낡은 규칙 찾기)</button><small class="muted">원칙 8-2 — 짚기만 하고 고치는 것은 직접</small></div>`:""}
         ${check?`<div class="vrcheck">${check.busy?`<span class="muted">점검하는 중…</span>`:check.err?`<span class="warn">${esc(check.err)}</span>`:aiText(check.text)}</div>`:""}`
-      :`<p class="hint" style="margin:0">팀장님이 직접 쓰거나 고친 문장을 담아 두면, AI가 새로 쓰거나 다듬는 문장이 이 말투를 따릅니다 (원칙 1-6). 사실·인용·원문은 바꾸지 않습니다. 쓰기 화면에서 문장을 고르고 「말투」를 눌러도 담깁니다.</p>
+      :`<p class="hint" style="margin:0">${esc(jo(callName(),"이","가"))} 직접 쓰거나 고친 문장을 담아 두면, AI가 새로 쓰거나 다듬는 문장이 이 말투를 따릅니다 (원칙 1-6). 사실·인용·원문은 바꾸지 않습니다. 쓰기 화면에서 문장을 고르고 「말투」를 눌러도 담깁니다.</p>
         <div class="vrform"><textarea id="vo-t" placeholder="말투가 잘 드러난 내 문장 하나 (예: 어떻게 보면, 우리는 모두 길 위에 서 있는 사람들이지요.)" rows="2"></textarea><div class="row" style="gap:6px"><span class="muted" style="font-size:12.5px">쓰이는 글</span>${ksel(sermonNow?"설교":"모두",'id="vo-k"')}<button class="btn small ink" data-vadd>담기</button></div></div>
         <div class="vrlist">${V.slice().reverse().map(x=>`<div class="vrrow"><div style="min-width:0;flex:1">「${esc(x.t)}」<br><small class="muted">${esc(x.at||"")} · ${esc(x.k||"모두")}</small></div><button class="btn small ghost" data-vdel="${x.id}">✕</button></div>`).join("")||`<p class="muted" style="margin:0">아직 담긴 문장이 없습니다.</p>`}</div>`}
     </section>`;
@@ -7793,7 +7960,7 @@ document.addEventListener("contextmenu",e=>{ if(e.shiftKey||isTouch()) return;  
   const t=e.target; let r=null;
   if(t.closest?.(".ctxmenu")){ e.preventDefault(); return; }
   if(t.closest?.("#readview")&&!t.closest("a,button")) r=[ "읽기 모드",[{t:"다시 쓰기",ic:"✎",fn:()=>toggleRead()},{t:"글씨 크게",ic:"＋",fn:()=>readFsStep(1)},{t:"글씨 작게",ic:"－",fn:()=>readFsStep(-1)},$("#readview.pulpit")?{t:"강단용 PDF",ic:"▤",fn:()=>sendOpen('w')}:null] ];
-  else if(t.id==="wbody") r=ctxEditor();
+  else if(t.closest?.("#wbody")) r=ctxEditor();
   else if(t.closest?.("#sutext .vt")) r=ctxVerse(t.closest(".vt"));
   else { const f=ctxFind(t); if(f) r=f.k==="w"?ctxWriting(f.id):f.k==="b"?ctxBook(f.id):f.k==="m"?ctxMs(f.id):ctxSlide(f.id); }
   if(!r) return; e.preventDefault(); ctxOpen(e.clientX,e.clientY,r[0],r[1],false,r[2]); });
@@ -7809,7 +7976,8 @@ document.addEventListener("contextmenu",e=>{ if(isTouch()&&(ctxFind(e.target)||e
 // ⌘/Ctrl+엔터: 여러 줄 칸(메모·각주·노트·자료·독후감)에서 저장. Esc: 맨 위 창·상자 닫기. ⌘E: 읽기 모드. ?: 단축키 안내.
 const KB_SKIP=new Set(["q","jotq","cmtq","bqf"]);   // 바로 걸러지는 찾기 칸
 const KB_CANCEL=/^(닫기|그만|그만두기|취소|지우기|완전히 지우기|버리기)/;
-function kbButton(el){ const vis=b=>b&&!b.disabled&&b.offsetParent!==null&&!b.matches(".ghost,.danger,[data-x],.undobtn,.fsbtn")&&!KB_CANCEL.test(b.textContent.trim());
+const KB_OUT=/노션|보내기|메일|공유/;   // 한 줄 칸 엔터로는 바깥으로 보내는 단추를 누르지 않음 (⌘엔터로만)
+function kbButton(el,strict){ const vis=b=>b&&!b.disabled&&b.offsetParent!==null&&!b.matches(".ghost,.danger,[data-x],.undobtn,.fsbtn")&&!KB_CANCEL.test(b.textContent.trim())&&!(strict&&KB_OUT.test(b.textContent));
   const after=b=>el.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_FOLLOWING;
   const row=el.closest(".row"); if(row){ const b=[...row.querySelectorAll("button")].find(x=>after(x)&&vis(x)); if(b) return b; }
   const box=el.closest(".hlbar,.sendview section,.expopts section,section,.sheet,.item,.card-index,details,.field")?.closest(".hlbar,.sendview section,.expopts section,section,.sheet,.item,.card-index")||el.closest(".hlbar,section,.sheet,.item");
@@ -7820,12 +7988,12 @@ document.addEventListener("keydown",e=>{
     if(el.hasAttribute("onkeydown")||KB_SKIP.has(el.id)) return;
     if(el.id==="wtitle"||el.id==="wpassage"){ e.preventDefault(); const b=$("#wbody"); if(b&&!READVIEW){ b.focus(); if(el.id==="wtitle") b.setSelectionRange(0,0); } return; }   // 제목에서 엔터 → 본문으로
     if(el.closest(".writegrid")) return;
-    const b=kbButton(el); if(b){ e.preventDefault(); b.click(); } return; }
-  if(el.matches?.("textarea")&&el.id!=="wbody"&&(e.metaKey||e.ctrlKey)){ const b=kbButton(el); if(b){ e.preventDefault(); b.click(); } } });
+    const b=kbButton(el,true); if(b){ e.preventDefault(); b.click(); } return; }
+  if(el.matches?.("textarea,w-ed")&&el.id!=="wbody"&&(e.metaKey||e.ctrlKey)){ const b=kbButton(el); if(b){ e.preventDefault(); b.click(); } } });
 // Esc: 맨 위에 떠 있는 것부터 닫음 (오른쪽 메뉴는 따로)
 document.addEventListener("keydown",e=>{ if(e.key!=="Escape"||CTX||e.isComposing) return;
   const top=[...document.querySelectorAll("#aipanel,#sppop,.slview,#hlbar,#dcalpop,#dfcalpop,.bookview,.sendview,#draftpick .sheet")].filter(x=>x.offsetParent!==null||getComputedStyle(x).position==="fixed").pop();
-  if(!top) return; if(top.id==="hlbar"){ hlClose(); } else if(top.id==="sppop"){ spellPopClose(); } else if(top.id==="dcalpop"){ return; } else if(top.id==="dfcalpop"){ dCalClose(); }
+  if(!top) return; if(top.id==="hlbar"){ const ta=top.querySelector("#wfn,#hlmemo"), ok=top.querySelector(".btn.ink"); if(ta&&ok&&ta.value.trim()&&ta.value!==ta.defaultValue) ok.click(); else hlClose(); }   // 쓴 것이 있으면 간직하고 닫기 (모든 칸 같은 원칙) else if(top.id==="sppop"){ spellPopClose(); } else if(top.id==="dcalpop"){ return; } else if(top.id==="dfcalpop"){ dCalClose(); }
   else { const c=top.querySelector("[data-x],#bvclose,#dfx,#eo-x")||[...top.querySelectorAll("button")].find(b=>/^(닫기|그만두기)$/.test(b.textContent.trim())); if(c) c.click(); else top.remove(); }
   e.preventDefault(); e.stopImmediatePropagation(); },true);
 // 단축키
@@ -8531,7 +8699,7 @@ function stageNote(){ const n=$("#psnote"); if(!n) return; n.hidden=false; $("#p
 function stageNoteHide(){ const n=$("#psnote"); if(n) n.hidden=true; stageWake(); }
 function stageNoteKeep(){ const t=($("#psnotein")?.value||"").trim(); if(!t) return stageNoteHide(); (S.jots=S.jots||[]).push(jotNew(P.ctx?`${t}\n— ${P.ctx}`:t)); save(); toast("끄적이기에 담았습니다"); stageNoteHide(); }
 addEventListener("resize",()=>{ if(STAGE) stagePaint(); });
-document.addEventListener("keydown",e=>{ if(!STAGE) return; if(e.key==="Escape"){ e.preventDefault(); pomoStageClose(); } else if(e.key===" "&&!e.target.matches?.("textarea,input")){ e.preventDefault(); P.on?pomoPause():pomoStart(); } });
+document.addEventListener("keydown",e=>{ if(!STAGE) return; if(e.key==="Escape"){ e.preventDefault(); pomoStageClose(); } else if(e.key===" "&&!e.target.matches?.("textarea,input,[contenteditable]")){ e.preventDefault(); P.on?pomoPause():pomoStart(); } });
 // 가만히 두면 집중 화면 (설정 「가만히 두면 집중 화면」, 1분 · 쓰는 화면·글방에서는 열지 않음)
 function stageIdleCheck(){ const c=pomoSet(); if(!c.idle||STAGE||!P.on||tab==="write"||tab==="room"||document.visibilityState!=="visible") return; if(document.activeElement?.matches?.("textarea,input,select")) return; if(Date.now()-LAST_IN>60000) pomoStageOpen({idle:true}); }
 function pomoPaint(full){ pomoMini(); if(STAGE){ if(full) stageBuild(); else stagePaint(); } const card=$("#pomocard"); if(!card) return;
