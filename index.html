@@ -291,12 +291,13 @@ sup.enref{font-size:.7em;color:#4f7fa8;font-family:Georgia,serif} .enhead{margin
 body.aiopen #aitog{background:#7a5aa8;color:#fff;border-color:#7a5aa8}
 .hmirror i.sug{visibility:visible;font-style:normal;color:transparent;position:relative;background:rgba(59,130,246,.13);box-shadow:inset 0 -2px 0 rgba(37,99,235,.55);border-radius:2px}
 .hmirror i.sug::before{content:"AI 제안";position:absolute;left:0;top:-1.05em;font:600 10.5px/1.3 -apple-system,"Apple SD Gothic Neo",sans-serif;color:#1d4ed8;background:#e8f0fe;border:1px solid #9bb8f5;border-radius:6px;padding:0 5px;white-space:nowrap;pointer-events:none}
-.hmirror i.sug.on{background:rgba(59,130,246,.24);box-shadow:inset 0 -2px 0 #2563eb}
+.hmirror i.sug.on{background:rgba(220,38,38,.06);box-shadow:none;text-decoration:line-through;text-decoration-color:#dc2626;text-decoration-thickness:2px}
+.hmirror i.sug.on::before{content:"AI 제안 — 바꿀 문장";color:#b91c1c;background:#fdecec;border-color:#f3b4b4}
 #fbpanel.away{display:none}
 #sugcard{position:absolute;z-index:60;box-sizing:border-box;background:#f6f8fc;border:1px solid #c9d7f2;border-left:4px solid #2563eb;border-radius:12px;box-shadow:0 12px 28px -14px rgba(0,0,0,.35);padding:12px 16px 12px;font:14.5px/1.65 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink)}
 #sugcard .sgh{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--faint)} #sugcard .sgh .spacer{flex:1} #sugcard .sgtag{color:#1d4ed8;font-weight:700}
 #sugcard .sgnav{border:1px solid var(--edge);background:var(--paper);border-radius:6px;width:24px;height:22px;cursor:pointer;color:var(--ink-soft)}
-#sugcard .sgwhy{color:#c0392b;margin:8px 0 6px} #sugcard .sgto{font-family:"Gowun Batang",serif;font-size:16px;line-height:1.8;margin:6px 0 10px;color:var(--ink)}
+#sugcard .sgwhy{color:#c0392b;margin:8px 0 6px} #sugcard .sgto{font-family:"Gowun Batang",serif;font-size:16px;line-height:1.8;margin:6px 0 10px;color:#1d4ed8;background:rgba(59,130,246,.07);border-radius:6px;padding:4px 8px}
 #sugcard .sgb{display:flex;justify-content:flex-end;gap:8px} #sugcard .sgb button{font:13.5px -apple-system,"Apple SD Gothic Neo",sans-serif;border:1px solid var(--edge);background:var(--paper);border-radius:10px;padding:6px 14px;cursor:pointer;color:var(--ink)} #sugcard .sgb button.p{border-color:#2563eb;color:#1d4ed8;font-weight:600}
 @media (max-width:700px){ #sugcard{padding:10px 12px} #sugcard .sgb button{min-height:40px;padding:8px 16px} }
 .hmirror i.fb{visibility:visible;font-style:normal;color:transparent;background:rgba(214,92,92,.10);box-shadow:inset 0 -2px 0 rgba(200,70,70,.45);border-radius:2px}
@@ -1363,7 +1364,14 @@ h2,.big,.bookc .t,.dw-item h5,.item .myeongjo{word-break:keep-all;overflow-wrap:
 :root[data-theme="dark"] .draftmode .label.bible,:root[data-theme="dark"] .draftmode .step .num{color:#9fc0ea}
 /* 되돌리기·다시 하기 단추 */
 .undobtn{font:inherit;border:1px solid var(--edge);background:var(--paper-2);border-radius:999px;min-width:34px;height:30px;cursor:pointer;color:var(--ink-soft);font-size:15px;padding:0 9px}
-.undobtn:hover{border-color:var(--deco)}
+.undobtn:hover{border-color:var(--deco)} .undobtn:disabled{opacity:.38;cursor:default}
+.wti.wsnew{color:#1d4ed8} .wti.wsnew .stc{background:#2563eb;color:#fff}
+.histgrp{display:inline-flex;align-items:center;gap:0;flex:0 0 auto} .histgrp .undobtn{border-radius:0;margin-left:-1px} .histgrp .undobtn:first-child{border-radius:999px 0 0 999px;margin-left:0} .histgrp .undobtn:last-child{border-radius:0 999px 999px 0} .histgrp .histl{min-width:20px;padding:0 4px;font-size:11px}
+.docbar .histgrp{margin-right:6px} .docbar .histgrp .undobtn{height:28px}
+body:has(.docbar) .toolbar .histgrp{display:none}
+.histpop{position:fixed;z-index:120;min-width:240px;max-width:min(360px,calc(100vw - 16px));max-height:60vh;overflow:auto;background:var(--paper);border:1px solid var(--edge);border-radius:10px;box-shadow:0 10px 26px -10px rgba(0,0,0,.3);padding:4px;font:13px -apple-system,"Apple SD Gothic Neo",sans-serif}
+.histpop p{margin:4px 8px;color:var(--faint);font-size:12px} .histpop .foot{border-top:1px solid var(--edge);padding-top:6px;margin-top:4px;text-align:center}
+.histpop button{display:block;width:100%;text-align:left;border:0;background:none;padding:6px 8px;border-radius:6px;cursor:pointer;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .histpop button small{color:var(--ink-soft)} .histpop button.on{background:color-mix(in srgb,#2563eb 14%,transparent)}
 @media (max-width:700px){ .writegrid aside{display:flex;flex-direction:column} .writegrid .calcard{order:9;margin:18px 0 0} .cal .d{height:36px} .cmtlist li input[type=checkbox]{width:20px;height:20px} }
 </style>
 </head>
@@ -1734,7 +1742,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="95cb1f17f5";
+const APP_BUILD="0d0b543659";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3220,7 +3228,7 @@ write0(){
     ${w&&w.track==="bible"&&w.type==="묵상"?`<button class="btn small ink" onclick="draftPick('${w.id}')" title="이 묵상(과 같은 본문의 다른 묵상)에서 씨앗을 이어받아 설교초안을 새로 씁니다. 묵상은 그대로 남습니다">${ICO.cross}설교초안 만들기</button>`:""}
     ${!w&&fws.length?`<span class="chip on" style="cursor:default">묵상 ${fws.length}편의 씨앗을 이어받은 초안</span>`:""}
     <span class="spacer"></span>
-    <span class="row touchonly" style="gap:4px"><button class="undobtn" onclick="tUndo()" title="되돌리기">↶</button><button class="undobtn" onclick="tUndo(true)" title="다시 하기">↷</button></span>
+    ${histBtns()}
     <button class="btn small focusexit" onclick="toggleFocus()">집중 나가기</button>
     <details class="tgrp"><summary class="btn small">쓰기 ▾</summary><div class="tgmenu">
       ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}${w&&cardKindOf(w)&&!cardKindOf(w).sermon?`<button class="btn small" onclick="tgClose();cardOpen()" title="한 문장·기능·겨냥할 자리… 초안 전에 글을 설계합니다">설계 카드</button>`:""}<button class="btn small aibtn" onclick="tgClose();fbStart()" title="성격에 맞는 기준으로 점수·강점·약점, 고칠 문장마다 코멘트와 대안 (적용은 하나씩 직접)">✦ 피드백·첨삭</button><button class="btn small" onclick="tgClose();altHere()" title="커서가 있는 문장(또는 고른 글)을 바꿔 쓴 후보 4개">✦ 다른 표현</button>${w&&wMs(w)&&!wMs(w).rule?`<button class="btn small" onclick="tgClose();pieceSplit()" title="커서가 있는 줄부터 새 글로 (■ 소제목 줄이면 그 이름이 새 글 제목)">✂ 커서에서 나누기</button><button class="btn small" onclick="tgClose();pieceMerge()" title="다음 글을 이 글 끝에 붙입니다">⊕ 다음 글과 합치기</button>`:""}${w&&cardKindOf(w)?`<button class="btn small" onclick="tgClose();vfOpen()" title="사실 주장을 출처와 대조합니다">검증표</button><button class="btn small" onclick="tgClose();ckOpen()" title="완성 전 점검 질문 10개">점검 10문항</button>`:""}
@@ -3558,19 +3566,70 @@ function paintHeads(){
     const hit=RG.filter(r=>r.s<st+l.length+1&&r.e>st); if(hit.length){ let o="",cur=0; hit.forEach(r=>{ const a=Math.max(cur,r.s-st), z=Math.min(l.length,r.e-st); if(z<=a) return; o+=plain(l.slice(cur,a),head)+`<i class="${r.c}">${esc(l.slice(a,z))}</i>`; cur=z; }); return o+plain(l.slice(cur),head); }
     if(!E.length) return plain(l,head);
     let out="", last=0; E.forEach(x=>{ out+=plain(l.slice(last,x.s),head)+`<i class="sp ${x.src}" data-l="${i}" data-s="${x.s}" data-e="${x.e}" title="${esc(x.to)}${x.why?" — "+esc(x.why):""}">${esc(l.slice(x.s,x.e))}</i>`; last=x.e; }); return out+plain(l.slice(last),head); }).map((h,i)=>OZ.has(i)?`<i class="ownl">${h}</i>`:h).join("\n");
-  fnPanePaint(t); sugDraw();
+  fnPanePaint(t); sugDraw(); histPaint();
   const n=errs.reduce((a,x)=>a+x.length,0), st=$("#spellstate"); if(st&&!SPELL_AI_BUSY) st.textContent=n?`밑줄 ${n}`:"";
 }
+let TINS_LABEL="";   // 다음 tInsert 한 번의 되돌리기 이름 (AI 적용·서식 등)
 // 글자 칸에 프로그램이 글을 넣을 때는 브라우저의 '입력' 명령으로 넣어, ⌘Z(되돌리기)·⇧⌘Z(다시 하기)가 그대로 듣게 합니다
-function tInsert(b,txt,s,e){
+function tInsert(b,txt,s,e,label){
   if(READVIEW&&b.id==="wbody"){ READVIEW=false; toggleRead(); }
+  histMark(b,label||TINS_LABEL||"넣기"); TINS_LABEL="";
   b.focus(); if(document.activeElement!==b){ s=s??(b.selectionStart??b.value.length); e=e??s; b.value=b.value.slice(0,s)+txt+b.value.slice(e); b.selectionStart=b.selectionEnd=s+txt.length; grow(); countW(); draftInput(); return; } s=s??(b.selectionStart??b.value.length); e=e??(arguments.length>=3?s:(b.selectionEnd??s)); try{ b.setSelectionRange(s,e); }catch(_){}
   let ok=false; try{ ok=document.execCommand("insertText",false,txt); }catch(_){}
   if(!ok||b.value.slice(s,s+txt.length)!==txt){ b.value=b.value.slice(0,s)+txt+b.value.slice(e); }   // 입력 명령을 못 쓰는 브라우저면 그냥 넣음 (이때는 되돌리기 안 됨)
   b.selectionStart=b.selectionEnd=s+txt.length; grow(); countW(); draftInput();
 }
-function tUndo(redo){ const b=$("#wbody"); if(!b) return; if(READVIEW) return toast("「다시 쓰기」로 돌아간 뒤 되돌릴 수 있습니다"); b.focus(); const before=b.value; let ok=false; try{ ok=document.execCommand(redo?"redo":"undo"); }catch(_){}
-  if(!ok||b.value===before) toast(redo?"다시 할 것이 없습니다":"되돌릴 것이 없습니다"); grow(); countW(); draftInput(); }
+// ───────── 되돌리기 · 다시 실행 (워드처럼): 글마다 이 앱이 직접 기록 ─────────
+// 브라우저 기본 되돌리기는 프로그램이 글을 바꾸거나 화면을 다시 그리면 끊겨서, 본문(#wbody)의 바뀜을 글마다 따로 쌓아 둠 (이 기기 메모리만 — 기록 파일에 안 넣음)
+// 묶음: 이어서 치는 글자는 한 덩어리(1.2초 쉬거나·커서를 옮기거나·문장이 끝나면 끊음), 엔터·지우기·붙여넣기·잘라내기·프로그램이 넣은 것(AI 적용·틀·서식…)은 따로
+const HIST=new Map(), HIST_MAX=200;
+function histOf(b){ const id=editId||"new"; let H=HIST.get(id); if(!H){ H={past:[],future:[],last:{v:b.value,s:b.selectionStart,e:b.selectionEnd},g:null}; HIST.set(id,H); } return H; }
+// 프로그램이 기록 없이 글을 바꿨으면(다시 그리기·임시본 되살리기 등) 그 앞 상태를 한 걸음으로 남김
+function histSync(b,H){ if(H.last.v!==b.value){ H.past.push({...H.last,label:"고침"}); H.future=[]; H.g=null; histTrim(H); } H.last={v:b.value,s:b.selectionStart,e:b.selectionEnd}; }
+const histTrim=H=>{ if(H.past.length>HIST_MAX) H.past.splice(0,H.past.length-HIST_MAX); };
+const HIST_TYPE=t=>/^insert(Text|CompositionText|ReplacementText)$/.test(t)?"type":/^delete/.test(t)&&t!=="deleteByCut"?"del":t==="insertParagraph"||t==="insertLineBreak"?"enter":t==="insertFromPaste"||t==="insertFromDrop"?"paste":t==="deleteByCut"?"cut":"edit";
+const HIST_NAME={type:"입력",del:"지우기",enter:"줄 바꿈",paste:"붙여넣기",cut:"잘라내기",edit:"고침"};
+// 한 걸음 남기기 (프로그램이 바꾸기 직전에도 부름 — tInsert 등). label: 메뉴에 보일 이름
+function histMark(b,label){ if(!b||b.id!=="wbody") return; const H=histOf(b); histSync(b,H); H.past.push({...H.last,label:label||"고침"}); H.future=[]; H.g=null; histTrim(H); }
+document.addEventListener("beforeinput",e=>{ const b=e.target; if(b?.id!=="wbody") return;
+  if(e.inputType==="historyUndo"||e.inputType==="historyRedo"){ e.preventDefault(); return e.inputType==="historyUndo"?histUndo():histRedo(); }   // 메뉴 「편집 → 실행 취소」·흔들기도 이 기록으로
+  const H=histOf(b), now=Date.now(), type=HIST_TYPE(e.inputType), s=b.selectionStart, en=b.selectionEnd; histSync(b,H);
+  const g=H.g, txt=e.data||"", cont=g&&g.type===type&&now-g.t<1200&&s===en&&s===g.at&&!(type==="type"&&/[.?!。…]\s*$/.test(g.tail||""));
+  if(!cont||e.isComposing&&!g){ if(!(e.isComposing&&g&&g.type==="type"&&now-g.t<1200)){ H.past.push({...H.last,label:HIST_NAME[type]}); H.future=[]; histTrim(H); } }
+  H.g={type,t:now,at:-1,tail:txt}; },true);
+document.addEventListener("input",e=>{ const b=e.target; if(b?.id!=="wbody") return; const H=histOf(b); if(H.g){ H.g.at=b.selectionStart; H.g.t=Date.now(); } H.last={v:b.value,s:b.selectionStart,e:b.selectionEnd}; histPaint(); },true);
+document.addEventListener("keydown",e=>{ const b=e.target; if(b?.id==="wbody"&&(e.key.startsWith("Arrow")||e.key==="Home"||e.key==="End")){ const H=HIST.get(editId||"new"); if(H) H.g=null; } },true);   // 커서를 옮기면 묶음을 끊음
+document.addEventListener("mousedown",e=>{ if(e.target?.id==="wbody"){ const H=HIST.get(editId||"new"); if(H) H.g=null; } },true);
+function histGo(n,redo){ const b=$("#wbody"); if(!b) return; if(READVIEW) return toast("「다시 쓰기」로 돌아간 뒤 되돌릴 수 있습니다"); const H=histOf(b); histSync(b,H);
+  const from=redo?H.future:H.past, to=redo?H.past:H.future; if(!from.length) return toast(redo?"다시 실행할 것이 없습니다":"되돌릴 것이 없습니다");
+  let st, names=[]; n=Math.min(n||1,from.length); for(let k=0;k<n;k++){ st=from.pop(); names.push(st.label); to.push({...H.last,label:st.label}); H.last={v:st.v,s:st.s,e:st.e}; }
+  H.g=null; b.value=st.v; b.focus({preventScroll:true}); try{ b.setSelectionRange(st.s,st.e); }catch(_){}
+  grow(); countW(); draftInput(); paintHeads(); histPaint(); histShowCaret(b);
+  toast(`${redo?"다시 실행":"되돌림"}: ${n>1?`${n}걸음`:names[0]}`); }
+const histUndo=n=>histGo(n,false), histRedo=n=>histGo(n,true);
+function histShowCaret(b){ const y=b.getBoundingClientRect().top+scrollY+caretY(b); if(y<scrollY+80||y>scrollY+innerHeight-80) scrollTo({top:Math.max(0,y-innerHeight*.35),behavior:"smooth"}); }
+// 메뉴의 한 걸음 이름: 바뀐 글자 미리보기 (앞뒤 같은 부분을 빼고 남은 곳)
+function histPeek(a,b){ let i=0; while(i<a.length&&i<b.length&&a[i]===b[i]) i++; let j=0; while(j<a.length-i&&j<b.length-i&&a[a.length-1-j]===b[b.length-1-j]) j++;
+  const del=a.slice(i,a.length-j), ins=b.slice(i,b.length-j), cut=t=>{ t=t.replace(/\s+/g," ").trim(); return t.length>18?t.slice(0,18)+"…":t; };
+  return ins&&del?`「${cut(del)}」→「${cut(ins)}」`:ins?`「${cut(ins)}」`:del?`「${cut(del)}」`:""; }
+function histPaint(){ const b=$("#wbody"), H=b&&HIST.get(editId||"new"), u=!!H?.past.length, r=!!H?.future.length, top=H?.past.at(-1), fu=H?.future.at(-1), mac=/Mac|iPhone|iPad/.test(navigator.platform), M=mac?"⌘":"Ctrl+";
+  document.querySelectorAll("[data-hist=u]").forEach(x=>{ x.disabled=!u; x.title=u?`되돌리기: ${top.label} ${histPeek(top.v,H.last.v)} (${M}Z)`:`되돌리기 (${M}Z)`; });
+  document.querySelectorAll("[data-hist=r]").forEach(x=>{ x.disabled=!r; x.title=r?`다시 실행: ${fu.label} (${mac?"⇧⌘Z":"Ctrl+Y"})`:`다시 실행 (${mac?"⇧⌘Z":"Ctrl+Y"})`; });
+  document.querySelectorAll("[data-hist=l]").forEach(x=>x.disabled=!u); }
+// ▾ 되돌리기 목록 (워드처럼 여러 걸음을 한 번에): 위에서부터 고른 데까지 되돌림
+function histList(btn){ const b=$("#wbody"); if(!b) return; const H=histOf(b); histSync(b,H); if(!H.past.length) return toast("되돌릴 것이 없습니다");
+  document.querySelector(".histpop")?.remove(); const L=H.past.slice(-25).reverse(), states=[H.last,...L];
+  const pop=document.createElement("div"); pop.className="histpop"; pop.innerHTML=`<p>되돌릴 곳을 고르세요</p>${L.map((st,k)=>`<button type="button" data-n="${k+1}"><b>${esc(st.label)}</b> <small>${esc(histPeek(st.v,states[k].v))}</small></button>`).join("")}<p class="foot" data-f>1걸음 되돌리기</p>`;
+  document.body.appendChild(pop); const r=btn.getBoundingClientRect(); pop.style.left=Math.max(8,Math.min(innerWidth-pop.offsetWidth-8,r.left))+"px"; pop.style.top=(r.bottom+4)+"px";
+  pop.onmousedown=e=>e.preventDefault(); pop.onmouseover=e=>{ const n=+e.target.closest("[data-n]")?.dataset.n||0; if(!n) return; pop.querySelectorAll("[data-n]").forEach(x=>x.classList.toggle("on",+x.dataset.n<=n)); pop.querySelector("[data-f]").textContent=`${n}걸음 되돌리기`; };
+  pop.onclick=e=>{ const n=+e.target.closest("[data-n]")?.dataset.n||0; if(!n) return; pop.remove(); histUndo(n); };
+  setTimeout(()=>document.addEventListener("mousedown",function cl(e){ if(!e.target.closest(".histpop")){ pop.remove(); document.removeEventListener("mousedown",cl); } }),0); }
+const histBtns=()=>`<span class="histgrp"><button type="button" class="undobtn" data-hist="u" onclick="histUndo()" title="되돌리기">↶</button><button type="button" class="undobtn histl" data-hist="l" onclick="histList(this)" title="되돌리기 목록 — 여러 걸음을 한 번에">▾</button><button type="button" class="undobtn" data-hist="r" onclick="histRedo()" title="다시 실행">↷</button></span>`;
+// 단축키: ⌘Z / Ctrl+Z 되돌리기 · ⇧⌘Z / Ctrl+Y / ⌘Y / Ctrl+Shift+Z 다시 실행 (한글 조합 중에는 조합을 먼저 끝냄)
+document.addEventListener("keydown",e=>{ if(e.target?.id!=="wbody"||!(e.metaKey||e.ctrlKey)||e.altKey) return; const k=e.key.toLowerCase(), code=e.code;
+  const z=k==="z"||code==="KeyZ", y=k==="y"||code==="KeyY"; if(!z&&!y) return; if(e.isComposing) return; e.preventDefault(); e.stopPropagation();
+  if(z&&!e.shiftKey) histUndo(); else histRedo(); },true);
+function tUndo(redo){ return redo?histRedo():histUndo(); }
 function countW(){ const v=$("#wbody")?.value||""; const fn=(v.match(/\[\^/g)||[]).length, el=$("#wcount"); if(!el) return; const g=wMsNow(editId&&S.writings.find(x=>x.id===editId))?.genre;
   if(g==="poem"){ const L=stripMemo(v).replace(/\s+$/,"").split("\n"), lines=L.filter(l=>l.trim()).length, st=lines?L.join("\n").trim().split(/\n\s*\n/).length:0; el.textContent=`${lines}행 · ${st}연 · ${chars(v).toLocaleString()}자${fn?` · 각주 ${fn}`:""}`; return; }   // 시: 행·연
   const sermon=/설교/.test($("#wtype")?.value||"")||g==="sermon", mins=sermon?Math.round(chars(stripMemo(v))*1.2/SPM()):0; if(sermon) ratioPaint();
@@ -5613,7 +5672,27 @@ function chkAlias(mid,i){ const x=CHK_AI?.aliases?.[i]; if(!x) return; const c=c
   c.aliases=[...new Set([...(c.aliases||[]),x.alias])]; c.updated=new Date().toISOString(); save(); x.st="closed"; render(); toast(`「${x.alias}」을(를) ${c.name}의 다른 이름에 넣었습니다 — 예전 글에서도 바로 잡힙니다`); }
 function chkGoto(wid,from){ go("write",{edit:wid}); setTimeout(()=>{ const b=$("#wbody"); if(!b) return; const a=b.value.indexOf(from); if(a<0) return toast("본문에서 그 구절을 찾지 못했습니다 — 그사이 고쳤나 봅니다"); b.focus(); b.setSelectionRange(a,a+from.length); const y=b.getBoundingClientRect().top+scrollY+caretY(b); scrollTo({top:Math.max(0,y-innerHeight*.35),behavior:"smooth"}); },350); }
 // 글을 떠날 때 한 줄: 계획한 시점 인물·장소가 본문에 없으면
-function chkLeave(wid){ const w=S.writings.find(x=>x.id===wid), m=w&&wMs(w); if(!m||m.genre!=="novel") return; const p=chkPlan(m,w).filter(f=>!f.soft); if(p.length) toast(`「${w.title||"방금 글"}」 — ${p[0].t}. 원고 보기 「설정 점검」에서 자세히`); }
+const WS_HINTED=new Set();
+function chkLeave(wid){ const w=S.writings.find(x=>x.id===wid), m=w&&wMs(w); if(!m||m.rule) return; const p=m.genre==="novel"?chkPlan(m,w).filter(f=>!f.soft):[]; if(p.length) return toast(`「${w.title||"방금 글"}」 — ${p[0].t}. 원고 보기 「설정 점검」에서 자세히`);
+  // 글을 떠나면: 그 글에서 노트에 없는 인물·장소·용어 등을 AI가 저절로 찾아 「새 요소 N」으로 (넣는 것은 글쓴이가 골라서)
+  if(chars(w.body||"")>=200) wsAuto(m,w); }
+const WS_PEND={};   // 원고 → 저절로 찾은 것 {add,update,rel,from:[제목]} (이 기기 메모리)
+const wsAutoOn=()=>{ try{ return localStorage.getItem("seojae.wsAuto")!=="0"; }catch(_){ return true; } };
+function wsAutoSet(on){ try{ localStorage.setItem("seojae.wsAuto",on?"1":"0"); }catch(_){} toast(on?"글을 떠날 때 새 요소를 저절로 찾습니다":"이제 「원고에서 설정 정리」를 누를 때만 찾습니다"); }
+async function wsAuto(m,w){ if(!wsAutoOn()||!SERVER||!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return; const k="seojae.wsAutoAt."+w.id, stamp=String(chars(w.body||""))+"|"+(w.updated||"");
+  try{ if(localStorage.getItem(k)===stamp) return; localStorage.setItem(k,stamp); }catch(_){}
+  const P=cxP(m.genre&&CX_PROF[m.genre]?m.genre:"free");
+  try{ const r=await gcall("coWrite",{mode:"worldsync",body:`■ ${w.title||""}\n${stripMemo(w.body||"")}`.slice(0,14000),settings:fbSettings(m),rules:cxSys(m.id,"rules")?.body||"",kinds:P.kinds.filter(k=>k!=="기타"),tpl:P.kinds.map(k=>`${k}: ${(P.tpl[k]||[]).join("·")}`).join(" / "),title:m.title,genre:G(m).n});
+    const has=n=>cxScope(m.id).some(c=>cxNames(c).includes(n)), D=WS_PEND[m.id]||(WS_PEND[m.id]={add:[],update:[],rel:[],from:[]}); let n=0;
+    (r.add||[]).forEach(x=>{ if(has(x.name)||D.add.some(y=>y.name===x.name)) return; D.add.push({...x,props:{...x.props}}); n++; });
+    (r.update||[]).forEach(x=>{ if(!has(x.name)||D.update.some(y=>y.name===x.name)) return; D.update.push({...x,props:{...x.props}}); n++; });
+    (r.rel||[]).forEach(x=>{ if(D.rel.some(y=>y.a===x.a&&y.b===x.b&&y.label===x.label)) return; D.rel.push(x); n++; });
+    if(!n) return; if(!D.from.includes(w.title||"")) D.from.push(w.title||"(제목 없음)");
+    toast(`「${w.title||"방금 글"}」에서 노트에 없는 것 ${n}개를 찾았습니다 — 월드의 「✦ 새 요소」에서 골라 넣으세요`); if(tab==="room") render(); else document.querySelectorAll("[data-wspend]").forEach(x=>x.textContent=wsPendN(m.id)); }
+  catch(_){ try{ localStorage.removeItem(k); }catch(__){} } }
+const wsPendN=mid=>{ const D=WS_PEND[mid]; return D?D.add.length+D.update.length+D.rel.length:0; };
+function wsPendOpen(mid){ const D=WS_PEND[mid]; if(!D) return; const has=n=>cxScope(mid).some(c=>cxNames(c).includes(n));
+  WS={mid,busy:false,scope:"auto",add:D.add.filter(x=>!has(x.name)),update:D.update,rel:D.rel,note:`글을 떠날 때 저절로 찾은 것 — ${D.from.map(t=>`「${t}」`).join(" ")}`}; WS.pick=new Set([...WS.add.map((x,i)=>"a"+i),...WS.update.map((x,i)=>"u"+i),...WS.rel.map((x,i)=>"r"+i)]); wsDraw(); }
 function plotHtml(m,ws0){ const lines=m.plot?.lines||[], lc=n=>PL_COL[lines.indexOf(n)%PL_COL.length], povs=[...new Set(ws0.map(w=>wMeta(w,"pov")).filter(Boolean))], ws=ws0.filter(w=>(!PLOT_LINE||wMeta(w,"pline")===PLOT_LINE)&&(!PLOT_POV||wMeta(w,"pov")===PLOT_POV)), st=plotStages(m), cur=Object.entries(PLOT_SETS).find(([,v])=>v.join()===st.join())?.[0]||"직접", un=ws.filter(w=>!st.includes(wMeta(w,"beat")));
   const people=w=>codexIn(w.body,m.id).filter(c=>c.kind==="인물"||(!c.kind&&m.genre==="novel")).slice(0,5);
   const card=w=>`<div class="scard pcard" draggable="true" data-w="${w.id}" ${wMeta(w,"pline")&&lines.includes(wMeta(w,"pline"))?`style="border-left:4px solid ${lc(wMeta(w,"pline"))}"`:""}><a href="#" onclick="go('write',{edit:'${w.id}'});return false"><b>${esc(w.title||"(제목 없음)")}</b></a>${chars(w.body)?"":`<span class="pcplan" title="아직 본문이 없는 계획 카드">계획</span>`}${wMeta(w,"pov")||wMeta(w,"st")?`<span class="pcmeta">${wMeta(w,"pov")?`◉ ${esc(wMeta(w,"pov"))}`:""}${wMeta(w,"st")?` · ${esc(wMeta(w,"st"))}`:""}</span>`:""}<span class="pcsum">${esc(w.summary||pv(w,60))}${m.rule?"":`<button class="sumed" onclick="wSum('${w.id}')" title="한 줄 요약 고치기">✎</button>`}</span>
@@ -5701,7 +5780,18 @@ function aiToggle(){ if($("#aipanel")&&AI_MODE!=="research") return aiClose(); a
 function aiClose(){ $("#aipanel")?.remove(); document.body.classList.remove("aiopen"); AI_MODE="write"; paintNavAi(); }
 const paintNavAi=()=>$("#nav .navai")?.classList.toggle("on",AI_MODE==="research"&&!!$("#aipanel"));
 function aiSelNow(){ const b=$("#wbody"); if(!b) return null; const s=b.selectionStart, e=b.selectionEnd; return e>s?{s,e,t:b.value.slice(s,e)}:null; }
-function aiFmt(t){ const parts=[]; let i=0; String(t||"").replace(/<<<넣기\s*\n?([\s\S]*?)\n?>>>/g,(m,body,off)=>{ parts.push({k:"t",v:t.slice(i,off)}); parts.push({k:"s",v:body.trim()}); i=off+m.length; return m; }); parts.push({k:"t",v:String(t||"").slice(i)}); return parts; }
+// 답 나누기: 글 · <<<넣기 …>>>(커서 자리에 넣을 새 문장) · <<<바꾸기 원문:… 제안:…>>>(글에 있는 문장을 바꿔 쓰자는 것 — 본문에 취소선 + 아래 제안, 「적용」을 눌러야 바뀜)
+function aiFmt(t){ const parts=[]; let i=0, n=0; t=String(t||""); t.replace(/<<<(넣기|바꾸기)\s*\n?([\s\S]*?)\n?>>>/g,(m,kind,body,off)=>{ parts.push({k:"t",v:t.slice(i,off)});
+    if(kind==="바꾸기"){ const f=body.match(/원문\s*[:：]\s*([\s\S]*?)\n\s*제안\s*[:：]/), to=body.match(/제안\s*[:：]\s*([\s\S]*)$/); const strip=x=>String(x||"").trim().replace(/^["“「]|["”」]$/g,"").trim();
+      if(f&&to) parts.push({k:"r",from:strip(f[1]),to:strip(to[1]),n:n++}); else parts.push({k:"s",v:body.trim()}); }
+    else parts.push({k:"s",v:body.trim()}); i=off+m.length; return m; }); parts.push({k:"t",v:t.slice(i)}); return parts; }
+const aiRw=t=>aiFmt(t).filter(p=>p.k==="r").map(p=>({from:p.from,to:p.to,why:""}));
+function rwIt(i,j){ return AI_MSGS[i]?.rw?.[j]; }
+function rwApply(i,j){ const it=rwIt(i,j), b=$("#wbody"); if(!it||it.st||!b) return false; const at=aiSugFind(it);
+  if(at===-1){ toast("글에서 이 문장을 찾지 못했습니다 (그사이 바뀌었을 수 있어요) — 「복사」로 직접 넣어 주세요"); return false; } if(at===-3){ toast("같은 문장이 여러 곳에 있어 바꾸지 않았습니다"); return false; }
+  { const oz=ownHit(b.value,at,at+it.from.length); if(oz){ toast(`「${oz}」은 직접 쓰는 자리라 바꾸지 않았습니다 (원칙 1-5)`); return false; } }
+  TINS_LABEL="AI 바꿔 쓰기 적용"; tInsert(b,it.to,at,at+it.from.length); it.st="done"; aiStore(); aiDraw(); toast("바꿨습니다 ("+undoHint()+")"); return true; }
+function rwDrop(i,j){ const it=rwIt(i,j); if(!it) return; it.st="drop"; aiStore(); aiDraw(); }
 function aiText(t){ return esc(t.trim()).replace(/\*\*([^*\n]+)\*\*/g,"<b>$1</b>").replace(/(^|\n)- (.+)/g,"$1• $2").replace(/\n/g,"<br>"); }
 document.addEventListener("toggle",e=>{ const d=e.target; if(!d.open||!d.matches?.("details.tgrp,details.stmore")) return; const m=d.querySelector(".tgmenu,.stmmenu"); if(!m) return; m.style.transform="";
   const r=m.getBoundingClientRect(); let dx=0; if(r.left<8) dx=8-r.left; else if(r.right>innerWidth-8) dx=innerWidth-8-r.right; if(dx) m.style.transform=`translateX(${Math.round(dx)}px)`; },true);   // 쓰기·다듬기·원고 관리 메뉴가 휴대폰 화면 밖으로 잘리지 않게
@@ -5724,7 +5814,7 @@ function aiSugHtml(m,i){ const pend=(m.items||[]).filter(x=>!x.st).length;
 function aiDraw(){ const el=$("#aipanel"); if(!el) return; if(AI_MODE==="research") return rsDraw(); const sel=aiSelNow(), k=aiGenre(), cr=CONF.claude, keyOK=!!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini), ask=aiAsk(), keep=$("#aiin")?.value||"";
   el.innerHTML=`<div class="aih"><span style="color:#7a5aa8;font-size:17px">✦</span><b>글쓰기 도우미</b><span class="muted" style="font-size:12px">${esc(k.name)}</span>${k.meditation?`<span class="aimode"><span title="묵상은 글쓴이의 기도라 AI가 문장을 지어 주지 않습니다">질문만</span></span>`:`<span class="aimode"><button class="${ask==="ask"?"on":""}" onclick="aiSetAsk('ask')" title="묻고 답하기 — 넣을 문장은 카드로">질문</button><button class="${ask==="suggest"?"on":""}" onclick="aiSetAsk('suggest')" title="고칠 곳을 찾아 하나씩 비교해 보고 적용">제안</button></span>`}<span class="spacer"></span><button onclick="rsOpen()" title="웹에서 자료를 찾아 원고 자료 모음에 담는 조사 도우미">조사 ↗</button>${AI_MSGS.length?`<button onclick="aiReset()" title="대화를 비웁니다">새 대화</button>`:""}<button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div>
     <div class="aim" id="aimsgs">${AI_MSGS.length?AI_MSGS.map((m,i)=>m.role==="me"?`<div class="msg me">${aiText(m.text)}<button class="mkrule" onclick="ruleFromMsg(${i})" title="이 지적을 규칙으로 남기면 다음 AI 요청마다 함께 갑니다 (원칙 8-1)">규칙으로</button></div>`:m.role==="err"?`<div class="msg err">${esc(m.text)}</div>`:m.items?aiSugHtml(m,i)
-      :`<div class="msg ai">${aiFmt(m.text).map((p,j)=>p.k==="t"?(p.v.trim()?aiText(p.v):""):`<div class="sug">${esc(p.v)}<div class="row">${k.meditation?"":k.poem?"":`<button class="p" onclick="aiPut(${i},${j},'ins')">커서 자리에 넣기</button>${m.sel?`<button onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""}`}<button onclick="aiPut(${i},${j},'copy')">복사</button></div></div>`).join("")}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`).join("")
+      :`<div class="msg ai">${aiFmt(m.text).map((p,j)=>p.k==="t"?(p.v.trim()?aiText(p.v):""):p.k==="r"?rwHtml(m,i,p):`<div class="sug">${esc(p.v)}<div class="row">${k.meditation?"":k.poem?"":`<button class="p" onclick="aiPut(${i},${j},'ins')">커서 자리에 넣기</button>${m.sel?`<button onclick="aiPut(${i},${j},'rep')">고른 곳 바꾸기</button>`:""}`}<button onclick="aiPut(${i},${j},'copy')">복사</button></div></div>`).join("")}${m.ai?`<small>${esc(m.ai)}</small>`:""}</div>`).join("")
       :k.meditation?`<div class="msg ai">묵상은 팀장님이 말씀 앞에서 쓰는 글이라, 저는 문장을 지어 드리지 않고 <b>질문</b>만 합니다. 본문을 다시 보게 하는 관찰 질문, 확실한 배경 사실(출처와 함께), 맞춤법을 도와 드려요.</div>`
       :ask==="suggest"?`<div class="msg ai"><b>제안 모드</b> — 무엇을 고칠지 말씀하시면(예: 「어색한 문장」) 글에서 고칠 곳을 찾아 「전 → 후」로 보여 드립니다. 하나씩 보고 ✓ 적용을 누른 것만 글에 들어가고 ⌘Z로 되돌릴 수 있어요.${rfDirs().free?"":`<br><span class="muted" style="font-size:12.5px">${esc(k.name)}은 비문(주어·서술어 호응, 조사)만 고칩니다.</span>`}</div>`
       :`<div class="msg ai">지금 쓰는 글을 함께 보고 있어요. 막힌 곳, 다듬고 싶은 문장, 제목, 흐름… 무엇이든 물어보세요.<br><span class="muted" style="font-size:12.5px">글은 바꾸지 않고 제안만 합니다. 넣고 싶은 문장은 「넣기」를 누르면 들어가고 ⌘Z로 되돌릴 수 있어요. 문장을 고르고 「✦ 다듬기」를 누르면 그 자리에서 고친 안을 비교해 볼 수 있어요.${k.noContinue?` ${esc(k.name)}은 대신 이어 쓰지 않고 질문·구조·표현을 함께 봅니다.`:""}</span></div>`}
@@ -5757,10 +5847,14 @@ async function aiSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
   const doc={title:$("#wtitle")?.value||"",body,genre:k.name,item:k.item,focus:k.focus,passage:$("#wpassage")?.value||k.w?.passage||"",sel:sel?.t||"",near,noContinue:k.noContinue,meditation:k.meditation,poem:k.poem,sermon:k.sermon,card:cardForAI(k.w),...vrFor(k.sermon),refs:AI_REFS?aiRefsText(k.m):"",world:AI_WORLD?aiWorldText(k.m):"",around:aiAround(k.w),gate:["essay","selfhelp","novel","paper"].includes(k.kind)&&!(k.w&&wMeta(k.w,"cok")),kind:k.kind,samples,only:rfDirs().free?"":"비문 — 주어·서술어 호응, 조사, 어색한 문장 구조만"};
   const hist=AI_MSGS.filter(m=>m.role!=="err"&&m.text).slice(-12).map(m=>({role:m.role,text:m.text}));
   let add; try{ if(ask==="suggest"){ const r=await gcall("coWrite",{mode:"suggest",messages:hist,doc}); add={role:"ai",text:`(제안 ${r.items.length}곳)`,items:r.items.map(x=>({...x})),ai:r.ai}; }
-    else { const r=await gcall("coWrite",{messages:hist,doc}); add={role:"ai",text:r.text,ai:r.ai,sel:sel||null,pos}; } }
+    else { const r=await gcall("coWrite",{messages:hist,doc}); add={role:"ai",text:r.text,ai:r.ai,sel:sel||null,pos}; const rw=aiRw(r.text); if(rw.length) add.rw=rw; } }
   catch(e){ add={role:"err",text:"답을 받지 못했습니다: "+e.message}; }
   AI_BUSY=false; if(AI_KEY===key){ AI_MSGS.push(add); aiStore(); } else { const L=chatGet(key); L.push(add); chatPut(key,L); }   // 기다리는 사이 다른 글로 옮겼으면 물었던 글의 대화에
   aiDraw(); }
+function rwHtml(m,i,p){ const it=m.rw?.[p.n]||{from:p.from,to:p.to}, b=$("#wbody"), here=!!b&&b.value.includes(it.from), k=aiGenre();
+  return `<div class="sug2 ${it.st||""}"><small class="muted">바꿔 쓰기 제안</small><div class="rfdiff">${rfDiffHtml(it.from,it.to)}</div><div class="row">${it.st==="done"?`<span class="muted" style="font-size:12px">✓ 바꿈</span>`:it.st==="drop"?`<span class="muted" style="font-size:12px">버림</span>`
+    :here&&!k.poem&&!k.meditation?`<button class="p" onclick="sugOpen('rw',${i},${p.n})" title="본문의 그 문장에 취소선을 긋고 아래에 제안을 띄웁니다 — 거기서 「적용」">글에서 보기</button><button onclick="rwApply(${i},${p.n})">✓ 적용</button><button onclick="rwDrop(${i},${p.n})">버리기</button>`
+    :`<small class="muted">글에서 이 문장을 찾지 못했습니다</small><button onclick="clip(${jsArg(it.to).replace(/"/g,"&quot;")})">복사</button>`}</div></div>`; }
 function aiPut(i,j,mode){ const m=AI_MSGS[i], p=m&&aiFmt(m.text)[j], b=$("#wbody"); if(!p||!b) return;
   if(mode==="copy") return clip(p.v);
   if(mode==="rep"){ const sl=m.sel; if(!sl||b.value.slice(sl.s,sl.e)!==sl.t) return toast("고른 곳이 그 뒤 바뀌어 바꿀 수 없습니다 — 「커서 자리에 넣기」를 써 주세요"); const oz=ownHit(b.value,sl.s,sl.e); if(oz) return toast(`「${oz}」은 직접 쓰는 자리입니다 (원칙 1-5) — 복사해서 참고만 하세요`); tInsert(b,p.v,sl.s,sl.e); }
@@ -5776,7 +5870,7 @@ function aiSugApply(i,j,quiet){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); 
   if(at===-1){ if(!quiet) toast("글에서 이 구절을 찾지 못했습니다 (그사이 바뀌었을 수 있어요)"); return false; }
   if(at===-3){ if(!quiet) toast("같은 구절이 여러 곳에 있어 넣지 않았습니다 — 「글에서 보기」로 찾아 직접 고쳐 주세요"); return false; }
   { const oz=ownHit(b.value,at,at+it.from.length); if(oz){ if(!quiet) toast(`「${oz}」은 직접 쓰는 자리라 넣지 않았습니다 (원칙 1-5) — 참고만 하세요`); return false; } }
-  tInsert(b,it.to,at,at+it.from.length); it.st="done"; aiStore(); if(!quiet){ aiDraw(); toast("넣었습니다 ("+undoHint()+")"); } return true; }
+  TINS_LABEL="AI 제안 적용"; tInsert(b,it.to,at,at+it.from.length); it.st="done"; aiStore(); if(!quiet){ aiDraw(); toast("넣었습니다 ("+undoHint()+")"); } return true; }
 function aiSugDrop(i,j){ const it=AI_MSGS[i]?.items?.[j]; if(!it) return; it.st="drop"; aiStore(); aiDraw(); }
 function aiSugAll(i){ const L=AI_MSGS[i]?.items||[]; let n=0, skip=0; L.forEach((it,j)=>{ if(it.st) return; aiSugApply(i,j,true)?n++:skip++; }); aiDraw(); toast(`${n}곳을 넣었습니다${skip?` · ${skip}곳은 글에서 찾지 못해 남겨 둠`:""} (⌘Z로 하나씩 되돌리기)`); }
 function aiSugShow(i,j){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); if(!it||!b) return; if(!it.st) return sugOpen("ai",i,j); const at=b.value.indexOf(it.from); if(at<0) return toast("글에서 이 구절을 찾지 못했습니다");
@@ -5891,7 +5985,7 @@ const docExp=m=>m&&m.id!=="__one"?(m.exportOpts?.doc?{...DOC_DEF,...m.exportOpts
 function docVars(w){ const d=docStyle(w), z=docZoom()/100, px=d.pt*4/3*z;
   return `--doc-font:${docFont(d.font)[2].replace(/"/g,"'")};--doc-fs:${px.toFixed(2)}px;--doc-lh:${(px*d.lh).toFixed(2)}px;--doc-align:${d.align};--doc-ind:${d.ind}em;--doc-sp:${(d.sp*d.lh).toFixed(2)}em;--doc-w:${Math.round(794*z)}px`; }
 function docBar(w){ const d=docStyle(w), m=docOwn(w), z=docZoom(), opt=(v,list,fmt)=>list.map(x=>`<option value="${x}" ${String(v)===String(x)?"selected":""}>${fmt?fmt(x):x}</option>`).join(""), al=(k,ic,t)=>`<button type="button" class="dbb ${d.align===k?"on":""}" onclick="docSet('align','${k}')" title="${t}">${ic}</button>`;
-  return `<div class="docbar nofocus" onmousedown="if(!event.target.closest('select'))event.preventDefault()">
+  return `<div class="docbar nofocus" onmousedown="if(!event.target.closest('select'))event.preventDefault()">${histBtns()}
     <select title="글꼴" onchange="docSet('font',this.value)">${DOC_FONTS.map(f=>`<option value="${f[0]}" ${d.font===f[0]?"selected":""}>${f[1]}</option>`).join("")}</select>
     <select title="글자 크기 (pt)" onchange="docSet('pt',+this.value)">${opt(d.pt,[9,10,10.5,11,12,13,14,16,18],x=>x+" pt")}</select>
     <select title="줄 간격" onchange="docSet('lh',+this.value)">${opt(d.lh,[1,1.15,1.3,1.5,1.6,1.8,2,2.5],x=>"줄 "+x)}</select>
@@ -5956,11 +6050,11 @@ async function fbStart(){ const b=$("#wbody"); if(!b) return; const k=aiGenre();
 let SUG_ON=null;   // 지금 카드를 연 제안 {src:"fb"|"ai", i, j}
 function sugList(v){ const out=[], wid=editId||"new";
   if(FB&&!FB.busy&&FB.wid===wid) (FB.items||[]).forEach((x,i)=>{ if(x.st==="open"&&x.from) out.push({src:"fb",i,from:x.from,to:x.to||"",note:x.note||"",kind:x.kind||""}); });
-  (typeof AI_MSGS!=="undefined"?AI_MSGS:[]).forEach((m,i)=>(m?.items||[]).forEach((x,j)=>{ if(!x.st&&x.from) out.push({src:"ai",i,j,from:x.from,to:x.to||"",note:x.why||"",kind:"도우미 제안"}); }));
+  (typeof AI_MSGS!=="undefined"?AI_MSGS:[]).forEach((m,i)=>{ (m?.items||[]).forEach((x,j)=>{ if(!x.st&&x.from) out.push({src:"ai",i,j,from:x.from,to:x.to||"",note:x.why||"",kind:"도우미 제안"}); }); (m?.rw||[]).forEach((x,j)=>{ if(!x.st&&x.from) out.push({src:"rw",i,j,from:x.from,to:x.to||"",note:"",kind:"바꿔 쓰기"}); }); });
   return out.map(x=>({...x,at:v.indexOf(x.from)})).filter(x=>x.at>=0); }
 const sugSame=(a,b)=>a&&b&&a.src===b.src&&a.i===b.i&&a.j===b.j;
 function sugRanges(v){ return sugList(v).map(x=>({s:x.at,e:x.at+x.from.length,c:"sug"+(sugSame(x,SUG_ON)?" on":"")})); }
-function sugOpen(src,i,j){ SUG_ON={src,i,j}; if(innerWidth<=700){ $("#fbpanel")?.classList.add("away"); if(src==="ai") aiClose?.(); } paintHeads(); const b=$("#wbody"), x=sugList(b?.value||"").find(y=>sugSame(y,SUG_ON)); if(!x){ SUG_ON=null; paintHeads(); return toast("본문에서 그 구절을 찾지 못했습니다 — 그사이 고쳤나 봅니다"); }
+function sugOpen(src,i,j){ SUG_ON={src,i,j}; if(innerWidth<=700){ $("#fbpanel")?.classList.add("away"); if(src==="ai"||src==="rw") aiClose?.(); } paintHeads(); const b=$("#wbody"), x=sugList(b?.value||"").find(y=>sugSame(y,SUG_ON)); if(!x){ SUG_ON=null; paintHeads(); return toast("본문에서 그 구절을 찾지 못했습니다 — 그사이 고쳤나 봅니다"); }
   setTimeout(()=>{ const c=$("#sugcard"); if(c){ const r=c.getBoundingClientRect(); if(r.bottom>innerHeight-20||r.top<60) scrollTo({top:scrollY+r.top-innerHeight*.3,behavior:"smooth"}); } },30); }
 function sugHide(){ if(!SUG_ON) return; SUG_ON=null; paintHeads(); }
 function sugDraw(){ const b=$("#wbody"), x=SUG_ON&&b&&b.style.display!=="none"?sugList(b.value).find(y=>sugSame(y,SUG_ON)):null; let c=$("#sugcard");
@@ -5974,8 +6068,8 @@ function sugDraw(){ const b=$("#wbody"), x=SUG_ON&&b&&b.style.display!=="none"?s
   const br=b.getBoundingClientRect(), last=mk.at(-1).getClientRects(), lr=last[last.length-1]||mk.at(-1).getBoundingClientRect();
   c.style.left=(br.left+scrollX)+"px"; c.style.width=b.clientWidth+"px"; c.style.top=(lr.bottom+scrollY+6)+"px"; }
 function sugStep(d){ const b=$("#wbody"); if(!b) return; const L=sugList(b.value); if(!L.length) return; const n=L.findIndex(y=>sugSame(y,SUG_ON)), x=L[(n+d+L.length)%L.length]; sugOpen(x.src,x.i,x.j); }
-function sugApply(){ const x=SUG_ON; if(!x) return; SUG_ON=null; const ok=x.src==="fb"?(fbApply(x.i),FB?.items?.[x.i]?.st==="done"):aiSugApply(x.i,x.j); if(x.src==="ai"&&ok) aiDraw?.(); paintHeads(); const left=sugList($("#wbody")?.value||"").length; if(ok&&left) setTimeout(()=>toast(`적용했습니다 (⌘Z로 되돌리기) · 제안 ${left}곳 남음 — 파란 곳을 누르면 봅니다`),50); }
-function sugDrop(){ const x=SUG_ON; if(!x) return; SUG_ON=null; if(x.src==="fb") fbDismiss(x.i); else aiSugDrop(x.i,x.j); paintHeads(); }
+function sugApply(){ const x=SUG_ON; if(!x) return; SUG_ON=null; const ok=x.src==="fb"?(fbApply(x.i),FB?.items?.[x.i]?.st==="done"):x.src==="rw"?rwApply(x.i,x.j):aiSugApply(x.i,x.j); if(x.src==="ai"&&ok) aiDraw?.(); paintHeads(); const left=sugList($("#wbody")?.value||"").length; if(ok&&left) setTimeout(()=>toast(`적용했습니다 (⌘Z로 되돌리기) · 제안 ${left}곳 남음 — 파란 곳을 누르면 봅니다`),50); }
+function sugDrop(){ const x=SUG_ON; if(!x) return; SUG_ON=null; if(x.src==="fb") fbDismiss(x.i); else if(x.src==="rw") rwDrop(x.i,x.j); else aiSugDrop(x.i,x.j); paintHeads(); }
 // 본문을 누르면: 파란 곳 안이면 그 제안 카드, 밖이면 카드 접기
 document.addEventListener("click",e=>{ const b=e.target; if(b?.id!=="wbody"){ return; } const at=b.selectionStart, x=sugList(b.value).find(y=>at>=y.at&&at<=y.at+y.from.length); if(x){ if(!sugSame(x,SUG_ON)) sugOpen(x.src,x.i,x.j); } else sugHide(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&SUG_ON&&$("#sugcard")){ e.stopPropagation(); sugHide(); } },true);
@@ -5987,7 +6081,7 @@ function fbGo(i){ const x=FB?.items?.[i], b=$("#wbody"); if(!x||!b) return; cons
 function fbApply(i){ const x=FB?.items?.[i], b=$("#wbody"); if(!x||!b||!x.to) return; const k=aiGenre(); if(k.poem) return toast("시는 행을 바꿔 쓰지 않습니다 — 코멘트를 보고 직접 고쳐 주세요");
   const a=b.value.indexOf(x.from); if(a<0) return toast("본문에서 그 구절을 찾지 못했습니다 — 그사이 고쳤나 봅니다");
   const oz=ownHit(b.value,a,a+x.from.length); if(oz) return toast(`「${oz}」은 직접 쓰는 자리입니다 (원칙 1-5) — 코멘트를 보고 직접 고쳐 주세요`);
-  tInsert(b,x.to,a,a+x.from.length); x.st="done"; fbDraw(); paintHeads(); toast("적용했습니다 (⌘Z로 되돌리기)"); }
+  TINS_LABEL="AI 첨삭 적용"; tInsert(b,x.to,a,a+x.from.length); x.st="done"; fbDraw(); paintHeads(); toast("적용했습니다 (⌘Z로 되돌리기)"); }
 function fbDismiss(i){ const x=FB?.items?.[i]; if(!x) return; x.st="closed"; fbDraw(); paintHeads(); }
 function fbDraw(){ if(!FB) return $("#fbpanel")?.remove(); let p=$("#fbpanel"); if(!p){ p=document.createElement("aside"); p.id="fbpanel"; p.className="fbpanel"; document.body.appendChild(p); p.onmousedown=e=>{ if(!e.target.closest("input,textarea,a")) e.preventDefault(); }; }
   const bar=n=>`<span class="fbbar"><i style="width:${n*20}%"></i></span>`, open=(FB.items||[]).filter(x=>x.st==="open").length;
@@ -6062,26 +6156,41 @@ document.addEventListener("keydown",e=>{ if(tab!=="write"||!e.altKey||e.metaKey|
 
 // 설정 정리: AI가 원고를 읽고 노트에 없는 인물·달라진 속성·새 관계를 제안 → 골라서 넣기
 let WS=null;   // {mid,busy,err,add,update,rel,pick:Set}
-async function wsStart(scope){ const w=editId&&S.writings.find(x=>x.id===editId), m=(tab==="write"?wMs(w):null)||S.manuscripts.find(x=>x.id===ROOM_MS); if(!m||m.rule) return toast("원고 안에서 쓸 수 있습니다");
+// 원고 전체 설정 정리: 길면 글 단위로 나눠 여러 번 읽음(한 번에 14,000자). 지난 정리 뒤 새로 쓰거나 고친 글이 있으면 그 글만 먼저 — 이 기기에 시각(seojae.wsAt.<원고>)
+const wsAtKey=mid=>"seojae.wsAt."+mid, wsAt=mid=>{ try{ return localStorage.getItem(wsAtKey(mid))||""; }catch(_){ return ""; } };
+const wsNew=m=>{ const at=wsAt(m.id); return msList(m).filter(w=>chars(w.body||"")>=100&&(!at||(w.updated||w.created||"")>at)); };
+async function wsStart(scope,all){ const w=editId&&S.writings.find(x=>x.id===editId), m=(tab==="write"?wMs(w):null)||S.manuscripts.find(x=>x.id===ROOM_MS); if(!m||m.rule) return toast("원고 안에서 쓸 수 있습니다");
   if(!SERVER) return toast("구글 서버에 닿아야 AI를 쓸 수 있습니다"); if(!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini)) return toast("설정 → 주석 서재에서 클로드(또는 제미나이) 열쇠를 넣어 주세요");
-  const P=cxP(m.genre&&CX_PROF[m.genre]?m.genre:"free"), text=scope==="piece"&&tab==="write"&&$("#wbody")?aiBodyText($("#wbody")):msList(m).map(x=>`■ ${x.title||""}\n${stripMemo(x.body||"")}`).join("\n\n");
-  if(text.length>14000){ const upto=(text.slice(0,14000).match(/^■ .*/gm)||[]).pop()||""; if(!confirm(`원고가 길어(${text.length.toLocaleString()}자) AI는 앞 14,000자${upto?` — 「${upto.slice(2,40)}」까지`:""}만 읽습니다.\n뒤쪽은 글마다 「다듬기 ▾ → ✦ 설정 정리」로 하면 빠짐없이 됩니다. 계속할까요?`)) return; }
-  WS={mid:m.id,busy:true,scope}; wsDraw();
-  try{ const r=await gcall("coWrite",{mode:"worldsync",body:text,settings:fbSettings(m),rules:cxSys(m.id,"rules")?.body||"",kinds:P.kinds.filter(k=>k!=="기타"),tpl:P.kinds.map(k=>`${k}: ${(P.tpl[k]||[]).join("·")}`).join(" / "),title:m.title,genre:G(m).n});
-    if(!WS||WS.mid!==m.id) return; const has=n=>cxScope(m.id).some(c=>cxNames(c).includes(n));
-    Object.assign(WS,{busy:false,add:(r.add||[]).filter(x=>!has(x.name)),update:(r.update||[]).filter(x=>has(x.name)),rel:(r.rel||[]),ai:r.ai}); WS.pick=new Set([...WS.add.map((x,i)=>"a"+i),...WS.update.map((x,i)=>"u"+i),...WS.rel.map((x,i)=>"r"+i)]); }
-  catch(e){ if(WS) Object.assign(WS,{busy:false,err:"정리하지 못했습니다: "+e.message}); } wsDraw(); }
+  const P=cxP(m.genre&&CX_PROF[m.genre]?m.genre:"free"), LIM=14000, piece=scope==="piece"&&tab==="write"&&$("#wbody");
+  let parts, note="";
+  if(piece) parts=[aiBodyText($("#wbody"))];
+  else { const fresh=wsNew(m), whole=msList(m).filter(x=>chars(x.body||"")>0), use=!all&&wsAt(m.id)&&fresh.length&&fresh.length<whole.length?fresh:whole;
+    if(use!==whole) note=`지난 정리 뒤 새로 쓰거나 고친 ${use.length}편만 읽습니다`;
+    const txt=x=>`■ ${x.title||""}\n${stripMemo(x.body||"")}`.slice(0,LIM); parts=[]; let cur="";
+    use.forEach(x=>{ const t=txt(x); if(cur&&cur.length+t.length+2>LIM){ parts.push(cur); cur=""; } cur+=(cur?"\n\n":"")+t; }); if(cur) parts.push(cur);
+    if(!parts.length) return toast("읽을 글이 없습니다");
+    if(parts.length>1&&!confirm(`${note?note+" — ":""}글이 길어(${parts.reduce((a,x)=>a+x.length,0).toLocaleString()}자) ${parts.length}번에 나눠 빠짐없이 읽습니다. 계속할까요?`)) return; }
+  WS={mid:m.id,busy:true,scope,note,prog:parts.length>1?`1 / ${parts.length}`:""}; wsDraw();
+  const has=n=>cxScope(m.id).some(c=>cxNames(c).includes(n)), add=[], update=[], rel=[]; let ai="", fail=0;
+  for(let k=0;k<parts.length;k++){ if(!WS||WS.mid!==m.id) return; WS.prog=parts.length>1?`${k+1} / ${parts.length}`:""; wsDraw();
+    try{ const r=await gcall("coWrite",{mode:"worldsync",body:parts[k],settings:fbSettings(m)+(add.length?`\n[이번 정리에서 이미 찾은 새 항목] ${add.map(x=>x.name).join(", ")}`:""),rules:cxSys(m.id,"rules")?.body||"",kinds:P.kinds.filter(k=>k!=="기타"),tpl:P.kinds.map(k=>`${k}: ${(P.tpl[k]||[]).join("·")}`).join(" / "),title:m.title,genre:G(m).n});
+      ai=r.ai||ai; (r.add||[]).forEach(x=>{ if(has(x.name)) return; const o=add.find(y=>y.name===x.name); if(o) Object.assign(o.props,x.props); else add.push({...x,props:{...x.props}}); });
+      (r.update||[]).forEach(x=>{ if(!has(x.name)) return; const o=update.find(y=>y.name===x.name); if(o){ Object.assign(o.props,x.props); if(x.note&&!o.note.includes(x.note)) o.note=(o.note?o.note+" / ":"")+x.note; } else update.push({...x,props:{...x.props},note:x.note||""}); });
+      (r.rel||[]).forEach(x=>{ if(!rel.some(y=>y.a===x.a&&y.b===x.b&&y.label===x.label)) rel.push(x); }); }
+    catch(e){ fail++; if(parts.length===1){ if(WS) Object.assign(WS,{busy:false,err:"정리하지 못했습니다: "+e.message}); return wsDraw(); } } }
+  if(!WS||WS.mid!==m.id) return; if(!piece&&fail<parts.length){ try{ localStorage.setItem(wsAtKey(m.id),new Date().toISOString()); }catch(_){} }
+  Object.assign(WS,{busy:false,add,update,rel,ai,prog:"",note:[note,fail?`${parts.length}번 가운데 ${fail}번은 받지 못했습니다 — 다시 눌러 주세요`:""].filter(Boolean).join(" · ")}); WS.pick=new Set([...add.map((x,i)=>"a"+i),...update.map((x,i)=>"u"+i),...rel.map((x,i)=>"r"+i)]); wsDraw(); }
 function wsTog(k){ if(!WS) return; WS.pick.has(k)?WS.pick.delete(k):WS.pick.add(k); wsDraw(); }
 function wsApply(){ if(!WS) return; const m=S.manuscripts.find(x=>x.id===WS.mid); if(!m) return; const now=new Date().toISOString(), find=n=>cxScope(m.id).find(c=>cxNames(c).includes(n)); let a=0,u=0,r=0;
   WS.add.forEach((x,i)=>{ if(!WS.pick.has("a"+i)||find(x.name)) return; S.codex.push({id:uid(),name:x.name,ms:m.id,...(x.kind?{kind:x.kind}:{}),aliases:[],...(Object.keys(x.props).length?{props:Object.entries(x.props).map(([k,v])=>({k,v}))}:{}),body:x.note||"",updated:now}); a++; });
   WS.update.forEach((x,i)=>{ if(!WS.pick.has("u"+i)) return; const c=find(x.name); if(!c) return; const P2=(c.props||[]).map(p=>({...p})); Object.entries(x.props).forEach(([k,v])=>{ const p=P2.find(y=>y.k===k); if(p) p.v=v; else P2.push({k,v}); }); c.props=P2; if(x.note) c.body=(c.body?c.body+"\n":"")+`(${today()}) ${x.note}`; c.updated=now; u++; });
   WS.rel.forEach((x,i)=>{ if(!WS.pick.has("r"+i)) return; const A=find(x.a), B=find(x.b); if(!A||!B) return; A.rel=A.rel||[]; if(A.rel.some(q=>q.to===B.id&&q.label===x.label)) return; A.rel.push(Object.assign({to:B.id,label:x.label},CX_TONE[x.tone]?{tone:x.tone}:{})); A.updated=now; r++; });
-  save(); toast(`노트에 넣었습니다 — 새 항목 ${a} · 고친 항목 ${u} · 관계 ${r}`); WS=null; wsDraw(); if(tab==="room") render(); }
+  if(WS.scope==="auto") delete WS_PEND[WS.mid]; save(); toast(`노트에 넣었습니다 — 새 항목 ${a} · 고친 항목 ${u} · 관계 ${r}`); WS=null; wsDraw(); if(tab==="room") render(); }
 function wsDraw(){ if(!WS) return $("#wspanel")?.remove(); let p=$("#wspanel"); if(!p){ p=document.createElement("aside"); p.id="wspanel"; p.className="fbpanel"; document.body.appendChild(p); p.onmousedown=e=>{ if(!e.target.closest("input,textarea,a,label")) e.preventDefault(); }; }
   const box=(k,html)=>`<label class="wsrow"><input type="checkbox" ${WS.pick?.has(k)?"checked":""} onchange="wsTog('${k}')"><span>${html}</span></label>`, pr=o=>Object.entries(o||{}).map(([k,v])=>`${esc(k)}=${esc(v)}`).join(" · ");
-  p.innerHTML=`<div class="fbh"><b>✦ 설정 정리</b><small class="muted">${WS.scope==="piece"?"이 글":"원고 전체"}에서</small><span class="spacer"></span><button onclick="WS=null;wsDraw()" title="닫기">✕</button></div>
-    ${WS.busy?`<p class="muted">원고를 읽고 노트와 견주는 중… <span class="dots"><i></i><i></i><i></i></span></p>`:WS.err?`<p class="warn">${esc(WS.err)}</p>`
-    :`<p class="muted" style="font-size:12.5px;margin:0 0 6px">글에 분명히 적힌 것만 제안합니다. 넣을 것만 고르세요.</p>
+  p.innerHTML=`<div class="fbh"><b>✦ 설정 정리</b><small class="muted">${WS.scope==="piece"?"이 글":WS.scope==="auto"?"새로 쓴 글":"원고 전체"}에서</small><span class="spacer"></span><button onclick="WS=null;wsDraw()" title="닫기">✕</button></div><label class="chk" style="font-size:12px;margin:0 0 6px"><input type="checkbox" ${wsAutoOn()?"checked":""} onchange="wsAutoSet(this.checked)"> 글을 떠날 때 새 요소를 저절로 찾기 (AI)</label>
+    ${WS.busy?`<p class="muted">원고를 읽고 노트와 견주는 중${WS.prog?` (${WS.prog})`:""}… <span class="dots"><i></i><i></i><i></i></span></p>${WS.note?`<p class="muted" style="font-size:12.5px">${esc(WS.note)}</p>`:""}`:WS.err?`<p class="warn">${esc(WS.err)}</p>`
+    :`<p class="muted" style="font-size:12.5px;margin:0 0 6px">글에 분명히 적힌 것만 제안합니다. 넣을 것만 고르세요.</p>${WS.note?`<p class="muted" style="font-size:12.5px;margin:0 0 6px">${esc(WS.note)}${WS.scope==="ms"?` · <a href="#" onclick="wsStart('ms',true);return false">원고 전체 다시 읽기</a>`:""}</p>`:""}
       ${WS.add.length?`<p class="fbt">새 항목 ${WS.add.length}</p>${WS.add.map((x,i)=>box("a"+i,`<b>${esc(x.name)}</b> <small class="muted">${esc(x.kind||"")}</small>${pr(x.props)?`<br><small>${pr(x.props)}</small>`:""}${x.note?`<br><small class="muted">${esc(x.note)}</small>`:""}${x.why?`<br><small class="wswhy">「${esc(x.why)}」</small>`:""}`)).join("")}`:""}
       ${WS.update.length?`<p class="fbt">고칠 항목 ${WS.update.length}</p>${WS.update.map((x,i)=>box("u"+i,`<b>${esc(x.name)}</b> ${pr(x.props)?`<small>${pr(x.props)}</small>`:""}${x.note?`<br><small class="muted">${esc(x.note)}</small>`:""}${x.why?`<br><small class="wswhy">「${esc(x.why)}」</small>`:""}`)).join("")}`:""}
       ${WS.rel.length?`<p class="fbt">새 관계 ${WS.rel.length}</p>${WS.rel.map((x,i)=>box("r"+i,`<b>${esc(x.a)}</b> —${esc(x.label)}${CX_TONE[x.tone]?`<small style="color:${cxToneCol(x.tone)}">(${CX_TONE[x.tone][0]})</small>`:""}→ <b>${esc(x.b)}</b>${x.why?`<br><small class="wswhy">「${esc(x.why)}」</small>`:""}`)).join("")}`:""}
@@ -6277,7 +6386,7 @@ function worldTree(m,cur){ const P=cxP(cxPK({ms:m.id})), all=cxScope(m.id), nove
         ${f?"":`<div class="wtl">${L.map(c=>`<button class="wti2 ${cur==="cx:"+c.id?"on":""}" onclick="stOpen('cx:${c.id}')"><i class="wdot sm" style="background:${cxCol(c)}"></i>${esc(c.name)}</button>`).join("")}${L.length?`<button class="wti2 all ${cur==="cxk:"+k?"on":""}" onclick="stOpen('cxk:${esc(k)}')">⋰ 전체</button>`:""}</div>`}</div>`; }).join("")}
     ${all.some(c=>!c.kind)?it("codex","◎","종류 없음",`<span class="stc">${all.filter(c=>!c.kind).length}</span>`):""}
     ${it("cxsys:rules","⚙",novel?"월드 정리 규칙":"정리 규칙")}
-    <button class="stnavi wti" onclick="wsStart('ms')" title="원고 전체를 읽고 노트와 견주어 제안"><span class="sti">✦</span>원고에서 설정 정리</button></div>`; }
+    <button class="stnavi wti" onclick="wsStart('ms')" title="원고를 읽고 노트에 없는 인물·장소 등을 찾아 제안 — 지난 정리 뒤 새로 쓴 글이 있으면 그 글부터"><span class="sti">✦</span>원고에서 설정 정리${(()=>{ const n=wsNew(m).length; return n&&wsAt(m.id)?` <span class="stc" title="지난 정리 뒤 새로 쓰거나 고친 글">새 글 ${n}</span>`:""; })()}</button>${wsPendN(m.id)?`<button class="stnavi wti wsnew" onclick="wsPendOpen('${m.id}')" title="글을 떠날 때 AI가 저절로 찾은 새 인물·장소·용어 — 골라서 노트에 넣습니다"><span class="sti">✦</span>새 요소 <span class="stc" data-wspend>${wsPendN(m.id)}</span></button>`:""}</div>`; }
 function cxNewKind(kind){ const m=S.manuscripts.find(x=>x.id===ROOM_MS); if(!m) return; const name=(prompt(`새 ${kind} 이름`,"")||"").trim(); if(!name) return;
   const c={id:uid(),name,kind,ms:m.id,aliases:[],body:"",updated:new Date().toISOString()}; S.codex.push(c); save(); stOpen("cx:"+c.id); }
 // 종류 「전체」 · 월드 「전체」: 그 종류 항목과 이어진 항목까지 그래프로, 아래에 카드
@@ -6523,15 +6632,15 @@ addEventListener("scroll",()=>{ if(RF) rfPlace(); },{passive:true}); addEventLis
 function rfClose(){ RF=null; $("#rfcard")?.remove(); paintHeads(); }
 function rfApply(){ const b=$("#wbody"); if(!b||!RF||RF.busy||RF.to==null||RF.same||(RF.shape&&RF.poem)) return; rfCheck(); if(!RF) return;
   if(RF.stale){ rfDraw(); return toast("그사이 이 부분이 바뀌어 적용하지 않았습니다"); }
-  const before=b.value, {s,e,to}=RF; RF=null; $("#rfcard")?.remove(); tInsert(b,to,s,e); paintHeads();
+  const before=b.value, {s,e,to}=RF; RF=null; $("#rfcard")?.remove(); TINS_LABEL="AI 다듬기 적용"; tInsert(b,to,s,e); paintHeads();
   RF_UNDO={wid:editId||"new",before,after:b.value}; rfUndoBar(); }
 // 적용 뒤 8초 동안 「되돌리기」 (⌘Z가 안 듣는 기기를 위해 적용 전 글을 이 기기 메모리에 잠시 둠)
 function rfUndoBar(){ let u=$("#rfundo"); if(!u){ u=document.createElement("div"); u.id="rfundo"; document.body.appendChild(u); }
   u.innerHTML=`<span>다듬은 글을 넣었습니다</span><button onclick="rfUndo()">되돌리기</button>`; clearTimeout(u._t); u._t=setTimeout(()=>{ u.remove(); RF_UNDO=null; },8000); }
 function rfUndo(){ const b=$("#wbody"), U=RF_UNDO; $("#rfundo")?.remove(); RF_UNDO=null; if(!b||!U||(editId||"new")!==U.wid) return;
   if(b.value!==U.after) return toast("그 뒤에 글이 바뀌어 여기서는 되돌릴 수 없습니다 — ⌘Z를 써 주세요");
-  b.focus(); let ok=false; try{ ok=document.execCommand("undo"); }catch(_){} if(!ok||b.value!==U.before){ b.value=U.before; }
-  grow(); countW(); draftInput(); paintHeads(); toast("되돌렸습니다"); }
+  const H=histOf(b); if(H.past.at(-1)?.v===U.before) return histUndo(); histMark(b,"다듬기 되돌림"); b.value=U.before;
+  grow(); countW(); draftInput(); paintHeads(); histPaint(); toast("되돌렸습니다"); }
 document.addEventListener("input",e=>{ if(RF&&e.target?.id==="wbody"){ const was=RF.stale; rfCheck(); paintHeads(); if(RF&&RF.stale!==was) rfDraw(); else rfPlace(); } });   // 거울 층 바탕도 따라가게
 document.addEventListener("keydown",e=>{ if(RF&&e.key==="Escape"){ e.preventDefault(); e.stopPropagation(); rfClose(); } },true);
 // ───────── AI 조사 도우미 ─────────
@@ -6656,7 +6765,9 @@ function ctxSlide(n){ n=+n; const b=$("#wbody"), placed=b&&slideNums(b.value).in
 function ctxEditor(){ const b=$("#wbody"); const s=b.selectionStart, e=b.selectionEnd, has=e>s, w=editId&&S.writings.find(x=>x.id===editId);
   const li=b.value.slice(0,s).split("\n").length-1, col=s-(b.value.lastIndexOf("\n",s-1)+1), sp=(spellLine(b.value.split("\n")[li]||"")||[]).find(x=>x.s<=col&&col<=x.e);
   const lineStart=b.value.lastIndexOf("\n",s-1)+1, putLine=t=>{ const pre=b.value.slice(0,lineStart); tInsert(b,(b.value.slice(lineStart,s).trim()?"\n":"")+t,s,s); };
+  const H=histOf(b), mac=/Mac|iPhone|iPad/.test(navigator.platform); histSync(b,H);
   return [has?`「${b.value.slice(s,e).replace(/\s+/g," ").slice(0,24)}${e-s>24?"…":""}」`:"",[
+    H.past.length?{t:`되돌리기 (${mac?"⌘Z":"Ctrl+Z"})`,ic:"↶",fn:()=>histUndo()}:null, H.future.length?{t:`다시 실행 (${mac?"⇧⌘Z":"Ctrl+Y"})`,ic:"↷",fn:()=>histRedo()}:null, H.past.length||H.future.length?"-":null,
     sp?{t:`「${sp.from}」 → 「${sp.to}」`,ic:"✓",fn:()=>spellFix(li,sp.s,sp.e)}:null,sp?"-":null,
     has?{t:"AI로 다듬기",ic:"✦",sub:rfDirs().dirs.map(d=>({t:RF_DIRS[d][0],fn:()=>{ WSEL={s,e}; rfStart(d); }}))}:null,
     has?{t:"형광펜",ic:"🖍",sub:HLC.map(([k,c])=>({t:{y:"노랑",g:"초록",p:"분홍",b:"파랑"}[k]||k,ic:`<span class="dot" style="background:${c}"></span>`,fn:()=>{ WSEL={s,e}; wMark('hl',k); }}))}:null,
@@ -6726,7 +6837,7 @@ document.addEventListener("keydown",e=>{ const typing=e.target.matches?.("input,
   if(e.key==="?"){ e.preventDefault(); kbHelp(); return; }
   if(tab==="diary"&&diaryDate&&(e.key==="ArrowLeft"||e.key==="ArrowRight")&&!document.querySelector(".bookview,.sendview,#dcalpop:not([hidden])")){ const d=new Date(diaryDate+"T12:00:00"); d.setDate(d.getDate()+(e.key==="ArrowLeft"?-1:1)); const k=dkey(d); if(k<=today()){ e.preventDefault(); dOpen(k,e.key==="ArrowLeft"?"prev":"next"); } } });
 function kbHelp(){ if(document.querySelector(".kbhelp")) return; const mac=/Mac|iPhone|iPad/.test(navigator.platform), M=mac?"⌘":"Ctrl";
-  const rows=[["엔터","한 줄 칸에서 그 칸의 확인 단추 (원고 만들기·저장·찾기·읽어 오기 …)"],["제목에서 엔터","본문으로 내려가기"],[M+" + 엔터","메모·각주·노트·자료 칸에서 저장"],["Esc","맨 위 창·상자 닫기 (집중 모드 나가기)"],[M+" + S","간직하기"],[M+" + E","읽기 모드 ↔ 다시 쓰기"],["⇧ + 엔터","본문에서 성경 구절 줄 → 본문 넣기"],[M+" + Z / ⇧"+M+" + Z","되돌리기 / 다시 하기"],["← →","일기장 앞날 · 다음 날, 슬라이드 크게 보기에서 앞뒤"],["오른쪽 클릭","글·원고·책·슬라이드·글 칸·성경 절 메뉴 (⇧ 누르면 브라우저 메뉴)"],["?","이 안내"]];
+  const rows=[["엔터","한 줄 칸에서 그 칸의 확인 단추 (원고 만들기·저장·찾기·읽어 오기 …)"],["제목에서 엔터","본문으로 내려가기"],[M+" + 엔터","메모·각주·노트·자료 칸에서 저장"],["Esc","맨 위 창·상자 닫기 (집중 모드 나가기)"],[M+" + S","간직하기"],[M+" + E","읽기 모드 ↔ 다시 쓰기"],["⇧ + 엔터","본문에서 성경 구절 줄 → 본문 넣기"],[M+" + Z","되돌리기 (본문 — 도구 막대 ↶ · ▾ 목록으로 여러 걸음)"],[mac?"⇧⌘Z · ⌘Y":"Ctrl + Y · Ctrl + Shift + Z","다시 실행 (↷)"],["← →","일기장 앞날 · 다음 날, 슬라이드 크게 보기에서 앞뒤"],["오른쪽 클릭","글·원고·책·슬라이드·글 칸·성경 절 메뉴 (⇧ 누르면 브라우저 메뉴)"],["?","이 안내"]];
   const ov=document.createElement("div"); ov.className="bookview sendview kbhelp";
   ov.innerHTML=`<section class="sheet" style="max-width:560px;margin:50px auto;display:grid;gap:8px"><div class="row"><p class="label" style="margin:0">키보드로 쓰기</p><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div>
     <table class="kbt">${rows.map(([k,d])=>`<tr><td><kbd>${esc(k)}</kbd></td><td>${esc(d)}</td></tr>`).join("")}</table><p class="hint" style="margin:0">휴대폰에서는 목록을 길게 누르면 메뉴가 나옵니다.</p></section>`;
