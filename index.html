@@ -964,6 +964,20 @@ body.stdragging,body.stdragging *{user-select:none!important;-webkit-user-select
 body.docmode .notebook{background:#fff;color:#222;max-width:var(--doc-w,794px);margin:0 auto;padding:30px 84px 80px;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.12),0 10px 30px rgba(0,0,0,.08)}
 html[data-theme="dark"] body.docmode .notebook{background:var(--paper);color:var(--ink)}
 body.docmode .notebook::before,body.docmode .notebook::after,body.docmode .notebook .margin{display:none}
+/* 문서 모드 종이: 노트(줄 간격에 맞춘 파란 줄 + 왼쪽 빨간 여백선) · 원고지(한 글자 한 칸, 줄 사이 띠) */
+body.docmode{--dp-bg:#fff} body.docmode[data-dpaper="note"]{--dp-bg:#fffef8} body.docmode[data-dpaper="wongo"]{--dp-bg:#fffcf5;--wg-line:#df9a86}
+html[data-theme="dark"] body.docmode{--dp-bg:var(--paper);--wg-line:color-mix(in srgb,#df9a86 55%,var(--paper))}
+body.docmode[data-dpaper="note"] .notebook,body.docmode[data-dpaper="wongo"] .notebook{background-color:var(--dp-bg)}
+body.docmode[data-dpaper="note"] .notebook{background-image:linear-gradient(to right,transparent 62px,#f0b3aa 62px 63px,transparent 63px)}
+body.docmode[data-dpaper="note"] textarea.page{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--doc-lh) - 1px),#c6d6ea calc(var(--doc-lh) - 1px) var(--doc-lh))!important;background-position:0 4px}
+html[data-theme="dark"] body.docmode[data-dpaper="note"] textarea.page{background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--doc-lh) - 1px),var(--rule) calc(var(--doc-lh) - 1px) var(--doc-lh))!important}
+body.docmode[data-dpaper="wongo"] textarea.page[data-wg]{background-image:
+  repeating-linear-gradient(to bottom,transparent 0 var(--wg-t),var(--wg-line) var(--wg-t) calc(var(--wg-t) + 1px),transparent calc(var(--wg-t) + 1px) calc(var(--wg-t) + var(--wg-c) - 1px),var(--wg-line) calc(var(--wg-t) + var(--wg-c) - 1px) calc(var(--wg-t) + var(--wg-c)),transparent calc(var(--wg-t) + var(--wg-c)) var(--wg-l)),
+  repeating-linear-gradient(to bottom,var(--dp-bg) 0 var(--wg-t),transparent var(--wg-t) calc(var(--wg-t) + var(--wg-c)),var(--dp-bg) calc(var(--wg-t) + var(--wg-c)) var(--wg-l)),
+  repeating-linear-gradient(to right,var(--wg-line) 0 1px,transparent 1px var(--wg-c))!important;
+  background-position:0 4px,0 4px,var(--wg-x) 0!important;background-size:100% var(--wg-l),100% var(--wg-l),calc(var(--wg-c) * var(--wg-n,1000) + 1px) 100%;background-repeat:repeat-y,repeat-y,no-repeat}
+body.docmode .writegrid>div,body.docmode .notebook{min-width:0}   /* 위 막대(한 줄로 옆으로 넘김)가 쪽 폭을 밀어 휴대폰 화면이 옆으로 넓어지던 것 막음 */
+@media (max-width:700px){ body.docmode[data-dpaper="note"] .notebook{background-image:none} }
 body.docmode textarea.page{background-image:none!important;font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);min-height:70vh}
 body.docmode .notebook .title-in{font-family:var(--doc-font);font-size:calc(var(--doc-fs) * 1.9);border-bottom:0;margin-top:26px}
 body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);white-space:normal} body.docmode .readview p.dp{margin:0 0 var(--doc-sp);text-indent:var(--doc-ind);white-space:pre-wrap} body.docmode .readview h4{font-family:var(--doc-font);font-size:calc(var(--doc-fs) * 1.12)}
@@ -1952,7 +1966,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="b70c889721";
+const APP_BUILD="838eaa9326";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3980,7 +3994,7 @@ function fnGo(i){ const b=$("#wbody"); if(!b) return; const m=b.value.slice(i).m
 function paintHeads(){
   const t=$("#wbody"); if(!t) return; let m=$("#hmirror"); if(!m){ m=document.createElement("div"); m.id="hmirror"; m.className="hmirror"; m.setAttribute("aria-hidden","true"); t.after(m); }
   if(t.style.display==="none"){ m.style.display="none"; return; } m.style.display="";
-  const cs=getComputedStyle(t); m.style.cssText=`top:${t.offsetTop}px;left:${t.offsetLeft}px;width:${t.clientWidth}px;padding:${cs.padding};font:${cs.font};letter-spacing:${cs.letterSpacing};color:${cs.color};text-align:${cs.textAlign}`;
+  wongoFit(t); const cs=getComputedStyle(t); m.style.cssText=`top:${t.offsetTop}px;left:${t.offsetLeft}px;width:${t.clientWidth}px;padding:${cs.padding};font:${cs.font};letter-spacing:${cs.letterSpacing};word-spacing:${cs.wordSpacing};color:${cs.color};text-align:${cs.textAlign}`;
   // 소제목 줄 안의 영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보이므로 그 부분만 원래 글자(보이지 않는 자리)로 둡니다
   const boldLine=l=>l.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s■◆▣※—]+)/).map((p,i)=>i%2?`<span>${esc(p)}</span>`:(p?`<b>${esc(p)}</b>`:"")).join("");   // 한글만 굵게 (괄호·가운뎃점·영문·숫자는 굵게 하면 폭이 달라져 겹쳐 보임)
   const plain=(l,head)=>head?boldLine(l):markLine(l);
@@ -6437,6 +6451,22 @@ function ownHit(text,s,e){ const z=ownZones(text); if(!z.size) return ""; const 
 const DOC_FONTS=[["gowun","고운 바탕",'"Gowun Batang",serif',"바탕"],["myeongjo","나눔명조",'"Nanum Myeongjo",serif',"나눔명조"],["sans","고딕",'-apple-system,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif',"맑은 고딕"],["noto","Noto Serif",'"Noto Serif","Gowun Batang",serif',"Noto Serif"],["georgia","Georgia",'Georgia,"Gowun Batang",serif',"Georgia"]];
 const DOC_DEF={font:"gowun",pt:11,lh:1.6,align:"left",ind:0,sp:0};
 let DOC_MODE=(()=>{ try{ return localStorage.getItem("seojae.docMode")==="1"; }catch(_){ return false; } })();
+// 문서 모드 종이(이 기기 seojae.docPaper — 화면에서만, 내보내기·쪽 미리보기는 흰 쪽 그대로): 흰 쪽 · 노트(줄) · 원고지(한 글자 한 칸)
+const DOC_PAPERS=[["white","흰 쪽"],["note","노트"],["wongo","원고지"]];
+const docPaper=()=>{ try{ const v=localStorage.getItem("seojae.docPaper"); return DOC_PAPERS.some(p=>p[0]===v)?v:"white"; }catch(_){ return "white"; } };
+function docPaperSet(v){ try{ localStorage.setItem("seojae.docPaper",v); }catch(_){} docPaperMark(); WG_KEY=""; docPaint(); toast(v==="wongo"?"원고지 — 한 글자가 한 칸에 들어갑니다 (화면에서만, 내보내기는 그대로)":v==="note"?"노트 — 줄 간격에 맞춘 줄 종이":"흰 쪽"); }
+function docPaperMark(){ document.body.dataset.dpaper=DOC_MODE?docPaper():""; }
+// 원고지: 칸 크기를 글자 크기에 맞춰 정하고, 쓰는 칸 폭이 칸의 정수배가 되게 · 한글 한 자(와 띄어쓰기 한 칸)가 한 칸이 되도록 글자·낱말 간격을 잼
+let WG_KEY="", WG_CV=null;
+function wongoFit(t){ const on=DOC_MODE&&docPaper()==="wongo"&&t&&t.id==="wbody";
+  if(!on){ if(t?.dataset.wg){ ["letterSpacing","wordSpacing","lineHeight","textAlign"].forEach(k=>t.style[k]=""); ["--wg-c","--wg-l","--wg-t","--wg-x","--wg-n"].forEach(k=>t.style.removeProperty(k)); delete t.dataset.wg; WG_KEY=""; } return; }
+  const cs=getComputedStyle(t), k=t.clientWidth+"|"+cs.fontSize+"|"+cs.fontFamily; if(k===WG_KEY&&t.dataset.wg) return; WG_KEY=k;
+  const fs=parseFloat(cs.fontSize), cw=t.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  WG_CV=WG_CV||document.createElement("canvas"); const x=WG_CV.getContext("2d"); x.font=`${cs.fontSize} ${cs.fontFamily}`; const wg=x.measureText("가").width||fs, ws=x.measureText(" ").width||fs*.3;
+  const cols=Math.max(8,Math.floor(cw/(fs*1.5))), C=cw/cols, L=Math.round(C*1.38*100)/100, ls=C-wg;
+  Object.assign(t.style,{letterSpacing:ls.toFixed(3)+"px",wordSpacing:(wg-ws).toFixed(3)+"px",lineHeight:L+"px",textAlign:"left"});
+  t.style.setProperty("--wg-c",C.toFixed(3)+"px"); t.style.setProperty("--wg-l",L+"px"); t.style.setProperty("--wg-t",((L-C)/2).toFixed(3)+"px"); t.style.setProperty("--wg-x",(parseFloat(cs.paddingLeft)-ls/2).toFixed(3)+"px"); t.style.setProperty("--wg-n",cols); t.dataset.wg=cols; }
+addEventListener("resize",()=>{ if(DOC_MODE&&docPaper()==="wongo"){ WG_KEY=""; const t=$("#wbody"); if(t){ wongoFit(t); grow(); } } });
 const docZoom=()=>{ try{ return +localStorage.getItem("seojae.docZoom")||100; }catch(_){ return 100; } };
 const docFont=k=>DOC_FONTS.find(f=>f[0]===k)||DOC_FONTS[0];
 function docOwn(w){ const m=w?wMs(w):null; return m&&!m.rule?m:null; }
@@ -6456,11 +6486,12 @@ function docBar(w){ const d=docStyle(w), m=docOwn(w), z=docZoom(), opt=(v,list,f
     <span class="dbg"><button type="button" class="dbb" onclick="docWrap('**')" title="굵게 (⌘B)"><b>B</b></button><button type="button" class="dbb" onclick="docWrap('*')" title="기울임 (⌘I)"><i style="font-family:Georgia,serif">I</i></button></span><span class="dbg"><button type="button" class="dbb" onclick="docHead()" title="이 줄을 ■ 소제목으로 (다시 누르면 풀림)"><b>■</b> 소제목</button><button type="button" class="dbb" onclick="docMk('hl','y')" title="고른 글자에 형광펜"><span class="dot" style="background:#f3d36b"></span></button><button type="button" class="dbb" onclick="docMk('ul')" title="고른 글자에 밑줄"><u>밑줄</u></button><button type="button" class="dbb" onclick="fnHere()" title="각주 (⌘⇧F)"><b style="font-family:Georgia,serif">¹</b></button></span>
     <span class="dbg"><button type="button" class="dbb" onclick="altHere()" title="커서가 있는 문장을 바꿔 쓴 후보 4개">✦ 다른 표현</button><button type="button" class="dbb" onclick="fbStart()" title="점수·강점·약점과 첨삭">✦ 피드백</button><button type="button" class="dbb" onclick="styOpen()" title="문체 점검 (기계로 셈)">✎ 문체</button></span>
     <span class="spacer"></span><button type="button" class="dbb" onclick="toggleRead()" title="들여쓰기·문단 간격까지 쪽 모양으로 봅니다">쪽 미리보기</button>
+    <select title="종이 — 흰 쪽·노트·원고지 (이 기기, 화면에서만)" onchange="docPaperSet(this.value)">${DOC_PAPERS.map(p=>`<option value="${p[0]}" ${docPaper()===p[0]?"selected":""}>종이: ${p[1]}</option>`).join("")}</select>
     <select title="확대 (이 기기)" onchange="docZoomSet(+this.value)">${opt(z,[75,90,100,110,125,150],x=>x+"%")}</select>
     <small class="muted dbscope" title="${m?"이 원고의 모든 글에 같은 모양 — 워드·PDF로 내보낼 때도":"원고에 들지 않은 글의 기본 모양"}">${m?`『${esc(m.title)}』 전체 · 내보내기도`:"모든 글 기본"}</small></div>`; }
 function docPaint(){ const w=cardW(), nb=$(".notebook"); if(!nb) return; nb.setAttribute("style",DOC_MODE?docVars(w):""); const bar=$(".docbar"); if(DOC_MODE){ const t=document.createElement("div"); t.innerHTML=docBar(w); if(bar) bar.replaceWith(t.firstElementChild); else nb.prepend(t.firstElementChild); } else bar?.remove();
-  if(READVIEW){ READVIEW=false; toggleRead(); } grow(); paintHeads(); }
-function docToggle(){ DOC_MODE=!DOC_MODE; try{ localStorage.setItem("seojae.docMode",DOC_MODE?"1":"0"); }catch(_){} document.body.classList.toggle("docmode",DOC_MODE); const b=$("#docbtn"); if(b){ b.innerHTML=DOC_MODE?"✎ 노트로":"📄 문서 모드"; b.classList.toggle("on",DOC_MODE); } docPaint();
+  WG_KEY=""; wongoFit($("#wbody")); if(READVIEW){ READVIEW=false; toggleRead(); } grow(); paintHeads(); }
+function docToggle(){ DOC_MODE=!DOC_MODE; try{ localStorage.setItem("seojae.docMode",DOC_MODE?"1":"0"); }catch(_){} document.body.classList.toggle("docmode",DOC_MODE); docPaperMark(); WG_KEY=""; const b=$("#docbtn"); if(b){ b.innerHTML=DOC_MODE?"✎ 노트로":"📄 문서 모드"; b.classList.toggle("on",DOC_MODE); } docPaint();
   toast(DOC_MODE?"문서 모드 — 흰 쪽에 글꼴·문단 모양을 정합니다 (글은 그대로)":"노트 모드로 돌아왔습니다"); }
 function docSet(k,v){ const w=cardW(), m=docOwn(w), cur=docStyle(w); const nd={font:cur.font,pt:cur.pt,lh:cur.lh,align:cur.align,ind:cur.ind,sp:cur.sp,[k]:v};
   if(m){ m.exportOpts={...(m.exportOpts||{}),doc:nd}; m.updated=new Date().toISOString(); } else S.settings.docStyle=nd; save(); docPaint(); }
@@ -6480,7 +6511,7 @@ function docMk(kind,color){ const b=$("#wbody"); if(!b) return; if(b.selectionEn
 // 내보내기에 쓰는 문서 모양 (PDF)
 function docCss(m,o){ const d=docExp(m); if(!d||o.fmt==="pulpit") return ""; const f=docFont(d.font)[2];
   return `html{font-family:${f};font-size:${d.pt}pt!important} p,.chapter p{line-height:${d.lh}!important;text-indent:${d.ind}em;text-align:${d.align};margin:0 0 ${(d.sp*d.lh).toFixed(2)}em}\n`; }
-if(document.body) document.body.classList.toggle("docmode",DOC_MODE); else document.addEventListener("DOMContentLoaded",()=>document.body.classList.toggle("docmode",DOC_MODE));
+if(document.body){ document.body.classList.toggle("docmode",DOC_MODE); docPaperMark(); } else document.addEventListener("DOMContentLoaded",()=>{ document.body.classList.toggle("docmode",DOC_MODE); docPaperMark(); });
 // ───────── 다른 표현 · 피드백·첨삭 (2026-10-29, 타입탁 「다른 표현」·「첨삭」을 본뜸 — 모든 글 성격 공통) ─────────
 // 원칙: AI는 후보·코멘트만, 고르는 것과 넣는 것은 글쓴이(카드를 눌러야 들어감). 묵상은 질문만이라 빠지고, 시는 행을 바꾸지 않게 코멘트만, 설교의 「직접 쓸 네 자리」는 적용하지 않음
 // 커서가 있는 문장(고른 글이 있으면 그것)을 다른 표현으로
