@@ -291,7 +291,8 @@ textarea.page.lined{background-image:repeating-linear-gradient(to bottom,transpa
 .fnpane .fned{border:0;background:none;color:var(--faint);cursor:pointer;font-size:12px} .fnkind{display:flex;gap:14px;margin-bottom:6px;font-size:13px} .fnkind small{color:var(--faint)}
 sup.enref{font-size:.7em;color:#4f7fa8;font-family:Georgia,serif} .enhead{margin:14px 0 2px;font-weight:600;font-size:13px}
 @media (max-width:700px){ .fnpane{max-width:none} } .hmirror i.mki{visibility:visible;font-style:normal;color:transparent;text-decoration:underline dotted color-mix(in srgb,var(--sepia) 75%,transparent);text-decoration-thickness:1.5px;text-underline-offset:5px}
-.hmirror i.mkc{visibility:visible;font-style:normal;color:transparent;background:color-mix(in srgb,var(--paper) 70%,transparent)} .hmirror i.mkf{background:color-mix(in srgb,var(--paper) 55%,transparent);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--sepia) 45%,transparent)}
+.hmirror i.mkc{visibility:visible;font-style:normal;color:transparent;background:var(--pgbg,var(--paper));border-radius:2px}   /* 꾸밈 기호(== ** __)는 종이 색으로 덮어 안 보이게 — 글 칸에는 남아 있음 */
+.notebook{--pgbg:var(--note-bg,var(--paper))} body.docmode .notebook{--pgbg:#fff} body.docmode[data-dpaper="note"] .notebook{--pgbg:#fffef8} html[data-theme="dark"] body.docmode .notebook{--pgbg:var(--paper)} .hmirror i.mkf{background:color-mix(in srgb,var(--paper) 55%,transparent);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--sepia) 45%,transparent)}
 .hmirror i.mkh{visibility:visible;font-style:normal;color:transparent;border-radius:2px} .hmirror i.mku{visibility:visible;font-style:normal;color:transparent;text-decoration:underline;text-decoration-color:var(--sepia);text-decoration-thickness:1.5px;text-underline-offset:5px}
 body.aiopen #aitog{background:#7a5aa8;color:#fff;border-color:#7a5aa8}
 .hmirror i.sug{visibility:visible;font-style:normal;color:transparent;position:relative;background:rgba(59,130,246,.13);box-shadow:inset 0 -2px 0 rgba(37,99,235,.55);border-radius:2px}
@@ -1039,7 +1040,8 @@ body.docmode .writegrid>div,body.docmode .notebook{min-width:0}
 body.docmode[data-dwidth="wide"] #main:has(.writegrid){max-width:1400px} body.docmode[data-dwidth="land"] #main:has(.writegrid){max-width:1520px} body.docmode[data-dwidth="full"] #main:has(.writegrid){max-width:none}   /* 위 막대(한 줄로 옆으로 넘김)가 쪽 폭을 밀어 휴대폰 화면이 옆으로 넓어지던 것 막음 */
 @media (max-width:700px){ body.docmode[data-dpaper="note"] .notebook{background-image:none} }
 body.docmode[data-dpaper="wongo"] textarea.page[data-wg]{min-height:0!important;color:transparent!important;caret-color:transparent;-webkit-text-fill-color:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::selection{background:transparent} body.docmode[data-dpaper="wongo"] textarea.page[data-wg]::placeholder{-webkit-text-fill-color:var(--faint);color:var(--faint)}
-.hmirror.wgm{white-space:normal;letter-spacing:0!important;word-spacing:0!important;overflow:visible} .hmirror.wgm .wgr{display:flex;height:var(--wg-l,30px);align-items:center} .hmirror.wgm .wgr i{flex:0 0 var(--wg-c);width:var(--wg-c);text-align:center;font-style:normal;line-height:1} .hmirror.wgm .wgr.hd i{font-weight:700} .hmirror.wgm .wgr i.sel{background:color-mix(in srgb,#7aa7e0 38%,transparent)}
+.hmirror.wgm{white-space:normal;letter-spacing:0!important;word-spacing:0!important;overflow:visible} .hmirror.wgm .wgr{display:flex;height:var(--wg-l,30px);align-items:center} .hmirror.wgm .wgr i{flex:0 0 var(--wg-c);width:var(--wg-c);text-align:center;font-style:normal;line-height:1} .hmirror.wgm .wgr.hd i{font-weight:700} .hmirror.wgm .wgr i,.hmirror.wgm .wgcar{visibility:visible} .hmirror.wgm .wgr i.hl{background:color-mix(in srgb,var(--hl) 55%,transparent)} .hmirror.wgm .wgr i.ul{text-decoration:underline;text-decoration-color:var(--sepia);text-underline-offset:4px} .hmirror.wgm .wgr i.bd{font-weight:800} .hmirror.wgm .wgr i.it{font-style:italic} .hmirror.wgm .wgr i.fn{font-size:.7em;color:var(--sepia)}
+.hmirror.wgm .wgr i.sel{background:color-mix(in srgb,#7aa7e0 38%,transparent)}
 .hmirror.wgm .wgcar{position:absolute;width:2px;background:var(--ink);animation:wgblink 1.05s steps(1) infinite} @keyframes wgblink{50%{opacity:0}}
 body.docmode textarea.page{background-image:none!important;font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);min-height:70vh}
 body.docmode .notebook .title-in{font-family:var(--doc-font);font-size:calc(var(--doc-fs) * 1.9);border-bottom:0;margin-top:26px}
@@ -2091,7 +2093,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="45542b3ef1";
+const APP_BUILD="403cb46818";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2719,15 +2721,16 @@ const hlClose=()=>{ $("#hlbar")?.remove(); HLSEL=null; };
 // 글쓰기 칸에서 글자를 고르면: 형광펜·밑줄·각주 표시를 글 속에 넣습니다
 let WSEL=null;
 function wTools(){
-  return `<button class="rfd rfgo" title="AI로 다듬기 — 고친 안을 비교해 보고 넣습니다" onclick="rfMenu()">✦ 다듬기</button>`+HLC.map(([k,c])=>`<button title="형광펜" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")
-    +`<button title="굵게 (⌘B)" onclick="docWrap('**',true)" style="font-weight:800">B</button><button title="기울임 (⌘I)" onclick="docWrap('*',true)" style="font-style:italic;font-family:Georgia,serif">I</button><button title="밑줄" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button title="각주 달기 (고른 글 뒤에 번호로 붙습니다)" onclick="wMark('fn')" style="font-weight:700;font-family:Georgia,serif">¹</button><button title="표시 지우기 (형광펜·밑줄만 지우고 글은 그대로)" onclick="wMark('clear')">⌫</button><button class="rfd" title="이 문장을 말투 기준으로 담기 — AI가 이 말투를 따릅니다" onclick="voiceAddSel()">말투</button><button title="닫기" onclick="hlClose()">✕</button>`;
+  return `<button class="rfd rfgo" title="AI로 다듬기 — 고친 안을 비교해 보고 넣습니다" onclick="rfMenu()">✦ 다듬기</button>`+HLC.map(([k,c])=>`<button title="형광펜 — 이미 칠한 곳에 같은 색을 한 번 더 누르면 지워집니다" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")
+    +`<button title="굵게 (⌘B)" onclick="docWrap('**',true)" style="font-weight:800">B</button><button title="기울임 (⌘I)" onclick="docWrap('*',true)" style="font-style:italic;font-family:Georgia,serif">I</button><button title="밑줄" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button title="각주 달기 (고른 글 뒤에 번호로 붙습니다)" onclick="wMark('fn')" style="font-weight:700;font-family:Georgia,serif">¹</button><button class="hlerase" title="꾸밈 지우기 — 고른 곳의 형광펜·밑줄을 지웁니다 (글은 그대로)" onclick="wMark('clear')">지우개</button><button class="rfd" title="이 문장을 말투 기준으로 담기 — AI가 이 말투를 따릅니다" onclick="voiceAddSel()">말투</button><button title="닫기" onclick="hlClose()">✕</button>`;
 }
 function wMark(kind,color){
   const b=$("#wbody"); if(!b||!WSEL) return hlClose();
   let {s,e}=WSEL; const v=b.value; let sel=v.slice(s,e);
   if(kind==="fn"){ fnBox(e,null,v.slice(s,e)); return; }
   else { // 고른 구간과 조금이라도 겹치는 표시는 통째로 다룹니다 (반쪽만 바뀌어 깨지지 않게)
-    for(const m of v.matchAll(MK_RE)){ const ms=m.index, me=ms+m[0].length; if(ms<e&&me>s){ s=Math.min(s,ms); e=Math.max(e,me); } }
+    let same=false; for(const m of v.matchAll(MK_RE)){ const ms=m.index, me=ms+m[0].length; if(ms<e&&me>s){ s=Math.min(s,ms); e=Math.max(e,me); if(kind==="hl"&&m[2]!=null&&(m[1]||"y")===color) same=true; if(kind==="ul"&&m[3]!=null) same=true; } }
+    if(same){ kind="clear"; toast("형광펜(밑줄)을 지웠습니다 — 같은 색을 한 번 더 누르면 지워집니다"); }   
     sel=v.slice(s,e);
     const wrap=t=>{ t=stripWrap(t); if(!t.trim()) return t; const lead=t.match(/^\s*/)[0], tail=t.match(/\s*$/)[0], core=t.trim();
       return lead+(kind==="hl"?`==${color==="y"?"":color+":"}${core}==`:kind==="ul"?`__${core}__`:core)+tail; };
@@ -2765,7 +2768,18 @@ function fnApply(at,editIdx,memo){
   b.focus(); grow(); countW(); draftInput();
 }
 document.addEventListener("click",e=>{ const sup=e.target.closest?.("#readview sup.fnref"); if(!sup) return; const n=[...document.querySelectorAll("#readview sup.fnref")].indexOf(sup); fnBox(0,n,""); });
-document.addEventListener("mouseup",e=>{ const b=e.target.closest?.("#wbody"); if(!b||e.button===2||CTX) return; setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd}; hlBar(wTools(),{left:e.clientX,top:e.clientY-8,width:0,height:0,bottom:e.clientY+8}); },10); });
+// 고른 글의 화면 자리(맨 윗줄 위·가운데) — 꾸밈 막대를 고른 글 「위」에 띄우려고. 원고지는 칸 배치로, 그 밖은 같은 모양의 보이지 않는 복사본으로 잼
+function selRect(b){ const s=b.selectionStart, e=b.selectionEnd, tb=b.getBoundingClientRect();
+  if(wgOn(b)){ const g=b._wg, rows=wgModel(b), p=wgPos(rows,s,g), q=wgPos(rows,Math.max(s,e-1),g); const top=tb.top+g.pt+p.r*g.L-b.scrollTop, x0=p.r===q.r?tb.left+g.pl+p.c*g.C:tb.left+g.pl, x1=p.r===q.r?tb.left+g.pl+(q.c+1)*g.C:tb.left+g.pl+g.cols*g.C;
+    return {left:x0,width:x1-x0,top,bottom:tb.top+g.pt+(q.r+1)*g.L-b.scrollTop,height:0}; }
+  const cs=getComputedStyle(b), d=document.createElement("div");
+  ["fontFamily","fontSize","fontWeight","lineHeight","letterSpacing","wordSpacing","textAlign","paddingTop","paddingRight","paddingBottom","paddingLeft","borderTopWidth","borderLeftWidth","boxSizing","textIndent","tabSize"].forEach(k=>d.style[k]=cs[k]);
+  Object.assign(d.style,{position:"absolute",visibility:"hidden",whiteSpace:"pre-wrap",overflowWrap:"break-word",wordBreak:cs.wordBreak,width:b.offsetWidth+"px",left:"0",top:"0"});
+  d.textContent=b.value.slice(0,s); const sp=document.createElement("span"); sp.textContent=b.value.slice(s,e)||"."; d.appendChild(sp); d.appendChild(document.createTextNode(b.value.slice(e)||" ")); document.body.appendChild(d);
+  const dr=d.getBoundingClientRect(), rs=[...sp.getClientRects()]; d.remove(); if(!rs.length) return null;
+  const top=Math.min(...rs.map(r=>r.top)), bot=Math.max(...rs.map(r=>r.bottom)), first=rs.filter(r=>r.top===top), l=Math.min(...first.map(r=>r.left)), rr=Math.max(...first.map(r=>r.right));
+  return {left:tb.left+(l-dr.left),width:rr-l,top:tb.top+(top-dr.top)-b.scrollTop,bottom:tb.top+(bot-dr.top)-b.scrollTop,height:bot-top}; }
+document.addEventListener("mouseup",e=>{ const b=e.target.closest?.("#wbody"); if(!b||e.button===2||CTX) return; setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd}; let r=null; try{ r=selRect(b); }catch(_){} hlBar(wTools(),r||{left:e.clientX,top:e.clientY-8,width:0,height:0,bottom:e.clientY+8}); },10); });
 document.addEventListener("selectionchange",()=>{ const b=$("#wbody"); if(!b||document.activeElement!==b||!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._wsT); window._wsT=setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return; WSEL={s:b.selectionStart,e:b.selectionEnd}; const r=b.getBoundingClientRect(); hlBar(wTools(),{left:r.left+r.width/2,top:Math.max(60,r.top)+40,width:0,height:0,bottom:Math.max(60,r.top)+60}); },400); });
 // 성경 구절 넣기: 한 줄에 「창 1:1-3」(약어나 책 이름)만 적고 Enter 를 누르면 그 자리에 본문(개역한글, 공개본)이 들어갑니다
 const BABBR="창 출 레 민 신 수 삿 룻 삼상 삼하 왕상 왕하 대상 대하 스 느 에 욥 시 잠 전 아 사 렘 애 겔 단 호 욜 암 옵 욘 미 나 합 습 학 슥 말 마 막 눅 요 행 롬 고전 고후 갈 엡 빌 골 살전 살후 딤전 딤후 딛 몬 히 약 벧전 벧후 요일 요이 요삼 유 계".split(" ");
@@ -4133,7 +4147,7 @@ let FN_C={f:0,e:0};
 function markLine(l){ let out="", last=0; const dim=t=>`<i class="mkc">${esc(t)}</i>`, hid0=t=>t?`<span>${esc(t)}</span>`:"", han=t=>t.split(/([^가-힣ㄱ-ㅎㅏ-ㅣ\s]+)/).map((p,i)=>i%2?hid0(p):(p?`<b>${esc(p)}</b>`:"")).join("");
   const hid=t=>{ if(!t) return ""; let o="",k=0; for(const m of t.matchAll(BI_RE)){ o+=hid0(t.slice(k,m.index)); k=m.index+m[0].length; const mk=m[1]!=null?"**":"*"; o+=dim(mk)+(m[1]!=null?han(m[1]):`<i class="mki">${esc(m[2])}</i>`)+dim(mk); } return o+hid0(t.slice(k)); };
   for(const m of l.matchAll(MKL_RE)){ out+=hid(l.slice(last,m.index)); last=m.index+m[0].length;
-    if(m[2]!=null){ const pre="=="+(m[1]?m[1]+":":""), c=(HLC.find(([k])=>k===(m[1]||"y"))||HLC[0])[1]; out+=dim(pre)+`<i class="mkh" style="background:${c}66">${esc(m[2])}</i>`+dim("=="); }
+    if(m[2]!=null){ const pre="=="+(m[1]?m[1]+":":""), c=(HLC.find(([k])=>k===(m[1]||"y"))||HLC[0])[1]; const edge=t=>`<i class="mkc" style="background:linear-gradient(${c}66,${c}66),var(--pgbg,var(--paper))">${esc(t)}</i>`; out+=edge(pre)+`<i class="mkh" style="background:${c}66">${esc(m[2])}</i>`+edge("=="); }
     else if(m[3]!=null) out+=dim("__")+`<i class="mku">${esc(m[3])}</i>`+dim("__");
     else { const raw=m[0].slice(2,-1), en=isEnd(raw), n=en?++FN_C.e:++FN_C.f; out+=`<i class="mkfn ${en?"en":""}">${esc(m[0])}<b class="fnsup">${en?romanL(n):n}</b><small class="fntx">${esc(fnText(raw))}</small></i>`; } }
   return out+hid(l.slice(last)); }
@@ -5648,7 +5662,7 @@ const HELP_SEL="button,summary,select,.pill,.chip,.sttab,.gcard,.twsw,[data-help
 document.addEventListener("mouseover",e=>{ if(!HELP_ON||isTouch()) return; const el=e.target.closest?.(HELP_SEL); if(el===HELP_EL) return; helpHide(); if(!el||el.closest("#helptip,.hmirror")) return;
   const h=helpFor(el); if(!h) return; HELP_EL=el; const t=el.getAttribute("title"); if(t!=null){ el.dataset.htitle=t; el.removeAttribute("title"); }
   HELP_T=setTimeout(()=>{ if(HELP_EL!==el||!el.isConnected) return; const d=document.createElement("div"); d.id="helptip"; d.className="helptip"; d.innerHTML=`<b>${esc(h.name)}</b><span>${esc(h.txt)}</span>`; document.body.appendChild(d);
-    const r=el.getBoundingClientRect(), w=d.offsetWidth, hh=d.offsetHeight, below=r.bottom+10+hh<innerHeight; let x=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8);
+    const r=el.getBoundingClientRect(), w=d.offsetWidth, hh=d.offsetHeight, below=r.top-10-hh<8; let x=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8);
     d.style.left=x+"px"; d.style.top=(below?r.bottom+10:r.top-hh-10)+"px"; d.classList.add(below?"b":"t"); d.style.setProperty("--ax",Math.max(14,Math.min(w-14,r.left+r.width/2-x))+"px"); requestAnimationFrame(()=>d.classList.add("on")); },380); },true);
 document.addEventListener("mouseout",e=>{ if(HELP_EL&&!HELP_EL.contains(e.relatedTarget)) helpHide(); },true);
 ["mousedown","scroll","keydown"].forEach(ev=>addEventListener(ev,()=>{ if(HELP_EL) helpHide(); },true));
@@ -6892,15 +6906,27 @@ function wongoFit(t){ const on=DOC_MODE&&docPaper()==="wongo"&&t&&t.id==="wbody"
   t.style.setProperty("--wg-c",C.toFixed(3)+"px"); t.style.setProperty("--wg-l",L+"px"); t.style.setProperty("--wg-t",((L-C)/2).toFixed(3)+"px"); t.style.setProperty("--wg-x",pl.toFixed(3)+"px"); t.style.setProperty("--wg-n",cols);
   t.style.setProperty("--wg-y",pt.toFixed(3)+"px"); t._wg={cols,C,L,pl,pt}; t.dataset.wg=cols; wgBind(t); }
 // 칸 배치: 문단마다 cols 칸씩 끊어 줄을 만듦 → 글자 i의 (줄 r, 칸 c), 줄마다 시작 글자
-function wgModel(t){ const g=t._wg, v=t.value, rows=[]; let off=0;
-  v.split("\n").forEach(l=>{ const n=Math.max(1,Math.ceil(l.length/g.cols)); for(let k=0;k<n;k++) rows.push({s:off+k*g.cols,e:off+Math.min(l.length,(k+1)*g.cols),end:off+l.length,last:k===n-1}); off+=l.length+1; });
+// 꾸밈 표시(==형광펜==·__밑줄__·**굵게**·*기울임*·[^각주])는 칸을 차지하지 않고, 사이 글자에만 색·굵기·밑줄 (hid: 숨길 기호 자리, cls: 글자 꾸밈)
+function wgDecor(v){ const n=v.length, hid=new Uint8Array(n), cls=new Array(n);
+  const mark=(a,b,c,st)=>{ for(let k=a;k<b;k++){ cls[k]=(cls[k]||"")+" "+c; if(st) cls[k+"s"]=st; } }, hide=(a,b)=>{ for(let k=a;k<b;k++) hid[k]=1; };
+  for(const m of v.matchAll(MK_RE)){ const a=m.index, L=m[0].length;
+    if(m[2]!=null){ const pre=2+(m[1]?2:0); hide(a,a+pre); hide(a+L-2,a+L); const c=(HLC.find(([k])=>k===(m[1]||"y"))||HLC[0])[1]; mark(a+pre,a+L-2,"hl",c); }
+    else if(m[3]!=null){ hide(a,a+2); hide(a+L-2,a+L); mark(a+2,a+L-2,"ul"); }
+    else { hide(a,a+2); hide(a+L-1,a+L); mark(a+2,a+L-1,"fn"); } }
+  for(const m of v.matchAll(BI_RE)){ const a=m.index, L=m[0].length, w=m[1]!=null?2:1; if(hid[a]) continue; hide(a,a+w); hide(a+L-w,a+L); mark(a+w,a+L-w,m[1]!=null?"bd":"it"); }
+  return {hid,cls}; }
+// 칸 배치: 문단마다 보이는 글자만 cols 칸씩 → 줄마다 ix(그 줄에 놓인 글자들의 원래 자리), s(줄 시작 자리), e(다음 줄 시작 자리 또는 문단 끝)
+function wgModel(t){ const g=t._wg, v=t.value, D=t._wgD&&t._wgD.v===v?t._wgD:(t._wgD={v,...wgDecor(v)}), rows=[]; let off=0;
+  v.split("\n").forEach(l=>{ const vis=[]; for(let k=off;k<off+l.length;k++) if(!D.hid[k]) vis.push(k); const n=Math.max(1,Math.ceil(vis.length/g.cols));
+    for(let k=0;k<n;k++){ const ix=vis.slice(k*g.cols,(k+1)*g.cols); rows.push({ix,s:k?vis[k*g.cols]:off,e:k<n-1?vis[(k+1)*g.cols]:off+l.length,end:off+l.length,last:k===n-1}); }
+    off+=l.length+1; });
   return rows; }
-function wgPos(rows,i,g){ for(let r=0;r<rows.length;r++){ const R=rows[r]; if(i>=R.s&&(i<R.e||(i===R.e&&(R.last||R.e-R.s<g.cols)))) return {r,c:i-R.s}; if(i===R.e&&!R.last&&i<R.end) return {r:r+1,c:0}; } const R=rows[rows.length-1]; return {r:rows.length-1,c:R.e-R.s}; }
-function wgIdx(rows,r,c,g){ r=Math.max(0,Math.min(rows.length-1,r)); const R=rows[r]; return R.s+Math.max(0,Math.min(R.e-R.s,c)); }
+function wgPos(rows,i,g){ for(let r=0;r<rows.length;r++){ const R=rows[r]; if(i>=R.s&&(i<R.e||(i===R.e&&R.last))){ let c=0; while(c<R.ix.length&&R.ix[c]<i) c++; return {r,c}; } } const R=rows[rows.length-1]; return {r:rows.length-1,c:R.ix.length}; }
+function wgIdx(rows,r,c,g){ r=Math.max(0,Math.min(rows.length-1,r)); const R=rows[r]; c=Math.max(0,c); return c<R.ix.length?R.ix[c]:R.e; }
 function wgHit(t,x,y){ const g=t._wg, b=t.getBoundingClientRect(), rows=wgModel(t); return wgIdx(rows,Math.floor((y-b.top-g.pt+t.scrollTop)/g.L),Math.round((x-b.left-g.pl)/g.C),g); }
-function wgPaint(t,m){ const g=t._wg, rows=wgModel(t), v=t.value, a=t.selectionStart, z=t.selectionEnd, foc=document.activeElement===t;
+function wgPaint(t,m){ const g=t._wg, rows=wgModel(t), v=t.value, D=t._wgD, a=t.selectionStart, z=t.selectionEnd, foc=document.activeElement===t;
   let h=""; rows.forEach(R=>{ const head=HEAD_RE.test(v.slice(v.lastIndexOf("\n",R.s-1)+1,R.end));
-    let r=""; for(let i=R.s;i<R.e;i++){ const ch=v[i]; r+=`<i class="${i>=a&&i<z?"sel":""}">${ch===" "?"":esc(ch)}</i>`; }
+    let r=""; R.ix.forEach(i=>{ const ch=v[i], c=(D.cls[i]||"").trim(), st=D.cls[i+"s"]; r+=`<i class="${c}${i>=a&&i<z?" sel":""}"${st?` style="--hl:${st}"`:""}>${ch===" "?"":esc(ch)}</i>`; });
     h+=`<div class="wgr${head?" hd":""}">${r}</div>`; });
   const p=wgPos(rows,t.selectionDirection==="backward"?a:z,g);
   m.innerHTML=h+(foc&&a===z?`<span class="wgcar" style="left:${(g.pl+p.c*g.C).toFixed(2)}px;top:${(g.pt+p.r*g.L+(g.L-g.C)/2+2).toFixed(2)}px;height:${(g.C-4).toFixed(2)}px"></span>`:"");
@@ -6921,7 +6947,7 @@ function wgBind(t){ if(t._wgb) return; t._wgb=1;
   // 위아래·줄 처음/끝: 칸 줄 따라
   t.addEventListener("keydown",e=>{ if(!wgOn(t)||e.isComposing||e.metaKey||e.ctrlKey||e.altKey||!["ArrowUp","ArrowDown","Home","End"].includes(e.key)) return;
     const g=t._wg, rows=wgModel(t), back=t.selectionDirection==="backward", foc=back?t.selectionStart:t.selectionEnd, anc=back?t.selectionEnd:t.selectionStart, p=wgPos(rows,foc,g);
-    const i=e.key==="ArrowUp"?(p.r===0?0:wgIdx(rows,p.r-1,p.c,g)):e.key==="ArrowDown"?(p.r===rows.length-1?t.value.length:wgIdx(rows,p.r+1,p.c,g)):e.key==="Home"?rows[p.r].s:rows[p.r].e;
+    const i=e.key==="ArrowUp"?(p.r===0?0:wgIdx(rows,p.r-1,p.c,g)):e.key==="ArrowDown"?(p.r===rows.length-1?t.value.length:wgIdx(rows,p.r+1,p.c,g)):e.key==="Home"?rows[p.r].s:(rows[p.r].last||!rows[p.r].ix.length?rows[p.r].e:rows[p.r].ix[rows[p.r].ix.length-1]+1);
     e.preventDefault(); if(e.shiftKey){ i>=anc?t.setSelectionRange(anc,i,"forward"):t.setSelectionRange(i,anc,"backward"); } else t.setSelectionRange(i,i); wgKick(); }); }
 let WG_TOUCH=null;
 addEventListener("resize",()=>{ if(DOC_MODE&&docPaper()==="wongo"){ WG_KEY=""; const t=$("#wbody"); if(t){ wongoFit(t); grow(); } } });
