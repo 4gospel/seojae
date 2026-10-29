@@ -1271,7 +1271,8 @@ body.typew #wbody{padding-bottom:45vh}
 .dcalwrap{position:relative;display:inline-block}
 .dcalpop{position:absolute;left:0;top:calc(100% + 8px);z-index:65;width:320px;max-width:calc(100vw - 32px)}
 .dcalpop .calcard{box-shadow:0 14px 34px -12px rgba(0,0,0,.45)}
-@media (max-width:700px){ .dcalpop{position:fixed;left:16px;right:16px;top:auto;bottom:calc(84px + env(safe-area-inset-bottom));width:auto;max-width:none} }
+.dfcal{position:static;display:inline-flex} .dfullx .dfcal .dcalpop{left:50%;transform:translateX(-50%);top:calc(100% + 12px);font-size:14px;z-index:72} .dfullx .dfcal .dcalpop button{width:auto;height:auto;border-radius:6px;font-size:inherit;display:revert} .dfullx .dfcal .dcalpop .ico{width:auto;height:auto}
+@media (max-width:700px){ .dcalpop{position:fixed;left:16px;right:16px;top:auto;bottom:calc(84px + env(safe-area-inset-bottom));width:auto;max-width:none} .dfullx .dfcal .dcalpop{position:absolute;top:auto;bottom:calc(100% + 14px);left:50%;right:auto;width:min(340px,calc(100vw - 24px))} }
 /* 일기 달력 표시: 일기 쓴 날 진한 점, 기록만 있는 날 옅은 점, 펼친 날 테두리 */
 .cal .d.dj::after{content:"";position:absolute;left:50%;bottom:3px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--ink)}
 .cal .d.ds::after{content:"";position:absolute;left:50%;bottom:3px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--deco)}
@@ -1951,7 +1952,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="453a052cc9";
+const APP_BUILD="b70c889721";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3381,7 +3382,7 @@ function dCalHtml(){
     <div class="callegend"><span><i style="background:var(--ink);width:8px;height:8px"></i>일기 쓴 날</span><span><i style="background:var(--deco);width:7px;height:7px"></i>읽기·글만 있는 날</span><span><i style="width:auto;height:auto;border-radius:0;background:none;color:var(--sepia);font-style:normal;font-size:14px;line-height:1">★</i>지금 펼친 날</span><span><i style="width:auto;height:auto;border-radius:0;background:none;font-weight:800;text-decoration:underline;text-underline-offset:2px;font-style:normal;color:var(--ink)">${now.getDate()}</i>오늘</span></div></div>`;
 }
 function dCalMove(n){ let m=dcalM+n, y=dcalY; while(m<0){ m+=12; y--; } while(m>11){ m-=12; y++; } dcalY=y; dcalM=m; dCalPaint(); }
-function dCalPaint(){ const el=$(".dcal"); if(el) el.outerHTML=dCalHtml(); }
+function dCalPaint(){ const p=dCalOpenNow(), el=p?.querySelector(".dcal")||$(".dcal"); if(el) el.outerHTML=dCalHtml(); }
 // 목록 보기: 일기가 있는 날을 최근부터
 function dListHtml(){
   const days=[...new Set([...Object.keys(S.diary||{}).filter(dHas),...Object.keys(S.log||{}).filter(dSome),...live().map(w=>w.date)])].filter(k=>k<=today()&&k>=dMin()).sort().reverse();
@@ -3433,18 +3434,19 @@ function diaryPage(){
 }
 // 달력 팝업: 「달력」 단추 아래 떠서 날짜를 고르면 닫힘. 바깥 클릭·Esc로도 닫힘
 function dCalToggle(){ const p=$("#dcalpop"); if(!p) return; if(p.style.display!=="none"){ p.style.display="none"; return; } if(STK_OPEN){ STK_OPEN=false; STK_SEL=null; paintStk(); } p.innerHTML=dCalHtml(); p.style.display=""; }
-function dCalClose(){ const p=$("#dcalpop"); if(p) p.style.display="none"; }
-document.addEventListener("click",e=>{ const p=$("#dcalpop"); if(p&&p.style.display!=="none"&&!e.target.closest(".dcalwrap")) p.style.display="none"; });
+function dCalClose(){ document.querySelectorAll("#dcalpop,#dfcalpop").forEach(p=>p.style.display="none"); }
+const dCalOpenNow=()=>[...document.querySelectorAll("#dcalpop,#dfcalpop")].find(p=>p.style.display!=="none");
+document.addEventListener("click",e=>{ const path=e.composedPath(); document.querySelectorAll("#dcalpop,#dfcalpop").forEach(p=>{ if(p.style.display!=="none"&&!path.includes(p.parentElement)) p.style.display="none"; }); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") dCalClose(); });
 // 일기책만 화면 가득: 머리·메뉴·단추 줄을 숨기고 책을 창 가득. PC는 브라우저 전체 화면까지. Esc·「돌아가기」·다른 메뉴로 가면 풀림
 function dFull(on){ const b=document.body; if(on===b.classList.contains("dfull")) return; b.classList.toggle("dfull",on);
   let x=$("#dfullx"); if(on){ if(!x){ x=document.createElement("div"); x.id="dfullx"; x.className="dfullx glass"; document.body.appendChild(x); }
-    x.innerHTML=`<button onclick="dGo(-1)" title="전날 (←)" aria-label="전날">‹</button><button onclick="dCalToggleFull()" title="날짜 고르기" aria-label="달력">${ICO.cal}</button> <button onclick="dGo(1)" title="다음 날 (→)" aria-label="다음 날">›</button><i></i><button onclick="toggleStk()" title="스티커 붙이기" aria-label="스티커">🌼</button><i></i><button onclick="dFull(false)" title="돌아가기 (Esc)" aria-label="돌아가기">✕</button>`;
+    x.innerHTML=`<button onclick="dGo(-1)" title="전날 (←)" aria-label="전날">‹</button><span class="dcalwrap dfcal"><button onclick="dCalToggleFull()" title="날짜 고르기" aria-label="달력">${ICO.cal}</button><div id="dfcalpop" class="dcalpop" style="display:none"></div></span><button onclick="dGo(1)" title="다음 날 (→)" aria-label="다음 날">›</button><i></i><button onclick="toggleStk()" title="스티커 붙이기" aria-label="스티커">🌼</button><i></i><button onclick="dFull(false)" title="돌아가기 (Esc)" aria-label="돌아가기">✕</button>`;
     if(!isTouch()&&document.documentElement.requestFullscreen&&!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); scrollTo(0,0); }
   else { x?.remove(); if(document.fullscreenElement&&!STAGE) document.exitFullscreen().catch(()=>{}); }
   if(tab==="diary") setTimeout(()=>{ const t=$(".dline"); if(t) dGrow(t); stkFitAll?.(); },60); }
-function dCalToggleFull(){ dFull(false); setTimeout(()=>dCalToggle(),80); }
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&document.body.classList.contains("dfull")&&!STAGE) dFull(false); });
+function dCalToggleFull(){ const p=$("#dfcalpop"); if(!p) return; if(p.style.display!=="none"){ p.style.display="none"; return; } if(STK_OPEN){ STK_OPEN=false; STK_SEL=null; paintStk(); } dcalY=dcalM=null; p.innerHTML=dCalHtml(); p.style.display=""; }
+document.addEventListener("keydown",e=>{ if(e.key!=="Escape"||!document.body.classList.contains("dfull")||STAGE) return; if($("#dfcalpop")?.style.display===""){ dCalClose(); return; } dFull(false); });
 document.addEventListener("fullscreenchange",()=>{ if(!document.fullscreenElement&&document.body.classList.contains("dfull")&&!isTouch()) dFull(false); });
 // 일기장 쓸어 넘기기 (휴대폰·태블릿): 옆으로 60px 넘게, 위아래보다 옆으로 더 움직이면 넘김. 스티커를 붙이는 중이거나 글자를 고르는 중이면 넘기지 않음
 let D_SW=null;
@@ -7302,8 +7304,8 @@ document.addEventListener("keydown",e=>{
   if(el.matches?.("textarea")&&el.id!=="wbody"&&(e.metaKey||e.ctrlKey)){ const b=kbButton(el); if(b){ e.preventDefault(); b.click(); } } });
 // Esc: 맨 위에 떠 있는 것부터 닫음 (오른쪽 메뉴는 따로)
 document.addEventListener("keydown",e=>{ if(e.key!=="Escape"||CTX||e.isComposing) return;
-  const top=[...document.querySelectorAll("#aipanel,#sppop,.slview,#hlbar,#dcalpop,.bookview,.sendview,#draftpick .sheet")].filter(x=>x.offsetParent!==null||getComputedStyle(x).position==="fixed").pop();
-  if(!top) return; if(top.id==="hlbar"){ hlClose(); } else if(top.id==="sppop"){ spellPopClose(); } else if(top.id==="dcalpop"){ return; }
+  const top=[...document.querySelectorAll("#aipanel,#sppop,.slview,#hlbar,#dcalpop,#dfcalpop,.bookview,.sendview,#draftpick .sheet")].filter(x=>x.offsetParent!==null||getComputedStyle(x).position==="fixed").pop();
+  if(!top) return; if(top.id==="hlbar"){ hlClose(); } else if(top.id==="sppop"){ spellPopClose(); } else if(top.id==="dcalpop"){ return; } else if(top.id==="dfcalpop"){ dCalClose(); }
   else { const c=top.querySelector("[data-x],#bvclose,#dfx,#eo-x")||[...top.querySelectorAll("button")].find(b=>/^(닫기|그만두기)$/.test(b.textContent.trim())); if(c) c.click(); else top.remove(); }
   e.preventDefault(); e.stopImmediatePropagation(); },true);
 // 단축키
