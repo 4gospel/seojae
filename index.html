@@ -284,11 +284,12 @@ body.readmode .notebook::after,body.focus .notebook::after{display:none}
 .hmirror b{font-weight:800;color:var(--note-ink,var(--ink))}
 /* 모양째 쓰는 글 칸 <w-ed> (2026-10-30): 꾸밈은 글 칸이 직접 보이고, 거울 층은 같은 모양으로 겹쳐 맞춤법·AI 표시만 */
 w-ed{display:block;position:relative;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;outline:none;cursor:text;tab-size:4;-webkit-user-select:text;user-select:text}
-w-ed.isempty::before{content:attr(data-ph);position:absolute;top:0;left:0;right:0;padding:inherit;box-sizing:border-box;color:var(--faint);-webkit-text-fill-color:var(--faint);pointer-events:none;white-space:pre-wrap}
-w-ed mark.wk{color:inherit;padding:0;border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+w-ed.isempty::before{content:attr(data-ph);content:attr(data-ph) / "";position:absolute;top:0;left:0;right:0;padding:inherit;box-sizing:border-box;color:var(--faint);-webkit-text-fill-color:var(--faint);pointer-events:none;white-space:pre-wrap}
+w-ed mark.wk{cursor:text}
 w-ed u.wku{text-decoration:underline;text-decoration-color:var(--sepia);text-decoration-thickness:1.5px;text-underline-offset:4px}
 w-ed b.wb,.hmirror b.wb{font-weight:700} w-ed i.wi,.hmirror i.wi{font-style:italic}
-w-ed sup.wfn,.hmirror sup.wfn{font:700 .62em/1 Georgia,serif;vertical-align:super;padding:0 1px;color:#a0522d;cursor:pointer} w-ed sup.wfn.en{color:#4f7fa8}
+w-ed sup.wfn,.hmirror sup.wfn{font:700 .62em/1 Georgia,serif;vertical-align:super;padding:0 1px;color:#a0522d;cursor:pointer} w-ed sup.wfn.en{color:#3d6890}
+html[data-theme="dark"] w-ed sup.wfn{color:#e0a27a} html[data-theme="dark"] w-ed sup.wfn.en{color:#9cc0e6}
 w-ed sup.wfn:hover{background:color-mix(in srgb,var(--sepia) 14%,transparent);border-radius:3px}
 .hmirror mark.wk,.hmirror u.wku,.hmirror b.wb,.hmirror i.wi,.hmirror sup.wfn{visibility:hidden;background:none!important;text-decoration:none} .hmirror b:not(.wb){visibility:visible}
 body.docmode[data-dpaper="wongo"] w-ed.page[data-wg] *{background:none!important;text-decoration:none!important;color:transparent!important;-webkit-text-fill-color:transparent!important}
@@ -415,7 +416,7 @@ body.focus .notebook{margin:0 auto!important;max-width:min(860px,100%)} body.doc
 .twsw .sw{flex:0 0 34px;height:20px;border-radius:999px;background:color-mix(in srgb,var(--ink) 18%,transparent);position:relative;transition:background .2s} .twsw .sw i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
 .twsw.on .sw{background:#4f7a5a} .twsw.on .sw i{left:16px} .twsw .twt{display:grid;flex:1;line-height:1.25} .twsw .twt b{font-size:14px} .twsw .twt small{font-size:11.5px;color:var(--faint);white-space:nowrap} .twsw em{font-style:normal;font-size:12px;color:var(--faint)} .twsw.on em{color:#4f7a5a;font-weight:600}
 @media (max-width:700px){ .focusx span{display:none} .focusx{padding:8px 11px} }
-/* 쓰기 화면: 넓은 화면에서는 본문 칸을 더 넓게, 옆 칸(달력·본문·간직하기)은 접을 수 있음 — 이 기기에 기억(seojae.sidefold) */
+/* 쓰기 화면: 넓은 화면에서는 본문 칸을 더 넓게, 옆 칸(달력·본문·간직)은 접을 수 있음 — 이 기기에 기억(seojae.sidefold) */
 @media (min-width:1200px){ #main:has(.writegrid) .writegrid{grid-template-columns:1fr 320px} }
 @media (min-width:881px){
   body.sidefold .writegrid{grid-template-columns:1fr!important} body.sidefold .writegrid>aside{display:none}
@@ -791,11 +792,7 @@ html[data-theme="dark"] .dslipcard{background:var(--paper) var(--grain);color:va
 /* 일기: 손으로 칠한 형광펜 · 펜 밑줄 (글자 굵기는 그대로) */
 .dedit{min-height:238px;white-space:pre-wrap;word-break:break-word;outline:none;cursor:text}
 .dedit:empty::before{content:attr(data-ph);color:var(--faint);pointer-events:none}
-.crayon mark.mk{--hc:247,214,92;color:inherit;padding:0 .22em;margin:0 -.12em;border-radius:.9em .35em .8em .3em;-webkit-box-decoration-break:clone;box-decoration-break:clone;cursor:text;
-  background:linear-gradient(104deg,rgba(var(--hc),0) .9%,rgba(var(--hc),.78) 2.6%,rgba(var(--hc),.55) 6%,rgba(var(--hc),.34) 93%,rgba(var(--hc),.72) 96%,rgba(var(--hc),0) 98.5%),linear-gradient(183deg,rgba(var(--hc),0) 0%,rgba(var(--hc),.32) 8%,rgba(var(--hc),0) 16%);
-  background-size:100% 78%,100% 100%;background-position:0 70%,0 0;background-repeat:no-repeat}
-.crayon mark.hl-g{--hc:150,205,120} .crayon mark.hl-p{--hc:240,150,175} .crayon mark.hl-b{--hc:130,185,240}
-:root[data-theme="dark"] .crayon mark.mk{filter:saturate(.8) brightness(.8)}
+.crayon mark.mk{cursor:text}
 .crayon u.mku{text-decoration:none;padding-bottom:3px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='7' viewBox='0 0 60 7'><path d='M0 4.2 C 8 2.6, 14 5.4, 22 3.8 S 38 2.4, 46 4.4 S 56 3.4, 60 3.9' fill='none' stroke='%23463225' stroke-width='1.6' stroke-linecap='round' opacity='.85'/></svg>") repeat-x 0 100%/60px 7px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 :root[data-theme="dark"] .crayon u.mku{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='7' viewBox='0 0 60 7'><path d='M0 4.2 C 8 2.6, 14 5.4, 22 3.8 S 38 2.4, 46 4.4 S 56 3.4, 60 3.9' fill='none' stroke='%23e8dccb' stroke-width='1.6' stroke-linecap='round' opacity='.8'/></svg>")}
 .ddeco .dk .dpen{text-decoration:none;padding-bottom:2px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='5' viewBox='0 0 30 5'><path d='M0 3 C 6 1.6, 12 4, 18 2.8 S 26 2.2, 30 3' fill='none' stroke='%23463225' stroke-width='1.4' stroke-linecap='round'/></svg>") repeat-x 0 100%/30px 5px}
@@ -1051,10 +1048,12 @@ body.docmode .writegrid>div,body.docmode .notebook{min-width:0}
 body.docmode[data-dwidth="wide"] #main:has(.writegrid){max-width:1400px} body.docmode[data-dwidth="land"] #main:has(.writegrid){max-width:1520px} body.docmode[data-dwidth="full"] #main:has(.writegrid){max-width:none}   /* 위 막대(한 줄로 옆으로 넘김)가 쪽 폭을 밀어 휴대폰 화면이 옆으로 넓어지던 것 막음 */
 @media (max-width:700px){ body.docmode[data-dpaper="note"] .notebook{background-image:none} }
 body.docmode[data-dpaper="wongo"] :is(textarea,w-ed).page[data-wg]{min-height:0!important;color:transparent!important;caret-color:transparent;-webkit-text-fill-color:transparent} body.docmode[data-dpaper="wongo"] :is(textarea,w-ed).page[data-wg]::selection{background:transparent} body.docmode[data-dpaper="wongo"] :is(textarea,w-ed).page[data-wg]::placeholder{-webkit-text-fill-color:var(--faint);color:var(--faint)}
-.hmirror.wgm{white-space:normal;letter-spacing:0!important;word-spacing:0!important;overflow:visible} .hmirror.wgm .wgr{display:flex;height:var(--wg-l,30px);align-items:center} .hmirror.wgm .wgr i{flex:0 0 var(--wg-c);width:var(--wg-c);text-align:center;font-style:normal;line-height:1} .hmirror.wgm .wgr.hd i{font-weight:700} .hmirror.wgm .wgr i,.hmirror.wgm .wgcar{visibility:visible} .hmirror.wgm .wgr i.hl{background:color-mix(in srgb,var(--hl) 55%,transparent)} .hmirror.wgm .wgr i.ul{text-decoration:underline;text-decoration-color:var(--sepia);text-underline-offset:4px} .hmirror.wgm .wgr i.bd{font-weight:800} .hmirror.wgm .wgr i.it{font-style:italic} .hmirror.wgm .wgr i.fn{font-size:.7em;color:var(--sepia)}
+.hmirror.wgm{white-space:normal;letter-spacing:0!important;word-spacing:0!important;overflow:visible} .hmirror.wgm .wgr{display:flex;height:var(--wg-l,30px);align-items:center} .hmirror.wgm .wgr i{flex:0 0 var(--wg-c);width:var(--wg-c);text-align:center;font-style:normal;line-height:1} .hmirror.wgm .wgr.hd i{font-weight:700} .hmirror.wgm .wgr i,.hmirror.wgm .wgcar{visibility:visible} .hmirror.wgm .wgr i.hl{background:linear-gradient(176deg,transparent 14%,color-mix(in srgb,var(--hl) 62%,transparent) 22%,color-mix(in srgb,var(--hl) 42%,transparent) 80%,transparent 90%)} .hmirror.wgm .wgr i.ul{text-decoration:underline;text-decoration-color:var(--sepia);text-underline-offset:4px} .hmirror.wgm .wgr i.bd{font-weight:800} .hmirror.wgm .wgr i.it{font-style:italic} .hmirror.wgm .wgr i.fn{font-size:.7em;color:var(--sepia)}
 .hmirror.wgm .wgr i.sel{background:color-mix(in srgb,#7aa7e0 38%,transparent)}
 .hmirror.wgm .wgcar{position:absolute;width:2px;background:var(--ink);animation:wgblink 1.05s steps(1) infinite} @keyframes wgblink{50%{opacity:0}}
-body.docmode :is(textarea,w-ed).page{background-image:none!important;font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);min-height:70vh}
+body.docmode :is(textarea,w-ed).page{background-image:none!important;font-family:var(--doc-font);font-size:var(--doc-fs);}
+@media (max-width:700px){ body.docmode :is(textarea,w-ed).page{font-size:max(16px,var(--doc-fs))} }
+body.docmode :is(textarea,w-ed).page{line-height:var(--doc-lh);text-align:var(--doc-align);min-height:70vh}
 body.docmode .notebook .title-in{font-family:var(--doc-font);font-size:calc(var(--doc-fs) * 1.9);border-bottom:0;margin-top:26px}
 body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-height:var(--doc-lh);text-align:var(--doc-align);white-space:normal} body.docmode .readview p.dp{margin:0 0 var(--doc-sp);text-indent:var(--doc-ind);white-space:pre-wrap} body.docmode .readview h4{font-family:var(--doc-font);font-size:calc(var(--doc-fs) * 1.12)}
 .docbar{position:sticky;top:0;z-index:6;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;margin:0 -60px 8px;padding:8px 10px;background:color-mix(in srgb,var(--paper) 92%,#fff);border-bottom:1px solid var(--edge);border-radius:6px 6px 0 0;font-size:13px}
@@ -1265,7 +1264,7 @@ body.focus .stside,body.focus .sttabs{display:none} body.focus .studio{grid-temp
 @media (max-width:700px){ .cmphead,.cmpgrid{grid-template-columns:1fr} .cmphead{display:none} .cmpl:not(:empty)::before{content:"지금";font-size:12px;color:var(--faint)} .cmpr:not(:empty)::before{content:"새 판";font-size:12px;color:var(--faint)} }
 .diffview{max-width:820px;margin:16px auto;white-space:pre-wrap;font-size:15px;line-height:1.8;max-height:calc(100vh - 140px);overflow:auto}
 .df.add{background:color-mix(in srgb,var(--book) 16%,transparent);color:var(--ink)} .df.del{background:color-mix(in srgb,var(--bible) 13%,transparent);color:var(--ink-soft);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--bible) 60%,transparent)}
-.expopts{background:rgba(40,28,16,.35)} .expopts .chk{display:flex;gap:6px;align-items:center}
+.expopts{background:rgba(40,28,16,.35);overflow:auto;overscroll-behavior:contain} .expopts .chk{display:flex;gap:6px;align-items:center}
 .maplegend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-soft);margin:10px 0 4px} .maplegend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:0}
 .mapwrap{overflow-x:auto;background:var(--paper-2);border-radius:4px}
 .mapsvg{width:100%;min-width:620px;height:auto;display:block}
@@ -1449,11 +1448,13 @@ body.focus .sucard{display:none}
 
 /* 본문 형광펜·밑줄·메모 */
 .sutext .vt{cursor:text}
-mark.mk{background:none;color:inherit;padding:0 1px;border-radius:2px;cursor:pointer}
-mark.hl-y{background:linear-gradient(transparent 38%,rgba(247,214,92,.62) 38%,rgba(247,214,92,.62) 92%,transparent 92%)}
-mark.hl-g{background:linear-gradient(transparent 38%,rgba(150,200,130,.55) 38%,rgba(150,200,130,.55) 92%,transparent 92%)}
-mark.hl-p{background:linear-gradient(transparent 38%,rgba(240,160,170,.55) 38%,rgba(240,160,170,.55) 92%,transparent 92%)}
-mark.hl-b{background:linear-gradient(transparent 38%,rgba(140,185,225,.55) 38%,rgba(140,185,225,.55) 92%,transparent 92%)}
+mark.mk{color:inherit;cursor:pointer}
+/* 형광펜은 어디서나 크레파스 붓질 모양 (2026-10-30 팀장님: 일기·글쓰기·읽기·말씀 모두 하나로). 색은 HLC 와 같은 4색 */
+mark.hl-y,mark.hl-g,mark.hl-p,mark.hl-b{--hc:247,214,92;color:inherit;padding:0 .22em;margin:0 -.12em;border-radius:.9em .35em .8em .3em;-webkit-box-decoration-break:clone;box-decoration-break:clone;
+  background:linear-gradient(104deg,rgba(var(--hc),0) .9%,rgba(var(--hc),calc(.78*var(--hk,1))) 2.6%,rgba(var(--hc),calc(.55*var(--hk,1))) 6%,rgba(var(--hc),calc(.34*var(--hk,1))) 93%,rgba(var(--hc),calc(.72*var(--hk,1))) 96%,rgba(var(--hc),0) 98.5%),linear-gradient(183deg,rgba(var(--hc),0) 0%,rgba(var(--hc),calc(.32*var(--hk,1))) 8%,rgba(var(--hc),0) 16%);
+  background-size:100% 78%,100% 100%;background-position:0 70%,0 0;background-repeat:no-repeat}
+mark.hl-g{--hc:150,205,120} mark.hl-p{--hc:240,150,175} mark.hl-b{--hc:130,185,240}
+:root[data-theme="dark"] mark{--hk:.62} @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) mark{--hk:.62} }
 mark.ul{text-decoration:underline;text-decoration-color:var(--bible);text-decoration-thickness:1.6px;text-underline-offset:4px}
 sup.mmo{color:var(--sepia);cursor:pointer;font-size:12px;margin-left:1px;user-select:none;-webkit-user-select:none}
 .hlbar{position:fixed;z-index:70;background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:999px;box-shadow:0 8px 22px -8px rgba(0,0,0,.4);padding:4px 6px;display:flex;gap:2px;align-items:center}
@@ -1485,7 +1486,7 @@ sup.mmo{color:var(--sepia);cursor:pointer;font-size:12px;margin-left:1px;user-se
 .dictpop .pos{font-style:italic;color:var(--faint);font-size:12.5px}
 
 /* 내 글의 형광펜·밑줄·각주 */
-.rich mark.mk,.readview mark.mk,.dw-body mark.mk{color:inherit;padding:0 1px;border-radius:2px}
+.rich mark.mk,.readview mark.mk,.dw-body mark.mk{color:inherit}
 .rich u.mku,.readview u.mku,.dw-body u.mku{text-decoration:underline;text-decoration-color:var(--sepia);text-decoration-thickness:1.5px;text-underline-offset:4px}
 sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .fnlist{margin:14px 0 0;padding:10px 0 0 22px;border-top:1px dashed var(--deco);font-size:14px;color:var(--ink-soft);line-height:1.6}
@@ -1568,7 +1569,7 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .fsbtn{font:inherit;border:1px solid var(--edge);background:var(--paper-2);border-radius:999px;min-width:34px;height:30px;cursor:pointer;color:var(--ink-soft);font-size:13px;padding:0 8px}
 .fsbtn:hover{border-color:var(--deco)}
 /* 임시 보관 표시 */
-.draftstamp{font-size:12.5px;color:var(--faint)} .draftstamp.busy{color:var(--sepia)}
+.draftstamp{font-family:var(--ui-font);font-size:12.5px;color:var(--faint)} .draftstamp.busy{color:var(--sepia)}
 /* 스티커 창: 컴퓨터에서는 끌어서 화면 가장자리에 붙일 수 있습니다 */
 .stk-palette.dock-l{left:14px;top:50%;bottom:auto;transform:translateY(-50%);width:min(300px,calc(100vw - 24px))}
 .stk-palette.dock-r{left:auto;right:14px;top:50%;bottom:auto;transform:translateY(-50%);width:min(300px,calc(100vw - 24px))}
@@ -1620,12 +1621,12 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .sheet.compact details.keybox>summary{font-size:13px;color:var(--faint)}
 
 /* 어두운 화면: 형광펜은 잉크를 가리지 않게 옅게, 글자는 밝게 */
-:root[data-theme="dark"] mark.hl-y,:root:not([data-theme="light"]) mark.hl-y{background:linear-gradient(transparent 38%,rgba(247,214,92,.28) 38%,rgba(247,214,92,.28) 92%,transparent 92%)}
+
 :root[data-theme="dark"] mark.hl-g,:root:not([data-theme="light"]) mark.hl-g{background:linear-gradient(transparent 38%,rgba(150,200,130,.26) 38%,rgba(150,200,130,.26) 92%,transparent 92%)}
 :root[data-theme="dark"] mark.hl-p,:root:not([data-theme="light"]) mark.hl-p{background:linear-gradient(transparent 38%,rgba(240,160,170,.26) 38%,rgba(240,160,170,.26) 92%,transparent 92%)}
 :root[data-theme="dark"] mark.hl-b,:root:not([data-theme="light"]) mark.hl-b{background:linear-gradient(transparent 38%,rgba(140,185,225,.26) 38%,rgba(140,185,225,.26) 92%,transparent 92%)}
 :root[data-theme="dark"] .cal .d.bible::before,:root:not([data-theme="light"]) .cal .d.bible::before{background:rgba(247,214,92,.22);box-shadow:inset 0 0 0 1px rgba(247,214,92,.55)}
-:root[data-theme="light"] mark.hl-y{background:linear-gradient(transparent 38%,rgba(247,214,92,.62) 38%,rgba(247,214,92,.62) 92%,transparent 92%)}
+
 :root[data-theme="light"] mark.hl-g{background:linear-gradient(transparent 38%,rgba(150,200,130,.55) 38%,rgba(150,200,130,.55) 92%,transparent 92%)}
 :root[data-theme="light"] mark.hl-p{background:linear-gradient(transparent 38%,rgba(240,160,170,.55) 38%,rgba(240,160,170,.55) 92%,transparent 92%)}
 :root[data-theme="light"] mark.hl-b{background:linear-gradient(transparent 38%,rgba(140,185,225,.55) 38%,rgba(140,185,225,.55) 92%,transparent 92%)}
@@ -1737,7 +1738,7 @@ details.more[open]>summary{margin-bottom:var(--sp-1)}
   details.more>summary{padding:8px 0}
   .card-index .seal{width:80px;height:80px}
 }
-@media (max-width:880px){ body.staside #main .studio .writegrid,body.staside.sidefold #main .studio .writegrid.hasbinder{grid-template-columns:minmax(0,1fr)!important} }   /* 휴대폰: 곁 칸은 종이 아래로 */
+@media (max-width:1180px){ body.staside #main .studio .writegrid,body.staside.sidefold #main .studio .writegrid.hasbinder{grid-template-columns:minmax(0,1fr)!important} }   /* 좁은 화면: 곁 칸은 종이 아래로 */   /* 휴대폰: 곁 칸은 종이 아래로 */
 </style>
 </head>
 <body>
@@ -2014,7 +2015,7 @@ function metaSet(wid,k,v){ const w=S.writings.find(x=>x.id===wid); if(!w) return
   w.meta=Object.assign({},w.meta||{}); w.metaTs=Object.assign({},w.metaTs||{});
   if(v===""||v==null){ delete w.meta[k]; } else w.meta[k]=v; w.metaTs[k]=now;
   if(w.scene&&k in w.scene){ w.scene=Object.assign({},w.scene); delete w.scene[k]; }
-  w.updated=now; if(editId===wid) EDIT_BASE=w.updated; save(); }
+  { const _pu=w.updated; w.updated=now; if(editId===wid&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } save(); }
 function mergeFrom(other){
   const del=Object.assign({},other.deleted||{},S.deleted||{});
   const stamp=x=>x.updated||x.date||"";
@@ -2110,7 +2111,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="ca55695b38";
+const APP_BUILD="8cfe941051";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2216,7 +2217,8 @@ const $=s=>document.querySelector(s);
 const jo=(w,a,b)=>{ const t=String(w??""); for(let i=t.length-1;i>=0;i--){ const c=t.charCodeAt(i); if(c>=0xAC00&&c<=0xD7A3) return t+((c-0xAC00)%28?a:b); } return t+a+"("+b+")"; };
 const jp=(w,a,b)=>jo(w,a,b).slice(String(w??"").length);   // 조사만
 // 나를 부르는 호칭 (설정 → 쓰기, S.settings.callName — 기기 사이에 따라감). 앱이 사용자를 부르는 문구는 모두 이것으로
-const callName=()=>String(S?.settings?.callName||"").trim().slice(0,20)||"팀장님";
+const cnClean=v=>String(v||"").replace(/[^가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9 ·]/g,"").replace(/\s+/g," ").trim().slice(0,20);
+const callName=()=>cnClean(S?.settings?.callName)||"팀장님";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const dkey=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
@@ -2236,7 +2238,7 @@ const stripWrap=t=>String(t||"").replace(/==(?:[ygpb]:)?([^=\n]+?)==|__([^_\n]+?
 // 미주: [^^내용] — 원고(글) 끝에 i, ii … 로 모임 (워드·한글의 미주처럼). 각주는 쪽(글) 아래 1, 2 …
 const isEnd=x=>String(x||"").startsWith("^"), fnText=x=>String(x||"").replace(/^\^/,"");
 const romanL=n=>ROMAN(n).toLowerCase();
-function fnRef(x,fn){ if(!fn) return `<sup class="fnref" title="${esc(fnText(x))}">✎</sup>`; if(isEnd(x)){ (fn.end=fn.end||[]).push(fnText(x)); return `<sup class="enref" title="미주: ${esc(fnText(x))}">${romanL(fn.end.length)}</sup>`; } return `<sup class="fnref" title="${esc(x)}">${fn.push(x)}</sup>`; }
+function fnRef(x,fn){ if(!fn) return `<sup class="fnref" title="${esc(fnText(x))}">✎</sup>`; if(isEnd(x)){ (fn.end=fn.end||[]).push(fnText(x)); return `<sup class="enref" title="미주: ${esc(fnText(x))}">${romanL(fn.end.length)}</sup>`; } return `<sup class="fnref" title="${esc(x).replace(/\*/g,"&#42;")}">${fn.push(x)}</sup>`; }
 function fnHtmlIn(t,fn){ // 형광펜·밑줄 안의 각주
   let out="", last=0; const str=String(t||"");
   for(const m of str.matchAll(FN_RE)){ out+=esc(str.slice(last,m.index)); last=m.index+m[0].length; out+=fnRef(m[1],fn); }
@@ -2691,7 +2693,7 @@ async function paintSu(){
   paintSuText();
 }
 // ───────── 본문 형광펜·밑줄·메모 (S.marks[날짜]) ─────────
-const HLC=[["y","#f7d65c"],["g","#96c882"],["p","#f0a0aa"],["b","#8cb9e1"]];
+const HLC=[["y","#f7d65c"],["g","#96cd78"],["p","#f096af"],["b","#82b9f0"]];   // 형광펜 4색 (크레파스 붓질 --hc 와 같은 색)
 const suDate=()=>$("#sucard")?.dataset.date;
 const marksOf=d=>(S.marks?.[d])||[];
 function markHtml(t,ms){
@@ -2731,29 +2733,37 @@ function selPieces(){
     if(e>s) out.push({c:+el.dataset.c,v:+el.dataset.v,lang:el.dataset.l,s,e,t:plainText(el).slice(s,e)}); });
   return out.length?{pieces:out.map(({t,...p})=>p),text:out.map(p=>p.t).join(" ").replace(/\s+/g," ").trim(),rect:r.getBoundingClientRect()}:null;
 }
-function hlBar(html,rect,memo){
+function hlBar(html,rect,memo,below,box){
   let b=$("#hlbar"); if(!b){ b=document.createElement("div"); b.id="hlbar"; document.body.appendChild(b); }
   b.className="hlbar"+(memo?" memo":""); b.innerHTML=html; b.onmousedown=e=>{ if(!e.target.matches("textarea,input")) e.preventDefault(); };
-  const w=b.offsetWidth, h=b.offsetHeight; let x=rect.left+rect.width/2-w/2, y=rect.top-h-10; if(y<8) y=rect.bottom+10;
-  b.style.left=Math.max(8,Math.min(innerWidth-w-8,x))+"px"; b.style.top=Math.max(8,Math.min(innerHeight-h-8,y))+"px";
+  const vv=window.visualViewport, vt=vv?vv.offsetTop:0, vh=vv?vv.height:innerHeight;   // 휴대폰 키보드가 올라와 있으면 보이는 부분 안에
+  const w=b.offsetWidth, h=b.offsetHeight; let x=rect.left+rect.width/2-w/2, y=below?rect.bottom+14:rect.top-h-10; if(below&&y+h>vt+vh-8) y=rect.top-h-10; if(!below&&y<vt+8) y=rect.bottom+10;
+  if(box&&box.width>w) x=Math.max(box.left,Math.min(box.right-w,x));   // 글 칸 폭 안에
+  b.style.left=Math.max(8,Math.min(innerWidth-w-8,x))+"px"; b.style.top=Math.max(vt+8,Math.min(vt+vh-h-8,y))+"px";
 }
 const hlClose=()=>{ $("#hlbar")?.remove(); HLSEL=null; };
 // 글쓰기 칸에서 글자를 고르면: 형광펜·밑줄·각주 표시를 글 속에 넣습니다
 let WSEL=null;
-function wTools(el){
-  if(el&&el.id!=="wbody") return HLC.map(([k,c])=>`<button title="형광펜 — 같은 색을 한 번 더 누르면 지워집니다" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")+`<button title="굵게 (⌘B)" onclick="docWrap('**',true)" style="font-weight:800">B</button><button title="기울임 (⌘I)" onclick="docWrap('*',true)" style="font-style:italic;font-family:Georgia,serif">I</button><button title="밑줄 (⌘U)" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button class="hlerase" title="꾸밈 지우기" onclick="wMark('clear')">지우개</button><button title="닫기" onclick="hlClose()">✕</button>`;   // 이어 읽기 고치기 칸: 꾸밈만 (AI·각주는 글쓰기 화면에서)
-  return `<button class="rfd rfgo" title="AI로 다듬기 — 고친 안을 비교해 보고 넣습니다" onclick="rfMenu()">✦ 다듬기</button>`+HLC.map(([k,c])=>`<button title="형광펜 — 이미 칠한 곳에 같은 색을 한 번 더 누르면 지워집니다" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")
-    +`<button title="굵게 (⌘B)" onclick="docWrap('**',true)" style="font-weight:800">B</button><button title="기울임 (⌘I)" onclick="docWrap('*',true)" style="font-style:italic;font-family:Georgia,serif">I</button><button title="밑줄 (⌘U)" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button title="각주 달기 (고른 글 뒤에 번호로 붙습니다)" onclick="wMark('fn')" style="font-weight:700;font-family:Georgia,serif">¹</button><button class="hlerase" title="꾸밈 지우기 — 고른 곳의 형광펜·밑줄을 지웁니다 (글은 그대로)" onclick="wMark('clear')">지우개</button><button class="rfd" title="이 문장을 말투 기준으로 담기 — AI가 이 말투를 따릅니다" onclick="voiceAddSel()">말투</button><button title="닫기" onclick="hlClose()">✕</button>`;
+const HLC_NAME={y:"노랑",g:"연두",p:"분홍",b:"하늘"};
+function wTools(el){ const full=!el||el.id==="wbody";   // 모든 글 칸 같은 막대 — 순서: 색 → B I U → 각주 → 지우개 | AI(글쓰기 칸만)
+  return HLC.map(([k,c])=>`<button title="${HLC_NAME[k]} 형광펜 — 같은 색을 한 번 더 누르면 지워집니다" onclick="wMark('hl','${k}')"><span class="dot" style="background:${c}"></span></button>`).join("")
+    +`<button title="굵게 (⌘B)" onclick="docWrap('**',true)" style="font-weight:800">B</button><button title="기울임 (⌘I)" onclick="docWrap('*',true)" style="font-style:italic;font-family:Georgia,serif">I</button><button title="밑줄 (⌘U)" onclick="wMark('ul')" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button>`
+    +(full?`<button title="각주 달기 (고른 글 뒤에 번호로 붙습니다 · ⌘⇧F)" onclick="wMark('fn')" style="font-weight:700;font-family:Georgia,serif">¹</button>`:"")
+    +`<button class="hlerase" title="꾸밈 지우기 — 고른 곳의 형광펜·밑줄·굵게·기울임을 지웁니다 (글은 그대로)" onclick="wMark('clear')">지우개</button>`
+    +(full?`<i class="hlsep"></i><button class="rfd rfgo" title="AI로 다듬기 — 고친 안을 비교해 보고 넣습니다" onclick="rfMenu()">✦ 다듬기</button><button class="rfd" title="이 문장을 말투 기준으로 담기 — AI가 이 말투를 따릅니다" onclick="voiceAddSel()">말투</button>`:"")
+    +`<button title="닫기" onclick="hlClose()">✕</button>`;
 }
 function wMark(kind,color){
   const b=WSEL?.el?.isConnected?WSEL.el:$("#wbody"); if(!b||!WSEL) return hlClose();
   let {s,e}=WSEL; const v=b.value; let sel=v.slice(s,e);
-  if(kind==="fn"){ fnBox(e,null,v.slice(s,e)); return; }
+  if(kind==="fn"){ fnBox(e,null,stripMk(v.slice(s,e))); return; }
+  if(b.tagName==="W-ED"){ edFormat(b,s,e,kind,color); b.focus(); grow(); countW(); draftInput(); return; }   // 모양째 쓰는 칸: 글자 목록으로
   else { // 고른 구간과 조금이라도 겹치는 표시는 통째로 다룹니다 (반쪽만 바뀌어 깨지지 않게)
+    const full=kind==="clear"; if(full) for(const m of v.matchAll(BI_RE)){ const ms=m.index, me=ms+m[0].length; if(ms<e&&me>s){ s=Math.min(s,ms); e=Math.max(e,me); } }   // 지우개는 굵게·기울임까지
     let same=false; for(const m of v.matchAll(MK_RE)){ const ms=m.index, me=ms+m[0].length; if(ms<e&&me>s){ s=Math.min(s,ms); e=Math.max(e,me); if(kind==="hl"&&m[2]!=null&&(m[1]||"y")===color) same=true; if(kind==="ul"&&m[3]!=null) same=true; } }
     if(same){ kind="clear"; toast("형광펜(밑줄)을 지웠습니다 — 같은 색을 한 번 더 누르면 지워집니다"); }   
     sel=v.slice(s,e);
-    const wrap=t=>{ t=stripWrap(t); if(!t.trim()) return t; const lead=t.match(/^\s*/)[0], tail=t.match(/\s*$/)[0], core=t.trim();
+    const wrap=t=>{ t=stripWrap(t); if(full) t=biStrip(t); if(!t.trim()) return t; const lead=t.match(/^\s*/)[0], tail=t.match(/\s*$/)[0], core=t.trim();
       return lead+(kind==="hl"?`==${color==="y"?"":color+":"}${core}==`:kind==="ul"?`__${core}__`:core)+tail; };
     const wrapped=sel.split("\n").map(wrap).join("\n");   // 여러 줄이면 줄마다 따로
     tInsert(b,wrapped,s,e); if(!matchMedia("(pointer:coarse)").matches){ b.selectionStart=s; b.selectionEnd=s+wrapped.length; } hlClose(); }
@@ -2766,7 +2776,7 @@ function fnBox(at,editIdx,quote){
   const r=b.getBoundingClientRect();
   hlBar(`<div class="muted" style="font-size:13px;margin-bottom:6px">${editIdx!=null?`각주 ${editIdx+1} 고치기`:`「${esc((quote||"").slice(0,50))}${(quote||"").length>50?"…":""}」에 각주`}</div>
     <div class="fnkind"><label><input type="radio" name="fnk" value="f" ${isEnd(cur)?"":"checked"}> 각주 <small>쪽 아래</small></label><label><input type="radio" name="fnk" value="e" ${isEnd(cur)?"checked":""}> 미주 <small>원고 끝</small></label></div>
-    <textarea id="wfn" placeholder="각주 내용 (출처, 보충 설명, 번역 이름 등)">${esc(fnText(cur))}</textarea>
+    <textarea id="wfn" placeholder="각주·미주 내용 (출처, 보충 설명, 번역 이름 등)">${esc(fnText(cur))}</textarea>
     <div class="row" style="margin-top:8px;gap:6px"><span class="spacer"></span>${editIdx!=null?`<button class="btn small danger" style="width:auto;border-radius:999px" onclick="fnApply(${at},${editIdx},'')">지우기</button>`:""}<button class="btn small ghost" style="width:auto;border-radius:999px" onclick="hlClose()">취소</button><button class="btn small ink" style="width:auto;border-radius:999px" onclick="fnApply(${at},${editIdx==null?"null":editIdx},($('input[name=fnk]:checked')?.value==='e'?'^':'')+$('#wfn').value)">달기</button></div>`,
     {left:r.left+r.width/2,top:Math.max(80,r.top)+60,width:0,height:0,bottom:Math.max(80,r.top)+80},true);
   setTimeout(()=>$("#wfn")?.focus(),20);
@@ -2775,12 +2785,15 @@ function fnBox(at,editIdx,quote){
 function caretAt(b){ const s=b.selectionStart??0, e=b.selectionEnd??s; return (s===0&&e===0&&b.value&&!b.dataset.caret)?{s:b.value.length,e:b.value.length}:{s,e}; }   // 한 번도 커서를 두지 않았으면 글 끝
 ["keyup","mouseup","touchend"].forEach(ev=>document.addEventListener(ev,e=>{ const b=e.target.closest?.("#wbody"); if(b) b.dataset.caret="1"; }));
 function fnHere(){ const b=$("#wbody"); if(!b) return; if(READVIEW) toggleRead(); const {s,e}=caretAt(b);   // 상자는 이 클릭이 다 끝난 뒤에 엶 (같은 클릭이 「바깥 클릭」으로 상자를 닫지 않게)
-  setTimeout(()=>{ if(e>s){ WSEL={s,e}; return wMark("fn"); } const pre=b.value.slice(Math.max(0,s-24),s).replace(/\s+/g," ").trim(); fnBox(s,null,pre?"…"+pre:"글 맨 앞"); },0); }
+  setTimeout(()=>{ if(e>s){ WSEL={s,e}; return wMark("fn"); } const pre=stripMk(b.value.slice(Math.max(0,s-40),s)).slice(-24).replace(/\s+/g," ").trim(); fnBox(s,null,pre?"…"+pre:"글 맨 앞"); },0); }
 document.addEventListener("keydown",e=>{ if((e.metaKey||e.ctrlKey)&&e.shiftKey&&(e.key==="f"||e.key==="F")&&$("#wbody")&&tab==="write"){ e.preventDefault(); fnHere(); } });
 document.addEventListener("keydown",e=>{ if((e.metaKey||e.ctrlKey)&&e.shiftKey&&(e.key==="e"||e.key==="E")&&$("#wbody")&&tab==="write"){ e.preventDefault(); fnHere(); setTimeout(()=>{ const r=document.querySelector('input[name=fnk][value=e]'); if(r) r.checked=true; },30); } });   // 미주 ⌘⇧E
-document.addEventListener("keydown",e=>{ if(e.key!=="Tab"||e.target?.id!=="wbody"||e.metaKey||e.ctrlKey||e.altKey) return; if(wMsNow(editId&&S.writings.find(x=>x.id===editId))?.genre!=="poem") return;
-  e.preventDefault(); const b=e.target, s=b.selectionStart, en=b.selectionEnd, ls=b.value.lastIndexOf("\n",s-1)+1, le=(i=>i<0?b.value.length:i)(b.value.indexOf("\n",Math.max(en-1,s))), seg=b.value.slice(ls,le);
-  const out=e.shiftKey?seg.split("\n").map(l=>l.replace(/^( {1,4}|\t)/,"")).join("\n"):seg.split("\n").map(l=>"    "+l).join("\n"); tInsert(b,out,ls,le); b.setSelectionRange(ls,ls+out.length); });   // 시: Tab 들여쓰기·⇧Tab 내어쓰기 (줄 단위)
+// Tab: 글 칸 밖(단추)으로 튀지 않고 칸 안에 머묾 (모든 글 칸 같은 원칙). 시는 줄 단위 들여쓰기·⇧Tab 내어쓰기
+document.addEventListener("keydown",e=>{ if(e.key!=="Tab"||e.target?.tagName!=="W-ED"||e.metaKey||e.ctrlKey||e.altKey||e.isComposing) return; e.preventDefault();
+  if(e.target.id!=="wbody"||wMsNow(editId&&S.writings.find(x=>x.id===editId))?.genre!=="poem") return;
+  const b=e.target, s=b.selectionStart, en=b.selectionEnd, ls=b.value.lastIndexOf("\n",s-1)+1, le=(i=>i<0?b.value.length:i)(b.value.indexOf("\n",Math.max(en-1,s))), seg=b.value.slice(ls,le);
+  const out=e.shiftKey?seg.split("\n").map(l=>l.replace(/^( {1,4}|\t)/,"")).join("\n"):seg.split("\n").map(l=>"    "+l).join("\n"); tInsert(b,out,ls,le);
+  if(s===en){ const d=e.shiftKey?-(seg.length-out.length):4, p=Math.max(ls,s+d); b.setSelectionRange(p,p); } else b.setSelectionRange(ls,ls+out.length); });   // 커서만 있으면 커서를 따라 옮김 (줄을 고른 채로 두면 다음 글자에 줄이 지워짐)
 function fnApply(at,editIdx,memo){
   const b=$("#wbody"); if(!b) return; const en=isEnd(memo); memo=fnText(memo).trim().replace(/[\[\]]/g,""); if(memo&&en) memo="^"+memo; const v=b.value;
   if(editIdx==null){ hlClose(); if(!memo) return; const ins=`[^${memo}]`; b.value=v.slice(0,at)+ins+v.slice(at); b.selectionStart=b.selectionEnd=at+ins.length; }
@@ -2801,10 +2814,10 @@ function selRect(b){ const s=b.selectionStart, e=b.selectionEnd, tb=b.getBoundin
   const dr=d.getBoundingClientRect(), rs=[...sp.getClientRects()]; d.remove(); if(!rs.length) return null;
   const top=Math.min(...rs.map(r=>r.top)), bot=Math.max(...rs.map(r=>r.bottom)), first=rs.filter(r=>r.top===top), l=Math.min(...first.map(r=>r.left)), rr=Math.max(...first.map(r=>r.right));
   return {left:tb.left+(l-dr.left),width:rr-l,top:tb.top+(top-dr.top)-b.scrollTop,bottom:tb.top+(bot-dr.top)-b.scrollTop,height:bot-top}; }
-function wBarShow(b,fb){ if(b.readOnly||b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; let r=null; try{ r=selRect(b); }catch(_){} hlBar(wTools(b),r||fb); }
+function wBarShow(b,fb){ if(b.readOnly||b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; let r=null; try{ r=selRect(b); }catch(_){} hlBar(wTools(b),r||fb,false,false,b.getBoundingClientRect()); }
 document.addEventListener("keyup",e=>{ const b=e.target; if(b?.tagName!=="W-ED"||!e.shiftKey||e.isComposing||!/^(Arrow|Home|End|Page)/.test(e.key)) return; const r=b.getBoundingClientRect(); wBarShow(b,{left:r.left+r.width/2,top:r.top+40,width:0,height:0,bottom:r.top+60}); });   // ⇧+화살표로 골라도 같은 꾸밈 막대
-document.addEventListener("mouseup",e=>{ const b=e.target.closest?.("w-ed"); if(!b||e.button===2||CTX) return; setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; let r=null; try{ r=selRect(b); }catch(_){} hlBar(wTools(b),r||{left:e.clientX,top:e.clientY-8,width:0,height:0,bottom:e.clientY+8}); },10); });
-document.addEventListener("selectionchange",()=>{ const b=document.activeElement; if(b?.tagName!=="W-ED"||!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._wsT); window._wsT=setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return; WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; const r=b.getBoundingClientRect(); hlBar(wTools(b),{left:r.left+r.width/2,top:Math.max(60,r.top)+40,width:0,height:0,bottom:Math.max(60,r.top)+60}); },400); });
+document.addEventListener("mouseup",e=>{ const b=e.target.closest?.("w-ed"); if(!b||e.button===2||CTX||e.target.closest?.("sup.wfn")) return; setTimeout(()=>{ if(b.selectionStart===b.selectionEnd) return hlClose(); WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; let r=null; try{ r=selRect(b); }catch(_){} hlBar(wTools(b),r||{left:e.clientX,top:e.clientY-8,width:0,height:0,bottom:e.clientY+8},false,false,b.getBoundingClientRect()); },10); });
+document.addEventListener("selectionchange",()=>{ const b=document.activeElement; if(b?.tagName!=="W-ED"||!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._wsT); window._wsT=setTimeout(()=>{ if(b.selectionStart===b.selectionEnd){ if($("#hlbar")&&!$("#hlbar").classList.contains("memo")) hlClose(); return; } WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; let sr=null; try{ sr=selRect(b); }catch(_){} if(sr){ hlBar(wTools(b),sr,false,true); return; } const r=b.getBoundingClientRect(); hlBar(wTools(b),{left:r.left+r.width/2,top:Math.max(60,r.top)+40,width:0,height:0,bottom:Math.max(60,r.top)+60}); },400); });
 // 성경 구절 넣기: 한 줄에 「창 1:1-3」(약어나 책 이름)만 적고 Enter 를 누르면 그 자리에 본문(개역한글, 공개본)이 들어갑니다
 const BABBR="창 출 레 민 신 수 삿 룻 삼상 삼하 왕상 왕하 대상 대하 스 느 에 욥 시 잠 전 아 사 렘 애 겔 단 호 욜 암 옵 욘 미 나 합 습 학 슥 말 마 막 눅 요 행 롬 고전 고후 갈 엡 빌 골 살전 살후 딤전 딤후 딛 몬 히 약 벧전 벧후 요일 요이 요삼 유 계".split(" ");
 const REF_RE=/^\s*([가-힣]{1,7}(?:[123]서)?)\s*(\d{1,3})[:：장편]\s*(\d{1,3})?(?:\s*[-~]\s*(?:(\d{1,3})[:：])?(\d{1,3}))?\s*(절)?\s*$/;
@@ -2885,7 +2898,7 @@ function memoBox(id,text,rect){
     <textarea id="hlmemo" placeholder="이 구절에 남길 생각…">${esc(m.memo||"")}</textarea>
     <div class="row" style="margin-top:8px;gap:4px">${HLC.map(([k,c])=>`<button title="색 바꾸기" onclick="markSet('${id}',{color:'${k}'})"><span class="dot" style="background:${c}"></span></button>`).join("")}
       <button title="밑줄" onclick="markSet('${id}',{ul:'t'})" style="text-decoration:underline">U</button><span class="spacer"></span>
-      <button class="btn small danger" style="width:auto;border-radius:999px" onclick="markDel('${id}')">지우기</button><button class="btn small ink" style="width:auto;border-radius:999px" onclick="memoSave('${id}',${jsArg(text||"")})">저장</button></div>`,rect,true);
+      <button class="btn small danger" style="width:auto;border-radius:999px" onclick="markDel('${id}')">지우기</button><button class="btn small ink" style="width:auto;border-radius:999px" onclick="memoSave('${id}',${jsArg(text||"")})">간직</button></div>`,rect,true);
   setTimeout(()=>$("#hlmemo")?.focus(),20);
 }
 function markSet(id,o){ const [,m]=markById(id); if(!m) return; if(o.color) m.color=m.color===o.color?null:o.color; if(o.ul) m.ul=!m.ul; m.u=new Date().toISOString(); save(); paintSuText(); }
@@ -2905,7 +2918,7 @@ function markDel(id){
   S.marks[d]=marksOf(d).filter(x=>!ids.includes(x)); save(); paintSuText(); hlClose();
 }
 // 글자를 고르면 형광펜 막대, 칠한 곳을 누르면 메모 상자
-document.addEventListener("mouseup",e=>{ if(e.button===2||CTX||e.target.closest?.("#hlbar,#wbody,.ctxmenu")) return; setTimeout(()=>{ const s=selPieces(); if(s){ HLSEL=s; hlBar(hlTools(),s.rect); } else if(!e.target.closest(".mk,.mmo")&&$("#hlbar")&&!$("#hlbar").classList.contains("memo")) hlClose(); },10); });
+document.addEventListener("mouseup",e=>{ if(e.button===2||CTX||e.target.closest?.("#hlbar,#wbody,w-ed,[contenteditable],.ctxmenu")) return; setTimeout(()=>{ const s=selPieces(); if(s){ HLSEL=s; hlBar(hlTools(),s.rect); } else if(!e.target.closest(".mk,.mmo")&&$("#hlbar")&&!$("#hlbar").classList.contains("memo")) hlClose(); },10); });
 document.addEventListener("selectionchange",()=>{ if(!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._hlT); window._hlT=setTimeout(()=>{ const s=selPieces(); if(s){ HLSEL=s; hlBar(hlTools(),s.rect); } },350); });
 document.addEventListener("click",e=>{ const mk=e.target.closest?.("#sutext .mk,#sutext .mmo"); if(!mk) { if($("#hlbar")?.classList.contains("memo")&&!e.composedPath().some(n=>n.id==="hlbar")) hlClose(); return; }   // 누른 단추가 막대를 다시 그리며 떨어져 나가도(각주 단추 → 각주 상자) 막대 안 클릭으로 봄
   if(!getSelection().isCollapsed) return; const [,m]=markById(mk.dataset.mid); if(!m) return;
@@ -3073,7 +3086,7 @@ setInterval(()=>{ const d=today(), p=dayPart(); if(d===SHOWN_DAY&&p===SHOWN_PART
 
 // ───────── 화면 ─────────
 // 흐름: 밑줄(읽다 붙잡은 문장) → 글(그 문장으로 쓴 묵상·설교·에세이) → 원고(글을 모아 엮는 책)
-let AUTOKEEP_ON=false, SCRIV_EDIT=null, SCRIV_T=0, SCRIV_PREV=false;   // 이어 읽기 「고치기」 (아래 scrivHtml)
+let AUTOKEEP_ON=false, SCRIV_EDIT=null, SCRIV_T=0, SCRIV_PREV=false, SCRIV_BASE=null;   // 이어 읽기 「고치기」 (아래 scrivHtml)
 let AI_MODE="write";   // 오른쪽 AI 창: write 글쓰기 도우미 · research 조사 도우미 (아래 「AI 조사 도우미」)
 const TABS=[["today","오늘"],["qt","묵상"],["diary","일기"],["drawer","서랍"],["shelf","책장"],["write","글방"]];   // 글쓰기(글방)는 따로 떨어진 특별한 방 — 맨 오른쪽, 다른 모양   // 묵상 = 말씀 글(묵상·설교), 글쓰기 = 책 글·자유 글. 둘 다 같은 쓰기 화면(track 만 다름). 설정은 오른쪽 위 톱니
 // 손으로 그린 듯 조금씩 다른 톱니 — 놋쇠 열쇠 같은 아날로그 느낌
@@ -3093,7 +3106,7 @@ function gearSvg(){
 let restPeek=false, selLen=null, promoAsk=null;   // 쉬는 날에도 '그래도 읽기'를 누르면 오늘 분량을 보여 줌
 let tab="today", track="bible", editId=null, selTopics=[], selSits=[], fromWriting=null, fromNote=null, noteOpen=null, drawerSub="all";
 let NAV=false;
-function go(t,o={}){ const lvId=tab==="write"?editId:null; if(t!=="room") nmAuto();
+function go(t,o={}){ hlClose(); const lvId=tab==="write"?editId:null; if(t!=="room") nmAuto();
   if(tab==="write"&&$("#wbody")&&writingUnsaved()){                    // 떠날 때: 쓴 만큼 되면 저절로 간직(노션에도), 아직 몇 줄이면 임시 보관
     autoKeepNow(); if(writingUnsaved()){ saveDraft(); if(t!=="write") toast(track==="bible"?"쓰던 글은 임시로 보관했습니다. 「묵상」을 다시 열면 이어집니다":editId?"쓰던 글은 임시로 보관했습니다. 그 글을 다시 열면 이어집니다":"쓰던 새 글은 임시로 보관했습니다. 위 「✎ 쓰던 새 글」 탭에서 이어 씁니다"); }
   }
@@ -3625,7 +3638,7 @@ document.addEventListener("keydown",e=>{ if(e.key!=="Escape"||!document.body.cla
 document.addEventListener("fullscreenchange",()=>{ if(!document.fullscreenElement&&document.body.classList.contains("dfull")&&!isTouch()) dFull(false); });
 // 일기장 쓸어 넘기기 (휴대폰·태블릿): 옆으로 60px 넘게, 위아래보다 옆으로 더 움직이면 넘김. 스티커를 붙이는 중이거나 글자를 고르는 중이면 넘기지 않음
 let D_SW=null;
-document.addEventListener("touchstart",e=>{ const b=e.target.closest?.(".dbook"); if(!b||tab!=="diary"||e.touches.length!==1||STK_OPEN||e.target.closest(".stk,.stk-tools")){ D_SW=null; return; } const t=e.touches[0]; D_SW={x:t.clientX,y:t.clientY,at:Date.now()}; },{passive:true});
+document.addEventListener("touchstart",e=>{ const b=e.target.closest?.(".dbook"); if(!b||tab!=="diary"||e.touches.length!==1||STK_OPEN||e.target.closest(".stk,.stk-tools,.dedit")||document.activeElement?.classList?.contains("dedit")){ D_SW=null; return; } const t=e.touches[0]; D_SW={x:t.clientX,y:t.clientY,at:Date.now()}; },{passive:true});
 document.addEventListener("touchend",e=>{ const s=D_SW; D_SW=null; if(!s||tab!=="diary") return; const t=e.changedTouches[0], dx=t.clientX-s.x, dy=t.clientY-s.y;
   if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.4||Date.now()-s.at>900) return; const sel=String(getSelection?.()||""); if(sel.length) return; dGo(dx<0?1:-1); },{passive:true});
 // ───────── 일기 꾸미기: 손으로 칠한 형광펜 4색 · 펜 밑줄 (2026-10-29 팀장님: 쓰는 동안에도 칠한 모습 그대로, 굵게·기울임은 뺌) ─────────
@@ -3701,8 +3714,14 @@ document.addEventListener("keydown",e=>{ const ed=e.target; if(!ed?.classList?.c
   if(k==="z"||k==="y"){ e.preventDefault(); e.stopPropagation(); dUndo(k==="y"||e.shiftKey); } else if(k==="u"&&!e.shiftKey){ e.preventDefault(); dMark("ul"); } else if((k==="b"||k==="i")&&!e.shiftKey) e.preventDefault(); },true);   // 일기는 굵게·기울임 없음(팀장님 결정) — 브라우저 기본 굵게도 막음
 function dKey(ev){ if(ev.key==="Enter"&&!ev.isComposing&&!ev.shiftKey){ ev.preventDefault(); document.execCommand("insertLineBreak"); } }
 function dPaste(ev){ ev.preventDefault(); { const ed=dEd(); if(ed) dSnap(ed,"paste"); } const t=(ev.clipboardData||window.clipboardData)?.getData("text")||""; document.execCommand("insertText",false,t.replace(/\r\n?/g,"\n")); }
-function dDecoBar(){ const b=(k,c,lab,tip)=>`<button type="button" class="dk ${k==="hl"?"hl-"+c:k}" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="dMark('${k}','${c||""}')" title="${tip}">${lab}</button>`;
-  return `<div class="ddeco" role="toolbar" aria-label="일기 꾸미기"><span class="ddl">꾸미기</span>${b("hl","y","","노랑 형광펜")}${b("hl","g","","연두 형광펜")}${b("hl","p","","분홍 형광펜")}${b("hl","b","","하늘 형광펜")}<i class="dsep"></i>${b("ul","",`<span class="dpen">펜 밑줄</span>`,"펜으로 밑줄")}${b("x","","지우개","고른 곳의 형광펜·밑줄 지우기")}<i class="dsep"></i><button type="button" class="dk dstk ${STK_OPEN?"on":""}" onpointerdown="event.preventDefault()" onclick="toggleStk()" title="스티커 붙이기">🌼 스티커</button><small class="ddh">글자를 고른 뒤 누르세요 · 같은 색을 한 번 더 누르면 지워집니다</small></div>`; }
+// 일기 꾸미기: 글쓰기 칸과 같은 원칙 — 글자를 고르면 그 위에 뜨는 꾸밈 막대 (형광펜 4색 · 펜 밑줄 · 지우개). 칸 위에는 스티커 단추만
+function dDecoBar(){ return `<div class="ddeco" role="toolbar" aria-label="일기"><button type="button" class="dk dstk ${STK_OPEN?"on":""}" onpointerdown="event.preventDefault()" onclick="toggleStk()" title="스티커 붙이기">🌼 스티커</button><small class="ddh">글자를 고르면 꾸밈 막대가 뜹니다 · 같은 색을 한 번 더 누르면 지워집니다</small></div>`; }
+function dBarHtml(){ return HLC.map(([k,c])=>`<button title="${{y:"노랑",g:"연두",p:"분홍",b:"하늘"}[k]} 형광펜 — 같은 색을 한 번 더 누르면 지워집니다" onclick="dMark('hl','${k}');hlClose()"><span class="dot" style="background:${c}"></span></button>`).join("")+`<button title="펜 밑줄 (⌘U)" onclick="dMark('ul');hlClose()" style="text-decoration:underline;text-decoration-color:var(--sepia)">U</button><button class="hlerase" title="꾸밈 지우기 — 고른 곳의 형광펜·밑줄을 지웁니다 (글은 그대로)" onclick="dMark('x');hlClose()">지우개</button><button title="닫기" onclick="hlClose()">✕</button>`; }
+function dBarShow(){ const ed=dEd(), sel=getSelection(); if(!ed||!sel.rangeCount||sel.isCollapsed||!ed.contains(sel.anchorNode)||!ed.contains(sel.focusNode)) return; const rs=[...sel.getRangeAt(0).getClientRects()].filter(r=>r.width||r.height); if(!rs.length) return;
+  const top=Math.min(...rs.map(r=>r.top)), first=rs.filter(r=>r.top-top<2), l=Math.min(...first.map(r=>r.left)), rr=Math.max(...first.map(r=>r.right)), bot=Math.max(...rs.map(r=>r.bottom)); hlBar(dBarHtml(),{left:l,width:rr-l,top,bottom:bot,height:bot-top},false,matchMedia("(pointer:coarse)").matches); }
+document.addEventListener("mouseup",e=>{ if(e.button===2||!e.target.closest?.(".dedit")) return; setTimeout(()=>{ const sel=getSelection(); if(sel.isCollapsed) return hlClose(); dBarShow(); },10); });
+document.addEventListener("keyup",e=>{ if(!e.target?.classList?.contains("dedit")||!e.shiftKey||e.isComposing||!/^(Arrow|Home|End|Page)/.test(e.key)) return; dBarShow(); });
+document.addEventListener("selectionchange",()=>{ const ed=dEd(); if(!ed||document.activeElement!==ed||!matchMedia("(pointer:coarse)").matches) return; clearTimeout(window._dsT); window._dsT=setTimeout(()=>{ if(!getSelection().isCollapsed) dBarShow(); },400); });
 function dMark(kind,color){ const ed=dEd(); if(!ed) return; const sel=getSelection(); if(!sel.rangeCount||!ed.contains(sel.anchorNode)||!ed.contains(sel.focusNode)) return toast("꾸밀 글자를 먼저 고르세요");
   const r=sel.getRangeAt(0); if(r.collapsed) return toast("꾸밀 글자를 먼저 고르세요"); dSnap(ed,"mark");
   let s=dOff(ed,r.startContainer,r.startOffset), e=dOff(ed,r.endContainer,r.endOffset); if(s>e) [s,e]=[e,s];
@@ -3915,7 +3934,7 @@ write0(){
   const notes=S.notes.filter(n=>n.track===track).slice(-14).reverse();
   const ink=S.settings.ink, paper=S.settings.paper;
   const books=S.books;
-  const defPassage=w?.passage ?? fw?.passage ?? (fn?.track==="bible"&&fn.source?fn.source:todayPassageHint());
+  const defPassage=w?.passage ?? fw?.passage ?? (fn?.track==="bible"&&fn.source?fn.source:(!dtype||dtype==="묵상")?todayPassageHint():"");
   return `
   ${track==="bible"?`<div class="sucard" id="sucard" data-date="${esc(w?.date||today())}"></div>`:""}
   <div class="toolbar">
@@ -3953,7 +3972,7 @@ write0(){
     ${track!=="bible"||(dtype&&dtype!=="묵상")?`<button class="btn small nofocus" onclick="sendOpen('w')" title="노션·PDF·워드로 보냅니다 (묵상 말고는 구글에만 간직되어 있습니다)">보내기</button>`:""}${serBtns()}
     <button class="btn small aibtn nofocus" id="aitog" onclick="aiToggle()" title="AI 글쓰기 도우미 — 누르면 열고, 다시 누르면 닫습니다 (글은 바꾸지 않고 제안만)">✦ AI</button>
     <button class="btn small ghost nofocus discardbtn" onclick="discardPage()" title="${w?"이 글을 휴지통에 넣습니다 (30일 안에 서랍 → 휴지통에서 되살림)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"휴지통에":"버리기"}</button>
-    <button class="btn small ink" onclick="saveWriting()" title="⌘S">간직하기</button>
+    <button class="btn small ink" onclick="saveWriting()" title="간직 (⌘S) — 쓰는 대로 저절로도 간직됩니다">간직</button>
   </div>
   <div id="draftpick"></div>
   ${srcCard(w,fws)}
@@ -3966,7 +3985,7 @@ write0(){
         ${pieceNav(w)}<input class="title-in" id="wtitle" value="${esc(w?.title)}" placeholder="제목" oninput="draftInput();autoKeepKick()">
         <div class="meta"><span class="pen" style="font-size:20px">${esc(w?.date||today())}</span><span id="wcount"></span><span id="draftstamp" class="draftstamp"></span><span id="refhint" class="refhint" style="display:none"></span></div>
         ${cardHtml(w)}
-        <w-ed class="page ${paper}" id="wbody" contenteditable="true" spellcheck="false" oninput="grow();countW();draftInput();refHint();spellAutoKick();autoKeepKick()" onkeyup="refHint()" onclick="refHint();spellPopClose()" style="--penink:${penInk()}" data-ph="${esc(wGuide(w)||(isTouch()?"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다.":"여기에 천천히 써 내려가세요…  글자를 고르면 형광펜·밑줄·각주 막대가 뜹니다. 한 줄에 「창 1:1-3」만 적고 Shift+Enter 를 누르면 그 구절(개역한글)이 들어옵니다."))}">${esc(w?.body??seed)}</w-ed>
+        <w-ed class="page ${paper}" id="wbody" contenteditable="true" spellcheck="false" oninput="grow();countW();draftInput();refHint();spellAutoKick();autoKeepKick()" onkeyup="refHint()" onclick="refHint();spellPopClose()" style="--penink:${penInk()}" data-ph="${esc(wGuide(w)||"여기에 천천히 써 내려가세요…  (글자를 고르면 꾸밈 막대가 뜹니다)")}" title="한 줄에 「창 1:1-3」만 적고 ⇧엔터를 누르면 그 구절(개역한글)이 들어옵니다">${esc(w?.body??seed)}</w-ed>
       </div>
     </div>
     <aside>
@@ -3993,7 +4012,7 @@ write0(){
         <hr class="dash">
         <p class="step"><span class="num">2</span>간직하기</p>
         <div class="sealrow">
-          <button class="seal" id="sealbtn" onclick="pressSeal()" aria-label="간직하기">${waxSeal()}</button>
+          <button class="seal" id="sealbtn" onclick="pressSeal()" aria-label="간직">${waxSeal()}</button>
           <div class="sealtext"><b class="ttl">${dtype==="설교초안"?"설교초안 봉인":"봉인을 누르면"}</b><span>${PLACE()}에 저장${track==="bible"&&(dtype||"묵상")==="묵상"&&canSync()?"되고, 노션에도 실립니다.":canNotion()?"됩니다. 노션은 「노션에 보내기」로.":"됩니다."}</span><span class="sealkey">⌘S 로도 간직됩니다</span></div>
         </div>
         <div id="syncstamp">${syncStamp(w)}${w?.syncError?`<div class="muted" style="margin-top:8px">${esc(w.syncError)}</div>`:""}</div>
@@ -4195,7 +4214,7 @@ function paintHeads(){
 // 글자 칸(textarea)과 같은 이름으로 value·selectionStart·selectionEnd·setSelectionRange 를 「기호가 든 원문」 자리로 주고받음 → 글 칸에 기대던 코드가 그대로 돎
 // 화면에는 보이는 글자만: 형광펜 <mark class="wk hl-?"> · 밑줄 <u class="wku"> · 굵게 <b class="wb"> · 기울임 <i class="wi"> · 각주 <sup class="wfn" data-raw="[^…]">(한 덩어리)
 // 보이는 글자마다 원문 시작·끝(s·e)을 들고 다님. 고치지 않은 줄은 원래 원문 그대로 돌려줌(_cache) — 열어 보기만 해도 글이 바뀌는 일이 없게
-const ED_ZW=/[\u200b\ufeff]/;
+const ED_ZW=/\u2063/g, ED_Z="\u2063";   // 꾸밈 끝 커서 자리로 앱이 넣는 보이지 않는 칸 (원문 속 영폭 문자 U+200B 등은 글자로 셈)
 function edParseLine(l,base,out){
   const fnp=(t,o,a)=>{ let k=0; for(const m of t.matchAll(FN_RE)){ for(let j=k;j<m.index;j++) out.push({ch:t[j],...a,s:o+j,e:o+j+1}); out.push({ch:"￼",atom:m[0],...a,s:o+m.index,e:o+m.index+m[0].length}); k=m.index+m[0].length; } for(let j=k;j<t.length;j++) out.push({ch:t[j],...a,s:o+j,e:o+j+1}); };
   const bi=(t,o,a)=>{ let k=0; for(const m of t.matchAll(BI_RE)){ fnp(t.slice(k,m.index),o+k,a); const w=m[1]!=null?2:1; fnp(m[1]??m[2],o+m.index+w,{...a,b:m[1]!=null,i:m[1]==null}); k=m.index+m[0].length; } fnp(t.slice(k),o+k,a); };
@@ -4207,7 +4226,7 @@ const edKey=xs=>{ let k=""; for(const x of xs) k+=x.atom?"\u0001"+x.atom+"\u0001
 function edSerLine(xs){ let t=""; const P=new Array(xs.length);
   const emit=k=>{ const c=xs[k].atom||xs[k].ch; P[k]=[t.length,t.length+c.length]; t+=c; }, sp=x=>!x.atom&&/\s/.test(x.ch);
   const wrap=(a,z,open,close,inner)=>{ let p=a,q=z; while(p<q&&sp(xs[p])) p++; while(q>p&&sp(xs[q-1])) q--; for(let k=a;k<p;k++) emit(k); if(p<q){ t+=open; inner(p,q); t+=close; } for(let k=q;k<z;k++) emit(k); };
-  const bm=x=>x.b?"**":x.i?"*":"";
+  const bm=x=>x.atom?"":x.b?"**":x.i?"*":"";   // 각주 덩어리는 굵게·기울임 짝을 끊음 (MK_RE 가 각주를 먼저 자르므로)
   const biRun=(a,z)=>{ let k=a; while(k<z){ const m=bm(xs[k]); let j=k+1; while(j<z&&bm(xs[j])===m) j++; if(!m) for(let q=k;q<j;q++) emit(q); else wrap(k,j,m,m,(p,q)=>{ for(let r=p;r<q;r++) emit(r); }); k=j; } };
   const gk=x=>x.hl?"h"+x.hl:x.ul?"u":"";
   let k=0; while(k<xs.length){ const g=gk(xs[k]); let j=k+1; while(j<xs.length&&gk(xs[j])===g) j++;
@@ -4217,7 +4236,7 @@ function edSerLine(xs){ let t=""; const P=new Array(xs.length);
 function edLineHtml(xs,fc,mir,head){ let h="", k=0;
   const ok=x=>x.hl?"h"+x.hl:x.ul?"u":"", ik=x=>(x.b?1:0)+","+(x.i?1:0);
   const inner=(a,z)=>{ let o="", q=a; while(q<z){ const x=xs[q];
-      if(x.atom){ const raw=x.atom.slice(2,-1), en=isEnd(raw), n=en?++fc.e:++fc.f; let t=`<sup class="wfn${en?" en":""}" contenteditable="false" data-raw="${esc(x.atom)}" title="${esc((en?"미주: ":"각주: ")+fnText(raw))}">${en?romanL(n):n}</sup>`; if(x.b) t=`<b class="wb">${t}</b>`; else if(x.i) t=`<i class="wi">${t}</i>`; o+=t; q++; continue; }
+      if(x.atom){ const raw=x.atom.slice(2,-1), en=isEnd(raw), n=en?++fc.e:++fc.f; let t=`<sup class="wfn${en?" en":""}" contenteditable="false" data-raw="${esc(x.atom)}" aria-label="${en?"미주":"각주"} ${en?romanL(n):n}: ${esc(fnText(raw))}" title="${esc((en?"미주: ":"각주: ")+fnText(raw))}">${en?romanL(n):n}</sup>`; if(x.b) t=`<b class="wb">${t}</b>`; else if(x.i) t=`<i class="wi">${t}</i>`; o+=t; q++; continue; }
       let j=q+1; while(j<z&&!xs[j].atom&&ik(xs[j])===ik(x)&&xs[j].ov===x.ov) j++;
       const t=xs.slice(q,j).map(y=>y.ch).join(""); let r;
       if(!mir) r=esc(t); else if(x.ov) r=`<i class="${x.ov.c}"${x.ov.a||""}>${esc(t)}</i>`;
@@ -4231,7 +4250,7 @@ function edLineHtml(xs,fc,mir,head){ let h="", k=0;
 const edLines=items=>{ const L=[[]]; for(const x of items){ if(x.ch==="\n"&&!x.atom) L.push([]); else L[L.length-1].push(x); } return L; };
 // 화면(DOM) → 글자 목록. <br>은 줄바꿈(맨 끝의 자리 잡기 <br>은 빼고), <div>·<p>는 새 줄, 보이지 않는 칸(\u200b)은 셈하지 않음
 function edWalk(node,a,out,keepBr,host){ for(const n of node.childNodes){
-    if(n.nodeType===3){ const v=n.nodeValue; for(let j=0;j<v.length;j++){ const c=v[j]; if(c==="\u200b"||c==="\ufeff") continue; out.push(c==="\n"?{ch:"\n"}:{ch:c,hl:a.hl,ul:a.ul,b:a.b,i:a.i}); } continue; }
+    if(n.nodeType===3){ const v=n.nodeValue; for(let j=0;j<v.length;j++){ const c=v[j]; if(c===ED_Z) continue; out.push(c==="\n"?{ch:"\n"}:{ch:c,hl:a.hl,ul:a.ul,b:a.b,i:a.i}); } continue; }
     if(n.nodeType!==1) continue; const tg=n.tagName;
     if(tg==="BR"){ if(keepBr||!edTrailing(n,host)) out.push({ch:"\n"}); continue; }
     if(n.dataset?.raw){ out.push({ch:"￼",atom:n.dataset.raw,...a}); continue; }
@@ -4245,7 +4264,7 @@ function edVisAt(ed,node,off){ if(node===ed&&off===0) return 0; const r=document
 // 보이는 글자 p번째 → 화면 자리 (꾸밈 경계에서는 앞 글자 쪽에 붙임)
 function edDomAt(ed,p){ let n=0, res=null;
   const go=node=>{ for(let ci=0; ci<node.childNodes.length&&!res; ci++){ const c=node.childNodes[ci];
-      if(c.nodeType===3){ const v=c.nodeValue; for(let j=0;j<v.length;j++){ if(v[j]==="\u200b"||v[j]==="\ufeff") continue; if(n===p){ res=[c,j]; return; } n++; } if(n===p){ res=[c,v.length]; return; } continue; }
+      if(c.nodeType===3){ const v=c.nodeValue; for(let j=0;j<v.length;j++){ if(v[j]===ED_Z) continue; if(n===p){ res=[c,j]; return; } n++; } if(n===p){ res=[c,v.length]; return; } continue; }
       if(c.nodeType!==1) continue;
       if(c.tagName==="BR"){ if(edTrailing(c,ed)){ res=[node,ci]; return; } if(n===p){ res=[node,ci]; return; } n++; if(n===p){ res=[node,ci+1]; return; } continue; }
       if(c.dataset?.raw){ if(n===p){ res=[node,ci]; return; } n++; if(n===p){ res=[node,ci+1]; return; } continue; }
@@ -4254,15 +4273,16 @@ function edDomAt(ed,p){ let n=0, res=null;
   go(ed); if(res) return res; const L=ed.lastChild; return L&&L.nodeName==="BR"?[ed,ed.childNodes.length-1]:[ed,ed.childNodes.length]; }
 class WEd extends HTMLElement{
   connectedCallback(){ if(this._ok) return; this._ok=1; const v=this.textContent; this._dv=v; this._sel={s:v.length,e:v.length,d:"none"}; this._ver=0;
-    if(!this.hasAttribute("contenteditable")) this.setAttribute("contenteditable","true"); this.setAttribute("role","textbox"); this.setAttribute("aria-multiline","true"); this.setAttribute("translate","no");
+    if(!this.hasAttribute("contenteditable")) this.setAttribute("contenteditable","true"); this.setAttribute("role","textbox"); this.setAttribute("aria-multiline","true"); if(!this.hasAttribute("aria-label")) this.setAttribute("aria-label",this.id==="scta"?"꼭지 본문 고치기":"본문"); if(this.dataset.ph) this.setAttribute("aria-placeholder",this.dataset.ph); this.setAttribute("translate","no");
     this._set(v); edBind(this); }
   // 원문 → 화면
   _set(v){ this._v=v; this._dirty=false; this._ver++; const items=[], L=v.split("\n"), cache=new Map(); let base=0, fc={f:0,e:0}, h=[];
-    L.forEach((l,i)=>{ const xs=edParseLine(l,base,[]); cache.set(edKey(xs),{src:l,P:xs.map(x=>[x.s-base,x.e-base])}); h.push(edLineHtml(xs,fc)); items.push(...xs); if(i<L.length-1) items.push({ch:"\n",s:base+l.length,e:base+l.length+1}); base+=l.length+1; });
+    L.forEach((l,i)=>{ const xs=edParseLine(l,base,[]), ck=edKey(xs); if(!cache.has(ck)) cache.set(ck,[]); cache.get(ck).push({src:l,i,P:xs.map(x=>[x.s-base,x.e-base])}); h.push(edLineHtml(xs,fc)); items.push(...xs); if(i<L.length-1) items.push({ch:"\n",s:base+l.length,e:base+l.length+1}); base+=l.length+1; });
     this._items=items; this._cache=cache; this._fix=false; this.innerHTML=h.join("\n")+(v.endsWith("\n")||!v?"<br>":""); if(!v) this.innerHTML=""; this.classList.toggle("isempty",!v); this._sk=null; }
   // 화면 → 원문 (고치지 않은 줄은 원래 원문)
-  _read(){ const xs=edWalk(this,{},[],false,this), lines=edLines(xs); let src="", fix=false; const items=[];
-    lines.forEach((ln,i)=>{ if(i){ items.push({ch:"\n",s:src.length,e:src.length+1}); src+="\n"; } const base=src.length; let t, P; const hit=this._cache.get(edKey(ln));
+  _read(){ const xs=edWalk(this,{},[],false,this); { let n=this.lastChild; while(n&&((n.nodeType===3&&!n.nodeValue.replace(ED_ZW,"").length)||(n.nodeType===1&&n.tagName!=="BR"&&!n.dataset?.raw&&n.lastChild))){ if(n.nodeType===3){ n=n.previousSibling; continue; } n=n.lastChild; } if(n&&n.nodeType===3&&/\n$/.test(n.nodeValue.replace(ED_ZW,""))&&xs.length&&xs[xs.length-1].ch==="\n") xs.pop(); }   // 글 끝 엔터 때 크롬이 넣는 자리 잡기 줄바꿈(\n\n)은 하나로
+    const lines=edLines(xs), used=new Set(); let src="", fix=false; const items=[];
+    lines.forEach((ln,i)=>{ if(i){ items.push({ch:"\n",s:src.length,e:src.length+1}); src+="\n"; } const base=src.length; let t, P; const C=this._cache.get(edKey(ln)), hit=C&&(C.find(c=>c.i===i)||C.find(c=>!used.has(c))||C[0]); if(hit) used.add(hit);
       if(hit&&hit.P.length===ln.length){ t=hit.src; P=hit.P; } else { const r=edSerLine(ln); t=r.t; P=r.P; if(!fix&&edKey(edParseLine(t,0,[]))!==edKey(ln)) fix=true; }
       for(let k=0;k<ln.length;k++){ const x=ln[k]; x.s=base+P[k][0]; x.e=base+P[k][1]; items.push(x); } src+=t; });
     this._v=src; this._items=items; this._dirty=false; this._fix=fix; this._ver++; this._sk=null; this.classList.toggle("isempty",!src); }
@@ -4271,7 +4291,7 @@ class WEd extends HTMLElement{
   get defaultValue(){ return this._dv??""; } set defaultValue(v){ this._dv=String(v??""); }
   get textLength(){ return this.value.length; }
   get placeholder(){ return this.dataset.ph||""; } set placeholder(v){ this.dataset.ph=v; }
-  get readOnly(){ return this.getAttribute("contenteditable")==="false"; } set readOnly(f){ this.setAttribute("contenteditable",f?"false":"true"); }
+  get readOnly(){ return this.getAttribute("contenteditable")==="false"; } set readOnly(f){ this.setAttribute("contenteditable",f?"false":"true"); this.setAttribute("aria-readonly",f?"true":"false"); }
   // 보이는 자리 → 원문 자리. 커서만 있을 때는 꾸밈 기호 바깥(앞 글자의 닫는 기호 뒤, 다음 글자의 여는 기호 앞)
   _s0(p){ const I=this._items; return p<I.length?I[p].s:this._v.length; }
   _s1(p){ return p>0?this._items[p-1].e:0; }
@@ -4298,28 +4318,44 @@ class WEd extends HTMLElement{
     return L; }
 }
 // 원문을 고칠 때(붙여넣기·잘라내기 등): 되돌리기 한 걸음 + 원문에서 바꾸고 + 「입력」 알림(글 칸 oninput·자동 간직이 그대로 돌게)
+// 꾸밈 넣기·풀기 (형광펜·밑줄·굵게·기울임·지우개): 원문을 잘라 감싸지 않고 보이는 글자마다 꾸밈 값을 바꾼 뒤 걸친 줄만 다시 만듦 — 꾸밈이 서로 걸쳐도 기호가 깨지지 않음
+function edFormat(b,s,e,kind,color){ const v=b.value, I=b._items, inR=x=>x.ch!=="\n"&&x.s>=s&&x.s<e, core=I.filter(x=>inR(x)&&(x.atom||x.ch.trim()));
+  if(!core.length){ toast("꾸밀 글자를 먼저 고르세요"); return false; }
+  const every=f=>core.every(f); let set, off=false;
+  if(kind==="hl"){ off=every(x=>x.hl===color); set=x=>{ if(off) x.hl=null; else { x.hl=color; x.ul=false; } }; }
+  else if(kind==="ul"){ off=every(x=>x.ul); set=x=>{ if(off) x.ul=false; else { x.ul=true; x.hl=null; } }; }
+  else if(kind==="b"){ off=every(x=>x.b); set=x=>{ x.b=!off; if(!off) x.i=false; }; }
+  else if(kind==="i"){ off=every(x=>x.i); set=x=>{ x.i=!off; if(!off) x.b=false; }; }
+  else set=x=>{ x.hl=null; x.ul=false; x.b=false; x.i=false; };
+  const ls=v.lastIndexOf("\n",Math.max(0,s-1)+(s?0:-1))+1, le0=v.indexOf("\n",Math.max(s,e-1)), le=le0<0?v.length:le0;
+  let at=ls; const out=v.slice(ls,le).split("\n").map(l=>{ const a=at; at+=l.length+1; const xs=I.filter(x=>x.ch!=="\n"&&x.s>=a&&x.s<a+l.length); if(!xs.some(inR)) return l; return edSerLine(xs.map(x=>{ const y={...x}; if(inR(x)) set(y); return y; })).t; }).join("\n");
+  const vs=b._vis(s), ve=b._vis(e); hlClose(); if(out===v.slice(ls,le)) return true;
+  tInsert(b,out,ls,le,{hl:"형광펜",ul:"밑줄",b:"굵게",i:"기울임",clear:"꾸밈 지우기"}[kind]||"꾸밈"); b.setSelectionRange(b._s0(vs),Math.max(b._s0(vs),b._s1(ve)));
+  if(off&&(kind==="hl"||kind==="ul")) toast(kind==="hl"?"형광펜을 지웠습니다 — 같은 색을 한 번 더 누르면 지워집니다":"밑줄을 지웠습니다");
+  return true; }
 function edEdit(ed,txt,s,e,label,type){ histMark(ed,label); const v=ed.value; ed.value=v.slice(0,s)+txt+v.slice(e); ed.setSelectionRange(s+txt.length,s+txt.length); ed.dispatchEvent(new InputEvent("input",{bubbles:true,inputType:type||"insertReplacementText",data:txt})); }
 function edBind(ed){
-  ed.addEventListener("input",e=>{ if(e.isComposing||!ed._fix) return; ed._fix=false; const {s,e:z,d}=ed._getSel(); ed._set(ed.value); ed._sel={s,e:z,d}; if(document.activeElement===ed) ed._apply(); });   // 기호를 직접 쳐서 꾸밈이 생기면 화면을 다시 그림
-  ed.addEventListener("compositionend",()=>setTimeout(()=>{ if(ed._dirty) ed.value; if(ed._fix){ ed._fix=false; const {s,e,d}=ed._getSel(); ed._set(ed.value); ed._sel={s,e,d}; if(document.activeElement===ed) ed._apply(); } },0));
+  ed.addEventListener("input",e=>{ if(e.isComposing||ed._comp||!ed._fix) return; ed._fix=false; const {s,e:z,d}=ed._getSel(); ed._set(ed.value); ed._sel={s,e:z,d}; if(document.activeElement===ed) ed._apply(); });   // 기호를 직접 쳐서 꾸밈이 생기면 화면을 다시 그림
+  ed.addEventListener("compositionstart",()=>{ ed._comp=true; });
+  ed.addEventListener("compositionend",()=>setTimeout(()=>{ ed._comp=false; if(ed._dirty) ed.value; if(ed._fix){ ed._fix=false; const {s,e,d}=ed._getSel(); ed._set(ed.value); ed._sel={s,e,d}; if(document.activeElement===ed) ed._apply(); } },0));
   ed.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.isComposing&&e.keyCode!==229&&!e.shiftKey&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!e.defaultPrevented){ e.preventDefault(); histMark(ed,"줄 바꿈"); document.execCommand("insertLineBreak"); } });   // 엔터 = 줄 바꿈 (프로그램 입력 명령은 beforeinput 이 없어 되돌리기 한 걸음을 직접 남김) (문단 상자를 만들지 않게)
   ed.addEventListener("beforeinput",e=>{ if(/^format/.test(e.inputType)){ e.preventDefault(); return; } if(e.inputType==="insertParagraph"){ e.preventDefault(); histMark(ed,"줄 바꿈"); document.execCommand("insertLineBreak"); } });   // 브라우저 기본 굵게·밑줄(⌘B·⌘U 등)은 쓰지 않음 — 앱의 꾸밈으로
   ed.addEventListener("pointerdown",()=>{ ed._ptr=1; setTimeout(()=>ed._ptr=0,400); },true);
   ed.addEventListener("focus",()=>{ if(!ed._ptr) ed._apply(); });   // 프로그램이 focus() 하면 전에 고른 자리로 (글자 칸처럼)
-  ed.addEventListener("paste",e=>{ e.preventDefault(); const cd=e.clipboardData||window.clipboardData; let t=cd?.getData("application/x-seojae")||cd?.getData("text/plain")||""; t=t.replace(/\r\n?/g,"\n"); const {s,e:z}=ed._getSel(); edEdit(ed,t,s,z,"붙여넣기","insertFromPaste"); });
+  ed.addEventListener("paste",e=>{ e.preventDefault(); const cd=e.clipboardData||window.clipboardData; const pl=cd?.getData("text/plain")||"", xs=cd?.getData("application/x-seojae")||"", sq=x=>String(x).replace(/\s+/g,""); let t=xs&&sq(stripMk(xs))===sq(pl)?xs:pl; /* 앱 안 꾸밈째 형식은 눈에 보인 글과 같을 때만 */ t=t.replace(/\r\n?/g,"\n"); const {s,e:z}=ed._getSel(); edEdit(ed,t,s,z,"붙여넣기","insertFromPaste"); });
   const cp=(e,cut)=>{ const {s,e:z}=ed._getSel(); if(z<=s) return; e.preventDefault(); const src=ed.value.slice(s,z); try{ e.clipboardData.setData("text/plain",stripMk(src)); e.clipboardData.setData("text/html",richHtml(src).replace(/\n/g,"<br>")); e.clipboardData.setData("application/x-seojae",src); }catch(_){} if(cut) edEdit(ed,"",s,z,"잘라내기","deleteByCut"); };   // 밖으로는 기호 없는 글자·서식, 앱 안에서는 꾸밈째
   ed.addEventListener("copy",e=>cp(e,false)); ed.addEventListener("cut",e=>cp(e,true));
   ed.addEventListener("dragstart",e=>e.preventDefault()); ed.addEventListener("drop",e=>e.preventDefault());
   ed.addEventListener("click",e=>{ const f=e.target.closest?.("sup.wfn"); if(!f||ed.id!=="wbody") return; const n=[...ed.querySelectorAll("sup.wfn")].indexOf(f); if(n>=0) setTimeout(()=>fnBox(0,n,""),0); });   // 각주 번호를 누르면 고치기 (이 클릭이 끝난 뒤에 열어야 「바깥 클릭」으로 닫히지 않음)
 }
-document.addEventListener("input",e=>{ if(e.target?.tagName==="W-ED") e.target._dirty=true; },true);   // 화면이 바뀜 → 원문을 다시 읽어야 함 (글 칸 oninput 보다 먼저)
+document.addEventListener("input",e=>{ const t=e.target; if(t?.tagName!=="W-ED"&&!t?.classList?.contains("dedit")) return; if(t.tagName==="W-ED") t._dirty=true; if(e.isTrusted&&$("#hlbar")&&!$("#hlbar").classList.contains("memo")){ hlClose(); WSEL=null; } },true);   // 화면이 바뀜 → 원문을 다시 읽어야 함 (글 칸 oninput 보다 먼저) · 치기 시작하면 꾸밈 막대는 닫음   // 화면이 바뀜 → 원문을 다시 읽어야 함 (글 칸 oninput 보다 먼저)
 document.addEventListener("compositionupdate",e=>{ if(e.target?.tagName==="W-ED") e.target._dirty=true; },true);
 // 꾸밈(형광펜·밑줄) 끝에 커서가 오면 바깥으로: 새로 치는 글자는 칠해지지 않게 (일기 칸과 같은 원칙). 고른 자리도 기억(칸을 떠나도 selectionStart 가 남게)
 document.addEventListener("selectionchange",()=>{ const ed=document.activeElement; if(ed?.tagName!=="W-ED") return; const sel=getSelection(); if(!sel.rangeCount||!ed.contains(sel.anchorNode)) return; ed._getSel();
-  if(!sel.isCollapsed) return; const n=sel.anchorNode, o=sel.anchorOffset, el=(n.nodeType===1?n:n.parentElement)?.closest?.("mark,u"); if(!el||!ed.contains(el)) return;
+  if(!sel.isCollapsed||ed._comp) return; const n=sel.anchorNode, o=sel.anchorOffset, el=(n.nodeType===1?n:n.parentElement)?.closest?.("mark,u"); if(!el||!ed.contains(el)) return;
   const pre=document.createRange(); pre.setStart(el,0); pre.setEnd(n,o); const post=document.createRange(); post.setStart(n,o); post.setEnd(el,el.childNodes.length);
   const atS=!pre.toString().replace(ED_ZW,"").length, atE=!post.toString().replace(ED_ZW,"").length; if(!atS&&!atE) return;
-  const z=document.createTextNode("\u200b"); if(atE) el.after(z); else el.before(z); const c=document.createRange(); c.setStart(z,atE?1:0); c.collapse(true); sel.removeAllRanges(); sel.addRange(c); ed._sk=null; });
+  const z=document.createTextNode(ED_Z); if(atE) el.after(z); else el.before(z); const c=document.createRange(); c.setStart(z,atE?1:0); c.collapse(true); sel.removeAllRanges(); sel.addRange(c); ed._sk=null; });
 customElements.define("w-ed",WEd);
 // 거울 층(맞춤법·AI 표시·소제목 굵게·네 자리)을 글 칸과 같은 모양으로: 글 칸의 글자 목록에 표시를 얹어 같은 HTML 로 그림
 function edMirrorHtml(t,errs,RG,OZ){ const v=t.value, L=v.split("\n"), lines=edLines(t._items), fc={f:0,e:0}, O=new Map(); let off=0;
@@ -4344,7 +4380,7 @@ function tInsert(b,txt,s,e,label){
 // 브라우저 기본 되돌리기는 프로그램이 글을 바꾸거나 화면을 다시 그리면 끊겨서, 본문(#wbody)의 바뀜을 글마다 따로 쌓아 둠 (이 기기 메모리만 — 기록 파일에 안 넣음)
 // 묶음: 이어서 치는 글자는 한 덩어리(1.2초 쉬거나·커서를 옮기거나·문장이 끝나면 끊음), 엔터·지우기·붙여넣기·잘라내기·프로그램이 넣은 것(AI 적용·틀·서식…)은 따로
 const HIST=new Map(), HIST_MAX=200;
-const histKey=b=>b?.id==="wbody"?(editId||"new"):(b?.id||"")+":"+(SCRIV_EDIT||"");   // 글마다 (이어 읽기 고치기 칸도 따로)
+const histKey=b=>b?.id==="wbody"?draftKey():(b?.id||"")+":"+(SCRIV_EDIT||"");   // 글마다 (이어 읽기 고치기 칸도 따로)
 function histOf(b){ const id=histKey(b); let H=HIST.get(id); if(!H){ H={past:[],future:[],last:{v:b.value,s:b.selectionStart,e:b.selectionEnd},g:null}; HIST.set(id,H); } return H; }
 // 프로그램이 기록 없이 글을 바꿨으면(다시 그리기·임시본 되살리기 등) 그 앞 상태를 한 걸음으로 남김
 function histSync(b,H){ if(H.last.v!==b.value){ H.past.push({...H.last,label:"고침"}); H.future=[]; H.g=null; histTrim(H); } H.last={v:b.value,s:b.selectionStart,e:b.selectionEnd}; }
@@ -4371,7 +4407,7 @@ function histGo(n,redo){ const b=histEd(); if(!b) return; if(READVIEW) return to
   grow(); countW(); draftInput(); paintHeads(); histPaint(); histShowCaret(b);
   toast(`${redo?"다시 실행":"되돌림"}: ${n>1?`${n}걸음`:names[0]}`); }
 const histUndo=n=>histGo(n,false), histRedo=n=>histGo(n,true);
-function histShowCaret(b){ if(!b.isConnected) return; const y=b.getBoundingClientRect().top+scrollY+caretY(b); if(y<scrollY+80||y>scrollY+innerHeight-80) scrollTo({top:Math.max(0,y-innerHeight*.35),behavior:"smooth"}); }
+function histShowCaret(b){ if(!b.isConnected) return; const vh=window.visualViewport?.height||innerHeight, y=b.getBoundingClientRect().top+scrollY+caretY(b); if(y<scrollY+80||y>scrollY+vh-80) scrollTo({top:Math.max(0,y-vh*.35),behavior:"smooth"}); }
 // 메뉴의 한 걸음 이름: 바뀐 글자 미리보기 (앞뒤 같은 부분을 빼고 남은 곳)
 function histPeek(a,b){ let i=0; while(i<a.length&&i<b.length&&a[i]===b[i]) i++; let j=0; while(j<a.length-i&&j<b.length-i&&a[a.length-1-j]===b[b.length-1-j]) j++;
   const del=a.slice(i,a.length-j), ins=b.slice(i,b.length-j), cut=t=>{ t=t.replace(/\s+/g," ").trim(); return t.length>18?t.slice(0,18)+"…":t; };
@@ -4474,10 +4510,10 @@ function pomoSettingsHtml(){ const c=pomoSet(), num=(k,v,min,max)=>`<input type=
       <p class="hint">아이폰도 같은 이름으로 단축어를 만들면 홈 화면 아침 서재에서 똑같이 켜집니다. 앱이 뒤로 가 있을 때 집중이 끝나면, 시간으로 만든 단축어는 저절로 꺼지고 「끄기 전까지」로 만든 단축어는 아침 서재로 돌아올 때 꺼집니다.</p>
     </details></div>`; }
 function callNameSection(){ return `<section class="sheet tape c compact"><p class="label">나를 부르는 호칭</p>
-    <label class="field"><span>앱과 AI가 나를 부를 때</span><input id="callname" value="${esc(S.settings.callName||"")}" maxlength="20" placeholder="예: 요한님 · 목사님 · 팀장님" onchange="callNameSet(this.value)"></label>
-    <div class="row" style="gap:6px;flex-wrap:wrap">${["요한님","목사님","팀장님"].map(x=>`<button type="button" class="pill" onclick="callNameSet('${x}')">${x}</button>`).join("")}</div>
+    <label class="field"><span>앱과 AI가 나를 부를 때</span><input id="callname" value="${esc(S.settings.callName||"")}" maxlength="20" placeholder="예: 요한님 · 목사님 · 팀장님" onchange="callNameSet(this.value)" onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();callNameSet(this.value)}"></label>
+    <div class="row" style="gap:6px;flex-wrap:wrap">${["요한님","목사님","팀장님"].map(x=>`<button type="button" class="pill ${callName()===x?"on":""}" aria-pressed="${callName()===x}" onclick="callNameSet('${x}')">${x}</button>`).join("")}</div>
     <p class="hint">비워 두면 「팀장님」으로 부릅니다. 안내 문구와 AI 도우미가 이 호칭을 씁니다. 기기 사이에 함께 따라갑니다.</p></section>`; }
-function callNameSet(v){ v=String(v||"").trim().slice(0,20); if(v===(S.settings.callName||"")) return; S.settings.callName=v; save(); toast(`이제 「${callName()}」${jp(callName(),"으로","로")} 부릅니다`); if(tab==="settings") render(); }
+function callNameSet(v){ v=cnClean(v); if(v===(S.settings.callName||"")) return; S.settings.callName=v; save(); toast(`이제 「${callName()}」${jp(callName(),"으로","로")} 부릅니다`); if(tab==="settings") render(); }
 function quietSection(){
   const ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua), and=/Android/.test(ua);
   return `<section class="sheet tape c compact">
@@ -4616,7 +4652,7 @@ let EDIT_BASE=null, EDIT_WARNED=false;
 // 다른 기기에서 받은 뒤: 지금 연 글이 바뀌었고 이 화면에서 아직 손대지 않았으면 새 판으로 바꿔 보여 줌
 function afterRemote(){ if(tab!=="write"||!editId) return; const w=S.writings.find(x=>x.id===editId), b=$("#wbody"), t=$("#wtitle"); if(!w||!b||(w.updated||null)===EDIT_BASE) return;
   if(b.value===b.defaultValue&&t.value===t.defaultValue){ NAV=true; try{ render(); }finally{ NAV=false; } toast("다른 기기에서 고친 판으로 바꿨습니다"); }
-  else if(!EDIT_WARNED){ EDIT_WARNED=true; toast("다른 기기에서 이 글이 바뀌었습니다. 「간직하기」를 누르면 지금 화면 글로 바뀌고, 다른 기기 판은 이전 판으로 남습니다"); } }
+  else if(!EDIT_WARNED){ EDIT_WARNED=true; toast("다른 기기에서 이 글이 바뀌었습니다. 「간직」을 누르면 지금 화면 글로 바뀌고, 다른 기기 판은 이전 판으로 남습니다"); } }
 function keepWriting(auto){
   const b=$("#wbody"); if(!b) return null; const body=b.value;
   if(!body.trim()){ const ew=editId&&!(S.deleted||{})[editId]&&S.writings.find(x=>x.id===editId), tt=($("#wtitle")?.value||"").trim();   // 본문은 아직 비었어도 이미 있는 글(새 꼭지·장면)의 제목은 간직 — 안 그러면 떠날 때 「(제목 없음)」이 됨
@@ -4633,7 +4669,7 @@ function keepWriting(auto){
   if(!w){ const norm=t=>String(t||"").replace(/\s+/g," ").trim(), nb=norm(body); const dup=live().find(x=>x.track===track&&x.type===data.type&&(x.type!=="설교초안"||(x.place||"")===(data.place||""))&&(nb===norm(x.body)||(data.title&&x.date===today()&&x.title===data.title&&(x.passage||"")===(data.passage||"")&&norm(x.body).slice(0,100)===nb.slice(0,100))));
     if(dup){ w=dup; editId=dup.id; if(auto&&dup.body!==body) dup.prev=[{at:dup.updated||dup.date,body:dup.body},...(dup.prev||[])].slice(0,3); } }   // 같은 글(종류·본문 앞부분까지 같은)이 이미 있으면 새로 만들지 않고 그 글에 이어 씁니다
   const otherEdit=!!(w&&openedId===w.id&&(w.updated||null)!==EDIT_BASE&&w.body!==body);   // 연 뒤에 다른 기기가 고친 판
-  if(otherEdit&&auto) return null;   // 자동 간직은 남의 새 판을 덮지 않음 (직접 「간직하기」를 눌러야)
+  if(otherEdit&&auto) return null;   // 자동 간직은 남의 새 판을 덮지 않음 (직접 「간직」을 눌러야)
   if(w&&w.body!==body&&(!auto||otherEdit)) w.prev=[{at:w.updated||w.date,body:w.body,...(otherEdit?{from:"다른 기기"}:{})},...(w.prev||[])].slice(0,3);   // 이전 판 3개 (봉인 때만 — 자동 간직은 같은 판을 이어 씀)
   if(w) Object.assign(w,data);
   else {   // 새 글 (또는 다른 기기에서 지워진 글을 다시 간직하는 경우)
@@ -4650,7 +4686,7 @@ function keepWriting(auto){
 }
 function saveWriting(){ keepWriting(false); }
 let AUTOKEEP_T;
-// 자동 간직: 손을 3초 쉬면 저절로 간직하고 「✓ 간직됨 시각」을 작게 보임 (쓰는 동안은 「✎ 쓰는 중…」). 「간직하기」는 누르지 않아도 됨
+// 자동 간직: 손을 3초 쉬면 저절로 간직하고 「✓ 간직됨 시각」을 작게 보임 (쓰는 동안은 「✎ 쓰는 중…」). 「간직」은 누르지 않아도 됨
 function autoKeepKick(){ clearTimeout(AUTOKEEP_T); AUTOKEEP_ON=true; const el=$("#draftstamp"); if(el&&el.dataset.st!=="w"){ el.dataset.st="w"; el.textContent="✎ 쓰는 중…"; el.classList.add("busy"); }
   AUTOKEEP_T=setTimeout(()=>{ AUTOKEEP_ON=false; if(tab!=="write") return; const w=keepWriting(true); if(!w&&el?.dataset.st==="w") paintDraftStamp("이 기기에 임시 보관"); },3000); }
 // 쓰기 화면을 떠나거나 앱을 내릴 때: 쓰던 글을 간직하고, 봉인한 뒤 고친 것이 있으면 노션에도
@@ -4941,7 +4977,7 @@ function reviewBox(b){
   return `${bookNotesHtml(b.id,true)}<div class="reviewbox" style="margin-top:12px"><p class="label book" style="font-size:19px">독후감 ${b.reviewNotion?.page?`<a class="nstate ok" href="${esc(safeUrl(b.reviewNotion.url)||"#")}" target="_blank" style="text-decoration:none;margin-left:8px"><i></i>노션 독서 노트에 보관됨</a>`:""}</p>
     <input id="rv-one" class="pen" style="font-size:20px" placeholder="이 책을 한 줄로" value="${esc(b.oneLine||"")}" oninput="reviewKick('${b.id}')">
     <textarea id="rv-text" oninput="reviewKick('${b.id}')" placeholder="읽고 난 뒤 남는 것 — 기억하고 싶은 문장, 내 삶과 설교에 가져올 것, 아쉬운 점…" style="margin-top:8px">${esc(b.review||"")}</textarea>
-    <div class="row" style="margin-top:8px"><button class="btn small ink" onclick="saveReview('${b.id}')">독후감 간직 → 노션 독서 노트</button><button class="btn small ghost" onclick="reviewKick('${b.id}',true);REVIEW_OPEN=null;openBook('${b.id}')">접기</button><small class="muted" id="rvstate"></small></div></div>`;
+    <div class="row" style="margin-top:8px"><button class="btn small ink" onclick="saveReview('${b.id}')" title="독후감은 치는 대로 저절로 간직됩니다 — 이 단추는 노션 독서 노트로 보냅니다">노션 독서 노트로 보내기</button><button class="btn small ghost" onclick="reviewKick('${b.id}',true);REVIEW_OPEN=null;openBook('${b.id}')">접기</button><small class="muted" id="rvstate"></small></div></div>`;
 }
 // 독후감은 치는 대로 이 기기·구글에 저절로 간직 (노션 독서 노트에는 단추를 눌렀을 때만)
 let RV_T=0; function reviewKick(id,now){ clearTimeout(RV_T); const run=()=>{ const b=S.books.find(x=>x.id===id), o=$("#rv-one"), t=$("#rv-text"); if(!b||!o||!t) return; const one=o.value.trim(), rv=t.value.trim(); if(one===(b.oneLine||"")&&rv===(b.review||"")) return; b.oneLine=one; b.review=rv; b.reviewAt=new Date().toISOString(); save(); const st=$("#rvstate"); if(st) st.textContent="✓ 간직됨 "+new Date().toTimeString().slice(0,5); }; if(now) run(); else RV_T=setTimeout(run,1200); }
@@ -4997,7 +5033,7 @@ function openBook(id){
     ${b.oneLine&&REVIEW_OPEN!==b.id?`<p class="pen" style="font-size:21px;margin:8px 0 0">“${esc(b.oneLine)}”</p>`:""}
     ${b.review&&REVIEW_OPEN!==b.id?`<details class="more"><summary>독후감 ${b.reviewNotion?.page?`<a class="nstate ok" href="${esc(safeUrl(b.reviewNotion.url)||"#")}" target="_blank" style="text-decoration:none;margin-left:6px"><i></i>노션 독서 노트</a>`:""}</summary><p class="sub pre" style="margin:6px 0">${esc(b.review)}</p><button class="btn small" onclick="REVIEW_OPEN='${b.id}';openBook('${b.id}')">고치기</button></details>`:""}
     ${REVIEW_OPEN===b.id?reviewBox(b):""}
-    <div class="row" style="margin-top:12px"><button class="btn ink small" onclick="saveBook('${b.id}')">저장</button>${b.status==="완료"&&REVIEW_OPEN!==b.id&&!b.review?`<button class="btn small" onclick="REVIEW_OPEN='${b.id}';openBook('${b.id}')">${ICO.pen}독후감 쓰기</button>`:""}
+    <div class="row" style="margin-top:12px"><button class="btn ink small" onclick="saveBook('${b.id}')">간직</button>${b.status==="완료"&&REVIEW_OPEN!==b.id&&!b.review?`<button class="btn small" onclick="REVIEW_OPEN='${b.id}';openBook('${b.id}')">${ICO.pen}독후감 쓰기</button>`:""}
       ${b.id!==S.settings.currentBook&&b.status!=="완료"?`<button class="btn small" onclick="pickBook('${b.id}')">지금 읽는 책으로</button>`:""}
       ${b.status!=="완료"?`<button class="btn small" onclick="finishBook('${b.id}')">다 읽었습니다</button>`:`<button class="btn small" onclick="reopenBook('${b.id}')">다시 읽기</button>`}
       ${storeLinks(b.title)}
@@ -5187,7 +5223,7 @@ h4{font-family:"Nanum Myeongjo";font-weight:700;font-size:10.5pt;margin:6mm 0 2m
 blockquote{margin:3mm 0 3mm 4mm;padding-left:4mm;border-left:1pt solid #8a2a1f;font-family:"Nanum Myeongjo";line-height:1.8;color:#3d3128}
 blockquote cite{display:block;text-align:right;font-style:normal;font-size:8pt;color:#8a7a68;margin-top:1mm}
 mark.mk{color:inherit;padding:0 .5pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-mark.hl-y{background:#f6e3a1}mark.hl-g{background:#cfe3c4}mark.hl-p{background:#f3cfd4}mark.hl-b{background:#cadcec}
+mark.hl-y,mark.hl-g,mark.hl-p,mark.hl-b{--hc:247,214,92;background:linear-gradient(104deg,rgba(var(--hc),0) .9%,rgba(var(--hc),.78) 2.6%,rgba(var(--hc),.55) 6%,rgba(var(--hc),.34) 93%,rgba(var(--hc),.72) 96%,rgba(var(--hc),0) 98.5%),linear-gradient(183deg,rgba(var(--hc),0) 0%,rgba(var(--hc),.32) 8%,rgba(var(--hc),0) 16%);background-size:100% 78%,100% 100%;background-position:0 70%,0 0;background-repeat:no-repeat;border-radius:.9em .35em .8em .3em;-webkit-box-decoration-break:clone;box-decoration-break:clone;-webkit-print-color-adjust:exact;print-color-adjust:exact}mark.hl-g{--hc:150,205,120}mark.hl-p{--hc:240,150,175}mark.hl-b{--hc:130,185,240}
 u.mku{text-decoration:underline;text-decoration-color:#8a2a1f;text-decoration-thickness:.7pt;text-underline-offset:2.5pt}
 sup.fnref{font-size:7pt;color:#8a2a1f;line-height:0}
 ol.fn{margin:7mm 0 0;padding:3mm 0 0 5mm;border-top:.5pt solid #c9b9a3;font-size:8.5pt;color:#555;line-height:1.6}
@@ -5246,7 +5282,7 @@ blockquote{font-family:inherit;font-weight:700;color:#1d4c94;border-left:2.5pt s
 blockquote cite{font-size:.75em;color:#6d6d6d}
 .spot{color:#c2410c;font-weight:800}
 hr.pr{border:0;border-top:.7pt solid #cfc4b4;margin:5mm 0;clear:both}
-mark.hl-y{background:#f6e3a1}mark.hl-g{background:#cfe3c4}mark.hl-p{background:#f3cfd4}mark.hl-b{background:#cadcec}
+mark.hl-y,mark.hl-g,mark.hl-p,mark.hl-b{--hc:247,214,92;background:linear-gradient(104deg,rgba(var(--hc),0) .9%,rgba(var(--hc),.78) 2.6%,rgba(var(--hc),.55) 6%,rgba(var(--hc),.34) 93%,rgba(var(--hc),.72) 96%,rgba(var(--hc),0) 98.5%),linear-gradient(183deg,rgba(var(--hc),0) 0%,rgba(var(--hc),.32) 8%,rgba(var(--hc),0) 16%);background-size:100% 78%,100% 100%;background-position:0 70%,0 0;background-repeat:no-repeat;border-radius:.9em .35em .8em .3em;-webkit-box-decoration-break:clone;box-decoration-break:clone;-webkit-print-color-adjust:exact;print-color-adjust:exact}mark.hl-g{--hc:150,205,120}mark.hl-p{--hc:240,150,175}mark.hl-b{--hc:130,185,240}
 u.mku{text-decoration-thickness:1pt;text-underline-offset:2.5pt}
 sup.fnref{font-size:.6em} ol.fn{font-size:.7em;line-height:1.5;clear:both}
 .part{height:auto;padding-top:40mm} .partname{font-family:"Nanum Gothic",sans-serif}
@@ -5290,7 +5326,7 @@ const SEND_IC={notion:["N","노션 페이지로"],pdf:["▤","책·원고지·�
 function sendList(kind,mid,o){ if(kind==="w"){ const w=S.writings.find(x=>x.id===editId); return w?[w]:[]; }
   const m=S.manuscripts.find(x=>x.id===mid); let ws=m?msList(m):[]; if(o?.done) ws=ws.filter(w=>w.status==="완성"); if(o?.ids) ws=ws.filter(w=>o.ids.includes(w.id)); return ws; }
 function sendOpen(kind,mid){
-  if(kind==="w"){ const w=editId&&S.writings.find(x=>x.id===editId); if(!w) return toast("먼저 「간직하기」로 글을 간직해 주세요"); if($("#wbody")&&writingUnsaved()) keepWriting(true); mid=wMs(w)?.id||null; }
+  if(kind==="w"){ const w=editId&&S.writings.find(x=>x.id===editId); if(!w) return toast("먼저 「간직」으로 글을 간직해 주세요"); if($("#wbody")&&writingUnsaved()) keepWriting(true); mid=wMs(w)?.id||null; }
   let to="pdf"; try{ to=localStorage.getItem("seojae.sendTo")||"pdf"; }catch(_){}
   const m=mid&&S.manuscripts.find(x=>x.id===mid), w=kind==="w"?S.writings.find(x=>x.id===editId):null;
   const ov=document.createElement("div"); ov.className="bookview sendview"; const P=expPrefs(m);
@@ -5587,9 +5623,9 @@ function serHead(m){ const sr=SERIAL(m); if(!sr) return ""; const L=msList(m).fi
 function serPub(wid){ const w=S.writings.find(x=>x.id===wid); if(!w) return; metaSet(w.id,"pub",wMeta(w,"pub")?"":today()); save(); render(); toast(wMeta(w,"pub")?"올림으로 표시했습니다":"올림 표시를 풀었습니다"); }
 // 이 화 복사: 「N화 제목」 + 본문(틀 줄·메모·각주 표시 빼고), 문단 사이 빈 줄은 설정대로 — 플랫폼 글쓰기 칸에 바로 붙여 넣게
 function serCopy(wid){ const w=S.writings.find(x=>x.id===wid), m=w&&wMs(w); if(!w||!m) return; const sr=SERIAL(m)||{}, b=$("#wbody")&&editId===wid?$("#wbody").value:w.body;
-  let body=expBody(b,expPrefs(m)).replace(/\[\^+[^\]]*\]/g,"").replace(/\*\*([^*\n]+)\*\*/g,"$1").replace(/\*([^*\n]+)\*/g,"$1").split("\n").map(l=>l.trim()).filter((l,i,A)=>l||(A[i-1]||"").trim()).join("\n").trim();
-  if(sr.gap!==false) body=body.split(/\n+/).filter(Boolean).join("\n\n");
-  clip(`${epNo(m,wid)}화 ${($("#wtitle")&&editId===wid?$("#wtitle").value:w.title)||""}`.trim()+"\n\n"+body); toast(`${epNo(m,wid)}화를 복사했습니다 (${charsAll(body).toLocaleString()}자) — 플랫폼 글쓰기 칸에 붙여 넣으세요`); }
+  let body=stripMk(expBody(b,expPrefs(m))).split("\n").map(l=>l.replace(/\s+$/,"")).join("\n").replace(/^\n+|\n+$/g,"");
+  if(sr.gap!==false){ const blk=l=>/^\s*[\[【<〈《┃│|]/.test(l); const L=body.split("\n"), o=[]; L.forEach((l,i)=>{ o.push(l); const n=L[i+1]; if(n!=null&&l.trim()&&n.trim()&&!(blk(l)&&blk(n))) o.push(""); }); body=o.join("\n"); }   // 문단 사이 빈 줄 (일부러 띄운 빈 줄·장면 구분·[상태창] 덩어리는 그대로)
+  clip(`${epNo(m,wid)}화 ${($("#wtitle")&&editId===wid?$("#wtitle").value:w.title)||""}`.trim()+"\n\n"+body,`${epNo(m,wid)}화를 복사했습니다 (${charsAll(body).toLocaleString()}자) — 플랫폼 글쓰기 칸에 붙여 넣으세요`); }
 function serBtns(){ const w=editId&&S.writings.find(x=>x.id===editId), m=w&&wMs(w); if(!SERIAL(m)) return ""; const pub=wMeta(w,"pub");
   return `<button class="btn small nofocus" onclick="serCopy('${w.id}')" title="「N화 제목」과 본문을 플랫폼에 붙여 넣기 좋게 복사">⧉ ${epNo(m,w.id)}화 복사</button><button class="btn small nofocus ${pub?"ink":""}" onclick="serPub('${w.id}')" title="플랫폼에 올렸으면 표시 — 비축분 셈에서 빠집니다">${pub?"✓ 올림 "+esc(pub.slice(5)):"올림 표시"}</button>`; }
 const gTpl=g=>g.tplFrom?(TYPES.bible[g.tplFrom]??TYPES.book[g.tplFrom]??""):(g.tpl||"");
@@ -5877,7 +5913,7 @@ function roomNewPiece(mid,pid,first){ const m=S.manuscripts.find(x=>x.id===mid);
   if(m.rule) return go('write',{track:g.track||"book",new:true,ms:mid,tpl:gTpl(g),type:g.type});
   const id=uid(), now=new Date().toISOString(), body=first!=null?first:g.auto?gTpl(g):"", it=m.items=m.items||[]; let at=it.length;
   if(pid){ const k=it.indexOf("part:"+pid), lv=m.parts?.[pid]?.lv||1; if(k>=0){ at=k+1; while(at<it.length){ const x=it[at]; if(isPart(x)&&(m.parts?.[x.slice(5)]?.lv||1)<=lv) break; at++; } } }
-  else if(tab==="write"&&editId&&it.includes(editId)) at=it.indexOf(editId)+1;
+  else if(tab==="write"&&editId&&it.includes(editId)&&!SERIAL(m)?.on) at=it.indexOf(editId)+1;   // 연재 원고는 새 화를 맨 끝에
   S.writings.push({id,date:today(),track:g.track||"book",type:g.type||"자유 글",title:"",body,updated:now}); it.splice(at,0,id); m.updated=now; if(first==null) FRESH[id]=body; save();
   go('write',{edit:id}); setTimeout(()=>$("#wtitle")?.focus(),250); }
 function dropFresh(id){ const body0=FRESH[id]; if(body0==null) return; delete FRESH[id]; const w=S.writings.find(x=>x.id===id); if(!w) return;
@@ -6044,7 +6080,7 @@ function stTree(m,cur){ if(!m) return `<p class="muted st-empty">원고가 아�
     if(hide) return; const w=x.w, k="w:"+w.id, d=any?lv-base+2:1, c=chars(w.body), sr=SERIAL(m), sl=sr?serLen(m,w.body):null, big=!sr&&sx.size[1]&&c>sx.size[1]*1.5, pn=sr?(/^\s*\d+\s*화/.test(w.title||"")?"":epNo(m,w.id)+"화"):num&&!numHas(w.title)?pieceNum(m,w.id):"";
     out+=`<div class="stnode w ${cur===k?"on":""}" data-k="${w.id}" style="--d:${d}" onclick="stOpen('${k}')" title="${esc(stOf(w))} · ${c.toLocaleString()}자">${grip}<span class="sti">✎</span>${pn?`<span class="stno">${pn}</span>`:""}<span class="stn" ${cur===k?`data-drafttitle data-empty="(제목 없음)"`:""}>${esc(w.title||"(제목 없음)")}</span>${big?`<span class="stbig" title="${c.toLocaleString()}자 — 알맞은 길이(${sx.size[1].toLocaleString()}자)보다 꽤 깁니다. ■ 소제목에서 나눌지 생각해 보세요 (쓰기 ▾ → 커서에서 나누기)">✂</span>`:""}${sl?`<span class="stser ${sl.st==="알맞음"?"ok":sl.st==="넘침"?"over":""}" title="${sl.n.toLocaleString()}자(공백 포함) — ${sl.a.toLocaleString()}~${sl.b.toLocaleString()}자 ${sl.st}">${sl.st==="알맞음"?"●":sl.st==="넘침"?"▲":"○"}</span>`:""}${sr&&wMeta(w,"pub")?`<span class="stser pub" title="올림 ${esc(wMeta(w,"pub"))}">↑</span>`:""}<i class="dot ${ST_CLS[stOf(w)]}"></i></div>`;
     if(cur===k) out+=`<div class="sthd" data-w="${w.id}" style="--d:${d+1}">${stHeadsInner(w)}</div>`; });
-  const dr=stDraftOf(m); if(dr) out+=`<div class="stnode w draft ${cur==="draft"?"on":""}" style="--d:1" onclick="stOpen('draft')" title="아직 간직하기 전입니다 — 간직하면 이 원고에 들어갑니다"><span class="sti">✎</span><span class="stn" data-drafttitle data-empty="새 ${esc(g.item)}">${esc(dr.t||"새 "+g.item)}</span><small class="stdr">${cur==="draft"?"쓰는 중":"쓰던 글"}</small></div>`;
+  const dr=stDraftOf(m); if(dr) out+=`<div class="stnode w draft ${cur==="draft"?"on":""}" style="--d:1" onclick="stOpen('draft')" title="아직 간직 전입니다 — 간직하면 이 원고에 들어갑니다"><span class="sti">✎</span><span class="stn" data-drafttitle data-empty="새 ${esc(g.item)}">${esc(dr.t||"새 "+g.item)}</span><small class="stdr">${cur==="draft"?"쓰는 중":"쓰던 글"}</small></div>`;
   return out+(m.rule?"":`<div class="staddrow">${[1,2].map(lv=>`<button class="stadd sm ${lv===sx.main?"":"minor"}" onclick="addPart('${m.id}',${lv})" title="목차 칸(${esc(g.parts[lv-1])}) — 글이 아니라 칸막이${lv===sx.main?"":" · 길 때만"}">＋ ${esc(g.parts[lv-1])}</button>`).join("")}<button class="stadd" onclick="roomNewPiece('${m.id}')" title="글 하나 — 서랍의 낱장">＋ 새 ${esc(g.item)}</button><button class="stadd sm q" onclick="stRules('${m.id}')" title="장·절·소제목을 어떻게 나누나">?</button></div>`); }
 // 간직 전 새 글도 목차·탭에 제목으로 보이게 (제목을 치면 바로 바뀜). 지금 쓰는 새 글이면 그 칸, 아니면 남겨 둔 쓰던 글(임시 보관)
 function stDraftOf(m){ if(tab==="write"&&!editId&&track==="book"&&SEL_MS===m.id){ const d=bookDraft(); return {t:($("#wtitle")?.value??(d?.ms===m.id?d.title:"")??"").trim()}; }
@@ -6126,7 +6162,7 @@ const msSnapOf=m=>({title:m.title,genre:m.genre||"free",items:[...(m.items||[])]
 async function msVerSave(m,name){ const r=await gcall("msVerSave",{ms:m.id,name:String(name||"").slice(0,80),snap:msSnapOf(m)}); if(!r.ok) throw new Error(r.error||"판을 남기지 못했습니다"); return r; }
 function msVerOpen(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; if(tab==="write"&&$("#wbody")) autoKeepNow(); if(SCRIV_EDIT&&$("#scta")) scrivAuto(true);
   const ov=document.createElement("div"); ov.className="bookview sendview"; let list=null, err="", cmp=null, open=new Set();
-  const load=async()=>{ if(!SERVER){ err="구글 서버에 닿아야 원고 판을 쓸 수 있습니다"; return draw(); } try{ const r=await gcall("msVerList",{ms:m.id}); if(!r.ok) throw new Error(r.error); list=r.list; err=""; }catch(e){ err="판 목록을 받지 못했습니다: "+e.message; } draw(); };
+  const load=async()=>{ if(!SERVER){ err="구글 서버에 닿아야 원고 판을 쓸 수 있습니다"; return draw(); } try{ const r=await gcall("msVerList",{ms:m.id}); if(!r.ok) throw new Error(r.error); list=r.list; err=""; }catch(e){ err="판 목록을 받지 못했습니다: "+(/Cannot read|undefined|null/.test(e.message)?"구글 서버의 답이 비어 있습니다 — 연결을 확인해 주세요":e.message); } draw(); };
   const fmtAt=a=>{ const d=new Date(a); return isNaN(d)?a:`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`; };
   const cmpRows=ver=>{ const S2=ver.snap||{}, snapW=new Map((S2.writings||[]).map(w=>[w.id,w])), cur=msList(m), rows=[];
     cur.forEach(w=>{ const o=snapW.get(w.id); rows.push(o?{k:(o.body===(w.body||"")&&o.title===(w.title||""))?"same":"chg",w,o}:{k:"new",w}); });
@@ -6329,8 +6365,8 @@ function wSideRoom(w){ const m=wMs(w), cx=w?codexIn(w.body+" "+(w.title||"")):[]
       ${(m.research||[]).length?`<details class="more" open><summary>원고 자료 ${(m.research||[]).length}</summary>${resSideHtml(m)}</details>`:`<p class="hint">원고 자료는 글방 → 「자료 모음」에서 모아 둡니다.</p>`}`:""}
     ${cx.length?`<details class="more" ${m?"":"open"}><summary>이 글에 나온 인물·주제 ${cx.length}</summary>${cx.map(c=>`<details class="cxside ${cxOrphan(c)?"common":""}"><summary>${cxOrphan(c)?`<span class="combadge">공통</span> `:""}${esc(c.name)}</summary><div class="cxsidebody">${esc(c.body||"(노트 비어 있음)")}</div><a href="#" onclick="ROOM_CODEX='${c.id}';go('room');return false" class="muted">노트 열기 →</a></details>`).join("")}</details>`:""}
   </div>`; }
-let MEMO_T=0; function memoKick(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w) return; w.memo=v; clearTimeout(MEMO_T); MEMO_T=setTimeout(()=>{ w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); },900); }   // 꼭지 메모: 치는 대로 (다시 그려도 그대로)
-function saveMemo(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w||(w.memo||"")===v) return; w.memo=v; w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); toast("꼭지 메모를 남겼습니다"); }
+let MEMO_T=0; function memoKick(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w) return; w.memo=v; clearTimeout(MEMO_T); MEMO_T=setTimeout(()=>{ { const _pu=w.updated; w.updated=new Date().toISOString(); if(editId===wid&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } save(); },900); }   // 꼭지 메모: 치는 대로 (다시 그려도 그대로)
+function saveMemo(wid,v){ const w=S.writings.find(x=>x.id===wid); if(!w||(w.memo||"")===v) return; w.memo=v; { const _pu=w.updated; w.updated=new Date().toISOString(); if(editId===wid&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } save(); toast("꼭지 메모를 남겼습니다"); }
 // ───────── 자료 모음 = 원고의 자료 창고 (2026-10-29 다시 만듦) ─────────
 // 메모(포스트잇)는 「내 생각의 씨앗」, 자료 모음은 「바깥에서 가져온 근거」 — 출처와 함께 두고 인용·각주·참고 문헌으로 이어짐.
 // 원고 안 m.research=[{id,kind,t 제목,body 내용·원문,au 저자,yr 연도,pg 쪽,url,src(예전 한 줄 출처),note 내 생각,tags[],ok 확인 상태,at,u}] — 자료마다 u 시각으로 합침(mergeInner)
@@ -6372,7 +6408,7 @@ function resList(m){ const q=RES_Q.trim().toLowerCase(); let L=(m.research||[]).
   const by={new:(a,b)=>(b.u||b.at||"").localeCompare(a.u||a.at||""),title:(a,b)=>(a.t||"").localeCompare(b.t||"","ko"),author:(a,b)=>(a.au||"힣").localeCompare(b.au||"힣","ko")||(a.yr||"").localeCompare(b.yr||"")}[RES_SORT];
   return L.slice().sort(by); }
 function resForm(m,r){ r=r||{}; const RP=resP(m), sel=resKinds(m).map(k=>`<option value="${esc(k)}" ${(r.kind||RP.dflt)===k?"selected":""}>${RES_IC[k]||"◎"} ${esc(k)}</option>`).join("");
-  return `<div class="resed" id="resed"><div class="row" style="gap:8px;align-items:center"><b>${r.id?"자료 고치기":"새 자료"}</b><span class="spacer"></span><small class="muted">⌘S·⌘↩ 간직 · Esc 나오기</small><button class="btn small ghost" onclick="resClose()">✕</button></div>
+  return `<div class="resed" id="resed"><div class="row" style="gap:8px;align-items:center"><b>${r.id?"자료 고치기":"새 자료"}</b><span class="spacer"></span><small class="muted">⌘S·⌘↩ 간직 · Esc 간직하고 닫기</small><button class="btn small ghost" onclick="resClose()">✕</button></div>
     <div class="resgrid"><label class="cxf"><span>종류</span><select id="rs-k">${sel}</select></label><label class="cxf wide"><span>제목 (책·글·자료 이름)</span><input id="rs-t" value="${esc(r.t||"")}" placeholder="${esc(RP.tPh)}"></label></div>
     <label class="cxf"><span>내용 · 원문 <small>인용할 문장은 그대로</small></span><textarea id="rs-b" class="cxp-text" placeholder="${esc(RP.bPh)}">${esc(r.body||"")}</textarea></label>
     <div class="resgrid four"><label class="cxf"><span>저자</span><input id="rs-au" value="${esc(r.au||"")}" placeholder="칼빈"></label><label class="cxf"><span>연도</span><input id="rs-yr" value="${esc(r.yr||"")}" placeholder="1557"></label><label class="cxf"><span>쪽</span><input id="rs-pg" value="${esc(r.pg||"")}" placeholder="212"></label><label class="cxf"><span>확인</span><select id="rs-ok">${["","확인함","확인 못 함"].map(v=>`<option value="${v}" ${(r.ok||"")===v?"selected":""}>${v||"—"}</option>`).join("")}</select></label></div>
@@ -6415,7 +6451,7 @@ function resInsert(mid,rid,how){ const m=S.manuscripts.find(x=>x.id===mid), r=m?
   if(how==="quote"&&r.kind==="AI 조사"&&r.ok!=="확인함") return toast("AI가 정리한 요약은 원문 인용으로 넣지 않습니다 — 자료를 열어 원문 문장으로 바꾸고 「확인함」으로 둔 뒤 넣어 주세요");
   if(how!=="fn"&&r.ok==="확인 못 함"&&!confirm(`「${r.t||"자료"}」는 아직 「확인 못 함」입니다. 그래도 넣을까요?\n(넣은 뒤 원문과 대조해 주세요)`)) return;
   { const oz=ownHit(b.value,caretAt(b).e,caretAt(b).e); if(oz) return toast(`커서가 「${oz}」에 있습니다 — 직접 쓰는 자리입니다 (원칙 1-5)`); }
-  const txt=how==="fn"?(c?`[^${c.replace(/[\[\]]/g,"")}]`:""):how==="body"?(r.body||"")+"\n":`「${(r.body||"").replace(/\s*\n\s*/g," ")}」${c?`[^${c.replace(/[\[\]]/g,"")}]`:""}`;
+  const txt=how==="fn"?(c?`[^${c.replace(/[\[\]]/g,"")}]`:""):how==="body"?(r.body||"")+"\n":`「${(r.body||"").replace(/\s*\n\s*/g," ").trim().replace(/^[“"「『‘']+|[”"」』’']+$/g,"")}」${c?`[^${c.replace(/[\[\]]/g,"")}]`:""}`;
   if(!txt) return toast("출처가 없어 각주를 만들 수 없습니다 — 자료에 저자·제목을 적어 주세요"); tInsert(b,txt); toast(how==="fn"?"각주를 넣었습니다":"자료를 넣었습니다"); }
 function resSideHtml(m){ const L=(m.research||[]).filter(r=>!(S.deleted||{})[r.id]); if(!L.length) return `<p class="hint">원고 자료는 글방 → 「자료 모음」에서 모아 두면 여기서 꺼내 씁니다.</p>`;
   return L.map(r=>`<div class="rsrc"><b>${RES_IC[r.kind||"기타"]||""} ${esc(r.t||"자료")}</b><span class="muted">${esc((r.body||"").slice(0,100))}${(r.body||"").length>100?"…":""}</span><small class="muted">${esc(resCite(r))}</small><div class="row" style="gap:4px;flex-wrap:wrap"><button class="btn small" onclick="resInsert('${m.id}','${r.id}','quote')" title="「원문」 + 각주(출처)">인용+각주</button><button class="btn small ghost" onclick="resInsert('${m.id}','${r.id}','fn')" title="커서 자리에 출처 각주만">각주만</button><button class="btn small ghost" onclick="resInsert('${m.id}','${r.id}','body')">내용만</button></div></div>`).join(""); }
@@ -6429,12 +6465,13 @@ function resDel(mid,rid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) retu
 // 이어 보기: 꼭지들을 한 장처럼. 「고치기」로 그 자리에서 고치고 간직
 // 이어 읽기 「고치기」 칸: 치는 대로 1.2초 뒤 저절로 간직(처음 한 번만 이전 판을 남김). 화면을 다시 그리거나 앱을 내릴 때도 바로 간직 — 글을 잃지 않게
 function scrivAuto(now){ clearTimeout(SCRIV_T); const run=()=>{ const w=SCRIV_EDIT&&S.writings.find(x=>x.id===SCRIV_EDIT), t=$("#scta"); if(!w||!t||t.value===w.body) return;
-    if(!SCRIV_PREV){ w.prev=[{at:w.updated||w.date,body:w.body},...(w.prev||[])].slice(0,3); SCRIV_PREV=true; } w.body=t.value; w.updated=new Date().toISOString(); save(); const st=$("#sctastate"); if(st) st.textContent="✓ 간직됨 "+new Date().toTimeString().slice(0,5); };
+    if(SCRIV_BASE&&w.updated!==SCRIV_BASE){ w.prev=[{at:w.updated||w.date,body:w.body,from:"다른 기기"},...(w.prev||[])].slice(0,3); SCRIV_PREV=true; toast("다른 기기에서 바뀐 판은 「이전 판」에 남기고, 지금 고친 글로 간직했습니다"); }
+    else if(!SCRIV_PREV){ w.prev=[{at:w.updated||w.date,body:w.body},...(w.prev||[])].slice(0,3); SCRIV_PREV=true; } w.body=t.value; w.updated=new Date().toISOString(); SCRIV_BASE=w.updated; save(); const st=$("#sctastate"); if(st) st.textContent="✓ 간직됨 "+new Date().toTimeString().slice(0,5); };
   if(now) run(); else SCRIV_T=setTimeout(run,1200); }
-function scrivOpen(wid){ scrivAuto(true); SCRIV_EDIT=wid; SCRIV_PREV=false; render(); setTimeout(()=>{ const t=$("#scta"); if(t){ t.focus(); } $("#sc-"+wid)?.scrollIntoView({block:"start"}); },60); }
+function scrivOpen(wid){ scrivAuto(true); SCRIV_EDIT=wid; SCRIV_PREV=false; SCRIV_BASE=S.writings.find(x=>x.id===wid)?.updated||null; render(); setTimeout(()=>{ const t=$("#scta"); if(t){ t.focus(); } $("#sc-"+wid)?.scrollIntoView({block:"start"}); },60); }
 function scrivHtml(m){ const seq=msSeq(m); if(!seq.length) return `<p class="muted">아직 꼭지가 없습니다.</p>`; let n=0;
   return `<div class="scriv">${seq.map(x=>{ if(x.p) return `<h3 class="scp lv${x.p.lv}">${esc(x.p.t)}</h3>`; const w=x.w; n++;
-    const body=SCRIV_EDIT===w.id?`<w-ed class="page scta" id="scta" contenteditable="true" spellcheck="false" oninput="scrivAuto()">${esc(w.body||"")}</w-ed><div class="row" style="gap:6px;margin-top:6px"><button class="btn small ink" onclick="scrivSave('${w.id}')">다 고침</button><small class="muted" id="sctastate">치는 대로 저절로 간직됩니다</small></div>`
+    const body=SCRIV_EDIT===w.id?`<w-ed class="page scta" id="scta" contenteditable="true" spellcheck="false" oninput="scrivAuto()">${esc(w.body||"")}</w-ed><div class="row" style="gap:6px;margin-top:6px"><button class="btn small ink" onclick="scrivSave('${w.id}')" title="간직하고 닫기 — 치는 대로 저절로도 간직됩니다">간직</button><small class="muted" id="sctastate">치는 대로 저절로 간직됩니다</small></div>`
       :`<div class="scbody">${(()=>{ const fn=[]; const h=richHtml(stripMemo(w.body||""),fn); return h+fnHtml(fn); })()}</div>${revNotesHtml(w)}`;
     return `<article class="scw" id="sc-${w.id}"><header><span class="pen scn">${n}</span><b>${esc(w.title||"(제목 없음)")}</b><span class="muted">${esc(w.date||"")} · ${chars(w.body).toLocaleString()}자</span><span class="spacer"></span>${SCRIV_EDIT===w.id?"":`<button class="btn small ghost" onclick="scrivOpen('${w.id}')">고치기</button><button class="btn small ghost" onclick="scrivAuto(true);go('write',{edit:'${w.id}'})">쓰기 화면</button>`}</header>${body}</article>`; }).join("")}</div>`; }
 function scrivSave(wid){ const w=S.writings.find(x=>x.id===wid), t=$("#scta"); if(!w||!t) return; const changed=SCRIV_PREV||t.value!==w.body; scrivAuto(true);
@@ -6792,7 +6829,7 @@ function caretY(ta){ if(ta.tagName==="W-ED"){ const r=ta.rects(ta.selectionEnd,t
   Object.assign(d.style,{position:"absolute",visibility:"hidden",whiteSpace:"pre-wrap",top:"0",left:"-9999px",width:ta.offsetWidth+"px"});
   d.textContent=ta.value.slice(0,ta.selectionEnd); const sp=document.createElement("span"); sp.textContent="\u200b"; d.appendChild(sp); document.body.appendChild(d); const y=sp.offsetTop; d.remove(); return y; }
 let TW_RAF=0; function typeCenter(){ if(!TYPEW||TW_RAF) return; TW_RAF=requestAnimationFrame(()=>{ TW_RAF=0; const ta=$("#wbody"); if(!ta||document.activeElement!==ta) return;
-  const y=ta.getBoundingClientRect().top+scrollY+caretY(ta); const want=y-innerHeight*0.42; if(Math.abs(want-scrollY)>4) scrollTo({top:Math.max(0,want),behavior:"auto"}); }); }
+  const y=ta.getBoundingClientRect().top+scrollY+caretY(ta); const want=y-(window.visualViewport?.height||innerHeight)*0.42; if(Math.abs(want-scrollY)>4) scrollTo({top:Math.max(0,want),behavior:"auto"}); }); }
 ["input","keyup","click"].forEach(ev=>document.addEventListener(ev,e=>{ if(TYPEW&&e.target?.closest?.("#wbody")) typeCenter(); }));
 // ───────── AI 글쓰기 도우미 (펜시브 「에이전트」처럼) ─────────
 // 오른쪽 창에서 지금 글을 함께 보며 묻고 답함. 서버 coWrite_(클로드 우선). 고치는 것은 늘 카드로 — 사람이 누르는 것만 글에 들어감(⌘Z 되돌리기).
@@ -6960,7 +6997,8 @@ function aiSugShow(i,j){ const it=AI_MSGS[i]?.items?.[j], b=$("#wbody"); if(!it|
 const CARD_F=[["c1","한 문장","이 글이 말할 것 — 하나만"],["cfn","기능","독자(청중)에게 일어날 일"],["ctg","겨냥할 자리","독자의 아픔·필요 (설교: 타락한 상태)"],["cpath","가는 길","설교: 그리스도로 가는 길 / 글: 핵심으로 가는 길"],["cstory","주 예화","도입에서 열고 결론에서 닫을 예화 하나"],["cbudget","분량 예산","예: 20분 · 도입 10% · 본론 70% · 결론 20%"]];
 const OWN_F=[["own1","도입 첫 문단"],["own2","1인칭 고백"],["own3","결론 마지막 문단"],["own4","기도문"]];
 // 논문은 연구 질문부터, 소설은 장면이 할 일부터 (2026-10-29 팀장님 승인) — 서버 cardLb_ 와 같은 이름
-const CARD_SETS={paper:[["c1","연구 질문","이 논문(절)이 답하려는 물음 하나"],["cfn","가설·주장","질문에 대한 잠정적 답"],["ctg","연구의 공백","선행 연구가 다루지 않은 것"],["cpath","연구 방법","문헌 분석·설문·주석 연구 등"],["cstory","핵심 근거·자료","주장을 받칠 1차 자료"],["cbudget","분량 예산","예: 이 절 3,000자 · 전체 40쪽"]],
+const CARD_SETS={selfhelp:[["c1","핵심 메시지(약속)","이 꼭지가 독자에게 약속하는 것 — 하나만"],["cfn","대상 독자","누구를 위해 — 구체적인 한 사람"],["ctg","독자의 문제","독자가 겪는 어려움·막힌 자리"],["cpath","원리·방법","문제에서 약속으로 가는 길"],["cstory","사례","도입에서 열고 결론에서 닫을 사례 하나"],["cbudget","실천 과제·분량","독자가 오늘 해 볼 한 가지 · 예: 6,000자"]],   // 2026-10-30 글쓰기팀: 자기계발서는 설교용 칸 이름 대신 (저장 칸은 같음)
+  paper:[["c1","연구 질문","이 논문(절)이 답하려는 물음 하나"],["cfn","가설·주장","질문에 대한 잠정적 답"],["ctg","연구의 공백","선행 연구가 다루지 않은 것"],["cpath","연구 방법","문헌 분석·설문·주석 연구 등"],["cstory","핵심 근거·자료","주장을 받칠 1차 자료"],["cbudget","분량 예산","예: 이 절 3,000자 · 전체 40쪽"]],
   novel:[["c1","장면이 할 일","이 장면이 끝나면 무엇이 바뀌나 — 하나만"],["goal","인물의 목표","이 장면에서 원하는 것","cfn"],["conf","갈등·장애","막는 것"],["ctg","독자에게 남길 것","정서나 질문"],["cpath","전환점","장면이 꺾이는 순간"],["pov","시점 인물","누구의 눈으로","cstory"],["loc","장소","어디서"],["when","때","언제"],["cbudget","분량 예산","예: 4,000자"]]};
 // 소설: 설계 카드와 곁 칸 장면 정보는 같은 칸(w.meta)을 함께 씀 — 「장면이 할 일」(c1) = 「결과」(turn), 목표·갈등·시점·장소·때는 장면 정보 칸 그대로
 // 예전 카드 칸 cfn(목표·갈등)·cstory(시점·장소·때)는 지우지 않고 남겨 둠 — 새 칸이 비었으면 옮기고, 다르면 「두 곳 내용이 다름」으로 고르게 함
@@ -7006,7 +7044,7 @@ function cardHtml(w){ if(!w) return /설교/.test(NEW_TYPE||"")?`<p class="hint 
   const C=CARD_AI&&CARD_AI.id===w.id?CARD_AI:null, chip=(k,v)=>`<button type="button" class="cchip" onclick="cardPick('${k}',${jsArg(v)})">${esc(v)}</button>`;
   return `<details class="dcard" ${open?"open":""} ontoggle="this.open?CARD_OPEN.add('${w.id}'):CARD_OPEN.delete('${w.id}')"><summary><b>설계 카드</b> <span class="dcsum ${ok?"ok":""}">${one?`${ok?"✓ ":""}${esc(one)}`:`아직 정하지 않았습니다 — ${cardF(w)[0][1]}`}</span>${!ok?`<small class="dcwarn">${cardKindOf(w).kind==="paper"?"AI 구조안은":"AI 초안은"} ${cardF(w)[0][1]}을 확정한 뒤에</small>`:""}</summary>
     <div class="dcbody">
-      <label class="field dc3"><span>내가 받은 것 세 줄 <small>— 본문을 먼저 읽고. AI는 여기서 출발합니다</small></span><textarea id="c3" rows="3" placeholder="1.&#10;2.&#10;3." onchange="cardSet('c3',this.value)">${esc(wMeta(w,"c3"))}</textarea>${seedChips(w,"c3")}</label>
+      <label class="field dc3"><span>${["paper","novel","selfhelp"].includes(cardKindOf(w)?.kind)?"내 생각 세 줄 <small>— 먼저 내 말로. AI는 여기서 출발합니다</small>":"내가 받은 것 세 줄 <small>— 본문을 먼저 읽고. AI는 여기서 출발합니다</small>"}</span><textarea id="c3" rows="3" placeholder="1.&#10;2.&#10;3." onchange="cardSet('c3',this.value)">${esc(wMeta(w,"c3"))}</textarea>${seedChips(w,"c3")}</label>
       ${scSyncLater(w)}${scDiffHtml(w)}<div class="dcgrid">${cardF(w).map(([k,n,ph,ak=k])=>`<label class="field ${k==="c1"?"dcone":""}"><span>${n}${k==="cpath"&&!CARD_SETS[cardKindOf(w).kind]?` <small>${sermon?"그리스도로 가는 길":"핵심으로 가는 길"}</small>`:""}</span>${k==="c1"?`<div class="row" style="gap:6px;flex-wrap:nowrap"><input id="card-c1" value="${esc(one)}" placeholder="${esc(ph)}" onchange="cardSet('c1',this.value)" style="flex:1;min-width:0"><button type="button" class="btn small ${ok?"ink":""}" onclick="cardOk()" title="${ok?"확정을 풉니다":"이 한 문장으로 확정 — 그 뒤에만 AI 초안"}">${ok?"✓ 확정됨":"확정"}</button></div>`:`<input id="card-${k}" value="${esc(wMeta(w,k))}" placeholder="${esc(ph)}" onchange="cardSet('${k}',this.value)">`}
           ${k==="c1"?seedChips(w,"c1"):""}${C&&k==="c1"&&C.ones.length?`<div class="cchips">${C.ones.map(v=>chip("c1",v)).join("")}</div>`:""}${C&&ak==="cstory"&&C.stories.length?`<div class="cchips">${C.stories.map(v=>chip("cstory",v)).join("")}</div>`:""}
           ${C&&{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[ak]&&C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[ak]]?`<div class="cchips">${chip(ak,C[{cfn:"func",ctg:"target",cpath:"path",cbudget:"budget"}[ak]])}</div>`:""}</label>`).join("")}</div>
@@ -7074,12 +7112,12 @@ function wongoFit(t){ const on=DOC_MODE&&docPaper()==="wongo"&&t&&t.id==="wbody"
   t.style.setProperty("--wg-y",pt.toFixed(3)+"px"); t._wg={cols,C,L,pl,pt}; t.dataset.wg=cols; wgBind(t); }
 // 칸 배치: 문단마다 cols 칸씩 끊어 줄을 만듦 → 글자 i의 (줄 r, 칸 c), 줄마다 시작 글자
 // 꾸밈 표시(==형광펜==·__밑줄__·**굵게**·*기울임*·[^각주])는 칸을 차지하지 않고, 사이 글자에만 색·굵기·밑줄 (hid: 숨길 기호 자리, cls: 글자 꾸밈)
-function wgDecor(v){ const n=v.length, hid=new Uint8Array(n), cls=new Array(n);
+function wgDecor(v){ const n=v.length, hid=new Uint8Array(n), cls=new Array(n), fc={f:0,e:0};
   const mark=(a,b,c,st)=>{ for(let k=a;k<b;k++){ cls[k]=(cls[k]||"")+" "+c; if(st) cls[k+"s"]=st; } }, hide=(a,b)=>{ for(let k=a;k<b;k++) hid[k]=1; };
   for(const m of v.matchAll(MK_RE)){ const a=m.index, L=m[0].length;
     if(m[2]!=null){ const pre=2+(m[1]?2:0); hide(a,a+pre); hide(a+L-2,a+L); const c=(HLC.find(([k])=>k===(m[1]||"y"))||HLC[0])[1]; mark(a+pre,a+L-2,"hl",c); }
     else if(m[3]!=null){ hide(a,a+2); hide(a+L-2,a+L); mark(a+2,a+L-2,"ul"); }
-    else { hide(a,a+2); hide(a+L-1,a+L); mark(a+2,a+L-1,"fn"); } }
+    else { const en=isEnd(m[4]), n=en?++fc.e:++fc.f; hide(a,a+L); hid[a+2]=0; cls[a+2]="fn"; cls[(a+2)+"n"]=en?romanL(n):String(n); } }   // 각주·미주는 칸 하나에 번호 (내용은 칸에 풀지 않음)
   for(const m of v.matchAll(BI_RE)){ const a=m.index, L=m[0].length, w=m[1]!=null?2:1; if(hid[a]) continue; hide(a,a+w); hide(a+L-w,a+L); mark(a+w,a+L-w,m[1]!=null?"bd":"it"); }
   return {hid,cls}; }
 // 칸 배치: 문단마다 보이는 글자만 cols 칸씩 → 줄마다 ix(그 줄에 놓인 글자들의 원래 자리), s(줄 시작 자리), e(다음 줄 시작 자리 또는 문단 끝)
@@ -7093,7 +7131,7 @@ function wgIdx(rows,r,c,g){ r=Math.max(0,Math.min(rows.length-1,r)); const R=row
 function wgHit(t,x,y){ const g=t._wg, b=t.getBoundingClientRect(), rows=wgModel(t); return wgIdx(rows,Math.floor((y-b.top-g.pt+t.scrollTop)/g.L),Math.round((x-b.left-g.pl)/g.C),g); }
 function wgPaint(t,m){ const g=t._wg, rows=wgModel(t), v=t.value, D=t._wgD, a=t.selectionStart, z=t.selectionEnd, foc=document.activeElement===t;
   let h=""; rows.forEach(R=>{ const head=HEAD_RE.test(v.slice(v.lastIndexOf("\n",R.s-1)+1,R.end));
-    let r=""; R.ix.forEach(i=>{ const ch=v[i], c=(D.cls[i]||"").trim(), st=D.cls[i+"s"]; r+=`<i class="${c}${i>=a&&i<z?" sel":""}"${st?` style="--hl:${st}"`:""}>${ch===" "?"":esc(ch)}</i>`; });
+    let r=""; R.ix.forEach(i=>{ const ch=v[i], c=(D.cls[i]||"").trim(), st=D.cls[i+"s"]; const lab=D.cls[i+"n"]; r+=`<i class="${c}${i>=a&&i<z?" sel":""}"${st?` style="--hl:${st}"`:""}>${lab!=null?esc(lab):ch===" "?"":esc(ch)}</i>`; });
     h+=`<div class="wgr${head?" hd":""}">${r}</div>`; });
   const p=wgPos(rows,t.selectionDirection==="backward"?a:z,g);
   m.innerHTML=h+(foc&&a===z?`<span class="wgcar" style="left:${(g.pl+p.c*g.C).toFixed(2)}px;top:${(g.pt+p.r*g.L+(g.L-g.C)/2+2).toFixed(2)}px;height:${(g.C-4).toFixed(2)}px"></span>`:"");
@@ -7156,7 +7194,7 @@ function docHead(){ const b=$("#wbody"); if(!b) return; const v=b.value, s=v.las
   const nl=/^\s*■/.test(l)?l.replace(/^\s*■\s*/,""):"■ "+l; tInsert(b,nl,s,e); b.setSelectionRange(s+nl.length,s+nl.length); }
 // 굵게·기울임 넣기/풀기: 고른 글을 **…** / *…* 로 감쌈 (이미 감싸 있으면 풂). ⌘B · ⌘I
 function docWrap(mk,bar){ const b=(bar&&WSEL?.el?.isConnected&&WSEL.el)||(document.activeElement?.tagName==="W-ED"?document.activeElement:$("#wbody")); if(!b) return; let s=bar&&WSEL?WSEL.s:b.selectionStart, e=bar&&WSEL?WSEL.e:b.selectionEnd; if(bar) hlClose(); const v=b.value, n=mk.length;
-  if(e<=s) return toast("먼저 글자를 고르세요"); const sel=v.slice(s,e);
+  if(e<=s) return toast("먼저 글자를 고르세요"); if(b.tagName==="W-ED"){ edFormat(b,s,e,mk==="**"?"b":"i"); return; } const sel=v.slice(s,e);
   if(v.slice(s-n,s)===mk&&v.slice(e,e+n)===mk&&(n===2||(v[s-2]!=="*"&&v[e+1]!=="*"))){ tInsert(b,sel,s-n,e+n); b.setSelectionRange(s-n,e-n); return; }
   if(sel.length>2*n&&sel.startsWith(mk)&&sel.endsWith(mk)){ const inner=sel.slice(n,-n); tInsert(b,inner,s,e); b.setSelectionRange(s,s+inner.length); return; }
   if(/\n/.test(sel)) return toast("굵게·기울임은 한 줄(한 문단) 안에서만 넣을 수 있습니다");
@@ -7709,7 +7747,7 @@ function vrOpen(tab0,pre){ const ov=document.createElement("div"); ov.className=
         <div class="vrform"><textarea id="vr-t" placeholder="규칙 (예: 결론에 새 정보·요약 나열·훈계 목록을 넣지 않는다)" rows="2">${esc(pre?.t||"")}</textarea>
           <div class="row" style="gap:6px;flex-wrap:wrap"><input id="vr-why" placeholder="계기 — 왜 생겼나 (예: 「마무리가 너무 급하다」 10-07)" value="${esc(pre?.why||"")}" style="flex:2;min-width:180px"><input id="vr-how" placeholder="적용 방법 — 어떻게" style="flex:2;min-width:160px"><span class="muted" style="font-size:12.5px">범위</span>${ksel(sermonNow?"설교":"모두",'id="vr-k"')}<button class="btn small ink" data-add>규칙 남기기</button></div></div>
         <div class="vrlist">${R.slice().reverse().map((x,n)=>`<div class="vrrow ${x.on===false?"off":""}"><label class="chk" title="끄면 AI에 보내지 않음"><input type="checkbox" data-on="${x.id}" ${x.on!==false?"checked":""}></label><div style="min-width:0;flex:1">${editing===x.id?`<textarea data-et="${x.id}" rows="2">${esc(x.t)}</textarea><input data-ew="${x.id}" value="${esc(x.why||"")}" placeholder="계기"><input data-eh="${x.id}" value="${esc(x.how||"")}" placeholder="적용 방법">`:`<b>${R.length-n}. ${esc(x.t)}</b>${x.why||x.how?`<div class="muted" style="font-size:12.5px">${x.why?"계기: "+esc(x.why):""}${x.why&&x.how?" · ":""}${x.how?"적용: "+esc(x.how):""}</div>`:""}`}<small class="muted">${esc(x.at||"")} · ${esc(x.k||"모두")}</small></div>
-            ${editing===x.id?`<button class="btn small ink" data-esave="${x.id}">저장</button>`:`<button class="btn small ghost" data-edit="${x.id}">고치기</button>`}<button class="btn small ghost" data-del="${x.id}" title="지우기 (고칠 규칙이면 「고치기」로 — 바뀐 규칙은 지우거나 무엇으로 바뀌었는지 적기)">✕</button></div>`).join("")||`<p class="muted" style="margin:0">아직 규칙이 없습니다. AI 창에서 내가 쓴 말 아래 「규칙으로」를 눌러도 됩니다.</p>`}</div>
+            ${editing===x.id?`<button class="btn small ink" data-esave="${x.id}">간직</button>`:`<button class="btn small ghost" data-edit="${x.id}">고치기</button>`}<button class="btn small ghost" data-del="${x.id}" title="지우기 (고칠 규칙이면 「고치기」로 — 바뀐 규칙은 지우거나 무엇으로 바뀌었는지 적기)">✕</button></div>`).join("")||`<p class="muted" style="margin:0">아직 규칙이 없습니다. AI 창에서 내가 쓴 말 아래 「규칙으로」를 눌러도 됩니다.</p>`}</div>
         ${R.length>1?`<div class="row" style="gap:8px"><button class="btn small" data-check ${SERVER?"":"disabled"}>✦ 규칙 점검 (부딪히는·낡은 규칙 찾기)</button><small class="muted">원칙 8-2 — 짚기만 하고 고치는 것은 직접</small></div>`:""}
         ${check?`<div class="vrcheck">${check.busy?`<span class="muted">점검하는 중…</span>`:check.err?`<span class="warn">${esc(check.err)}</span>`:aiText(check.text)}</div>`:""}`
       :`<p class="hint" style="margin:0">${esc(jo(callName(),"이","가"))} 직접 쓰거나 고친 문장을 담아 두면, AI가 새로 쓰거나 다듬는 문장이 이 말투를 따릅니다 (원칙 1-6). 사실·인용·원문은 바꾸지 않습니다. 쓰기 화면에서 문장을 고르고 「말투」를 눌러도 담깁니다.</p>
@@ -7852,8 +7890,8 @@ async function rsSend(q){ const ta=$("#aiin"); q=(q||ta?.value||"").trim(); if(!
 const rsBody=x=>String(x.text||"").replace(/\*\*([^*\n]+)\*\*/g,"$1").trim();
 const rsSrcLine=x=>(x.src||[]).map(u=>`${u.title} ${u.url}`).join("\n");
 function rsCopy(i){ const x=RS_MSGS[i]; if(x) clip(rsBody(x)+((x.src||[]).length?"\n\n출처\n"+rsSrcLine(x):"")); }
-function rsPut(i){ const x=RS_MSGS[i], b=$("#wbody"); if(!x||!b) return; const at=caretAt(b).e, pre=b.value.slice(0,at); { const oz=ownHit(b.value,at,at); if(oz) return toast(`커서가 「${oz}」에 있습니다 — 직접 쓰는 자리라 AI 문장을 넣지 않습니다 (원칙 1-5)`); }
-  tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+rsBody(x)+"\n",at,at); toast("넣었습니다 ("+undoHint()+")"); }
+function rsPut(i){ const x=RS_MSGS[i], b=$("#wbody"); if(!x||!b) return; { const k=aiGenre(); if(k.meditation||k.poem) return toast(k.meditation?"묵상에는 AI 글을 넣지 않습니다 — 조사 결과는 읽고 내 말로 적어 주세요":"시에는 AI 글을 넣지 않습니다"); } const at=caretAt(b).e, pre=b.value.slice(0,at); { const oz=ownHit(b.value,at,at); if(oz) return toast(`커서가 「${oz}」에 있습니다 — 직접 쓰는 자리라 AI 문장을 넣지 않습니다 (원칙 1-5)`); }
+  tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+rsBody(x)+"[^AI 조사 — 원문 확인 필요]\n",at,at); toast("넣었습니다 — 각주에 「AI 조사·원문 확인 필요」를 달았습니다 ("+undoHint()+")"); }   // 원칙 2: 추측을 사실처럼 남기지 않음
 // 담기: 지금 원고의 자료 모음에. 원고가 없으면 어느 원고에 담을지 고르고, 원고가 하나도 없으면 끄적이기에
 function rsKeep(i,mid){ const x=RS_MSGS[i]; if(!x) return; const m=mid?S.manuscripts.find(y=>y.id===mid):rsMs();
   if(!m){ const L=liveMs().filter(y=>!y.rule);
@@ -7891,7 +7929,7 @@ addEventListener("scroll",()=>{ if(CTX&&!CTX.classList.contains("sheet")) ctxClo
 // 무엇을 눌렀나: 가까운 요소의 onclick(글 열기·책 열기·원고 고르기·슬라이드)에서 번호를 찾음
 const CTX_PAT=[[/go\('write',\{edit:'([\w-]+)'/,"w"],[/stOpen\('w:([\w-]+)'\)/,"w"],[/stOpen\('ms:([\w-]+)'\)/,"m"],[/restoreWriting\('([\w-]+)'\)/,"w"],[/openBook\('([\w-]+)'\)/,"b"],[/roomPick\('([\w-]+)'\)/,"m"],[/restoreMs\('([\w-]+)'\)/,"m"],[/slideInsert\((\d+)\)/,"s"]];
 function ctxFind(t){ let el=t;
-  for(let d=0; el&&el!==document.body&&d<7; d++, el=el.parentElement){ if(el.closest?.(".ctxmenu,#wbody,input,textarea,select,.sendview,.bookview,.stk-layer,.stk-palette")) return null;
+  for(let d=0; el&&el!==document.body&&d<7; d++, el=el.parentElement){ if(el.closest?.(".ctxmenu,#wbody,w-ed,[contenteditable],input,textarea,select,.sendview,.bookview,.stk-layer,.stk-palette")) return null;
     const own=el.getAttribute?.("onclick")||""; for(const [re,k] of CTX_PAT){ const m=own.match(re); if(m) return {k,id:m[1]}; }
     if(d>0&&el.querySelectorAll){ for(const [re,k] of CTX_PAT){ const ids=[...new Set([...el.querySelectorAll("[onclick]")].map(x=>(x.getAttribute("onclick")||"").match(re)).filter(Boolean).map(m=>m[1]))]; if(ids.length===1) return {k,id:ids[0]}; if(ids.length>1) break; } } }
   return null; }
@@ -7948,7 +7986,7 @@ function ctxEditor(){ const b=$("#wbody"); const s=b.selectionStart, e=b.selecti
     {t:"소제목(■) 줄 넣기",ic:"■",fn:()=>putLine("■ ")},{t:"구분선 넣기",ic:"―",fn:()=>putLine("---\n")},
     w?.slides?{t:"슬라이드 고르기 (옆 칸)",ic:"▣",fn:()=>{ if(document.body.classList.contains("sidefold")) toggleSide(); sideTab("slides"); document.querySelector(".sidetabs")?.scrollIntoView({behavior:"smooth",block:"nearest"}); }}:null,
     $("#wtype")&&typeTpl(track,$("#wtype").value)?{t:"틀 넣기",ic:"▦",fn:()=>insertTemplate()}:null,"-",
-    {t:has?"AI에게 이 부분 묻기":"AI 도우미 열기",ic:"✦",fn:()=>aiOpen(has?"고른 곳을 더 낫게 다듬을 방법을 두세 가지 제안해 주세요":"")},{t:"읽기 모드",ic:"👁",fn:()=>toggleRead()},{t:"간직하기",ic:"✓",fn:()=>saveWriting()},"-",{t:w?"이 글 휴지통에":"버리기 (빈 페이지로)",ic:"🗑",danger:true,fn:()=>discardPage()}],"⇧ 누른 채 오른쪽 클릭: 브라우저 원래 메뉴(맞춤법 제안 등)"]; }
+    {t:has?"AI에게 이 부분 묻기":"AI 도우미 열기",ic:"✦",fn:()=>aiOpen(has?"고른 곳을 더 낫게 다듬을 방법을 두세 가지 제안해 주세요":"")},{t:"읽기 모드",ic:"👁",fn:()=>toggleRead()},{t:"간직",ic:"✓",fn:()=>saveWriting()},"-",{t:w?"이 글 휴지통에":"버리기 (빈 페이지로)",ic:"🗑",danger:true,fn:()=>discardPage()}],"⇧ 누른 채 오른쪽 클릭: 브라우저 원래 메뉴(맞춤법 제안 등)"]; }
 // 매일성경 본문의 절 (컴퓨터만 — 휴대폰은 글자 고르기 막대)
 function ctxVerse(el){ const c=+el.dataset.c, v=+el.dataset.v, P=suPassage(SU), txt=plainText(el).trim(), sel=getSelection().toString().trim(), q=sel&&el.contains(getSelection().anchorNode)?sel:txt;
   const ref=`${P?.name||""} ${c}:${v}`.trim()+(el.dataset.l==="en"?" WEB":"");
@@ -7966,7 +8004,7 @@ document.addEventListener("contextmenu",e=>{ if(e.shiftKey||isTouch()) return;  
   if(!r) return; e.preventDefault(); ctxOpen(e.clientX,e.clientY,r[0],r[1],false,r[2]); });
 // 휴대폰: 목록을 길게 누르면 (0.5초, 손가락이 움직이면 취소) 아래 메뉴. 그 뒤 손을 떼며 생기는 누름은 무시
 let LP=null;
-document.addEventListener("touchstart",e=>{ if(e.touches.length!==1||CTX) return; const t=e.target; if(t.closest?.("input,textarea,select,#sutext,.ctxmenu")) return; const f=ctxFind(t); if(!f) return;
+document.addEventListener("touchstart",e=>{ if(e.touches.length!==1||CTX) return; const t=e.target; if(t.closest?.("input,textarea,select,w-ed,[contenteditable],#sutext,.ctxmenu")) return; const f=ctxFind(t); if(!f) return;
   const p=e.touches[0]; clearTimeout(LP?.t); LP={x:p.clientX,y:p.clientY,f,fired:false,t:setTimeout(()=>{ const r=LP.f.k==="w"?ctxWriting(LP.f.id):LP.f.k==="b"?ctxBook(LP.f.id):LP.f.k==="m"?ctxMs(LP.f.id):ctxSlide(LP.f.id); if(!r) return; LP.fired=true; navigator.vibrate?.(12); getSelection()?.removeAllRanges(); ctxOpen(0,0,r[0],r[1],true); },520)}; },{passive:true});
 document.addEventListener("touchmove",e=>{ if(!LP) return; const p=e.touches[0]; if(Math.hypot(p.clientX-LP.x,p.clientY-LP.y)>10){ clearTimeout(LP.t); LP=null; } },{passive:true});
 document.addEventListener("touchend",e=>{ if(!LP) return; clearTimeout(LP.t); if(LP.fired){ e.preventDefault(); } LP=null; },{passive:false});
@@ -8003,7 +8041,7 @@ document.addEventListener("keydown",e=>{ const typing=e.target.matches?.("input,
   if(e.key==="?"){ e.preventDefault(); kbHelp(); return; }
   if(tab==="diary"&&diaryDate&&(e.key==="ArrowLeft"||e.key==="ArrowRight")&&!document.querySelector(".bookview,.sendview,#dcalpop:not([hidden])")){ const d=new Date(diaryDate+"T12:00:00"); d.setDate(d.getDate()+(e.key==="ArrowLeft"?-1:1)); const k=dkey(d); if(k<=today()){ e.preventDefault(); dOpen(k,e.key==="ArrowLeft"?"prev":"next"); } } });
 function kbHelp(){ if(document.querySelector(".kbhelp")) return; const mac=/Mac|iPhone|iPad/.test(navigator.platform), M=mac?"⌘":"Ctrl";
-  const rows=[["엔터","한 줄 칸에서 그 칸의 확인 단추 (원고 만들기·저장·찾기·읽어 오기 …)"],["제목에서 엔터","본문으로 내려가기"],[M+" + 엔터","메모·각주·노트·자료 칸에서 저장"],["Esc","맨 위 창·상자 닫기 (집중 모드 나가기)"],[M+" + S","간직하기"],[M+" + E","읽기 모드 ↔ 다시 쓰기"],["⇧ + 엔터","본문에서 성경 구절 줄 → 본문 넣기"],[M+" + Z","되돌리기 (본문 — 도구 막대 ↶ · ▾ 목록으로 여러 걸음)"],[mac?"⇧⌘Z · ⌘Y":"Ctrl + Y · Ctrl + Shift + Z","다시 실행 (↷)"],["← →","일기장 앞날 · 다음 날, 슬라이드 크게 보기에서 앞뒤"],["오른쪽 클릭","글·원고·책·슬라이드·글 칸·성경 절 메뉴 (⇧ 누르면 브라우저 메뉴)"],["?","이 안내"]];
+  const rows=[["엔터","한 줄 칸에서 그 칸의 확인 단추 (원고 만들기·저장·찾기·읽어 오기 …)"],["제목에서 엔터","본문으로 내려가기"],[M+" + 엔터","메모·각주·노트·자료 칸에서 저장"],["Esc","맨 위 창·상자 닫기 (집중 모드 나가기)"],[M+" + S","간직 (모든 글 칸)"],[M+" + E","읽기 모드 ↔ 다시 쓰기"],["⇧ + 엔터","본문에서 성경 구절 줄 → 본문 넣기"],[M+" + Z","되돌리기 (본문 — 도구 막대 ↶ · ▾ 목록으로 여러 걸음)"],[mac?"⇧⌘Z · ⌘Y":"Ctrl + Y · Ctrl + Shift + Z","다시 실행 (↷)"],["← →","일기장 앞날 · 다음 날, 슬라이드 크게 보기에서 앞뒤"],["오른쪽 클릭","글·원고·책·슬라이드·글 칸·성경 절 메뉴 (⇧ 누르면 브라우저 메뉴)"],["?","이 안내"]];
   const ov=document.createElement("div"); ov.className="bookview sendview kbhelp";
   ov.innerHTML=`<section class="sheet" style="max-width:560px;margin:50px auto;display:grid;gap:8px"><div class="row"><p class="label" style="margin:0">키보드로 쓰기</p><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div>
     <table class="kbt">${rows.map(([k,d])=>`<tr><td><kbd>${esc(k)}</kbd></td><td>${esc(d)}</td></tr>`).join("")}</table><p class="hint" style="margin:0">휴대폰에서는 목록을 길게 누르면 메뉴가 나옵니다.</p></section>`;
@@ -8029,7 +8067,7 @@ async function pdfSlides(buf,prog){ const P=await loadLib(...PDFJS); P.GlobalWor
 const b64buf=b=>{ const s=atob(b), u=new Uint8Array(s.length); for(let i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u; };
 async function slideAttach(w,d,meta){ const deck=uid(); SLIDES[deck]=d; await idbSet("slides:"+deck,d); let up=false;
   if(SERVER){ try{ await gcall("slideSave",{deck,imgs:d.imgs,texts:d.texts}); up=true; }catch(e){ toast("슬라이드 그림을 구글에 올리지 못해 이 기기에만 있습니다: "+e.message); } }
-  w.slides=Object.assign({deck,n:d.imgs.length,at:new Date().toISOString(),up},meta); w.updated=new Date().toISOString(); if(editId===w.id) EDIT_BASE=w.updated; save(); return deck; }
+  w.slides=Object.assign({deck,n:d.imgs.length,at:new Date().toISOString(),up},meta); { const _pu=w.updated; w.updated=new Date().toISOString(); if(editId===w.id&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } save(); return deck; }
 const slideNums=body=>String(body||"").split("\n").map(l=>l.match(SLIDE_RE)).filter(Boolean).map(m=>+m[1]);
 function slideTabHtml(w){ if(!w) return `<p class="hint">글을 간직하면 슬라이드를 붙일 수 있습니다.</p>`;
   if(!w.slides) return `<p class="hint">설교 PPT를 가져오면 슬라이드가 작은 그림으로 여기 모입니다. 그림을 누르면 글의 커서 자리에 「▣ 슬라이드 n」 줄이 들어가고, 강단용 PDF에서는 그 자리 오른쪽에 그림이 나옵니다.</p><button class="btn small ink" onclick="slidePick()">${ICO.down}PPT 가져오기</button><p class="hint" style="margin-top:8px">노션 설교문(슬라이드 포함)을 「보내기 · 가져오기 → 노션 페이지」로 가져오면 그림과 자리가 함께 들어옵니다.</p>`;
@@ -8049,7 +8087,7 @@ function slideInsert(n){ const b=$("#wbody"), w=editId&&S.writings.find(x=>x.id=
   tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+`▣ 슬라이드 ${n}${lab?" · "+lab:""}`+(post.startsWith("\n")?"":"\n")); document.querySelector(`.slth[data-n="${n}"]`)?.classList.add("on"); }
 function slideDetach(wid){ const w=S.writings.find(x=>x.id===wid); if(!w?.slides||!confirm("슬라이드를 떼고, 글 속 「▣ 슬라이드」 줄도 지울까요? (그림은 드라이브에 남습니다)")) return;
   const b=$("#wbody"); if(b&&editId===wid){ const nb=b.value.split("\n").filter(l=>!SLIDE_RE.test(l)).join("\n"); if(nb!==b.value) tInsert(b,nb,0,b.value.length); }
-  delete w.slides; w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); paintSlideTab(w); toast("슬라이드를 뗐습니다"); }
+  delete w.slides; { const _pu=w.updated; w.updated=new Date().toISOString(); if(editId===wid&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } save(); paintSlideTab(w); toast("슬라이드를 뗐습니다"); }
 // 자동 자리 잡기: 슬라이드 글자와 문단의 두 글자 묶음이 얼마나 겹치는지로, 앞에서부터 차례대로(설교 흐름) 맞춥니다
 async function slideAuto(wid){ const w=S.writings.find(x=>x.id===wid), b=$("#wbody"); if(!w?.slides||!b) return; const d=await slideData(w.slides.deck); if(!d) return toast("슬라이드 그림을 찾지 못했습니다");
   if(!(d.texts||[]).some(t=>t&&t.length>3)) return toast("슬라이드에 글자가 없어 자동으로 자리를 잡을 수 없습니다. 그림을 눌러 직접 넣어 주세요");
@@ -8065,7 +8103,7 @@ async function slideAuto(wid){ const w=S.writings.find(x=>x.id===wid), b=$("#wbo
   tInsert(b,out.join("\n"),0,b.value.length); paintSlideTab(w);
   const got=d.texts.length-miss.length; toast(`${got}장의 자리를 잡았습니다${miss.length?` · ${miss.length}장(${miss.slice(0,10).join(", ")}${miss.length>10?"…":""})은 맞는 문단이 없어 그림을 눌러 직접 넣어 주세요`:""} — ⌘Z로 되돌리기`); }
 // PPT 고르기: 드라이브 최근 PPT(설교 제목·본문과 이름이 맞는 것을 위로) 또는 이 기기의 .pptx·.pdf
-function slidePick(){ const w=editId&&S.writings.find(x=>x.id===editId); if(!w) return toast("먼저 「간직하기」로 글을 간직해 주세요"); if($("#wbody")&&writingUnsaved()) keepWriting(true);
+function slidePick(){ const w=editId&&S.writings.find(x=>x.id===editId); if(!w) return toast("먼저 「간직」으로 글을 간직해 주세요"); if($("#wbody")&&writingUnsaved()) keepWriting(true);
   const ov=document.createElement("div"); ov.className="bookview sendview";
   ov.innerHTML=`<section class="sheet" style="max-width:640px;margin:36px auto;display:grid;gap:10px">
     <div class="row"><p class="label" style="margin:0">${ICO.down}설교 PPT 가져오기</p><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div>
@@ -8167,7 +8205,7 @@ const stampName=()=>{ const d=new Date(), z=n=>String(n).padStart(2,"0"); return
 function wordDiffHtml(a,b){ const A=a.match(/\s+|[^\s]+/g)||[], B=b.match(/\s+|[^\s]+/g)||[]; if(A.length*B.length>60000) return [esc(a),esc(b)];
   const d=arrDiff(A,B); let l="",r=""; d.forEach(x=>{ if(x.t==="same"){ l+=esc(x.s); r+=esc(x.s); } else if(x.t==="del") l+=`<del>${esc(x.s)}</del>`; else r+=`<ins>${esc(x.s)}</ins>`; }); return [l,r]; }
 // 지난 원고로 남기기 (이름 붙인 판, 10개까지)
-function impSnap(w,name,body){ if((w.snaps||[]).length>=10) return false; (w.snaps=w.snaps||[]).unshift({id:uid(),name,at:new Date().toISOString(),title:w.title||"",body}); w.updated=new Date().toISOString(); if(editId===w.id) EDIT_BASE=w.updated; return true; }
+function impSnap(w,name,body){ if((w.snaps||[]).length>=10) return false; (w.snaps=w.snaps||[]).unshift({id:uid(),name,at:new Date().toISOString(),title:w.title||"",body}); { const _pu=w.updated; w.updated=new Date().toISOString(); if(editId===w.id&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } return true; }
 // 나란히 비교 창: 고친 곳마다 「받아들이기」를 고르고 반영
 function cmpOpen(w,nw,label,o={}){ const live=editId===w.id&&$("#wbody"), body=live?$("#wbody").value:w.body, cur=impItems(body), {H,rows}=cmpHunks(cur,nw);
   if(!H.length){ toast(`${label}이 지금 글과 같습니다`); o.onApply?.(); save(); return null; }
@@ -8250,8 +8288,8 @@ function snapHtml(w){ const sn=w.snaps||[];
 async function snapTake(wid){ const w=S.writings.find(x=>x.id===wid), b=$("#wbody"); if(!w) return; const body=b&&editId===wid?b.value:w.body;
   if((w.snaps||[]).length>=10) return toast("이름 붙인 판은 10개까지입니다. 하나를 지운 뒤 남겨 주세요");
   const name=(await askText("이 판의 이름 (예: 출판사 보내기 전)",today()+" 판")||"").trim(); if(!name) return;
-  (w.snaps=w.snaps||[]).unshift({id:uid(),name,at:new Date().toISOString(),title:$("#wtitle")?.value||w.title||"",body}); w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); toast(`「${name}」 판을 남겼습니다`); render(); }
-function snapDel(wid,sid){ const w=S.writings.find(x=>x.id===wid); if(!w||!confirm("이 판을 지울까요?")) return; w.snaps=(w.snaps||[]).filter(x=>x.id!==sid); w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); render(); }
+  (w.snaps=w.snaps||[]).unshift({id:uid(),name,at:new Date().toISOString(),title:$("#wtitle")?.value||w.title||"",body}); { const _pu=w.updated; w.updated=new Date().toISOString(); if(editId===wid&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } save(); toast(`「${name}」 판을 남겼습니다`); render(); }
+function snapDel(wid,sid){ const w=S.writings.find(x=>x.id===wid); if(!w||!confirm("이 판을 지울까요?")) return; w.snaps=(w.snaps||[]).filter(x=>x.id!==sid); { const _pu=w.updated; w.updated=new Date().toISOString(); if(editId===wid&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } save(); render(); }
 function snapRestore(wid,sid){ const w=S.writings.find(x=>x.id===wid), v=w?.snaps?.find(x=>x.id===sid), b=$("#wbody"); if(!v||!b) return;
   if(!confirm(`지금 본문 대신 「${v.name}」 판을 넣을까요? (간직해야 확정되고, 지금 본문은 이전 판으로 남습니다)`)) return; tInsert(b,v.body,0,b.value.length); toast("판을 불러왔습니다. 간직하면 확정됩니다"); }
 // 줄 단위 비교 (LCS)
@@ -8375,7 +8413,7 @@ function mapPage(){ const g=mapGraph(), linked=g.nodes.filter(n=>n.deg>0), W=900
 function revNotesHtml(w,side){ const r=w.review; if(!r?.notes?.length) return side&&r?`<p class="hint" style="margin:0 0 6px">검토: 짚을 점이 없었습니다 (${esc((r.at||"").slice(0,10))})</p>`:"";
   return `<div class="revnotes"><p class="revh">검토 메모 ${r.notes.length} <small class="hint" style="display:inline">· ${esc((r.at||"").slice(0,10))}</small><span class="spacer"></span><button class="btn small ghost" onclick="revClear('${w.id}')" title="다 봤으면 지웁니다">다 봤어요</button></p>
     ${r.notes.map(n=>`<div class="revn"><span class="revt">${esc(n.type||"")}</span>${n.quote?`<a href="#" class="revq" onclick="revFind('${w.id}',${jsArg(n.quote)});return false" title="${n.found?"본문에서 찾기":"본문에서 그대로 찾지 못한 구절"}">「${esc(n.quote)}」</a>`:""}<span>${esc(n.note)}</span></div>`).join("")}</div>`; }
-function revClear(wid){ const w=S.writings.find(x=>x.id===wid); if(!w) return; delete w.review; w.updated=new Date().toISOString(); if(editId===wid) EDIT_BASE=w.updated; save(); render(); }
+function revClear(wid){ const w=S.writings.find(x=>x.id===wid); if(!w) return; delete w.review; { const _pu=w.updated; w.updated=new Date().toISOString(); if(editId===wid&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } save(); render(); }
 function revFind(wid,q){ if(editId!==wid||!$("#wbody")){ go('write',{edit:wid}); setTimeout(()=>revFind(wid,q),300); return; } const b=$("#wbody"), i=b.value.indexOf(q); if(i<0) return toast("본문에서 그 구절을 찾지 못했습니다 (그새 고쳤을 수 있습니다)");
   b.focus(); b.setSelectionRange(i,i+q.length); const y=b.getBoundingClientRect().top+scrollY+caretY(b); scrollTo({top:y-innerHeight*.4,behavior:"smooth"}); }
 async function reviewRun(title,kind,ws){ if(!SERVER||!GAS) return toast("구글 서버에 연결되어야 검토할 수 있습니다"); if(!CONF.ai) return toast("설정 → 주석 서재에 클로드(또는 제미나이) 열쇠가 있어야 합니다");
@@ -8384,7 +8422,7 @@ async function reviewRun(title,kind,ws){ if(!SERVER||!GAS) return toast("구글 
   toast("검토를 받는 중입니다… (1~2분)"); try{ busy(true); }catch(_){}
   const gm=ws[0]?(wMs(ws[0])||S.manuscripts.find(x=>x.title===title)):null, gg=G(gm);
   try{ const r=await gcall("reviewMs",{title,kind,pieces,genre:gm?.genre?gg.n:"",focus:gg.focus,item:gg.item,...(gm?.genre==="novel"?{settings:fbSettings(gm),serial:!!SERIAL(gm)}:{})}); if(!r.ok) throw new Error(r.error); const at=new Date().toISOString();
-    ws.forEach(w=>{ const p=r.pieces.find(x=>x.id===w.id); w.review={at,ai:r.ai,notes:p?p.notes:[]}; w.updated=at; if(editId===w.id) EDIT_BASE=at; });
+    ws.forEach(w=>{ const p=r.pieces.find(x=>x.id===w.id); w.review={at,ai:r.ai,notes:p?p.notes:[]}; { const _pu=w.updated; w.updated=at; if(editId===w.id&&EDIT_BASE===_pu) EDIT_BASE=at; } });
     save(); toast(`검토를 받았습니다 — 짚을 점 ${r.pieces.reduce((a,x)=>a+x.notes.length,0)}개`); return r; }
   catch(e){ toast("검토하지 못했습니다: "+e.message); return null; } finally{ try{ busy(false); }catch(_){} } }
 async function reviewMs(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const ws=msList(m); if(!ws.length) return toast("원고에 글이 없습니다");
@@ -8394,7 +8432,7 @@ function reviewPartMenu(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) 
   if(!parts.length) return toast("부·장이 없습니다 — 원고 전체 검토를 쓰세요");
   ctxOpen(innerWidth/2,innerHeight/3,"어느 부·장을 검토할까요?",parts.map(x=>{ const i=seq.indexOf(x), ws=[]; for(let j=i+1;j<seq.length;j++){ if(seq[j].p&&seq[j].p.lv<=x.p.lv) break; if(seq[j].w) ws.push(seq[j].w); }
     return {t:`${numT(partNum(m,x.p.id),x.p.t)} · ${ws.length}${G(m).item}`,ic:"✦",fn:()=>ws.length?reviewRun(`${m.title} — ${x.p.t}`,"원고",ws).then(r=>{ if(r) render(); }):toast("이 칸에 글이 없습니다")}; }),isTouch()); }
-async function reviewOne(wid){ const w=S.writings.find(x=>x.id===wid); if(!w) return; if($("#wbody")&&editId===wid&&writingUnsaved()) return toast("먼저 「간직하기」를 눌러 지금 글을 간직한 뒤 검토를 받아 주세요");
+async function reviewOne(wid){ const w=S.writings.find(x=>x.id===wid); if(!w) return; if($("#wbody")&&editId===wid&&writingUnsaved()) return toast("먼저 「간직」을 눌러 지금 글을 간직한 뒤 검토를 받아 주세요");
   const m=wMs(w); const r=await reviewRun(m?m.title:(w.title||"글"),w.type==="설교초안"?"설교초안":"원고 꼭지",[w]); if(r) render(); }
 // 서랍: 분류별로 걸러 보기
 let filt={track:"",kind:"",type:"",book:"",topic:""};
@@ -8708,8 +8746,8 @@ function pomoPaint(full){ pomoMini(); if(STAGE){ if(full) stageBuild(); else sta
   document.title=P.on?`${mmss(pomoLeft())} ${PH_NAME[P.phase]} · 아침 서재`:"아침 서재"; }
 setTimeout(()=>{ if(P.on&&Date.now()>=P.endsAt) pomoEnd(false); pomoPaint(true); if(pomoActive()) pomoTick(); },0);
 
-document.addEventListener("focusin",e=>{ if(e.target.matches?.("textarea,input:not([type=checkbox]):not([type=file]),select")) document.body.classList.add("typing"); });
-document.addEventListener("focusout",()=>setTimeout(()=>{ if(!document.activeElement?.matches?.("textarea,input,select")) document.body.classList.remove("typing"); },60));
+document.addEventListener("focusin",e=>{ if(e.target.matches?.("textarea,input:not([type=checkbox]):not([type=file]),select,[contenteditable]:not([contenteditable=false])")) document.body.classList.add("typing"); });
+document.addEventListener("focusout",()=>setTimeout(()=>{ if(!document.activeElement?.matches?.("textarea,input,select,[contenteditable]:not([contenteditable=false])")) document.body.classList.remove("typing"); },60));
 document.addEventListener("keydown",e=>{
   if((e.metaKey||e.ctrlKey)&&e.key==="s"&&tab==="write"){ e.preventDefault(); saveWriting(); }
   if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="s"&&tab==="room"&&ROOM_CODEX&&$(".codexpage")){ e.preventDefault(); codexSave(ROOM_CODEX,true); }   // 노트 화면 「간직」 (⌘S·Ctrl+S) — 화면을 다시 그리지 않아 커서 그대로
