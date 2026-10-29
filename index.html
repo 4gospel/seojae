@@ -738,6 +738,18 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .diary .cover{width:54px;height:78px;font-size:10px}
 .bkwhen{background:var(--paper-2);border:1px solid var(--edge);border-radius:8px;padding:10px 12px;margin:0 0 10px}
 .dnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+/* 일기: 손으로 칠한 형광펜 · 펜 밑줄 (글자 굵기는 그대로) */
+.dedit{min-height:238px;white-space:pre-wrap;word-break:break-word;outline:none;cursor:text}
+.dedit:empty::before{content:attr(data-ph);color:var(--faint);pointer-events:none}
+.crayon mark.mk{--hc:247,214,92;color:inherit;padding:0 .22em;margin:0 -.12em;border-radius:.9em .35em .8em .3em;-webkit-box-decoration-break:clone;box-decoration-break:clone;cursor:text;
+  background:linear-gradient(104deg,rgba(var(--hc),0) .9%,rgba(var(--hc),.78) 2.6%,rgba(var(--hc),.55) 6%,rgba(var(--hc),.34) 93%,rgba(var(--hc),.72) 96%,rgba(var(--hc),0) 98.5%),linear-gradient(183deg,rgba(var(--hc),0) 0%,rgba(var(--hc),.32) 8%,rgba(var(--hc),0) 16%);
+  background-size:100% 78%,100% 100%;background-position:0 70%,0 0;background-repeat:no-repeat}
+.crayon mark.hl-g{--hc:150,205,120} .crayon mark.hl-p{--hc:240,150,175} .crayon mark.hl-b{--hc:130,185,240}
+:root[data-theme="dark"] .crayon mark.mk{filter:saturate(.8) brightness(.8)}
+.crayon u.mku{text-decoration:none;padding-bottom:3px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='7' viewBox='0 0 60 7'><path d='M0 4.2 C 8 2.6, 14 5.4, 22 3.8 S 38 2.4, 46 4.4 S 56 3.4, 60 3.9' fill='none' stroke='%23463225' stroke-width='1.6' stroke-linecap='round' opacity='.85'/></svg>") repeat-x 0 100%/60px 7px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+:root[data-theme="dark"] .crayon u.mku{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='7' viewBox='0 0 60 7'><path d='M0 4.2 C 8 2.6, 14 5.4, 22 3.8 S 38 2.4, 46 4.4 S 56 3.4, 60 3.9' fill='none' stroke='%23e8dccb' stroke-width='1.6' stroke-linecap='round' opacity='.8'/></svg>")}
+.ddeco .dk .dpen{text-decoration:none;padding-bottom:2px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='5' viewBox='0 0 30 5'><path d='M0 3 C 6 1.6, 12 4, 18 2.8 S 26 2.2, 30 3' fill='none' stroke='%23463225' stroke-width='1.4' stroke-linecap='round'/></svg>") repeat-x 0 100%/30px 5px}
+.ddeco .dk.dstk.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .ddeco{display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin:0 0 8px;font-family:-apple-system,"Apple SD Gothic Neo",sans-serif}
 .ddeco .ddl{font-size:11.5px;letter-spacing:.12em;color:var(--faint);margin-right:2px} .ddeco .ddh{font-size:11px;color:var(--faint);margin-left:4px}
 .ddeco .dk{border:1px solid var(--edge);background:var(--paper);border-radius:7px;height:28px;min-width:28px;padding:0 8px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
@@ -1939,7 +1951,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="7ba6e9274a";
+const APP_BUILD="453a052cc9";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3322,7 +3334,7 @@ let diaryDate=null;
 const WEATHER=["☀️","⛅","☁️","🌧️","❄️","🌫️"], MOODS=["😊","🙂","😌","🥲","🔥","🙏"];
 function dEntry(d,make){ if(!S.diary) S.diary={}; if(make&&!S.diary[d]) S.diary[d]={}; return S.diary[d]||{}; }
 function dTouch(d){ dEntry(d,true).t=new Date().toISOString(); save(); }
-function dSet(k,v){ const d=diaryDate, e=dEntry(d,true); const ta=$(".dline"); if(ta){ clearTimeout(dLineT); e.line=ta.value; } e[k]=e[k]===v?null:v; dTouch(d); render(); }
+function dSet(k,v){ const d=diaryDate, e=dEntry(d,true); const cur=dCur(); if(cur!=null){ clearTimeout(dLineT); e.line=cur; } e[k]=e[k]===v?null:v; dTouch(d); render(); }
 let dLineT; function dLine(v){ const d=diaryDate; clearTimeout(dLineT); dLineT=setTimeout(()=>{ dEntry(d,true).line=v; dTouch(d); },600); }
 function dGo(n){ const x=new Date((diaryDate||today())+"T00:00"); x.setDate(x.getDate()+n); dOpen(dkey(x),n>0?"next":"prev"); }
 // 그날 일기로: 책장을 넘기듯 지금 장이 접히고 새 장이 펼쳐집니다
@@ -3409,7 +3421,7 @@ function diaryPage(){
     <div class="pg r">
       <div class="dsec" style="margin-top:0"><p class="dl cr">오늘 일기</p>
         ${dDecoBar()}
-        <div class="crayon">${dHasMk(e.line)?`<div class="dview" onclick="dEditOn(event)" title="눌러서 고치기">${dRich(e.line)}</div>`:""}<textarea class="dline" ${dHasMk(e.line)?"hidden":""} placeholder="오늘 아침, 짧게라도 진짜 일기를…" oninput="dLine(this.value);dGrow(this)" onblur="dEditOff()">${esc(e.line||"")}</textarea></div></div>
+        <div class="crayon"><div class="dline dedit" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="오늘 일기" data-ph="오늘 아침, 짧게라도 진짜 일기를…" oninput="dInput(this)" onkeydown="dKey(event)" onpaste="dPaste(event)">${dHtmlChars(dParse(e.line||""))}</div></div></div>
       <div class="dsec"><p class="dl">오늘 쓴 글</p>
         ${ws.length?ws.map(w=>`<div class="dw-item"><span class="label ${w.track}" style="font-size:18px;margin:0">[${esc(wTag(w))}]${w.passage?" "+esc(w.passage):""}</span><h5>${esc(w.title||"(제목 없음)")}</h5>
           <div class="dw-body" onclick="this.classList.toggle('open')" title="눌러서 펼치기/접기">${(()=>{ const fn=[]; const h=richHtml(w.body,fn); return h+fnHtml(fn); })()}</div>
@@ -3427,7 +3439,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape") dCalClose(); });
 // 일기책만 화면 가득: 머리·메뉴·단추 줄을 숨기고 책을 창 가득. PC는 브라우저 전체 화면까지. Esc·「돌아가기」·다른 메뉴로 가면 풀림
 function dFull(on){ const b=document.body; if(on===b.classList.contains("dfull")) return; b.classList.toggle("dfull",on);
   let x=$("#dfullx"); if(on){ if(!x){ x=document.createElement("div"); x.id="dfullx"; x.className="dfullx glass"; document.body.appendChild(x); }
-    x.innerHTML=`<button onclick="dGo(-1)" title="전날 (←)" aria-label="전날">‹</button><button onclick="dCalToggleFull()" title="날짜 고르기" aria-label="달력">${ICO.cal}</button><button onclick="dGo(1)" title="다음 날 (→)" aria-label="다음 날">›</button><i></i><button onclick="dFull(false)" title="돌아가기 (Esc)" aria-label="돌아가기">✕</button>`;
+    x.innerHTML=`<button onclick="dGo(-1)" title="전날 (←)" aria-label="전날">‹</button><button onclick="dCalToggleFull()" title="날짜 고르기" aria-label="달력">${ICO.cal}</button> <button onclick="dGo(1)" title="다음 날 (→)" aria-label="다음 날">›</button><i></i><button onclick="toggleStk()" title="스티커 붙이기" aria-label="스티커">🌼</button><i></i><button onclick="dFull(false)" title="돌아가기 (Esc)" aria-label="돌아가기">✕</button>`;
     if(!isTouch()&&document.documentElement.requestFullscreen&&!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); scrollTo(0,0); }
   else { x?.remove(); if(document.fullscreenElement&&!STAGE) document.exitFullscreen().catch(()=>{}); }
   if(tab==="diary") setTimeout(()=>{ const t=$(".dline"); if(t) dGrow(t); stkFitAll?.(); },60); }
@@ -3439,27 +3451,54 @@ let D_SW=null;
 document.addEventListener("touchstart",e=>{ const b=e.target.closest?.(".dbook"); if(!b||tab!=="diary"||e.touches.length!==1||STK_OPEN||e.target.closest(".stk,.stk-tools")){ D_SW=null; return; } const t=e.touches[0]; D_SW={x:t.clientX,y:t.clientY,at:Date.now()}; },{passive:true});
 document.addEventListener("touchend",e=>{ const s=D_SW; D_SW=null; if(!s||tab!=="diary") return; const t=e.changedTouches[0], dx=t.clientX-s.x, dy=t.clientY-s.y;
   if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.4||Date.now()-s.at>900) return; const sel=String(getSelection?.()||""); if(sel.length) return; dGo(dx<0?1:-1); },{passive:true});
-// ───────── 일기 꾸미기: 형광펜 4색·밑줄·굵게·기울임 (글쓰기와 같은 표시 ==…== · ==g:…== · __…__ · **…** · *…*) ─────────
-// 쓰는 동안은 글자 칸, 칸을 떠나면 꾸민 모습으로 보이고, 누르면 다시 고침. 단추는 눌러도 고른 글자가 풀리지 않게(pointerdown 막음)
+// ───────── 일기 꾸미기: 손으로 칠한 형광펜 4색 · 펜 밑줄 (2026-10-29 팀장님: 쓰는 동안에도 칠한 모습 그대로, 굵게·기울임은 뺌) ─────────
+// 일기 칸은 꾸민 모습이 바로 보이는 글 칸(contenteditable). 저장은 예전과 같은 글자 표시(==…== · ==g:…== · __…__)라 다른 기기·옛 판도 그대로 읽음
+// 글자마다 {ch,hl,ul,b,i} 로 풀어 다루고(dParse·dWalk), 같은 꾸밈끼리 묶어 다시 글자 표시로(dSerChars). 예전 굵게·기울임(**…** · *…*)은 읽어서 그대로 둠
 const dHasMk=t=>{ t=String(t||""); return t.search(MK_RE)>=0||t.search(BI_RE)>=0; };   // search 는 표시 찾기 위치(lastIndex)를 건드리지 않음
-const dRich=t=>richHtml(String(t||""));   // 줄바꿈은 white-space:pre-wrap 으로
+function dParse(line){ const out=[], str=String(line||""); let last=0;
+  const push=(t,a)=>{ let l=0; for(const m of t.matchAll(BI_RE)){ for(const ch of t.slice(l,m.index)) out.push({ch,...a}); for(const ch of (m[1]??m[2])) out.push({ch,...a,b:m[1]!=null,i:m[1]==null}); l=m.index+m[0].length; } for(const ch of t.slice(l)) out.push({ch,...a}); };
+  for(const m of str.matchAll(MK_RE)){ push(str.slice(last,m.index),{}); last=m.index+m[0].length; if(m[4]!=null) push(m[0],{}); else if(m[3]!=null) push(m[3],{ul:true}); else push(m[2],{hl:m[1]||"y"}); }
+  push(str.slice(last),{}); return out; }
+const dKeyOf=x=>[x.hl||"",x.ul?1:0,x.b?1:0,x.i?1:0].join();
+function dRuns(cs){ const runs=[]; let i=0; while(i<cs.length){ if(cs[i].ch==="\n"){ runs.push({nl:true}); i++; continue; } const c=cs[i], k=dKeyOf(c); let t=""; while(i<cs.length&&cs[i].ch!=="\n"&&dKeyOf(cs[i])===k){ t+=cs[i].ch; i++; } runs.push({t,a:c}); } return runs; }
+function dSerChars(cs){ return dRuns(cs).map(r=>{ if(r.nl) return "\n"; const t=r.t, a=r.a, core=t.trim(); if(!core) return t; const lead=t.match(/^\s*/)[0], tail=t.match(/\s*$/)[0];
+  let s=core; if(a.b) s=`**${s}**`; else if(a.i) s=`*${s}*`; if(a.hl) s=`==${a.hl==="y"?"":a.hl+":"}${s}==`; else if(a.ul) s=`__${s}__`; return lead+s+tail; }).join(""); }
+function dHtmlChars(cs){ const h=dRuns(cs).map(r=>{ if(r.nl) return "\n"; let s=esc(r.t); const a=r.a; if(a.b) s=`<b>${s}</b>`; else if(a.i) s=`<i>${s}</i>`; if(a.hl) s=`<mark class="mk hl-${a.hl}">${s}</mark>`; else if(a.ul) s=`<u class="mku">${s}</u>`; return s; }).join("");
+  return h+(cs.length&&cs[cs.length-1].ch==="\n"?"<br>":""); }   // 끝 줄바꿈이 보이게 자리 잡기 <br>
+// 글 칸 → 글자 목록. <br>은 줄바꿈(부모의 마지막 <br>은 브라우저의 자리 잡기라 셈하지 않음), <div>·<p>는 새 줄
+function dWalk(node,attrs,out,keepBr){ for(const n of node.childNodes){
+    if(n.nodeType===3){ for(const ch of n.nodeValue.replace(/​/g,"")) out.push({ch,...attrs}); continue; } if(n.nodeType!==1) continue;
+    const tg=n.tagName; if(tg==="BR"){ if(keepBr||n.nextSibling) out.push({ch:"\n"}); continue; }
+    let a=attrs; if(tg==="MARK"){ a={...a,hl:(String(n.className).match(/hl-([ygpb])/)||[])[1]||"y",ul:false}; } else if(tg==="U") a={...a,ul:true,hl:null}; else if(tg==="B"||tg==="STRONG") a={...a,b:true}; else if(tg==="I"||tg==="EM") a={...a,i:true};
+    if((tg==="DIV"||tg==="P")&&out.length&&out[out.length-1].ch!=="\n") out.push({ch:"\n"}); dWalk(n,a,out,keepBr); }
+  return out; }
+const dEd=()=>$(".dedit");
+const dCur=()=>{ const ed=dEd(); return ed?dSerChars(dWalk(ed,{},[])):null; };
+function dOff(ed,node,off){ const r=document.createRange(); r.setStart(ed,0); r.setEnd(node,off); const tmp=document.createElement("div"); tmp.appendChild(r.cloneContents()); return dWalk(tmp,{},[],true).length; }
+function dSetSel(ed,s,e){ const w=document.createTreeWalker(ed,NodeFilter.SHOW_TEXT); let n, pos=0, rs=null, re=null; const r=document.createRange();
+  while((n=w.nextNode())){ const L=n.nodeValue.length; if(!rs&&s<=pos+L){ r.setStart(n,s-pos); rs=1; } if(rs&&e<=pos+L){ r.setEnd(n,e-pos); re=1; break; } pos+=L; }
+  if(rs&&re){ const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); } }
+// 형광펜·밑줄 가장자리에 커서가 오면 바깥으로: 새로 쓰는 글자는 칠해지지 않게 (실제 펜처럼). 보이지 않는 칸(​)을 꾸밈 바깥에 두고 그 안에 커서
+document.addEventListener("selectionchange",()=>{ const ed=dEd(); if(!ed||document.activeElement!==ed) return; const sel=getSelection(); if(!sel.rangeCount||!sel.isCollapsed) return;
+  let n=sel.anchorNode, o=sel.anchorOffset; if(!ed.contains(n)) return; const el=(n.nodeType===1?n:n.parentElement)?.closest?.("mark,u"); if(!el||!ed.contains(el)) return;
+  const r=document.createRange(); r.selectNodeContents(el); const atS=r.comparePoint(n,o)===0&&(()=>{ const t=document.createRange(); t.setStart(el,0); t.setEnd(n,o); return !t.toString().length; })(), atE=(()=>{ const t=document.createRange(); t.setStart(n,o); t.setEnd(el,el.childNodes.length); return !t.toString().length; })();
+  if(!atS&&!atE) return; const z=document.createTextNode("​"); if(atE) el.after(z); else el.before(z); const c=document.createRange(); c.setStart(z,atE?1:0); c.collapse(true); sel.removeAllRanges(); sel.addRange(c); });
+function dInput(ed){ dLine(dSerChars(dWalk(ed,{},[]))); dGrow(ed); }
+function dKey(ev){ if(ev.key==="Enter"&&!ev.isComposing&&!ev.shiftKey){ ev.preventDefault(); document.execCommand("insertLineBreak"); } }
+function dPaste(ev){ ev.preventDefault(); const t=(ev.clipboardData||window.clipboardData)?.getData("text")||""; document.execCommand("insertText",false,t.replace(/\r\n?/g,"\n")); }
 function dDecoBar(){ const b=(k,c,lab,tip)=>`<button type="button" class="dk ${k==="hl"?"hl-"+c:k}" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="dMark('${k}','${c||""}')" title="${tip}">${lab}</button>`;
-  return `<div class="ddeco" role="toolbar" aria-label="일기 꾸미기"><span class="ddl">꾸미기</span>${b("hl","y","","노랑 형광펜")}${b("hl","g","","연두 형광펜")}${b("hl","p","","분홍 형광펜")}${b("hl","b","","하늘 형광펜")}<i class="dsep"></i>${b("ul","","<u>밑줄</u>","밑줄")}${b("b","","<b>굵게</b>","굵게 (⌘B)")}${b("i","","<i>기울임</i>","기울임 (⌘I)")}<i class="dsep"></i>${b("x","","지우기","고른 곳의 꾸밈 벗기기")}<small class="ddh">글자를 고른 뒤 누르세요</small></div>`; }
-function dEditOn(ev){ if(ev?.target?.closest?.("a")) return; const ta=$(".dline"), v=$(".dview"); if(!ta) return; v?.remove(); ta.hidden=false; dGrow(ta); ta.focus(); }
-function dEditOff(){ setTimeout(()=>{ const ta=$(".dline"); if(!ta||document.activeElement===ta||!dHasMk(ta.value)||tab!=="diary") return; clearTimeout(dLineT); const d=diaryDate, e=dEntry(d,true); if(e.line!==ta.value){ e.line=ta.value; dTouch(d); }
-  ta.hidden=true; let v=$(".dview"); if(!v){ v=document.createElement("div"); v.className="dview"; v.title="눌러서 고치기"; v.onclick=dEditOn; ta.before(v); } v.innerHTML=dRich(ta.value); },120); }
-function dMark(kind,color){ const ta=$(".dline"); if(!ta) return; if(ta.hidden){ dEditOn(); return toast("꾸밀 글자를 고른 뒤 다시 누르세요"); }
-  let s=ta.selectionStart, e=ta.selectionEnd; const v=ta.value; if(s===e) return toast("꾸밀 글자를 먼저 고르세요");
-  for(const m of v.matchAll(MK_RE)){ const ms=m.index, me=ms+m[0].length; if(ms<e&&me>s){ s=Math.min(s,ms); e=Math.max(e,me); } }   // 겹친 표시는 통째로 (반쪽만 깨지지 않게)
-  for(const m of v.matchAll(BI_RE)){ const ms=m.index, me=ms+m[0].length; if(ms<e&&me>s){ s=Math.min(s,ms); e=Math.max(e,me); } }
-  const wrap=t=>{ const lead=t.match(/^\s*/)[0], tail=t.match(/\s*$/)[0]; let core=t.trim(); if(!core) return t;
-    if(kind==="x") core=biStrip(stripWrap(core)); else if(kind==="hl") core=`==${color==="y"?"":color+":"}${stripWrap(core)}==`; else if(kind==="ul") core=`__${stripWrap(core)}__`;
-    else { const plain=biStrip(core); core=kind==="b"?`**${plain}**`:`*${plain}*`; }
-    return lead+core+tail; };
-  const out=v.slice(s,e).split("\n").map(wrap).join("\n"); ta.setRangeText(out,s,e,"select"); ta.focus(); dLine(ta.value); dGrow(ta); }
-document.addEventListener("keydown",e=>{ if(tab!=="diary"||!(e.metaKey||e.ctrlKey)||!e.target.classList?.contains("dline")) return; const k=e.key.toLowerCase(); if(k==="b"||k==="i"){ e.preventDefault(); dMark(k); } });
+  return `<div class="ddeco" role="toolbar" aria-label="일기 꾸미기"><span class="ddl">꾸미기</span>${b("hl","y","","노랑 형광펜")}${b("hl","g","","연두 형광펜")}${b("hl","p","","분홍 형광펜")}${b("hl","b","","하늘 형광펜")}<i class="dsep"></i>${b("ul","",`<span class="dpen">펜 밑줄</span>`,"펜으로 밑줄")}${b("x","","지우개","고른 곳의 형광펜·밑줄 지우기")}<i class="dsep"></i><button type="button" class="dk dstk ${STK_OPEN?"on":""}" onpointerdown="event.preventDefault()" onclick="toggleStk()" title="스티커 붙이기">🌼 스티커</button><small class="ddh">글자를 고른 뒤 누르세요 · 같은 색을 한 번 더 누르면 지워집니다</small></div>`; }
+function dMark(kind,color){ const ed=dEd(); if(!ed) return; const sel=getSelection(); if(!sel.rangeCount||!ed.contains(sel.anchorNode)||!ed.contains(sel.focusNode)) return toast("꾸밀 글자를 먼저 고르세요");
+  const r=sel.getRangeAt(0); if(r.collapsed) return toast("꾸밀 글자를 먼저 고르세요");
+  let s=dOff(ed,r.startContainer,r.startOffset), e=dOff(ed,r.endContainer,r.endOffset); if(s>e) [s,e]=[e,s];
+  const cs=dWalk(ed,{},[]), sel2=cs.slice(s,e).filter(x=>x.ch!=="\n"&&x.ch.trim());
+  const off=kind==="hl"?sel2.length&&sel2.every(x=>x.hl===color):kind==="ul"?sel2.length&&sel2.every(x=>x.ul):false;   // 같은 꾸밈을 다시 누르면 지움
+  for(let k=s;k<e&&k<cs.length;k++){ const x=cs[k]; if(x.ch==="\n") continue;
+    if(kind==="x"||off){ if(kind!=="ul") x.hl=null; if(kind!=="hl") x.ul=false; if(kind==="x"){ x.b=false; x.i=false; } }
+    else if(kind==="hl"){ x.hl=color; x.ul=false; } else if(kind==="ul"){ x.ul=true; x.hl=null; } }
+  const line=dSerChars(cs); ed.innerHTML=dHtmlChars(cs); dSetSel(ed,s,e); clearTimeout(dLineT); const d=diaryDate; dEntry(d,true).line=line; dTouch(d); dGrow(ed); }
 // 일기 칸은 쓰는 만큼 아래로 늘어남
-function dGrow(t){ t.style.height="auto"; t.style.height=Math.max(238,t.scrollHeight+4)+"px"; }
+function dGrow(t){ if(t.isContentEditable) return; t.style.height="auto"; t.style.height=Math.max(238,t.scrollHeight+4)+"px"; }   // 글 칸(contenteditable)은 저절로 늘어남
 
 // ───────── 스티커: 일기와 글 종이에 붙이고, 끌어서 옮기고, 돌리고, 키우기 ─────────
 const STICKERS={
@@ -3541,7 +3580,7 @@ function stkAct(op){
   if(op==="f"){ L.splice(i,1); L.push(t); } if(op==="x"){ L.splice(i,1); tomb(t.id); STK_SEL=null; }
   stkCommit(ctx); paintStk();
 }
-function toggleStk(){ if(typeof dCalClose==="function") dCalClose(); STK_OPEN=!STK_OPEN; if(!STK_OPEN) STK_SEL=null; paintStk(); }
+function toggleStk(){ if(typeof dCalClose==="function") dCalClose(); STK_OPEN=!STK_OPEN; if(!STK_OPEN) STK_SEL=null; paintStk(); document.querySelectorAll(".dstk").forEach(b=>b.classList.toggle("on",STK_OPEN)); }
 // 스티커 창 자리: 컴퓨터에서는 끌어다 왼쪽·오른쪽·위·아래 가장자리에 붙여 둘 수 있습니다 (이 기기에 기억)
 const stkDock=()=>{ try{ return localStorage.getItem("seojae.stkdock")||"b"; }catch(_){ return "b"; } };
 function setStkDock(d){ try{ localStorage.setItem("seojae.stkdock",d); }catch(_){} const el=$("#stkpal"); if(el) el.className="stk-palette"+(d==="b"?"":" dock-"+d); }
