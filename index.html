@@ -619,7 +619,43 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .dsec>.dl.cr{color:var(--crayon,#e4714a)}
 .crayon .dline:focus{outline:none}
 .diary .cover{width:54px;height:78px;font-size:10px}
+.bkwhen{background:var(--paper-2);border:1px solid var(--edge);border-radius:8px;padding:10px 12px;margin:0 0 10px}
 .dnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.ddeco{display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin:0 0 8px;font-family:-apple-system,"Apple SD Gothic Neo",sans-serif}
+.ddeco .ddl{font-size:11.5px;letter-spacing:.12em;color:var(--faint);margin-right:2px} .ddeco .ddh{font-size:11px;color:var(--faint);margin-left:4px}
+.ddeco .dk{border:1px solid var(--edge);background:var(--paper);border-radius:7px;height:28px;min-width:28px;padding:0 8px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.ddeco .dk.hl-y,.ddeco .dk.hl-g,.ddeco .dk.hl-p,.ddeco .dk.hl-b{width:28px;padding:0;border-radius:50%} .ddeco .dk.hl-y{background:#f7d65c} .ddeco .dk.hl-g{background:#b9dea6} .ddeco .dk.hl-p{background:#f3b6c2} .ddeco .dk.hl-b{background:#a9cbee}
+.ddeco .dk:hover{border-color:var(--ink-soft)} .ddeco .dk:active{transform:scale(.94)} .ddeco .dsep{width:1px;height:18px;background:var(--edge);margin:0 3px}
+.dview{font-family:"Nanum Pen Script";font-size:25px;line-height:34px;min-height:238px;white-space:pre-wrap;word-break:break-word;color:var(--ink);cursor:text;background:repeating-linear-gradient(transparent 0 32px,color-mix(in srgb,var(--crayon,#e4714a) 28%,transparent) 32px 33px,transparent 33px 34px)}
+.dview mark.mk{cursor:text} .dview u.mku{text-decoration-color:var(--crayon,#e4714a);text-decoration-thickness:2px;text-underline-offset:4px}
+@media (max-width:700px){ .ddeco .ddh{display:none} .ddeco .dk{height:32px;min-width:32px} .ddeco .dk.hl-y,.ddeco .dk.hl-g,.ddeco .dk.hl-p,.ddeco .dk.hl-b{width:32px} }
+
+/* 일기장 — 천으로 싼 하드커버 안에 펼친 책: 바느질선 · 겹친 종이 가장자리 · 가운데 책등 그늘 · 리본 책갈피 · 쪽 번호 */
+.dbook{position:relative;padding:16px 18px 20px;border-radius:12px;background:#4a2228 linear-gradient(135deg,rgba(255,255,255,.07),transparent 40%,rgba(0,0,0,.18));background-image:linear-gradient(135deg,rgba(255,255,255,.07),transparent 40%,rgba(0,0,0,.2)),repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0 2px,transparent 2px 5px);box-shadow:0 34px 48px -30px rgba(40,20,10,.75),0 2px 0 rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.07)}
+.dbook::before{content:"";position:absolute;inset:7px;border:1px dashed rgba(232,205,160,.38);border-radius:8px;pointer-events:none}
+.dbook>.diary{border:0;border-radius:3px;min-height:72vh;box-shadow:-2px 2px 0 -1px #efe6d3,-4px 4px 0 -2px #e5dac3,-6px 6px 0 -3px #d9ccb1,2px 2px 0 -1px #efe6d3,4px 4px 0 -2px #e5dac3,6px 6px 0 -3px #d9ccb1,0 16px 26px -16px rgba(0,0,0,.6)}
+.dbook>.diary::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:80px;margin-left:-40px;pointer-events:none;z-index:1;background:linear-gradient(90deg,transparent,rgba(60,40,20,.07) 38%,rgba(60,40,20,.2) 50%,rgba(60,40,20,.07) 62%,transparent)}
+.dbook .diary .pg.l{border-right:0;box-shadow:none;padding-left:58px} .dbook .diary .pg.r{box-shadow:none;padding-right:58px}
+.dribbon{position:absolute;z-index:4;top:2px;right:96px;width:15px;height:120px;background:linear-gradient(90deg,#7c1f2b,#a33443 50%,#7c1f2b);clip-path:polygon(0 0,100% 0,100% 100%,50% 86%,0 100%);box-shadow:0 2px 3px rgba(0,0,0,.25);pointer-events:none}
+.dhead{border-bottom:1px solid var(--edge);padding-bottom:12px;position:relative} .dhead::after{content:"❦";position:absolute;left:50%;bottom:-10px;transform:translateX(-50%);background:var(--paper);padding:0 8px;color:var(--deco);font-size:14px;line-height:20px}
+.dhead .dd{font-family:"Nanum Myeongjo",serif;font-weight:800;font-size:48px;letter-spacing:-.02em} .dhead .dw{letter-spacing:.22em;font-size:13px}
+.dbook .dsec>.dl:not(.cr){font-family:"Nanum Myeongjo",serif;font-size:13px;font-weight:700;letter-spacing:.24em;color:var(--sepia);display:flex;align-items:center;gap:10px} .dbook .dsec>.dl:not(.cr)::after{content:"";flex:1;height:1px;background:var(--edge)}
+.dfolio{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:"Nanum Myeongjo",serif;font-size:12px;letter-spacing:.2em;color:var(--faint)} .dfolio::before,.dfolio::after{content:"—";margin:0 8px;opacity:.5}
+.dturn{position:absolute;z-index:5;top:16px;bottom:20px;width:52px;border:0;background:transparent;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;color:var(--ink-soft)}
+.dturn.prev{left:18px;border-radius:3px 0 0 3px} .dturn.next{right:18px;border-radius:0 3px 3px 0}
+.dturn i{font-style:normal;font-family:"Nanum Myeongjo",serif;font-size:30px;opacity:0;transition:opacity .2s,transform .2s}
+.dturn:not(:disabled):hover{background:linear-gradient(90deg,rgba(60,40,20,.08),transparent)} .dturn.next:not(:disabled):hover{background:linear-gradient(270deg,rgba(60,40,20,.08),transparent)}
+.dturn:not(:disabled):hover i{opacity:.75} .dturn.prev:not(:disabled):hover i{transform:translateX(-3px)} .dturn.next:not(:disabled):hover i{transform:translateX(3px)}
+.dturn:disabled{cursor:default} .dturn:focus-visible{outline:2px solid var(--sepia);outline-offset:-4px}
+.dturn::after{content:"";position:absolute;bottom:0;width:0;height:0;transition:width .2s,height .2s} .dturn.next::after{right:0;background:linear-gradient(225deg,transparent 50%,#e9dfca 50%);box-shadow:-2px -2px 4px rgba(0,0,0,.12)} .dturn.prev::after{left:0;background:linear-gradient(135deg,transparent 50%,#e9dfca 50%);box-shadow:2px -2px 4px rgba(0,0,0,.12)}
+.dturn:not(:disabled):hover::after{width:26px;height:26px}
+.diary.slide-next{animation:dslideN .4s ease-out} .diary.slide-prev{animation:dslideP .4s ease-out}
+@keyframes dslideN{from{transform:translateX(18%) rotateY(-8deg);opacity:.2}to{transform:none;opacity:1}} @keyframes dslideP{from{transform:translateX(-18%) rotateY(8deg);opacity:.2}to{transform:none;opacity:1}}
+:root[data-theme="dark"] .dbook>.diary{box-shadow:-2px 2px 0 -1px #3a332b,-4px 4px 0 -2px #322b24,2px 2px 0 -1px #3a332b,4px 4px 0 -2px #322b24,0 16px 26px -16px rgba(0,0,0,.8)}
+@media (max-width:700px){ .dbook{padding:10px 8px 12px;border-radius:10px} .dbook::before{inset:4px} .dbook>.diary::after{display:none} .dribbon{left:auto;right:30px;height:70px;width:12px}
+  .dbook .diary .pg.l,.dbook .diary .pg.r{padding-left:26px;padding-right:26px} .dturn{width:22px;top:10px;bottom:12px} .dturn.prev{left:8px} .dturn.next{right:8px} .dturn i{opacity:.35;font-size:22px} .dturn:disabled i{opacity:0} .dhead .dd{font-size:40px}
+  .dbook .diary .pg.l .dfolio{display:none} .dbook .diary .pg{padding-bottom:40px} }
+
 .dbook{perspective:1600px}
 /* 보내기 */
 .sendview{background:rgba(40,28,16,.35);overflow:auto} .sendpick{display:grid;gap:4px;max-height:220px;overflow:auto;border:1px dashed var(--edge);padding:8px;border-radius:6px} .sendpick .chk{display:flex;gap:6px;align-items:center;font-size:14px}
@@ -884,6 +920,21 @@ body.docmode .readview{font-family:var(--doc-font);font-size:var(--doc-fs);line-
 .stgoal{display:flex;align-items:center;gap:10px;border:0;background:none;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--ink);font:14px -apple-system,"Apple SD Gothic Neo",sans-serif;text-align:left;width:100%} .stgoal:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)} .stgoal .stn{flex:0 1 auto;max-width:220px;font-weight:600}
 .stgoal .bar{width:120px;height:6px;border-radius:3px;background:var(--edge);overflow:hidden;flex:none} .stgoal .bar i{display:block;height:100%;background:var(--book)}
 .dday{margin-left:auto;font-size:12.5px;padding:1px 9px;border-radius:999px;border:1px solid var(--edge)} .dday.soon{color:#b45309;border-color:#f0c48a} .dday.over{color:var(--bible);border-color:var(--bible)}
+.jboard{max-width:1100px} .jbin{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;background:var(--paper);border:1px solid var(--edge);border-radius:10px;padding:10px 12px;box-shadow:0 8px 20px -18px rgba(0,0,0,.5)}
+.jbin textarea{width:100%;border:0;background:transparent;font-size:22px;resize:vertical;min-height:52px;outline:0;color:var(--ink)} .jbin select{font-size:13px}
+.jbbar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;margin:16px 0 6px} .jchips{display:flex;flex-wrap:wrap;gap:6px}
+.jchip{border:1px solid var(--edge);background:var(--paper);border-radius:99px;padding:3px 12px;font:13px/1.6 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft);cursor:pointer} .jchip i{font-style:normal;opacity:.55;margin-left:5px;font-size:12px} .jchip.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.jbtools{display:flex;align-items:center;gap:8px;flex-wrap:wrap} .jbtools input{width:130px!important;font-size:13px;padding:4px 9px} .jbtools select,.jbin select{width:auto!important;font-size:13px;padding:5px 8px} .jbin .row{flex-wrap:nowrap} .jbtools label.chk{display:inline-flex;align-items:center;gap:5px;width:auto;font-size:13px;white-space:nowrap;margin:0} .jbtools label.chk input{width:auto!important;margin:0}
+#jbbody{background:linear-gradient(var(--paper-2),var(--paper-2)) padding-box;border-radius:12px;padding:6px 14px 14px;min-height:140px;background-image:radial-gradient(rgba(80,60,40,.07) 1px,transparent 1.4px);background-size:14px 14px}
+.jgh{margin:14px 2px 0;font:600 13px/1.6 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink-soft);display:flex;align-items:center;gap:6px} .jgh span{opacity:.55;font-weight:400} .jgh small{font-weight:400;opacity:.6}
+.stickies.jgrid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:20px 18px;padding:12px 2px 4px}
+.jcard{min-height:120px;padding-top:12px} .jcard.pin{box-shadow:0 14px 22px -14px rgba(0,0,0,.6),0 0 0 2px rgba(196,84,72,.25)} .jcard .stt.ro{cursor:default}
+.jtop{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-family:-apple-system,"Apple SD Gothic Neo",sans-serif} .jcat{border:0;background:rgba(255,255,255,.6);border-radius:99px;font-size:11.5px;padding:1px 9px;color:#5a4a2c;cursor:pointer} .jcat.none{opacity:.45} .jcat.ms{cursor:default;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jused{font-size:11px;color:#2f5d4e;background:rgba(255,255,255,.5);border-radius:99px;padding:0 7px} .jpin{margin-left:auto;font-size:13px}
+.jseeds{margin-top:10px;border-top:1px dashed var(--edge);padding-top:4px} .seedc{opacity:.92} .jdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#fdf0a6;border:1px solid rgba(0,0,0,.1)} .jdot.c-p{background:#fbd3dc} .jdot.c-g{background:#d2efc6} .jdot.c-b{background:#cfe4fb}
+.jempty{color:var(--faint);text-align:center;padding:26px 8px;margin:0;line-height:1.8}
+.jcard .stb button{white-space:nowrap}
+@media (max-width:700px){ .jcard .stb small{display:none} .jcard .stb{gap:2px} .jbin{grid-template-columns:1fr} .stickies.jgrid{grid-template-columns:repeat(2,1fr);gap:14px 10px} .jcard{font-size:19px} .jbbar{flex-direction:column;align-items:stretch} .jbtools input{flex:1} }
 .stickies{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px;padding:10px 4px} .stickies.small{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 .sticky{position:relative;min-height:130px;padding:16px 12px 30px;background:#fdf0a6;color:#3a3220;border-radius:2px 2px 12px 2px;box-shadow:0 12px 18px -14px rgba(0,0,0,.55),0 1px 0 rgba(0,0,0,.05);transform:rotate(var(--r,0deg));font-family:"Nanum Pen Script",cursive;font-size:21px;line-height:1.25}
 .sticky::before{content:"";position:absolute;top:-8px;left:50%;width:46px;height:16px;margin-left:-23px;background:rgba(255,255,255,.55);box-shadow:0 1px 2px rgba(0,0,0,.08);transform:rotate(-2deg)}
@@ -1746,7 +1797,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="e16771aa1e";
+const APP_BUILD="bcf66bd735";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -1779,13 +1830,13 @@ function tryReload(){
 }
 if(/[?&]v=/.test(location.search)) history.replaceState(null,"",location.pathname+location.hash);
 document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState==="hidden"){ if(SCRIV_EDIT&&$("#scta")) scrivAuto(true); autoKeepNow(); saveDraft(); draftCloud(); flushSave(); return; }   // 화면을 내릴 때: 임시 저장(구글에도) + 미뤄 둔 저장 바로 보내기
+  if(document.visibilityState==="hidden"){ try{ nmAuto(); }catch(_){} if(SCRIV_EDIT&&$("#scta")) scrivAuto(true); autoKeepNow(); saveDraft(); draftCloud(); flushSave(); return; }   // 화면을 내릴 때: 임시 저장(구글에도) + 미뤄 둔 저장 바로 보내기
   checkUpdate();
   if(GAS&&READY&&!saveT&&!SAVING&&isDirty()) pushSave();   // 밀린 저장이 있으면 먼저 보냄
   if(GAS&&READY&&!saveT&&!SAVING&&!(tab==="write"&&writingUnsaved())) (async()=>{ try{ const r=await gcall("rev"); if(r&&r.rev===REV) return; }catch(_){} fetchFresh(false); })();   // 오래 열어 둔 화면도 최신으로 (바뀐 게 없으면 전체를 받지 않음)
 });
 addEventListener("online",()=>{ if(GAS&&READY&&isDirty()) pushSave(); });
-addEventListener("pagehide",()=>{ autoKeepNow(); saveDraft(); draftCloud(); flushSave(); });
+addEventListener("pagehide",()=>{ try{ nmAuto(); }catch(_){} autoKeepNow(); saveDraft(); draftCloud(); flushSave(); });
 addEventListener("beforeunload",e=>{ if(writingUnsaved()){ saveDraft(); e.preventDefault(); e.returnValue=""; } });
 setInterval(checkUpdate,5*60*1000);
 
@@ -2091,6 +2142,57 @@ function paintCcm(){ paintMpCtl(); const box=$("#mpccm"); if(!box||!MUSIC.ccm) r
     :`<span class="muted" style="font-size:12.5px">유튜브에서 확인된 곡이 없습니다.</span>`)
     +`<div class="row" style="gap:6px;justify-content:space-between"><small class="muted" style="font-size:11px">AI가 고르고 유튜브에서 찾은 곡만</small><button class="hb" onclick="ccmOpen(true)" title="다른 곡으로 다시 고르기">다시 고르기</button></div>`; }
 function ccmPlay(i){ const c=MUSIC.ccm?.[i]; if(!c) return; if(MP&&MUSIC.slot==="ccm:"+i){ try{ MUSIC.playing?MP.pauseVideo():MP.playVideo(); }catch(_){} return; } mpPlay(c.id,c.song,c.artist,"ccm:"+i,c.ym); }
+// ───────── 자동 백업: 구글 드라이브 「아침 서재/백업」(모든 기기, 서버가 날마다) + 이 PC 폴더(설정한 PC만, 휴대폰은 구글만) ─────────
+// PC 백업은 크롬·엣지의 「폴더 고르기」로 고른 폴더에 아침서재-백업-날짜.json 을 씁니다. 같은 날은 30분마다 그날 파일을 새로 고치고, 최근 30일 + 달마다 첫 파일을 남깁니다.
+// 고른 폴더(손잡이)는 이 기기 큰 저장소(IndexedDB lbDir)에만, 켜기·마지막 시각은 seojae.localBackup 에만 — 기록 파일(구글)에는 넣지 않음
+let BK_INFO=null, BK_ASKED=false, LB_NEED=false, LB_BUSY=false;
+const lbCan=()=>"showDirectoryPicker" in window&&!matchMedia("(pointer:coarse)").matches;
+const lbCfg=()=>{ try{ return JSON.parse(localStorage.getItem("seojae.localBackup")||"null")||{}; }catch(_){ return {}; } };
+const lbSetCfg=o=>{ try{ localStorage.setItem("seojae.localBackup",JSON.stringify(Object.assign(lbCfg(),o))); }catch(_){} };
+const LB_PRE="아침서재-백업-";
+function bkWhen(iso){ if(!iso) return ""; const d=new Date(iso); return isNaN(d)?"":`${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`; }
+async function bkInfo(install){ if(!GAS||!SERVER) return; try{ const r=await gcall("backupInfo",{install:!!install}); if(r.ok){ BK_INFO=r; bkPaint(); } }catch(e){ BK_INFO={ok:false,error:e.message}; bkPaint(); } }
+async function bkNow(){ if(!GAS||!SERVER) return toast("구글에 연결되어 있어야 합니다"); toast("구글 드라이브에 지금 기록을 백업하는 중…"); try{ const r=await gcall("backupNow","지금"); if(!r.ok) throw new Error(r.error); toast(`백업했습니다 · ${r.name}`); bkInfo(false); }catch(e){ toast("백업하지 못했습니다: "+e.message); } }
+function lbData(){ return JSON.stringify({app:"아침 서재",kind:"backup",build:APP_BUILD,at:new Date().toISOString(),data:JSON.parse(SER())}); }
+// 손잡이를 꺼내 쓰기 허락을 확인합니다 (ask: 사람이 단추를 눌렀을 때만 허락 창을 띄울 수 있음)
+async function lbDir(ask){ const h=await idbGet("lbDir"); if(!h) return null; let p="prompt"; try{ p=await h.queryPermission({mode:"readwrite"}); }catch(_){}
+  if(p!=="granted"&&ask){ try{ p=await h.requestPermission({mode:"readwrite"}); }catch(_){} }
+  LB_NEED=p!=="granted"; return p==="granted"?h:null; }
+async function lbRun(force,ask){ const c=lbCfg(); if(!c.on||!lbCan()||LB_BUSY) return false; if(GAS&&!READY&&!force) return false;
+  if(!force&&c.at&&Date.now()-new Date(c.at).getTime()<30*60e3&&(c.day===today())) return false;   // 30분에 한 번
+  LB_BUSY=true;
+  try{ const h=await lbDir(ask); if(!h){ bkPaint(); if(force) toast("PC 백업 폴더를 쓸 허락이 필요합니다 — 설정 → 자동 백업에서 「허락하기」"); return false; }
+    const name=LB_PRE+today()+".json", f=await h.getFileHandle(name,{create:true}), w=await f.createWritable(); await w.write(lbData()); await w.close();
+    const names=[]; for await (const [n,x] of h.entries()) if(x.kind==="file"&&n.startsWith(LB_PRE)&&n.endsWith(".json")) names.push(n);
+    names.sort(); const first={}; names.forEach(n=>{ const m=n.slice(LB_PRE.length,LB_PRE.length+7); if(!first[m]) first[m]=n; });
+    const old=names.filter(n=>!Object.values(first).includes(n)); for(const n of old.slice(0,Math.max(0,old.length-30))){ try{ await h.removeEntry(n); }catch(_){} }   // 최근 30일 + 달마다 첫 파일
+    lbSetCfg({at:new Date().toISOString(),day:today(),name:h.name,count:Math.min(names.length,30+Object.keys(first).length)}); if(force) toast(`이 PC의 「${h.name}」 폴더에 백업했습니다 · ${name}`); bkPaint(); return true;
+  }catch(e){ if(force) toast("PC에 백업하지 못했습니다: "+e.message); return false; }
+  finally{ LB_BUSY=false; } }
+async function lbPick(){ if(!lbCan()) return toast("이 브라우저는 폴더 고르기를 지원하지 않습니다 — 크롬·엣지에서 켜거나 「지금 내려받기」를 쓰세요");
+  try{ const h=await showDirectoryPicker({id:"seojae-backup",mode:"readwrite",startIn:"documents"}); await idbSet("lbDir",h); lbSetCfg({on:true,name:h.name,at:""}); LB_NEED=false; await lbRun(true,true); bkPaint(); }
+  catch(e){ if(e?.name!=="AbortError") toast("폴더를 고르지 못했습니다: "+e.message); } }
+function lbOff(){ if(!confirm("이 PC 백업을 끌까요? 이미 만든 백업 파일은 폴더에 그대로 남습니다.")) return; lbSetCfg({on:false}); bkPaint(); toast("이 PC 백업을 껐습니다 (구글 백업은 그대로)"); }
+function lbDownload(){ download(LB_PRE+today()+".json",lbData(),"application/json"); toast("지금 기록 전체를 파일로 내려받았습니다"); }
+function bkInner(){ const c=lbCfg(), I=BK_INFO;
+  const g=!GAS?`<p class="muted">구글에 연결되면 「아침 서재/백업」 폴더에 날마다 사본이 남습니다.</p>`
+    :!I?`<p class="muted">구글 백업 상태를 확인하는 중…</p>`
+    :!I.ok?`<p class="muted">구글 백업 상태를 받지 못했습니다${I.error?`: ${esc(I.error)}`:""}</p>`
+    :`<div class="okline"><span class="stamp ${I.clock?"ok":""}">${I.clock?"자동 백업 켜짐":"저장할 때만"}</span><span class="muted">사본 ${I.count}개${I.last?` · 마지막 ${esc(I.last.name.replace(/^data-|\.json$/g,""))}`:""}${I.lastAt?` (${bkWhen(I.lastAt)})`:""}</span></div>
+      <p class="hint">${I.clock?"날마다 새벽 4시 무렵 저절로, 그리고 그날 첫 저장 때 사본을 남깁니다.":"그날 첫 저장 때 사본을 남깁니다."} 최근 60개와 달마다 첫 사본은 오래 둡니다.${I.needEditor?" 저장이 없는 날에도 남기려면 구글 스크립트 편집기에서 <b>turnOnAutoBackup</b> 을 ▶ 한 번 실행해 주세요.":""}</p>`;
+  const pc=!lbCan()?`<p class="hint" style="margin-top:10px">${matchMedia("(pointer:coarse)").matches?"휴대폰·태블릿에서는 구글 백업만 합니다.":"이 브라우저는 폴더에 저절로 쓰는 기능이 없어, PC 백업은 크롬·엣지에서 켤 수 있습니다. 대신 「지금 내려받기」로 파일을 받아 둘 수 있습니다."}</p>`
+    :c.on?`<div class="okline" style="margin-top:12px"><span class="stamp ${LB_NEED?"":"ok"}">${LB_NEED?"허락 필요":"이 PC 백업 켜짐"}</span><span class="muted">「${esc(c.name||"폴더")}」${c.at?` · 마지막 ${bkWhen(c.at)}`:""}</span></div>
+      ${LB_NEED?`<p class="hint">브라우저를 다시 열면 폴더에 쓰는 허락을 한 번 더 물어야 합니다. 「허락하기」를 눌러 주세요.</p>`:`<p class="hint">이 PC에서 앱을 열어 두면 30분마다 오늘 파일(아침서재-백업-날짜.json)을 새로 씁니다. 최근 30일과 달마다 첫 파일을 남깁니다.</p>`}`
+    :`<p class="hint" style="margin-top:12px">안전 장치로 이 PC의 폴더(예: 문서 → 아침서재 백업)에도 날마다 사본을 남길 수 있습니다. 이 PC에서만 켜지고, 다른 기기에는 영향이 없습니다.</p>`;
+  return `${g}<div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap">${GAS&&SERVER?`<button class="btn small" onclick="bkNow()">지금 구글에 백업</button>${I?.folderUrl?`<a class="btn small ghost" href="${esc(I.folderUrl)}" target="_blank" rel="noopener">백업 폴더 열기 ↗</a>`:""}`:""}</div>
+    ${pc}<div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap">${lbCan()?(c.on?`${LB_NEED?`<button class="btn small ink" onclick="lbRun(true,true)">허락하기</button>`:`<button class="btn small" onclick="lbRun(true,true)">지금 PC에 백업</button>`}<button class="btn small ghost" onclick="lbPick()">폴더 바꾸기</button><button class="btn small ghost" onclick="lbOff()">끄기</button>`:`<button class="btn small ink" onclick="lbPick()">PC 백업 폴더 고르기</button>`):""}${matchMedia("(pointer:coarse)").matches?"":`<button class="btn small ghost" onclick="lbDownload()">지금 내려받기</button>`}</div>
+    <p class="hint" style="margin-top:8px">되살리기: 서랍 → 휴지통 아래 「백업에서 찾기」에서 날짜별 사본의 글을 골라 되살립니다.</p>`; }
+function bkPaint(){ const el=$("#bkbox"); if(el) el.innerHTML=bkInner(); }
+function backupSection(){ if(!BK_ASKED&&GAS&&SERVER){ BK_ASKED=true; setTimeout(()=>bkInfo(true),50); } if(lbCfg().on&&lbCan()) setTimeout(()=>lbDir(false).then(()=>bkPaint()),60);
+  return `<section class="sheet"><p class="label">자동 백업</p><p class="sub">기록 전체를 구글 드라이브 「아침 서재/백업」 폴더에 날마다 남깁니다. PC에서는 원하면 이 PC 폴더에도 한 벌 더 남깁니다.</p><div id="bkbox">${bkInner()}</div></section>`; }
+setInterval(()=>{ lbRun(false,false); },10*60e3);
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") lbRun(false,false); });
+setTimeout(()=>lbRun(false,false),20000);   // 열고 조금 뒤 (최신 기록을 받은 다음)
 function musicSection(){
   return `<section class="sheet tape ${CONF.yt?"compact":""}">
     <p class="label">찬송가·CCM 듣기</p>
@@ -2573,7 +2675,7 @@ function gearSvg(){
 let restPeek=false, selLen=null, promoAsk=null;   // 쉬는 날에도 '그래도 읽기'를 누르면 오늘 분량을 보여 줌
 let tab="today", track="bible", editId=null, selTopics=[], selSits=[], fromWriting=null, fromNote=null, noteOpen=null, drawerSub="all";
 let NAV=false;
-function go(t,o={}){ const lvId=tab==="write"?editId:null;
+function go(t,o={}){ const lvId=tab==="write"?editId:null; if(t!=="room") nmAuto();
   if(tab==="write"&&$("#wbody")&&writingUnsaved()){                    // 떠날 때: 쓴 만큼 되면 저절로 간직(노션에도), 아직 몇 줄이면 임시 보관
     autoKeepNow(); if(writingUnsaved()){ saveDraft(); if(t!=="write") toast(track==="bible"?"쓰던 글은 임시로 보관했습니다. 「묵상」을 다시 열면 이어집니다":editId?"쓰던 글은 임시로 보관했습니다. 그 글을 다시 열면 이어집니다":"쓰던 새 글은 임시로 보관했습니다. 위 「✎ 쓰던 새 글」 탭에서 이어 씁니다"); }
   }
@@ -2910,7 +3012,7 @@ function jotBox(){
     <small class="hint" style="margin-bottom:6px">글감 창고 — 생각나는 것을 그때그때 적어 두고, 글을 쓸 때 꺼내 씁니다. 모든 기기에서 같이 보이고 노션에는 가지 않습니다.</small>
     <textarea id="jotin" class="pen" placeholder="떠오른 한 줄… (⌘Enter / Ctrl+Enter 로 보관)" onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter'){event.preventDefault();jotAdd()}" style="min-height:62px;font-size:21px"></textarea>
     <div class="row" style="margin-top:6px"><button class="btn small ink" onclick="jotAdd()">끄적여 두기</button><span class="spacer"></span>${(S.jots||[]).length>6?`<input id="jotq" placeholder="찾기" value="${esc(JOT_Q)}" oninput="JOT_Q=this.value;jotPaint()" style="width:120px;font-size:13px;padding:4px 8px">`:""}</div>
-    <div id="jotlist" class="jotlines">${jotList()}</div></div>`;
+    <div id="jotlist" class="jotlines">${jotList()}</div><button class="btn small ghost" style="margin-top:8px" onclick="stOpen('jots')">끄적이기 판에서 모두 보기 · 분류·정렬 →</button></div>`;
 }
 function jotList(){
   const q=JOT_Q.trim().toLowerCase(); let L=jots().filter(j=>!q||j.t.toLowerCase().includes(q)); const total=L.length; if(!JOT_ALL&&!q) L=L.slice(0,6);
@@ -2918,9 +3020,73 @@ function jotList(){
     +(total>L.length?`<button class="btn small ghost" style="margin-top:6px" onclick="JOT_ALL=true;jotPaint()">${total-L.length}개 더 보기</button>`:JOT_ALL&&total>6?`<button class="btn small ghost" style="margin-top:6px" onclick="JOT_ALL=false;jotPaint()">접기</button>`:"");
 }
 function jotPaint(){ const el=$("#jotlist"); if(el) el.innerHTML=jotList(); }
-function jotAdd(){ const i=$("#jotin"); const t=(i?.value||"").trim(); if(!t) return toast("적을 것을 먼저 써 주세요"); (S.jots=S.jots||[]).push({id:uid(),t,updated:new Date().toISOString()}); i.value=""; save(); toast("끄적여 두었습니다"); if($("#jotlist")){ jotPaint(); if(S.jots.length===7) render(); } else if(tab==="today") render(); }
-function jotDel(id){ const j=(S.jots||[]).find(x=>x.id===id); if(!j) return; if(j.t.length>40&&!confirm("이 끄적임을 지울까요?")) return; tomb(id); S.jots=S.jots.filter(x=>x.id!==id); save(); jotPaint(); }
+function jotAdd(){ const i=$("#jotin"); const t=(i?.value||"").trim(); if(!t) return toast("적을 것을 먼저 써 주세요"); (S.jots=S.jots||[]).push(jotNew(t)); i.value=""; save(); toast("끄적여 두었습니다"); if($("#jotlist")){ jotPaint(); if(S.jots.length===7) render(); } else if(tab==="today") render(); }
+function jotDel(id){ const j=(S.jots||[]).find(x=>x.id===id); if(!j) return; if(j.t.length>40&&!confirm("이 끄적임을 지울까요?")) return; tomb(id); S.jots=S.jots.filter(x=>x.id!==id); save(); jotPaint(); jbPaint(); stSideCount(); }
 function jotInsert(id){ const j=(S.jots||[]).find(x=>x.id===id), b=$("#wbody"); if(!j||!b) return; tInsert(b,j.t+"\n"); toast("글에 넣었습니다 (끄적임은 그대로 둡니다)"); }
+// ───────── 끄적이기 판 (글방 공통 창고): 오늘 화면·쓰는 화면·고른 글에서 담은 끄적임을 포스트잇으로 한곳에 ─────────
+// 끄적임 하나 = {id,t,updated, at 처음 적은 때, cat 분류, c 색, pin 붙박이, used[{m,k,at}] 쓰인 곳} — 칸은 모두 덧붙인 것(없어도 예전처럼 보임)
+const JOT_CATS=[["idea","생각","💡"],["seed","글감","✎"],["word","말씀","✝"],["quote","인용","❝"],["todo","할 일","☐"],["ask","질문","?"]];
+const jotCat=k=>JOT_CATS.find(x=>x[0]===k);
+// 분류를 고르지 않고 적으면 모양을 보고 짐작해 둡니다 (나중에 눌러 바꿈)
+function jotGuess(t){ t=String(t||"").trim(); if(/[?？]\s*$/.test(t)) return "ask"; if(/^(할 일|todo|□|☐|-\s*\[\s?\])/i.test(t)) return "todo"; if(/^[「“"『]/.test(t)) return "quote"; if(/[가-힣]{1,4}\s?\d{1,3}\s?[:장]\s?\d{1,3}/.test(t)) return "word"; return ""; }
+const jotNew=(t,cat)=>{ const now=new Date().toISOString(); return {id:uid(),t,at:now,updated:now,cat:cat||jotGuess(t)}; };
+let JB_CAT="all", JB_SORT="new", JB_Q="", JB_SEEDS=false, JB_UNUSED=false;
+try{ JB_SORT=localStorage.getItem("seojae.jbSort")||"new"; JB_SEEDS=localStorage.getItem("seojae.jbSeeds")==="1"; }catch(_){}
+const JB_COL={y:"노랑",p:"분홍",g:"연두",b:"하늘"};
+function jotFind(id){ return (S.jots||[]).find(x=>x.id===id); }
+function jotTouch(j){ j.updated=new Date().toISOString(); save(); }
+function jotCard(j){ const c=jotCat(j.cat), n=(j.used||[]).length;
+  return `<div class="sticky jcard c-${esc(j.c||"y")} ${j.pin?"pin":""}" style="--r:${((j.id.charCodeAt(j.id.length-1)%7)-3)*.5}deg">
+    <div class="jtop"><button class="jcat ${c?"":"none"}" onclick="jotCatMenu('${j.id}',event)" title="분류 바꾸기">${c?`${c[2]} ${c[1]}`:"＋ 분류"}</button>${n?`<span class="jused" title="원고 메모·꼭지·글로 ${n}번 꺼내 썼습니다">✓ 쓰임 ${n}</span>`:""}${j.pin?`<span class="jpin" title="붙박이 — 맨 위에 늘 보임">📌</span>`:""}</div>
+    <div class="stt" contenteditable="plaintext-only" spellcheck="false" onblur="jotEdit('${j.id}',this.innerText)">${esc(j.t)}</div>
+    <div class="stb"><button onclick="jotPin('${j.id}')" title="${j.pin?"붙박이 풀기":"맨 위에 붙박이"}">${j.pin?"⇣":"📌"}</button><button onclick="jotColor('${j.id}')" title="색 바꾸기">●</button><button onclick="jotUseMenu('${j.id}',event)" title="원고 메모·새 꼭지·새 글로 꺼내 쓰기">→ 쓰기</button><button onclick="jotDel('${j.id}')" title="떼기">×</button><small>${esc((j.at||j.updated||"").slice(5,10).replace("-","."))}</small></div></div>`; }
+function seedCard(m,x){ return `<div class="sticky jcard seedc c-${esc(x.c||"y")}" style="--r:${((x.id.charCodeAt(x.id.length-1)%7)-3)*.5}deg"><div class="jtop"><span class="jcat ms">▦ ${esc(m.title)}</span></div><div class="stt ro">${esc(x.t)}</div>
+    <div class="stb"><button onclick="stOpen('ms:${m.id}');stOpen('memo')" title="그 원고의 메모 판으로">원고 메모 열기</button><small>${esc((x.at||"").slice(5,10).replace("-","."))}</small></div></div>`; }
+function jbList(){ const q=JB_Q.trim().toLowerCase(), all=jots();
+  let L=all.filter(j=>(JB_CAT==="all"||(JB_CAT==="none"?!j.cat:j.cat===JB_CAT))&&(!q||j.t.toLowerCase().includes(q))&&(!JB_UNUSED||!(j.used||[]).length));
+  const t0=j=>j.at||j.updated||"";
+  L.sort(JB_SORT==="old"?(a,b)=>t0(a).localeCompare(t0(b)):JB_SORT==="long"?(a,b)=>b.t.length-a.t.length:(a,b)=>(b.updated||"").localeCompare(a.updated||""));
+  const grid=a=>`<div class="stickies jgrid">${a.map(jotCard).join("")}</div>`, pins=L.filter(j=>j.pin), rest=L.filter(j=>!j.pin);
+  let h=pins.length?`<p class="jgh">📌 붙박이 <span>${pins.length}</span></p>${grid(pins)}`:"";
+  if(JB_SORT==="cat"||JB_SORT==="color"){ const keys=JB_SORT==="cat"?[...JOT_CATS.map(x=>x[0]),""]:Object.keys(JB_COL);
+    keys.forEach(k=>{ const g=rest.filter(j=>JB_SORT==="cat"?(j.cat||"")===k:(j.c||"y")===k); if(!g.length) return; const c=jotCat(k);
+      h+=`<p class="jgh">${JB_SORT==="cat"?(c?`${c[2]} ${c[1]}`:"분류 없음"):`<i class="jdot c-${k}"></i>${JB_COL[k]}`} <span>${g.length}</span></p>${grid(g)}`; }); }
+  else if(rest.length) h+=(pins.length?`<p class="jgh">나머지 <span>${rest.length}</span></p>`:"")+grid(rest);
+  if(!L.length) h=`<p class="jempty">${all.length?"고른 조건에 맞는 끄적임이 없습니다.":"아직 끄적인 것이 없습니다. 위 칸에 떠오른 한 줄을 적어 붙여 보세요.<br>오늘 화면·쓰는 화면의 「끄적이기」, 글에서 고른 문장의 「끄적이기에 담기」도 모두 여기로 모입니다."}</p>`;
+  if(JB_SEEDS){ const ms=liveMs().map(m=>[m,(m.seeds||[]).filter(x=>!x.done&&(!q||String(x.t).toLowerCase().includes(q)))]).filter(([,a])=>a.length);
+    h+=`<div class="jseeds"><p class="jgh">▦ 원고마다 붙인 메모 <span>${ms.reduce((n,[,a])=>n+a.length,0)}</span><small>— 원고 안에서 고칩니다</small></p>${ms.length?`<div class="stickies jgrid">${ms.map(([m,a])=>a.map(x=>seedCard(m,x)).join("")).join("")}</div>`:`<p class="jempty">원고 메모가 없습니다.</p>`}</div>`; }
+  return h; }
+function jbPaint(){ const el=$("#jbbody"); if(el) el.innerHTML=jbList(); const c=$("#jbchips"); if(c) c.innerHTML=jbChips(); }
+function jbChips(){ const all=jots(), n=k=>k==="all"?all.length:k==="none"?all.filter(j=>!j.cat).length:all.filter(j=>j.cat===k).length;
+  const chip=(k,lab)=>`<button class="jchip ${JB_CAT===k?"on":""}" onclick="JB_CAT='${k}';jbPaint()">${lab}<i>${n(k)}</i></button>`;
+  return chip("all","전체")+JOT_CATS.filter(([k])=>n(k)||JB_CAT===k).map(([k,l,ic])=>chip(k,`${ic} ${l}`)).join("")+(n("none")?chip("none","분류 없음"):""); }
+function jotBoard(){ const all=jots(), wk=new Date(Date.now()-7*864e5).toISOString(), nw=all.filter(j=>(j.at||j.updated||"")>=wk).length, used=all.filter(j=>(j.used||[]).length).length;
+  return `<section class="sthome jboard"><h2 class="sthello" style="font-size:24px">끄적이기</h2>
+    <p class="sub" style="text-align:center;margin:-14px 0 14px">공통 창고 — 모든 기기에서 같이 보이고 노션에는 가지 않습니다 · 모두 ${all.length} · 이번 주 ${nw}${used?` · 꺼내 쓴 것 ${used}`:""}</p>
+    <div class="jbin"><textarea id="jbin" class="pen" rows="2" placeholder="떠오른 한 줄… (엔터로 붙이기 · 줄바꿈은 Shift+엔터)" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();jbAdd()}"></textarea>
+      <div class="row" style="gap:6px"><select id="jbcat" title="분류 (고르지 않으면 모양을 보고 짐작합니다)"><option value="">분류 — 저절로</option>${JOT_CATS.map(([k,l,ic])=>`<option value="${k}">${ic} ${l}</option>`).join("")}</select><button class="btn ink" onclick="jbAdd()">붙이기</button></div></div>
+    <div class="jbbar"><div class="jchips" id="jbchips">${jbChips()}</div>
+      <div class="row jbtools"><input id="jbq" placeholder="찾기" value="${esc(JB_Q)}" oninput="JB_Q=this.value;jbPaint()"><select onchange="JB_SORT=this.value;try{localStorage.setItem('seojae.jbSort',this.value)}catch(_){};jbPaint()" title="늘어놓는 순서">${[["new","최근 고친 순"],["old","처음 적은 순"],["long","긴 것부터"],["cat","분류별로 묶기"],["color","색깔별로 묶기"]].map(([k,l])=>`<option value="${k}" ${JB_SORT===k?"selected":""}>${l}</option>`).join("")}</select>
+        <label class="chk"><input type="checkbox" ${JB_UNUSED?"checked":""} onchange="JB_UNUSED=this.checked;jbPaint()">안 쓴 것만</label>
+        <label class="chk"><input type="checkbox" ${JB_SEEDS?"checked":""} onchange="JB_SEEDS=this.checked;try{localStorage.setItem('seojae.jbSeeds',this.checked?'1':'')}catch(_){};jbPaint()">원고 메모도 함께</label></div></div>
+    <div id="jbbody">${jbList()}</div>
+    <p class="hint" style="margin-top:14px">포스트잇을 누르면 바로 고칩니다. 위 띠는 분류, 📌는 맨 위 붙박이, ●는 색, 「→ 쓰기」는 원고 메모·새 ${"꼭지"}·새 글로 꺼내 쓰기(꺼내 쓴 끄적임에는 「✓ 쓰임」이 붙습니다), ×는 떼기.</p></section>`; }
+function jbAdd(){ const i=$("#jbin"), t=(i?.value||"").trim(); if(!t) return toast("적을 것을 먼저 써 주세요"); const j=jotNew(t,$("#jbcat")?.value||""); (S.jots=S.jots||[]).push(j); i.value=""; save(); jbPaint(); stSideCount(); i.focus();
+  toast(j.cat?`붙였습니다 · ${jotCat(j.cat)[1]}`:"붙였습니다"); }
+function jotEdit(id,t){ const j=jotFind(id); t=String(t||"").trim(); if(!j||j.t===t) return; if(!t) return jotDel(id); j.t=t; jotTouch(j); }
+function jotPin(id){ const j=jotFind(id); if(!j) return; j.pin=!j.pin; jotTouch(j); jbPaint(); }
+function jotColor(id){ const j=jotFind(id); if(!j) return; const ks=Object.keys(JB_COL); j.c=ks[(ks.indexOf(j.c||"y")+1)%ks.length]; jotTouch(j); jbPaint(); }
+function jotCatMenu(id,ev){ ev?.stopPropagation(); const j=jotFind(id); if(!j) return; const r=ev?.target?.getBoundingClientRect?.()||{left:innerWidth/2,bottom:innerHeight/2};
+  ctxOpen(r.left,r.bottom+4,"분류",[...JOT_CATS.map(([k,l,ic])=>({t:l+(j.cat===k?" ✓":""),ic,fn:()=>{ j.cat=k; jotTouch(j); jbPaint(); }})),{t:"분류 없음"+(!j.cat?" ✓":""),ic:"∘",fn:()=>{ j.cat=""; jotTouch(j); jbPaint(); }}]); }
+function jotUsed(j,m,k){ (j.used=j.used||[]).push({m:m||"",k,at:new Date().toISOString()}); jotTouch(j); }
+function jotUseMenu(id,ev){ ev?.stopPropagation(); const j=jotFind(id); if(!j) return; const r=ev?.target?.getBoundingClientRect?.()||{left:innerWidth/2,bottom:innerHeight/2}, ms=liveMs().filter(m=>!m.rule);
+  const pick=(title,fn)=>setTimeout(()=>{ if(!ms.length) return toast("원고가 아직 없습니다 — 글방에서 「＋ 새 원고」를 먼저 만드세요"); ctxOpen(r.left,r.bottom+4,title,ms.map(m=>({t:`『${m.title}』`,ic:G(m).ic,fn:()=>fn(m)}))); },0);
+  ctxOpen(r.left,r.bottom+4,"꺼내 쓰기",[
+    {t:"원고 메모로 붙이기",ic:"▤",fn:()=>pick("어느 원고의 메모로?",m=>{ const now=new Date().toISOString(); (m.seeds=m.seeds||[]).unshift({id:uid(),t:j.t,c:j.c||"y",done:false,at:now,u:now}); m.updated=now; jotUsed(j,m.id,"memo"); jbPaint(); toast(`『${m.title}』 메모에 붙였습니다 (끄적임은 그대로)`); })},
+    {t:"새 꼭지로 쓰기",ic:"✎",fn:()=>pick("어느 원고의 새 꼭지로?",m=>{ jotUsed(j,m.id,"piece"); roomNewPiece(m.id,null,j.t+"\n"); })},
+    {t:"새 자유 글로 쓰기",ic:"✐",fn:()=>{ jotUsed(j,"","free"); go('write',{track:'book',new:true,type:'자유 글',tpl:j.t+"\n"}); }},
+    {t:"글자 복사",ic:"⧉",fn:()=>{ try{ navigator.clipboard.writeText(j.t); toast("복사했습니다"); }catch(_){ toast("복사하지 못했습니다"); } }}]); }
+function stSideCount(){ const b=$("#stjotn"); if(b) b.textContent=(S.jots||[]).length||""; }
 // ───────── 독서 일기: 그날 읽은 분량과 쓴 글을 한 장에 ─────────
 let diaryDate=null;
 const WEATHER=["☀️","⛅","☁️","🌧️","❄️","🌫️"], MOODS=["😊","🙂","😌","🥲","🔥","🙏"];
@@ -2934,7 +3100,7 @@ function dGo(n){ const x=new Date((diaryDate||today())+"T00:00"); x.setDate(x.ge
 // 전날은 왼쪽 장이 오른쪽으로(앞면=지금 왼쪽 장, 뒷면=새 오른쪽 장). 넘어가는 동안 밑에는 새 펼침면이 보입니다
 function dOpen(k,dir){ if(k>today()) return; if(k<dMin()){ toast(`일기장은 ${dMin()}(1일째)부터 열립니다`); return; } STK_SEL=null; const old=$(".diary"); DIARY_VIEW="page";
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches, narrow=innerWidth<=700;
-  if(!old||!dir||reduce||narrow){ diaryDate=k; render(); return; }
+  if(!old||!dir||reduce||narrow){ diaryDate=k; render(); if(dir&&!reduce){ const nd=$(".diary"); nd?.classList.add(dir==="next"?"slide-next":"slide-prev"); setTimeout(()=>nd?.classList.remove("slide-next","slide-prev"),420); } return; }
   const oL=old.querySelector(".pg.l")?.cloneNode(true), oR=old.querySelector(".pg.r")?.cloneNode(true);
   diaryDate=k; render(); const nd=$(".diary"); if(!nd||!oL||!oR) return;
   const nL=nd.querySelector(".pg.l").cloneNode(true), nR=nd.querySelector(".pg.r").cloneNode(true);
@@ -2971,7 +3137,7 @@ function dListHtml(){
   if(!days.length) return `<p class="muted">아직 일기가 없습니다. 날마다 한 줄이면 충분합니다.</p>`;
   return `<div class="dlist">${days.map(k=>{ const e=S.diary?.[k]||{}, ws=live().filter(w=>w.date===k), L=S.log?.[k]||{}, x=new Date(k+"T00:00");
     return `<a href="#" class="dli" onclick="dOpen('${k}');return false"><span class="dd pen">${x.getMonth()+1}.${String(x.getDate()).padStart(2,"0")}</span><span class="dw">${WEEK[x.getDay()]}</span><span class="dm">${esc((e.weather||"")+(e.mood||""))}</span>
-      <span class="dt">${(e.line||"").trim()?`<span class="pen" style="font-size:19px">${esc(e.line.trim().slice(0,60))}</span>`:`<span class="muted">${ws.length?ws.map(w=>"["+esc(wTag(w))+"] "+esc(w.title||w.passage||"")).join(" · "):L.read||(L.bible||[]).length?"말씀을 읽은 날":Object.keys(L.books||{}).length?"책을 읽은 날":""}</span>`}</span>
+      <span class="dt">${(e.line||"").trim()?`<span class="pen" style="font-size:19px">${esc(biStrip(stripMk(e.line)).trim().slice(0,60))}</span>`:`<span class="muted">${ws.length?ws.map(w=>"["+esc(wTag(w))+"] "+esc(w.title||w.passage||"")).join(" · "):L.read||(L.bible||[]).length?"말씀을 읽은 날":Object.keys(L.books||{}).length?"책을 읽은 날":""}</span>`}</span>
       <span class="dn muted">${[ws.length?"글 "+ws.length:"",(e.stickers||[]).length?"스티커 "+(e.stickers||[]).length:""].filter(Boolean).join(" · ")}</span></a>`; }).join("")}</div>`;
 }
 function diaryPage(){
@@ -2989,9 +3155,12 @@ function diaryPage(){
     <span class="dcalwrap"><button class="btn small" onclick="dCalToggle()" title="달력에서 날짜 고르기">${ICO.cal}달력</button><div id="dcalpop" class="dcalpop" style="display:none"></div></span>
     <span class="spacer"></span>${DIARY_VIEW==="page"?`<button class="btn small ink" onclick="toggleStk()">${ICO.flower}스티커 붙이기</button>`:""}</div>`;
   if(DIARY_VIEW==="list") return nav+`<section class="sheet"><p class="label">일기 목록</p>${dListHtml()}</section>`;
-  return nav+`<div class="dbook"><div class="diary">
+  const pn=Math.max(1,Math.round((new Date(d+"T12:00")-new Date(dMin()+"T12:00"))/864e5)+1), canP=d>dMin(), canN=d<today();
+  return nav+`<div class="dbook"><span class="dribbon" aria-hidden="true"></span>
+    <button class="dturn prev" ${canP?"":"disabled"} onclick="dGo(-1)" title="${canP?"전날로 넘기기":"일기장 첫날입니다"}" aria-label="전날"><i>‹</i></button><button class="dturn next" ${canN?"":"disabled"} onclick="dGo(1)" title="${canN?"다음 날로 넘기기":"오늘이 마지막 장입니다"}" aria-label="다음 날"><i>›</i></button>
+    <div class="diary">
     ${stkLayer("diary:"+d)}
-    <div class="pg l">
+    <div class="pg l"><div class="dfolio">${pn*2-1}</div>
       <div class="dhead"><span class="dd">${x.getMonth()+1}.${String(x.getDate()).padStart(2,"0")}</span><span class="dw">${x.getFullYear()} · ${WEEK[x.getDay()]}요일</span></div>
       <div class="dmood">${WEATHER.map(w=>`<button class="${e.weather===w?"on":""}" onclick="dSet('weather','${w}')">${w}</button>`).join("")}<span style="width:10px"></span>${MOODS.map(m=>`<button class="${e.mood===m?"on":""}" onclick="dSet('mood','${m}')">${m}</button>`).join("")}</div>
       <div class="dsec"><p class="dl">오늘 읽은 말씀</p>${bible}</div>
@@ -3000,12 +3169,14 @@ function diaryPage(){
     </div>
     <div class="pg r">
       <div class="dsec" style="margin-top:0"><p class="dl cr">오늘 일기</p>
-        <div class="crayon"><textarea class="dline" placeholder="오늘 아침, 짧게라도 진짜 일기를…" oninput="dLine(this.value);dGrow(this)">${esc(e.line||"")}</textarea></div></div>
+        ${dDecoBar()}
+        <div class="crayon">${dHasMk(e.line)?`<div class="dview" onclick="dEditOn(event)" title="눌러서 고치기">${dRich(e.line)}</div>`:""}<textarea class="dline" ${dHasMk(e.line)?"hidden":""} placeholder="오늘 아침, 짧게라도 진짜 일기를…" oninput="dLine(this.value);dGrow(this)" onblur="dEditOff()">${esc(e.line||"")}</textarea></div></div>
       <div class="dsec"><p class="dl">오늘 쓴 글</p>
         ${ws.length?ws.map(w=>`<div class="dw-item"><span class="label ${w.track}" style="font-size:18px;margin:0">[${esc(wTag(w))}]${w.passage?" "+esc(w.passage):""}</span><h5>${esc(w.title||"(제목 없음)")}</h5>
           <div class="dw-body" onclick="this.classList.toggle('open')" title="눌러서 펼치기/접기">${(()=>{ const fn=[]; const h=richHtml(w.body,fn); return h+fnHtml(fn); })()}</div>
           <a href="#" class="muted" onclick="go('write',{edit:'${w.id}'});return false">글 열기 →</a></div>`).join("")
           :`<p class="muted">이날 쓴 글이 없습니다.</p>`}</div>
+      <div class="dfolio">${pn*2}</div>
     </div>
   </div></div>`;
 }
@@ -3014,6 +3185,30 @@ function dCalToggle(){ const p=$("#dcalpop"); if(!p) return; if(p.style.display!
 function dCalClose(){ const p=$("#dcalpop"); if(p) p.style.display="none"; }
 document.addEventListener("click",e=>{ const p=$("#dcalpop"); if(p&&p.style.display!=="none"&&!e.target.closest(".dcalwrap")) p.style.display="none"; });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") dCalClose(); });
+// 일기장 쓸어 넘기기 (휴대폰·태블릿): 옆으로 60px 넘게, 위아래보다 옆으로 더 움직이면 넘김. 스티커를 붙이는 중이거나 글자를 고르는 중이면 넘기지 않음
+let D_SW=null;
+document.addEventListener("touchstart",e=>{ const b=e.target.closest?.(".dbook"); if(!b||tab!=="diary"||e.touches.length!==1||STK_OPEN||e.target.closest(".stk,.stk-tools")){ D_SW=null; return; } const t=e.touches[0]; D_SW={x:t.clientX,y:t.clientY,at:Date.now()}; },{passive:true});
+document.addEventListener("touchend",e=>{ const s=D_SW; D_SW=null; if(!s||tab!=="diary") return; const t=e.changedTouches[0], dx=t.clientX-s.x, dy=t.clientY-s.y;
+  if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.4||Date.now()-s.at>900) return; const sel=String(getSelection?.()||""); if(sel.length) return; dGo(dx<0?1:-1); },{passive:true});
+// ───────── 일기 꾸미기: 형광펜 4색·밑줄·굵게·기울임 (글쓰기와 같은 표시 ==…== · ==g:…== · __…__ · **…** · *…*) ─────────
+// 쓰는 동안은 글자 칸, 칸을 떠나면 꾸민 모습으로 보이고, 누르면 다시 고침. 단추는 눌러도 고른 글자가 풀리지 않게(pointerdown 막음)
+const dHasMk=t=>{ t=String(t||""); return t.search(MK_RE)>=0||t.search(BI_RE)>=0; };   // search 는 표시 찾기 위치(lastIndex)를 건드리지 않음
+const dRich=t=>richHtml(String(t||""));   // 줄바꿈은 white-space:pre-wrap 으로
+function dDecoBar(){ const b=(k,c,lab,tip)=>`<button type="button" class="dk ${k==="hl"?"hl-"+c:k}" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="dMark('${k}','${c||""}')" title="${tip}">${lab}</button>`;
+  return `<div class="ddeco" role="toolbar" aria-label="일기 꾸미기"><span class="ddl">꾸미기</span>${b("hl","y","","노랑 형광펜")}${b("hl","g","","연두 형광펜")}${b("hl","p","","분홍 형광펜")}${b("hl","b","","하늘 형광펜")}<i class="dsep"></i>${b("ul","","<u>밑줄</u>","밑줄")}${b("b","","<b>굵게</b>","굵게 (⌘B)")}${b("i","","<i>기울임</i>","기울임 (⌘I)")}<i class="dsep"></i>${b("x","","지우기","고른 곳의 꾸밈 벗기기")}<small class="ddh">글자를 고른 뒤 누르세요</small></div>`; }
+function dEditOn(ev){ if(ev?.target?.closest?.("a")) return; const ta=$(".dline"), v=$(".dview"); if(!ta) return; v?.remove(); ta.hidden=false; dGrow(ta); ta.focus(); }
+function dEditOff(){ setTimeout(()=>{ const ta=$(".dline"); if(!ta||document.activeElement===ta||!dHasMk(ta.value)||tab!=="diary") return; clearTimeout(dLineT); const d=diaryDate, e=dEntry(d,true); if(e.line!==ta.value){ e.line=ta.value; dTouch(d); }
+  ta.hidden=true; let v=$(".dview"); if(!v){ v=document.createElement("div"); v.className="dview"; v.title="눌러서 고치기"; v.onclick=dEditOn; ta.before(v); } v.innerHTML=dRich(ta.value); },120); }
+function dMark(kind,color){ const ta=$(".dline"); if(!ta) return; if(ta.hidden){ dEditOn(); return toast("꾸밀 글자를 고른 뒤 다시 누르세요"); }
+  let s=ta.selectionStart, e=ta.selectionEnd; const v=ta.value; if(s===e) return toast("꾸밀 글자를 먼저 고르세요");
+  for(const m of v.matchAll(MK_RE)){ const ms=m.index, me=ms+m[0].length; if(ms<e&&me>s){ s=Math.min(s,ms); e=Math.max(e,me); } }   // 겹친 표시는 통째로 (반쪽만 깨지지 않게)
+  for(const m of v.matchAll(BI_RE)){ const ms=m.index, me=ms+m[0].length; if(ms<e&&me>s){ s=Math.min(s,ms); e=Math.max(e,me); } }
+  const wrap=t=>{ const lead=t.match(/^\s*/)[0], tail=t.match(/\s*$/)[0]; let core=t.trim(); if(!core) return t;
+    if(kind==="x") core=biStrip(stripWrap(core)); else if(kind==="hl") core=`==${color==="y"?"":color+":"}${stripWrap(core)}==`; else if(kind==="ul") core=`__${stripWrap(core)}__`;
+    else { const plain=biStrip(core); core=kind==="b"?`**${plain}**`:`*${plain}*`; }
+    return lead+core+tail; };
+  const out=v.slice(s,e).split("\n").map(wrap).join("\n"); ta.setRangeText(out,s,e,"select"); ta.focus(); dLine(ta.value); dGrow(ta); }
+document.addEventListener("keydown",e=>{ if(tab!=="diary"||!(e.metaKey||e.ctrlKey)||!e.target.classList?.contains("dline")) return; const k=e.key.toLowerCase(); if(k==="b"||k==="i"){ e.preventDefault(); dMark(k); } });
 // 일기 칸은 쓰는 만큼 아래로 늘어남
 function dGrow(t){ t.style.height="auto"; t.style.height=Math.max(238,t.scrollHeight+4)+"px"; }
 
@@ -3377,6 +3572,7 @@ settings(){
   <div class="grid setgrid">
   ${reminderSection()}
   ${appSection()}
+  ${backupSection()}
   ${musicSection()}
   ${vrSection()}
   ${quietSection()}
@@ -3966,7 +4162,7 @@ function trashView(){
       :`<p class="muted">휴지통이 비어 있습니다.</p>`}
   </section>
   <section class="sheet"><p class="label">백업에서 찾기</p>
-    <p class="sub">휴지통에 없는 글(예전 방식으로 지운 글)은 구글 드라이브 「아침 서재/백업」 폴더의 날짜별 사본에서 찾아 되살릴 수 있습니다. 사본은 날마다 그날 첫 저장 때 만들어집니다(최근 60일).</p>
+    <p class="sub">휴지통에 없는 글(예전 방식으로 지운 글)은 구글 드라이브 「아침 서재/백업」 폴더의 날짜별 사본에서 찾아 되살릴 수 있습니다. 사본은 날마다 새벽(자동 백업 시계)과 그날 첫 저장 때 만들어집니다(최근 60개 + 달마다 첫 사본). 설정 → 자동 백업에서 상태를 봅니다.</p>
     <div class="row" style="margin-top:8px"><button class="btn small" onclick="backupBrowse()">백업 목록 보기</button></div>
     <div id="backups" style="margin-top:8px"></div>
   </section>`;
@@ -3977,26 +4173,43 @@ async function backupBrowse(){
   const box=$("#backups"); if(!box) return; if(!GAS) return box.innerHTML=`<p class="muted">구글 서버에 연결되어 있어야 합니다.</p>`;
   box.innerHTML=`<p class="muted">백업 목록을 받는 중…</p>`;
   try{ const r=await gcall("backupList"); if(!r.ok) throw new Error(r.error);
-    box.innerHTML=r.files.length?`<div class="row" style="gap:8px"><select id="bksel" style="width:auto" onchange="backupShow(this.value)"><option value="">날짜를 고르세요</option>${r.files.map(f=>`<option value="${esc(f.name)}">${esc(f.name.replace(/^data-|\.json$/g,""))} 사본 (${Math.round(f.size/1024)}KB)</option>`).join("")}</select></div><div id="bklist" style="margin-top:8px"></div>`:`<p class="muted">백업 사본이 아직 없습니다.</p>`;
+    box.innerHTML=r.files.length?`<div class="row" style="gap:8px"><select id="bksel" style="width:auto" onchange="backupShow(this.value)"><option value="">날짜를 고르세요</option>${r.files.map(f=>`<option value="${esc(f.name)}" data-at="${esc(f.at||"")}">${f.at?esc(bkWhen(f.at))+" 무렵의 기록":esc(f.name.replace(/^data-|\.json$/g,""))+" 사본"}${/^data-\d{4}-\d{2}-\d{2}-\d{4}/.test(f.name)?" · "+esc(f.name.replace(/^data-[\d-]+-?|\.json$/g,"")||"수시"):""} (${Math.round(f.size/1024)}KB)</option>`).join("")}</select></div><div id="bklist" style="margin-top:8px"></div>`:`<p class="muted">백업 사본이 아직 없습니다.</p>`;
   }catch(e){ box.innerHTML=`<p class="muted">백업 목록을 받지 못했습니다: ${esc(e.message)}</p>`; }
 }
 async function backupShow(name){
   const box=$("#bklist"); if(!box||!name) return; BK_NAME=name; box.innerHTML=`<p class="muted">사본을 읽는 중…</p>`;
   try{ const r=await gcall("backupWritings",{name}); if(!r.ok) throw new Error(r.error);
-    const have=new Set(live().map(w=>w.id)), inTrash=new Set(trashed().map(w=>w.id)), gone=r.writings.filter(x=>!have.has(x.id));
-    box.innerHTML=gone.length?`<p class="hint">지금 서랍에 없는 글 ${gone.length}편 (사본에 있는 글 ${r.writings.length}편 중)</p>`+gone.map(x=>`<div class="item"><div class="row"><span class="label ${x.track}" style="margin:0;font-size:17px">[${esc(x.type||"")}]</span>${x.passage?`<span class="muted">${esc(x.passage)}</span>`:""}<span class="spacer"></span><span class="muted" style="font-size:13px">${esc(x.date)} · ${(x.chars||0).toLocaleString()}자</span></div>
+    const have=new Set(live().map(w=>w.id)), inTrash=new Set(trashed().map(w=>w.id)), gone=r.writings.filter(x=>!have.has(x.id)), at=$("#bksel")?.selectedOptions?.[0]?.dataset.at||"";
+    const head=`<div class="bkwhen"><b>${at?esc(bkWhen(at))+" 무렵":esc(name.replace(/^data-|\.json$/g,""))}</b>의 기록입니다 <span class="muted">— 사본은 그 시각에 구글에 있던 기록 전체를 그대로 뜬 것입니다</span>
+      <div class="row" style="gap:6px;margin-top:6px"><button class="btn small" onclick="bkMergeAll()">이 사본 전체를 지금 기록과 합치기</button></div>
+      <p class="hint" style="margin:4px 0 0">합치기: 지금 없는 글·원고·노트·끄적임·일기를 되찾아 옵니다. 지금 기록은 사라지지 않고, 같은 것은 더 나중에 고친 쪽이 남습니다. 노션에는 아무것도 보내지 않습니다.</p></div>`;
+    box.innerHTML=head+(gone.length?`<p class="hint">지금 서랍에 없는 글 ${gone.length}편 (사본에 있는 글 ${r.writings.length}편 중)</p>`+gone.map(x=>`<div class="item"><div class="row"><span class="label ${x.track}" style="margin:0;font-size:17px">[${esc(x.type||"")}]</span>${x.passage?`<span class="muted">${esc(x.passage)}</span>`:""}<span class="spacer"></span><span class="muted" style="font-size:13px">${esc(x.date)} · ${(x.chars||0).toLocaleString()}자</span></div>
         <div class="myeongjo" style="font-size:16px"><b>${esc(x.title||"(제목 없음)")}</b></div><div class="sub">${esc(x.head||"")}…</div>
         <div class="row" style="margin-top:6px">${inTrash.has(x.id)?`<span class="muted" style="font-size:13px">휴지통에 있습니다 →</span><button class="btn small ink" onclick="restoreWriting('${esc(x.id)}')">휴지통에서 되살리기</button>`:`<button class="btn small ink" onclick="backupRestore('${esc(x.id)}')">이 글 되살리기</button>`}</div></div>`).join("")
-      :`<p class="muted">이 사본의 글은 모두 지금 서랍에 있습니다.</p>`;
+      :`<p class="muted">이 사본의 글은 모두 지금 서랍에 있습니다.</p>`);
   }catch(e){ box.innerHTML=`<p class="muted">사본을 읽지 못했습니다: ${esc(e.message)}</p>`; }
 }
 async function backupRestore(id){
   if(!BK_NAME) return; toast("되살리는 중…");
   try{ const r=await gcall("backupWriting",{name:BK_NAME,id}); if(!r.ok||!r.writing) throw new Error(r.error||"사본에 그 글이 없습니다");
-    const x=r.writing, w={...x,id:uid(),notion:null,syncedAt:null,syncError:null,trashed:null,updated:new Date().toISOString(),restoredFrom:{id:x.id,backup:BK_NAME}};   // 새 번호로 (지운 글의 묘비와 겹치지 않게)
-    delete w.syncing; delete w.resync; S.writings.push(w); save(); toast("되살렸습니다 — 서랍과 달력에 다시 보입니다"); if(canSync()) syncWriting(w,true); backupShow(BK_NAME);
+    const x=r.writing, w={...x,id:uid(),syncError:null,trashed:null,updated:new Date().toISOString(),restoredFrom:{id:x.id,backup:BK_NAME}};   // 새 번호로 (지운 글의 묘비와 겹치지 않게)
+    delete w.syncing; delete w.resync; delete w.trashedWith;
+    // 노션: 사본에 적힌 원래 페이지를 휴지통에서 꺼내 그 페이지를 그대로 씁니다(새 페이지를 만들지 않아 같은 노트가 두 번 가지 않음). 원래 페이지가 노션에서 완전히 지워졌을 때만 번호를 비움
+    const pages=[w.notion?.page,w.notion?.index].filter(Boolean);
+    if(pages.length){ let okN=false; if(SERVER&&CONF.notion){ try{ const nr=await gcall("notionRestore",{pages}); okN=nr.ok&&!(nr.failed||[]).length; }catch(_){} }
+      if(!okN&&SERVER&&CONF.notion){ w.notion=null; w.syncedAt=null; } }
+    S.writings.push(w); save(); toast("되살렸습니다 — 서랍과 달력에 다시 보입니다"); if(canSync()) syncWriting(w,true); backupShow(BK_NAME);
   }catch(e){ toast("되살리지 못했습니다: "+e.message); }
 }
+// 사본 전체 합치기: 합치기 전 지금 기록을 한 벌 더 떠 두고(되돌릴 길), 사본과 지금 기록을 합칩니다(mergeFrom — 묘비·나중 고친 쪽 규칙 그대로). 노션으로는 보내지 않음
+async function bkMergeAll(){ if(!BK_NAME) return; const at=$("#bksel")?.selectedOptions?.[0]?.dataset.at||"";
+  if(!confirm(`${at?bkWhen(at)+" 무렵":BK_NAME}의 기록을 지금 기록과 합칠까요?\n\n· 지금 없는 글·원고·노트·끄적임·일기를 되찾아 옵니다\n· 지금 기록은 사라지지 않고, 같은 것은 더 나중에 고친 쪽이 남습니다\n· 일부러 지운 것(완전히 지운 것)은 되살아나지 않습니다 — 휴지통에 든 것은 휴지통에서 되살리세요\n· 합치기 전 지금 기록을 「백업」 폴더에 한 벌 더 남깁니다\n· 노션에는 아무것도 보내지 않습니다`)) return;
+  toast("사본을 받아 합치는 중…");
+  try{ try{ await gcall("backupNow","되살리기전"); }catch(_){}
+    const r=await gcall("backupData",{name:BK_NAME}); if(!r.ok) throw new Error(r.error); const d=JSON.parse(r.data); if(!d||!Array.isArray(d.writings)) throw new Error("아침 서재 기록이 아닙니다");
+    const n0=bkCount(); mergeFrom(d); const n1=bkCount(); save(); render(); toast(`합쳤습니다 · 되찾은 것 ${Math.max(0,n1-n0)}개 (합치기 전 기록은 「백업」 폴더에 남겨 두었습니다)`);
+  }catch(e){ toast("합치지 못했습니다: "+e.message); } }
+const bkCount=()=>["writings","manuscripts","codex","jots","notes","books"].reduce((n,k)=>n+(S[k]||[]).length,0)+Object.keys(S.diary||{}).length;
 // 쓰던 칸을 비우고, 자동 간직 예약과 임시 보관(이 기기·구글)을 모두 지웁니다
 function blankPage(){ clearTimeout(AUTOKEEP_T); clearTimeout(draftT); clearDraft(); const b=$("#wbody"), t=$("#wtitle"); if(b){ b.value=""; b.defaultValue=""; } if(t){ t.value=""; t.defaultValue=""; } editId=null; }
 // 버리기: 아직 간직하지 않은 새 글이면 바로 비우고 새 페이지로, 간직된 글이면 그 글을 지웁니다(노션 페이지도 휴지통으로)
@@ -4801,8 +5014,10 @@ function roomNewHtml(){ return `<section class="sheet roommain newms"><p class="
   <p class="sub" style="margin:0 0 8px">어떤 성격의 글인가요? 고른 성격에 맞게 부·장 이름, 새 꼭지의 틀, 목표 단위, 검토 관점, 책 모양이 달라집니다. 나중에 바꿀 수 있습니다.</p>
   <div class="genres">${Object.entries(GENRES).map(([k,g],i)=>`<label class="gcard"><input type="radio" name="nmg" value="${k}" ${i===0?"checked":""}><b>${g.n}</b><span>${g.d}</span><small>${g.parts[0]}·${g.parts[1]} · ${g.item} · 목표 ${g.unit==="매"?"원고지 매수":g.unit==="자"?"글자 수":"편 수"}</small></label>`).join("")}</div>
   <div class="row" style="gap:6px;margin-top:14px"><button class="btn ink" onclick="createMs()">원고 만들기</button><button class="btn ghost" onclick="ROOM_NEW=false;render()">그만</button></div></section>`; }
-function createMs(){ const t=($("#nmtitle")?.value||"").trim(); if(!t) return toast("가제를 적어 주세요"); const g=document.querySelector('input[name="nmg"]:checked')?.value||"free";
-  const m={id:uid(),title:t,items:[],parts:{},genre:g}; ROOM_NEW=false; S.manuscripts.push(m); ROOM_MS=m.id; ST_ACT="ms:"+m.id; { const i=STUDIO_TABS.indexOf("new"); if(i>=0) STUDIO_TABS.splice(i,1); } stAdd(ST_ACT); try{ localStorage.setItem("seojae.roomMs",m.id); }catch(_){} save(); roomBase(); toast(`「${t}」 ${GENRES[g].n} 원고를 만들었습니다. ${jo(GENRES[g].parts[0],"을","를")} 나누고 ${jo(GENRES[g].item,"을","를")} 넣어 보세요`); render(); }
+// 새 원고 양식에 가제를 적어 두고 다른 곳으로 가거나 앱을 닫으면, 원고부터 만들어 둡니다 (글은 나중에)
+function nmAuto(){ if(!ROOM_NEW||tab!=="room") return false; const t=($("#nmtitle")?.value||"").trim(); if(!t) return false; createMs(true); return true; }
+function createMs(auto){ const t=($("#nmtitle")?.value||"").trim(); if(!t) return toast("가제를 적어 주세요"); const g=document.querySelector('input[name="nmg"]:checked')?.value||"free";
+  const m={id:uid(),title:t,items:[],parts:{},genre:g}; ROOM_NEW=false; S.manuscripts.push(m); ROOM_MS=m.id; ST_ACT="ms:"+m.id; { const i=STUDIO_TABS.indexOf("new"); if(i>=0) STUDIO_TABS.splice(i,1); } stAdd(ST_ACT); try{ localStorage.setItem("seojae.roomMs",m.id); }catch(_){} save(); flushSave(); roomBase(); toast(auto?`「${t}」 원고를 만들어 두었습니다 (글은 아직 없어도 서가에 남습니다)`:`「${t}」 ${GENRES[g].n} 원고를 만들었습니다. ${jo(GENRES[g].parts[0],"을","를")} 나누고 ${jo(GENRES[g].item,"을","를")} 넣어 보세요`); render(); }
 function roomRename(mid){ const m=S.manuscripts.find(x=>x.id===mid); const t=(prompt("원고 가제",m.title)||"").trim(); if(!t||t===m.title) return; m.title=t; save(); render(); }
 function addPart(mid,lv){ const m=S.manuscripts.find(x=>x.id===mid); if(!m||m.rule) return;
   const pn=G(m).parts[lv===1?0:1], t=(prompt(lv===1?`${pn} 이름 (예: 1${pn} · 머무는 아침)`:`${pn} 이름 (예: 시편의 아침)`,"")||"").trim(); if(!t) return;
@@ -4961,11 +5176,11 @@ const ST_MAX=5; let ST_USED=(()=>{ try{ return JSON.parse(localStorage.getItem("
 function stTrim(keep){ let rest=STUDIO_TABS.filter(x=>x!=="home");
   while(rest.length>ST_MAX){ const old=rest.filter(x=>x!==keep).sort((a,b)=>(ST_USED[a]||0)-(ST_USED[b]||0))[0]; if(!old) break; STUDIO_TABS.splice(STUDIO_TABS.indexOf(old),1); delete ST_USED[old]; rest=STUDIO_TABS.filter(x=>x!=="home"); } }
 function stAdd(k){ if(!k||k==="draft") return; if(!STUDIO_TABS.includes("home")) STUDIO_TABS.unshift("home"); ST_USED[k]=Date.now(); if(!STUDIO_TABS.includes(k)) STUDIO_TABS.push(k); stTrim(k); stSave(); }
-function stValid(k){ if(["home","map","memo","res","codex","new","common"].includes(k)||/^cx(k|sys):/.test(k)) return true; const [t,id]=[k.slice(0,k.indexOf(":")),k.slice(k.indexOf(":")+1)];
+function stValid(k){ if(["home","map","memo","res","codex","new","common","jots"].includes(k)||/^cx(k|sys):/.test(k)) return true; const [t,id]=[k.slice(0,k.indexOf(":")),k.slice(k.indexOf(":")+1)];
   if(t==="w") return live().some(w=>w.id===id); if(t==="ms") return liveMs().some(m=>m.id===id); if(t==="cx") return codexLive().some(c=>c.id===id); return false; }
-function stLabel(k){ if(k==="home") return [ICO.closed.replace('class="ico"','class="ico" style="display:none"')+"⌂","글방 홈"]; if(k==="map") return ["✺","생각 지도"]; if(k==="common") return ["◎",CX_COMMON]; if(k==="cxk:~minor") return ["∘","스쳐 간 것"]; if(k.startsWith("cxk:")) return ["⋰",k==="cxk:*"?"월드 전체":k.slice(4)+" 전체"]; if(k==="cxsys:bg") return ["▣","월드 배경"]; if(k==="cxsys:premise") return ["◆","전제"]; if(k==="cxsys:rules") return ["⚙","정리 규칙"]; if(k==="memo") return ["▤","메모"]; if(k==="res") return ["⧉","자료 모음"]; if(k==="codex") return ["◎",G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex||"인물·주제 노트"]; if(k==="new") return ["＋","새 원고"]; if(k==="draft"){ if(stCur()==="draft") return ["✎","새 글"]; const d=bookDraft(); return ["✎",d?.title?d.title+" (쓰던 글)":"쓰던 새 글"]; }
+function stLabel(k){ if(k==="home") return [ICO.closed.replace('class="ico"','class="ico" style="display:none"')+"⌂","글방 홈"]; if(k==="map") return ["✺","생각 지도"]; if(k==="common") return ["◎",CX_COMMON]; if(k==="jots") return ["✐","끄적이기"]; if(k==="cxk:~minor") return ["∘","스쳐 간 것"]; if(k.startsWith("cxk:")) return ["⋰",k==="cxk:*"?"월드 전체":k.slice(4)+" 전체"]; if(k==="cxsys:bg") return ["▣","월드 배경"]; if(k==="cxsys:premise") return ["◆","전제"]; if(k==="cxsys:rules") return ["⚙","정리 규칙"]; if(k==="memo") return ["▤","메모"]; if(k==="res") return ["⧉","자료 모음"]; if(k==="codex") return ["◎",G(S.manuscripts.find(x=>x.id===ROOM_MS)).codex||"인물·주제 노트"]; if(k==="new") return ["＋","새 원고"]; if(k==="draft"){ if(stCur()==="draft") return ["✎","새 글"]; const d=bookDraft(); return ["✎",d?.title?d.title+" (쓰던 글)":"쓰던 새 글"]; }
   const id=k.slice(k.indexOf(":")+1); if(k.startsWith("w:")){ const w=S.writings.find(x=>x.id===id); return ["✎",w?.title||"(제목 없음)"]; } if(k.startsWith("ms:")) return ["▦",S.manuscripts.find(x=>x.id===id)?.title||"원고"]; if(k.startsWith("cx:")) return ["◎",codexLive().find(c=>c.id===id)?.name||"노트"]; return ["",k]; }
-function stOpen(k){ document.body.classList.remove("stnav"); if((k==="codex"||/^cx(k|sys)?:/.test(k))&&ST_LTAB!=="world"){ ST_LTAB="world"; try{ localStorage.setItem("seojae.stLtab","world"); }catch(_){} } if(k==="draft"){ if(tab==="write"&&!editId) return; const d=bookDraft(); return go('write',{new:true,track:"book",ms:d?.ms||null}); } if(k.startsWith("ms:")) stMsSwitch(k.slice(3)); stAdd(k);
+function stOpen(k){ document.body.classList.remove("stnav"); if(k!=="new") nmAuto(); if((k==="codex"||/^cx(k|sys)?:/.test(k))&&ST_LTAB!=="world"){ ST_LTAB="world"; try{ localStorage.setItem("seojae.stLtab","world"); }catch(_){} } if(k==="draft"){ if(tab==="write"&&!editId) return; const d=bookDraft(); return go('write',{new:true,track:"book",ms:d?.ms||null}); } if(k.startsWith("ms:")) stMsSwitch(k.slice(3)); stAdd(k);
   if(k.startsWith("w:")) return go('write',{edit:k.slice(2)});
   ROOM_NEW=k==="new"; ROOM_CODEX=k.startsWith("cx:")?k.slice(3):null; ROOM_MAP=k==="map"; ST_ACT=k;
   if(k.startsWith("ms:")){ ROOM_MS=k.slice(3); try{ localStorage.setItem("seojae.roomMs",ROOM_MS); }catch(_){} }
@@ -5005,7 +5220,7 @@ function stSide(cur){ const ms=liveMs(), m=ms.find(x=>x.id===ROOM_MS)||ms[0]||nu
     ${m?`<div class="stltab"><button class="${ST_LTAB!=="world"?"on":""}" onclick="stLtab('ms')">원고</button><button class="${ST_LTAB==="world"?"on":""}" onclick="stLtab('world')">${m.genre==="novel"?"월드":"노트"} <small>${cxScope(m.id).length||""}</small></button></div>`:""}
     ${m&&ST_LTAB==="world"?worldTree(m,cur)+"</div>":`${m?`<div class="stnavs">${nav("memo","▤","메모 (포스트잇)",seeds)}${nav("res","⧉","자료 모음",(m?.research||[]).length)}</div>`:""}
     <div class="stsec"><p class="stsech">목차</p><div id="sttree" data-m="${m?.id||""}">${stTree(m,cur)}</div></div></div>`}
-    <div class="stcommon"><p class="stsech"><span class="combadge">공통</span> 모든 말씀 글</p><button class="stnavi ${cur==="common"||(cur.startsWith("cx:")&&cxOrphan(codexLive().find(c=>"cx:"+c.id===cur)||{}))?"on":""}" onclick="stOpen('common')"><span class="sti">◎</span>${CX_COMMON}<span class="stc">${codexLive().filter(cxOrphan).length||""}</span></button></div>
+    <div class="stcommon"><p class="stsech"><span class="combadge">공통</span> 공통 창고</p><button class="stnavi ${cur==="common"||(cur.startsWith("cx:")&&cxOrphan(codexLive().find(c=>"cx:"+c.id===cur)||{}))?"on":""}" onclick="stOpen('common')"><span class="sti">◎</span>${CX_COMMON}<span class="stc">${cxComN()||""}</span></button><button class="stnavi ${cur==="jots"?"on":""}" onclick="stOpen('jots')"><span class="sti">✐</span>끄적이기<span class="stc" id="stjotn">${(S.jots||[]).length||""}</span></button></div>
     <div class="stfoot"><button onclick="go('drawer',{sub:'trash'})"><span class="sti">${ICO.trash}</span>휴지통</button><button onclick="go('drawer',{sub:'all'})"><span class="sti">${ICO.search}</span>서랍 (모든 글)</button><button onclick="go('settings')"><span class="sti">⚙</span>설정</button></div></aside>`; }
 function studioWrap(cur,main){ stAdd(cur); return `<div class="studio">${stSide(cur)}<div class="stmain">${stTabs(cur)}${main}</div></div><div class="stback" onclick="document.body.classList.remove('stnav')"></div>`; }
 const stHello=()=>{ const h=Math.floor(kstMinutes()/60); return h<5?"고요한 새벽입니다":h<12?"좋은 아침입니다":h<18?"좋은 오후입니다":"평안한 저녁입니다"; };
@@ -5162,6 +5377,7 @@ function roomPage(){
   else if(cur==="memo") main=stMemo(m);
   else if(cur==="codex") main=stCodexList();
   else if(cur==="common") main=stCodexList(true);
+  else if(cur==="jots") main=jotBoard();
   else if(cur.startsWith("cxk:")&&m) main=cxKindPage(m,cur.slice(4));
   else if(cur.startsWith("cxsys:")&&m) main=cxSysPage(m,cur.slice(6));
   else if(cur==="res") main=m?resPage(m):stHome(m);
@@ -5387,7 +5603,8 @@ const codexLive=()=>(S.codex||[]).filter(c=>!(S.deleted||{})[c.id]);
 // 원고마다 자기 노트 창고 (2026-10-29 팀장님: 공통 자료 없이 원고마다): 항목의 c.ms(원고 번호)로 그 원고에만 속함. 원고 안에서는 그 원고의 노트만 보이고 찾음.
 // c.ms 가 없는 예전 노트(또는 원고가 지워진 노트)는 「주인 없는 노트」 — 원고에는 안 보이고, 노트 목록 아래에서 「이 원고로 가져오기」. 원고 밖 글(묵상)에서는 예전처럼 이 노트만 찾음
 const cxMsNow=()=>{ if(tab==="write"){ const w=editId&&S.writings.find(x=>x.id===editId); return wMs(w)?.id||null; } return ROOM_MS||null; };
-const cxOrphan=c=>!c.ms||!liveMs().some(m=>m.id===c.ms);   // 원고 번호가 없는 노트 = 공통 창고 「말씀 노트」 (묵상·설교초안 같은 원고 밖 말씀 글이 함께 씀)
+const cxOrphan=c=>!c.ms;   // 원고 번호가 없는 노트 = 공통 창고 「말씀 노트」 (묵상·설교초안 같은 원고 밖 말씀 글이 함께 씀) — 휴지통에 든 원고의 노트는 여기로 오지 않고 숨음(원고를 되살리면 함께 돌아옴)
+const cxComN=()=>codexLive().filter(c=>!c.ms&&!c.sys&&!c.minor).length;   // 말씀 노트 수 (월드 배경·정리 규칙·스쳐 간 것은 세지 않음)
 const cxHome=c=>cxOrphan(c)?null:c.ms;
 const CX_COMMON="말씀 노트";
 // 공통 → 원고로 복사: 복사본은 그 원고의 노트(원고 성격에 맞게 고쳐 씀), 원본은 공통에 그대로. 공통 안의 관계는 따라가지 않음
@@ -5538,7 +5755,7 @@ function stCodexList(common){ const P=cxP(common?"common":cxPK()), V=P.views.som
       ${cols.length?"":`<p class="hint">속성을 채우면 열이 생깁니다 (항목 → 「기본 속성 채우기」).</p>`}`;
   } else if(V==="graph") body=cxGraph(cs);
   else { const cardC=c=>{ const p=(c.props||[]).find(x=>x.v); return `<div class="strc cxcard" onclick="stOpen('cx:${c.id}')" role="button" tabindex="0"><b>${cxIc(c)} ${esc(c.name)}</b><span>${esc(p?`${p.k}: ${p.v}`:(c.body||"").slice(0,60))}</span><small>${c.kind?esc(c.kind)+" · ":""}나온 글 ${codexHits(c).ws.length}편${(c.rel||[]).length?` · 관계 ${c.rel.length}`:""}</small>${common?`<button class="btn small ghost cxclaim" onclick="cxCopyMenu('${c.id}',event)" title="원고의 노트로 복사합니다 (원본은 공통에 그대로)">⧉ 내 원고로 복사</button>`:""}</div>`; };
-    const mine=cs, nCom=codexLive().filter(cxOrphan).length, mt=S.manuscripts.find(x=>x.id===ROOM_MS)?.title||"이 원고";
+    const mine=cs, nCom=cxComN(), mt=S.manuscripts.find(x=>x.id===ROOM_MS)?.title||"이 원고";
     body=common?`<div class="strec comgrid">${mine.map(cardC).join("")||`<p class="muted" style="margin:0">아직 말씀 노트가 없습니다. 성경 인물·지명·용어처럼 여러 묵상에서 함께 쓰는 노트를 두세요.</p>`}</div>`
       :`<p class="cxgh">『${esc(mt)}』의 노트 <span class="muted">${mine.length}</span></p><div class="strec">${mine.map(cardC).join("")||`<p class="muted" style="margin:0">이 원고에만 쓰는 노트가 아직 없습니다. 「＋ 항목」으로 만들면 이 원고를 열 때만 보입니다.</p>`}</div>
       ${nCom?`<p class="cxcomlink"><span class="combadge">공통</span> 「${CX_COMMON}」에 ${nCom}개 — 이 원고에도 필요하면 거기서 「내 원고로 복사」 <button class="btn small ghost" onclick="stOpen('common')">말씀 노트 열기</button></p>`:""}`; }
@@ -6726,7 +6943,7 @@ function rsPut(i){ const x=RS_MSGS[i], b=$("#wbody"); if(!x||!b) return; const a
 // 담기: 지금 원고의 자료 모음에. 원고가 없으면 어느 원고에 담을지 고르고, 원고가 하나도 없으면 끄적이기에
 function rsKeep(i,mid){ const x=RS_MSGS[i]; if(!x) return; const m=mid?S.manuscripts.find(y=>y.id===mid):rsMs();
   if(!m){ const L=liveMs().filter(y=>!y.rule);
-    if(!L.length){ (S.jots=S.jots||[]).push({id:uid(),t:(rsBody(x)+((x.src||[]).length?"\n\n출처\n"+rsSrcLine(x):"")).slice(0,2000),updated:new Date().toISOString()}); save(); return toast("원고가 없어 끄적이기에 담았습니다"); }
+    if(!L.length){ (S.jots=S.jots||[]).push(jotNew((rsBody(x)+((x.src||[]).length?"\n\n출처\n"+rsSrcLine(x):"")).slice(0,2000),"quote")); save(); return toast("원고가 없어 끄적이기에 담았습니다"); }
     return ctxOpen(innerWidth/2,innerHeight/3,"어느 원고의 자료 모음에 담을까요?",L.map(y=>({t:y.title||"(이름 없음)",ic:"📚",fn:()=>rsKeep(i,y.id)})),isTouch()); }
   const t=(x.q||"AI 조사").replace(/\s+/g," ").slice(0,60), src=(x.src||[]).length?x.src.map(u=>`${u.title} ${u.url}`).join(" · ").slice(0,600):"AI 조사 · 출처 없음(확인 필요)";
     // 답이 실제로 기대어 쓴 원문 구절(cites)이 있으면 그것을 본문에, AI 요약은 메모로 — 원문과 AI 말을 섞지 않음
@@ -6809,7 +7026,7 @@ function ctxEditor(){ const b=$("#wbody"); const s=b.selectionStart, e=b.selecti
     {t:has?"각주 달기":"커서 자리에 각주",ic:"¹",fn:()=>{ if(has){ WSEL={s,e}; wMark('fn'); } else fnBox(s,null,"…"+b.value.slice(Math.max(0,s-24),s).replace(/\s+/g," ").trim()); }},
     has?{t:"표시 지우기",ic:"⌫",fn:()=>{ WSEL={s,e}; wMark('clear'); }}:null,
     has?{t:"말투 기준으로 담기",ic:"♪",fn:()=>{ WSEL={s,e}; voiceAddSel(); }}:null,
-    has?{t:"끄적이기에 담기",ic:"✐",fn:()=>{ (S.jots=S.jots||[]).push({id:uid(),t:b.value.slice(s,e).trim().slice(0,2000),updated:new Date().toISOString()}); save(); toast("끄적이기에 담았습니다"); if($("#jotlist")) jotPaint(); }}:null,
+    has?{t:"끄적이기에 담기",ic:"✐",fn:()=>{ (S.jots=S.jots||[]).push(jotNew(b.value.slice(s,e).trim().slice(0,2000))); save(); toast("끄적이기에 담았습니다"); if($("#jotlist")) jotPaint(); }}:null,
     has?"-":null,
     has?{t:"잘라내기",ic:"✂",fn:()=>{ const t=b.value.slice(s,e); navigator.clipboard?.writeText(t).then(()=>tInsert(b,"",s,e),()=>toast("잘라내지 못했습니다")); }}:null,
     has?{t:"복사",ic:"⧉",fn:()=>clip(b.value.slice(s,e))}:null,
@@ -7426,7 +7643,7 @@ async function checkNotion(){
   }catch(_){ el.textContent="확인하지 못했습니다."; }
 }
 function restore(input){ const f=input.files[0]; if(!f) return; const r=new FileReader();
-  r.onload=async()=>{ try{ const d=JSON.parse(r.result); if(!d||!Array.isArray(d.writings)) throw 0; if(!confirm("백업 파일의 기록을 지금 기록과 합칠까요?\n(지금 기록은 사라지지 않고, 같은 글은 더 나중에 고친 쪽이 남습니다. 지운 글은 되살아나지 않습니다)")) return;
+  r.onload=async()=>{ try{ let d=JSON.parse(r.result); if(d&&d.kind==="backup"&&d.data) d=d.data; if(!d||!Array.isArray(d.writings)) throw 0;   // PC 백업 파일(아침서재-백업-날짜.json)은 data 안에 기록 if(!confirm("백업 파일의 기록을 지금 기록과 합칠까요?\n(지금 기록은 사라지지 않고, 같은 글은 더 나중에 고친 쪽이 남습니다. 지운 글은 되살아나지 않습니다)")) return;
       if(GAS&&SERVER){ try{ await gcall("backupNow"); }catch(_){} }   // 합치기 전 지금 기록을 드라이브에 사본으로
       mergeFrom(d); save(); render(); toast("백업 파일을 합쳤습니다"); }catch(_){ toast("아침 서재 백업 파일이 아닙니다"); } };
   r.readAsText(f); input.value=""; }
