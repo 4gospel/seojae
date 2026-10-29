@@ -698,6 +698,14 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .dturn:disabled{cursor:default} .dturn:focus-visible{outline:2px solid var(--sepia);outline-offset:-4px}
 .dturn::after{content:"";position:absolute;bottom:0;width:0;height:0;transition:width .2s,height .2s} .dturn.next::after{right:0;background:linear-gradient(225deg,transparent 50%,#e9dfca 50%);box-shadow:-2px -2px 4px rgba(0,0,0,.12)} .dturn.prev::after{left:0;background:linear-gradient(135deg,transparent 50%,#e9dfca 50%);box-shadow:2px -2px 4px rgba(0,0,0,.12)}
 .dturn:not(:disabled):hover::after{width:26px;height:26px}
+/* 휴대폰 한 쪽 넘김 */
+.mflip{position:absolute;inset:0;z-index:20;pointer-events:none;perspective:1800px;perspective-origin:35% 35%}
+.mflip .mpage{position:absolute;left:0;right:0;top:0;margin:0;overflow:hidden;background:var(--paper) var(--grain);box-shadow:none!important;border-radius:3px;display:grid;grid-template-columns:1fr}
+.mflip .mpage .mflip{display:none}
+.mflip .turn{transform-origin:left center;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .66s cubic-bezier(.35,.05,.25,1),box-shadow .66s}
+.mflip .turn::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 30%,rgba(255,255,255,.08) 70%,rgba(0,0,0,.22));opacity:0;transition:opacity .66s}
+.mflip .turn:not(.in).go{transform:rotateY(-178deg)} .mflip .turn.go::after{opacity:1}
+.mflip .turn.in{transform:rotateY(-178deg)} .mflip .turn.in.go{transform:rotateY(0)} .mflip .turn.in::after{opacity:1} .mflip .turn.in.go::after{opacity:0}
 .diary.slide-next{animation:dslideN .4s ease-out} .diary.slide-prev{animation:dslideP .4s ease-out}
 @keyframes dslideN{from{transform:translateX(18%) rotateY(-8deg);opacity:.2}to{transform:none;opacity:1}} @keyframes dslideP{from{transform:translateX(-18%) rotateY(8deg);opacity:.2}to{transform:none;opacity:1}}
 :root[data-theme="dark"] .dbook>.diary{box-shadow:-2px 2px 0 -1px #3a332b,-4px 4px 0 -2px #322b24,2px 2px 0 -1px #3a332b,4px 4px 0 -2px #322b24,0 16px 26px -16px rgba(0,0,0,.8)}
@@ -1485,7 +1493,7 @@ body:has(.docbar) .toolbar .histgrp{display:none}
   <div class="top">
     <div class="brand" onclick="go('today')" title="오늘 화면으로" role="link">아침 서재<small>MORNING · STUDY · DIARY</small></div>
     <div class="topright"><div class="stkcol"><div class="streak" id="streak"></div><div class="pomomini" id="pomomini" hidden></div></div>
-    <button class="gearbtn" id="gearbtn" onclick="go('settings')" title="설정" aria-label="설정"></button></div>
+    <button class="gearbtn" id="gearbtn" onclick="gearToggle()" title="설정 (한 번 더 누르면 하던 화면으로)" aria-label="설정"></button></div>
   </div>
   <nav id="nav"></nav>
 </div><div class="navline"></div></header>
@@ -1846,7 +1854,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="8a9b5b7b32";
+const APP_BUILD="479174c5b4";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2822,6 +2830,7 @@ function goInner(t,o){ TRACK_PICK=!!o.track; if(editId&&FRESH[editId]!=null&&o.e
   if(t==="write"&&!o.edit&&!o.fromNote&&!o.fromWriting&&!o.new){   // 쓰기로 들어오면 오늘 쓴 글이 있을 때 그 글을 이어서 (묵상 먼저). 새로 쓰려면 「새 글」
     const tr=o.track||track, ws=live().filter(w=>w.date===today()&&w.track===tr); const w=ws.find(x=>x.type==="묵상")||ws[0]; if(w){ o=Object.assign({},o,{edit:w.id}); } }
   { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew&&ew.trashed){ t="drawer"; o={sub:"trash"}; setTimeout(()=>toast("휴지통에 있는 글입니다. 「되살리기」를 누른 뒤 열 수 있습니다"),100); } }
+  if(t==="settings"&&tab!=="settings") SET_FROM=tab;   // 다른 길로 설정에 들어와도 톱니로 그 화면에 돌아가게
   tab=t; if(o.track) track=o.track; { const ew=o.edit&&S.writings.find(x=>x.id===o.edit); if(ew) track=ew.track; }   // 글을 열면 그 글의 갈래로 (위 메뉴 표시도 묵상/글쓰기로 맞춤)
   editId=o.edit||null; fromNote=o.fromNote||null; fromWriting=o.fromWriting||(o.fromWritings||[])[0]||null; FROMS=o.fromWritings||(fromWriting?[fromWriting]:null); SEL_PLACE=o.place; SEL_MS=o.ms||null; NEW_TPL=o.new&&o.tpl?o.tpl:""; NEW_TYPE=o.new&&o.type?o.type:null; selLen=undefined; promoAsk=null; if(o.sub) drawerSub=o.sub; wStk=[]; STK_SEL=null; STK_OPEN=false; READVIEW=false; $("#stkpal")?.remove(); selTopics=[]; selSits=[]; draft=null; noteOpen=null; document.body.classList.remove("focus"); render(); scrollTo(0,0);
   if(t==="write"&&innerWidth<=700&&(o.edit||o.new||o.fromWritings)) setTimeout(()=>$(".toolbar")?.scrollIntoView({block:"start"}),60); }   // 휴대폰: 글을 열면 쓰는 자리로
@@ -3234,8 +3243,9 @@ function dGo(n){ const x=new Date((diaryDate||today())+"T00:00"); x.setDate(x.ge
 // 진짜 책처럼: 가운데 등을 축으로 한 장이 넘어갑니다. 다음 날은 오른쪽 장이 왼쪽으로(앞면=지금 오른쪽 장, 뒷면=새 왼쪽 장),
 // 전날은 왼쪽 장이 오른쪽으로(앞면=지금 왼쪽 장, 뒷면=새 오른쪽 장). 넘어가는 동안 밑에는 새 펼침면이 보입니다
 function dOpen(k,dir){ if(k>today()) return; if(k<dMin()){ toast(`일기장은 ${dMin()}(1일째)부터 열립니다`); return; } STK_SEL=null; const old=$(".diary"); DIARY_VIEW="page";
-  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches, narrow=innerWidth<=700;
-  if(!old||!dir||reduce||narrow){ diaryDate=k; render(); if(dir&&!reduce){ const nd=$(".diary"); nd?.classList.add(dir==="next"?"slide-next":"slide-prev"); setTimeout(()=>nd?.classList.remove("slide-next","slide-prev"),420); } return; }
+  const narrow=innerWidth<=700;   // 팀장님: 실제 책처럼 늘 넘김 (기기의 「동작 줄이기」와 상관없이)
+  if(!old||!dir){ diaryDate=k; render(); return; }
+  if(narrow){ const oc=old.cloneNode(true); diaryDate=k; render(); dFlipOne(oc,dir); return; }
   const oL=old.querySelector(".pg.l")?.cloneNode(true), oR=old.querySelector(".pg.r")?.cloneNode(true);
   diaryDate=k; render(); const nd=$(".diary"); if(!nd||!oL||!oR) return;
   const nL=nd.querySelector(".pg.l").cloneNode(true), nR=nd.querySelector(".pg.r").cloneNode(true);
@@ -3245,8 +3255,16 @@ function dOpen(k,dir){ if(k>today()) return; if(k<dMin()){ toast(`일기장은 $
   const front=document.createElement("div"); front.className="face front diary"; front.appendChild(next?oR:oL);
   const back=document.createElement("div"); back.className="face back diary"; back.appendChild(next?nL:nR);
   flip.append(front,back); wrap.append(under,flip); nd.appendChild(wrap);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>flip.classList.add("go")));
+  flip.getBoundingClientRect(); flip.classList.add("go");   // 그린 뒤 바로 넘김 (창이 뒤에 있어 그리기 신호가 늦어도 넘어감)
   setTimeout(()=>wrap.remove(),760); }
+// 휴대폰(한 쪽짜리 책): 다음 날은 지금 장이 책등(왼쪽)을 축으로 들려 넘어가고, 전날은 앞 장이 왼쪽에서 넘어와 덮습니다
+function dFlipOne(oc,dir){ const nd=$(".diary"); if(!nd) return; const h=nd.offsetHeight, next=dir==="next";
+  const wrap=document.createElement("div"); wrap.className="mflip";
+  const mk=src=>{ const d=src.cloneNode(true); d.classList.add("mpage"); d.style.height=h+"px"; d.querySelectorAll("textarea,button,input").forEach(x=>x.tabIndex=-1); return d; };
+  if(next){ const pg=mk(oc); pg.classList.add("turn"); wrap.append(pg); }
+  else { const under=mk(oc); under.classList.add("under"); const pg=mk(nd); pg.classList.add("turn","in"); wrap.append(under,pg); }
+  nd.appendChild(wrap); const t=wrap.querySelector(".turn"); t.getBoundingClientRect(); t.classList.add("go");
+  setTimeout(()=>wrap.remove(),720); }
 let DIARY_VIEW="page", dcalY=null, dcalM=null;
 // 일기 달력: 한 줄 일기·날씨·기분·스티커가 있는 날은 잉크 점(진함), 읽기·글 기록만 있는 날은 옅은 점
 const dHas=k=>{ const e=S.diary?.[k]; return !!(e&&((e.line||"").trim()||e.mood||e.weather||(e.stickers||[]).length)); };
@@ -7694,6 +7712,15 @@ function creditWarn(){ const c=CONF?.claude; if(!c||!c.low) return; let k=""; tr
   try{ localStorage.setItem("seojae.creditWarn",today()); }catch(_){}
   setTimeout(()=>toast(c.empty?"클로드 크레딧을 다 썼습니다. 요약은 제미나이로 이어집니다 (설정 → 주석 서재)":`클로드 크레딧이 약 $${c.left.toFixed(2)} 남았습니다. 다음 충전 ${c.next}`),1500); }
 // 설정 → 주석 서재의 요약 열쇠 칸을 펴고 클로드 칸에 커서를
+// 설정 톱니: 누르면 설정, 설정에서 한 번 더 누르면 들어오기 전 화면·자리로 (쓰던 글은 그 글로, 새 글은 임시 보관에서 이어서)
+let SET_BACK=null, SET_FROM=null;
+function gearToggle(){
+  if(tab==="settings"){ const b=SET_BACK||{t:SET_FROM&&SET_FROM!=="write"?SET_FROM:"today",o:{},y:0}; SET_BACK=null; go(b.t,b.o); setTimeout(()=>scrollTo(0,b.y||0),80); return; }
+  const before=new Set(S.writings.map(w=>w.id)), t=tab, y=scrollY;
+  let o=t==="write"?(editId?{edit:editId}:{new:true,track,ms:SEL_MS||null,type:$("#wtype")?.value||undefined}):t==="drawer"?{sub:drawerSub}:{};
+  go("settings");
+  if(t==="write"&&!o.edit){ const kept=S.writings.find(w=>!before.has(w.id)); if(kept) o={edit:kept.id}; }   // 떠나며 저절로 간직된 새 글이면 그 글로
+  SET_BACK={t,o,y}; }
 function goAiKey(){ go("settings"); setTimeout(()=>{ const b=$("#aikeybox"); if(b){ b.open=true; b.closest("details:not(#aikeybox)")?.setAttribute("open",""); b.scrollIntoView({block:"center"}); setTimeout(()=>$("#ckey")?.focus(),300); } },150); }
 async function saveKey(k,inputId){
   if(!SERVER) return toast("서버로 열어야 저장할 수 있습니다");
