@@ -826,6 +826,10 @@ body.dfull .dbook>.diary>.pg>.dfolio{position:static;order:99;margin-top:auto;pa
 .dbook{perspective:1600px}
 /* 보내기 */
 .sendview{background:rgba(40,28,16,.35);overflow:auto}
+.helptip{position:fixed;z-index:200;max-width:280px;padding:9px 12px 10px;border-radius:12px;background:var(--paper) var(--grain);border:1px solid var(--edge);box-shadow:0 12px 30px -10px rgba(0,0,0,.4);color:var(--ink);font:13px/1.55 -apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;display:grid;gap:3px;pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity .14s,transform .14s}
+.helptip.on{opacity:1;transform:none} .helptip b{font-size:12.5px;color:var(--sepia);font-weight:600} .helptip span{color:var(--ink-soft)}
+.helptip::before{content:"";position:absolute;left:var(--ax,20px);width:10px;height:10px;background:var(--paper);border:1px solid var(--edge);transform:translateX(-50%) rotate(45deg)} .helptip.b::before{top:-6px;border-right:0;border-bottom:0} .helptip.t::before{bottom:-6px;border-left:0;border-top:0}
+.pill[data-tip]:hover::after{display:none!important}
 .askview{position:fixed;inset:0;z-index:120;background:rgba(40,28,16,.32);display:flex;align-items:center;justify-content:center;padding:16px 16px 12vh;animation:askin .14s ease-out}
 .asksheet{width:min(460px,100%);background:var(--paper) var(--grain);border:1px solid var(--edge);border-radius:16px;box-shadow:0 22px 50px -18px rgba(0,0,0,.5);padding:20px 22px 16px;display:grid;gap:10px}
 .asksheet .label{margin:0} .asksheet .hint{margin:-4px 0 0;font-size:13.5px} .asksheet .askin{font:17px "Gowun Batang",serif;padding:10px 12px;border:1px solid var(--edge);border-radius:10px;background:color-mix(in srgb,var(--paper) 60%,#fff);color:var(--ink);width:100%;box-sizing:border-box} .asksheet .askin:focus{outline:none;border-color:var(--ink-soft);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 8%,transparent)} .asksheet .row{gap:6px;margin-top:4px}
@@ -909,6 +913,9 @@ body.dfull .dbook>.diary>.pg>.dfolio{position:static;order:99;margin-top:auto;pa
 .kbt{border-collapse:collapse;font-size:14.5px} .kbt td{padding:5px 8px;border-bottom:1px dashed var(--edge);vertical-align:top} .kbt td:first-child{white-space:nowrap} kbd{font:600 12.5px/1.6 -apple-system,sans-serif;background:var(--paper-2,#efe7da);border:1px solid var(--edge);border-bottom-width:2px;border-radius:5px;padding:1px 7px;color:var(--ink)}
 /* ───── 글방 = 작업실 (펜시브식) ───── */
 .studio{display:grid;grid-template-columns:236px minmax(0,1fr);gap:22px;align-items:start}
+/* 넓은 PC: 글방(왼쪽 목차·오른쪽 곁 칸)을 모두 켜도 가운데 종이가 넉넉하게 — 화면 틀을 화면 폭에 맞춰 넓힘 (위 머리 줄도 같은 폭) */
+@media (min-width:1300px){ #main:has(.studio){max-width:min(1680px,calc(100vw - 64px))} body:has(#main .studio) header .wrap{max-width:min(1680px,calc(100vw - 64px))} .studio{gap:28px} body.staside .studio .writegrid{grid-template-columns:minmax(0,1fr) 320px!important;gap:30px} }
+@media (min-width:1700px){ .studio{grid-template-columns:260px minmax(0,1fr)} }
 .stside{position:sticky;top:10px;max-height:calc(100vh - 20px);overflow:auto;background:color-mix(in srgb,var(--paper) 72%,var(--edge));border:1px solid var(--edge);border-radius:14px;padding:10px 8px;display:flex;flex-direction:column;gap:4px;font:14px/1.35 -apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);scrollbar-width:thin}
 .stms summary{list-style:none;display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:9px;cursor:pointer;font-weight:600} .stms summary::-webkit-details-marker{display:none} .stms summary:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
 /* 원고 성격: 아이콘과 색 (모드 띠와 같은 색) — 접혀 있어도 무슨 글인지 보임 */
@@ -1998,7 +2005,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="218f8d8273";
+const APP_BUILD="bd4cae34f2";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4147,6 +4154,7 @@ function lookSection(){
   return `<section class="sheet wide">
     <div class="row" style="gap:10px;align-items:baseline"><p class="label" style="margin:0">화면 꾸미기 <small class="hint" style="display:inline">· 이 기기만 — 휴대폰과 컴퓨터를 따로</small></p></div>
     <div class="lookgrid">
+      <div class="setrow"><span class="k">도움말 모드</span><button type="button" class="twsw ${HELP_ON?"on":""}" style="width:auto" role="switch" aria-checked="${HELP_ON}" data-help="켜면 단추·메뉴에 마우스를 올렸을 때 쓰임새 카드가 뜹니다 (이 기기만)" onclick="helpSet(!HELP_ON);this.classList.toggle('on',HELP_ON);this.querySelector('em').textContent=HELP_ON?'켬':'끔'"><span class="sw"><i></i></span><span class="twt"><b>단추 설명 보기</b><small>마우스를 올리면 쓰임새가 카드로</small></span><em>${HELP_ON?"켬":"끔"}</em></button></div>
       <div class="setrow"><span class="k">밝기</span><div class="pills">${[["light","밝게","기기가 야간 모드여도 항상 밝은 종이 화면"],["dark","어둡게","항상 어두운 밤 서재 화면"],["auto","기기 따라","기기의 주간·야간 모드를 그대로"]].map(([v,n,d])=>`<button class="pill ${theme===v?"on":""}" data-tip="${d}" onclick="setTheme('${v}')">${n}</button>`).join("")}</div></div>
       <div class="setrow"><span class="k">글자 크기</span><div class="pills">${[["",isTouch()?"보통(17)":"보통(18)"],[16,"작게"],[20,"크게"],[22,"더 크게"],[26,"아주 크게"]].map(([v,n])=>`<button class="pill ${(fs||"")===v?"on":""}" onclick="lookSet('fs',${v===""?"''":v})">${n}</button>`).join("")}</div></div>
       <div class="setrow"><span class="k">종이 색</span><div class="row" style="gap:7px;flex-wrap:wrap;padding-top:4px">${PAPERS.map(([bg,n,ink])=>dot(bg||"linear-gradient(135deg,#fbf7ee 50%,#29231d 50%)",n,(L.bg||"")===bg,`lookSet('bg','${bg}');lookSet('ink','${(L.ink&&L.inkManual)?L.ink:ink}')`)).join("")}</div></div>
@@ -5318,6 +5326,221 @@ const ringSvg=(pct,sz=46)=>{ const r=sz/2-4, c=2*Math.PI*r, f=Math.max(0,Math.mi
 const ST_CLS={"씨앗":"s1","초고":"s2","다듬는 중":"s3","완성":"s4"};
 const stOf=w=>WSTATUS.includes(w.status)?w.status:"초고";
 function roomPick(id){ stMsSwitch(id); ROOM_CODEX=null; ROOM_MAP=false; ROOM_NEW=false; ROOM_MS=id; ST_ACT="ms:"+id; stAdd(ST_ACT); try{ localStorage.setItem("seojae.roomMs",id); }catch(_){} render(); }
+// ───────── 도움말 모드: 단추·메뉴에 마우스를 올리면 쓰임새 카드 (설정 → 도움말 모드, 이 기기 seojae.helpMode, 처음엔 켬) ─────────
+// 설명은 그 단추의 title·data-tip 을 먼저 쓰고, 없으면 아래 HELP_TXT (단추 글자에서 아이콘·숫자를 뗀 이름으로 찾음)
+const HELP_TXT={
+ "쓰기":"쓰는 데 쓰는 도구 모음 — 틀 넣기·설계 카드·피드백·다른 표현·나누기/합치기·타자기·글자 크기·펜 색·종이",
+ "다듬기":"고른 글이나 이 글을 AI와 함께 다듬는 메뉴 — 다듬기·줄이기·쉽게·비문 고치기 등 (결과는 비교해 보고 적용)",
+ "틀 넣기":"이 글 종류(또는 원고 성격)에 맞는 ■ 소제목 틀을 본문에 넣습니다. 이미 쓴 글은 그대로 두고 덧붙입니다",
+ "간직 ⌘S":"지금 글을 바로 간직합니다 (⌘S). 손을 3초 쉬면 저절로도 간직됩니다",
+ "밑줄 남기기":"고른 문장을 밑줄로 남겨 오늘 화면·책장·서랍에서 다시 봅니다",
+ "끄적여 두기":"떠오른 생각을 끄적이기에 짧게 남깁니다 — 나중에 끄적이기 판에서 글이나 원고 메모로 꺼내 씁니다",
+ "끄적이기에 담기":"이 내용을 끄적이기에 한 장으로 담아 둡니다",
+ "묵상 쓰기":"오늘 본문으로 새 묵상을 씁니다",
+ "설교초안 쓰기":"이 본문으로 설교초안을 새로 씁니다",
+ "이 본문으로 쓰기":"고른 본문을 이 글의 본문 칸에 넣고 쓰기를 시작합니다",
+ "해설 보기":"주석 서재에서 이 본문의 해설을 찾아 보여 줍니다",
+ "개역한글":"본문을 개역한글로만 봅니다",
+ "한·영":"개역한글과 영어(WEB)를 나란히 봅니다",
+ "영어":"영어(World English Bible)로만 봅니다",
+ "↺ 10초":"10초 뒤로",
+ "10초 ↻":"10초 앞으로",
+ "작게":"플레이어를 작게","보통":"플레이어를 보통 크기로","크게":"플레이어를 크게",
+ "📌 끌리지 않게":"플레이어를 지금 자리에 고정합니다 (실수로 끌려 옮겨지지 않게)",
+ "한 곡씩":"한 곡이 끝나면 멈춥니다 (누를 때마다 이어 듣기 · 한 곡씩 · 한 곡 반복이 바뀝니다)",
+ "연결 링크 복사":"다른 기기에서 이 서재에 붙을 수 있는 연결 링크를 복사합니다 (비밀 열쇠가 들어 있으니 내 기기에만)",
+ "이 기기 연결 끊기":"이 기기에서 구글 연결을 끊습니다. 기록은 구글에 그대로 있습니다",
+ "오늘부터 다시 세기":"「이어지는 아침」을 오늘 1일째부터 다시 셉니다",
+ "처음 기록부터 세기":"「이어지는 아침」을 처음 기록한 날부터 셉니다",
+ "지금 구글에 백업":"지금 기록 파일의 사본을 구글 드라이브 「백업」 폴더에 남깁니다",
+ "지금 PC에 백업":"지금 기록을 고른 PC 폴더에 파일로 남깁니다",
+ "PC 백업 폴더 고르기":"자동 백업 파일을 둘 이 컴퓨터의 폴더를 고릅니다",
+ "폴더 바꾸기":"PC 백업 폴더를 다른 곳으로 바꿉니다",
+ "지금 내려받기":"지금 기록을 파일(.json)로 내려받습니다",
+ "백업 파일 내려받기":"이 백업 사본을 파일로 내려받습니다",
+ "백업에서 글 찾기 →":"날짜별 백업 사본에서 지운 글을 찾아 되살립니다",
+ "백업 목록 보기":"구글에 남은 날짜별 백업 사본을 봅니다",
+ "이 사본 전체를 지금 기록과 합치기":"이 사본에만 있는 글·노트를 지금 기록에 더합니다 (지금 것은 지우지 않음)",
+ "휴지통에서 되살리기":"휴지통의 글을 원래 자리로 되돌립니다",
+ "이 글 되살리기":"이 글을 서랍·달력에 다시 보이게 합니다",
+ "되살리기":"휴지통에서 원래 자리로 되돌립니다",
+ "완전히 지우기":"되살릴 수 없게 지웁니다 — 다른 기기에서도 사라집니다",
+ "이 기기에 앱으로 설치":"홈 화면·독(Dock)에 아침 서재를 앱처럼 둡니다",
+ "시각 바꾸기":"아침 알림 메일이 오는 시각을 바꿉니다",
+ "알림 켜기":"아침 알림 메일을 켭니다 (4gospel 메일로)",
+ "클로드 열쇠 넣으러 가기":"AI 기능에 쓸 클로드 열쇠를 넣는 설정으로 갑니다",
+ "폴더 이름 저장":"드라이브 폴더 이름을 저장합니다",
+ "오늘로":"오늘 날짜로 돌아갑니다",
+ "일기장":"책처럼 넘겨 보는 일기장 보기",
+ "목록":"일기를 날짜 목록으로 봅니다",
+ "스티커 붙이기":"쪽에 스티커를 붙입니다 — 고른 뒤 쪽을 누르면 그 자리에",
+ "스티커":"스티커 고르기를 열고 닫습니다",
+ "글 속에 넣기":"이 그림을 글 안에 넣습니다",
+ "스티커로 보관":"이 그림을 스티커 서랍에 보관해 다시 씁니다",
+ "여기까지 읽음":"오늘 읽은 자리를 이 책에 기록합니다 (쪽 또는 %)",
+ "책장 보기":"책장으로 갑니다",
+ "책 꽂기":"이 책을 책장에 꽂습니다",
+ "이 책 꽂기":"찾은 책을 책장에 꽂습니다 (목차·쪽수도 함께)",
+ "제목으로 직접 꽂기":"찾는 책이 없으면 적은 제목 그대로 꽂습니다",
+ "글쓰기":"글방(글쓰기)으로 갑니다",
+ "오늘의 독서 일기 꾸미기":"오늘 읽은 책과 밑줄로 일기 쪽을 꾸밉니다",
+ "오늘 이 문장으로 쓰기":"이 밑줄 문장으로 오늘 글을 시작합니다",
+ "독후감 간직 → 노션 독서 노트":"독후감을 간직하고 노션 독서 노트에도 보냅니다",
+ "밑줄 모두 복사":"이 책의 밑줄을 모두 복사합니다",
+ "종이책(쪽)":"읽은 자리를 쪽수로 셉니다","전자책(%)":"읽은 자리를 %로 셉니다",
+ "국립중앙도서관에서 목차·쪽수 가져오기":"국립중앙도서관 자료로 목차와 쪽수를 채웁니다",
+ "독후감 쓰기":"이 책의 독후감을 씁니다",
+ "지금 읽는 책으로":"이 책을 「지금 읽는 책」으로 옮깁니다",
+ "다 읽었습니다":"다 읽은 책으로 옮기고 날짜를 남깁니다",
+ "다시 읽기":"다 읽은 책을 다시 읽는 책으로",
+ "책장에서 빼기":"이 책을 책장에서 뺍니다 (밑줄·독후감은 남음)",
+ "표지 찾기":"이 책의 표지 그림을 찾습니다",
+ "휴지통에 넣기":"휴지통으로 옮깁니다 — 30일 안에 되살릴 수 있습니다",
+ "휴지통에":"이 글을 휴지통으로 옮깁니다 — 30일 안에 서랍 → 휴지통에서 되살립니다",
+ "본문 되돌리기":"본문을 이 판의 내용으로 되돌립니다",
+ "조건으로 모으기":"주제·성경책·글 종류를 정해 두면 맞는 글이 저절로 모이는 원고",
+ "직접 고르기":"글을 하나씩 골라 넣고 순서를 직접 정하는 원고",
+ "모두 다시 보내기":"보낸 글을 모두 다시 보냅니다 (노션은 같은 페이지를 갱신)",
+ "글로 키우기":"이 밑줄·메모를 바탕으로 새 글을 시작합니다",
+ "통독 방법 고르기":"성경 통독 방법(맥체인·연대기순 등)을 고릅니다",
+ "그래도 읽기":"알림을 넘기고 읽기로 갑니다",
+ "다음 날 분량 이어 읽기":"내일 분량을 미리 이어 읽습니다",
+ "다 펼치기":"접힌 칸을 모두 펼칩니다",
+ "시작 단축어 시험 (1분)":"방해금지를 켜는 단축어가 되는지 1분짜리로 시험합니다",
+ "끝 단축어 시험":"방해금지를 끄는 단축어가 되는지 시험합니다",
+ "원고 만들기":"고른 성격으로 새 원고를 만듭니다 (카드를 두 번 눌러도 됩니다)",
+ "새 원고":"새 원고(책)를 만듭니다 — 가제와 성격을 정합니다",
+ "＋ 새 원고":"새 원고(책)를 만듭니다 — 가제와 성격을 정합니다",
+ "지금과 비교":"이 판과 지금 글을 나란히 비교합니다",
+ "카드":"카드로 봅니다","표":"표로 봅니다","줄":"한 줄씩 봅니다",
+ "커서 자리에 넣기":"이 내용을 본문의 커서 자리에 넣습니다 (⌘Z로 되돌림)",
+ "📝 메모로 남기기":"원고 메모(포스트잇)로 남깁니다",
+ "메모로 남기기":"원고 메모(포스트잇)로 남깁니다",
+ "이 글":"지금 쓰는 글만","고르기":"원고에서 보낼 글을 직접 고릅니다",
+ "A5 책 (표지·차례·쪽 번호)":"작은 책 판형 — 표지·차례·쪽 번호가 들어갑니다",
+ "A4 투고 원고 (넓은 줄 간격)":"출판사에 보내는 원고 모양 — A4, 넓은 줄 간격",
+ "미리보기":"고른 모양으로 쪽을 나눠 미리 봅니다",
+ "고르기로":"판형 고르기로 돌아갑니다",
+ "PDF로 저장":"인쇄 창을 엽니다 — 대상에서 「PDF로 저장」을 고르세요",
+ "조건 고치기":"이 원고에 글이 모이는 조건을 고칩니다",
+ "책 모양 PDF":"원고를 책 모양 PDF로 묶습니다",
+ "원고 내려받기":"원고 전체를 마크다운 파일(.md)로 내려받습니다",
+ "모두 보기":"전부 펼쳐 봅니다",
+ "바꾸기":"찾은 곳을 모두 바꿉니다 (바꾼 뒤 「방금 바꾼 것 되돌리기」 가능)",
+ "방금 바꾼 것 되돌리기":"방금 한 찾아 바꾸기를 되돌립니다",
+ "지금 원고를 판으로 남기기":"원고 전체를 지금 모습 그대로 드라이브에 판으로 남깁니다",
+ "이 판으로 원고 전체 되살리기":"원고 전체를 이 판의 내용으로 되돌립니다 (지금 모습은 판으로 먼저 남겨 둠)",
+ "직접 다듬기로 바꾸기":"조건으로 모이던 원고를, 순서를 직접 정하는 원고로 바꿉니다",
+ "찾아 바꾸기":"원고 전체에서 낱말을 찾아 바꿉니다",
+ "원고 판 전체 남기기·비교":"원고 판을 남기고 예전 판과 비교합니다",
+ "이름 바꾸기":"이름(가제)을 바꿉니다",
+ "원고 검토 받기 (AI)":"AI가 원고 전체를 원고 성격의 기준으로 검토합니다",
+ "부·장 골라 검토":"긴 원고는 부·장을 골라 나눠 검토합니다",
+ "보내기 · 가져오기":"PDF·워드·노션 등으로 보내거나, 노션·워드에서 가져옵니다",
+ "나오기":"이 화면에서 나옵니다",
+ "내용만":"설명 없이 내용만 봅니다","다 고침":"모두 고친 것으로 표시합니다",
+ "쓰기 화면":"글 쓰는 화면으로 돌아갑니다",
+ "⧉ 내 원고로 복사":"공통 말씀 노트를 지금 원고의 노트로 복사합니다 (원본은 그대로)",
+ "내 원고로 복사":"공통 말씀 노트를 지금 원고의 노트로 복사합니다 (원본은 그대로)",
+ "＋ 칸":"속성 칸을 하나 더합니다","칸":"속성 칸을 하나 더합니다",
+ "기본 칸 채우기":"이 종류에 맞는 기본 속성 칸들을 채워 넣습니다",
+ "＋ 관계":"다른 항목과의 관계를 하나 더합니다","관계":"다른 항목과의 관계를 하나 더합니다",
+ "말씀 노트 열기":"공통 말씀 노트로 갑니다",
+ "그 자리로 →":"글에서 그 자리로 갑니다",
+ "「다른 이름」에 넣기":"이 호칭을 항목의 「다른 이름」에 넣어, 앞으로 같은 인물로 셉니다",
+ "글에서 보기":"제안을 본문의 그 자리에서 보여 줍니다 (적용은 거기서)",
+ "모두 적용":"남은 제안을 한꺼번에 적용합니다 (⌘Z로 되돌림)",
+ "고른 곳 바꾸기":"고른 제안만 바꿉니다",
+ "✦ AI 카드 초안":"AI가 설계 카드의 칸을 초안으로 채웁니다 — 확정은 직접",
+ "AI 카드 초안":"AI가 설계 카드의 칸을 초안으로 채웁니다 — 확정은 직접",
+ "고른 것 노트에 넣기":"AI가 찾은 것 가운데 고른 것만 노트에 넣습니다",
+ "열기 ›":"엽니다","닫기 Esc":"닫습니다 (Esc)",
+ "다시 보이기":"숨긴 것을 다시 보이게 합니다",
+ "＋ 이름 더하기":"스쳐 간 것으로 남겨 둘 이름을 직접 적어 넣습니다",
+ "이름 더하기":"스쳐 간 것으로 남겨 둘 이름을 직접 적어 넣습니다",
+ "＋ 새 속성(열)":"이 종류의 모든 항목에 같은 속성 칸을 더합니다",
+ "새 속성(열)":"이 종류의 모든 항목에 같은 속성 칸을 더합니다",
+ "⋰ 전체":"이 종류의 항목을 모두 카드·표로 봅니다","전체":"이 종류의 항목을 모두 카드·표로 봅니다",
+ "＋ 새 섹션":"노트에 이름 붙은 섹션(외모·성격 등)을 더합니다","새 섹션":"노트에 이름 붙은 섹션(외모·성격 등)을 더합니다",
+ "규칙 남기기":"이 원칙을 규칙 저장소에 남깁니다 — 모든 글쓰기 AI가 따릅니다",
+ "✦ 규칙 점검 (부딪히는·낡은 규칙 찾기)":"AI가 서로 부딪히거나 낡은 규칙을 찾아 줍니다",
+ "규칙 점검 (부딪히는·낡은 규칙 찾기)":"AI가 서로 부딪히거나 낡은 규칙을 찾아 줍니다",
+ "담기":"자료 모음에 담습니다",
+ "↻ 다시":"다른 결과로 다시 받습니다","다시":"다른 결과로 다시 받습니다",
+ "되돌리기":"방금 적용한 것을 되돌립니다 (⌘Z)",
+ "이 자리에 넣기":"커서 자리에 넣습니다",
+ "PPT 가져오기":"드라이브의 설교 PPT를 이 글에 붙입니다",
+ "다시 가져오기":"슬라이드를 다시 읽어 옵니다",
+ "떼기":"붙인 슬라이드를 뗍니다 (파일은 그대로)",
+ "이 기기에서 고르기 (.pptx · .pdf)":"이 기기의 PPT·PDF 파일을 골라 붙입니다",
+ "읽어 오기":"고른 노션 페이지를 읽어 옵니다",
+ "그 글과 원본 비교":"가져온 교정본과 원래 글을 나란히 비교합니다",
+ "그 글 열기":"그 글을 엽니다","그래도 새로 만들기":"같은 글이 있어도 새 글로 만듭니다",
+ "새 글로 만들기":"가져온 내용으로 새 글을 만듭니다",
+ "고른 고침 반영":"교정본에서 고른 고침만 원래 글에 반영합니다",
+ "나란히 보기":"두 글을 나란히 봅니다",
+ "지금 판 남기기":"지금 글을 이름 붙인 판으로 남깁니다 (최대 10개)",
+ "이 판으로":"글을 이 판으로 되돌립니다",
+ "‹ 원고로":"원고 목차로 돌아갑니다",
+ "목차 열기":"이 원고의 목차를 엽니다",
+ "낱장으로 펼치기":"원고별로 묶인 글을 한 편씩 펼쳐 봅니다",
+ "거르기 풀기":"거르기 조건을 모두 풉니다",
+ "이 찾기 저장":"지금 거르기·찾기를 이름 붙여 저장합니다",
+ "이 조건으로 원고 만들기":"지금 거른 조건으로 글이 저절로 모이는 원고를 만듭니다",
+ "올해 1월 1일":"통독을 올해 1월 1일부터 셉니다","매일성경 따라":"매일성경 본문 순서를 따릅니다",
+ "통독표 따라":"고른 통독표 순서를 따릅니다","매일":"날마다 읽습니다","주일 빼고":"주일은 쉬고 읽습니다",
+ "이 방법 처음부터":"이 통독 방법을 처음부터 다시 시작합니다",
+ "넘기기":"이번 것은 넘깁니다",
+ "허락하기":"이 기기에서 이 기능을 쓰도록 허락합니다",
+ "원고만 휴지통에":"원고(목차)만 휴지통에 — 꼭지 글은 서랍에 남습니다",
+ "원고와 꼭지 글 모두 휴지통에":"원고와 그 안의 글을 함께 휴지통에 — 원고를 되살리면 글도 함께 돌아옵니다",
+ "원고 전체":"원고의 모든 글","완성만":"상태가 「완성」인 글만",
+ "＋ 부":"목차에 부(큰 칸)를 더합니다 — 글이 아니라 칸막이",
+ "＋ 새 편":"이 자리에 새 글을 만듭니다",
+ "?":"원고 목차의 원칙 — 칸(부·장)·글·■ 소제목의 단계",
+ "오늘":"오늘 화면 — 날마다 하는 세 가지, 오늘 본문·읽는 책·집중 시간","묵상":"묵상 — 매일성경 본문을 읽고 묵상·설교초안을 씁니다","일기":"일기장 — 책처럼 넘겨 보고 꾸미는 하루 기록","서랍":"서랍 — 쓴 글을 모두 찾아보고 거르고, 원고로 엮고, 휴지통을 봅니다","책장":"책장 — 읽는 책·밑줄·독후감",
+ "원고":"지금 원고의 메모·자료 모음·목차","월드":"지금 원고의 설정(인물·장소 등)·월드 배경·정리 규칙 (소설 밖은 「노트」)","노트":"지금 원고의 노트(인물·주제·용어 등)",
+ "전제 · 로그라인":"이 이야기를 한두 문장으로 — AI가 늘 함께 읽는 바탕","월드 배경":"이야기 세계의 큰 배경 — 시대·장소·규칙","월드 정리 규칙":"AI가 설정을 정리할 때 따를 규칙 (예: 조연은 따로 묶기)","정리 규칙":"AI가 설정을 정리할 때 따를 규칙",
+ "말씀 노트":"모든 묵상·설교가 함께 쓰는 공통 노트 — 성경 인물·지명·용어","끄적이기":"짧게 적어 둔 생각들 — 분류·정렬하고 글이나 원고 메모로 꺼내 씁니다","서랍 (모든 글)":"쓴 글을 모두 찾아보는 서랍으로","설정":"설정 — 연결·알림·화면 꾸미기·도움말 모드 등",
+ "모두 읽었습니다":"오늘 통독 분량을 다 읽은 것으로 표시합니다","15분":"집중 시간 15분","25분":"집중 시간 25분 (뽀모도로 기본)","45분":"집중 시간 45분","50분":"집중 시간 50분",
+ "다음 날 ›":"다음 날 일기로 (→)","‹ 전날":"전날 일기로 (←)",
+ "☀️":"날씨: 맑음","⛅":"날씨: 구름 조금","☁️":"날씨: 흐림","🌧️":"날씨: 비","❄️":"날씨: 눈","🌫️":"날씨: 안개","😊":"기분: 기쁨","🙂":"기분: 좋음","😌":"기분: 평안","🥲":"기분: 울컥함","🔥":"기분: 뜨거움","🙏":"기분: 감사·기도",
+ "모든 기록":"서랍의 모든 글을 봅니다","원고 — 책으로 엮기":"원고(책) 목록 — 새 원고를 만들고 글을 엮습니다",
+ "골라:말씀+책":"말씀 글·책 글로 거릅니다","골라:모든 글 종류":"글 종류(묵상·설교초안·소설 등)로 거릅니다","골라:모든 성경책":"본문의 성경책으로 거릅니다","골라:모든 주제":"주제·꼬리표로 거릅니다","골라:＋ 간직한 글 더하기…":"써 둔 글을 골라 이 원고에 넣습니다",
+ "최신":"최근에 꽂은 순","오래된 순":"오래전에 꽂은 순","분류별":"24가지 분류로 묶어 봅니다","별점순":"별점이 높은 순",
+ "모두 펼치기":"설정을 모두 펼쳐 봅니다","월":"이 요일에 알림","화":"이 요일에 알림","수":"이 요일에 알림","목":"이 요일에 알림","금":"이 요일에 알림","토":"이 요일에 알림","일":"이 요일에 알림",
+ "규칙":"AI가 따를 규칙을 보고 고칩니다","말투 기준":"내 말투의 기준 문장 — AI가 이 말투를 따릅니다","더 크게":"글자를 더 크게 (이 기기만)","아주 크게":"글자를 아주 크게 (이 기기만)","작게":"작게",
+ "연결 방법":"노션 연결 방법을 펼칩니다","색인 만들기":"주석 서재 폴더의 파일로 찾기용 색인을 만듭니다","요약 열쇠 넣기":"주석 요약에 쓸 AI 열쇠를 넣습니다","키 넣는 방법":"인증키를 받아 넣는 방법을 펼칩니다",
+ "새 장면":"이 원고에 새 장면(글)을 만듭니다","자유 글":"원고에 넣지 않은 자유 글을 씁니다","새 메모":"원고 메모(포스트잇)를 붙입니다","목차 카드":"원고 목차를 카드로 봅니다",
+ "최근 3달":"최근 3달 동안 쓴 글만 잇습니다","1년":"최근 1년 동안 쓴 글만","전부":"모든 글","생각 잇기":"주제·낱말·성경책·노트로 글과 글을 잇는 지도","글의 뿌리":"한 글이 어디서 왔는지(묵상 → 초안 → 원고) 따라가 봅니다","열기":"엽니다",
+ "가나다":"가나다순으로","성경 책별":"성경책별로 묶어서","자주 만난 순":"글에 자주 나온 순으로",
+ "붙이기":"적은 것을 붙입니다","전체":"모두 봅니다","안 쓴 것만":"아직 글에 쓰지 않은 것만",
+ "부 나누기":"목차에 부(큰 칸)를 더합니다 — 칸막이일 뿐 글은 아님","장 나누기":"목차에 장(작은 칸)을 더합니다","골라:자유 글":"이 원고의 성격 — 바꾸면 부·장 이름, 틀, 목표 단위, 검토 관점이 달라집니다",
+ "화 단위로 연재":"웹소설처럼 「화」 단위로 — 분량·연재 요일·비축분을 셉니다",
+ "목차":"부·장·글 차례를 줄이나 카드로 봅니다","플롯":"장면을 이야기 단계(발단·전개…)에 놓고 봅니다","설정 점검":"인물·장소가 글에 실제로 쓰였는지, 계획과 맞는지 점검합니다","상태":"글의 상태(초고·다듬는 중·완성)로 칸반처럼 봅니다","이어 읽기":"원고 전체를 한 줄로 이어 읽고 바로 고칩니다",
+ "관계도":"항목 사이의 관계를 그림으로 봅니다", "휴지통":"지운 글·원고 — 30일 안에 되살릴 수 있습니다","가−":"글자를 한 단계 작게 (이 기기만)","가＋":"글자를 한 단계 크게 (이 기기만)","골라:줄 노트":"쓰는 칸의 종이 — 줄 노트·모눈·무지","보내기 · 가져오기 PDF·워드·노션":"PDF·워드·노션 등으로 보내거나, 노션·워드에서 가져옵니다","저장":"고친 내용을 저장합니다","항목":"새 노트 항목을 만듭니다","이름 ↓":"이름순으로 정렬","이름":"이름순으로 정렬","수정일":"고친 날짜순으로 정렬"
+};
+let HELP_ON=(()=>{ try{ return localStorage.getItem("seojae.helpMode")!=="0"; }catch(_){ return true; } })();
+function helpSet(on){ HELP_ON=on; try{ localStorage.setItem("seojae.helpMode",on?"1":"0"); }catch(_){} document.body.classList.toggle("helpon",on); helpHide(); toast(on?"도움말 모드를 켰습니다 — 단추에 마우스를 올리면 쓰임새가 보입니다":"도움말 모드를 껐습니다"); }
+const helpKey=t=>String(t||"").replace(/\s+/g," ").trim().replace(/[▾▸]+\s*$/,"").replace(/\s*\(\d+\)\s*$/,"").replace(/\s+\d+\s*$/,"").trim();
+const helpBare=t=>helpKey(t).replace(/^[^\p{L}\p{N}?＋+]+/u,"").replace(/^[＋+]\s*/,"").replace(/\s*[—-].*$/,"").replace(/\s*→\s*$/,"").trim();
+function helpFor(el){ const own=el.getAttribute("data-help")||el.dataset.htitle||el.getAttribute("title")||el.getAttribute("data-tip")||el.getAttribute("aria-label");
+  if(el.matches(".setitem>summary")) return null;
+  const sel=el.tagName==="SELECT", name=sel?(el.options[el.selectedIndex]?.text||"").trim():helpKey(el.innerText||el.textContent||""), bare=helpBare(name);
+  let dict=sel?HELP_TXT["골라:"+(el.options[0]?.text||"").trim()]:(HELP_TXT[name]||HELP_TXT[bare]||HELP_TXT[bare.replace(/\s*\(.*\)$/,"")]||HELP_TXT[bare.replace(/\s*[\d…].*$/,"").trim()]);
+  if(!dict&&!sel&&/^새 \S/.test(bare)&&bare.length<14) dict=`${bare.slice(2)}${jo?jo(bare.slice(2),"을","를"):"을"} 새로 만듭니다`;
+  const txt=own||dict; if(!txt||txt===name) return null; return {name:name.length>40?name.slice(0,38)+"…":name,txt}; }
+let HELP_EL=null, HELP_T=0;
+function helpHide(){ clearTimeout(HELP_T); $("#helptip")?.remove(); if(HELP_EL?.dataset.htitle!=null){ HELP_EL.setAttribute("title",HELP_EL.dataset.htitle); delete HELP_EL.dataset.htitle; } HELP_EL=null; }
+const HELP_SEL="button,summary,select,.pill,.chip,.sttab,.gcard,.twsw,[data-help],[data-tip],a.btn";
+document.addEventListener("mouseover",e=>{ if(!HELP_ON||isTouch()) return; const el=e.target.closest?.(HELP_SEL); if(el===HELP_EL) return; helpHide(); if(!el||el.closest("#helptip,.hmirror")) return;
+  const h=helpFor(el); if(!h) return; HELP_EL=el; const t=el.getAttribute("title"); if(t!=null){ el.dataset.htitle=t; el.removeAttribute("title"); }
+  HELP_T=setTimeout(()=>{ if(HELP_EL!==el||!el.isConnected) return; const d=document.createElement("div"); d.id="helptip"; d.className="helptip"; d.innerHTML=`<b>${esc(h.name)}</b><span>${esc(h.txt)}</span>`; document.body.appendChild(d);
+    const r=el.getBoundingClientRect(), w=d.offsetWidth, hh=d.offsetHeight, below=r.bottom+10+hh<innerHeight; let x=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8);
+    d.style.left=x+"px"; d.style.top=(below?r.bottom+10:r.top-hh-10)+"px"; d.classList.add(below?"b":"t"); d.style.setProperty("--ax",Math.max(14,Math.min(w-14,r.left+r.width/2-x))+"px"); requestAnimationFrame(()=>d.classList.add("on")); },380); },true);
+document.addEventListener("mouseout",e=>{ if(HELP_EL&&!HELP_EL.contains(e.relatedTarget)) helpHide(); },true);
+["mousedown","scroll","keydown"].forEach(ev=>addEventListener(ev,()=>{ if(HELP_EL) helpHide(); },true));
+if(document.body) document.body.classList.toggle("helpon",HELP_ON); else document.addEventListener("DOMContentLoaded",()=>document.body.classList.toggle("helpon",HELP_ON));
 // 앱 안 입력 창 (브라우저 기본 prompt 대신 — 앱 결에 맞추고 화면 가운데쯤에): 글자 또는 null(그만)을 돌려줌
 function askText(label,def="",opt={}){ return new Promise(res=>{ document.querySelector(".askview")?.remove();
   const ov=document.createElement("div"); ov.className="askview"; const [h,...rest]=String(label).split(/\s+—\s+/), sub=rest.join(" — ");
