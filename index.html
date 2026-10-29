@@ -740,6 +740,26 @@ details.keybox>summary{cursor:pointer;color:var(--ink-soft);font-size:14px}
 .dsec ul{margin:0;padding-left:18px}
 .dsec li{margin:3px 0}
 .dquote{font-family:"Nanum Myeongjo";border-left:2px solid var(--deco);padding:2px 0 2px 12px;margin:8px 0;line-height:1.75}
+/* 일기장 = 스크롤 없는 공책 (PC): 책 크기 고정, 쪽은 넘치지 않게 (dFit 이 쪽지·밑줄을 접고 글씨를 줄임) */
+@media (min-width:701px){ body:has(.dbook) main.wrap{padding-bottom:16px} .dbook>.diary{height:clamp(520px,calc(100vh - 270px),980px);min-height:0!important} .dbook>.diary>.pg{overflow:hidden;box-sizing:border-box} .dqs .dquote{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer} }
+.crayon .dline{font-size:calc(25px * var(--dls,1));line-height:calc(34px * var(--dls,1));min-height:calc(238px * var(--dls,1));background:repeating-linear-gradient(transparent 0 calc(34px * var(--dls,1) - 2px),color-mix(in srgb,var(--crayon,#e4714a) 28%,transparent) calc(34px * var(--dls,1) - 2px) calc(34px * var(--dls,1) - 1px),transparent calc(34px * var(--dls,1) - 1px) calc(34px * var(--dls,1)))!important;background-attachment:local!important}
+/* 끼워 둔 쪽지 */
+.dwlist{display:grid;gap:10px;margin-top:6px}
+.dw-slip{display:grid;gap:2px;text-align:left;width:100%;border:1px solid color-mix(in srgb,var(--edge) 70%,transparent);border-left:3px solid var(--deco);background:color-mix(in srgb,#fffdf6 70%,var(--paper));border-radius:2px 8px 8px 2px;padding:9px 13px 10px;cursor:pointer;color:var(--ink);font:inherit;box-shadow:0 1px 0 rgba(0,0,0,.04),0 6px 12px -10px rgba(60,40,20,.5);transform:rotate(var(--rot,0deg));transition:transform .18s,box-shadow .18s}
+.dw-slip:hover{transform:rotate(0deg) translateY(-2px);box-shadow:0 10px 18px -12px rgba(60,40,20,.6)}
+.dw-slip.bible{border-left-color:var(--bible)} .dw-slip.book{border-left-color:var(--book)}
+.dw-slip .k{font-family:"Nanum Pen Script";font-size:17px;line-height:1.1;color:var(--sepia)} .dw-slip.bible .k{color:var(--bible)} .dw-slip.book .k{color:var(--book)}
+.dw-slip b{font-family:"Nanum Myeongjo";font-weight:800;font-size:16.5px;line-height:1.35;word-break:keep-all}
+.dw-slip .ex{font:13px/1.55 "Gowun Batang",serif;color:var(--ink-soft);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dw-slip[hidden],.dquote[hidden],.dw-more[hidden]{display:none!important}
+.dqs.tight .dquote{-webkit-line-clamp:2;margin:5px 0;line-height:1.6} .dqs.tight .dquote .muted{display:none}
+.dwlist.tight{gap:5px} .dwlist.tight .dw-slip{grid-template-columns:auto 1fr;align-items:baseline;gap:8px;padding:5px 12px} .dwlist.tight .dw-slip .ex{display:none} .dwlist.tight .dw-slip b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dw-more{justify-self:start;border:1px dashed var(--edge);background:none;border-radius:999px;padding:4px 12px;font:12.5px var(--ui-font,sans-serif);color:var(--ink-soft);cursor:pointer;margin-top:2px} .dw-more:hover{color:var(--ink);border-color:var(--ink-soft)}
+.dslipview{position:fixed;inset:0;z-index:115;background:rgba(40,28,16,.28);display:flex;align-items:center;justify-content:center;padding:24px 16px;animation:askin .14s ease-out}
+.dslipcard{width:min(620px,100%);max-height:min(82vh,860px);overflow:auto;background:#fffdf6 var(--grain);color:#2a241d;border:1px solid var(--edge);border-radius:3px 10px 10px 3px;border-left:4px solid var(--deco);box-shadow:0 26px 60px -22px rgba(0,0,0,.55);padding:22px 26px 16px;transform:rotate(-.4deg);display:grid;gap:10px}
+html[data-theme="dark"] .dslipcard{background:var(--paper) var(--grain);color:var(--ink)}
+.dslipcard h3{font-family:"Nanum Myeongjo";font-weight:800;font-size:21px;margin:0;word-break:keep-all} .dslipk{margin:0;font-family:"Nanum Pen Script";font-size:19px;color:var(--sepia)} .dslipk.bible{color:var(--bible)} .dslipk.book{color:var(--book)}
+.dslipbody{font:15.5px/1.85 "Gowun Batang",serif;white-space:normal} .dslipacts{display:flex;gap:6px;position:sticky;bottom:-16px;background:linear-gradient(transparent,#fffdf6 40%);padding:10px 0 4px} html[data-theme="dark"] .dslipacts{background:linear-gradient(transparent,var(--paper) 40%)}
 .dw-item{margin:0 0 22px}
 .dw-item h5{font-family:"Nanum Myeongjo";font-weight:800;font-size:18px;margin:0 0 2px}
 .dw-body{white-space:pre-wrap;font-size:15.5px;line-height:34px;max-height:340px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 75%,transparent)}
@@ -809,6 +829,7 @@ body.dfull .dbook>.diary::after{display:none}
 body.dfull .dbook>.diary{display:flex;flex-wrap:wrap;align-content:flex-start;align-items:stretch}   /* 여러 줄 flex: 줄 높이가 글 길이를 따라감(한 줄·격자면 창 높이에 묶여 글이 쪽 밖으로 넘침) */
 body.dfull .dbook>.diary>.pg{flex:1 1 50%;max-width:50%}
 body.dfull .dbook>.diary>.pg{min-height:calc(100vh - 68px);min-height:calc(100dvh - 68px);box-sizing:border-box;display:flex;flex-direction:column}
+@media (min-width:701px){ body.dfull .dbook>.diary{height:auto;overflow:hidden} body.dfull .dbook>.diary>.pg{height:calc(100vh - 68px);height:calc(100dvh - 68px);overflow:hidden} }
 body.dfull .dbook>.diary>.pg>.dfolio{position:static;order:99;margin-top:auto;padding-top:18px}
 .dfullx{position:fixed;z-index:70;top:max(4px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px}
 .dfullx button{width:36px;height:36px;border-radius:50%;border:0;background:transparent;color:var(--ink);cursor:pointer;font-size:20px;display:inline-flex;align-items:center;justify-content:center}
@@ -2070,7 +2091,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="386acb8e8d";
+const APP_BUILD="45542b3ef1";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3511,7 +3532,7 @@ function dListHtml(){
       <span class="dn muted">${[ws.length?"글 "+ws.length:"",(e.stickers||[]).length?"스티커 "+(e.stickers||[]).length:""].filter(Boolean).join(" · ")}</span></a>`; }).join("")}</div>`;
 }
 function diaryPage(){
-  setTimeout(()=>{ const t=$(".dline"); if(t) dGrow(t); },0);
+  setTimeout(()=>{ const t=$(".dline"); if(t) dGrow(t); dFit(); },0); setTimeout(dFit,350);
   if(diaryDate&&diaryDate<dMin()) diaryDate=dMin();
   const d=diaryDate=diaryDate||today(), x=new Date(d+"T00:00"), L=S.log[d]||{}, e=dEntry(d); dcalY=x.getFullYear(); dcalM=x.getMonth();
   const notes=S.notes.filter(n=>n.date===d), ws=live().filter(w=>w.date===d);
@@ -3535,16 +3556,14 @@ function diaryPage(){
       <div class="dmood">${WEATHER.map(w=>`<button class="${e.weather===w?"on":""}" onclick="dSet('weather','${w}')">${w}</button>`).join("")}<span style="width:10px"></span>${MOODS.map(m=>`<button class="${e.mood===m?"on":""}" onclick="dSet('mood','${m}')">${m}</button>`).join("")}</div>
       <div class="dsec"><p class="dl">오늘 읽은 말씀</p>${bible}</div>
       <div class="dsec"><p class="dl">오늘 읽은 책</p>${books||`<p class="muted">${L.read&&!L.bible?"":"이날은 쪽수 기록이 없습니다."}</p>`}</div>
-      ${notes.length?`<div class="dsec"><p class="dl">밑줄</p>${notes.map(n=>`<div class="dquote">${esc(n.text)}<div class="muted">${esc(noteSrc(n))}</div></div>`).join("")}</div>`:""}
+      ${notes.length?`<div class="dsec dqs"><p class="dl">밑줄</p>${notes.map(n=>`<div class="dquote" onclick="dSlipNotes('${d}')" title="눌러서 이날 밑줄을 모두 펼쳐 봅니다">${esc(n.text)}<div class="muted">${esc(noteSrc(n))}</div></div>`).join("")}<button type="button" class="dw-more" hidden onclick="dSlipNotes('${d}')"></button></div>`:""}
     </div>
     <div class="pg r">
       <div class="dsec" style="margin-top:0"><p class="dl cr">오늘 일기</p>
         ${dDecoBar()}
         <div class="crayon"><div class="dline dedit" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="오늘 일기" data-ph="오늘 아침, 짧게라도 진짜 일기를…" oninput="dInput(this)" onkeydown="dKey(event)" onpaste="dPaste(event)">${dHtmlChars(dParse(e.line||""))}</div></div></div>
       <div class="dsec"><p class="dl">오늘 쓴 글</p>
-        ${ws.length?ws.map(w=>`<div class="dw-item"><span class="label ${w.track}" style="font-size:18px;margin:0">[${esc(wTag(w))}]${w.passage?" "+esc(w.passage):""}</span><h5>${esc(w.title||"(제목 없음)")}</h5>
-          <div class="dw-body" onclick="this.classList.toggle('open')" title="눌러서 펼치기/접기">${(()=>{ const fn=[]; const h=richHtml(w.body,fn); return h+fnHtml(fn); })()}</div>
-          <a href="#" class="muted" onclick="go('write',{edit:'${w.id}'});return false">글 열기 →</a></div>`).join("")
+        ${ws.length?`<div class="dwlist">${ws.map((w,i)=>`<button type="button" class="dw-slip ${w.track}" style="--rot:${[-.6,.5,-.3,.7][i%4]}deg" onclick="dSlip('${w.id}')" title="눌러서 이 글을 펼쳐 봅니다"><span class="k">[${esc(wTag(w))}]${w.passage?" "+esc(w.passage):""}</span><b>${esc(w.title||"(제목 없음)")}</b><span class="ex">${esc(pv(w,160))}</span></button>`).join("")}<button type="button" class="dw-more" hidden onclick="dSlipList('${d}')"></button></div>`
           :`<p class="muted">이날 쓴 글이 없습니다.</p>`}</div>
       <div class="dfolio">${pn*2}</div>
     </div>
@@ -3562,7 +3581,7 @@ function dFull(on){ const b=document.body; if(on===b.classList.contains("dfull")
     x.innerHTML=`<button onclick="dGo(-1)" title="전날 (←)" aria-label="전날">‹</button><span class="dcalwrap dfcal"><button onclick="dCalToggleFull()" title="날짜 고르기" aria-label="달력">${ICO.cal}</button><div id="dfcalpop" class="dcalpop" style="display:none"></div></span><button onclick="dGo(1)" title="다음 날 (→)" aria-label="다음 날">›</button><i></i><button onclick="toggleStk()" title="스티커 붙이기" aria-label="스티커">🌼</button><i></i><button onclick="dFull(false)" title="돌아가기 (Esc)" aria-label="돌아가기">✕</button>`;
     if(!isTouch()&&document.documentElement.requestFullscreen&&!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); scrollTo(0,0); }
   else { x?.remove(); if(document.fullscreenElement&&!STAGE) document.exitFullscreen().catch(()=>{}); }
-  if(tab==="diary") setTimeout(()=>{ const t=$(".dline"); if(t) dGrow(t); stkFitAll?.(); },60); }
+  if(tab==="diary") setTimeout(()=>{ const t=$(".dline"); if(t) dGrow(t); stkFitAll?.(); dFit(); },60); }
 function dCalToggleFull(){ const p=$("#dfcalpop"); if(!p) return; if(p.style.display!=="none"){ p.style.display="none"; return; } if(STK_OPEN){ STK_OPEN=false; STK_SEL=null; paintStk(); } dcalY=dcalM=null; p.innerHTML=dCalHtml(); p.style.display=""; }
 document.addEventListener("keydown",e=>{ if(e.key!=="Escape"||!document.body.classList.contains("dfull")||STAGE) return; if($("#dfcalpop")?.style.display===""){ dCalClose(); return; } dFull(false); });
 document.addEventListener("fullscreenchange",()=>{ if(!document.fullscreenElement&&document.body.classList.contains("dfull")&&!isTouch()) dFull(false); });
@@ -3603,7 +3622,35 @@ document.addEventListener("selectionchange",()=>{ const ed=dEd(); if(!ed||docume
   let n=sel.anchorNode, o=sel.anchorOffset; if(!ed.contains(n)) return; const el=(n.nodeType===1?n:n.parentElement)?.closest?.("mark,u"); if(!el||!ed.contains(el)) return;
   const r=document.createRange(); r.selectNodeContents(el); const atS=r.comparePoint(n,o)===0&&(()=>{ const t=document.createRange(); t.setStart(el,0); t.setEnd(n,o); return !t.toString().length; })(), atE=(()=>{ const t=document.createRange(); t.setStart(n,o); t.setEnd(el,el.childNodes.length); return !t.toString().length; })();
   if(!atS&&!atE) return; const z=document.createTextNode("​"); if(atE) el.after(z); else el.before(z); const c=document.createRange(); c.setStart(z,atE?1:0); c.collapse(true); sel.removeAllRanges(); sel.addRange(c); });
-function dInput(ed){ dLine(dSerChars(dWalk(ed,{},[]))); dGrow(ed); }
+function dInput(ed){ dLine(dSerChars(dWalk(ed,{},[]))); dGrow(ed); dFitSoon(); }
+// ───── 일기장은 스크롤 없는 공책: 책 크기를 고정하고, 쪽에 넘치면 ① 끼워 둔 쪽지·밑줄을 「＋n 더」로 접고 ② 일기 글씨를 손으로 쓰듯 조금씩 작게 (PC·책만 보기) ─────
+let DFIT_RAF=0; function dFitSoon(){ if(!DFIT_RAF) DFIT_RAF=requestAnimationFrame(()=>{ DFIT_RAF=0; dFit(); }); }
+const DL_SCALE=[1,.92,.85,.78,.72,.66];
+function dFit(){ const D=$(".dbook>.diary"); if(!D) return; const pages=[...D.querySelectorAll(":scope>.pg")], fix=innerWidth>700;
+  // 책 높이 = 화면에 꼭 맞게 (위 메뉴·단추 줄 아래부터 화면 끝까지) — 화면 전체가 스크롤되지 않게
+  if(fix&&!document.body.classList.contains("dfull")){ const top=D.getBoundingClientRect().top+scrollY; D.style.height=Math.max(520,Math.min(980,innerHeight-top-40))+"px"; } else D.style.height="";
+  pages.forEach(pg=>{ const over=()=>pg.scrollHeight>pg.clientHeight+1;
+    // 다시 처음부터: 모두 보이고 글씨 원래대로
+    pg.querySelectorAll(".dw-slip,.dquote").forEach(x=>x.hidden=false); pg.querySelectorAll(".dw-more").forEach(x=>x.hidden=true); pg.querySelector(".dwlist")?.classList.remove("tight"); pg.querySelector(".dqs")?.classList.remove("tight");
+    const dl=pg.querySelector(".dline"); if(dl) dl.style.removeProperty("--dls");
+    if(!fix) return;
+    // 순서: 쪽지·밑줄을 하나만 남기고 접기 → 일기 글씨 조금(85%까지) → 마지막 하나도 접기 → 글씨 더 작게
+    const fold=(items,more,unit,keep)=>{ if(!more) return; const vis=()=>items.filter(x=>!x.hidden);
+      while(over()&&vis().length>keep){ vis().pop().hidden=true; const n=items.length-vis().length; more.hidden=false; more.textContent=vis().length?`＋ ${n}${unit} 더 — 펼쳐 보기`:`${items.length}${unit} — 펼쳐 보기`; } };
+    const slips=[...pg.querySelectorAll(".dw-slip")], sm=pg.querySelector(".dwlist .dw-more"), qs=[...pg.querySelectorAll(".dquote")], qm=pg.querySelector(".dqs .dw-more");
+    if(over()){ pg.querySelector(".dwlist")?.classList.add("tight"); pg.querySelector(".dqs")?.classList.add("tight"); }   // 먼저 쪽지는 제목 한 줄, 밑줄은 두 줄로
+    fold(slips,sm,"편",1); fold(qs,qm,"개",1);
+    const shrink=to=>{ if(!dl) return; const cur=+(dl.style.getPropertyValue("--dls")||1); for(const k of DL_SCALE){ if(k>=cur) continue; if(!over()||k<to) break; dl.style.setProperty("--dls",k); } };
+    shrink(.85); fold(slips,sm,"편",0); fold(qs,qm,"개",0); shrink(0); }); }
+addEventListener("resize",()=>{ if($(".dbook>.diary")) dFitSoon(); });
+// 끼워 둔 쪽지를 책 위에 펼쳐 읽기 (책은 그대로, 쪽지만 따로)
+function dSlipOpen(html){ $("#dslipview")?.remove(); const ov=document.createElement("div"); ov.id="dslipview"; ov.className="dslipview"; ov.innerHTML=`<article class="dslipcard" role="dialog" aria-modal="true">${html}<div class="dslipacts"><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div></article>`;
+  document.body.appendChild(ov); const close=()=>{ ov.remove(); removeEventListener("keydown",esc_); }, esc_=e=>{ if(e.key==="Escape"){ e.preventDefault(); e.stopImmediatePropagation(); close(); } };
+  ov.onclick=e=>{ if(e.target===ov||e.target.closest("[data-x]")) close(); }; addEventListener("keydown",esc_,true); return ov; }
+function dSlipBody(w){ const fn=[]; return `<p class="dslipk ${w.track}">[${esc(wTag(w))}]${w.passage?" "+esc(w.passage):""} · ${esc(w.date)}</p><h3>${esc(w.title||"(제목 없음)")}</h3><div class="dslipbody">${richHtml(w.body,fn)}${fnHtml(fn)}</div>`; }
+function dSlip(id){ const w=S.writings.find(x=>x.id===id); if(!w) return; const ov=dSlipOpen(dSlipBody(w)); ov.querySelector(".dslipacts").insertAdjacentHTML("afterbegin",`<button class="btn small ink" onclick="document.getElementById('dslipview').remove();go('write',{edit:'${w.id}'})">글 열기 →</button>`); }
+function dSlipList(d){ const ws=live().filter(w=>w.date===d); dSlipOpen(`<p class="dslipk">${esc(d)} · 이날 쓴 글 ${ws.length}편</p>${ws.map(w=>`<button type="button" class="dw-slip ${w.track}" onclick="dSlip('${w.id}')"><span class="k">[${esc(wTag(w))}]${w.passage?" "+esc(w.passage):""}</span><b>${esc(w.title||"(제목 없음)")}</b><span class="ex">${esc(pv(w,160))}</span></button>`).join("")}`); }
+function dSlipNotes(d){ const ns=S.notes.filter(n=>n.date===d); dSlipOpen(`<p class="dslipk">${esc(d)} · 밑줄 ${ns.length}개</p>${ns.map(n=>`<div class="dquote">${esc(n.text)}<div class="muted">${esc(noteSrc(n))}</div></div>`).join("")}`); }
 function dKey(ev){ if(ev.key==="Enter"&&!ev.isComposing&&!ev.shiftKey){ ev.preventDefault(); document.execCommand("insertLineBreak"); } }
 function dPaste(ev){ ev.preventDefault(); const t=(ev.clipboardData||window.clipboardData)?.getData("text")||""; document.execCommand("insertText",false,t.replace(/\r\n?/g,"\n")); }
 function dDecoBar(){ const b=(k,c,lab,tip)=>`<button type="button" class="dk ${k==="hl"?"hl-"+c:k}" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="dMark('${k}','${c||""}')" title="${tip}">${lab}</button>`;
