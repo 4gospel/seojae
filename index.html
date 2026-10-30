@@ -1204,7 +1204,9 @@ input::placeholder,textarea::placeholder{color:var(--faint);opacity:1}
 .cxpop{position:absolute;z-index:5;width:min(320px,calc(100% - 12px));max-height:calc(100% - 12px);display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--edge);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.14);font:14px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink);cursor:default} .cxpn{display:flex;align-items:center;gap:8px;margin:0;padding:12px 14px 8px;font-weight:600;font-size:15px} .cxpn a{color:var(--ink);text-decoration:none} .cxpn a:hover{text-decoration:underline} .cxpn small{font-weight:400;font-size:12px} .cxpn .x{margin-left:auto;border:0;background:none;color:var(--faint);cursor:pointer;font-size:14px}
 .cxpb{overflow:auto;padding:0 14px 12px;display:grid;gap:2px} .cxpk{font-size:12px;color:var(--faint);margin-top:8px} .cxpv{font-size:15px} .cxpv a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--faint)} .cxpv small{color:var(--ink-soft);font-size:12px;margin-left:4px}
 @media (max-width:700px){ .cxlegend{min-height:34px;font-size:0;padding:4px} .cxlegend *{display:none} .cxgtools{bottom:5px;right:6px} .cxpop{left:6px !important;right:6px;width:auto} } .cxe{fill:none;stroke:currentColor;stroke-width:1.4;opacity:.6} .cxel{font:12px -apple-system,sans-serif;fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:4px} .cxn{cursor:pointer} .cxn circle{stroke:var(--paper);stroke-width:3} .cxn:hover circle{stroke:var(--ink)} .cxni{font:15px sans-serif;fill:#fff;text-anchor:middle} .cxnl{font:600 13px -apple-system,sans-serif;fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:4px}
-.sboard.pcard.peak{box-shadow:inset 0 0 0 2px color-mix(in srgb,#c08a3e 55%,transparent)} .pcpeak{font:700 11.5px var(--ui-font);color:#a0661f;margin-left:4px} .arccol .stno{font:12px var(--ui-font);color:var(--faint)}
+.sboard.growwrap{overflow-x:auto} .growsvg .gl{stroke:var(--edge);stroke-width:1} .growsvg .gl.z{stroke:var(--ink-soft);stroke-dasharray:3 4} .growsvg .gt,.growsvg .gx{font:11px var(--ui-font);fill:var(--faint)} .growleg{display:flex;gap:12px;flex-wrap:wrap;font:13px var(--ui-font);margin:4px 0} .growrow{border-top:1px dashed var(--edge);margin-top:8px} .growrow .field select{width:auto}
+.palibi td{cursor:pointer} .palibi td.man{font-weight:600;background:color-mix(in srgb,var(--st-acc,#2f3b52) 7%,transparent)}
+.pcard.peak{box-shadow:inset 0 0 0 2px color-mix(in srgb,#c08a3e 55%,transparent)} .pcpeak{font:700 11.5px var(--ui-font);color:#a0661f;margin-left:4px} .arccol .stno{font:12px var(--ui-font);color:var(--faint)}
 .pboard{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))} .pcard{display:grid;gap:5px} .pcsum{font-size:12.5px;color:var(--ink-soft);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden} .pcppl{display:flex;flex-wrap:wrap;gap:3px} .pcppl a{font-size:11.5px;border:1px solid var(--edge);border-radius:99px;padding:0 7px;text-decoration:none;color:var(--ink)}
 .stgoals{display:grid;gap:2px;border:1px solid var(--edge);border-radius:12px;padding:6px;background:var(--paper)}
 .stgoal{display:flex;align-items:center;gap:10px;border:0;background:none;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--ink);font:14px -apple-system,"Apple SD Gothic Neo",sans-serif;text-align:left;width:100%} .stgoal:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)} .stgoal .stn{flex:0 1 auto;max-width:220px;font-weight:600}
@@ -2155,7 +2157,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="d32afc50da";
+const APP_BUILD="ba5fae8b02";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -4011,19 +4013,19 @@ write0(){
     ${histBtns()}
     <button class="btn small focusexit" onclick="toggleFocus()">집중 나가기</button>
     <details class="tgrp"><summary class="btn small">쓰기 ▾</summary><div class="tgmenu">
-      ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}${w&&cardKindOf(w)&&!cardKindOf(w).sermon?`<button class="btn small" onclick="tgClose();cardOpen()" title="한 문장·기능·겨냥할 자리… 초안 전에 글을 설계합니다">설계 카드</button>`:""}<button class="btn small aibtn" onclick="tgClose();fbStart()" title="성격에 맞는 기준으로 점수·강점·약점, 고칠 문장마다 코멘트와 대안 (적용은 하나씩 직접)">✦ 피드백·첨삭</button><button class="btn small" onclick="tgClose();altHere()" title="커서가 있는 문장(또는 고른 글)을 바꿔 쓴 후보 4개">✦ 다른 표현</button>${w&&wMs(w)&&!wMs(w).rule?`<button class="btn small" onclick="tgClose();pieceSplit()" title="커서가 있는 줄부터 새 글로 (■ 소제목 줄이면 그 이름이 새 글 제목)">✂ 커서에서 나누기</button><button class="btn small" onclick="tgClose();pieceMerge()" title="다음 글을 이 글 끝에 붙입니다">⊕ 다음 글과 합치기</button>`:""}${w&&cardKindOf(w)?`<button class="btn small" onclick="tgClose();vfOpen()" title="사실 주장을 출처와 대조합니다">검증표</button><button class="btn small" onclick="tgClose();ckOpen()" title="완성 전 점검 질문 10개">점검 10문항</button>`:""}
+      ${wTplNow().tpl?`<button class="btn small" onclick="insertTemplate();tgClose()">틀 넣기</button>`:""}${w&&cardKindOf(w)&&!cardKindOf(w).sermon?`<button class="btn small" onclick="tgClose();cardOpen()" title="한 문장·기능·겨냥할 자리… 초안 전에 글을 설계합니다">설계 카드</button>`:""}<button class="btn small" onclick="tgClose();altHere()" title="커서가 있는 문장(또는 고른 글)을 바꿔 쓴 후보 4개">✦ 다른 표현</button>${w&&wMs(w)&&!wMs(w).rule?`<button class="btn small" onclick="tgClose();pieceSplit()" title="커서가 있는 줄부터 새 글로 (■ 소제목 줄이면 그 이름이 새 글 제목)">✂ 커서에서 나누기</button><button class="btn small" onclick="tgClose();pieceMerge()" title="다음 글을 이 글 끝에 붙입니다">⊕ 다음 글과 합치기</button>`:""}${w&&cardKindOf(w)?`<button class="btn small" onclick="tgClose();vfOpen()" title="사실 주장을 출처와 대조합니다">검증표</button><button class="btn small" onclick="tgClose();ckOpen()" title="완성 전 점검 질문 10개">점검 10문항</button>`:""}
       <button type="button" class="twsw ${TYPEW?"on":""}" onclick="toggleTypew()" id="twbtn" role="switch" aria-checked="${TYPEW}" title="쓰는 줄을 늘 화면 가운데에 둡니다 — 글이 길어져도 눈높이가 그대로"><span class="sw"><i></i></span><span class="twt"><b>타자기</b><small>쓰는 줄을 화면 가운데에</small></span><em>${TYPEW?"켬":"끔"}</em></button>
       <span class="row" style="gap:4px" title="글자 크기 (이 기기만)"><span class="muted" style="font-size:12.5px">글자</span><button class="fsbtn" onclick="fontStep(-1)">가−</button><button class="fsbtn" onclick="fontStep(1)">가＋</button></span>
       <div class="pp"><span class="muted" style="font-size:12.5px">펜</span>${INKS.map(([n,c])=>`<span class="inkdot ${ink===c?"on":""}" title="${n} 잉크" style="background:${c}" onclick="setInk('${c}')"></span>`).join("")}
         <select id="paper" style="width:auto" onchange="setPaper(this.value)"><option value="lined" ${paper==="lined"?"selected":""}>줄 노트</option><option value="grid" ${paper==="grid"?"selected":""}>모눈</option><option value="blank" ${paper==="blank"?"selected":""}>무지</option></select></div>
-    </div></details>
+    <button class="btn small ghost" onclick="tgClose();discardPage()" title="${w?"이 글을 휴지통에 넣습니다 (30일 안에 서랍 → 휴지통에서 되살림)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"휴지통에":"버리기"}</button></div></details>
     <details class="tgrp nofocus"><summary class="btn small">다듬기 ▾</summary><div class="tgmenu">
-      <span class="row" style="gap:4px"><button class="btn small" onclick="tgClose();styOpen()" title="반복어·같은 시작과 끝·버릇 말·뻔한 표현·군더더기·수동과 명사화·대사 꼬리말·시점과 시제 (기계로 셈)">✎ 문체 점검</button><button class="btn small aibtn" onclick="tgClose();fbStart()" title="AI 점수·첨삭">✦ 피드백</button>${w&&wMs(w)&&!wMs(w).rule?`<button class="btn small aibtn" onclick="tgClose();wsStart('piece')" title="이 글에 나온 인물·장소·관계를 노트와 견주어 제안">✦ 설정 정리</button>`:""}</span>
+      <span class="row" style="gap:4px"><button class="btn small" onclick="tgClose();styOpen()" title="반복어·같은 시작과 끝·버릇 말·뻔한 표현·군더더기·수동과 명사화·대사 꼬리말·시점과 시제 (기계로 셈)">✎ 문체 점검</button><button class="btn small aibtn" onclick="tgClose();fbStart()" title="성격에 맞는 기준으로 점수·강점·약점, 고칠 문장마다 코멘트와 대안 (적용은 하나씩 직접)">✦ 피드백·첨삭</button>${w&&wMs(w)&&!wMs(w).rule?`<button class="btn small aibtn" onclick="tgClose();wsStart('piece')" title="이 글에 나온 인물·장소·관계를 노트와 견주어 제안">✦ 설정 정리</button>`:""}</span>
       <span class="row" style="gap:4px"><button class="btn small" onclick="spellCheck()" id="spellbtn" title="쓰는 즉시 규칙으로 밑줄이 그어지고, 누르면 ${CONF.ai?(CONF.ai==="claude"?"클로드":"제미나이")+"가 모든 문단을 다시 살핍니다":"규칙 밑줄만 됩니다"}">맞춤법</button><span id="spellstate" class="muted" style="font-size:12.5px"></span></span>
       <button class="btn small" onclick="toggleStk();tgClose()">${ICO.flower}스티커</button>
-      <button class="btn small sidebtn" onclick="toggleSide();tgClose()" id="sidebtn" title="오른쪽 칸(달력·글 정보·간직)을 펴거나 접습니다">${track==="book"?(document.body.classList.contains("staside")?"옆 칸 접기 ›":"옆 칸 펴기 ‹"):document.body.classList.contains("sidefold")?"옆 칸 펴기 ‹":wMs(w)?"옆 칸 접기 › 목차 보기":"옆 칸 접기 ›"}</button>
-      <button class="btn small ghost" onclick="tgClose();discardPage()" title="${w?"이 글을 휴지통에 넣습니다 (30일 안에 서랍 → 휴지통에서 되살림)":"쓰던 내용을 버리고 빈 페이지로"}">${ICO.trash}${w?"휴지통에":"버리기"}</button>
     </div></details>
+      <button class="btn small ghost sidebtn nofocus" onclick="toggleSide()" id="sidebtn" title="오른쪽 칸(달력·글 정보·간직)을 펴거나 접습니다">${track==="book"?(document.body.classList.contains("staside")?"옆 칸 접기 ›":"옆 칸 펴기 ‹"):document.body.classList.contains("sidefold")?"옆 칸 펴기 ‹":wMs(w)?"옆 칸 접기 › 목차 보기":"옆 칸 접기 ›"}</button>
+
     <button class="btn small nofocus fnbtn" onmousedown="event.preventDefault()" onclick="fnHere()" title="각주 달기 — 고른 글 뒤에, 고르지 않았으면 커서 자리에 (⌘⇧F)"><b style="font-family:Georgia,serif">¹</b> 각주</button>
     <button class="btn small nofocus ${DOC_MODE?"on":""}" onclick="docToggle()" id="docbtn" title="워드처럼: 흰 쪽에 글꼴·크기·줄 간격·정렬·들여쓰기 (글은 그대로)">${DOC_MODE?"✎ 노트로":"📄 문서 모드"}</button>
     <button class="btn small nofocus" onclick="toggleFocus()" title="종이만 남기고 모두 숨깁니다 (나가기: Esc 또는 오른쪽 위 ✕)">⛶ 집중</button>
@@ -5252,7 +5254,7 @@ function bookHtml(m,ch,author,o={}){
     (pb.get(w.id)||[]).forEach(p=>{ if(p.lv===1){ parts+=`<section class="part"><h2 class="partname">${e(num(p)+p.t)}</h2></section>`; toc+=`<li class="tocpart">${e(num(p)+p.t)}</li>`; } else { parts+=`<div class="sect" id="s${i}">${e(num(p)+p.t)}</div>`; toc+=GN==="novel"?`<li><a href="#s${i}">${e(p.t)}<span class="dots"></span></a></li>`:`<li class="tocsect">${e(num(p)+p.t)}</li>`; } });
     if(GN==="poem"){ toc+=`<li><a href="#c${i}">${w.title?e(w.title):`<i>${e(poemFirst(w).slice(0,24))}</i>`}<span class="dots"></span></a></li>`;
       parts+=`<section class="chapter poem" id="c${i}"><h3>${e(w.title||"＊")}</h3>${poemHtml(w)}</section>`; return; }
-    if(GN==="novel"){ const brk=i>0&&!(pb.get(w.id)||[]).length; parts+=`${brk?`<p class="scenebreak">＊</p>`:""}<div class="scene" id="c${i}">${para(w.body)}</div>`; return; }
+    if(GN==="novel"){ const brk=i>0&&!(pb.get(w.id)||[]).length; parts+=`${brk?`<p class="scenebreak">＊</p>`:""}${P.sceneT&&w.title?`<p class="scenetitle">${e(w.title)}</p>`:""}<div class="scene" id="c${i}">${para(w.body)}</div>`; return; }
     if(grouped&&name&&name!==part){ part=name; parts+=`<section class="part"><h2 class="partname">${e(name)}</h2></section>`; toc+=`<li class="tocpart">${e(name)}</li>`; }
     const nn=o.genre==="paper"?(numHas(w.title)?"":pieceNum(m,w.id)+" "):`${i+1}. `;   // 논문은 단락 번호를 빼서 장·절 번호와 부딪치지 않게
     toc+=`<li><a href="#c${i}">${nn}${e(w.title||"(제목 없음)")}<span class="dots"></span></a></li>`;
@@ -5285,7 +5287,7 @@ html{font-family:"Gowun Batang","Nanum Myeongjo",serif;font-size:10.5pt;color:#2
 .poemtext .ln{display:block;text-indent:-2em;word-break:keep-all;overflow-wrap:break-word} .poemtext .ln.gap{height:1.4em}
 .epi{margin:0 0 9mm auto;max-width:72%;text-align:right;font-size:9pt;color:#666;line-height:1.7} .epi cite{display:block;font-style:normal;margin-top:1mm}
 ol.bookfn li .fw{color:#999;font-size:8pt}
-.scene{break-before:avoid} .sect+.scene{margin-top:4mm} .scenebreak{text-align:center;margin:6mm 0;color:#8a7a68;letter-spacing:.5em}
+.scene{break-before:avoid} .sect+.scene{margin-top:4mm} .scenebreak{text-align:center;margin:6mm 0;color:#8a7a68;letter-spacing:.5em} .scenetitle{text-align:center;margin:-3mm 0 4mm;font-size:8.5pt;color:#8a7a68}
 .toc a{color:inherit;text-decoration:none;display:flex;align-items:baseline;gap:2mm}
 .toc a::after{content:target-counter(attr(href),page);color:#777}
 .toc a .dots{flex:1;border-bottom:.6pt dotted #b9ab98;transform:translateY(-1mm)}
@@ -5479,6 +5481,7 @@ function sendBlocks(body){ const L=stripMemo(body||"").split("\n").filter(l=>!SL
 function expRowHtml(P){ return `<div class="setrow exprow"><span class="k">모양</span><div class="pills" style="gap:6px 14px;flex-wrap:wrap;align-items:center">
     <label class="chk"><input type="checkbox" data-pf="strip" ${P.strip?"checked":""}> 틀 소제목·안내 문구 빼기 <small class="muted">(고쳐 쓴 소제목은 남음)</small></label>
     <label class="chk"><input type="checkbox" data-pf="hl" ${P.hl?"checked":""}> 형광펜도 찍기</label>
+    <label class="chk" title="소설: 장면 사이는 기본으로 ＊만 넣습니다. 켜면 ＊ 아래에 장면 제목(「(회상)」 등)도 작게 싣습니다"><input type="checkbox" data-pf="sceneT" ${P.sceneT?"checked":""}> 소설 장면 제목도 싣기</label>
     <select data-pf="notes" style="width:auto"><option value="piece" ${P.notes!=="book"?"selected":""}>각주 — 워드는 쪽 아래, PDF는 꼭지 끝</option><option value="book" ${P.notes==="book"?"selected":""}>미주 — 책 끝에 모아서</option></select></div></div>
   <div class="setrow exprow"><span class="k">지은이</span><input data-author value="${esc(S.settings.author||"")}" placeholder="표지·첫 쪽에 들어갈 이름 (비워 두면 넣지 않음)" style="flex:1;min-width:0"></div>`; }
 function expRowWire(root,m,P){ root.querySelectorAll("[data-pf]").forEach(x=>x.onchange=()=>{ P[x.dataset.pf]=x.type==="checkbox"?x.checked:x.value; expPrefsSave(m,P); });
@@ -5530,7 +5533,7 @@ async function makeDocx(name,list,m,scope,P){ const D=await loadLib("https://unp
   list.forEach((w,i)=>{ const ps=pb.get(w.id)||[]; curT=w.title||"";
     ps.forEach(p=>kids.push(new Paragraph({text:numT(partNum(m,p.id),p.t),heading:H[p.lv-1],pageBreakBefore:p.lv===1||(novel&&p.lv===2)})));
     const th=H[depth];
-    if(novel){ if(i>0&&!ps.length) kids.push(new Paragraph({text:"＊",alignment:AlignmentType.CENTER,spacing:{before:240,after:240}})); }
+    if(novel){ if(i>0&&!ps.length) kids.push(new Paragraph({text:"＊",alignment:AlignmentType.CENTER,spacing:{before:240,after:240}})); if(P.sceneT&&w.title) kids.push(new Paragraph({children:[new TextRun({text:w.title,size:17,color:"8a7a68"})],alignment:AlignmentType.CENTER,spacing:{after:200}})); }
     else kids.push(new Paragraph({text:poem?(w.title||"＊"):paper&&whole?numT(pieceNum(m,w.id),w.title||"(제목 없음)"):(w.title||"(제목 없음)"),heading:th,pageBreakBefore:(poem||(i>0&&!paper))&&!ps.length,alignment:poem?AlignmentType.CENTER:AlignmentType.LEFT}));
     if(w.passage&&!novel) kids.push(new Paragraph({children:[new TextRun({text:w.passage,italics:true,color:"8A5A2B"})],spacing:{after:160}}));
     if(poem){ expBody(w.body,P).replace(/\s+$/,"").split("\n").forEach(l=>kids.push(new Paragraph({children:runs(l),spacing:{after:0,line:360}}))); return; }
@@ -6391,6 +6394,7 @@ function msPageHtml(m){ const g=G(m), ws=msList(m), chs=msChars(m), pages=msPage
         <label class="mrow"><span>목차 번호</span><select onchange="msNumSet('${m.id}',this.value)" title="성격에 맞는 기본값: ${esc(NUM_SCHEMES[NUM_DEF[m.genre]||"book"])}">${Object.entries(NUM_SCHEMES).map(([k,n])=>`<option value="${k}" ${numScheme(m)===k?"selected":""}>${esc(n)}${(NUM_DEF[m.genre]||"book")===k?" (기본)":""}</option>`).join("")}</select></label>
         <label class="mrow"><span>목표</span><input id="msgoal" type="number" min="0" inputmode="numeric" value="${m.goal||""}" placeholder="${g.unit==="매"?"원고지 매수":g.unit==="자"?"글자 수":"편 수"}" onchange="saveMsGoal('${m.id}',true)"><em>${esc(g.unit)}</em></label>
         <label class="mrow"><span>마감</span><input id="msdue" type="date" value="${esc(m.due||"")}" onchange="saveMsGoal('${m.id}',true)"></label>
+        ${m.genre==="novel"?`<label class="mrow"><span>달력</span><button type="button" class="btn small ghost" onclick="this.closest('details').open=false;calSet('${m.id}')" title="시대·세계의 연호로 이야기 시각을 정렬 (예: 세종=1418, 제국력=0)">${m.exportOpts?.cal?esc(calRules(m).map(r=>r.n).join("·")):"정하기"}</button></label>`:""}
         ${m.genre==="novel"?`<label class="mrow"><span>장르</span><select onchange="ngenreSet('${m.id}',this.value)" title="장르를 고르면 그 장르의 노트 종류(무공·경지, 스킬·아이템, 가문·작위 …)와 기본 칸이 더해집니다"><option value="">기본 (인물·장소·사건…)</option>${Object.entries(NOVEL_GENRES).map(([k,g])=>`<option value="${k}" ${m.exportOpts?.ngenre===k?"selected":""}>${esc(g.n)}</option>`).join("")}</select></label>`:""}
         ${m.genre==="novel"?(()=>{ const sr=m.exportOpts?.serial||{}, [a,b]=serSize({genre:"novel",exportOpts:{serial:{...sr,on:true}}}); return `<label class="mrow"><span>웹소설 연재</span><label class="chk"><input type="checkbox" ${sr.on?"checked":""} onchange="serSet('${m.id}','on',this.checked)"> 화 단위로 연재</label></label>
         ${sr.on?`<label class="mrow"><span>화당 분량</span><input type="number" min="0" style="width:80px" value="${a}" onchange="serSet('${m.id}','min',this.value)"> ~ <input type="number" min="0" style="width:80px" value="${b}" onchange="serSet('${m.id}','max',this.value)"><em>자(공백 포함)</em></label>
@@ -6400,7 +6404,7 @@ function msPageHtml(m){ const g=G(m), ws=msList(m), chs=msChars(m), pages=msPage
     <div class="stviews">${views.map(([k,n])=>`<button class="${(["research","cork"].includes(ROOM_VIEW)?"binder":ROOM_VIEW)===k?"on":""}" onclick="roomSetView('${k==="binder"&&ROOM_VIEW==="cork"?"cork":k}')">${n}</button>`).join("")}</div>
     ${viewNote(m,ROOM_VIEW==="research"?"binder":ROOM_VIEW)}
     ${msBodyHtml(m,ROOM_VIEW==="research"?"binder":ROOM_VIEW)}
-    ${m.review?`<div class="revall"><p class="label" style="margin:0 0 4px">원고 검토 <small class="hint" style="display:inline">· ${esc((m.review.at||"").slice(0,10))}</small></p><p class="sub" style="margin:0">${esc(m.review.overall||"")}</p></div>`:""}</section>`; }
+    ${m.review?`<div class="revall"><p class="label" style="margin:0 0 4px">원고 검토 <small class="hint" style="display:inline">· ${esc((m.review.at||"").slice(0,10))}</small></p><p class="sub" style="margin:0;white-space:pre-line">${m.review.outline?"<b>전체 구조</b> — ":""}${esc(m.review.overall||"")}</p></div>`:""}</section>`; }
 // 끌어 옮기기 연결 (목차·코르크보드: 순서, 상태 보드: 상태)
 function roomDnd(){
   const m=S.manuscripts.find(x=>x.id===ROOM_MS); if(!m) return;
@@ -6835,16 +6839,24 @@ function arcDel(mid,aid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m||!con
 function arcAuto(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const N=Math.max(10,msList(m).filter(w=>!isMatter(w.title||"")).length), arcs=[]; for(let a=1,k=1;a<=N;a+=10,k++) arcs.push({id:uid(),n:`${k}번째 아크`,a,b:a+9,peak:"",note:""}); m.plot={...(m.plot||{}),arcs}; m.updated=new Date().toISOString(); save(); PLOT_VIEW="arc"; render(); toast(`${arcs.length}개 아크로 나눴습니다 — 「고치기」로 이름·절정을 정해 보세요`); }
 const PL_COL=["#b0703f","#4f7fa8","#5f8a68","#a0577a","#7d6aa8","#a08a3c","#b0534a","#4e8b8f"];
 // 이야기 시각 정렬 열쇠: 숫자를 자리 맞춰 비교(「D+3」·「3일째」도 숫자로), 비면 맨 뒤
-const stKey=t=>String(t||"").trim()?String(t).replace(/\d+/g,d=>d.padStart(6,"0")):"\uffff";
-function plotTimeHtml(m,ws){ const order=new Map(ws.map((w,i)=>[w.id,i+1])), U=sceneUnits(ws), L=U.slice().sort((a,b)=>stKey(a.st).localeCompare(stKey(b.st))||order.get(a.w.id)-order.get(b.w.id)||a.k-b.k), no=U.filter(u=>!u.st).length;   // 한 화 안 장면마다
+// 이야기 시각 정렬 열쇠: 날짜 구분(. / - 년 월)을 하나로, 숫자는 자리 맞춤 · 원고별 달력(연호)은 먼저 서기로 · 「~」 구간은 시작으로
+const stKey=(t,m)=>{ let v=String(t||"").trim(); if(!v) return "\uffff"; v=calNorm(v.split(/\s*[~∼–]\s*/)[0],m); return v.replace(/(\d)\s*(?:[.\/\-]|년|월)\s*(?=\d)/g,"$1-").replace(/(\d)일/g,"$1").replace(/\d+/g,d=>d.padStart(6,"0")); };
+// 원고별 달력: 원고 정보 「달력」에 「연호=서기 원년 앞 해」를 한 줄씩 (예: 세종=1418, 제국력=0) → 「세종 7년 3월」을 1425-3 으로 바꿔 정렬
+function calRules(m){ const t=m?.exportOpts?.cal||""; return String(t).split(/\n|,/).map(l=>l.match(/^\s*([^=\d][^=]*?)\s*=\s*(-?\d+)\s*$/)).filter(Boolean).map(x=>({n:x[1].trim(),b:+x[2]})).sort((a,b)=>b.n.length-a.n.length); }
+function calNorm(v,m){ const R=calRules(m||S.manuscripts.find(x=>x.id===ROOM_MS)); for(const r of R){ const i=v.indexOf(r.n); if(i<0) continue; const rest=v.slice(i+r.n.length), y=rest.match(/^\s*(\d+)\s*년?/); if(!y) continue; return v.slice(0,i)+(r.b+(+y[1]))+"-"+rest.slice(y[0].length).replace(/^\s*/,""); } return v; }
+async function calSet(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const v=await askText("원고 달력 — 「연호=그 원년 바로 앞 해(서기)」를 쉼표로 (예: 세종=1418, 문종=1450, 제국력=0). 이야기 시각에 「세종 7년 3월」처럼 적으면 1425년 3월로 정렬합니다. 비우면 달력 없이",m.exportOpts?.cal||""); if(v==null) return; m.exportOpts={...(m.exportOpts||{}),cal:String(v).trim()||undefined}; m.updated=new Date().toISOString(); save(); toast(calRules(m).length?`달력 ${calRules(m).length}개를 정했습니다 — 시간순·알리바이 표가 이 달력으로 정렬됩니다`:"달력 없이 정렬합니다"); render(); }
+function plotTimeHtml(m,ws){ const order=new Map(ws.map((w,i)=>[w.id,i+1])), U=sceneUnits(ws), L=U.slice().sort((a,b)=>stKey(a.st,m).localeCompare(stKey(b.st,m))||order.get(a.w.id)-order.get(b.w.id)||a.k-b.k), no=U.filter(u=>!u.st).length;   // 한 화 안 장면마다
   return `<p class="hint">이야기 속 시간 순서입니다. 왼쪽 번호는 책 순서 — 번호가 뒤섞인 곳이 시간을 엇갈려 놓은 자리입니다.${no?` 「이야기 시각」이 빈 장면 ${no}개는 맨 뒤에.`:""} (장면 정보 → 이야기 시각)</p>
     <ol class="ptime">${L.map((u,i)=>{ const w=u.w, o=order.get(w.id)+(u.k?u.k/10:0), prev=i?order.get(L[i-1].w.id)+(L[i-1].k?L[i-1].k/10:0):0; return `<li class="${prev&&o<prev?"jump":""}"><span class="pto" title="책 순서">${order.get(w.id)}${u.k?`·${u.k+1}`:""}</span><b>${esc(u.st||"—")}</b><a href="#" onclick="go('write',{edit:'${w.id}'});return false">${esc(w.title||"(제목 없음)")}${u.k?` · 장면 ${u.k+1}`:""}</a><small>${esc([u.pov,u.loc].filter(Boolean).join(" · "))}</small></li>`; }).join("")}</ol>`; }
-function plotAlibiHtml(m,ws){ const L=sceneUnits(ws).filter(u=>u.st).sort((a,b)=>stKey(a.st).localeCompare(stKey(b.st))), P2=cxScope(m.id).filter(c=>c.kind==="인물"), cell=new Map(), uk=u=>u.w.id+"#"+u.k;   // 장면 단위 (한 화 안 장면마다)
+function alibiCycle(wid,k,cid){ const w=S.writings.find(x=>x.id===wid); if(!w) return; const M={...(wMeta(w,"alibi")||{})}, key=k+"|"+cid, O=["","있음","언급","주장","없음"], nx=O[(O.indexOf(M[key]||"")+1)%O.length]; if(nx) M[key]=nx; else delete M[key]; metaSet(wid,"alibi",M); save(); render(); }
+function plotAlibiHtml(m,ws){ const L=sceneUnits(ws).filter(u=>u.st).sort((a,b)=>stKey(a.st,m).localeCompare(stKey(b.st,m))), P2=cxScope(m.id).filter(c=>c.kind==="인물"), cell=new Map(), uk=u=>u.w.id+"#"+u.k;   // 장면 단위 (한 화 안 장면마다)
   L.forEach(u=>{ const inW=codexIn(u.txt,m.id).filter(c=>c.kind==="인물"); inW.forEach(c=>cell.set(uk(u)+"|"+c.id,u.loc||"✓")); const pv=P2.find(c=>cxNames(c).includes(u.pov)); if(pv) cell.set(uk(u)+"|"+pv.id,(u.loc||"✓")+" ◉"); });
-  const cols=P2.filter(c=>L.some(u=>cell.has(uk(u)+"|"+c.id)));
+  const man=(u,c)=>(wMeta(u.w,"alibi")||{})[u.k+"|"+c.id]||"", here=(u,c)=>{ const v=man(u,c); return v?v==="있음":cell.has(uk(u)+"|"+c.id); };   // 직접 고른 칸이 자동보다 먼저 — 「있음」만 그 자리에 있었던 것
+  const show=(u,c)=>{ const v=man(u,c), a=cell.get(uk(u)+"|"+c.id)||""; return v==="있음"?(u.loc||"✓")+" ●":v==="언급"?"(언급만)":v==="주장"?`주장: ${u.loc||"?"}`:v==="없음"?"—":a; };
+  const cols=P2.filter(c=>L.some(u=>cell.has(uk(u)+"|"+c.id)||man(u,c)));
   if(!L.length||!cols.length) return `<p class="muted">장면 정보에 「이야기 시각」과 「장소」를 적고, 본문에 인물 이름이 나오면 「누가 언제 어디에 있었나」 표가 됩니다 — 알리바이·동선 점검용.</p>`;
-  return `<p class="hint">인물 × 이야기 시각 → 그 장면의 장소 (◉ 시점 인물). 같은 시각에 두 곳에 있는 인물은 붉게 표시됩니다. 본문에 이름만 나와도(「그는 정원에 있었다」처럼 다른 곳 이야기라도) 그 장면 장소로 세니, 붉은 칸은 직접 살펴 주세요. 읽기만 하는 표입니다.</p><div class="cxtablewrap"><table class="cxtable palibi"><thead><tr><th>이야기 시각</th><th>장면</th>${cols.map(c=>`<th><i class="wdot sm" style="background:${cxCol(c)}"></i> ${esc(c.name)}</th>`).join("")}</tr></thead><tbody>
-    ${L.map(u=>`<tr><td><b>${esc(u.st)}</b></td><td><a href="#" onclick="go('write',{edit:'${u.w.id}'});return false">${esc(u.w.title||"(제목 없음)")}${u.k?` · 장면 ${u.k+1}`:""}</a></td>${cols.map(c=>{ const v=cell.get(uk(u)+"|"+c.id)||"", same=v&&L.some(x=>uk(x)!==uk(u)&&x.st===u.st&&cell.get(uk(x)+"|"+c.id)&&(x.loc||"")!==(u.loc||"")); return `<td class="${same?"clash":""}">${esc(v)}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>`; }
+  return `<p class="hint">인물 × 이야기 시각 → 그 장면의 장소 (◉ 시점 인물). 같은 시각에 두 곳에 있는 인물은 붉게 표시됩니다. 본문에 이름만 나와도 그 장면 장소로 세니, <b>칸을 눌러 직접 고르세요</b> — 있음(●) → 언급만 → 본인 주장 → 없음 → 저절로. 「있음」만 그 자리에 있었던 것으로 셉니다.</p><div class="cxtablewrap"><table class="cxtable palibi"><thead><tr><th>이야기 시각</th><th>장면</th>${cols.map(c=>`<th><i class="wdot sm" style="background:${cxCol(c)}"></i> ${esc(c.name)}</th>`).join("")}</tr></thead><tbody>
+    ${L.map(u=>`<tr><td><b>${esc(u.st)}</b></td><td><a href="#" onclick="go('write',{edit:'${u.w.id}'});return false">${esc(u.w.title||"(제목 없음)")}${u.k?` · 장면 ${u.k+1}`:""}</a></td>${cols.map(c=>{ const v=show(u,c), same=here(u,c)&&L.some(x=>uk(x)!==uk(u)&&stKey(x.st,m)===stKey(u.st,m)&&here(x,c)&&(x.loc||"")!==(u.loc||"")); return `<td class="${same?"clash":""} ${man(u,c)?"man":""}" onclick="alibiCycle('${u.w.id}',${u.k},'${c.id}')" title="누르면 바꿈: 있음 → 언급만 → 본인 주장 → 없음 → 저절로">${esc(v)}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>`; }
 // ───────── 설정 점검 (소설): 설정해 둔 인물·장소·복선이 글에서 실제로 쓰였는지 ─────────
 // 기계로 세는 것(등장 지도·장면 계획 대조·복선 회수)은 볼 때마다 이름·다른 이름으로 새로 셈 — 저장하지 않음. AI 점검은 단추를 누를 때만, 결과는 이 화면에만(카드 → 고칠지는 글쓴이가)
 const chkEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
@@ -6866,7 +6878,8 @@ function chkScene(m,ws,v){ v=String(v||"").trim(); if(!v) return -1; const L=ws.
   let i=ws.findIndex(w=>{ const t=(w.title||"").trim(); return t&&(v.includes(t)||t.includes(v)); }); if(i>=0) return i;
   const n=v.match(/(\d+)\s*(화|장|편|번째|꼭지)?/); if(n){ const w=L[+n[1]-1]; if(w) return ws.indexOf(w); } return -1; }
 function chkData(m){ const GAP=SERIAL(m)?.on?Math.max(CHK_GAP,15):CHK_GAP;   /* 연재는 길게 보므로 15화 */ const ws=msList(m), T=ws.map(chkText), wr=ws.map(chkWritten), items=cxScope(m.id), ko=cxP("novel").kinds||[];
-  const rows=items.map(c=>{ const n=T.map(t=>chkCount(c,t)), apps=n.map((x,i)=>x?i:-1).filter(i=>i>=0), wi=ws.map((_,i)=>i).filter(i=>wr[i]), flags=[];
+  const locHas=(w,c)=>{ const N=cxNames(c), L2=[wMeta(w,"loc"),...scxGet(w).map(x=>x.loc)].filter(Boolean); return L2.some(l=>N.some(n=>String(l).includes(n))); };   // 장면 정보 「장소」에 적은 것도 그 장소가 나온 것
+  const rows=items.map(c=>{ const n=T.map((t,i)=>chkCount(c,t)+(c.kind==="장소"&&locHas(ws[i],c)?1:0)), apps=n.map((x,i)=>x?i:-1).filter(i=>i>=0), wi=ws.map((_,i)=>i).filter(i=>wr[i]), flags=[];
     if(!apps.length) flags.push({t:"한 번도 안 나옴"});
     else { if(c.kind==="인물"&&apps.length===1&&wi.length>=4) flags.push({soft:1,t:"한 편에만 나옴"});
       for(let k=1;k<apps.length;k++){ const gap=wi.filter(i=>i>apps[k-1]&&i<apps[k]).length; if(gap>=GAP) flags.push({t:`${gap}편 동안 사라짐 (${apps[k-1]+1}→${apps[k]+1})`}); }
@@ -6902,7 +6915,7 @@ function chkHtml(m){ const D=chkData(m), {ws,wr}=D, N=ws.length, num=i=>SERIAL(m
   const wi=ws.map((w,i)=>i).filter(i=>wr[i]), A=CHK_AI&&CHK_AI.mid===m.id?CHK_AI:null, f0=A?.range?.[0]||1, t0=A?.range?.[1]||N;
   return `<div class="chkpage">
     <div class="chksum"><span class="${warnN?"w":""}"><b>${warnN}</b> 항목 살펴볼 것</span><span class="${planN?"w":""}"><b>${planN}</b> 편 계획과 다름</span><span class="${clueN?"w":""}"><b>${clueN}</b> 복선 회수 확인</span><small class="muted">쓴 글 ${wi.length} / ${N}편 · 이름과 「다른 이름」으로 셉니다 — 별명·호칭은 노트의 「다른 이름」에 적어 두세요</small></div>
-    <h3 class="chkh">등장 지도 <small>점이 클수록 많이 나옴 · 칸을 누르면 그 글로</small></h3>${map}
+    <h3 class="chkh">등장 지도 <small>점이 클수록 많이 나옴 · 칸을 누르면 그 글로 · 본문 50자 아래인 글은 「아직 안 쓴 글」(흐린 칸)로 셈 · 장소는 장면 정보 「장소」에 적어도 나온 것으로</small></h3>${map}
     <h3 class="chkh">장면 계획과 본문 <small>장면 정보의 시점 인물·장소가 본문에 있는지 (200자 넘게 쓴 글만)</small></h3>${plan?`<ul class="chkplan">${plan}</ul>`:`<p class="hint">✓ 계획과 어긋난 곳이 없습니다${ws.some(w=>wMeta(w,"pov")||wMeta(w,"loc"))?"":" (장면 정보에 시점 인물·장소를 적으면 여기서 대조합니다)"}</p>`}
     <h3 class="chkh">복선 회수</h3>${clue}
     <h3 class="chkh">✦ 설정 어긋남 점검 <small>AI · 누를 때만 · 고치지 않고 짚기만</small></h3>
@@ -6975,8 +6988,8 @@ function plotHtml(m,ws0){ const lines=m.plot?.lines||[], lc=n=>PL_COL[lines.inde
   return `<div class="row" style="gap:8px;margin-bottom:8px;flex-wrap:wrap"><span class="muted" style="font-size:13px">단계</span><select style="width:auto" onchange="plotSetStages('${m.id}',this.value)">${[...Object.keys(PLOT_SETS),"직접"].map(k=>`<option ${k===cur?"selected":""}>${k}${k==="직접"?" 정하기…":""}</option>`).join("")}</select><button class="btn small ghost" onclick="plotLines('${m.id}')" title="플로터의 플롯라인처럼: 주 플롯·곁 줄거리를 나눠 장면마다 표시">줄거리 줄${lines.length?` ${lines.length}`:" 정하기"}</button>
       ${lines.length?`<span class="pills">${[["","모두"],...lines.map(l=>[l,l])].map(([v,n])=>`<button class="pill ${PLOT_LINE===v?"on":""}" onclick="PLOT_LINE=${jsArg(v)};render()" ${v?`style="box-shadow:inset 3px 0 0 ${lc(v)}"`:""}>${esc(n)}</button>`).join("")}</span>`:""}
       ${povs.length>1?`<span class="pills" title="시점 인물로 거르기"><span class="muted" style="font-size:13px;align-self:center">시점</span>${[["","모두"],...povs.map(p=>[p,`${p} ${ws0.filter(w=>wMeta(w,"pov")===p).length}`])].map(([v,n])=>`<button class="pill ${PLOT_POV===v?"on":""}" onclick="PLOT_POV=${jsArg(v).replace(/"/g,"&quot;")};render()">${esc(n)}</button>`).join("")}</span>`:""}
-      <span class="spacer"></span><span class="stviews" style="margin:0">${[["beat","단계"],["arc","아크"],["time","시간순"],["alibi","알리바이 표"]].map(([k,n])=>`<button class="${PLOT_VIEW===k?"on":""}" onclick="PLOT_VIEW='${k}';render()">${n}</button>`).join("")}</span></div>
-    ${PLOT_VIEW==="arc"?plotArcHtml(m,ws):PLOT_VIEW==="time"?plotTimeHtml(m,ws):PLOT_VIEW==="alibi"?plotAlibiHtml(m,ws):`<div class="sboard pboard">${un.length?col("","아직 정하지 않음",un):""}${st.map(s=>col(s,s,ws.filter(w=>wMeta(w,"beat")===s))).join("")}</div>`}`; }
+      <span class="spacer"></span><span class="stviews" style="margin:0">${[["beat","단계"],["arc","아크"],["grow","성장 곡선"],["time","시간순"],["alibi","알리바이 표"]].map(([k,n])=>`<button class="${PLOT_VIEW===k?"on":""}" onclick="PLOT_VIEW='${k}';render()">${n}</button>`).join("")}</span></div>
+    ${PLOT_VIEW==="grow"?plotGrowHtml(m,ws):PLOT_VIEW==="arc"?plotArcHtml(m,ws):PLOT_VIEW==="time"?plotTimeHtml(m,ws):PLOT_VIEW==="alibi"?plotAlibiHtml(m,ws):`<div class="sboard pboard">${un.length?col("","아직 정하지 않음",un):""}${st.map(s=>col(s,s,ws.filter(w=>wMeta(w,"beat")===s))).join("")}</div>`}`; }
 // 타자기 모드: 쓰는 줄을 화면 가운데에 (이 기기에 기억)
 let TYPEW=false; try{ TYPEW=localStorage.getItem("seojae.typew")==="1"; }catch(_){}
 if(TYPEW) document.body.classList.add("typew");
@@ -7187,8 +7200,18 @@ function scxSet(wid,i,k,v){ const w=S.writings.find(x=>x.id===wid); if(!w) retur
 // 장면 단위: 첫 장면은 원래 장면 정보 칸, 둘째부터는 scx (시간순·알리바이 표가 장면마다)
 function sceneUnits(ws){ return ws.flatMap(w=>{ const P=sceneParts(w), X=scxGet(w); return P.map((t,k)=>k===0?{w,k,st:wMeta(w,"st"),pov:wMeta(w,"pov"),loc:wMeta(w,"loc"),txt:t}:{w,k,st:X[k-1]?.st||"",pov:X[k-1]?.pov||"",loc:X[k-1]?.loc||"",txt:t}); }); }
 function sceneBarHtml(w){ let o=false; try{ o=localStorage.getItem("seojae.scenebar")==="1"; }catch(_){} const sm=["pov","loc","when"].map(k=>wMeta(w,k)).filter(Boolean).join(" · ");
+  const ppl=codexIn(w.body||"",wMs(w)?.id).filter(c=>c.kind==="인물").slice(0,6), GR=wMeta(w,"grow")||{}, GV=[[-2,"바닥"],[-1,"흔들림"],[0,"그대로"],[1,"나아감"],[2,"크게 자람"]];
+  const grow=ppl.length?`<div class="growrow"><p class="hint" style="margin:6px 0 2px">인물의 마음 — 이 장면 끝에서 (플롯 「성장 곡선」에 이어 그려짐)</p>${ppl.map(c=>`<label class="field"><span>${esc(c.name)}</span><span class="row" style="gap:4px"><select onchange="growSet('${w.id}','${c.id}','v',this.value)"><option value="">—</option>${GV.map(([v,n])=>`<option value="${v}" ${GR[c.id]?.v===v?"selected":""}>${v>0?"+":""}${v} ${n}</option>`).join("")}</select><input value="${esc(GR[c.id]?.t||"")}" placeholder="한 줄 (예: 처음으로 거절함)" onchange="growSet('${w.id}','${c.id}','t',this.value)"></span></label>`).join("")}</div>`:"";
   const P=sceneParts(w), X=scxGet(w), more=P.length>1?`<div class="scxlist"><p class="hint" style="margin:6px 0 2px">이 화에는 「* * *」로 나눈 장면이 ${P.length}개 있습니다 — 위는 장면 1, 아래는 장면 2부터 (시간순·알리바이 표가 장면마다 갈라 봅니다)</p>${P.slice(1).map((t,i)=>`<div class="scxrow"><b>장면 ${i+2}</b><small class="muted">${esc(t.replace(/\s+/g," ").trim().slice(0,30))}…</small>${[["pov","시점 인물"],["loc","장소"],["st","이야기 시각"]].map(([k,n])=>`<label class="field"><span>${n}</span><input value="${esc(X[i]?.[k]||"")}" onchange="scxSet('${w.id}',${i},'${k}',this.value)"></label>`).join("")}</div>`).join("")}</div>`:"";
-  return `<details class="scenebar" ${o?"open":""} ontoggle="try{localStorage.setItem('seojae.scenebar',this.open?'1':'0')}catch(_){}"><summary>장면 정보${P.length>1?` · 장면 ${P.length}개`:""} <small>${esc(sm||"시점·장소·때 — 눌러서 적기")}</small></summary>${sceneFormHtml(w)}${more}</details>`; }
+  return `<details class="scenebar" ${o?"open":""} ontoggle="try{localStorage.setItem('seojae.scenebar',this.open?'1':'0')}catch(_){}"><summary>장면 정보${P.length>1?` · 장면 ${P.length}개`:""} <small>${esc(sm||"시점·장소·때 — 눌러서 적기")}</small></summary>${sceneFormHtml(w)}${more}${grow}</details>`; }
+function growSet(wid,cid,k,v){ const w=S.writings.find(x=>x.id===wid); if(!w) return; const G2={...(wMeta(w,"grow")||{})}, x={...(G2[cid]||{})}; if(k==="v"){ if(v==="") delete x.v; else x.v=+v; } else { const t=String(v||"").trim().slice(0,60); if(t) x.t=t; else delete x.t; } if(x.v==null&&!x.t) delete G2[cid]; else G2[cid]=x; metaSet(wid,"grow",G2); save(); }
+function plotGrowHtml(m,ws){ const P2=cxScope(m.id).filter(c=>c.kind==="인물"), pts=P2.map(c=>({c,L:ws.map((w,i)=>({i,w,x:(wMeta(w,"grow")||{})[c.id]})).filter(o=>o.x&&o.x.v!=null)})).filter(o=>o.L.length);
+  if(!pts.length) return `<p class="muted">장면 정보 띠 아래 「인물의 마음」에 장면마다 −2(바닥)~+2(크게 자람)를 고르면, 인물마다 마음이 움직인 선이 여기 그려집니다 — 성장 소설·청소년 소설의 성장 곡선, 장편의 인물 변화 점검용.</p>`;
+  const W2=Math.max(520,ws.length*46), H2=220, X=i=>30+i*(W2-60)/Math.max(1,ws.length-1), Y=v=>H2/2-v*(H2/2-24);
+  const grid=[-2,-1,0,1,2].map(v=>`<line x1="24" x2="${W2-24}" y1="${Y(v)}" y2="${Y(v)}" class="gl${v===0?" z":""}"/><text x="4" y="${Y(v)+4}" class="gt">${v>0?"+":""}${v}</text>`).join("");
+  const lines=pts.map(({c,L})=>`<polyline points="${L.map(o=>X(o.i)+","+Y(o.x.v)).join(" ")}" fill="none" stroke="${cxCol(c)}" stroke-width="2.4" stroke-linejoin="round"/>${L.map(o=>`<circle cx="${X(o.i)}" cy="${Y(o.x.v)}" r="4.5" fill="${cxCol(c)}"><title>${esc(c.name)} · ${esc(o.w.title||"")} · ${o.x.v>0?"+":""}${o.x.v}${o.x.t?" — "+esc(o.x.t):""}</title></circle>`).join("")}`).join("");
+  const xs=ws.map((w,i)=>`<text x="${X(i)}" y="${H2-4}" class="gx" text-anchor="middle">${i+1}</text>`).join("");
+  return `<p class="hint">장면(가로, 책 순서)마다 인물의 마음(세로). 점에 마우스를 올리면 그 장면의 한 줄. 선이 평평하면 그 인물이 움직이지 않는 구간입니다.</p><div class="growleg">${pts.map(({c})=>`<span><i class="wdot sm" style="background:${cxCol(c)}"></i>${esc(c.name)}</span>`).join("")}</div><div class="growwrap"><svg class="growsvg" viewBox="0 0 ${W2} ${H2}" width="${W2}" height="${H2}" role="img" aria-label="인물 성장 곡선">${grid}${lines}${xs}</svg></div>`; }
 function sceneFormHtml(w){ const nv=isNovelW(w); return `<div class="sceneform">${scSyncLater(w)}<p class="hint" style="margin:0 0 4px">장면 정보 — 코르크보드 카드에 보입니다${nv?" · 설계 카드와 같은 칸이라 한쪽에서 고치면 같이 바뀝니다":""}</p>${nv?sceneWarn(w):""}${SCENE_F.map(([k,n])=>`<label class="field"><span>${nv&&k==="turn"?"결과 — 무엇이 바뀌나 <small>(= 장면이 할 일)</small>":n}</span><input data-sk="${k}" value="${esc(wMeta(w,k))}" onchange="saveScene('${w.id}','${k}',this.value)"></label>`).join("")}${(()=>{ const m=wMs(w), p=m&&m.genre==="novel"?chkPlan(m,w):[]; return p.length?`<p class="hint scplan">${p.map(f=>`${f.soft?"·":"⚠"} ${esc(f.t)}`).join("<br>")}</p>`:""; })()}</div>`; }
 function scPick(k,which){ const w=cardW(); if(!w) return; const d=scDiffs(w).find(x=>x.k===k); if(!d) return;
   if(k==="turn"){ if(which==="old"){ cardSet("c1",d.old); } else metaSet(w.id,"turn",d.cur); }
@@ -7368,6 +7391,7 @@ function docWrap(mk,bar){ const b=(bar&&WSEL?.el?.isConnected&&WSEL.el)||(docume
   if(/\n/.test(sel)) return toast("굵게·기울임은 한 줄(한 문단) 안에서만 넣을 수 있습니다");
   s+=sel.match(/^\s*/)[0].length; e-=sel.match(/\s*$/)[0].length; if(e<=s) return; const core=v.slice(s,e); if(/\*/.test(core)) return toast("별표(*)가 든 글에는 넣을 수 없습니다");
   tInsert(b,mk+core+mk,s,e); b.setSelectionRange(s+n,s+n+core.length); }
+document.addEventListener("keydown",e=>{ if(e.target?.tagName!=="W-ED"||!(e.metaKey||e.ctrlKey)||!e.shiftKey||e.altKey||e.isComposing||!(e.code==="Digit8"||e.key==="*"||e.key==="8")) return; e.preventDefault(); const b=e.target, at=b.selectionEnd, v=b.value, pre=v.slice(0,at), post=v.slice(at); TINS_LABEL="장면 나눔"; tInsert(b,(pre&&!pre.endsWith("\n")?"\n":"")+"* * *"+(post.startsWith("\n")?"":"\n"),at,at); toast("장면을 나눴습니다 (⌘⇧8) — 장면 정보에 장면이 하나 늘었습니다"); });   // 장면 나눔 ⌘⇧8
 document.addEventListener("keydown",e=>{ if(e.target?.tagName!=="W-ED"||!(e.metaKey||e.ctrlKey)||e.shiftKey||e.altKey||e.isComposing) return; const k=e.key.toLowerCase(); if(k==="b"||k==="i"){ e.preventDefault(); docWrap(k==="b"?"**":"*"); } else if(k==="u"){ e.preventDefault(); docMk("ul"); } });   // ⌘B 굵게 · ⌘I 기울임 · ⌘U 밑줄 (모든 글 칸 같은 키)
 function docMk(kind,color){ const b=document.activeElement?.tagName==="W-ED"?document.activeElement:$("#wbody"); if(!b) return; if(b.selectionEnd<=b.selectionStart) return toast("먼저 글자를 고르세요"); WSEL={s:b.selectionStart,e:b.selectionEnd,el:b}; wMark(kind,color); }
 // 내보내기에 쓰는 문서 모양 (PDF)
@@ -8600,7 +8624,7 @@ function revFind(wid,q){ if(editId!==wid||!$("#wbody")){ go('write',{edit:wid});
   b.focus(); b.setSelectionRange(i,i+q.length); const y=b.getBoundingClientRect().top+scrollY+caretY(b); scrollTo({top:y-innerHeight*.4,behavior:"smooth"}); }
 async function reviewRun(title,kind,ws){ if(!SERVER||!GAS) return toast("구글 서버에 연결되어야 검토할 수 있습니다"); if(!CONF.ai) return toast("설정 → 주석 서재에 클로드(또는 제미나이) 열쇠가 있어야 합니다");
   const pieces=ws.map(w=>({id:w.id,title:w.title||"",text:stripMemo(w.body||"")})); const tot=pieces.reduce((a,x)=>a+x.text.length,0);
-  if(!confirm(`「${title}」 ${ws.length}꼭지(${tot.toLocaleString()}자)를 ${CONF.ai==="claude"?"클로드":"제미나이"}에게 보내 검토 메모를 받을까요?${CONF.ai==="claude"?"\n클로드 크레딧을 조금 씁니다(글이 길수록 더).":""}\n본문은 바꾸지 않습니다. 1~2분 걸릴 수 있습니다.${tot>60000||pieces.some(x=>x.text.length>9000)?`\n\n※ 한 번에 앞 60,000자(꼭지마다 9,000자)까지만 읽습니다 — 긴 원고는 장을 골라 나눠 받으세요.`:""}`)) return null;
+  const IT=G(wMs(ws[0])).item||"꼭지"; if(!confirm(`「${title}」 ${ws.length}${IT}(${tot.toLocaleString()}자)를 ${CONF.ai==="claude"?"클로드":"제미나이"}에게 보내 검토 메모를 받을까요?${CONF.ai==="claude"?"\n클로드 크레딧을 조금 씁니다(글이 길수록 더).":""}\n본문은 바꾸지 않습니다. 1~2분 걸릴 수 있습니다.${tot>60000||pieces.some(x=>x.text.length>9000)?`\n\n※ 한 번에 앞 60,000자(꼭지마다 9,000자)까지만 읽습니다 — 긴 원고는 장을 골라 나눠 받으세요.`:""}`)) return null;
   toast("검토를 받는 중입니다… (1~2분)"); try{ busy(true); }catch(_){}
   const gm=ws[0]?(wMs(ws[0])||S.manuscripts.find(x=>x.title===title)):null, gg=G(gm);
   try{ const r=await gcall("reviewMs",{title,kind,pieces,genre:gm?.genre?gg.n:"",focus:gg.focus,item:gg.item,...(gm?.genre==="novel"?{settings:fbSettings(gm),serial:!!SERIAL(gm)}:{})}); if(!r.ok) throw new Error(r.error); const at=new Date().toISOString();
@@ -8608,7 +8632,17 @@ async function reviewRun(title,kind,ws){ if(!SERVER||!GAS) return toast("구글 
     save(); toast(`검토를 받았습니다 — 짚을 점 ${r.pieces.reduce((a,x)=>a+x.notes.length,0)}개`); return r; }
   catch(e){ toast("검토하지 못했습니다: "+e.message); return null; } finally{ try{ busy(false); }catch(_){} } }
 async function reviewMs(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const ws=msList(m); if(!ws.length) return toast("원고에 글이 없습니다");
+  const tot=ws.reduce((a,w)=>a+stripMemo(w.body||"").length,0); if((ws.length>40||tot>60000)&&confirm(`원고가 길어(${ws.length}${G(m).item} · ${tot.toLocaleString()}자) 문장 검토는 앞 40${G(m).item}·60,000자까지만 읽습니다.\n\n대신 「전체 구조 검토」를 할까요? — ${G(m).item}마다 요약·장면 정보·처음과 끝 몇 줄만 모아 원고 전체의 흐름·인물 변화·복선을 봅니다 (문장은 보지 않음).\n\n확인 = 전체 구조 검토 · 취소 = 앞부분 문장 검토`)) return reviewOutline(m,ws);
   const r=await reviewRun(m.title,"원고",ws.slice(0,40)); if(r){ m.review={at:new Date().toISOString(),overall:r.overall,ai:r.ai}; save(); render(); } }
+// 장편 전체 구조 검토: 글마다 요약·장면 정보·처음과 끝만 모아 원고 전체를 한 번에 (서버 reviewMs mode outline) — 고치지 않고 짚기만
+async function reviewOutline(m,ws){ if(!SERVER||!GAS) return toast("구글 서버에 연결되어야 검토할 수 있습니다"); if(!CONF.ai) return toast("설정 → 주석 서재에 클로드(또는 제미나이) 열쇠가 있어야 합니다");
+  const cut=t=>t.replace(/\s+/g," ").trim(), pieces=ws.map((w,i)=>{ const b=cut(stripMk(stripMemo(w.body||""))), meta=["pov","loc","st","turn"].map(k=>wMeta(w,k)).filter(Boolean).join(" · ");
+    return {id:w.id,title:w.title||"",text:[w.summary?`요약: ${cut(w.summary)}`:"",meta?`장면 정보: ${meta}`:"",`처음: ${b.slice(0,220)}`,b.length>440?`끝: ${b.slice(-220)}`:""].filter(Boolean).join("\n")}; }).filter(x=>x.text.length>20);
+  toast(`전체 구조 검토를 받는 중입니다 — ${pieces.length}${G(m).item} (1~2분)`); try{ busy(true); }catch(_){}
+  try{ const gg=G(m), r=await gcall("reviewMs",{mode:"outline",title:m.title,kind:"원고",pieces,genre:gg.n,item:gg.item,focus:gg.focus,...(m.genre==="novel"?{settings:fbSettings(m),serial:!!SERIAL(m)}:{})}); if(!r.ok) throw new Error(r.error); const at=new Date().toISOString();
+    ws.forEach(w=>{ const p=(r.pieces||[]).find(x=>x.id===w.id); if(p&&p.notes.length){ w.review={at,ai:r.ai,notes:p.notes,outline:true}; { const _pu=w.updated; w.updated=at; if(editId===w.id&&EDIT_BASE===_pu) EDIT_BASE=at; } } });
+    m.review={at,ai:r.ai,outline:true,overall:[r.overall,...(r.arcs||[]).map(a=>`· ${a.range}: ${a.note}`)].filter(Boolean).join("\n")}; save(); render(); toast(`전체 구조 검토를 받았습니다 — 구간 ${(r.arcs||[]).length} · 짚을 점 ${(r.pieces||[]).reduce((a,x)=>a+x.notes.length,0)}`); }
+  catch(e){ toast("검토를 받지 못했습니다: "+e.message); } finally{ try{ busy(false); }catch(_){} } }
 // 부·장 하나만 검토 (장편은 원고 전체가 한 번에 다 읽히지 않으므로)
 function reviewPartMenu(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; const seq=msSeq(m), parts=seq.filter(x=>x.p);
   if(!parts.length) return toast("부·장이 없습니다 — 원고 전체 검토를 쓰세요");
