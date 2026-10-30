@@ -25,6 +25,7 @@ function applyTheme(t){
   return t;
 }
 applyTheme();
+try{ const v=localStorage.getItem("seojae.stColor"); if(v==="forest"||v==="white") document.documentElement.dataset.stc=v; }catch(_){}   // 글방 둘레 색 (이 기기) — 화면을 그리기 전에
 // 이 기기만의 노트 꾸미기(종이 색·글자 색·글자 크기): 화면이 그려지기 전에 적용 (localStorage seojae.look — 휴대폰과 컴퓨터를 따로)
 function applyLook(){
   let L={}; try{ L=JSON.parse(localStorage.getItem("seojae.look")||"{}")||{}; }catch(_){}
@@ -282,6 +283,42 @@ body.readmode .notebook::after,body.focus .notebook::after{display:none}
 .hmirror{position:absolute;z-index:2;pointer-events:none;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;box-sizing:border-box;overflow:hidden;background:transparent}
 .hmirror span{visibility:hidden}
 .hmirror b{font-weight:800;color:var(--note-ink,var(--ink))}
+
+/* ═══ 창작의 자리 (2026-10-30 팀장님 · 디자인 전문가·색채 심리학자 검토): 글방에 들어오면 둘레가 「새벽 남빛 서재」로 — 종이(--paper)는 그대로
+   근거: 파랑 계열·낮은 채도는 탐색하는 마음과 오래 견딤에 (Mehta & Zhu 2009 등 — 효과는 작고 사람마다 다름), 더 튼튼한 것은 「이 방 = 쓴다」는 맥락 단서
+   바탕 한 가지를 넓게 바꾸고, 메뉴 자리·글꼴은 그대로 (배운 손길을 깨지 않게). 다른 안(숲·흰 작업대)은 설정 → 화면 꾸미기 「글방 둘레」 ═══ */
+html:has(#main .studio){--desk:#dfe3ea;--st-side:#eef1f5;--st-side2:#e2e7ee;--st-line:#b8c0cd;--st-ink:#1f2a3d;--st-soft:#4a5670;--st-acc:#2f3b52;--st-gold:#b38a45;--st-goldt:#7a5716;--st-btn:#2f3b52;--st-btnink:#f3ecdc;--st-glow:rgba(217,183,121,.55)}
+:root[data-theme="dark"]:has(#main .studio){--desk:#111722;--st-side:#1a2131;--st-side2:#232c40;--st-line:#3a4763;--st-ink:#e6e0d2;--st-soft:#a9b3c6;--st-acc:#9fb3d6;--st-gold:#d9b779;--st-goldt:#d9b779;--st-btn:#34425e;--st-btnink:#f3ecdc;--st-glow:rgba(217,183,121,.4)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]):has(#main .studio){--desk:#111722;--st-side:#1a2131;--st-side2:#232c40;--st-line:#3a4763;--st-ink:#e6e0d2;--st-soft:#a9b3c6;--st-acc:#9fb3d6;--st-gold:#d9b779;--st-goldt:#d9b779;--st-btn:#34425e;--st-btnink:#f3ecdc;--st-glow:rgba(217,183,121,.4)} }
+/* 다른 안: B 숲 그늘 · C 흰 작업대 (이 기기 seojae.stColor) */
+html[data-stc="forest"]:has(#main .studio){--desk:#dfe5dc;--st-side:#eef1ea;--st-side2:#e1e7dc;--st-line:#b4c0ad;--st-ink:#1f2f27;--st-soft:#4b625b;--st-acc:#3f5f4c;--st-btn:#3f5f4c}
+:root[data-theme="dark"][data-stc="forest"]:has(#main .studio){--desk:#121916;--st-side:#1b241f;--st-side2:#243029;--st-line:#3a4b42;--st-ink:#e3e7e2;--st-soft:#a3b5ae;--st-acc:#8fbfa3;--st-btn:#35503f}
+html[data-stc="white"]:has(#main .studio){--desk:#eceef1;--st-side:#f7f8fa;--st-side2:#eceff3;--st-line:#c3c8d0;--st-ink:#1f2633;--st-soft:#4f5869;--st-acc:#2f3b52;--st-btn:#2f3b52}
+:root[data-theme="dark"][data-stc="white"]:has(#main .studio){--desk:#16181c;--st-side:#1e2127;--st-side2:#272b33;--st-line:#3d434e;--st-ink:#e4e6ea;--st-soft:#a4aab4;--st-acc:#c7cdd8;--st-btn:#3a4150}
+/* 둘레: 왼쪽 칸·위 탭·도구 막대·곁 칸이 같은 남빛 토큰을 씀 (안의 단추·글자도 따라옴) */
+.studio .stside,body.stnav .studio .stside{--paper:var(--st-side);--paper-2:var(--st-side2);--edge:var(--st-line);--ink:var(--st-ink);--ink-soft:var(--st-soft);--faint:var(--st-soft);--sepia:var(--st-goldt);background:var(--st-side);border-color:var(--st-line);color:var(--st-ink);box-shadow:inset 3px 0 0 var(--st-acc);font-family:var(--ui-font)}
+.studio .sttabs{--edge:var(--st-line);--ink:var(--st-ink);--ink-soft:var(--st-soft);--faint:var(--st-soft);border-bottom-color:var(--st-line)}
+.studio .sttab{font-family:var(--ui-font)} .studio .sttab.on{box-shadow:inset 0 2px 0 var(--st-gold);color:var(--ink)} .studio .sttab:hover{background:color-mix(in srgb,var(--st-acc) 8%,transparent)}
+.studio .toolbar{--edge:var(--st-line);--ink:var(--st-ink);--ink-soft:var(--st-soft);--faint:var(--st-soft);--paper-2:var(--st-side2)}
+.studio .toolbar .btn{font-family:var(--ui-font)} .studio .toolbar .btn.ink,.studio .stside .btn.ink{background:var(--st-btn);color:var(--st-btnink);border-color:var(--st-btn)}
+.studio .writegrid>aside{--paper:var(--st-side);--paper-2:var(--st-side2);--edge:var(--st-line);--ink:var(--st-ink);--ink-soft:var(--st-soft);--faint:var(--st-soft);--sepia:var(--st-goldt);color:var(--st-ink)}
+.studio .writegrid>aside .calfold{display:none}   /* 달력은 성장의 자리(묵상·오늘)에 — 글방 곁 칸에서는 뺌 */
+.studio .notebook{box-shadow:var(--shadow),0 0 0 1px color-mix(in srgb,var(--st-line) 45%,transparent)}   /* 종이는 그대로, 둘레와의 경계만 또렷하게 */
+:root[data-theme="dark"] .studio .notebook{box-shadow:var(--shadow),0 0 0 1px color-mix(in srgb,var(--st-gold) 26%,transparent)}
+html:has(#main .studio) .navline{background:var(--st-line)}
+/* 휴대폰: 탭이 흐려지지 않으니 아래 메뉴와 서랍의 색이 단서 */
+@media (max-width:700px){ html:has(#main .studio) nav{background:var(--st-side);border-top-color:var(--st-line)} html:has(#main .studio) nav button:not(.navroom):not(.navai){color:var(--st-soft)} }
+body.stnav .studio .stside{background:var(--st-side)} body.stnav .stback{background:rgba(15,20,32,.45)}
+/* 문턱 넘기: 바탕이 0.5초 동안 남빛으로 번지고, 금빛 한 줄이 위에서 한 번 그어짐 (나갈 때는 짧게). 동작 줄이기면 색만 바로 */
+@media (prefers-reduced-motion:no-preference){
+  html,body{transition:background-color .5s ease}
+  body.stenter .studio::before{content:"";position:fixed;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--st-gold),transparent);box-shadow:0 0 12px var(--st-glow);transform-origin:left;animation:stline .9s ease-out both;z-index:120;pointer-events:none}
+  body.stenter .studio .notebook,body.stenter .studio .sthome{animation:strise .35s ease-out both}
+  body.stleave{transition:background-color .25s}
+}
+@keyframes stline{0%{transform:scaleX(0);opacity:1}70%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+@keyframes strise{from{transform:translateY(4px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){ body:has(#main .studio) nav button:not(.navroom):not(.navai){transform:none!important;transition:none!important} }
 /* 모양째 쓰는 글 칸 <w-ed> (2026-10-30): 꾸밈은 글 칸이 직접 보이고, 거울 층은 같은 모양으로 겹쳐 맞춤법·AI 표시만 */
 w-ed{display:block;position:relative;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;outline:none;cursor:text;tab-size:4;-webkit-user-select:text;user-select:text}
 w-ed.isempty::before{content:attr(data-ph);content:attr(data-ph) / "";position:absolute;top:0;left:0;right:0;padding:inherit;box-sizing:border-box;color:var(--faint);-webkit-text-fill-color:var(--faint);pointer-events:none;white-space:pre-wrap}
@@ -2118,7 +2155,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="863dddb31e";
+const APP_BUILD="d8ea46d6a8";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3153,7 +3190,13 @@ function render(){
   if(AI_MODE==="research"&&$("#aipanel")) rsDraw();   // 원고가 바뀌면 그 원고의 조사 대화로
   { const r=$(".sttabrow"), on=r?.querySelector(".sttab.on"); if(on){ const a=on.getBoundingClientRect(), b=r.getBoundingClientRect(); if(a.left<b.left||a.right>b.right) r.scrollLeft+=a.left-b.left-12; } }   // 지금 보는 탭이 탭 줄 밖에 숨지 않게 (휴대폰)
   if(keep&&keep.e===editId&&$("#wbody")){ $("#wtitle").value=keep.t; $("#wbody").value=keep.b; if(keep.p!=null&&$("#wpassage")) $("#wpassage").value=keep.p; grow(); countW(); }
+  stSwitch();
 }
+// 창작의 자리로 들어오고 나갈 때: 한 번만 문턱 표시 · 브라우저 위 띠 색도 둘레 색으로
+let ST_IN=false;
+function stSwitch(){ const now=!!document.querySelector("#main .studio"); if(now===ST_IN) return; ST_IN=now; const b=document.body;
+  b.classList.remove("stenter","stleave"); void b.offsetWidth; b.classList.add(now?"stenter":"stleave"); clearTimeout(stSwitch.t); stSwitch.t=setTimeout(()=>b.classList.remove("stenter","stleave"),1000);
+  const tc=document.getElementById("themecolor"); if(tc) tc.content=getComputedStyle(document.documentElement).getPropertyValue("--desk").trim()||tc.content; }
 // ───────── 쓰던 글 임시 보관 (간직 전 탭 이동·앱 종료·새로 고침에도 사라지지 않게) ─────────
 const DKEY="seojae.draft";
 let draftT;
@@ -4498,6 +4541,8 @@ const FS_STEPS=[15,16,17,18,19,20,22,24,26];
 function fontStep(d){ const L=applyLook(); const cur=+L.fs||(isTouch()?17:18); let i=FS_STEPS.findIndex(x=>x>=cur); if(i<0) i=FS_STEPS.length-1; i=Math.max(0,Math.min(FS_STEPS.length-1,i+d)); lookSet("fs",FS_STEPS[i]); toast(`글자 크기 ${FS_STEPS[i]}`); grow(); }
 function lookSet(k,v){ const L=applyLook(); if(v==null||v===""||v===0) delete L[k]; else L[k]=v; try{ localStorage.setItem("seojae.look",JSON.stringify(L)); }catch(_){} applyLook(); const b=$("#wbody"); if(b) b.style.setProperty("--penink",penInk()); if(tab==="settings") render(); }
 const PAPERS=[["","기본(밝기 따라)",""],["#fbf7ee","크림","#2e2721"],["#ffffff","흰 종이","#222222"],["#f3efe2","미색","#2e2721"],["#eef5e6","연두","#2b3326"],["#e9f1f7","하늘","#223040"],["#f8ecec","연분홍","#3a2626"],["#1f1b17","검은 종이","#e8dfcf"]];
+const stColor=()=>{ try{ const v=localStorage.getItem("seojae.stColor")||""; return ["forest","white"].includes(v)?v:""; }catch(_){ return ""; } };
+function stColorSet(v){ try{ localStorage.setItem("seojae.stColor",v); }catch(_){} if(v) document.documentElement.dataset.stc=v; else delete document.documentElement.dataset.stc; toast(v?"글방 둘레 색을 바꿨습니다 — 글방에 들어가 보세요":"글방 둘레를 「새벽 남빛」으로"); render(); }
 function lookSection(){
   const L=applyLook(), fs=+L.fs||0; let theme="light"; try{ theme=localStorage.getItem("seojae.theme")||"light"; }catch(_){}
   const dot=(bg,n,on,fn)=>`<span class="inkdot ${on?"on":""}" title="${n}" style="background:${bg};width:24px;height:24px" onclick="${fn}"></span>`;
@@ -4505,6 +4550,7 @@ function lookSection(){
     <div class="row" style="gap:10px;align-items:baseline"><p class="label" style="margin:0">화면 꾸미기 <small class="hint" style="display:inline">· 이 기기만 — 휴대폰과 컴퓨터를 따로</small></p></div>
     <div class="lookgrid">
       <div class="setrow"><span class="k">도움말 모드</span><button type="button" class="twsw ${HELP_ON?"on":""}" style="width:auto" role="switch" aria-checked="${HELP_ON}" data-help="켜면 단추·메뉴에 마우스를 올렸을 때 쓰임새 카드가 뜹니다 (이 기기만)" onclick="helpSet(!HELP_ON);this.classList.toggle('on',HELP_ON);this.querySelector('em').textContent=HELP_ON?'켬':'끔'"><span class="sw"><i></i></span><span class="twt"><b>단추 설명 보기</b><small>마우스를 올리면 쓰임새가 카드로</small></span><em>${HELP_ON?"켬":"끔"}</em></button></div>
+      <div class="setrow"><span class="k">글방 둘레</span><div class="pills">${[["","새벽 남빛","기본 — 파랑 계열·낮은 채도, 금빛 등불 (전문가 추천)"],["forest","숲 그늘","초록 계열 — 오래 쓰기 편하고 덜 차가움"],["white","흰 작업대","색을 빼고 종이만 떠 보이게"]].map(([v,n,d])=>`<button class="pill ${stColor()===v?"on":""}" title="${d}" onclick="stColorSet('${v}')">${n}</button>`).join("")}</div><small class="hint" style="display:block;width:100%">글방(창작의 자리)에 들어가면 둘레 색이 바뀝니다. 종이는 그대로. 이 기기만.</small></div>
       <div class="setrow"><span class="k">밝기</span><div class="pills">${[["light","밝게","기기가 야간 모드여도 항상 밝은 종이 화면"],["dark","어둡게","항상 어두운 밤 서재 화면"],["auto","기기 따라","기기의 주간·야간 모드를 그대로"]].map(([v,n,d])=>`<button class="pill ${theme===v?"on":""}" data-tip="${d}" onclick="setTheme('${v}')">${n}</button>`).join("")}</div></div>
       <div class="setrow"><span class="k">글자 크기</span><div class="pills">${[["",isTouch()?"보통(17)":"보통(18)"],[16,"작게"],[20,"크게"],[22,"더 크게"],[26,"아주 크게"]].map(([v,n])=>`<button class="pill ${(fs||"")===v?"on":""}" onclick="lookSet('fs',${v===""?"''":v})">${n}</button>`).join("")}</div></div>
       <div class="setrow"><span class="k">종이 색</span><div class="row" style="gap:7px;flex-wrap:wrap;padding-top:4px">${PAPERS.map(([bg,n,ink])=>dot(bg||"linear-gradient(135deg,#fbf7ee 50%,#29231d 50%)",n,(L.bg||"")===bg,`lookSet('bg','${bg}');lookSet('ink','${(L.ink&&L.inkManual)?L.ink:ink}')`)).join("")}</div></div>
