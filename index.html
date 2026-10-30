@@ -1612,7 +1612,7 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .fsbtn{font:inherit;border:1px solid var(--edge);background:var(--paper-2);border-radius:999px;min-width:34px;height:30px;cursor:pointer;color:var(--ink-soft);font-size:13px;padding:0 8px}
 .fsbtn:hover{border-color:var(--deco)}
 /* 임시 보관 표시 */
-.card-index.nv .nvhide{display:none} .scenebar{margin:4px 0 10px;border:1px solid var(--edge);border-radius:10px;padding:6px 12px;background:var(--field-bg);font-family:var(--ui-font)} .scenebar>summary{cursor:pointer;font-size:13.5px;color:var(--ink-soft)} .scenebar>summary small{color:var(--faint);margin-left:6px} .scenebar .sceneform{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px 12px;margin-top:8px} .scenebar .sceneform>.hint{grid-column:1/-1} .scxlist{border-top:1px dashed var(--edge);margin-top:8px} .scxrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:4px 10px;align-items:end;padding:6px 0;border-bottom:1px dashed var(--edge)} .scxrow>b,.scxrow>small{grid-column:1/-1}
+.nmng .pill:has(input:checked){background:var(--ink);color:var(--paper);border-color:var(--ink)} .card-index.nv .nvhide{display:none} .scenebar{margin:4px 0 10px;border:1px solid var(--edge);border-radius:10px;padding:6px 12px;background:var(--field-bg);font-family:var(--ui-font)} .scenebar>summary{cursor:pointer;font-size:13.5px;color:var(--ink-soft)} .scenebar>summary small{color:var(--faint);margin-left:6px} .scenebar .sceneform{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px 12px;margin-top:8px} .scenebar .sceneform>.hint{grid-column:1/-1} .scxlist{border-top:1px dashed var(--edge);margin-top:8px} .scxrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:4px 10px;align-items:end;padding:6px 0;border-bottom:1px dashed var(--edge)} .scxrow>b,.scxrow>small{grid-column:1/-1}
 .draftstamp{font-family:var(--ui-font);font-size:12.5px;color:var(--faint)} .draftstamp.busy{color:var(--sepia)}
 /* 스티커 창: 컴퓨터에서는 끌어서 화면 가장자리에 붙일 수 있습니다 */
 .stk-palette.dock-l{left:14px;top:50%;bottom:auto;transform:translateY(-50%);width:min(300px,calc(100vw - 24px))}
@@ -1889,7 +1889,7 @@ const IS_LOCAL=/^(localhost|127\.0\.0\.1|\[::1\]|192\.168\.|10\.)/.test(location
 const GAS=!!CONN;                        // 구글 서버를 쓰는지
 let NEED_CONNECT=!CONN&&!IS_LOCAL, AUTH_FAIL=false;
 async function gcall(fn,...args){
-  if(fn==="coWrite"&&args[0]&&typeof args[0]==="object"&&!Array.isArray(args[0])) args[0]={...args[0],callName:callName()};   // AI가 나를 부를 때 쓸 호칭
+  if((fn==="coWrite"||fn==="reviewMs")&&args[0]&&typeof args[0]==="object"&&!Array.isArray(args[0])){ const cw=editId&&S.writings.find(x=>x.id===editId), mm=(cw&&wMs(cw))||S.manuscripts.find(x=>x.id===ROOM_MS), G2=mm?.genre==="novel"?ngOf(mm):null; args[0]={...args[0],callName:callName(),...(G2?{ng:{n:G2.n,rule:G2.rule}}:{})}; }   // AI가 나를 부를 호칭 · 소설 장르 관례   // AI가 나를 부를 때 쓸 호칭
   // 본문을 글자(text/plain)로 보내면 브라우저가 따로 허락을 묻지 않아 구글 서버에 바로 닿습니다
   const r=await fetch(CONN.u,{method:"POST",body:JSON.stringify({key:CONN.k,fn,args}),signal:AbortSignal.timeout?AbortSignal.timeout(fn==="saveData"?120000:fn==="cmtIndex"?300000:180000):undefined});
   let j; try{ j=await r.json(); }catch(_){ throw new Error(`구글 서버가 알아볼 수 없는 답을 보냈습니다 (${r.status}) — 잠시 뒤 다시 해 보세요`); }
@@ -2155,7 +2155,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="d8ea46d6a8";
+const APP_BUILD="d32afc50da";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -5982,7 +5982,8 @@ function roomNewMs(){ ROOM_NEW=true; ROOM_CODEX=null; ROOM_MAP=false; render(); 
 function roomNewHtml(){ return `<section class="sheet roommain newms"><p class="label" style="margin:0">새 원고</p>
   <input id="nmtitle" class="title-in" placeholder="가제 (예: 새벽에 머문 말씀)" style="margin:8px 0 14px" autofocus enterkeyhint="done" onkeydown="if(event.key==='Enter'&&!event.isComposing){ event.preventDefault(); createMs(); }">
   <p class="sub" style="margin:0 0 8px">어떤 성격의 글인가요? 고른 성격에 맞게 부·장 이름, 새 꼭지의 틀, 목표 단위, 검토 관점, 책 모양이 달라집니다. 나중에 바꿀 수 있습니다.</p>
-  <div class="genres">${Object.entries(GENRES).map(([k,g],i)=>`<label class="gcard" ondblclick="nmDbl('${k}')" title="두 번 누르면 이 성격으로 바로 원고를 만듭니다"><input type="radio" name="nmg" value="${k}" ${i===0?"checked":""}><b>${g.n}</b><span>${g.d}</span><small>${g.parts[0]}·${g.parts[1]} · ${g.item} · 목표 ${g.unit==="매"?"원고지 매수":g.unit==="자"?"글자 수":"편 수"}</small></label>`).join("")}</div>
+  <div class="genres">${Object.entries(GENRES).map(([k,g],i)=>`<label class="gcard" ondblclick="nmDbl('${k}')" title="두 번 누르면 이 성격으로 바로 원고를 만듭니다"><input type="radio" name="nmg" value="${k}" ${i===0?"checked":""} onchange="document.getElementById('nmng').hidden=this.value!=='novel'"><b>${g.n}</b><span>${g.d}</span><small>${g.parts[0]}·${g.parts[1]} · ${g.item} · 목표 ${g.unit==="매"?"원고지 매수":g.unit==="자"?"글자 수":"편 수"}</small></label>`).join("")}</div>
+  <div id="nmng" class="nmng" hidden><p class="sub" style="margin:10px 0 6px">어떤 장르인가요? <small class="hint" style="display:inline">— 노트 종류·플롯 단계·점검 문항·AI가 아는 장르 관례가 그 장르에 맞춰집니다 (나중에 원고 정보에서 바꿀 수 있음)</small></p><div class="pills"><label class="pill"><input type="radio" name="nmng" value="" checked hidden>고르지 않음</label>${Object.entries(NOVEL_GENRES).map(([k,g])=>`<label class="pill"><input type="radio" name="nmng" value="${k}" hidden>${esc(g.n)}</label>`).join("")}</div></div>
   <div class="row" style="gap:6px;margin-top:14px"><button class="btn ink" onclick="createMs()">원고 만들기</button><button class="btn ghost" onclick="ROOM_NEW=false;render()">그만</button></div></section>`; }
 async function nmDbl(k){ getSelection()?.removeAllRanges(); const r=document.querySelector(`input[name="nmg"][value="${k}"]`); if(r) r.checked=true; const ti=$("#nmtitle"); if(!ti) return;
   if(!ti.value.trim()){ const t=((await askText(`${GENRES[k].n} 원고의 가제 — 나중에 바꿀 수 있습니다`,"",{ok:"원고 만들기"}))||"").trim(); if(!t) return; ti.value=t; }
@@ -5990,10 +5991,10 @@ async function nmDbl(k){ getSelection()?.removeAllRanges(); const r=document.que
 // 새 원고 양식에 가제를 적어 두고 다른 곳으로 가거나 앱을 닫으면, 원고부터 만들어 둡니다 (글은 나중에)
 function nmAuto(){ if(!ROOM_NEW||tab!=="room") return false; const t=($("#nmtitle")?.value||"").trim(); if(!t) return false; createMs(true); return true; }
 function createMs(auto){ const t=($("#nmtitle")?.value||"").trim(); if(!t) return toast("가제를 적어 주세요"); const g=document.querySelector('input[name="nmg"]:checked')?.value||"free";
-  const m={id:uid(),title:t,items:[],parts:{},genre:g}; ROOM_NEW=false; S.manuscripts.push(m); ROOM_MS=m.id; ST_ACT="ms:"+m.id; { const i=STUDIO_TABS.indexOf("new"); if(i>=0) STUDIO_TABS.splice(i,1); } stAdd(ST_ACT); try{ localStorage.setItem("seojae.roomMs",m.id); }catch(_){} save(); flushSave(); roomBase(); toast(auto?`「${t}」 원고를 만들어 두었습니다 (글은 아직 없어도 서가에 남습니다)`:`「${t}」 ${GENRES[g].n} 원고를 만들었습니다. ${jo(GENRES[g].parts[0],"을","를")} 나누고 ${jo(GENRES[g].item,"을","를")} 넣어 보세요`); render(); }
+  const ng=g==="novel"?document.querySelector('input[name="nmng"]:checked')?.value||"":""; const m={id:uid(),title:t,items:[],parts:{},genre:g,...(ng?{exportOpts:{ngenre:ng}}:{})}; ROOM_NEW=false; S.manuscripts.push(m); ROOM_MS=m.id; ST_ACT="ms:"+m.id; { const i=STUDIO_TABS.indexOf("new"); if(i>=0) STUDIO_TABS.splice(i,1); } stAdd(ST_ACT); try{ localStorage.setItem("seojae.roomMs",m.id); }catch(_){} save(); flushSave(); roomBase(); toast(auto?`「${t}」 원고를 만들어 두었습니다 (글은 아직 없어도 서가에 남습니다)`:`「${t}」 ${GENRES[g].n} 원고를 만들었습니다. ${jo(GENRES[g].parts[0],"을","를")} 나누고 ${jo(GENRES[g].item,"을","를")} 넣어 보세요`); render(); }
 async function roomRename(mid){ const m=S.manuscripts.find(x=>x.id===mid); const t=(await askText("원고 가제",m.title)||"").trim(); if(!t||t===m.title) return; m.title=t; save(); render(); }
 async function addPart(mid,lv){ const m=S.manuscripts.find(x=>x.id===mid); if(!m||m.rule) return;
-  const pn=G(m).parts[lv===1?0:1], t=(await askText(lv===1?`${pn} 이름 (예: 1${pn} · 머무는 아침)`:`${pn} 이름 (예: 시편의 아침)`,"")||"").trim(); if(!t) return;
+  const pn=G(m).parts[lv===1?0:1], ex1=m.genre==="novel"?(ngOf(m)?.part||`1${pn} · 그해 겨울`):m.genre==="paper"?`제1${pn} · 서론`:`1${pn} · 머무는 아침`, ex2=m.genre==="novel"?"첫 만남":m.genre==="paper"?"연구의 배경":"시편의 아침", t=(await askText(lv===1?`${pn} 이름 (예: ${ex1})`:`${pn} 이름 (예: ${ex2})`,"")||"").trim(); if(!t) return;
   const id=uid(), first=!m.items.some(x=>isPart(x)&&(m.parts||{})[x.slice(5)]); m.parts=m.parts||{}; m.parts[id]={t,lv};
   if(first) m.items.unshift("part:"+id); else m.items.push("part:"+id); m.updated=new Date().toISOString(); save(); render();
   toast(first?`${jo(pn,"을","를")} 맨 위에 더했습니다. 아래 ${G(m).item}들이 이 ${pn}에 들어갑니다`:`${jo(pn,"을","를")} 맨 아래에 더했습니다. 끌거나 ↑↓로 자리를 옮기세요`); }
@@ -6511,14 +6512,17 @@ function resList(m){ const q=RES_Q.trim().toLowerCase(); let L=(m.research||[]).
   if(q) L=L.filter(r=>[r.t,r.body,r.au,r.yr,r.src,r.note,r.url,...(r.tags||[])].join(" ").toLowerCase().includes(q));
   const by={new:(a,b)=>(b.u||b.at||"").localeCompare(a.u||a.at||""),title:(a,b)=>(a.t||"").localeCompare(b.t||"","ko"),author:(a,b)=>(a.au||"힣").localeCompare(b.au||"힣","ko")||(a.yr||"").localeCompare(b.yr||"")}[RES_SORT];
   return L.slice().sort(by); }
+// 자료 칸 예시: 원고 성격(·소설 장르)에 맞게 — 신앙서 예시가 소설·논문에 나오지 않게
+const RES_EX={free:{au:"칼빈",yr:"1557",pg:"212",pub:"생명의말씀사",jn:"신학과 선교",src:"2장, 기도"},novel:{au:"김훈",yr:"2001",pg:"45",pub:"생각의나무",jn:"문학동네",src:"3장, 등대지기의 하루"},paper:{au:"Calvin, John",yr:"1557",pg:"212",pub:"Eerdmans",jn:"신학과 선교",src:"제2장 2절"}};
+const resEx=(m,k)=>(m?.genre==="novel"&&ngOf(m)?.ex?.[k]!=null?ngOf(m).ex[k]:null)??(RES_EX[m?.genre]||RES_EX.free)[k]??RES_EX.free[k];
 function resForm(m,r){ r=r||{}; const RP=resP(m), sel=resKinds(m).map(k=>`<option value="${esc(k)}" ${(r.kind||RP.dflt)===k?"selected":""}>${RES_IC[k]||"◎"} ${esc(k)}</option>`).join("");
   return `<div class="resed" id="resed"><div class="row" style="gap:8px;align-items:center"><b>${r.id?"자료 고치기":"새 자료"}</b><span class="spacer"></span><small class="muted">⌘S·⌘↩ 간직 · Esc 간직하고 닫기</small><button class="btn small ghost" onclick="resClose()">✕</button></div>
     <div class="resgrid"><label class="cxf"><span>종류</span><select id="rs-k">${sel}</select></label><label class="cxf wide"><span>제목 (책·글·자료 이름)</span><input id="rs-t" value="${esc(r.t||"")}" placeholder="${esc(RP.tPh)}"></label></div>
     <label class="cxf"><span>내용 · 원문 <small>인용할 문장은 그대로</small></span><textarea id="rs-b" class="cxp-text" placeholder="${esc(RP.bPh)}">${esc(r.body||"")}</textarea></label>
-    <div class="resgrid four"><label class="cxf"><span>저자</span><input id="rs-au" value="${esc(r.au||"")}" placeholder="칼빈"></label><label class="cxf"><span>연도</span><input id="rs-yr" value="${esc(r.yr||"")}" placeholder="1557"></label><label class="cxf"><span>쪽</span><input id="rs-pg" value="${esc(r.pg||"")}" placeholder="212"></label><label class="cxf"><span>확인</span><select id="rs-ok">${["","확인함","확인 못 함"].map(v=>`<option value="${v}" ${(r.ok||"")===v?"selected":""}>${v||"—"}</option>`).join("")}</select></label></div>
+    <div class="resgrid four"><label class="cxf"><span>저자</span><input id="rs-au" value="${esc(r.au||"")}" placeholder="${esc(resEx(m,"au"))}"></label><label class="cxf"><span>연도</span><input id="rs-yr" value="${esc(r.yr||"")}" placeholder="${esc(resEx(m,"yr"))}"></label><label class="cxf"><span>쪽</span><input id="rs-pg" value="${esc(r.pg||"")}" placeholder="${esc(resEx(m,"pg"))}"></label><label class="cxf"><span>확인</span><select id="rs-ok">${["","확인함","확인 못 함"].map(v=>`<option value="${v}" ${(r.ok||"")===v?"selected":""}>${v||"—"}</option>`).join("")}</select></label></div>
     <div class="resgrid four"><label class="cxf"><span>출판지</span><input id="rs-loc" value="${esc(r.loc||"")}" placeholder="서울"></label><label class="cxf"><span>역자 <small>번역서면</small></span><input id="rs-tr" value="${esc(r.tr||"")}" placeholder="김철수"></label><label class="cxf"><span>DOI</span><input id="rs-doi" value="${esc(r.doi||"")}" placeholder="10.xxxx/…"></label><label class="cxf"><span>접속일 <small>웹이면</small></span><input id="rs-acc" value="${esc(r.acc||"")}" placeholder="2026-10-30"></label></div>
-    <div class="resgrid four"><label class="cxf"><span>출판사</span><input id="rs-pub" value="${esc(r.pub||"")}" placeholder="생명의말씀사"></label><label class="cxf"><span>학술지·실린 책 <small>논문이면</small></span><input id="rs-jn" value="${esc(r.jn||"")}" placeholder="신학과 선교"></label><label class="cxf"><span>권·호</span><input id="rs-vol" value="${esc(r.vol||"")}" placeholder="45권 2호"></label><label class="cxf"><span>국내/국외</span><select id="rs-lang">${["","국내","국외"].map(v=>`<option value="${v}" ${(r.lang||"")===v?"selected":""}>${v||"(글자로 짐작)"}</option>`).join("")}</select></label></div>
-    <div class="resgrid"><label class="cxf wide"><span>주소 (웹)</span><input id="rs-url" value="${esc(r.url||"")}" placeholder="https://"></label><label class="cxf"><span>태그 <small>쉼표로</small></span><input id="rs-tags" value="${esc((r.tags||[]).join(", "))}" placeholder="2장, 기도"></label></div>
+    <div class="resgrid four"><label class="cxf"><span>출판사</span><input id="rs-pub" value="${esc(r.pub||"")}" placeholder="${esc(resEx(m,"pub"))}"></label><label class="cxf"><span>학술지·실린 책 <small>논문이면</small></span><input id="rs-jn" value="${esc(r.jn||"")}" placeholder="${esc(resEx(m,"jn"))}"></label><label class="cxf"><span>권·호</span><input id="rs-vol" value="${esc(r.vol||"")}" placeholder="45권 2호"></label><label class="cxf"><span>국내/국외</span><select id="rs-lang">${["","국내","국외"].map(v=>`<option value="${v}" ${(r.lang||"")===v?"selected":""}>${v||"(글자로 짐작)"}</option>`).join("")}</select></label></div>
+    <div class="resgrid"><label class="cxf wide"><span>주소 (웹)</span><input id="rs-url" value="${esc(r.url||"")}" placeholder="https://"></label><label class="cxf"><span>태그 <small>쉼표로</small></span><input id="rs-tags" value="${esc((r.tags||[]).join(", "))}" placeholder="${esc(resEx(m,"src"))}"></label></div>
     ${r.src&&!(r.au||r.yr)?`<label class="cxf"><span>예전 출처 한 줄</span><input id="rs-s" value="${esc(r.src)}"></label>`:""}
     <label class="cxf"><span>내 생각 <small>이 자료를 어디에 어떻게 쓸지</small></span><textarea id="rs-n" class="cxp-text small">${esc(r.note||"")}</textarea></label>
     <div class="cxp-save"><button class="btn ghost" onclick="resClose()">나오기</button><button class="btn ink" onclick="resSave('${m.id}')">간직 <small style="opacity:.6">⌘S</small></button></div></div>`; }
@@ -6650,16 +6654,31 @@ const cxIc=c=>CX_ICON[c.kind]||"◎";
 // 이 노트(또는 지금 원고)의 형식
 function cxPK(c){ if(c&&cxOrphan(c)) return "common"; const m=S.manuscripts.find(x=>x.id===(c?.ms||ROOM_MS)); return m&&CX_PROF[m.genre]?m.genre:"free"; }
 // 소설 장르마다 노트 종류·기본 칸을 더함 (판타지 스킬·아이템 · 무협 무공·경지 · 로판 가문·작위 · 로맨스 관계 변화). 저장은 원고의 m.exportOpts.ngenre 한 칸
-const NOVEL_GENRES={
-  fantasy:{n:"판타지·현대판타지",kinds:["스킬·능력","아이템","세력·길드","종족·몬스터","체계·등급"],tpl:{"스킬·능력":["등급","소유자","효과","대가·제약","처음 나온 화"],아이템:["등급","소유자","효과","출처","처음 나온 화"],"세력·길드":["우두머리","근거지","목표","적대 세력"],"종족·몬스터":["서식지","등급","특징","약점"],"체계·등급":["단계 순서","단계별 특징","도달한 인물"]}},
-  wuxia:{n:"무협",kinds:["무공","경지","문파·세가","병기","비급·영약"],tpl:{무공:["계열","등급","소유자","초식","약점·제약","처음 나온 화"],경지:["단계 순서","특징","도달한 인물"],"문파·세가":["정·사·마","장문인·가주","근거지","대표 무공","적대"],병기:["종류","주인","내력"],"비급·영약":["효능","내력","행방"]}},
-  romfan:{n:"로맨스판타지",kinds:["가문","작위·신분","사교계","마법·축복"],tpl:{가문:["작위","영지","가주","문장","세력","원작 속 결말"],"작위·신분":["서열","의무","특권"],사교계:["행사","주최","참석자","소문"],"마법·축복":["능력","대가","가진 사람"]}},
-  romance:{n:"로맨스",kinds:["관계 변화","직장·무대"],tpl:{"관계 변화":["두 사람","시작","전환점(화)","지금"],"직장·무대":["분위기","주요 인물"]}},
-  mystery:{n:"추리·스릴러",kinds:["사건 기록","증거","용의자 알리바이"],tpl:{"사건 기록":["일시","장소","피해자","발견자"],증거:["발견 장면","가리키는 사람","진짜·가짜(레드 헤링)"],"용의자 알리바이":["주장","실제","드러나는 화"]}}};
+const NOVEL_GENRES={   // 장르를 고르면 노트 종류·플롯 단계·점검 문항·설계 카드 안내·AI 관례·예시 글이 함께 바뀜 (2026-10-30 팀장님 「장르 맞춤으로」)
+  fantasy:{n:"판타지·현대판타지",kinds:["스킬·능력","아이템","세력·길드","종족·몬스터","체계·등급"],tpl:{"스킬·능력":["등급","소유자","효과","대가·제약","처음 나온 화"],아이템:["등급","소유자","효과","출처","처음 나온 화"],"세력·길드":["우두머리","근거지","목표","적대 세력"],"종족·몬스터":["서식지","등급","특징","약점"],"체계·등급":["단계 순서","단계별 특징","도달한 인물"]},
+    stages:["일상·결핍","부름·각성","시련·성장","위기·대가","결전","새 질서"],ck:["능력·체계(등급·대가)가 앞에서 정한 규칙과 맞는가?","주인공이 얻은 힘에 대가나 한계가 있는가 — 너무 쉽게 얻지 않았는가?"],ctg:"독자가 받는 보상 — 성장·사이다·반전",rule:"능력·마법 체계의 규칙과 대가를 지킴. 상태창·등급 표기는 작가가 정한 형식대로",part:"1부 · 회귀"},
+  wuxia:{n:"무협",kinds:["무공","경지","문파·세가","병기","비급·영약"],tpl:{무공:["계열","등급","소유자","초식","약점·제약","처음 나온 화"],경지:["단계 순서","특징","도달한 인물"],"문파·세가":["정·사·마","장문인·가주","근거지","대표 무공","적대"],병기:["종류","주인","내력"],"비급·영약":["효능","내력","행방"]},
+    stages:["은원의 시작","입문·수련","강호 출도","은원과 대결","경지의 벽","대결전"],ck:["무공 경지·초식이 설정과 맞는가 — 경지를 너무 쉽게 넘지 않았는가?","호칭·말투(하오체·존칭·문파 서열)가 시대와 인물에 맞는가?"],ctg:"독자가 받는 보상 — 성장·통쾌함·은원의 매듭",rule:"강호 예법과 호칭(대협·소협·사형·장문인), 하오체·고풍 말투, 경지 체계를 지킴",part:"1권 · 입문"},
+  romfan:{n:"로맨스판타지",kinds:["가문","작위·신분","사교계","마법·축복"],tpl:{가문:["작위","영지","가주","문장","세력","원작 속 결말"],"작위·신분":["서열","의무","특권"],사교계:["행사","주최","참석자","소문"],"마법·축복":["능력","대가","가진 사람"]},
+    stages:["빙의·회귀","원작 파악","원작 비틀기","갈등·오해","위기","새 결말"],ck:["원작(빙의 전 소설)의 설정과 바꾼 흐름이 어긋나지 않는가?","작위·예법·호칭이 신분에 맞는가?"],ctg:"독자에게 남길 것 — 설렘·통쾌함·원작이 바뀌는 순간",rule:"작위·예법·사교계 관례를 지키고, 원작 설정과 바뀐 흐름을 구분",part:"1부 · 원작 속으로"},
+  romance:{n:"로맨스",kinds:["관계 변화","직장·무대"],tpl:{"관계 변화":["두 사람","시작","전환점(화)","지금"],"직장·무대":["분위기","주요 인물"]},
+    stages:["만남","끌림","장애·오해","가까워짐","위기·이별","결실"],ck:["두 사람의 감정선이 이 장면에서 한 걸음 움직였는가?","설렘이 설명이 아니라 행동·대사·몸짓으로 보이는가?"],ctg:"독자에게 남길 감정 — 설렘·애틋함",rule:"감정선의 단계와 두 사람 시점의 균형, 동의와 존중",part:"1부 · 첫 만남"},
+  mystery:{n:"추리·스릴러",kinds:["사건 기록","증거","용의자 알리바이"],tpl:{"사건 기록":["일시","장소","피해자","발견자"],증거:["발견 장면","가리키는 사람","진짜·가짜(레드 헤링)"],"용의자 알리바이":["주장","실제","드러나는 화"]},
+    stages:["사건 발생","수사·탐문","가짜 단서","반전","추리·대면","해결·여파"],ck:["독자에게도 단서를 공정하게 보여 주었는가 — 작가만 아는 정보로 풀지 않는가?","가짜 단서(레드 헤링)와 진짜 단서의 균형이 맞는가?"],ctg:"독자에게 줄 단서·의심",rule:"공정한 단서(독자도 풀 수 있게), 시간표·알리바이의 일관성",part:"1부 · 사건"},
+  sf:{n:"SF",kinds:["기술·장치","용어","세계 규칙","세력·국가"],tpl:{"기술·장치":["원리","한계·부작용","쓰는 사람","처음 나온 장면"],용어:["뜻","처음 나온 장면","비슷한 말"],"세계 규칙":["번호","내용","예외","어기면"],"세력·국가":["체제","지도자","목표"]},
+    stages:["낯선 세계","균열","발견","대가","선택","새 세계"],ck:["과학·기술 설정이 정한 세계 규칙 안에서 움직이는가?","낯선 용어를 처음 나올 때 풀어 주었는가 — 설명 덩어리 없이?"],ctg:"독자에게 남길 질문 — 이 세계가 묻는 것",rule:"세계 규칙의 일관성, 용어는 처음 나올 때 풀고 설명 덩어리(인포덤프)를 피함",part:"1부 · 착륙"},
+  history:{n:"역사",kinds:["실존 인물","사건 연표","시대 고증","관직·제도"],tpl:{"실존 인물":["생몰년","관직·신분","사료 속 모습","이 소설에서 바꾼 것"],"사건 연표":["연도","사건","출처"],"시대 고증":["항목","당시 모습","출처"],"관직·제도":["품계","하는 일","호칭"]},
+    stages:["시대의 문","격변","선택","역사의 물결","결단","남은 것"],ck:["연도·관직·호칭·물건이 시대 고증과 맞는가(출처 확인)?","사료와 다르게 바꾼 곳을 작가가 알고 의도했는가?"],ctg:"독자에게 남길 것 — 그 시대 사람의 마음",rule:"사료와 허구를 구분하고 시대 고증(관직·호칭·물건)을 지킴. 바꾼 사실은 작가가 정한 것만",part:"1부 · 계유년 겨울",ex:{au:"국사편찬위원회",t:"조선왕조실록",yr:"",pub:"",jn:"역사와 현실",pg:"세조 1년 6월"}},
+  literary:{n:"순문학",kinds:["상징·모티프","장면 이미지"],tpl:{"상징·모티프":["뜻","처음 나온 곳","되돌아오는 곳"],"장면 이미지":["감각","이어지는 감정"]},
+    stages:["처음 장면","흔들림","깊어짐","깨달음·전환","끝 장면"],ck:["인물의 내면을 설명하지 않고 감각·이미지로 드러내는가?","되풀이되는 상징·모티프가 뜻을 쌓아 가는가?"],ctg:"독자에게 남길 여운",rule:"문장의 결과 리듬, 내면은 설명보다 이미지로, 결말을 닫지 않을 자유",part:"1부 · 물의 계절"},
+  youth:{n:"청소년",kinds:["성장 단계","관계 지도"],tpl:{"성장 단계":["처음 모습","흔들린 일","배운 것","달라진 모습(화·장)"],"관계 지도":["친구·가족·선생","갈등","변화"]},
+    stages:["익숙한 세계","균열","방황","부딪힘","선택","한 뼘 자람"],ck:["주인공의 고민이 그 나이에 실제로 있을 법한가?","어른의 교훈이 아니라 주인공이 스스로 깨닫는가?"],ctg:"독자에게 남길 것 — 나도 그랬다는 공감",rule:"그 나이의 말투와 고민, 교훈조를 피하고 스스로 깨닫게",part:"1부 · 열일곱"}};
+const ngOf=m=>NOVEL_GENRES[m?.exportOpts?.ngenre]||null;
+const ngOfW=w=>{ const m=w?wMs(w):null; return m?.genre==="novel"?ngOf(m):null; };
 const NG_CACHE={};
 const cxP=(k,m)=>{ const base=CX_PROF[k]||CX_PROF.free; if(k!=="novel") return base; const mm=m||S.manuscripts.find(x=>x.id===ROOM_MS), g=mm?.exportOpts?.ngenre, G2=NOVEL_GENRES[g]; if(!G2) return base;
   return NG_CACHE[g]||(NG_CACHE[g]={...base,kinds:[...base.kinds.filter(x=>x!=="기타"),...G2.kinds,"기타"],tpl:{...base.tpl,...G2.tpl}}); };
-function ngenreSet(mid,v){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; m.exportOpts={...(m.exportOpts||{}),ngenre:v||undefined}; m.updated=new Date().toISOString(); save(); toast(v?`「${NOVEL_GENRES[v].n}」 노트 종류를 더했습니다 — ${NOVEL_GENRES[v].kinds.join(" · ")}`:"기본 노트 종류로 돌아갑니다"); render(); }
+function ngenreSet(mid,v){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; m.exportOpts={...(m.exportOpts||{}),ngenre:v||undefined}; m.updated=new Date().toISOString(); save(); toast(v?`「${NOVEL_GENRES[v].n}」에 맞췄습니다 — 노트 종류(${NOVEL_GENRES[v].kinds.join("·")}), 플롯 단계, 점검 문항, AI 관례`:"기본 소설로 돌아갑니다"); render(); }
 let CX_PAGE_K="free";   // 지금 열린 노트 화면의 형식 (기본 칸 채우기에 씀)
 let CX_VIEW=(()=>{ try{ return localStorage.getItem("seojae.cxView")||"list"; }catch(_){ return "list"; } })(), CX_KIND="";
 function cxView(v){ CX_VIEW=v; try{ localStorage.setItem("seojae.cxView",v); }catch(_){} render(); }
@@ -6783,8 +6802,8 @@ ${groups.map(([k,l])=>`<h2>${e(CX_ICON[k]||"◎")} ${e(k||"기타")}</h2>${l.map
 <footer>아침 서재에서 만든 설정집입니다. 항목 이름 옆 주소(#…)로 항목마다 바로 연결할 수 있습니다.</footer></main></body></html>`;
   download(`${(m?.title||"원고").replace(/[\\/:*?"<>|]/g,"")} ${(P.export||"노트").replace(/·/g,"_")}${secret?"(작가용)":""}.html`,html,"text/html"); toast(secret?"작가용 설정집(비밀 포함)을 내려받았습니다":"공개용 설정집을 내려받았습니다 — 비밀은 빠졌습니다. 이 파일을 보내거나 웹에 올리면 됩니다"); }
 // 플롯 보드 (노벨라 파트·블록 · 타입탁 플롯 보드): 단계(열) 안에 장면 카드. 카드에는 장면에 나온 인물이 저절로 붙음
-const PLOT_SETS={"5단":["발단","전개","위기","절정","결말"],"3막":["1막 · 설정","2막 · 대립","3막 · 해결"],"기승전결":["기","승","전","결"]};
-const plotStages=m=>Array.isArray(m?.plot?.stages)&&m.plot.stages.length?m.plot.stages:PLOT_SETS["5단"];
+const PLOT_SETS={"5단":["발단","전개","위기","절정","결말"],"영웅의 여정":["일상","부름","시련","심연","귀환"],"3막":["1막 · 설정","2막 · 대립","3막 · 해결"],"기승전결":["기","승","전","결"]};
+const plotStages=m=>Array.isArray(m?.plot?.stages)&&m.plot.stages.length?m.plot.stages:(ngOf(m)?.stages||PLOT_SETS["5단"]);   // 장르를 고르면 그 장르의 흐름이 기본
 async function plotSetStages(mid,v){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return; let st=PLOT_SETS[v];
   if(v==="직접"){ const t=await askText("단계 이름을 쉼표로 (예: 프롤로그, 만남, 엇갈림, 진실, 에필로그)",plotStages(m).join(", ")); if(t==null) return render(); st=t.split(/[,，]/).map(x=>x.trim()).filter(Boolean).slice(0,10); if(!st.length) return render(); }
   m.plot={...(m.plot||{}),stages:st}; m.updated=new Date().toISOString(); save(); render(); }
@@ -7176,7 +7195,7 @@ function scPick(k,which){ const w=cardW(); if(!w) return; const d=scDiffs(w).fin
   else { const o=SC_OLD[k]; if(which==="old") scSplit(d.old,o.keys.length).concat(["","",""]).slice(0,o.keys.length).forEach((v,i)=>metaSet(w.id,o.keys[i],v)); else metaSet(w.id,k,d.cur); }
   save(); scTwinPaint(w); toast("한 가지로 맞췄습니다"); }
 const scDiffHtml=w=>{ const d=scDiffs(w); if(!d.length) return ""; return `<div class="scdiff"><b>두 곳 내용이 다름</b> <small class="muted">— 하나를 고르면 그 내용으로 맞춥니다 (아무것도 지우지 않았습니다)</small>${d.map(x=>`<div class="scdrow"><small>${esc(x.n)}</small><button type="button" class="btn small ghost" onclick="scPick('${x.k}','old')" title="${x.k==="turn"?"곁 칸 장면 정보의 결과":"예전 설계 카드에 적은 것"}">${x.k==="turn"?"장면 정보":"예전 카드"}: ${esc(x.old)}</button><button type="button" class="btn small ghost" onclick="scPick('${x.k}','cur')" title="지금 설계 카드 칸">지금 카드: ${esc(x.cur)}</button></div>`).join("")}</div>`; };
-const cardF=w=>CARD_SETS[cardKindOf(w)?.kind]||CARD_F;
+const cardF=w=>{ const F=CARD_SETS[cardKindOf(w)?.kind]||CARD_F, G2=cardKindOf(w)?.kind==="novel"?ngOfW(w):null; return G2?F.map(x=>x[0]==="ctg"?[x[0],x[1],G2.ctg,...x.slice(3)]:x):F; };
 const ownF=w=>{ const k=cardKindOf(w); return k?.sermon?OWN_F:k?.kind==="essay"?OWN_F.slice(0,3):[]; };   // 에세이: 도입 첫 문단·1인칭 고백·마지막 문단 (기도문 없음)
 // 묵상·설교초안에 이미 사람이 쓴 것 → 카드 칸 칩 (누르면 들어감, 원칙 1-3)
 function secLines(body,re,n){ const L=stripMemo(body||"").split("\n"); let on=false; const out=[]; for(const l of L){ if(/^\s*■/.test(l)){ on=re.test(l); continue; } if(on&&l.trim()&&!/^\s*〔/.test(l)) out.push(l.trim().replace(/^[-·•\d.)\s]+/,"")); if(out.length>=n) break; } return out.filter(Boolean); }
@@ -7849,7 +7868,8 @@ const CK_SETS={sermon:CK_Q,
 CK_SETS.webnovel=["첫 세 줄 안에 독자를 붙잡는 훅(사건·질문·이상한 것)이 있는가?","이 화가 할 일(무엇이 바뀌는가)이 분명한가?","이 화 안에 독자가 받는 보상(해결·반전·성장·사이다)이 하나 있는가?","마지막 문단이 다음 화를 누르게 하는 당김(위기·질문·폭로)으로 끝나는가?","앞 화에서 던진 떡밥을 잊지 않았는가? 새로 던진 떡밥을 메모했는가?","인물의 말과 행동이 설정(월드)과 맞는가?","모바일로 읽기 좋은가 — 문단이 짧고, 설명이 길게 이어지지 않는가?","대사와 서술의 비율이 장면 속도에 맞는가?","분량이 화당 목표에 맞는가?","이 화에서 내가 가장 쓰고 싶었던 장면은 어디인가?"];
 CK_SETS.free=CK_SETS.essay.map((q,i)=>i===3?"처음 읽는 사람도 따라올 수 있는가?":i===4?"맺음이 앞의 내용을 정리하되 새 주장을 덧붙이지 않는가?":q);
 const CK_OPEN=/무엇|어떻게|어디|누구|어느/;   // 답을 적어야 하는 열린 질문 → 한 줄 답 칸
-const ckSet=w=>{ const k=cardKindOf(w)?.kind; if(k==="novel"&&SERIAL(wMs(w))) return "webnovel"; return CK_SETS[k]?k:"free"; }, ckQ=w=>CK_SETS[ckSet(w)];
+const ckSet=w=>{ const k=cardKindOf(w)?.kind; if(k==="novel"){ const g=wMs(w)?.exportOpts?.ngenre, b=SERIAL(wMs(w))?"webnovel":"novel"; return NOVEL_GENRES[g]?b+":"+g:b; } return CK_SETS[k]?k:"free"; },
+  ckQ=w=>{ const [b,g]=ckSet(w).split(":"), Q=[...CK_SETS[b]], G2=NOVEL_GENRES[g]; if(G2){ if(b==="webnovel") Q[5]=G2.ck[0]; else { Q[6]=G2.ck[0]; Q[8]=G2.ck[1]; } } return Q; };   // 장르 문항: 소설은 7·9번, 웹소설은 6번을 장르 것으로
 const ckGet=w=>{ const t=wMeta(w,"chk10"); return t&&Array.isArray(t.a)&&(t.set||"sermon")===ckSet(w)?t:{a:[]}; };   // 예전 답(set 없음)은 설교 질문으로 한 것
 function ckSum(w){ const a=ckGet(w).a, y=a.filter(x=>x?.me==="예").length, n=a.filter(x=>x?.me==="아니오").length; return y||n?` <small class="${n?"warn":"muted"}">${y}/10${n?` · 아니오 ${n}`:""}</small>`:""; }
 function ckOpen(){ const w=cardW(); if(!w) return toast("몇 자 써서 간직되면 점검할 수 있습니다");
