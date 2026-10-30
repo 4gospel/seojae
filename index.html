@@ -290,6 +290,7 @@ w-ed u.wku{text-decoration:underline;text-decoration-color:var(--sepia);text-dec
 w-ed b.wb,.hmirror b.wb{font-weight:700} w-ed .wsep,.hmirror .wsep{display:inline-block;width:100%;text-align:center;letter-spacing:.3em} w-ed i.wi,.hmirror i.wi{font-style:italic}
 w-ed sup.wfn,.hmirror sup.wfn{font:700 .62em/1 Georgia,serif;vertical-align:super;padding:0 1px;color:#a0522d;cursor:pointer} w-ed sup.wfn.en{color:#3d6890}
 html[data-theme="dark"] w-ed sup.wfn{color:#e0a27a} html[data-theme="dark"] w-ed sup.wfn.en{color:#9cc0e6}
+sup.tlmark{font:10px var(--ui-font);color:var(--sepia);margin-left:2px;cursor:help}
 w-ed sup.wfn:hover{background:color-mix(in srgb,var(--sepia) 14%,transparent);border-radius:3px}
 .hmirror mark.wk,.hmirror u.wku,.hmirror b.wb,.hmirror i.wi,.hmirror sup.wfn{visibility:hidden;background:none!important;text-decoration:none} .hmirror b:not(.wb){visibility:visible}
 body.docmode[data-dpaper="wongo"] w-ed.page[data-wg] *{background:none!important;text-decoration:none!important;color:transparent!important;-webkit-text-fill-color:transparent!important}
@@ -1574,7 +1575,7 @@ sup.fnref{color:var(--sepia);font-size:11px;margin-left:1px;cursor:help}
 .fsbtn{font:inherit;border:1px solid var(--edge);background:var(--paper-2);border-radius:999px;min-width:34px;height:30px;cursor:pointer;color:var(--ink-soft);font-size:13px;padding:0 8px}
 .fsbtn:hover{border-color:var(--deco)}
 /* 임시 보관 표시 */
-.card-index.nv .nvhide{display:none} .scenebar{margin:4px 0 10px;border:1px solid var(--edge);border-radius:10px;padding:6px 12px;background:var(--field-bg);font-family:var(--ui-font)} .scenebar>summary{cursor:pointer;font-size:13.5px;color:var(--ink-soft)} .scenebar>summary small{color:var(--faint);margin-left:6px} .scenebar .sceneform{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px 12px;margin-top:8px} .scenebar .sceneform>.hint{grid-column:1/-1}
+.card-index.nv .nvhide{display:none} .scenebar{margin:4px 0 10px;border:1px solid var(--edge);border-radius:10px;padding:6px 12px;background:var(--field-bg);font-family:var(--ui-font)} .scenebar>summary{cursor:pointer;font-size:13.5px;color:var(--ink-soft)} .scenebar>summary small{color:var(--faint);margin-left:6px} .scenebar .sceneform{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px 12px;margin-top:8px} .scenebar .sceneform>.hint{grid-column:1/-1} .scxlist{border-top:1px dashed var(--edge);margin-top:8px} .scxrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:4px 10px;align-items:end;padding:6px 0;border-bottom:1px dashed var(--edge)} .scxrow>b,.scxrow>small{grid-column:1/-1}
 .draftstamp{font-family:var(--ui-font);font-size:12.5px;color:var(--faint)} .draftstamp.busy{color:var(--sepia)}
 /* 스티커 창: 컴퓨터에서는 끌어서 화면 가장자리에 붙일 수 있습니다 */
 .stk-palette.dock-l{left:14px;top:50%;bottom:auto;transform:translateY(-50%);width:min(300px,calc(100vw - 24px))}
@@ -2117,7 +2118,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="c41158c210";
+const APP_BUILD="863dddb31e";
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -6576,7 +6577,7 @@ function codexDel(id){ if(!confirm("이 노트를 지울까요? 글은 그대로
 // kinds 종류 · tpl 종류별 기본 칸("" = 종류 없을 때) · propH/noteH 칸 묶음 이름 · secret 작가만 칸 · rel 관계 이름(없으면 관계 없음) · views 보기 · export 내보내기 이름
 const CX_PROF={
   novel:{kinds:["인물","장소","조직","사물","사건","단서·복선","개념","기타"],tpl:{"단서·복선":["심은 장면","회수 예정 화","회수 장면","독자에게 보이는 정도","가리키는 것"],인물:["나이","직업","외모","성격","말버릇","원하는 것","두려워하는 것","첫 등장"],장소:["위치","분위기","특징"],조직:["우두머리","목적","구성원"],사물:["주인","쓰임·능력"],사건:["때","곳","관련 인물","결과"],개념:["뜻","규칙·한계"],기타:[],"":[]},
-    propH:"속성",propSub:"같은 종류끼리 「표」로 나란히 비교됩니다",noteH:"노트",noteSub:"설정집에 실리는 내용",secret:true,rel:"관계",relSub:"이름 붙은 관계 — 관계도에 선으로 그려집니다",relEx:"아버지, 옛 연인, 소속",views:[["list","카드"],["table","표"],["graph","관계도"]],export:"설정집",
+    propH:"속성",propSub:"같은 종류끼리 「표」로 나란히 비교됩니다 · 시점마다 달라지면 「17 | 12화~ 35」, 「회귀 전: 35 | 회귀 후: 17」",noteH:"노트",noteSub:"설정집에 실리는 내용",secret:true,rel:"관계",relSub:"이름 붙은 관계 — 관계도에 선으로 그려집니다 · 바뀌면 「약혼자 | 15화~ 파혼 | 30화~ 연인」(쓰는 화 기준으로 보임)",relEx:"아버지, 옛 연인 | 20화~ 연인",views:[["list","카드"],["table","표"],["graph","관계도"]],export:"설정집",
     intro:"등장인물·장소마다 항목을 두면 그 이름이 나온 장면이 저절로 모입니다. 종류·속성·관계를 정하면 표와 관계도로 봅니다."},
   paper:{kinds:["용어","학자","문헌","이론","자료","기타"],tpl:{용어:["정의","정의 출처","이 논문에서의 뜻","영문·원어","관련 용어"],학자:["소속·시대","대표 저작","핵심 주장","이 논문에서 쓸 곳"],문헌:["저자","연도","제목","출판·학술지","쪽","핵심 내용","인용할 문장"],이론:["주창자","핵심 개념","적용 범위·한계","관련 문헌"],자료:["출처","수치·내용","확인 여부"],기타:["출처"],"":["정의","출처"]},
     propH:"정의·서지",propSub:"출처를 함께 적습니다 — 「표」로 문헌·용어를 나란히 비교",noteH:"요약과 내 생각",noteSub:"요약(남의 말)과 해석(내 말)을 줄을 나눠 적으면 표절을 막습니다",secret:false,rel:"연결",relSub:"계승·비판·인용·반박 — 개념 지도에 선으로",relEx:"계승, 비판, 인용, 반박",views:[["list","카드"],["table","표"],["graph","개념 지도"]],export:"용어집·문헌표",
@@ -6702,7 +6703,7 @@ function stCodexList(common){ const P=cxP(common?"common":cxPK()), V=P.views.som
     body=`<div class="stviews cwtabs">${tabC("abc","가나다")}${tabC("book","성경 책별")}${tabC("freq","자주 만난 순")}</div>${all.length?inner:`<p class="muted">아직 말씀 노트가 없습니다. 성경 인물·지명·용어처럼 여러 묵상에서 함께 쓰는 노트를 두세요.</p>`}`; }
   else if(V==="table"){ const k=CX_KIND&&CX_KIND!=="-"?CX_KIND:(kinds[0]||""), rows=all.filter(c=>c.kind===k), cols=[...new Set([...(P.tpl[k]||[]),...rows.flatMap(c=>(c.props||[]).map(p=>p.k))])].filter(x=>rows.some(c=>(c.props||[]).some(p=>p.k===x&&p.v)));
     body=!k?`<p class="muted">항목에 종류를 정하면 같은 종류끼리 표로 나란히 봅니다.</p>`:`<div class="cxtablewrap"><table class="cxtable"><thead><tr><th>${CX_ICON[k]||"◎"} ${esc(k)}</th>${cols.map(x=>`<th>${esc(x)}</th>`).join("")}<th>관계</th><th>나온 글</th></tr></thead><tbody>
-      ${rows.map(c=>`<tr><td><a href="#" onclick="stOpen('cx:${c.id}');return false"><b>${esc(c.name)}</b></a></td>${cols.map(x=>`<td>${esc((c.props||[]).find(p=>p.k===x)?.v||"")}</td>`).join("")}<td>${(c.rel||[]).map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`${esc(r.label||"—")}: ${esc(t.name)}`:""; }).filter(Boolean).join("<br>")}</td><td>${codexHits(c).ws.length}</td></tr>`).join("")||`<tr><td colspan="9" class="muted">이 종류의 항목이 없습니다.</td></tr>`}</tbody></table></div>
+      ${rows.map(c=>`<tr><td><a href="#" onclick="stOpen('cx:${c.id}');return false"><b>${esc(c.name)}</b></a></td>${cols.map(x=>`<td>${esc((c.props||[]).find(p=>p.k===x)?.v||"")}</td>`).join("")}<td>${(c.rel||[]).map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`${esc(tlAt(r.label||"")||"—")}: ${esc(t.name)}`:""; }).filter(Boolean).join("<br>")}</td><td>${codexHits(c).ws.length}</td></tr>`).join("")||`<tr><td colspan="9" class="muted">이 종류의 항목이 없습니다.</td></tr>`}</tbody></table></div>
       ${cols.length?"":`<p class="hint">속성을 채우면 열이 생깁니다 (항목 → 「기본 속성 채우기」).</p>`}`;
   } else if(V==="graph") body=cxGraph(cs);
   else { const cardC=c=>{ const p=(c.props||[]).find(x=>x.v); return `<div class="strc cxcard" onclick="stOpen('cx:${c.id}')" role="button" tabindex="0"><b>${cxIc(c)} ${esc(c.name)}</b><span>${esc(p?`${p.k}: ${p.v}`:(c.body||"").slice(0,60))}</span><small>${c.kind?esc(c.kind)+" · ":""}나온 글 ${codexHits(c).ws.length}편${(c.rel||[]).length?` · 관계 ${c.rel.length}`:""}</small>${common?`<button class="btn small ghost cxclaim" onclick="cxCopyMenu('${c.id}',event)" title="원고의 노트로 복사합니다 (원본은 공통에 그대로)">⧉ 내 원고로 복사</button>`:""}</div>`; };
@@ -6770,15 +6771,15 @@ function arcAuto(mid){ const m=S.manuscripts.find(x=>x.id===mid); if(!m) return;
 const PL_COL=["#b0703f","#4f7fa8","#5f8a68","#a0577a","#7d6aa8","#a08a3c","#b0534a","#4e8b8f"];
 // 이야기 시각 정렬 열쇠: 숫자를 자리 맞춰 비교(「D+3」·「3일째」도 숫자로), 비면 맨 뒤
 const stKey=t=>String(t||"").trim()?String(t).replace(/\d+/g,d=>d.padStart(6,"0")):"\uffff";
-function plotTimeHtml(m,ws){ const order=new Map(ws.map((w,i)=>[w.id,i+1])), L=ws.slice().sort((a,b)=>stKey(wMeta(a,"st")).localeCompare(stKey(wMeta(b,"st")))||order.get(a.id)-order.get(b.id)), no=ws.filter(w=>!wMeta(w,"st")).length;
+function plotTimeHtml(m,ws){ const order=new Map(ws.map((w,i)=>[w.id,i+1])), U=sceneUnits(ws), L=U.slice().sort((a,b)=>stKey(a.st).localeCompare(stKey(b.st))||order.get(a.w.id)-order.get(b.w.id)||a.k-b.k), no=U.filter(u=>!u.st).length;   // 한 화 안 장면마다
   return `<p class="hint">이야기 속 시간 순서입니다. 왼쪽 번호는 책 순서 — 번호가 뒤섞인 곳이 시간을 엇갈려 놓은 자리입니다.${no?` 「이야기 시각」이 빈 장면 ${no}개는 맨 뒤에.`:""} (장면 정보 → 이야기 시각)</p>
-    <ol class="ptime">${L.map((w,i)=>{ const o=order.get(w.id), prev=i?order.get(L[i-1].id):0; return `<li class="${prev&&o<prev?"jump":""}"><span class="pto" title="책 순서">${o}</span><b>${esc(wMeta(w,"st")||"—")}</b><a href="#" onclick="go('write',{edit:'${w.id}'});return false">${esc(w.title||"(제목 없음)")}</a><small>${esc([wMeta(w,"pov"),wMeta(w,"loc")].filter(Boolean).join(" · "))}</small></li>`; }).join("")}</ol>`; }
-function plotAlibiHtml(m,ws){ const L=ws.filter(w=>wMeta(w,"st")).sort((a,b)=>stKey(wMeta(a,"st")).localeCompare(stKey(wMeta(b,"st")))), P2=cxScope(m.id).filter(c=>c.kind==="인물"), cell=new Map();
-  L.forEach(w=>{ const inW=codexIn(w.body,m.id).filter(c=>c.kind==="인물"); inW.forEach(c=>cell.set(w.id+"|"+c.id,wMeta(w,"loc")||"✓")); const pv=P2.find(c=>cxNames(c).includes(wMeta(w,"pov"))); if(pv) cell.set(w.id+"|"+pv.id,(wMeta(w,"loc")||"✓")+" ◉"); });
-  const cols=P2.filter(c=>L.some(w=>cell.has(w.id+"|"+c.id)));
+    <ol class="ptime">${L.map((u,i)=>{ const w=u.w, o=order.get(w.id)+(u.k?u.k/10:0), prev=i?order.get(L[i-1].w.id)+(L[i-1].k?L[i-1].k/10:0):0; return `<li class="${prev&&o<prev?"jump":""}"><span class="pto" title="책 순서">${order.get(w.id)}${u.k?`·${u.k+1}`:""}</span><b>${esc(u.st||"—")}</b><a href="#" onclick="go('write',{edit:'${w.id}'});return false">${esc(w.title||"(제목 없음)")}${u.k?` · 장면 ${u.k+1}`:""}</a><small>${esc([u.pov,u.loc].filter(Boolean).join(" · "))}</small></li>`; }).join("")}</ol>`; }
+function plotAlibiHtml(m,ws){ const L=sceneUnits(ws).filter(u=>u.st).sort((a,b)=>stKey(a.st).localeCompare(stKey(b.st))), P2=cxScope(m.id).filter(c=>c.kind==="인물"), cell=new Map(), uk=u=>u.w.id+"#"+u.k;   // 장면 단위 (한 화 안 장면마다)
+  L.forEach(u=>{ const inW=codexIn(u.txt,m.id).filter(c=>c.kind==="인물"); inW.forEach(c=>cell.set(uk(u)+"|"+c.id,u.loc||"✓")); const pv=P2.find(c=>cxNames(c).includes(u.pov)); if(pv) cell.set(uk(u)+"|"+pv.id,(u.loc||"✓")+" ◉"); });
+  const cols=P2.filter(c=>L.some(u=>cell.has(uk(u)+"|"+c.id)));
   if(!L.length||!cols.length) return `<p class="muted">장면 정보에 「이야기 시각」과 「장소」를 적고, 본문에 인물 이름이 나오면 「누가 언제 어디에 있었나」 표가 됩니다 — 알리바이·동선 점검용.</p>`;
   return `<p class="hint">인물 × 이야기 시각 → 그 장면의 장소 (◉ 시점 인물). 같은 시각에 두 곳에 있는 인물은 붉게 표시됩니다. 본문에 이름만 나와도(「그는 정원에 있었다」처럼 다른 곳 이야기라도) 그 장면 장소로 세니, 붉은 칸은 직접 살펴 주세요. 읽기만 하는 표입니다.</p><div class="cxtablewrap"><table class="cxtable palibi"><thead><tr><th>이야기 시각</th><th>장면</th>${cols.map(c=>`<th><i class="wdot sm" style="background:${cxCol(c)}"></i> ${esc(c.name)}</th>`).join("")}</tr></thead><tbody>
-    ${L.map(w=>`<tr><td><b>${esc(wMeta(w,"st"))}</b></td><td><a href="#" onclick="go('write',{edit:'${w.id}'});return false">${esc(w.title||"(제목 없음)")}</a></td>${cols.map(c=>{ const v=cell.get(w.id+"|"+c.id)||"", same=v&&L.some(x=>x.id!==w.id&&wMeta(x,"st")===wMeta(w,"st")&&cell.get(x.id+"|"+c.id)&&(wMeta(x,"loc")||"")!==(wMeta(w,"loc")||"")); return `<td class="${same?"clash":""}">${esc(v)}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>`; }
+    ${L.map(u=>`<tr><td><b>${esc(u.st)}</b></td><td><a href="#" onclick="go('write',{edit:'${u.w.id}'});return false">${esc(u.w.title||"(제목 없음)")}${u.k?` · 장면 ${u.k+1}`:""}</a></td>${cols.map(c=>{ const v=cell.get(uk(u)+"|"+c.id)||"", same=v&&L.some(x=>uk(x)!==uk(u)&&x.st===u.st&&cell.get(uk(x)+"|"+c.id)&&(x.loc||"")!==(u.loc||"")); return `<td class="${same?"clash":""}">${esc(v)}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>`; }
 // ───────── 설정 점검 (소설): 설정해 둔 인물·장소·복선이 글에서 실제로 쓰였는지 ─────────
 // 기계로 세는 것(등장 지도·장면 계획 대조·복선 회수)은 볼 때마다 이름·다른 이름으로 새로 셈 — 저장하지 않음. AI 점검은 단추를 누를 때만, 결과는 이 화면에만(카드 → 고칠지는 글쓴이가)
 const chkEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
@@ -7114,8 +7115,15 @@ function scTwinPaint(w){ if(!w||editId!==w.id) return; document.querySelectorAll
 function paintSceneWarn(w){ const b=$(".sceneform .scwarn"); if(b) b.outerHTML=sceneWarn(w); }
 const sceneWarn=w=>{ const d=scDiffs(w); return `<p class="scwarn hint" ${d.length?"":"hidden"} style="margin:2px 0 6px;color:var(--sepia)">⚠ 설계 카드와 두 곳 내용이 다름 ${d.length}곳 — 설계 카드에서 고르세요</p>`; };
 // 소설 장면 정보는 종이 위 접는 띠로 (곁 칸을 펴지 않아도 — 2026-10-30 소설가팀)
+const SCX_RE=/^\s*([＊*※✻⁂◇◆]\s*){1,5}$/;
+const sceneParts=w=>String(w?.body||"").split("\n").reduce((A,l)=>{ if(SCX_RE.test(l)) A.push(""); else A[A.length-1]+=(A[A.length-1]?"\n":"")+l; return A; },[""]);
+const scxGet=w=>{ const v=wMeta(w,"scx"); return Array.isArray(v)?v:[]; };
+function scxSet(wid,i,k,v){ const w=S.writings.find(x=>x.id===wid); if(!w) return; const L=scxGet(w).map(x=>({...x})); while(L.length<=i) L.push({}); L[i][k]=String(v||"").trim(); metaSet(wid,"scx",L); save(); }
+// 장면 단위: 첫 장면은 원래 장면 정보 칸, 둘째부터는 scx (시간순·알리바이 표가 장면마다)
+function sceneUnits(ws){ return ws.flatMap(w=>{ const P=sceneParts(w), X=scxGet(w); return P.map((t,k)=>k===0?{w,k,st:wMeta(w,"st"),pov:wMeta(w,"pov"),loc:wMeta(w,"loc"),txt:t}:{w,k,st:X[k-1]?.st||"",pov:X[k-1]?.pov||"",loc:X[k-1]?.loc||"",txt:t}); }); }
 function sceneBarHtml(w){ let o=false; try{ o=localStorage.getItem("seojae.scenebar")==="1"; }catch(_){} const sm=["pov","loc","when"].map(k=>wMeta(w,k)).filter(Boolean).join(" · ");
-  return `<details class="scenebar" ${o?"open":""} ontoggle="try{localStorage.setItem('seojae.scenebar',this.open?'1':'0')}catch(_){}"><summary>장면 정보 <small>${esc(sm||"시점·장소·때 — 눌러서 적기")}</small></summary>${sceneFormHtml(w)}</details>`; }
+  const P=sceneParts(w), X=scxGet(w), more=P.length>1?`<div class="scxlist"><p class="hint" style="margin:6px 0 2px">이 화에는 「* * *」로 나눈 장면이 ${P.length}개 있습니다 — 위는 장면 1, 아래는 장면 2부터 (시간순·알리바이 표가 장면마다 갈라 봅니다)</p>${P.slice(1).map((t,i)=>`<div class="scxrow"><b>장면 ${i+2}</b><small class="muted">${esc(t.replace(/\s+/g," ").trim().slice(0,30))}…</small>${[["pov","시점 인물"],["loc","장소"],["st","이야기 시각"]].map(([k,n])=>`<label class="field"><span>${n}</span><input value="${esc(X[i]?.[k]||"")}" onchange="scxSet('${w.id}',${i},'${k}',this.value)"></label>`).join("")}</div>`).join("")}</div>`:"";
+  return `<details class="scenebar" ${o?"open":""} ontoggle="try{localStorage.setItem('seojae.scenebar',this.open?'1':'0')}catch(_){}"><summary>장면 정보${P.length>1?` · 장면 ${P.length}개`:""} <small>${esc(sm||"시점·장소·때 — 눌러서 적기")}</small></summary>${sceneFormHtml(w)}${more}</details>`; }
 function sceneFormHtml(w){ const nv=isNovelW(w); return `<div class="sceneform">${scSyncLater(w)}<p class="hint" style="margin:0 0 4px">장면 정보 — 코르크보드 카드에 보입니다${nv?" · 설계 카드와 같은 칸이라 한쪽에서 고치면 같이 바뀝니다":""}</p>${nv?sceneWarn(w):""}${SCENE_F.map(([k,n])=>`<label class="field"><span>${nv&&k==="turn"?"결과 — 무엇이 바뀌나 <small>(= 장면이 할 일)</small>":n}</span><input data-sk="${k}" value="${esc(wMeta(w,k))}" onchange="saveScene('${w.id}','${k}',this.value)"></label>`).join("")}${(()=>{ const m=wMs(w), p=m&&m.genre==="novel"?chkPlan(m,w):[]; return p.length?`<p class="hint scplan">${p.map(f=>`${f.soft?"·":"⚠"} ${esc(f.t)}`).join("<br>")}</p>`:""; })()}</div>`; }
 function scPick(k,which){ const w=cardW(); if(!w) return; const d=scDiffs(w).find(x=>x.k===k); if(!d) return;
   if(k==="turn"){ if(which==="old"){ cardSet("c1",d.old); } else metaSet(w.id,"turn",d.cur); }
@@ -7491,7 +7499,7 @@ const cxCol=c=>CX_COLOR[c?.kind]||"#8a7a66";
 const CX_W={strong:["강함",3.4,""],"":["보통",1.7,""],weak:["약함",1.3,"6 5"]};
 const CX_TONE={good:["좋음","#3f9a5a","우호·사랑·신뢰"],bad:["나쁨","#c94a4a","적대·원한·갈등"],mixed:["복잡","#d8a23c","애증·긴장·거래"]};
 const cxToneCol=t=>CX_TONE[t]?.[1]||"";
-function cxGraph(cs,centerId,o){ o=o||{}; const ids=new Set(cs.map(c=>c.id)), E=cs.flatMap(c=>(c.rel||[]).filter(r=>ids.has(r.to)).map(r=>({a:c.id,b:r.to,l:r.label||"",t:CX_TONE[r.tone]?r.tone:"",m:!!r.mutual,w:CX_W[r.w]?r.w:""})));
+function cxGraph(cs,centerId,o){ o=o||{}; const ids=new Set(cs.map(c=>c.id)), E=cs.flatMap(c=>(c.rel||[]).filter(r=>ids.has(r.to)).map(r=>({a:c.id,b:r.to,l:tlAt(r.label||""),t:CX_TONE[r.tone]?r.tone:"",m:!!r.mutual,w:CX_W[r.w]?r.w:""})));
   if(!cs.length) return `<p class="muted">항목이 없습니다.</p>`; if(!E.length) return `<p class="muted">아직 이어진 것이 없습니다. 항목에서 「＋ ${esc(cxP(cxPK()).rel||"관계")}」로 이름 붙은 관계(${esc(cxP(cxPK()).relEx||"")}…)를 이으면 여기에 그려집니다.</p>`;
   const deg=id=>E.filter(e=>e.a===id||e.b===id).length, N=cs.slice().sort((a,b)=>deg(b.id)-deg(a.id)), W=o.full?1100:o.big?(N.length>9?1000:860):N.length>9?980:760, H=o.big&&!o.full?Math.max(600,Math.min(1000,440+N.length*32)):o.full?Math.max(660,Math.min(960,420+N.length*22)):N.length>9?Math.min(900,320+N.length*26):Math.max(420,Math.min(700,260+N.length*14)), cx=W/2, cy=H/2, R=Math.min(W,H)/2-80, P={};
   if(centerId){ const ci=N.findIndex(c=>c.id===centerId); if(ci>0) N.unshift(N.splice(ci,1)[0]); }
@@ -7556,7 +7564,12 @@ document.addEventListener("keydown",e=>{ const box=document.querySelector(".cxpi
   else if(e.key==="Enter"&&i>=0&&!e.isComposing){ e.preventDefault(); e.stopPropagation(); cxPickTake(L[i].dataset.pick); } },true);
 document.addEventListener("mousedown",e=>{ const b=e.target.closest?.(".cxpick [data-pick]"); if(b){ e.preventDefault(); cxPickTake(b.dataset.pick); } else if(!e.target.closest?.(".cxpick")&&!e.target.closest?.(".codexpage .cxprop [data-pv]")) cxPickClose(); });
 // 속성 값에 든 항목 이름은 링크로 (표·카드·팝업)
-const cxValHtml=(v,mid)=>v?cxLinkify(String(v),{id:""},mid):"";
+// 시점별 값: 「|」로 나눈 값 — 「12화~ 값」은 그 화부터, 「회귀 전: 값」은 이름표. 쓰기 화면에서는 그 화 기준, 그 밖에서는 마지막 값 (2026-10-30 웹소설)
+function tlParse(v){ return String(v||"").split("|").map(x=>x.trim()).filter(Boolean).map(x=>{ let m=x.match(/^(\d+)\s*화\s*(?:~|부터)?\s*[:：]?\s*(.*)$/); if(m) return {from:+m[1],v:m[2]}; m=x.match(/^([^:：\d][^:：]{0,11})[:：]\s*(.+)$/); if(m) return {lab:m[1].trim(),v:m[2]}; return {from:0,v:x}; }); }
+const tlNow=()=>{ if(tab==="write"&&editId){ const w=S.writings.find(x=>x.id===editId), m=w&&wMs(w); if(m) return epNo(m,w.id)||Infinity; } return Infinity; };
+function tlAt(v,n){ const t=String(v||""); if(!t.includes("|")) return t; const P=tlParse(t); if(P.some(x=>x.lab)) return P.map(x=>x.lab?`${x.lab} ${x.v}`:x.v).join(" / "); n=n??tlNow(); const c=P.filter(x=>(x.from||0)<=n); return (c.length?c[c.length-1]:P[0]).v; }
+const tlMark=v=>String(v||"").includes("|")?`<sup class="tlmark" title="${esc(tlParse(v).map(x=>x.lab?`${x.lab}: ${x.v}`:x.from?`${x.from}화부터: ${x.v}`:`처음: ${x.v}`).join(" → "))}">⟳</sup>`:"";
+const cxValHtml=(v,mid)=>v?cxLinkify(tlAt(String(v)),{id:""},mid)+tlMark(v):"";
 // 항목을 누르면 이어진 항목이 은은하게 빛남 — 영향력(관계 수 + 서로의 글에 나온 횟수)이 클수록 더 밝게, 이어지지 않은 항목은 흐리게
 function cxGlow(g,id){ const c=codexLive().find(x=>x.id===id); if(!c) return; const ns=cxNames(c), W={};
   g.querySelectorAll("[data-cxn]").forEach(el=>{ const x=codexLive().find(y=>y.id===el.dataset.cxn); if(!x||x.id===id) return; let w=0;
@@ -7576,7 +7589,7 @@ function cxHoverAt(x,y){ const t=$("#wbody"), m=$("#hmirror"); if(!t||!m||tab!==
   for(const c of L) for(const n of cxNames(c)){ let i=tx.indexOf(n); while(i>=0){ if(off>=i&&off<=i+n.length){ const rg=document.createRange(); rg.setStart(nd,i); rg.setEnd(nd,i+n.length); const b=rg.getBoundingClientRect(); if(x>=b.left-1&&x<=b.right+1&&y>=b.top-1&&y<=b.bottom+1) return {c,b}; } i=tx.indexOf(n,i+1); } }
   return null; }
 function cxHoverShow(c,b){ if(CXH.id===c.id&&CXH.el) return; cxHoverHide(true); const pv=(c.props||[]).filter(p=>p.v).slice(0,2), rels=[...(c.rel||[]).map(r=>({t:codexLive().find(y=>y.id===r.to),r})),...cxScope(cxHome(c)).filter(x=>x.id!==c.id).flatMap(x=>(x.rel||[]).filter(r=>r.to===c.id).map(r=>({t:x,r,back:true})))].filter((x,i,A)=>x.t&&A.findIndex(y=>y.t?.id===x.t.id)===i).slice(0,3);   // 한 사람은 한 번만
-  const el=document.createElement("div"); el.className="cxhov"; el.innerHTML=`<p class="cxhn"><i class="wdot" style="background:${cxCol(c)}"></i><b>${esc(c.name)}</b><small>${esc(c.kind||"")}</small></p>${pv.length?`<p class="cxhp">${pv.map(p=>`<span><em>${esc(p.k)}</em> ${esc(String(p.v).slice(0,24))}</span>`).join("")}</p>`:""}${rels.length?`<p class="cxhr">${rels.map(({t,r,back})=>`<span><i class="wdot sm" style="background:${cxCol(t)}"></i>${esc(t.name)} <small style="${r.tone?`color:${cxToneCol(r.tone)}`:""}">${back?"← ":""}${esc(r.label||"")}</small></span>`).join("")}</p>`:""}${c.body?`<p class="cxhb">${esc(c.body.replace(/\s+/g," ").slice(0,60))}${c.body.length>60?"…":""}</p>`:""}<button type="button" class="cxho" onclick="cxHoverHide(true);stOpen('cx:${c.id}')">열기 ›</button>`;
+  const el=document.createElement("div"); el.className="cxhov"; el.innerHTML=`<p class="cxhn"><i class="wdot" style="background:${cxCol(c)}"></i><b>${esc(c.name)}</b><small>${esc(c.kind||"")}</small></p>${pv.length?`<p class="cxhp">${pv.map(p=>`<span><em>${esc(p.k)}</em> ${esc(tlAt(String(p.v)).slice(0,24))}</span>`).join("")}</p>`:""}${rels.length?`<p class="cxhr">${rels.map(({t,r,back})=>`<span><i class="wdot sm" style="background:${cxCol(t)}"></i>${esc(t.name)} <small style="${r.tone?`color:${cxToneCol(r.tone)}`:""}">${back?"← ":""}${esc(tlAt(r.label||""))}</small></span>`).join("")}</p>`:""}${c.body?`<p class="cxhb">${esc(c.body.replace(/\s+/g," ").slice(0,60))}${c.body.length>60?"…":""}</p>`:""}<button type="button" class="cxho" onclick="cxHoverHide(true);stOpen('cx:${c.id}')">열기 ›</button>`;
   document.body.appendChild(el); const W=el.offsetWidth, H=el.offsetHeight; let x=Math.min(innerWidth-W-8,Math.max(8,b.left)), y=b.bottom+6; if(y+H>innerHeight-8) y=b.top-H-6; el.style.left=x+"px"; el.style.top=(y+scrollY)+"px";
   el.onmouseenter=()=>clearTimeout(CXH.t); el.onmouseleave=()=>cxHoverHide(); CXH.el=el; CXH.id=c.id; }
 function cxHoverHide(now){ clearTimeout(CXH.t); const go=()=>{ CXH.el?.remove(); CXH.el=null; CXH.id=""; }; if(now) go(); else CXH.t=setTimeout(go,220); }
@@ -7592,8 +7605,8 @@ function cxPop(id,e){ const g=e?.target?.closest?.("[data-cxg]"); if(!g) return 
   const row=(h,v)=>`<div class="cxpk">${esc(h)}</div><div class="cxpv">${v}</div>`;
   const html=`<div class="cxpop" data-id="${c.id}"><p class="cxpn"><i class="wdot" style="background:${cxCol(c)}"></i>${name(c)}<small class="muted">${esc(c.kind||"")}</small><button type="button" class="x" onclick="this.closest('.cxpop').remove()">✕</button></p><div class="cxpb">
     ${(c.props||[]).filter(p=>p.v).map(p=>row(p.k,cxValHtml(p.v,cxHome(c)))).join("")}
-    ${rels.length?row("관계",rels.map(({t,r})=>`${name(t)} <small style="${r.tone?`color:${cxToneCol(r.tone)}`:""}">${esc(r.label||"")}${r.mutual?" ⇄":""}</small>`).join("<br>")):""}
-    ${back.length?row("관계 (받음)",back.map(({t,r})=>`${name(t)} <small style="${r.tone?`color:${cxToneCol(r.tone)}`:""}">${esc(r.label||"")}</small>`).join("<br>")):""}
+    ${rels.length?row("관계",rels.map(({t,r})=>`${name(t)} <small style="${r.tone?`color:${cxToneCol(r.tone)}`:""}">${esc(tlAt(r.label||""))}${r.mutual?" ⇄":""}</small>`).join("<br>")):""}
+    ${back.length?row("관계 (받음)",back.map(({t,r})=>`${name(t)} <small style="${r.tone?`color:${cxToneCol(r.tone)}`:""}">${esc(tlAt(r.label||""))}</small>`).join("<br>")):""}
     ${[...where].map(([k,xs])=>row(k,xs.map(name).join(", "))).join("")}
     ${c.body?row("노트",esc(c.body).slice(0,200).replace(/\n/g,"<br>")+(c.body.length>200?"…":"")):""}
     ${!(c.props||[]).some(p=>p.v)&&!rels.length&&!back.length&&!where.size&&!c.body?`<p class="muted" style="margin:4px 0">아직 적은 것이 없습니다 — 이름을 누르면 항목이 열립니다.</p>`:""}</div></div>`;
@@ -7644,7 +7657,7 @@ function cxShowTog(mid,kind,k){ const m=S.manuscripts.find(x=>x.id===mid); if(!m
 async function cxColAdd(mid,kind){ const k=(await askText(`「${kind}」 모두에 더할 속성 이름`,"")||"").trim(); if(!k) return; const now=new Date().toISOString(); let n=0;
   cxScope(mid).filter(c=>c.kind===kind).forEach(c=>{ c.props=c.props||[]; if(c.props.some(p=>p.k===k)) return; c.props.push({k,v:""}); c.updated=now; n++; });
   const m=S.manuscripts.find(x=>x.id===mid), rows=cxScope(mid).filter(c=>c.kind===kind), cur=cxShown(m,kind,rows); try{ localStorage.setItem(cxShowKey(mid,kind),JSON.stringify([...cur,k])); }catch(_){} save(); render(); toast(`「${k}」 칸을 ${n}개 항목에 더했습니다 — 항목을 열어 채우세요`); }
-function cxRelChips(c){ return (c.rel||[]).map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`<a href="#" class="cxrchip" onclick="stOpen('cx:${t.id}');return false" title="${esc(r.label||"")}${r.tone?` · ${CX_TONE[r.tone][0]}`:""}"><i class="wdot sm" style="background:${cxCol(t)}"></i>${esc(t.name)}<small style="${r.tone?`color:${cxToneCol(r.tone)}`:""}">${esc(r.label||"")}</small></a>`:""; }).filter(Boolean).join(""); }
+function cxRelChips(c){ return (c.rel||[]).map(r=>{ const t=codexLive().find(y=>y.id===r.to); return t?`<a href="#" class="cxrchip" onclick="stOpen('cx:${t.id}');return false" title="${esc(tlAt(r.label||""))}${r.tone?` · ${CX_TONE[r.tone][0]}`:""}"><i class="wdot sm" style="background:${cxCol(t)}"></i>${esc(t.name)}<small style="${r.tone?`color:${cxToneCol(r.tone)}`:""}">${esc(tlAt(r.label||""))}</small></a>`:""; }).filter(Boolean).join(""); }
 // ───────── 스쳐 간 것: 이름만 등록된 자잘한 요소 — 어디에 몇 번 나왔는지 보고, 커지면 정식 요소로 ─────────
 const MINOR_UP=(st)=>st.apps.length>=3||st.total>=6;   // 3편 넘게 나오거나 6번 넘게 → 「⬆ 올릴 만함」
 function minorStats(m){ const ws=msList(m), T=ws.map(chkText); return cxMinor(m.id).map(c=>{ const n=T.map(t=>chkCount(c,t)), apps=n.map((x,i)=>x?i:-1).filter(i=>i>=0); return {c,n,apps,total:n.reduce((a,x)=>a+x,0)}; }); }
