@@ -2634,7 +2634,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="d8de8df651"; const APP_VER="2.6";   // 판 번호: 배포할 때마다 도구/판올리기.py 가 0.1씩 올림 (1.9 다음은 2.0) — 손으로 고치지 말 것
+const APP_BUILD="fc30a07dad"; const APP_VER="2.7";   // 판 번호: 배포할 때마다 도구/판올리기.py 가 0.1씩 올림 (1.9 다음은 2.0) — 손으로 고치지 말 것
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -3069,7 +3069,7 @@ function setGroups(){ const R=S.reminder||{}, rOn=!!(R.on&&R.clock!==false), p=S
      {k:"news",ic:"✉",t:"새 소식",st:"",sum:NEWS[0]?`${esc(NEWS[0].date)} · ${esc(NEWS[0].title)}`:"아직 없음",body:newsSection()},
      {k:"app",ic:"▢",t:"앱으로 설치하기",st:isApp()?"ok":"off",pill:isApp()?"설치됨":"선택",sum:isApp()?"이 기기는 앱으로 쓰는 중 · PC·안드로이드·아이폰 설치법":"PC·크롬·안드로이드·아이폰 사파리 — 기기마다 설치하는 법",body:appSection()},
      {k:"manual",ic:"❧",t:"사용 설명서",st:"",sum:"간단 매뉴얼 · 상세 매뉴얼 — 웹으로 보기 · PDF 받기",body:manualSection()},
-     {k:"studio",ic:"▤",t:"관리 스튜디오 (공개판)",st:"",sum:"공개판을 쓰는 기기들의 익명 합계 — 방문 기기·기능 사용·판 번호",body:`<section class="sheet tape c compact"><p class="label">관리 스튜디오 (공개판)</p><p class="sub">공개판(<a href="https://4gospel.github.io/seojae-open/" target="_blank" rel="noopener">4gospel.github.io/seojae-open ↗</a>)을 쓰는 기기들이 하루 한 번 보낸 익명 합계를 유튜브 스튜디오처럼 한눈에 봅니다. 개인 서버가 공개 창구에서 대신 받아 오며, 이 앱은 아무 숫자도 보내지 않습니다.</p><div class="row" style="margin-top:8px"><button class="btn ink" onclick="studioOpen()">관리 스튜디오 열기</button></div></section>`}]},
+     {k:"studio",ic:"▤",t:"관리 스튜디오 (공개판)",st:"",sum:"공개판을 쓰는 기기들의 익명 합계 — 방문 기기·기능 사용·판 번호",body:`<section class="sheet tape c compact"><p class="label">관리 스튜디오 (공개판)</p><p class="sub">공개판(<a href="https://morningseojae.github.io/seojae-open/" target="_blank" rel="noopener">morningseojae.github.io/seojae-open ↗</a>)을 쓰는 기기들이 하루 한 번 보낸 익명 합계를 유튜브 스튜디오처럼 한눈에 봅니다. 개인 서버가 공개 창구에서 대신 받아 오며, 이 앱은 아무 숫자도 보내지 않습니다.</p><div class="row" style="margin-top:8px"><button class="btn ink" onclick="studioOpen()">관리 스튜디오 열기</button></div></section>`}]},
    {id:"morning",t:"아침",ic:"☀︎",acc:"var(--bible)",rows:[
      {k:"plan",ic:"✚",t:"성경 통독",st:"",sum:`${esc(cur.name)}${plansAlso().length?` + ${plansAlso().map(x=>esc(planName(x.id))).join(" + ")}`:""} · ${p.mode==="date"?"달력대로":"이어 읽기"} · ${(p.day||0)+1}일째`,body:planSettings()},
      {k:"devo",ic:"❦",t:"오늘의 묵상 자료",st:"",sum:`${esc(devoSrc().name)} · 갈아 끼울 수 있음`,body:devoSection()},
