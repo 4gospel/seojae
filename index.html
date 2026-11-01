@@ -2504,6 +2504,13 @@ function metaSet(wid,k,v){ const w=S.writings.find(x=>x.id===wid); if(!w) return
   if(v===""||v==null){ delete w.meta[k]; } else w.meta[k]=v; w.metaTs[k]=now;
   if(w.scene&&k in w.scene){ w.scene=Object.assign({},w.scene); delete w.scene[k]; }
   { const _pu=w.updated; w.updated=now; if(editId===wid&&EDIT_BASE===_pu) EDIT_BASE=w.updated; } save(); }
+// 바깥에서 가져온 백업 파일의 번호 모양 확인(구글·이 기기에 있는 내 기록을 합칠 때는 쓰지 않음)(2026-11-01 보안 점검): 번호는 화면 단추 안에 그대로 들어가므로, 따옴표·괄호·꺾쇠가 든 번호는 버림
+const ID_OK=v=>typeof v==="string"&&/^[\w\-:.]{1,80}$/.test(v);
+function cleanIn(o){ if(!o||typeof o!=="object") return o;
+  for(const k of ["notes","writings","books","manuscripts","jots","codex","images","sends","sources","series"]){ if(!Array.isArray(o[k])) continue;
+    o[k]=o[k].filter(x=>x&&typeof x==="object"&&ID_OK(x.id)).map(x=>{ for(const f of ["bookId","fromWriting","fromNote","noteId","ms","mark"]) if(x[f]!=null&&!ID_OK(x[f])) delete x[f];
+      if(Array.isArray(x.fromWritings)) x.fromWritings=x.fromWritings.filter(ID_OK); if(Array.isArray(x.items)) x.items=x.items.filter(ID_OK); return x; }); }
+  return o; }
 function mergeFrom(other){
   const del=Object.assign({},other.deleted||{},S.deleted||{});
   const stamp=x=>x.updated||x.date||"";
@@ -2607,7 +2614,7 @@ async function pushSave(){
 // ───────── 새 버전 자동 새로 고침 ─────────
 // 올릴 때마다 version.json 의 번호가 바뀝니다. 앱이 열릴 때·다시 화면에 올라올 때·5분마다 확인해서,
 // 쓰는 중인 글이 없고 저장이 끝났을 때 새 버전으로 새로 고칩니다.
-const APP_BUILD="5eae67dcab"; const APP_VER="2.4";   // 판 번호: 배포할 때마다 도구/판올리기.py 가 0.1씩 올림 (1.9 다음은 2.0) — 손으로 고치지 말 것
+const APP_BUILD="e329e391cf"; const APP_VER="2.5";   // 판 번호: 배포할 때마다 도구/판올리기.py 가 0.1씩 올림 (1.9 다음은 2.0) — 손으로 고치지 말 것
 let NEW_BUILD=null, UPDATE_NOTICED=false;
 async function checkUpdate(){
   if(APP_BUILD.startsWith("__")) return;                 // 원본 파일로 열었을 때(고치는 중)는 건너뜁니다
@@ -2731,8 +2738,8 @@ const FN_RE=/\[\^([^\]\n]+?)\]/g;
 // 굵게 **…** · 기울임 *…* (2026-10-29 팀장님 허락 — 마크다운과 같은 표시, 한 줄 안에서만)
 const BI_RE=/\*\*([^*\n]+?)\*\*|\*(?![\s*])([^*\n]*?[^\s*])\*(?!\*)/g;
 // 글자 그대로 쓴 기호: 앞에 \ (예: 3\*4\*5). 기호를 읽기 전에 \X 를 보이지 않는 짝(\uE000 + 대신 글자)으로 가려 꾸밈으로 잡히지 않게 — 길이가 같아 자리 셈이 그대로
-const mkMask=t=>String(t??"").replace(/\\([*=_\[\]^\\])/g,(m,c)=>"\uE000"+String.fromCharCode(0xE100+c.charCodeAt(0)));
-const mkUnmask=t=>String(t??"").replace(/\uE000([\uE100-\uE17F])/g,(m,c)=>String.fromCharCode(c.charCodeAt(0)-0xE100));
+const mkMask=t=>String(t??"").replace(/\uE000/g,"").replace(/\\([*=_\[\]^\\])/g,(m,c)=>"\uE000"+String.fromCharCode(0xE100+c.charCodeAt(0)));   // 원문에 원래 있던 가림 표시는 먼저 지움
+const mkUnmask=t=>String(t??"").replace(/\uE000([\uE12A\uE13D\uE15B-\uE15F])/g,(m,c)=>String.fromCharCode(c.charCodeAt(0)-0xE100));   // 가린 기호 7개(* = [ \ ] ^ _)만 되돌림 — <·> 같은 글자를 되살려 화면에 코드가 끼어들지 않게(2026-11-01 보안 점검)
 const mkEsc=t=>String(t??"").replace(/[*\\]|==+|__+|\[\^/g,m=>m.replace(/./g,"\\$&"));   // 바깥 글을 기호째 글자로 (노션 가져오기 등)
 const biStrip0=t=>String(t??"").replace(BI_RE,(m,b,i)=>b??i);
 const biStrip=t=>mkUnmask(biStrip0(mkMask(t)));
@@ -3033,7 +3040,7 @@ function devoSection(){ const d=devoSrc();
     <p class="sub">지금 묵상 화면의 오늘 본문·해설·음성 듣기는 <b>${esc(d.name)}</b>에서 받아 옵니다.${d.own?"":" 해설은 그곳의 저작물이라 개인 묵상용으로만 보여 드리고, 기록·노션에는 남기지 않습니다."}</p>
     <p class="sub"><b>묵상 자료는 갈아 끼울 수 있게 만들어 두었습니다.</b> 아침 서재에 따로 묵상 집필진이 생기면, 그분들이 쓴 묵상을 올려 이 자리에서 그대로 보여 드립니다. 출처가 바뀌면 이 칸에 먼저 알려 드립니다.</p>
     <p class="hint">한 날의 묵상 = 날짜 · 제목 · 본문(책·장절) · 찬송가 번호 · 음성 주소 · 해설(소제목과 글 여러 개). 성경 본문 글자는 앱이 따로 불러옵니다.</p>
-    ${d.url?`<p class="hint"><a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.name)} 보기 ↗</a></p>`:""}</section>`; }
+    ${d.url?`<p class="hint"><a href="${esc(safeUrl(d.url)||"#")}" target="_blank" rel="noopener">${esc(d.name)} 보기 ↗</a></p>`:""}</section>`; }
 function setGroups(){ const R=S.reminder||{}, rOn=!!(R.on&&R.clock!==false), p=S.settings.plan||{}, cur=planObj(), ps=pomoSet(), rules=vrList("rules").filter(x=>x.on!==false).length, voice=vrList("voice").length;
   let theme="light"; try{ theme=localStorage.getItem("seojae.theme")||"light"; }catch(_){} const fs=+(()=>{ try{ return JSON.parse(localStorage.getItem("seojae.look")||"{}").fs; }catch(_){ return 0; } })()||0;
   const cm=(cmtLoad()?.files||[]).filter(f=>!f.hidden).length, sf=S.settings.streakFrom;
@@ -8868,7 +8875,7 @@ function vfOpen(){ const w=cardW(); if(!w) return toast("몇 자 써서 간직�
         ${rows.length?`<button class="btn small" data-ins title="원고 맨 끝에 ■ 부록 — 검증표 칸으로 넣습니다. 내보내기에도 실리니, 독자에게 보이고 싶지 않으면 내보내기 전에 지우세요 (↶ 되돌리기)">원고 끝 부록으로 넣기</button>`:""}</div>
       ${err?`<p class="warn" style="margin:0">${esc(err)}</p>`:""}${!SERVER?`<small class="muted">구글 서버에 닿아야 AI 검증을 쓸 수 있습니다. 꼬리표 모으기·부록 넣기는 됩니다.</small>`:""}
       ${T.at?`<small class="muted">${esc(T.at)} 검증${T.ai?` · ${esc(T.ai)}`:""}${left?` · <b>아직 대조할 줄 ${left}</b>`:" · 모두 확인됨"}</small>`:""}
-      <div class="vflist">${rows.map((x,i)=>filt&&x.status!==filt?"":`<div class="vfrow st${VF_ST.indexOf(x.status)}"><span class="vfst">${esc(x.status)}</span><div style="min-width:0;flex:1"><b>${esc(x.claim)}</b> <small class="muted">${esc(x.kind||"")}</small>${x.note?`<div style="font-size:13px">${esc(x.note)}</div>`:""}${x.source?`<small class="muted vfsrc">${/^https?:\/\//.test(x.source)?`<a href="${esc(x.source)}" target="_blank" rel="noopener">${esc(x.source.slice(0,80))}</a>`:esc(x.source)}</small>`:""}</div>
+      <div class="vflist">${rows.map((x,i)=>filt&&x.status!==filt?"":`<div class="vfrow st${VF_ST.indexOf(x.status)}"><span class="vfst">${esc(x.status)}</span><div style="min-width:0;flex:1"><b>${esc(x.claim)}</b> <small class="muted">${esc(x.kind||"")}</small>${x.note?`<div style="font-size:13px">${esc(x.note)}</div>`:""}${x.source?`<small class="muted vfsrc">${/^https?:\/\//.test(x.source)?`<a href="${esc(safeUrl(x.source)||"#")}" target="_blank" rel="noopener">${esc(x.source.slice(0,80))}</a>`:esc(x.source)}</small>`:""}</div>
           <div class="vfme"><button class="btn small ghost" data-go="${i}" title="본문에서 이 구절로">본문</button>${x.tag?"":`<label class="chk" title="직접 대조했으면 표시"><input type="checkbox" data-me="${i}" ${x.me?"checked":""}> 직접 확인</label>`}</div></div>`).join("")||`<p class="muted" style="margin:0">아직 검증표가 없습니다.</p>`}</div></section>`;
     ov.querySelector("[data-x]").onclick=()=>{ ov.remove(); cardPaint(); };
     ov.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{ filt=b.dataset.f; draw(); });
@@ -9070,7 +9077,7 @@ function rsQuick(){ const m=rsMs(), w=tab==="write"&&editId&&S.writings.find(x=>
 function rsDraw(){ const el=$("#aipanel"); if(!el) return; if(RS_KEY!==rsKeyNow()) rsLoad(); const keep=$("#aiin")?.value||"", m=rsMs(), canWrite=tab==="write"&&!!$("#wbody"), keyOK=!!(CONF.ai||CONF.aiKeys?.claude||CONF.aiKeys?.gemini);
   el.innerHTML=`<div class="aih"><div class="aih1"><span class="aistar">✦</span><b>조사 도우미</b><span class="aikind">${m?esc(m.title):"원고 밖"}</span><span class="spacer"></span><button data-x onclick="aiClose()" title="닫기 (Esc)">✕</button></div><div class="aih2"><span class="muted aihint">웹에서 찾아 자료 모음에</span><span class="spacer"></span>${canWrite?`<button onclick="aiOpen()" title="지금 쓰는 글을 함께 보는 글쓰기 도우미">이 글 ↗</button>`:""}${RS_MSGS.length?`<button onclick="rsReset()" title="대화를 비웁니다">새 대화</button>`:""}</div></div>
     <div class="aim" id="aimsgs">${RS_MSGS.length?RS_MSGS.map((x,i)=>x.role==="me"?`<div class="msg me">${aiText(x.text)}</div>`:x.role==="err"?`<div class="msg err">${esc(x.text)}</div>`
-      :`<div class="msg ai">${aiText(x.text)}${(x.src||[]).length?`<div class="rssrc"><b>출처</b>${x.src.map(u=>`<a href="${esc(u.url)}" target="_blank" rel="noopener">${esc(u.title||u.url)}</a>`).join("")}</div>`:`<div class="rssrc"><b>출처</b><span>검색한 웹 자료가 없습니다 — 사실은 따로 확인해 주세요</span></div>`}
+      :`<div class="msg ai">${aiText(x.text)}${(x.src||[]).length?`<div class="rssrc"><b>출처</b>${x.src.map(u=>`<a href="${esc(safeUrl(u.url)||"#")}" target="_blank" rel="noopener">${esc(u.title||u.url)}</a>`).join("")}</div>`:`<div class="rssrc"><b>출처</b><span>검색한 웹 자료가 없습니다 — 사실은 따로 확인해 주세요</span></div>`}
         <div class="rsact"><button class="p" onclick="rsKeep(${i})">${m?"자료 모음에 담기":"자료로 담기…"}</button>${canWrite?`<button onclick="rsPut(${i})">커서 자리에 넣기</button>`:""}<button onclick="rsCopy(${i})">복사</button></div>${x.ai?`<small>${esc(x.ai)}</small>`:""}</div>`).join("")
       :`<div class="msg ai">무엇을 조사할까요? 성경 본문의 배경, 인용문의 출처, 책·자료 찾기, 사실 확인…<br><span class="muted" style="font-size:12.5px">웹에서 찾아 출처와 함께 답합니다. 쓸 만한 답은 「자료 모음에 담기」를 누르면 ${m?`「${esc(m.title)}」 원고의 자료 모음에`:"고른 원고의 자료 모음에"} 들어갑니다. 출처가 없는 내용은 사실로 쓰기 전에 꼭 확인해 주세요.</span></div>`}
       ${AI_BUSY?`<div class="msg ai dots"><i></i><i></i><i></i></div>`:""}</div>
@@ -9831,7 +9838,7 @@ async function checkNotion(){
 function restore(input){ const f=input.files[0]; if(!f) return; const r=new FileReader();
   r.onload=async()=>{ try{ let d=JSON.parse(r.result); if(d&&d.kind==="backup"&&d.data) d=d.data; if(!d||!Array.isArray(d.writings)) throw 0;   // PC 백업 파일(아침서재-백업-날짜.json)은 data 안에 기록 if(!confirm("백업 파일의 기록을 지금 기록과 합칠까요?\n(지금 기록은 사라지지 않고, 같은 글은 더 나중에 고친 쪽이 남습니다. 지운 글은 되살아나지 않습니다)")) return;
       if(GAS&&SERVER){ try{ await gcall("backupNow"); }catch(_){} }   // 합치기 전 지금 기록을 드라이브에 사본으로
-      mergeFrom(d); save(); render(); toast("백업 파일을 합쳤습니다"); }catch(_){ toast("아침 서재 백업 파일이 아닙니다"); } };
+      mergeFrom(cleanIn(d)); save(); render(); toast("백업 파일을 합쳤습니다"); }catch(_){ toast("아침 서재 백업 파일이 아닙니다"); } };
   r.readAsText(f); input.value=""; }
 
 // ───────── 집중 시간 (뽀모도로) ─────────
