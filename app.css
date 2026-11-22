@@ -2645,4 +2645,11 @@ html.bson .askview{z-index:160}
 }
 /* 묵상지 고르기(매일성경 · 생명의 삶) — 2026-11-22 */
 .qbname{border:0;background:none;padding:0 2px;margin:0;font:inherit;color:inherit;cursor:pointer;border-bottom:1px dashed currentColor;display:inline-flex;align-items:baseline;gap:3px} .qbname i{font-style:normal;font-size:.75em;opacity:.7} .qbname:hover{color:var(--sepia)} .qbname:focus-visible{outline:2px solid var(--sepia);outline-offset:2px}
-
+/* 매일성경 해설 창(PC·맥 — 오른쪽에 붙고 화면은 html.bside로 그 폭만큼 왼쪽, 2026-11-23) */
+.sunpanel{position:fixed;top:0;right:0;bottom:0;z-index:55;display:flex;flex-direction:column;background:var(--paper);border-left:1px solid var(--edge);box-shadow:-12px 0 30px -22px rgba(0,0,0,.45)}
+.sunphead{display:flex;align-items:center;gap:8px;padding:12px 12px 10px 16px;border-bottom:1px solid var(--edge);font-family:var(--ui-font)}
+.sunphead b{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-size:15px}
+.sunphead .muted{font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sunphead .btn{flex:none}
+.sunpbody{flex:1;overflow:auto;margin:0;border-radius:0;padding:16px 20px 28px;overscroll-behavior:contain}
+@media print{ .sunpanel{display:none} html.bside body{margin-right:0} }

@@ -948,6 +948,10 @@ const MANUALS=[["quick","간단 매뉴얼","읽자마자 바로 써 보는 한 �
 // ───────── 새 소식 (2026-10-31 팀장님: 「앞으로 개선되는 내용은 처음 앱을 열 때 팝업으로」) — 공개판과 같은 틀 ─────────
 // 새 소식을 더할 때: NEWS 맨 앞에 넣고 id 는 날짜(같은 날 둘째는 2026-11-02b 처럼 — 글자 순서로 새것이 뒤). 본 소식 id 는 이 기기에만(seojae.newsSeen)
 const NEWS=[
+ {id:"2026-11-23",date:"2026년 11월 23일",title:"해설은 오른쪽 창에",items:[
+  ["📖","나란히 놓는 해설 창","컴퓨터에서 묵상 카드의 「해설 보기」를 누르면 해설이 화면 오른쪽 창으로 떠요. 보던 화면은 왼쪽으로 좁혀져 나란히 놓여요.","다른 메뉴로 옮겨도 그대로 있고, 날짜를 옮기면 그날 해설로 바뀌어요."],
+  ["✕","닫으면 원래대로","해설 창 위 「✕」나 카드의 「해설 창 닫기」를 누르면 화면이 원래 폭으로 돌아와요.",""],
+  ["📱","휴대폰은 그대로","휴대폰과 좁은 창에서는 지금처럼 카드 아래에 펼쳐져요.",""]]},
  {id:"2026-11-22",date:"2026년 11월 22일",title:"생명의 삶으로도 묵상해요",items:[
   ["🌿","묵상지를 골라요","묵상 화면 위 「매일성경 ▾」를 누르면 「생명의 삶」으로 바꿀 수 있어요. 오늘 본문·제목·찬송가가 그 묵상지를 따라와요.","설정 → 성경 통독 → 「묵상지」에서도 고를 수 있어요."],
   ["📖","생명의 삶 해설·영상","생명의 삶 본문 해설과 영상 QT는 두란노 구독자 화면이라, 「해설은 두란노에서 ↗」로 옆 창에 열어 드려요. 매일성경은 지금처럼 앱 안에서 해설을 보고 들어요.",""],
@@ -1229,9 +1233,14 @@ function bibleTile(win,L){ const sx=screen.availLeft||0, sy=screen.availTop||0, 
 // 화면 좁히기: 성경 창 왼쪽 끝(L)보다 오른쪽으로 나간 폭만큼 body 오른쪽을 비움. 남는 폭이 640px보다 좁거나 전체 화면이면 하지 않음(false)
 function bibleSide(L){ const R=document.documentElement, full=window.outerWidth>=screen.width&&window.outerHeight>=screen.height;
   const gap=L&&!full?Math.round(window.screenX+window.outerWidth-L-Math.max(0,window.outerWidth-window.innerWidth)/2):0;
-  if(gap<=0||window.innerWidth-gap<640){ if(BSIDE){ BSIDE=0; R.classList.remove("bside"); R.style.removeProperty("--bgap"); dispatchEvent(new Event("resize")); } return false; }
-  if(gap!==BSIDE){ BSIDE=gap; R.style.setProperty("--bgap",gap+"px"); R.classList.add("bside"); dispatchEvent(new Event("resize")); }
+  if(gap<=0||window.innerWidth-gap<640){ if(BSIDE){ BSIDE=0; sideGapPaint(); } return false; }
+  if(gap!==BSIDE){ BSIDE=gap; sideGapPaint(); }
   return true; }
+// 오른쪽을 비우는 폭 = 성경 창(BSIDE)과 앱 안 해설 창(NSIDE) 가운데 큰 쪽 — html.bside·--bgap 하나로(화면에 고정되는 요소 규칙도 그대로)
+let NSIDE=0;
+function sideGapPaint(){ const R=document.documentElement, g=Math.max(BSIDE,NSIDE), on=R.classList.contains("bside");
+  if(!g){ if(on){ R.classList.remove("bside"); R.style.removeProperty("--bgap"); dispatchEvent(new Event("resize")); } return; }
+  if(!on||R.style.getPropertyValue("--bgap")!==g+"px"){ R.style.setProperty("--bgap",g+"px"); R.classList.add("bside"); dispatchEvent(new Event("resize")); } }
 function bibleWatch(win,L){ clearInterval(BTILE_T); BTILE_T=setInterval(()=>{ let gone=true; try{ gone=!win||win.closed; }catch(_){} if(gone){ clearInterval(BTILE_T); bibleUntile(); } else if(L&&BSIDE) bibleSide(L); },1500); }   // 앱 창을 옮기거나 크기를 바꾸면 좁힌 폭도 다시 맞춤
 function bibleUntile(){ bibleSide(0); if(!BTILE) return; const b=BTILE; BTILE=null; try{ window.resizeTo(b.w,b.h); window.moveTo(b.x,b.y); }catch(_){} }
 function openBible(x){ const u=bibleUrl(x); if(!u) return toast("본문 위치를 알 수 없습니다"); popBible(u); }
@@ -1246,7 +1255,7 @@ const BALIAS={"요한일서":"요한1서","요한이서":"요한2서","요한삼
 const QB={su:{n:"매일성경",org:"성서유니온",fn:"dailyBible",home:()=>"https://sum.su.or.kr:8888/bible/today#bibleTab"},ll:{n:"생명의 삶",org:"두란노",fn:"dailyLL",home:d=>"https://www.duranno.com/qt/view/bible.asp?qtDate="+(d||today())}};
 const qbK=()=>S.settings.qtBook==="ll"?"ll":"su", qbN=()=>QB[qbK()].n;
 function qbSet(k){ if(!QB[k]||qbK()===k) return; const pl=suPassage(SU)?.label, f=$("#wpassage"); if(f&&pl&&f.value===pl) f.value=f.defaultValue;   // 아직 손대지 않은 본문 칸이면 새 묵상지 본문으로 다시 채움
-  S.settings.qtBook=k; save(); SU=null; SUT=null; SUN=null; $("#sunote")&&($("#sunote").innerHTML=""); if($("#sucard")) paintSu(); else render(); toast(`오늘의 묵상 본문을 「${QB[k].n}」에서 받아 옵니다`); }
+  S.settings.qtBook=k; save(); SU=null; SUT=null; SUN=null; if($("#sunpanel")) sunClose(); $("#sunote")&&($("#sunote").innerHTML=""); if($("#sucard")) paintSu(); else render(); toast(`오늘의 묵상 본문을 「${QB[k].n}」에서 받아 옵니다`); }
 function qbMenu(ev){ const r=ev.currentTarget.getBoundingClientRect(); ctxOpen(r.left,r.bottom+4,"묵상지 고르기",Object.entries(QB).map(([k,q])=>({t:(qbK()===k?"✓ ":"")+q.n+" · "+q.org,ic:k==="su"?"📘":"🌿",fn:()=>qbSet(k)})),isTouch()&&innerWidth<=700,"고른 묵상지의 오늘 본문·제목·찬송가가 이 칸에 옵니다"); }
 // 생명의 삶: 해설·영상은 두란노 구독자 화면으로 (앱 안에 넣지 않음 — 로그인이 필요한 유료 저작물)
 function llLinks(date){ return `<a class="btn small ghost" href="${esc(QB.ll.home(date))}" target="_blank" rel="noopener" onclick="return popBible(this.href)" title="두란노 「오늘의 QT」 화면을 오른쪽 성경 창으로 엽니다 — 본문 해설·묵상 에세이는 생명의삶 구독(로그인)으로 볼 수 있습니다">${ICO.book}해설은 두란노에서 ↗</a><a class="btn small ghost pconly" href="https://www.duranno.com/qt/view/video.asp?qtDate=${esc(date||today())}" target="_blank" rel="noopener" onclick="return popBible(this.href)" title="CGN 「영상 QT」 — 두란노 누리집에서 오늘 것은 컴퓨터로 볼 수 있고, 지난 날은 로그인이 필요합니다">🎬 영상 QT ↗</a>`; }
@@ -1277,17 +1286,38 @@ async function suTexts(P){
 }
 // 성서유니온 해설: 누를 때만 받아 와서 보여 주고, 기록에는 남기지 않습니다 (성서유니온 저작물)
 let SUN=null;
-async function suNoteToggle(){
-  const box=$("#sunote"), b=$("#subtn"); if(!box) return;
-  if(box.innerHTML){ box.innerHTML=""; b.innerHTML=ICO.book+"해설 보기"; return; }
-  const date=suDate(); b.textContent="해설 받는 중…";
-  try{ if(!SUN||SUN.date!==date) SUN=await gcall("dailyBibleNote",date); }catch(e){ b.innerHTML=ICO.book+"해설 보기"; return toast("해설을 받아 오지 못했습니다 ("+e.message+")"); }
-  b.textContent="해설 접기";
-  const para=t=>String(t||"").split(/<br\s*\/?>|\n/).map(x=>x.trim()).filter(Boolean).map(x=>`<p style="margin:0 0 6px">${esc(x)}</p>`).join("");
-  box.innerHTML=`<div class="sunote">${SUN.brief?`<p class="sub" style="margin:0 0 10px">${esc(SUN.brief)}</p>`:""}
+// 매일성경 해설 (2026-11-23 팀장님 「해설 창을 띄울 때 지금 화면은 왼쪽, 해설 창은 오른쪽에 — 피씨·맥 모두」):
+// 넓은 화면(마우스·폭 980px쯤부터)은 앱 안 오른쪽 해설 창(#sunpanel)으로 띄우고 화면을 그 폭만큼 왼쪽으로 좁힘(sideGapPaint) — 같은 창 안이라 어느 브라우저·설치한 앱에서도 가려지지 않음.
+// 다른 메뉴로 옮겨도 닫기 전까지 그대로, 묵상 날짜를 옮기면 그날 해설로. 휴대폰·좁은 창은 예전처럼 카드 아래에 펼침.
+const sunW=()=>Math.round(Math.min(480,Math.max(340,innerWidth*.34)));
+const sunWide=()=>innerWidth-sunW()>=640&&matchMedia("(pointer:fine)").matches;
+const suNoteHtml=()=>{ const para=t=>String(t||"").split(/<br\s*\/?>|\n/).map(x=>x.trim()).filter(Boolean).map(x=>`<p style="margin:0 0 6px">${esc(x)}</p>`).join("");
+  return `${SUN.brief?`<p class="sub" style="margin:0 0 10px">${esc(SUN.brief)}</p>`:""}
     ${SUN.sections.map(x=>`<div class="suhead" style="margin-top:8px">${esc(x.label)}</div>${para(x.text)}`).join("")}
-    <p class="hint" style="margin-top:8px">매일성경 해설 © 성서유니온선교회 · 개인 묵상용으로만 보여 드리며 기록·노션에는 남기지 않습니다. <a href="https://sum.su.or.kr:8888/bible/today" target="_blank" rel="noopener" onclick="return popBible(this.href)">성서유니온에서 보기 ↗</a></p></div>`;
+    <p class="hint" style="margin-top:8px">매일성경 해설 © 성서유니온선교회 · 개인 묵상용으로만 보여 드리며 기록·노션에는 남기지 않습니다. <a href="https://sum.su.or.kr:8888/bible/today" target="_blank" rel="noopener" onclick="return popBible(this.href)">성서유니온에서 보기 ↗</a></p>`; };
+function suBtnLabel(){ const b=$("#subtn"); if(b) b.innerHTML=ICO.book+($("#sunpanel")?"해설 창 닫기":$("#sunote")?.innerHTML?"해설 접기":"해설 보기"); }
+async function suNoteToggle(){
+  const box=$("#sunote"), b=$("#subtn");
+  if($("#sunpanel")) return sunClose();
+  if(box&&box.innerHTML){ box.innerHTML=""; return suBtnLabel(); }
+  const date=suDate()||SU?.date; if(!date) return; if(b) b.textContent="해설 받는 중…";
+  try{ if(!SUN||SUN.date!==date) SUN=await gcall("dailyBibleNote",date); }catch(e){ suBtnLabel(); return toast("해설을 받아 오지 못했습니다 ("+e.message+")"); }
+  if(sunWide()) return sunOpen();
+  if(box) box.innerHTML=`<div class="sunote">${suNoteHtml()}</div>`; suBtnLabel();
 }
+function sunOpen(){ let p=$("#sunpanel"); if(!p){ p=document.createElement("aside"); p.id="sunpanel"; p.className="sunpanel"; p.setAttribute("aria-label","매일성경 해설 창"); document.body.appendChild(p); }
+  NSIDE=sunW(); p.style.width=NSIDE+"px"; sideGapPaint(); sunPaint(); suBtnLabel();
+  let seen=false; try{ seen=localStorage.getItem("seojae.sunTip")==="1"; localStorage.setItem("seojae.sunTip","1"); }catch(_){} if(!seen) toast("해설을 오른쪽 창에 띄웠습니다 · 지금 화면은 왼쪽에 그대로 · ✕로 닫으면 원래 폭으로"); }
+function sunPaint(){ const p=$("#sunpanel"); if(!p||!SUN) return; const d=SUN.date, lb=`${+d.slice(5,7)}월 ${+d.slice(8,10)}일`, same=SU&&SU.date===d;
+  p.innerHTML=`<div class="sunphead"><b>${ICO.book}매일성경 해설</b><span class="muted" title="${esc(same&&SU.title?SU.title:"")}">${lb}${same&&SU.title?" · "+esc(SU.title):""}</span><span class="spacer"></span>${same&&SU.audio?`<button class="btn small ghost" onclick="suListen()" title="본문 낭독과 해설을 앱 안 작은 재생기로 듣습니다">${ICO.audio}듣기</button>`:""}<button class="btn small ghost sunx" onclick="sunClose()" title="해설 창 닫기 — 화면이 원래 폭으로 돌아갑니다" aria-label="해설 창 닫기">✕</button></div>
+    <div class="sunpbody sunote">${suNoteHtml()}</div>`; }
+function sunClose(){ $("#sunpanel")?.remove(); NSIDE=0; sideGapPaint(); suBtnLabel(); }
+// 묵상 카드를 다시 그린 뒤: 해설 창이 열려 있으면 그 날짜·묵상지에 맞춤
+function sunSync(){ if(!$("#sunpanel")) return; if(!SU||SU.src==="ll") return sunClose(); suBtnLabel(); if(SUN&&SUN.date===SU.date) return sunPaint();
+  const d=SU.date; gcall("dailyBibleNote",d).then(r=>{ if(SU&&SU.date===d&&$("#sunpanel")){ SUN=r; sunPaint(); } }).catch(()=>{}); }
+addEventListener("resize",()=>{ const p=$("#sunpanel"); if(!p) return; const w=sunW();
+  if(innerWidth-w<640){ sunClose(); toast("창이 좁아져 해설 창을 닫았습니다 — 「해설 보기」를 누르면 카드 아래에 펼쳐집니다"); }
+  else if(w!==NSIDE){ NSIDE=w; p.style.width=w+"px"; sideGapPaint(); } });
 // 휴대폰은 처음엔 접힘(쓸 종이가 먼저 보이게) — 한 번 펼치면 그 뒤로는 기억
 const suOpen=()=>{ try{ const v=localStorage.getItem("seojae.suOpen"); return v==null?innerWidth>700:v!=="0"; }catch(_){ return innerWidth>700; } };
 function suToggle(){ try{ localStorage.setItem("seojae.suOpen",suOpen()?"0":"1"); }catch(_){} paintSu(); }
@@ -1317,11 +1347,12 @@ async function paintSu(){
     <div class="sut"><b>${esc(SU.title)}</b> · ${esc(P.label)}${SU.hymn?` · <span class="muted hymnbox" id="hymnbox">찬송가 ${esc(SU.hymn)}장${hymnCtl()}</span>`:""}</div>
     <div class="links"><button class="btn small ink" onclick="suUse()">이 본문으로 쓰기</button>
       <a class="verlink" href="${esc(suOfficial(P,"NKRV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)" title="개역개정은 저작권 때문에 앱 안에 넣을 수 없어 대한성서공회 사이트에서 같은 구절을 엽니다">개역개정</a><a class="verlink" href="${esc(suOfficial(P,"NKT"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새한글</a><a class="verlink" href="${esc(suOfficial(P,"RNKSV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새번역</a><a class="verlink" href="${esc(suNiv(P))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">NIV</a><button class="btn small ghost pconly" onclick="sideTip()" title="성경 창을 띄워 둔 채 쓰는 법">ⓘ</button><button class="btn small ghost pconly" onclick="pipBible()" title="오늘 본문(개역한글·영어)을 다른 창보다 늘 위에 떠 있는 작은 창으로 띄웁니다 (크롬·엣지)">${ICO.closed}위에 띄우기</button>
-      ${SU.src==="ll"?llLinks(date):`${SU.audio?`<button class="btn small ghost" onclick="suListen()" title="매일성경 해설(본문 낭독과 해설)을 앱 안 작은 재생기로 듣습니다. 다른 메뉴로 옮겨도 계속 들립니다">${ICO.audio}해설 듣기</button>`:""}<button class="btn small ghost" id="subtn" onclick="suNoteToggle()">${ICO.book}해설 보기</button>`}</div>
+      ${SU.src==="ll"?llLinks(date):`${SU.audio?`<button class="btn small ghost" onclick="suListen()" title="매일성경 해설(본문 낭독과 해설)을 앱 안 작은 재생기로 듣습니다. 다른 메뉴로 옮겨도 계속 들립니다">${ICO.audio}해설 듣기</button>`:""}<button class="btn small ghost" id="subtn" onclick="suNoteToggle()" title="매일성경 해설을 봅니다 — 컴퓨터에서는 오른쪽 해설 창으로, 휴대폰에서는 카드 아래에">${ICO.book}${$("#sunpanel")?"해설 창 닫기":"해설 보기"}</button>`}</div>
     <details class="more"><summary>말씀 앞에서 묻기 <small class="hint" style="display:inline">· 오늘의 질문</small></summary><ol class="q" style="margin:4px 0 0">${pickQ("bible",today()+"b").map(q=>`<li>${esc(q)}</li>`).join("")}</ol></details>
     <div id="sunote"></div>
     ${open?`<div class="row" style="gap:6px;margin-top:10px;flex-wrap:wrap"><span class="muted" style="font-size:12.5px">보기</span><span class="pills">${SU_VIEWS.map(([k,n,tip])=>`<button class="pill ${suView()===k?"on":""}" style="padding:3px 10px;font-size:13px" data-tip="${tip}" onclick="lookSet('suview','${k}');paintSuText()">${n}</button>`).join("")}</span><span class="spacer"></span><span class="row" style="gap:4px" title="매일성경 글자 크기 (이 기기만)"><button class="fsbtn" onclick="suFont(-1)">가−</button><button class="fsbtn" onclick="suFont(1)">가＋</button></span><button class="fsbtn" onclick="lookSet('sutall',applyLook().sutall?'':1);paintSuText()" title="본문 칸을 다 펼쳐 스크롤 없이 봅니다">${applyLook().sutall?"칸 줄이기":"다 펼치기"}</button><button class="fsbtn sufold" onclick="suToggle()" title="성경 본문 칸을 완전히 접습니다 (이 기기에 기억)">접기 ▴</button></div>
       <div class="sutext" id="sutext"><span class="muted">본문을 불러오는 중…</span></div>`:`<button type="button" class="suopenbar" onclick="suToggle()" title="접어 둔 성경 본문 칸을 다시 폅니다"><span>▾ 성경 본문 펼치기</span><small>개역한글 · 영어</small></button>`}`;   // 접으면 그 자리에 펴는 띠(2026-11-02 팀장님 「성경 보기 창을 완전히 접도록」)
+  sunSync();
   if(!open) return;
   try{ if(!SUT||SUT.label!==P.label){ const t=await suTexts(P); if(gen!==SUGEN) return; SUT=t; SUT.label=P.label; } }catch(e){ const t=$("#sutext"); if(t) t.innerHTML=`<span class="muted">본문을 불러오지 못했습니다. 위 단추로 열어 주세요.</span>`; return; }
   paintSuText();
