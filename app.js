@@ -948,7 +948,8 @@ const MANUALS=[["quick","간단 매뉴얼","읽자마자 바로 써 보는 한 �
 // ───────── 새 소식 (2026-10-31 팀장님: 「앞으로 개선되는 내용은 처음 앱을 열 때 팝업으로」) — 공개판과 같은 틀 ─────────
 // 새 소식을 더할 때: NEWS 맨 앞에 넣고 id 는 날짜(같은 날 둘째는 2026-11-02b 처럼 — 글자 순서로 새것이 뒤). 본 소식 id 는 이 기기에만(seojae.newsSeen)
 const NEWS=[
- {id:"2026-11-23",date:"2026년 11월 23일",title:"해설은 오른쪽 창에",items:[
+ {id:"2026-11-23",date:"2026년 11월 23일",title:"아침 서재 1.0 — 해설은 오른쪽 창에",items:[
+  ["🎉","정식 1.0이 되었어요","「베타」 표시를 걷고, 화면 맨 아래 판 번호가 1.0부터 새로 시작해요.","글과 기록은 그대로예요."],
   ["📖","나란히 놓는 해설 창","컴퓨터에서 묵상 카드의 「해설 보기」를 누르면 해설이 화면 오른쪽 창으로 떠요. 보던 화면은 왼쪽으로 좁혀져 나란히 놓여요.","다른 메뉴로 옮겨도 그대로 있고, 날짜를 옮기면 그날 해설로 바뀌어요."],
   ["✕","닫으면 원래대로","해설 창 위 「✕」나 카드의 「해설 창 닫기」를 누르면 화면이 원래 폭으로 돌아와요.",""],
   ["📱","휴대폰은 그대로","휴대폰과 좁은 창에서는 지금처럼 카드 아래에 펼쳐져요.",""]]},
@@ -3253,7 +3254,7 @@ function studioPaint(){ const ov=$("#studioview"); if(!ov) return; const D=STU.d
       <section class="stus"><h4>많이 쓰는 기능 <small>(${STU.days}일 · 횟수 / 쓴 기기 날 수)</small></h4>${bars(feats.map(f=>({l:FN[f.k],v:f.n,s:` · ${f.u}`,mx:fmx})))}</section>
       <section class="stus"><h4>기기·저장</h4>${grp("m.",{phone:"휴대폰",tablet:"태블릿",pc:"PC"})}<hr class="dash">${grp("s.",{drive:"구글 드라이브",local:"이 기기만"})}<hr class="dash">${grp("app.",{app:"앱으로",web:"브라우저로"})}</section>
       <section class="stus"><h4>얼마나 써 왔나 <small>(연 날 기준)</small></h4>${grp("age.",{new:"처음",d1:"1주 안",w1:"1주~1달",m1:"1~3달",m3:"3달 넘게"})}</section>
-      <section class="stus"><h4>판 번호</h4>${bars(vrows.map(([l,v])=>({l:"베타 "+l,v,mx:vmx})))}</section>
+      <section class="stus"><h4>판 번호</h4>${bars(vrows.map(([l,v])=>({l:"판 "+l,v,mx:vmx})))}</section>
       <section class="stus"><h4>창구가 대신 한 일 <small>(${STU.days}일)</small></h4>${grp("gw.",{aiShared:"함께 쓰는 AI",searchBooks:"책 찾기",musicFind:"찬송가·CCM 찾기"})}<p class="hint" style="margin-top:8px">AI 켠 기기 날 수 ${sum("aiOn").toLocaleString()} · 함께 읽기 쓰는 기기 날 수 ${sum("alsoOn").toLocaleString()}</p></section>
       <section class="stus"><h4>창구 열쇠</h4>${[["gemini","함께 쓰는 AI(제미나이)"],["youtube","찬송가·CCM(유튜브)"],["kakao","책 찾기(카카오)"],["nl","목차·쪽수(국립중앙도서관)"],["gClient","구글 자동 잇기"]].map(([k,l])=>`<p class="stukey ${K[k]?"on":""}"><i></i>${l} <b>${K[k]?"켜짐":"꺼짐"}</b></p>`).join("")}</section>
     </div>
