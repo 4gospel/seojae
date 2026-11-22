@@ -2643,3 +2643,6 @@ html.bson .askview{z-index:160}
   .bsstage.narrow.op .bspage{opacity:1}
   .bscv-in{transition:opacity .15s}
 }
+/* 묵상지 고르기(매일성경 · 생명의 삶) — 2026-11-22 */
+.qbname{border:0;background:none;padding:0 2px;margin:0;font:inherit;color:inherit;cursor:pointer;border-bottom:1px dashed currentColor;display:inline-flex;align-items:baseline;gap:3px} .qbname i{font-style:normal;font-size:.75em;opacity:.7} .qbname:hover{color:var(--sepia)} .qbname:focus-visible{outline:2px solid var(--sepia);outline-offset:2px}
+
