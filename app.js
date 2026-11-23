@@ -949,6 +949,11 @@ const MANUALS=[["quick","간단 매뉴얼","읽자마자 바로 써 보는 한 �
 // ───────── 새 소식 (2026-10-31 팀장님: 「앞으로 개선되는 내용은 처음 앱을 열 때 팝업으로」) — 공개판과 같은 틀 ─────────
 // 새 소식을 더할 때: NEWS 맨 앞에 넣고 id 는 날짜(같은 날 둘째는 2026-11-02b 처럼 — 글자 순서로 새것이 뒤). 본 소식 id 는 이 기기에만(seojae.newsSeen)
 const NEWS=[
+ {id:"2026-11-24d",date:"2026년 11월 24일",title:"책에 예문과 연습이 늘었어요",items:[
+  ["✍️","글쓰기 수업이 더 풍성하게","상세 매뉴얼 4부에 장면과 요약, 첫 문장 네 가지, 한 문단을 네 번 보는 퇴고, 고백을 꾸미지 않는 신앙 에세이 같은 예문을 더했어요.",""],
+  ["🌿","묵상을 실제로 써 본 한 편","「짧게」 틀로 쓴 묵상 한 편, 묵상 길잡이를 곁에 두는 법, 쓰기 싫은 아침에 건네는 말을 담았어요.",""],
+  ["🗓️","첫째 달과 둘째 달","부록 「30일 시작 계획」은 앱에 손을 익히는 첫째 달, 4부 「4주 글쓰기 기초 과정」은 둘째 달로 이어져요. 첫 주 하루 10분 차림표도 있어요.",""],
+  ["🚇","책상이 없는 아침에도","출퇴근길·점심시간에 휴대폰으로 쓰는 법과 쓴 글을 블로그·SNS에 옮기는 길도 적었어요.",""]]},
  {id:"2026-11-24c",date:"2026년 11월 24일",title:"상세 매뉴얼을 다듬었어요",items:[
   ["📖","책 『한 잔의 아침, 한 줄의 글』","편집·국어·실제 사용자 눈으로 상세 매뉴얼을 다시 읽고 다듬었어요. 묵상 장은 꼭 필요한 순서만 남기고, 장마다 「작가에게 왜 필요한가」를 되살렸어요.",""],
   ["🧭","읽는 길을 짧게","「이 책을 읽는 방법」은 한 화면으로 줄였어요. 표지 아래 「오늘 아침부터 읽기」로 바로 들어가세요.",""]]},
@@ -3436,7 +3441,7 @@ function studioPaint(){ const ov=$("#studioview"); if(!ov) return; const D=STU.d
   const lab=[0,Math.floor((days.length-1)/2),days.length-1].filter((v,i,a)=>a.indexOf(v)===i).map(i=>`<text x="${X(i)}" y="${H-4}" class="stut" text-anchor="middle">${+days[i].d.slice(5,7)}.${+days[i].d.slice(8,10)}</text>`).join("");
   const chart=`<svg class="stuchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="날마다 연 기기와 새로 시작한 기기">${ticks}${lab}<path d="${line("dev")}" class="stul1"/><path d="${line("new")}" class="stul2"/>${days.map((x,i)=>`<circle cx="${X(i)}" cy="${Y(+x.a.dev||0)}" r="${days.length>60?1.5:2.5}" class="stud1"/>`).join("")}<g class="stuhov" style="display:none"><line class="stuvl" y1="${Y(mx)}" y2="${Y(0)}"/><circle class="stuh1" r="4.5"/><circle class="stuh2" r="4"/></g></svg>`;
   STU.cd={days,X,Y,W,H};
-  const FN={today:"오늘",qt:"묵상",write:"글방 글쓰기",room:"글방",diary:"일기",shelf:"책장",drawer:"서랍",settings:"설정",rt:"성경읽기표 열기",rtcheck:"읽기표 장 체크",read:"말씀 다 읽음",ai:"AI 부르기",save:"글 간직",also:"함께 읽기 더함",install:"앱 설치"};
+  const FN={today:"오늘",qt:"묵상",write:"글방 글쓰기",room:"글방",diary:"일기",shelf:"책장",drawer:"서랍",settings:"설정",rt:"성경읽기표 열기",rtcheck:"읽기표 장 체크",read:"말씀 다 읽음",ai:"AI 부르기",save:"글 간직",also:"함께 읽기 더함",install:"앱 설치",guide:"묵상 길잡이(해설) 보기",listen:"해설 듣기",hymn:"찬송가·CCM 듣기",qk:"빠른 메모(＋)",bs:"성경 책장",book:"상세 매뉴얼 책 펴기",fb:"의견 보내기",donate:"후원 창 열기"};
   const feats=Object.keys(FN).map(k=>({k,n:sum("f."+k),u:sum("u."+k)})).filter(x=>x.n).sort((a,b)=>b.n-a.n), fmx=Math.max(1,...feats.map(x=>x.n));
   const bars=(rows,unit)=>rows.length?rows.map(r=>`<div class="stub"><span class="stubn">${esc(r.l)}</span><span class="stubb"><i style="width:${Math.max(2,Math.round(r.v/r.mx*100))}%"></i></span><span class="stubv">${r.v.toLocaleString()}${unit||""}${r.s?`<small>${r.s}</small>`:""}</span></div>`).join(""):`<p class="hint">아직 숫자가 없습니다.</p>`;
   const grp=(pre,names)=>{ const rows=Object.entries(names).map(([k,l])=>({l,v:sum(pre+k)})).filter(r=>r.v); const m=Math.max(1,...rows.map(r=>r.v)); return bars(rows.map(r=>({...r,mx:m}))); };
@@ -3450,8 +3455,9 @@ function studioPaint(){ const ov=$("#studioview"); if(!ov) return; const D=STU.d
       <section class="stus"><h4>많이 쓰는 기능 <small>(${STU.days}일 · 횟수 / 쓴 기기 날 수)</small></h4>${bars(feats.map(f=>({l:FN[f.k],v:f.n,s:` · ${f.u}`,mx:fmx})))}</section>
       <section class="stus"><h4>기기·저장</h4>${grp("m.",{phone:"휴대폰",tablet:"태블릿",pc:"PC"})}<hr class="dash">${grp("s.",{drive:"구글 드라이브",local:"이 기기만"})}<hr class="dash">${grp("app.",{app:"앱으로",web:"브라우저로"})}</section>
       <section class="stus"><h4>얼마나 써 왔나 <small>(연 날 기준)</small></h4>${grp("age.",{new:"처음",d1:"1주 안",w1:"1주~1달",m1:"1~3달",m3:"3달 넘게"})}</section>
+      <section class="stus"><h4>묵상지 <small>(연 날 기준 · 2026-11-24부터)</small></h4>${grp("qb.",{su:"매일성경",ll:"생명의 삶"})}</section>
       <section class="stus"><h4>판 번호</h4>${bars(vrows.map(([l,v])=>({l:"판 "+l,v,mx:vmx})))}</section>
-      <section class="stus"><h4>창구가 대신 한 일 <small>(${STU.days}일)</small></h4>${grp("gw.",{aiShared:"함께 쓰는 AI",searchBooks:"책 찾기",musicFind:"찬송가·CCM 찾기"})}<p class="hint" style="margin-top:8px">AI 켠 기기 날 수 ${sum("aiOn").toLocaleString()} · 함께 읽기 쓰는 기기 날 수 ${sum("alsoOn").toLocaleString()}</p></section>
+      <section class="stus"><h4>창구가 대신 한 일 <small>(${STU.days}일)</small></h4>${grp("gw.",{aiShared:"함께 쓰는 AI",llGuide:"생명의 삶 길잡이",suGuide:"매일성경 길잡이",dailyLL:"생명의 삶 본문",dailyBible:"매일성경 본문",searchBooks:"책 찾기",bookDetail:"책 정보",musicFind:"찬송가·CCM 찾기",feedback:"의견 보내기"})}<p class="hint" style="margin-top:8px">AI 켠 기기 날 수 ${sum("aiOn").toLocaleString()} · 함께 읽기 쓰는 기기 날 수 ${sum("alsoOn").toLocaleString()}</p></section>
       <section class="stus"><h4>창구 열쇠</h4>${[["gemini","함께 쓰는 AI(제미나이)"],["youtube","찬송가·CCM(유튜브)"],["kakao","책 찾기(카카오)"],["nl","목차·쪽수(국립중앙도서관)"],["gClient","구글 자동 잇기"]].map(([k,l])=>`<p class="stukey ${K[k]?"on":""}"><i></i>${l} <b>${K[k]?"켜짐":"꺼짐"}</b></p>`).join("")}</section>
     </div>
     <p class="hint stufoot">모든 숫자는 기기가 하루 한 번 보낸 <b>익명 합계</b>입니다(통계를 끈 기기·「추적 안 함」 기기는 빠짐). 기능 횟수는 다음에 앱을 열 때 보내져 하루 늦게 채워집니다. 받은 시각 ${esc(bkWhen(D.at))}</p></article>`; }
