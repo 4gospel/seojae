@@ -949,6 +949,10 @@ const MANUALS=[["quick","간단 매뉴얼","읽자마자 바로 써 보는 한 �
 // ───────── 새 소식 (2026-10-31 팀장님: 「앞으로 개선되는 내용은 처음 앱을 열 때 팝업으로」) — 공개판과 같은 틀 ─────────
 // 새 소식을 더할 때: NEWS 맨 앞에 넣고 id 는 날짜(같은 날 둘째는 2026-11-02b 처럼 — 글자 순서로 새것이 뒤). 본 소식 id 는 이 기기에만(seojae.newsSeen)
 const NEWS=[
+ {id:"2026-11-23h",date:"2026년 11월 23일",title:"믿을 수 있는 길잡이",items:[
+  ["📚","검증된 주석으로","길잡이는 복음주의(장로교·감리교·성결교)에서 검증된 주석으로 써요. 성경 각 권마다 권위 있게 꼽히는 주석을 살펴요.",""],
+  ["🔖","출처는 맨 끝에","어떤 주석을 살폈는지 길잡이 맨 끝에 한 줄로 알려 드려요.",""],
+  ["📖","말씀 그대로","성경 구절은 개역한글 본문 그대로 옮겨요.",""]]},
  {id:"2026-11-23g",date:"2026년 11월 23일",title:"매일성경도 묵상 길잡이로",items:[
   ["📖","매일성경 묵상 길잡이","매일성경 카드의 「묵상 길잡이(해설)」를 누르면, 아침 서재에서 그날 본문으로 정리해 드리는 길잡이가 앱 안에서 펼쳐져요. 「해설 듣기」는 그대로예요.","「설교&강의」의 그 책 페이지 맨 아래 「📖 매일성경해설」에도 날마다 올라가요."],
   ["🤲","따뜻한 말로","생명의 삶·매일성경 길잡이 모두, 곁에 앉아 다독이듯 따뜻한 말로 써요. 「지친 마음에 건네는 말」 한 칸이 새로 생겼어요.",""],
@@ -1361,7 +1365,7 @@ const sunWide=()=>innerWidth-sunW()>=640&&matchMedia("(pointer:fine)").matches;
 // 해설 읽기(2026-11-23 팀장님 「해설 글이 가독성이 떨어져」 — 조판 전문가): 문단 첫머리의 「1-3절」·「(5-6절)」만 작은 꼬리표로, 나머지 글은 그대로
 const suVtag=x=>{ const m=x.match(/^[(\[]?\s*(\d+(?:\s*[-–~]\s*\d+)?(?:\s*,\s*\d+)*)\s*절\s*[)\]]?\s*[:.·]?\s*/); return m&&m[0].length<x.length?`<span class="suvr">${m[1].replace(/\s*[-–~]\s*/g,"–")}절</span>`+esc(x.slice(m[0].length)):esc(x); };
 const llGuideHtml=()=>{ const G=SUN; if(G.pending) return `<p class="muted" style="margin:0 0 10px">${esc(G.note||"묵상 길잡이를 준비하는 중입니다")}</p>${G.none?"":`<button class="btn small" onclick="suNoteReload()">다시 불러오기</button>`}`;
-  const body=String(G.text||"").split("\n").map(x=>x.trim()).filter(Boolean).map(x=>/^■/.test(x)?`<div class="suhead">${esc(x.replace(/^■\s*/,""))}</div>`:`<p class="sup">${suVtag(x)}</p>`).join("");
+  const body=String(G.text||"").split("\n").map(x=>x.trim()).filter(Boolean).map(x=>/^■/.test(x)?`<div class="suhead">${esc(x.replace(/^■\s*/,""))}</div>`:/^\(출처[:：]/.test(x)?`<p class="susrc">${esc(x)}</p>`:`<p class="sup">${suVtag(x)}</p>`).join("");   // 끝 줄 (출처: …)는 작게(2026-11-23)
   const su=G.qb==="su", org=su?"성서유니온 「매일성경」":"두란노 「생명의 삶」", bk=su?"「매일성경」":"「생명의 삶」";
   const notLL=`<p class="llnot">이 길잡이는 ${org}이 제공한 해설이 아닙니다. ${bk} 본문(장절)에 맞춰 아침 서재에서 정리해 제공하는 글입니다.</p>`;
   return `${notLL}${G.partial?`<p class="hint" style="margin:0 0 8px">주석을 읽은 길잡이는 아직 만드는 중이라, 먼저 본문·검색으로 만든 길잡이를 보여 드립니다.</p>`:""}${body}
