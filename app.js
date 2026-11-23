@@ -948,6 +948,9 @@ const MANUALS=[["quick","간단 매뉴얼","읽자마자 바로 써 보는 한 �
 // ───────── 새 소식 (2026-10-31 팀장님: 「앞으로 개선되는 내용은 처음 앱을 열 때 팝업으로」) — 공개판과 같은 틀 ─────────
 // 새 소식을 더할 때: NEWS 맨 앞에 넣고 id 는 날짜(같은 날 둘째는 2026-11-02b 처럼 — 글자 순서로 새것이 뒤). 본 소식 id 는 이 기기에만(seojae.newsSeen)
 const NEWS=[
+ {id:"2026-11-23c",date:"2026년 11월 23일",title:"생명의 삶 한 주 미리",items:[
+  ["📅","일요일 새벽 3시에 한 주치","두란노 공지의 월별 본문표를 읽어, 일요일 새벽 3시에 그 주 일곱 날 묵상 길잡이를 미리 만들어요.","노션 「생명의 삶」과 설교 카테고리 「묵상가이드」에도 함께 올라가요."],
+  ["👀","내일 본문 미리 보기","묵상 카드의 날짜 ›로 내일 생명의 삶 본문을 미리 볼 수 있어요. 제목·찬송가는 그날 아침에 나와요.",""]]},
  {id:"2026-11-23b",date:"2026년 11월 23일",title:"생명의 삶 묵상 길잡이 · 또렷해진 단추",items:[
   ["🔘","누르는 곳이 또렷해졌어요","묵상 카드의 단추 줄을 옅은 띠로 나누고, 단추마다 테두리를 달았어요. 번역은 「번역 | 개역개정 ↗ …」 한 묶음, 「위에 띄우기」는 「본문 작은 창」이 되었어요.","해설·길잡이를 열면 그 단추가 색으로 채워져요."],
   ["🌿","날마다 새벽 3시에","묵상지를 생명의 삶으로 고르면 묵상 카드에 「묵상 길잡이」가 생겨요. 그날 본문의 흐름·배경·본문이 보여 주는 하나님을 짚고, 묵상 질문으로 맺어요.","컴퓨터에서는 오른쪽 창으로, 휴대폰에서는 카드 아래에 펼쳐져요."],
@@ -1266,7 +1269,7 @@ function llLinks(date){ return `<button class="btn small ghost" id="subtn" oncli
 let SU=null, SUT=null, SUERR="";
 async function suInfo(date){
   const kb=qbK(), pre=kb==="ll"?"seojae.ll.":"seojae.su.";
-  try{ const c=JSON.parse(localStorage.getItem(pre+date)||"null"); if(c){ c.src=kb; return c; } }catch(_){}
+  try{ const c=JSON.parse(localStorage.getItem(pre+date)||"null"); if(c&&!(c.sched&&date<=today())){ c.src=kb; return c; } }catch(_){}
   if(!GAS) throw new Error("구글 서버에 연결되어 있어야 합니다");
   const r=await gcall(QB[kb].fn,date); r.src=kb;
   try{ localStorage.setItem(pre+date,JSON.stringify(r));
@@ -1356,7 +1359,7 @@ async function paintSu(){
   // 새 묵상이면 본문 칸을 매일성경으로 (설정에서 '통독표 따라'를 고르면 그대로 둠)
   const f=$("#wpassage"); if(f&&!fromNote&&!fromWriting&&S.settings.qtSource!=="plan"&&$("#wtype")?.value==="묵상"&&(editId?cur?.date===date&&cmtBare(f.value):f.value===f.defaultValue)){ f.value=P.label; }   // 본문 칸이 빈 그날 묵상에는 저절로
   box.innerHTML=`${nav}
-    <div class="sut"><b>${esc(SU.title)}</b> · ${esc(P.label)}${SU.hymn?` · <span class="muted hymnbox" id="hymnbox">찬송가 ${esc(SU.hymn)}장${hymnCtl()}</span>`:""}</div>
+    <div class="sut">${SU.title?`<b>${esc(SU.title)}</b> · `:""}${esc(P.label)}${SU.sched?` <small class="muted" title="두란노 공지의 월별 본문표로 미리 보는 본문입니다 — 제목·찬송가는 그날 아침에 나옵니다">· 미리 보기</small>`:""}${SU.hymn?` · <span class="muted hymnbox" id="hymnbox">찬송가 ${esc(SU.hymn)}장${hymnCtl()}</span>`:""}</div>
     <div class="links"><button class="btn small ink" onclick="suUse()">이 본문으로 쓰기</button>
       <span class="vergrp" role="group" aria-label="다른 번역으로 열기 (새 창)"><span class="vgk">번역</span><a class="verlink" href="${esc(suOfficial(P,"NKRV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)" title="개역개정은 저작권 때문에 앱 안에 넣을 수 없어 대한성서공회 사이트에서 같은 구절을 엽니다">개역개정</a><a class="verlink" href="${esc(suOfficial(P,"NKT"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새한글</a><a class="verlink" href="${esc(suOfficial(P,"RNKSV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새번역</a><a class="verlink" href="${esc(suNiv(P))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">NIV</a></span><button class="btn small ghost pconly" onclick="sideTip()" title="성경 창을 띄워 둔 채 쓰는 법">ⓘ</button><button class="btn small ghost pconly" onclick="pipBible()" title="오늘 본문(개역한글·영어)을 다른 창보다 늘 위에 떠 있는 작은 창으로 띄웁니다 (크롬·엣지)">${ICO.closed}본문 작은 창</button>
       ${SU.src==="ll"?llLinks(date):`${SU.audio?`<button class="btn small ghost" onclick="suListen()" title="매일성경 해설(본문 낭독과 해설)을 앱 안 작은 재생기로 듣습니다. 다른 메뉴로 옮겨도 계속 들립니다">${ICO.audio}해설 듣기</button>`:""}<button class="btn small ghost" id="subtn" onclick="suNoteToggle()" title="매일성경 해설을 봅니다 — 컴퓨터에서는 오른쪽 해설 창으로, 휴대폰에서는 카드 아래에">${ICO.book}${$("#sunpanel")?"해설 창 닫기":"해설 보기"}</button>`}</div>
