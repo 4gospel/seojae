@@ -2764,3 +2764,14 @@ html.bson .askview{z-index:160}
 .toolbar.qtmin .tmore{display:inline-flex}
 .toolbar.qtmin.open .tools2{display:contents!important}
 .toolbar.qtmin .tmore[aria-expanded="true"]{background:color-mix(in srgb,var(--sepia) 10%,var(--paper));border-color:var(--sepia)}
+/* 아주 크게 보기(폭 288px)에서 넘치던 곳(2026-11-23 실제 사용자 점검) */
+@media (max-width:320px){
+  .hymnbox{display:flex;flex-wrap:wrap;align-items:center;row-gap:4px}
+  .hymnbox .hkind{margin-left:0}
+  nav button.navai{margin-left:1px;padding-left:0;padding-right:0;min-width:0}
+  nav{column-gap:1px}
+  .sucard .links{flex-wrap:wrap;row-gap:4px}
+  .dnacts{flex-wrap:wrap} .dnacts .dnbtn{white-space:normal;min-width:0}
+  .tgreet{flex-wrap:wrap}
+  .grid.tgrid1,.grid.tgrid2{grid-template-columns:minmax(0,1fr)} .grid.tgrid1>*,.grid.tgrid2>*{min-width:0}
+}
