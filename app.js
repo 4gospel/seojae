@@ -477,12 +477,17 @@ async function api(path,body){
 const canSync=()=>SERVER&&CONF.notion&&S.settings.autoSync;   // 밑줄·책·독후감 자동 (독서 루틴)
 // 노션: 「묵상」만 간직할 때 자동. 설교초안·글방 글 등 나머지는 구글에만 간직되고, 「보내기」(노션에 보내기)로 직접 보낼 때만 감 (2026-10-28 팀장님 요청)
 const canNotion=()=>SERVER&&CONF.notion;
-const notionAutoKind=w=>w?.track==="bible"&&w?.type==="묵상"&&!w?.importFrom;   // 노션에 저절로 가는 글의 종류 (묵상만)
+const notionAutoKind=w=>false;   // 노션에 저절로 가는 글은 없음 — 묵상도 「보내기 → 노션」을 누를 때만(2026-11-24 팀장님 「묵상 내용을 내가 노션으로 보내기 할 때만, 자동으로 가지 않도록」, 그 앞은 묵상만 자동)
 const autoNotion=w=>canNotion()&&S.settings.autoSync&&notionAutoKind(w);   // 노션에서 가져온 글은 원래 페이지가 있으니 자동으로 보내지 않음
 const notionStale=w=>!!(w?.notion?.page&&w.syncedAt&&(w.updated||"")>w.syncedAt);
 let SYNCING=0;
 async function syncWriting(w,quiet,force){
-  if(!canNotion()||!w) return; if(!force&&!autoNotion(w)) return;   // 자동 호출은 말씀 줄만, 직접 보내기(force)는 무엇이든
+  if(!canNotion()||!w) return;
+  // 노션에 보낸 묵상을 다 지우고(틀만 남김) 떠나거나 간직하면 노션 페이지도 휴지통으로(2026-11-24 팀장님 「묵상 내용을 모두 지워 버리고 다른 추가 작업을 하지 않으면 노션에서는 삭제」) — 3초 자동 간직 때는 부르지 않으니 지우고 다시 쓰는 중에는 그대로
+  if(w.notion?.page&&w.track==="bible"&&w.type==="묵상"&&wEmpty(w)&&!w.syncing){ const pages=[w.notion.page,w.notion.index].filter(Boolean); w.syncing=true;
+    try{ const r=await api("/api/notion/trash",{pages}); if(r.ok&&!(r.failed||[]).length){ delete w.notion; w.syncedAt=null; w.syncError=null; toast("내용을 모두 지운 묵상이라 노션 페이지도 휴지통으로 옮겼습니다(노션 휴지통에서 되살릴 수 있어요)"); } else w.syncError="노션 페이지를 휴지통으로 옮기지 못했습니다"; }catch(_){ w.syncError="서버에 닿지 못했습니다"; }
+    w.syncing=false; save(); paintSync(w); return; }
+  if(!force&&!autoNotion(w)) return;   // 자동 호출은 말씀 줄만, 직접 보내기(force)는 무엇이든
   if(wEmpty(w)){ if(force&&!quiet) toast("아직 틀만 있는 글이라 노션에 보내지 않았습니다"); return; }   // 틀만 있는 글은 노션에 싣지 않음
   if(w.syncing){ w.resync=true; return; }      // 보내는 중이면 끝난 뒤 한 번 더(노션 중복 방지)
   w.syncing=true; SYNCING++; paintSync(w);
@@ -496,7 +501,7 @@ async function syncWriting(w,quiet,force){
     const r=await api("/api/notion/sync",{writing:payload,book});
     { const cur=S.writings.find(x=>x.id===w.id); if(cur&&cur!==w){ cur.syncing=w.syncing; w=cur; } }   // 보내는 사이 합쳐져 글 객체가 바뀌었으면 그쪽에 기록
     if(r.ok){ w.notion={page:r.page,index:r.index,marker:r.marker,blocks:r.blocks,url:r.url}; w.syncedAt=new Date().toISOString(); w.syncError=null; if(book&&r.bookRow) book.notionId=r.bookRow; if(!quiet) toast(r.recovered?"노션의 같은 글 페이지를 다시 찾아 그곳에 실었습니다":"노션에 실었습니다");
-      if(firstTime&&w.type==="설교초안") srcOf(w).filter(m=>m.notion?.page).forEach(m=>syncWriting(m,true)); }   // 새 초안이 생기면 바탕 묵상 페이지에도 「→ 설교초안」 링크를 달아 줌
+      if(firstTime&&w.type==="설교초안") srcOf(w).filter(m=>m.notion?.page).forEach(m=>syncWriting(m,true,true)); }   // 새 초안이 생기면 바탕 묵상 페이지에도 「→ 설교초안」 링크를 달아 줌
     else { w.syncError=r.error; if(!quiet) toast("노션에 올리지 못했습니다"); }
   }catch(e){ w.syncError="서버에 닿지 못했습니다"; }
   w.syncing=false; SYNCING--; save(); paintSync(w);
@@ -718,7 +723,8 @@ function hymnCtl(){ const n=hymnNo(); if(!n) return "";
 function hymnKind(k){ if(k===(MUSIC.view==="ccm"?"ccm":"hymn")) return; const el=$("#mplayer"); if(el&&!el.hidden) return mpKind(k).then(paintHymnCtl);
   const other=k==="ccm"?MUSIC.slot==="hymn":MUSIC.slot.startsWith("ccm:"); if(other&&MUSIC.playing){ try{ MP?.pauseVideo(); }catch(_){} MUSIC.playing=false; }
   MUSIC.view=k; paintHymnCtl(); }
-function paintHymnCtl(){ const b=$("#hymnbox"); if(!b||!SU?.hymn) return; b.innerHTML=`찬송가 ${esc(SU.hymn)}장${hymnCtl()}`; }
+function paintHymnCtl(){ const b=$("#hymnbox"); if(!b||!SU?.hymn) return; b.innerHTML=hymnInner(); }
+const hymnInner=()=>`<span class="suhn"><i aria-hidden="true">♪</i>찬송가 ${esc(SU.hymn)}장</span>${hymnCtl()}`;   // 묵상 카드 둘째 줄(2026-11-24 — 제목·본문과 나눠 작게)
 async function musicCall(body){ if(GAS) return gcall("musicFind",body); const r=await fetch("/api/music",{method:"POST",body:JSON.stringify(body)}); const j=await r.json(); if(j&&j.ok===false) throw new Error(j.error||"서버 오류"); return j; }
 function ytLoad(){ if(window.YT?.Player) return Promise.resolve(); return YT_P||(YT_P=new Promise((ok,no)=>{ const prev=window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady=()=>{ try{ prev?.(); }catch(_){} ok(); };
   const sc=document.createElement("script"); sc.src="https://www.youtube.com/iframe_api"; sc.onerror=()=>{ YT_P=null; no(new Error("유튜브를 불러오지 못했습니다 — 인터넷 연결을 확인해 주세요")); }; document.head.appendChild(sc); })); }
@@ -867,7 +873,7 @@ function phoneSection(){ return `${CONF.phoneUrl?`<section class="sheet tape c $
 function notionSection(){ if(CONF.local===false) return ""; return `<section class="sheet tape ${CONF.notion?"compact":""}">
     <p class="label">노션 연결</p>
     <div id="nstatus" class="sub">${CONF.notion?"연결 키가 들어 있습니다. 확인 중…":"아직 연결되지 않았습니다."}</div>
-    ${CONF.notion?`<label class="row" style="margin-top:6px;gap:8px;font-size:14px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 묵상은 간직할 때 노션에 자동으로 싣기 <small class="hint" style="display:inline">(설교초안·글방 글은 「보내기」로 원할 때만)</small></label>`:""}
+    ${CONF.notion?`<label class="row" style="margin-top:6px;gap:8px;font-size:14px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 밑줄·읽는 책은 노션 독서 목록에 저절로 싣기 <small class="hint" style="display:inline">(묵상·설교초안·글방 글은 「보내기 → 노션」을 누를 때만)</small></label>`:""}
     <details class="keybox" ${CONF.notion?"":"open"}><summary>${CONF.notion?"키 바꾸기 · 연결 방법":"연결 방법"}</summary>
     <ol class="steps sub">
       <li><a href="https://www.notion.so/profile/integrations" target="_blank">노션 통합 만들기</a> 페이지에서 <b>새 통합</b>을 만들고(이름: 아침 서재), <b>내부 통합 시크릿</b>을 복사합니다.</li>
@@ -875,7 +881,7 @@ function notionSection(){ if(CONF.local===false) return ""; return `<section cla
       <li>복사한 시크릿을 아래 칸에 붙여 넣고 저장합니다. (${GAS?"구글 계정의 비공개 저장소":"이 컴퓨터의 config.json"}에만 보관됩니다)</li>
     </ol>
     <div class="row"><input id="ntoken" type="text" class="secret" spellcheck="false" placeholder="ntn_ 로 시작하는 시크릿" style="flex:1" autocomplete="off"><button class="btn ink" onclick="saveKey('notionToken','ntoken')">저장</button></div>
-    ${CONF.notion?"":`<label class="row" style="margin-top:14px;gap:8px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 묵상은 간직할 때 노션에 자동으로 싣기 <small class="hint" style="display:inline">(설교초안·글방 글은 「보내기」로 원할 때만)</small></label>`}
+    ${CONF.notion?"":`<label class="row" style="margin-top:14px;gap:8px"><input type="checkbox" style="width:auto" ${S.settings.autoSync?"checked":""} onchange="S.settings.autoSync=this.checked;save()"> 밑줄·읽는 책은 노션 독서 목록에 저절로 싣기 <small class="hint" style="display:inline">(묵상·설교초안·글방 글은 「보내기 → 노션」을 누를 때만)</small></label>`}
     <p class="muted" style="margin-top:10px">말씀 글 → 설교&강의의 책별 노트(예: 신약04_요한복음)와 설교·묵상 색인<br>책 글·밑줄 → 자기계발 / 아침 독서 글, 책 → 독서 목록</p></details>
   </section>`; }
 function kakaoSection(){ if(CONF.local===false) return ""; return `<section class="sheet tape b ${CONF.kakao?"compact":""}">
@@ -938,7 +944,7 @@ function setGroups(){ const R=S.reminder||{}, rOn=!!(R.on&&R.clock!==false), p=S
      {k:"look",ic:"◐",t:"화면 꾸미기",st:"",sum:`${theme==="dark"?"어두운 화면":theme==="auto"?"기기 설정 따라":"밝은 종이"} · 글자 ${fs?fs+"px":"보통"} · 이 기기만`,body:lookSection()},
      {k:"conn",ic:"⇄",t:GAS?"다른 기기 연결":"휴대폰에서 쓰기",st:GAS?"ok":CONF.phoneUrl?"":"need",pill:"연결됨",sum:GAS?"이 기기 연결됨 · 구글 드라이브의 같은 기록":"같은 와이파이에서 QR로 열기",body:phoneSection()}]},
    {id:"link",t:"바깥 연결",ic:"⛓",acc:"var(--book)",rows:[
-     {k:"notion",ic:"N",t:"노션",st:CONF.notion?"ok":"off",pill:CONF.notion?"연결됨":"선택",sum:CONF.notion?`연결됨 · 묵상 자동 싣기 ${S.settings.autoSync?"켜짐":"꺼짐"}`:"연결 안 됨",body:notionSection()},
+     {k:"notion",ic:"N",t:"노션",st:CONF.notion?"ok":"off",pill:CONF.notion?"연결됨":"선택",sum:CONF.notion?`연결됨 · 글은 「보내기」로만 · 독서 자동 ${S.settings.autoSync?"켜짐":"꺼짐"}`:"연결 안 됨",body:notionSection()},
      {k:"cmt",ic:"❡",t:"주석 서재",st:cm?"ok":"off",pill:cm?"설정됨":"선택",sum:cm?`${esc(CONF.cmtFolder||"성경공부")} 폴더 · 주석 ${cm}개`:"폴더를 정하고 색인을 만들어 주세요",body:cmtSection()},
      {k:"kakao",ic:"◫",t:"책 표지 찾기 (카카오)",st:CONF.kakao?"ok":"off",pill:CONF.kakao?"설정됨":"선택",sum:CONF.kakao?"열쇠 들어 있음":"열쇠 없음 — 해외 도서 검색만",body:kakaoSection()},
      {k:"nl",ic:"☰",t:"목차·쪽수 (국립중앙도서관)",st:CONF.nl?"ok":"off",pill:CONF.nl?"설정됨":"선택",sum:CONF.nl?"인증키 들어 있음 · 목차·쪽수 자동":"인증키 없음",body:nlSection()}]},
@@ -949,6 +955,10 @@ const MANUALS=[["quick","간단 매뉴얼","읽자마자 바로 써 보는 한 �
 // ───────── 새 소식 (2026-10-31 팀장님: 「앞으로 개선되는 내용은 처음 앱을 열 때 팝업으로」) — 공개판과 같은 틀 ─────────
 // 새 소식을 더할 때: NEWS 맨 앞에 넣고 id 는 날짜(같은 날 둘째는 2026-11-02b 처럼 — 글자 순서로 새것이 뒤). 본 소식 id 는 이 기기에만(seojae.newsSeen)
 const NEWS=[
+ {id:"2026-11-24e",date:"2026년 11월 24일",title:"묵상 카드를 단정하게",items:[
+  ["📖","제목과 본문이 먼저 보여요","묵상 화면 맨 위 카드에서 오늘 본문의 제목과 장절을 또렷하게, 날짜 넘김·묵상지 고르기는 작고 차분하게 바꿨어요.",""],
+  ["♪","찬송가는 한 줄 아래 작게","찬송가는 제목 아래 한 줄로 옮겼어요. 「찬송가 | CCM」은 고르는 칸, 「▶ 듣기」는 누르면 바로 나오는 단추예요.",""],
+  ["📝","노션에는 보낼 때만","묵상도 이제 노션에 저절로 가지 않아요. 쓰기 화면의 「보내기 → 노션」을 누를 때만 가요. 노션에 보낸 묵상을 다 지우고 간직하면 노션 페이지도 휴지통으로 옮겨져요.",""]]},
  {id:"2026-11-24d",date:"2026년 11월 24일",title:"책에 예문과 연습이 늘었어요",items:[
   ["✍️","글쓰기 수업이 더 풍성하게","상세 매뉴얼 4부에 장면과 요약, 첫 문장 네 가지, 한 문단을 네 번 보는 퇴고, 고백을 꾸미지 않는 신앙 에세이 같은 예문을 더했어요.",""],
   ["🌿","묵상을 실제로 써 본 한 편","「짧게」 틀로 쓴 묵상 한 편, 묵상 길잡이를 곁에 두는 법, 쓰기 싫은 아침에 건네는 말을 담았어요.",""],
@@ -1475,7 +1485,7 @@ async function paintSu(){
   // 새 묵상이면 본문 칸을 매일성경으로 (설정에서 '통독표 따라'를 고르면 그대로 둠)
   const f=$("#wpassage"); if(f&&!fromNote&&!fromWriting&&S.settings.qtSource!=="plan"&&$("#wtype")?.value==="묵상"&&(editId?cur?.date===date&&cmtBare(f.value):f.value===f.defaultValue)){ f.value=P.label; }   // 본문 칸이 빈 그날 묵상에는 저절로
   box.innerHTML=`${nav}
-    <div class="sut">${SU.title?`<b>${esc(SU.title)}</b> · `:""}${esc(P.label)}${SU.sched?` <small class="muted" title="두란노 공지의 월별 본문표로 미리 보는 본문입니다 — 제목·찬송가는 그날 아침에 나옵니다">· 미리 보기</small>`:""}${SU.hymn?` · <span class="muted hymnbox" id="hymnbox">찬송가 ${esc(SU.hymn)}장${hymnCtl()}</span>`:""}</div>
+    <div class="sut">${SU.title?`<b class="sutt">${esc(SU.title)}</b>`:""}<span class="supl">${esc(P.label)}</span>${SU.sched?`<small class="muted" title="두란노 공지의 월별 본문표로 미리 보는 본문입니다 — 제목·찬송가는 그날 아침에 나옵니다">미리 보기</small>`:""}</div>${SU.hymn?`<div class="suhymn" id="hymnbox">${hymnInner()}</div>`:""}
     <div class="links"><button class="btn small ink" onclick="suUse()">이 본문으로 쓰기</button>
       <span class="vergrp" role="group" aria-label="다른 번역으로 열기 (새 창)"><span class="vgk">번역</span><a class="verlink" href="${esc(suOfficial(P,"NKRV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)" title="개역개정은 저작권 때문에 앱 안에 넣을 수 없어 대한성서공회 사이트에서 같은 구절을 엽니다">개역개정</a><a class="verlink" href="${esc(suOfficial(P,"NKT"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새한글</a><a class="verlink" href="${esc(suOfficial(P,"RNKSV"))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">새번역</a><a class="verlink" href="${esc(suNiv(P))}" target="_blank" rel="noopener" onclick="return popBible(this.href)">NIV</a></span><button class="btn small ghost pconly" onclick="sideTip()" title="성경 창을 띄워 둔 채 쓰는 법">ⓘ</button><button class="btn small ghost pconly" onclick="pipBible()" title="오늘 본문(개역한글·영어)을 다른 창보다 늘 위에 떠 있는 작은 창으로 띄웁니다 (크롬·엣지)">${ICO.closed}본문 작은 창</button>
       ${SU.src==="ll"?llLinks(date):`${SU.audio?`<button class="btn small ghost" onclick="suListen()" title="매일성경 해설(본문 낭독과 해설)을 앱 안 작은 재생기로 듣습니다. 다른 메뉴로 옮겨도 계속 들립니다">${ICO.audio}해설 듣기</button>`:""}<button class="btn small ghost" id="subtn" onclick="suNoteToggle()" title="그날 매일성경 본문(장절)에 맞춰 아침 서재에서 새벽 3시에 정리해 둔 묵상 길잡이를 봅니다 — 컴퓨터에서는 오른쪽 창으로, 휴대폰에서는 카드 아래에">${ICO.book}${$("#sunpanel")?"길잡이 창 닫기":"묵상 길잡이(해설)"}</button>`}</div>
@@ -4196,7 +4206,7 @@ let AUTOKEEP_T;
 function autoKeepKick(){ clearTimeout(AUTOKEEP_T); AUTOKEEP_ON=true; const el=$("#draftstamp"); if(el&&el.dataset.st!=="w"){ el.dataset.st="w"; el.textContent="✎ 쓰는 중…"; el.classList.add("busy"); }
   AUTOKEEP_T=setTimeout(()=>{ AUTOKEEP_ON=false; if(tab!=="write") return; const w=keepWriting(true); if(!w&&el?.dataset.st==="w") paintDraftStamp("이 기기에 임시 보관"); },3000); }
 // 쓰기 화면을 떠나거나 앱을 내릴 때: 쓰던 글을 간직하고, 봉인한 뒤 고친 것이 있으면 노션에도
-function autoKeepNow(){ if(tab!=="write"||!$("#wbody")) return; clearTimeout(AUTOKEEP_T); const w=keepWriting(true)||(editId&&S.writings.find(x=>x.id===editId)); if(w&&canSync()&&(!w.syncedAt||(w.updated||"")>w.syncedAt)) syncWriting(w,true); }
+function autoKeepNow(){ if(tab!=="write"||!$("#wbody")) return; clearTimeout(AUTOKEEP_T); const w=keepWriting(true)||(editId&&S.writings.find(x=>x.id===editId)); if(w&&canNotion()&&w.notion?.page&&(!w.syncedAt||(w.updated||"")>w.syncedAt)) syncWriting(w,true); }
 // 밀랍 봉인: 녹아 퍼진 듯 울퉁불퉁한 가장자리를 매번 같은 모양으로 그립니다
 function waxBlob(cx,cy,r){
   const n=30, pts=[];
@@ -4991,7 +5001,7 @@ function sendOpen(kind,mid){
     const sent=(S.sends||[]).filter(x=>!(S.deleted||{})[x.id]&&(kind==="w"?(x.ids||[]).includes(w.id):x.ms===mid)).slice(-4).reverse();
     ov.innerHTML=`<section class="sheet" style="max-width:640px;margin:36px auto;display:grid;gap:14px">
       <div class="row"><p class="label" style="margin:0">보내기 · 가져오기</p><span class="spacer"></span><button class="btn small ghost" data-x>닫기</button></div>
-      <p class="hint" style="margin:-6px 0 0">${kind==="w"?"이 글은":"이 원고의 글은"} 구글에만 간직되어 있습니다(노션에 저절로 가는 것은 묵상뿐). 여기서 고른 곳으로 보냅니다.</p>
+      <p class="hint" style="margin:-6px 0 0">${kind==="w"?"이 글은":"이 원고의 글은"} 구글에만 간직되어 있습니다(노션에는 여기서 보낼 때만 갑니다). 여기서 고른 곳으로 보냅니다.</p>
       <div class="sendto-wrap"><span class="k">어디로</span><div class="sendto">${SEND_TO.map(([k,n])=>{ const [ic,d]=SEND_IC[k]||["",""]; return `<button type="button" class="${to===k?"on":""}" data-to="${k}"><i>${ic}</i><b>${esc(n.replace(/\s*\(.*\)/,""))}</b><small>${d}</small></button>`; }).join("")}</div><small class="hint">전자책(EPUB)·구글 문서는 다음에 더해집니다.</small></div>
       <div class="setrow"><span class="k">무엇을</span><div class="pills">${kind==="w"?`<button class="pill ${scope==="one"?"on":""}" data-scope="one">이 글</button>`:""}${m?`${outN?`<button class="pill ${scope==="book"?"on":""}" data-scope="book" title="목차에서 「책에 넣지 않기」로 뺀 ${outN}편을 빼고 보냅니다">책에 넣을 것 (${msList(m).length-outN})</button>`:""}<button class="pill ${scope==="all"?"on":""}" data-scope="all">원고 전체 (${msList(m).length})</button><button class="pill ${scope==="done"?"on":""}" data-scope="done">완성만 (${msList(m).filter(x=>x.status==="완성").length})</button><button class="pill ${scope==="pick"?"on":""}" data-scope="pick">고르기</button>`:""}</div></div>
       ${scope==="pick"&&m?`<div class="sendpick">${msList(m).map(x=>`<label class="chk"><input type="checkbox" data-pick="${x.id}" ${!sel||sel.includes(x.id)?"checked":""}> ${esc(x.title||"(제목 없음)")} <span class="muted">${esc(x.status||"")}</span></label>`).join("")}</div>`:""}
