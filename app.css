@@ -3032,3 +3032,15 @@ html.use-nowriter #wcount{display:none!important}
 @media (max-width:440px){ .sucard .sut .sutt{font-size:20px} .sucard .sut .supl{font-size:15px} }
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .suhymn .hkind button.on{background:color-mix(in srgb,var(--ink) 18%,var(--paper));box-shadow:none} }
 :root[data-theme="dark"] .suhymn .hkind button.on{background:color-mix(in srgb,var(--ink) 18%,var(--paper));box-shadow:none}
+
+/* 노션 보내기 단추(2026-11-24) — 간직(봉인)과 따로, 노션 그림으로 「여기로 보낸다」가 바로 보이게 */
+.ntbtn{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:5px 12px 5px 8px;border:1px solid #d9d6d0;border-radius:10px;background:#fff;color:#191919;font:600 13.5px/1 var(--ui-font);cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.06);position:relative;transition:background .15s,border-color .15s}
+.ntbtn .nti{width:18px;height:18px;flex:none}
+.ntbtn b{font-weight:700;color:#5f5e5b;margin-left:1px}
+.ntbtn:hover{background:#f7f6f3;border-color:#c9c5bd}
+.ntbtn:focus-visible{outline:2px solid var(--sepia);outline-offset:2px}
+.ntbtn.sent b{color:#2f7d4f}
+.ntbtn .ntdot{position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:#e0a03a;box-shadow:0 0 0 2px var(--paper)}
+@media (pointer:coarse){ .ntbtn{min-height:40px} }
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .ntbtn{background:#2a2824;color:#f1efe9;border-color:#4a463f} :root:not([data-theme="light"]) .ntbtn .nti rect{fill:#f1efe9} :root:not([data-theme="light"]) .ntbtn b{color:#c9c4b8} }
+:root[data-theme="dark"] .ntbtn{background:#2a2824;color:#f1efe9;border-color:#4a463f} :root[data-theme="dark"] .ntbtn .nti rect{fill:#f1efe9} :root[data-theme="dark"] .ntbtn b{color:#c9c4b8}

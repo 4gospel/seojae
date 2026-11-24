@@ -520,13 +520,20 @@ async function syncBook(b){
   save();
 }
 const hm=t=>{ if(!t) return ""; const d=new Date(t); return isNaN(d)?"":`${d.getMonth()+1}.${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`; };
+// 노션 보내기 단추(2026-11-24 팀장님 「간직은 말 그대로 저장소에 저장, Notion → 노션 보내기 단추와 기능 따로 — 노션 그림으로 직관적으로」)
+const NOTION_ICO=`<svg class="nti" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="4" fill="#fff" stroke="#191919" stroke-width="1.8"/><path d="M8 17V7.2l8 9.6V7" fill="none" stroke="#191919" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+function notionBtn(w){ const sent=!!w?.notion?.page, stale=sent&&notionStale(w);
+  return `<button type="button" class="ntbtn ${sent?"sent":""}" onclick="notionSendNow('${w?.id||""}')" title="${sent?(stale?"고친 내용을 노션 페이지에 다시 보냅니다":"이미 노션에 있습니다 — 누르면 지금 내용으로 다시 보냅니다"):"이 글을 노션에 보냅니다 (간직은 구글에만, 노션은 이 단추를 누를 때만)"}">${NOTION_ICO}<span>Notion</span><b aria-hidden="true">${sent?"↻":"→"}</b>${stale?`<i class="ntdot" title="노션보다 새로 고친 내용이 있습니다"></i>`:""}</button>`; }
+async function notionSendNow(id){ let w=keepWriting(true)||(id&&S.writings.find(x=>x.id===id))||(editId&&S.writings.find(x=>x.id===editId))||($("#wbody")?.value.trim()?keepWriting(false):null);   // 짧은 새 글은 자동 간직이 건너뛰니 그때는 「간직」처럼   // 쓰던 것을 먼저 간직한 뒤 보냄
+  if(!w) return toast("먼저 글을 써 주세요"); if(wEmpty(w)) return toast("아직 틀만 있는 글이라 노션에 보내지 않았습니다");
+  await syncWriting(w,false,true); const st=$("#syncstamp"); if(st) st.innerHTML=syncStamp(w); const b=$(".ntbtn"); if(b) b.outerHTML=notionBtn(w); }
 function syncStamp(w){ return syncStamp0(w)+(w?.importFrom?impLine(w):""); }
 function syncStamp0(w){   // 노션 보관 상태는 늘 보이게: 보내는 중 → 보관됨(시각) / 미전송 / 아직 안 보냄
   if(!w) return "";
   if(w.syncing) return `<span class="stamp">보내는 중…</span><div class="nstate busy" style="margin-top:6px"><i></i>노션에 싣는 중</div>`;
   if(w.syncError) return `<span class="stamp err" title="${esc(w.syncError)}">노션 미전송</span>`;
   if(w.notion?.page) return `<a href="${esc(safeUrl(w.notion.url)||"#")}" target="_blank" style="text-decoration:none"><span class="stamp ok">노션 보관 ✓</span></a><div class="nstate ok" style="margin-top:6px"><i></i>노션에 보관됨${w.syncedAt?" · "+esc(hm(w.syncedAt)):""}${!notionAutoKind(w)&&notionStale(w)?" · <b>그 뒤 고친 것이 노션에는 아직 없음</b>":""}</div>`;
-  if(!notionAutoKind(w)) return canNotion()?`<div class="nstate"><i></i>구글에 간직됨 · 노션은 「노션에 보내기」로</div>`:"";
+  if(!notionAutoKind(w)) return canNotion()?`<div class="nstate"><i></i>구글에 간직됨 · 노션은 「Notion →」으로</div>`:"";
   return canSync()?`<div class="nstate"><i></i>아직 노션에 없음 — 봉인을 누르면 실립니다</div>`:"";
 }
 const nState=w=>w.syncing?`<span class="nstate busy"><i></i>보관 중</span>`:w.notion?.page?`<a class="nstate ok" href="${esc(safeUrl(w.notion.url)||"#")}" target="_blank" style="text-decoration:none"><i></i>노션 보관됨</a>`:w.syncError?`<span class="nstate err" title="${esc(w.syncError)}"><i></i>노션 미전송</span>`:"";
@@ -955,6 +962,9 @@ const MANUALS=[["quick","간단 매뉴얼","읽자마자 바로 써 보는 한 �
 // ───────── 새 소식 (2026-10-31 팀장님: 「앞으로 개선되는 내용은 처음 앱을 열 때 팝업으로」) — 공개판과 같은 틀 ─────────
 // 새 소식을 더할 때: NEWS 맨 앞에 넣고 id 는 날짜(같은 날 둘째는 2026-11-02b 처럼 — 글자 순서로 새것이 뒤). 본 소식 id 는 이 기기에만(seojae.newsSeen)
 const NEWS=[
+ {id:"2026-11-24f",date:"2026년 11월 24일",title:"간직과 노션 보내기를 나눴어요",items:[
+  ["🔖","봉인은 저장만","봉인(간직)을 누르면 구글 드라이브에 저장만 돼요. 노션에는 저절로 가지 않아요.",""],
+  ["➡️","「Notion →」 단추","봉인 아래 노션 그림이 있는 「Notion →」을 누르면 그 글이 노션으로 가요. 이미 보낸 글은 「Notion ↻」로 바뀌고, 그 뒤 고친 것이 있으면 작은 점이 떠요.",""]]},
  {id:"2026-11-24e",date:"2026년 11월 24일",title:"묵상 카드를 단정하게",items:[
   ["📖","제목과 본문이 먼저 보여요","묵상 화면 맨 위 카드에서 오늘 본문의 제목과 장절을 또렷하게, 날짜 넘김·묵상지 고르기는 작고 차분하게 바꿨어요.",""],
   ["♪","찬송가는 한 줄 아래 작게","찬송가는 제목 아래 한 줄로 옮겼어요. 「찬송가 | CCM」은 고르는 칸, 「▶ 듣기」는 누르면 바로 나오는 단추예요.",""],
@@ -3094,11 +3104,11 @@ write0(){
         <p class="step"><span class="num">2</span>간직하기</p>
         <div class="sealrow">
           <button class="seal" id="sealbtn" onclick="pressSeal()" aria-label="간직">${waxSeal()}</button>
-          <div class="sealtext"><b class="ttl">${dtype==="설교초안"?"설교초안 봉인":"봉인을 누르면"}</b><span>${PLACE()}에 저장${track==="bible"&&(dtype||"묵상")==="묵상"&&canSync()?"되고, 노션에도 실립니다.":canNotion()?"됩니다. 노션은 「노션에 보내기」로.":"됩니다."}</span><span class="sealkey">⌘S 로도 간직됩니다</span></div>
+          <div class="sealtext"><b class="ttl">${dtype==="설교초안"?"설교초안 봉인":"봉인을 누르면"}</b><span>${PLACE()}에 저장됩니다.${canNotion()?"<br>노션은 아래 「Notion →」으로 따로 보냅니다.":""}</span><span class="sealkey">⌘S 로도 간직됩니다</span></div>
         </div>
         <div id="syncstamp">${syncStamp(w)}${w?.syncError?`<div class="muted" style="margin-top:8px">${esc(w.syncError)}</div>`:""}</div>
         <div class="row sideacts"><button class="btn small" onclick="copyW()" title="제목과 본문을 복사해 카톡·블로그 등에 붙여 넣을 수 있습니다">글 복사</button>
-        ${w?.type==="묵상을설교로"?`<button class="btn small" onclick="pullNotion('${w.id}')" title="설교작성 프로젝트가 노션 이 페이지에 쓴 글을 앱으로 가져옵니다">${ICO.down}노션에서 가져오기</button>`:""}${w&&CONF.notion?`<button class="btn small" onclick="syncWriting(S.writings.find(x=>x.id==='${w.id}'),false,true)">${w.notion?.page?"노션에 다시 보내기":"노션에 보내기"}</button>`:""}${w?`<button class="btn small danger" onclick="delWriting('${w.id}')">휴지통에 넣기</button>`:""}</div>
+        ${w?.type==="묵상을설교로"?`<button class="btn small" onclick="pullNotion('${w.id}')" title="설교작성 프로젝트가 노션 이 페이지에 쓴 글을 앱으로 가져옵니다">${ICO.down}노션에서 가져오기</button>`:""}${CONF.notion?notionBtn(w):""}${w?`<button class="btn small danger" onclick="delWriting('${w.id}')">휴지통에 넣기</button>`:""}</div>
         ${w?(()=>{ const srcs=srcOf(w), ups=draftsOf(w), ln=x=>`<a href="#" onclick="go('write',{edit:'${x.id}'});return false">[${esc(wTag(x))}] ${esc(x.title||x.passage||"(제목 없음)")} · ${esc(x.date)}</a>`;
           return (srcs.length?`<p class="muted" style="margin-top:10px">← 바탕이 된 묵상: ${srcs.map(ln).join(", ")}</p>`:"")
             +(ups.length?`<p class="muted" style="margin-top:6px">→ 이 묵상으로 쓴 설교초안: ${ups.map(ln).join(", ")}</p>`:""); })():""}
